@@ -21,6 +21,7 @@ function sendLoadTime(time) {
 }
 
 function onImageLoad() {
+  document.body.toggleAttribute('shown', true);
   loadTime = Date.now();
   sendLoadTime(loadTime);
 }

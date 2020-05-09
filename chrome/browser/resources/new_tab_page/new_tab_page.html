@@ -13,26 +13,17 @@
         height: 56px;
       }
 
-      #backgroundImage,
-      #backgroundGradient {
+      #backgroundImage {
+        border: none;
         height: 100%;
+        pointer-events: none;
         position: fixed;
         top: 0;
         visibility: hidden;
         width: 100%;
       }
 
-      #backgroundImage {
-        border: none;
-        pointer-events: none;
-      }
-
-      #backgroundGradient {
-        background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .3));
-      }
-
-      [show-background-image] #backgroundImage,
-      [show-background-image] #backgroundGradient {
+      [show-background-image] #backgroundImage {
         visibility: visible;
       }
     </style>
@@ -42,7 +33,6 @@
     <iframe id="backgroundImage"
         src="chrome-untrusted://new-tab-page/background_image?$i18nRaw{backgroundImageUrl}">
     </iframe>
-    <div id="backgroundGradient"></div>
     <ntp-app></ntp-app>
     <script type="module" src="new_tab_page.js"></script>
     <link rel="stylesheet" href="chrome://resources/css/text_defaults_md.css">
