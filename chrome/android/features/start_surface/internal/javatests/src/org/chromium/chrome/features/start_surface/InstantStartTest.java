@@ -344,6 +344,7 @@ public class InstantStartTest {
     @SmallTest
     @Restriction({UiRestriction.RESTRICTION_TYPE_TABLET})
     public void willInitNativeOnTabletTest() {
+        startMainActivityFromLauncher();
         Assert.assertTrue(mActivityTestRule.getActivity().isTablet());
         Assert.assertTrue(CachedFeatureFlags.isEnabled(ChromeFeatureList.INSTANT_START));
 
