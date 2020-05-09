@@ -992,6 +992,9 @@
         'test_suites': {
           'gtest_tests': 'chromium_android_gtests',
         },
+        'additional_compile_targets': [
+          'all',
+        ],
       },
       'ToTAndroidOfficial': {
         'additional_compile_targets': [
@@ -1005,6 +1008,9 @@
         'test_suites': {
           'gtest_tests': 'chromium_linux_gtests',
         },
+        'additional_compile_targets': [
+          'all',
+        ],
       },
       'ToTLinux (dbg)': {
         'additional_compile_targets': [
@@ -1023,6 +1029,11 @@
         },
         'args': [
           '--test-launcher-print-test-stdio=always',
+        ],
+      },
+      'ToTLinuxASanLibfuzzer': {
+        'additional_compile_targets': [
+          'all',
         ],
       },
       'ToTLinuxMSan': {
@@ -1045,6 +1056,9 @@
         'test_suites': {
           'gtest_tests': 'chromium_linux_gtests',
         },
+        'additional_compile_targets': [
+          'all',
+        ],
       },
       'ToTLinuxTSan': {
         'mixins': [
@@ -1060,6 +1074,9 @@
       'ToTLinuxThinLTO': {
         'mixins': [
           'linux-xenial',
+        ],
+        'additional_compile_targets': [
+          'all',
         ],
         'test_suites': {
           'gtest_tests': 'chromium_linux_gtests',
