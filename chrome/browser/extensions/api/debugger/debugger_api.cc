@@ -28,7 +28,7 @@
 #include "chrome/browser/chrome_notification_types.h"
 #include "chrome/browser/devtools/chrome_devtools_manager_delegate.h"
 #include "chrome/browser/extensions/api/debugger/debugger_api_constants.h"
-#include "chrome/browser/extensions/api/debugger/extension_dev_tools_infobar.h"
+#include "chrome/browser/extensions/api/debugger/extension_dev_tools_infobar_delegate.h"
 #include "chrome/browser/extensions/extension_service.h"
 #include "chrome/browser/extensions/extension_tab_util.h"
 #include "chrome/browser/extensions/extension_util.h"
