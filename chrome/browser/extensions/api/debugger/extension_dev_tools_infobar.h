@@ -10,12 +10,14 @@
 
 #include "base/callback_forward.h"
 #include "base/callback_list.h"
+#include "base/strings/string16.h"
+#include "components/infobars/core/confirm_infobar_delegate.h"
 
 namespace extensions {
 
 // An infobar used to globally warn users that an extension is debugging the
 // browser (which has security consequences).
-class ExtensionDevToolsInfoBar {
+class ExtensionDevToolsInfoBarDelegate : public ConfirmInfoBarDelegate {
  public:
   using CallbackList = base::OnceClosureList;
 
@@ -27,21 +29,29 @@ class ExtensionDevToolsInfoBar {
       const std::string& extension_name,
       base::OnceClosure destroyed_callback);
 
-  ExtensionDevToolsInfoBar(const ExtensionDevToolsInfoBar&) = delete;
-  ExtensionDevToolsInfoBar& operator=(const ExtensionDevToolsInfoBar&) = delete;
+  ExtensionDevToolsInfoBarDelegate(const ExtensionDevToolsInfoBarDelegate&) =
+      delete;
+  ExtensionDevToolsInfoBarDelegate& operator=(
+      const ExtensionDevToolsInfoBarDelegate&) = delete;
+  ~ExtensionDevToolsInfoBarDelegate() override;
+
+  // ConfirmInfoBarDelegate:
+  infobars::InfoBarDelegate::InfoBarIdentifier GetIdentifier() const override;
+  bool ShouldExpire(const NavigationDetails& details) const override;
+  base::string16 GetMessageText() const override;
+  gfx::ElideBehavior GetMessageElideBehavior() const override;
+  int GetButtons() const override;
 
  private:
-  ExtensionDevToolsInfoBar(std::string extension_id,
-                           const std::string& extension_name);
-  ~ExtensionDevToolsInfoBar();
+  ExtensionDevToolsInfoBarDelegate(std::string extension_id,
+                                   const std::string& extension_name);
 
   // Adds |destroyed_callback| to the list of callbacks to run on destruction.
   std::unique_ptr<CallbackList::Subscription> RegisterDestroyedCallback(
       base::OnceClosure destroyed_callback);
 
-  void InfoBarDestroyed();
-
   const std::string extension_id_;
+  const base::string16 extension_name_;
   CallbackList callback_list_;
 };
 

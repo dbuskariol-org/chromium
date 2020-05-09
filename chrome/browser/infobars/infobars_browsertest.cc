@@ -228,8 +228,8 @@ void InfoBarUiTest::ShowUi(const std::string& name) {
       break;
 
     case IBD::EXTENSION_DEV_TOOLS_INFOBAR_DELEGATE:
-      extensions::ExtensionDevToolsInfoBar::Create("id", "Extension",
-                                                   base::DoNothing());
+      extensions::ExtensionDevToolsInfoBarDelegate::Create("id", "Extension",
+                                                           base::DoNothing());
       break;
 
     case IBD::INCOGNITO_CONNECTABILITY_INFOBAR_DELEGATE: {
