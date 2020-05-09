@@ -378,3 +378,10 @@ IN_PROC_BROWSER_TEST_F(
     NoTrustedTypesViolationInInterventionsInternals) {
   CheckTrustedTypesViolation("chrome://interventions-internals");
 }
+
+// Verify that there's no Trusted Types violation in chrome://version
+IN_PROC_BROWSER_TEST_F(
+    ChromeURLDataManagerTestWithWebUIReportOnlyTrustedTypesEnabled,
+    NoTrustedTypesViolationInVersion) {
+  CheckTrustedTypesViolation("chrome://version");
+}
