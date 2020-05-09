@@ -23,6 +23,8 @@ void EraseFromMap(T* map, size_t n, const volatile PaintCacheId* ids) {
 
 }  // namespace
 
+constexpr size_t ClientPaintCache::kNoCachingBudget;
+
 ClientPaintCache::ClientPaintCache(size_t max_budget_bytes)
     : cache_map_(CacheMap::NO_AUTO_EVICT), max_budget_(max_budget_bytes) {}
 ClientPaintCache::~ClientPaintCache() = default;
