@@ -12709,9 +12709,6 @@
         "test_id_prefix": "ninja://google_apis:google_apis_unittests/"
       },
       {
-        "args": [
-          "--child-arg=--ozone-platform=headless"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
@@ -12788,10 +12785,6 @@
         "test_id_prefix": "ninja://media/blink:media_blink_unittests/"
       },
       {
-        "args": [
-          "--child-arg=--ozone-platform=headless",
-          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.qemu.media_unittests.filter"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"
