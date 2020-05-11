@@ -15,6 +15,7 @@
 #include "content/public/common/content_features.h"
 #include "content/renderer/input/input_event_prediction.h"
 #include "content/renderer/input/main_thread_event_queue_task_list.h"
+#include "content/renderer/input/scoped_web_input_event_with_latency_info.h"
 #include "third_party/blink/public/common/input/web_input_event.h"
 #include "third_party/blink/public/mojom/input/input_event_result.mojom-shared.h"
 #include "third_party/blink/public/platform/scheduler/web_thread_scheduler.h"
@@ -38,6 +39,7 @@ class CONTENT_EXPORT MainThreadEventQueueClient {
   // another event). Returns false if the event will not be handled, and the
   // |handled_callback| will not be run.
   virtual bool HandleInputEvent(const blink::WebCoalescedInputEvent& event,
+                                const ui::LatencyInfo& latency_info,
                                 HandledEventCallback handled_callback) = 0;
   // Requests a BeginMainFrame callback from the compositor.
   virtual void SetNeedsMainFrame() = 0;
@@ -132,6 +134,7 @@ class CONTENT_EXPORT MainThreadEventQueue
   // will not be run.
   bool HandleEventOnMainThread(
       const blink::WebCoalescedInputEvent& event,
+      const ui::LatencyInfo& latency,
       const blink::WebInputEventAttribution& attribution,
       HandledEventCallback handled_callback);
 

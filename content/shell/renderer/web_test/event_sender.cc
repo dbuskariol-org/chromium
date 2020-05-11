@@ -2817,11 +2817,9 @@ WebInputEventResult EventSender::HandleInputEventOnViewOrPopup(
 
   WebPagePopup* popup = view()->GetPagePopup();
   if (popup && !WebInputEvent::IsKeyboardEventType(event.GetType()))
-    return popup->HandleInputEvent(
-        blink::WebCoalescedInputEvent(event, ui::LatencyInfo()));
+    return popup->HandleInputEvent(blink::WebCoalescedInputEvent(event));
 
-  return widget()->HandleInputEvent(
-      blink::WebCoalescedInputEvent(event, ui::LatencyInfo()));
+  return widget()->HandleInputEvent(blink::WebCoalescedInputEvent(event));
 }
 
 void EventSender::SendGesturesForMouseWheelEvent(

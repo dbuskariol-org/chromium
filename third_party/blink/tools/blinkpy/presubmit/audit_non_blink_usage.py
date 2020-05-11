@@ -952,10 +952,12 @@ _CONFIG = [
     {
         'paths': [
             'third_party/blink/renderer/core/exported/',
-            'third_party/blink/renderer/core/input/',
+            'third_party/blink/renderer/modules/exported/',
         ],
         'allowed': [
-            'ui::LatencyInfo',
+            'base::Time',
+            'base::TimeTicks',
+            'base::TimeDelta',
         ],
     },
     {

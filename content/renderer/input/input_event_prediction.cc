@@ -171,8 +171,7 @@ void InputEventPrediction::AddPredictedEvents(
       last_event_timestamp_ + mouse_predictor_->MaxPredictionTime();
   bool success = true;
   while (success) {
-    std::unique_ptr<WebInputEvent> predicted_event =
-        coalesced_event.Event().Clone();
+    ui::WebScopedInputEvent predicted_event = coalesced_event.Event().Clone();
     success = false;
     if (predicted_event->GetType() == WebInputEvent::Type::kTouchMove) {
       WebTouchEvent& touch_event =

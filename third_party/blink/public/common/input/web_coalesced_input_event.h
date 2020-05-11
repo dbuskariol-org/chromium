@@ -11,7 +11,6 @@
 #include "third_party/blink/public/common/common_export.h"
 #include "third_party/blink/public/common/input/web_input_event.h"
 #include "third_party/blink/public/common/input/web_pointer_event.h"
-#include "ui/latency/latency_info.h"
 
 namespace blink {
 
@@ -20,13 +19,10 @@ namespace blink {
 // including those that cannot be coalesced.
 class BLINK_COMMON_EXPORT WebCoalescedInputEvent {
  public:
-  WebCoalescedInputEvent(const WebInputEvent&, const ui::LatencyInfo&);
-  WebCoalescedInputEvent(std::unique_ptr<WebInputEvent>,
-                         const ui::LatencyInfo&);
+  explicit WebCoalescedInputEvent(const WebInputEvent&);
   WebCoalescedInputEvent(std::unique_ptr<WebInputEvent>,
                          std::vector<std::unique_ptr<WebInputEvent>>,
-                         std::vector<std::unique_ptr<WebInputEvent>>,
-                         const ui::LatencyInfo&);
+                         std::vector<std::unique_ptr<WebInputEvent>>);
   // Copy constructor to deep copy the event.
   WebCoalescedInputEvent(const WebCoalescedInputEvent&);
 
@@ -44,24 +40,12 @@ class BLINK_COMMON_EXPORT WebCoalescedInputEvent {
   const std::vector<std::unique_ptr<WebInputEvent>>&
   GetPredictedEventsPointers() const;
 
-  const ui::LatencyInfo& latency_info() const { return latency_; }
-
-  bool CanCoalesceWith(const WebCoalescedInputEvent& other) const
-      WARN_UNUSED_RESULT;
-
-  // Coalesce with the |newer_event|. This object will be updated to
-  // take into account |newer_event|'s fields, and |newer_event|'s latency
-  // info will become the trace id of the older event (and be marked as
-  // coalesced).
-  void CoalesceWith(WebCoalescedInputEvent& newer_event);
-
  private:
   using WebScopedInputEvent = std::unique_ptr<WebInputEvent>;
 
   WebScopedInputEvent event_;
   std::vector<WebScopedInputEvent> coalesced_events_;
   std::vector<WebScopedInputEvent> predicted_events_;
-  ui::LatencyInfo latency_;
 };
 
 using WebScopedCoalescedInputEvent = std::unique_ptr<WebCoalescedInputEvent>;

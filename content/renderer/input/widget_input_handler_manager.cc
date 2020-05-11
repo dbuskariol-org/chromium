@@ -23,7 +23,6 @@
 #include "third_party/blink/public/platform/scheduler/web_thread_scheduler.h"
 #include "third_party/blink/public/web/web_local_frame.h"
 #include "ui/events/base_event_utils.h"
-#include "ui/events/blink/blink_event_util.h"
 #include "ui/events/blink/did_overscroll_params.h"
 
 #if defined(OS_ANDROID)
@@ -579,8 +578,9 @@ void WidgetInputHandlerManager::HandleInputEvent(
   auto send_callback = base::BindOnce(
       &WidgetInputHandlerManager::HandledInputEvent, this, std::move(callback));
 
-  blink::WebCoalescedInputEvent coalesced_event(*event, latency);
-  render_widget_->HandleInputEvent(coalesced_event, std::move(send_callback));
+  blink::WebCoalescedInputEvent coalesced_event(*event);
+  render_widget_->HandleInputEvent(coalesced_event, latency,
+                                   std::move(send_callback));
 }
 
 void WidgetInputHandlerManager::DidHandleInputEventAndOverscroll(
