@@ -32,51 +32,105 @@ NGSimplifiedLayoutAlgorithm::NGSimplifiedLayoutAlgorithm(
   // Currently this only supports block-flow layout due to the static-position
   // calculations. If support for other layout types is added this logic will
   // need to be changed.
-  DCHECK(Node().IsBlockFlow());
+  bool is_block_flow = Node().IsBlockFlow();
+  DCHECK(is_block_flow);
   const NGPhysicalBoxFragment& physical_fragment =
       To<NGPhysicalBoxFragment>(result.PhysicalFragment());
 
-  container_builder_.SetIsInlineFormattingContext(
-      Node().IsInlineFormattingContextRoot());
-  container_builder_.SetStyleVariant(physical_fragment.StyleVariant());
+  container_builder_.SetInitialFragmentGeometry(params.fragment_geometry);
   container_builder_.SetIsNewFormattingContext(
       physical_fragment.IsFormattingContextRoot());
-  container_builder_.SetInitialFragmentGeometry(params.fragment_geometry);
 
-  NGExclusionSpace exclusion_space = result.ExclusionSpace();
-  container_builder_.SetExclusionSpace(std::move(exclusion_space));
+  if (is_block_flow) {
+    container_builder_.SetIsInlineFormattingContext(
+        Node().IsInlineFormattingContextRoot());
+    container_builder_.SetStyleVariant(physical_fragment.StyleVariant());
 
-  // Ensure that the parent layout hasn't asked us to move our BFC position.
-  DCHECK_EQ(ConstraintSpace().BfcOffset(),
-            previous_result_.GetConstraintSpaceForCaching().BfcOffset());
+    if (result.SubtreeModifiedMarginStrut())
+      container_builder_.SetSubtreeModifiedMarginStrut();
+    container_builder_.SetEndMarginStrut(result.EndMarginStrut());
 
-  if (result.SubtreeModifiedMarginStrut())
-    container_builder_.SetSubtreeModifiedMarginStrut();
+    // Ensure that the parent layout hasn't asked us to move our BFC position.
+    DCHECK_EQ(ConstraintSpace().BfcOffset(),
+              previous_result_.GetConstraintSpaceForCaching().BfcOffset());
+    container_builder_.SetBfcLineOffset(result.BfcLineOffset());
+    if (result.BfcBlockOffset())
+      container_builder_.SetBfcBlockOffset(*result.BfcBlockOffset());
 
-  container_builder_.SetBfcLineOffset(result.BfcLineOffset());
-  if (result.BfcBlockOffset())
-    container_builder_.SetBfcBlockOffset(*result.BfcBlockOffset());
+    if (result.LinesUntilClamp())
+      container_builder_.SetLinesUntilClamp(result.LinesUntilClamp());
 
-  container_builder_.SetEndMarginStrut(result.EndMarginStrut());
-  container_builder_.SetIntrinsicBlockSize(result.IntrinsicBlockSize());
-  container_builder_.SetUnpositionedListMarker(result.UnpositionedListMarker());
+    NGExclusionSpace exclusion_space = result.ExclusionSpace();
+    container_builder_.SetExclusionSpace(std::move(exclusion_space));
 
-  if (result.IsSelfCollapsing())
-    container_builder_.SetIsSelfCollapsing();
-  if (result.IsPushedByFloats())
-    container_builder_.SetIsPushedByFloats();
-  container_builder_.SetAdjoiningObjectTypes(result.AdjoiningObjectTypes());
+    if (result.IsSelfCollapsing())
+      container_builder_.SetIsSelfCollapsing();
+    if (result.IsPushedByFloats())
+      container_builder_.SetIsPushedByFloats();
+    container_builder_.SetAdjoiningObjectTypes(result.AdjoiningObjectTypes());
+    container_builder_.SetUnpositionedListMarker(
+        result.UnpositionedListMarker());
+
+    if (physical_fragment.LastBaseline())
+      container_builder_.SetLastBaseline(*physical_fragment.LastBaseline());
+  } else {
+    // Only block-flow layout sets the following fields.
+    DCHECK(physical_fragment.IsFormattingContextRoot());
+    DCHECK(!Node().IsInlineFormattingContextRoot());
+    DCHECK_EQ(physical_fragment.StyleVariant(), NGStyleVariant::kStandard);
+
+    DCHECK(!result.SubtreeModifiedMarginStrut());
+    DCHECK(result.EndMarginStrut().IsEmpty());
+
+    DCHECK_EQ(ConstraintSpace().BfcOffset(), NGBfcOffset());
+    DCHECK_EQ(result.BfcLineOffset(), LayoutUnit());
+    DCHECK_EQ(result.BfcBlockOffset().value_or(LayoutUnit()), LayoutUnit());
+
+    DCHECK(!result.LinesUntilClamp());
+
+    DCHECK(result.ExclusionSpace().IsEmpty());
+
+    DCHECK(!result.IsSelfCollapsing());
+    DCHECK(!result.IsPushedByFloats());
+    DCHECK_EQ(result.AdjoiningObjectTypes(), kAdjoiningNone);
+    DCHECK(!result.UnpositionedListMarker());
+
+    DCHECK(!physical_fragment.LastBaseline());
+
+    if (physical_fragment.IsFieldsetContainer())
+      container_builder_.SetIsFieldsetContainer();
+
+    if (physical_fragment.IsMathMLFraction())
+      container_builder_.SetIsMathMLFraction();
+
+    container_builder_.SetCustomLayoutData(result.CustomLayoutData());
+  }
+
+  if (physical_fragment.IsHiddenForPaint())
+    container_builder_.SetIsHiddenForPaint(true);
 
   if (physical_fragment.Baseline())
     container_builder_.SetBaseline(*physical_fragment.Baseline());
-  if (physical_fragment.LastBaseline())
-    container_builder_.SetLastBaseline(*physical_fragment.LastBaseline());
 
-  container_builder_.SetBlockSize(ComputeBlockSizeForFragment(
+  container_builder_.SetIntrinsicBlockSize(result.IntrinsicBlockSize());
+  container_builder_.SetOverflowBlockSize(result.OverflowBlockSize());
+
+  LayoutUnit new_block_size = ComputeBlockSizeForFragment(
       ConstraintSpace(), Style(),
       container_builder_.Borders() + container_builder_.Padding(),
       result.IntrinsicBlockSize(),
-      container_builder_.InitialBorderBoxSize().inline_size));
+      container_builder_.InitialBorderBoxSize().inline_size);
+
+  // Only block-flow is allowed to change its block-size during "simplified"
+  // layout, all other layout types must remain the same size.
+  if (is_block_flow) {
+    container_builder_.SetBlockSize(new_block_size);
+  } else {
+    LayoutUnit old_block_size =
+        NGFragment(writing_mode_, physical_fragment).BlockSize();
+    DCHECK_EQ(old_block_size, new_block_size);
+    container_builder_.SetBlockSize(old_block_size);
+  }
 
   child_available_inline_size_ =
       ShrinkAvailableSize(container_builder_.InitialBorderBoxSize(),

@@ -481,6 +481,7 @@ void NGPhysicalBoxFragment::CheckSameForSimplifiedLayout(
   DCHECK_EQ(type_, other.type_);
   DCHECK_EQ(sub_type_, other.sub_type_);
   DCHECK_EQ(style_variant_, other.style_variant_);
+  DCHECK_EQ(is_hidden_for_paint_, other.is_hidden_for_paint_);
 
   // |has_floating_descendants_for_paint_| can change during simplified layout.
   DCHECK_EQ(has_orthogonal_flow_roots_, other.has_orthogonal_flow_roots_);
@@ -490,10 +491,13 @@ void NGPhysicalBoxFragment::CheckSameForSimplifiedLayout(
             other.depends_on_percentage_block_size_);
 
   DCHECK_EQ(is_inline_formatting_context_, other.is_inline_formatting_context_);
+  DCHECK_EQ(has_fragment_items_, other.has_fragment_items_);
+  DCHECK_EQ(border_edge_, other.border_edge_);
+  DCHECK_EQ(is_math_fraction_, other.is_math_fraction_);
+
   DCHECK_EQ(is_fieldset_container_, other.is_fieldset_container_);
   DCHECK_EQ(is_legacy_layout_root_, other.is_legacy_layout_root_);
   DCHECK_EQ(is_painted_atomically_, other.is_painted_atomically_);
-  DCHECK_EQ(border_edge_, other.border_edge_);
 
   // The oof_positioned_descendants_ vector can change during "simplified"
   // layout. This occurs when an OOF-descendant changes from "fixed" to
