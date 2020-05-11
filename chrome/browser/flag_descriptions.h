@@ -2306,6 +2306,9 @@ extern const char kClickToCallUIDescription[];
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
     defined(OS_CHROMEOS)
 
+extern const char kEnableMediaFeedsName[];
+extern const char kEnableMediaFeedsDescription[];
+
 extern const char kRemoteCopyReceiverName[];
 extern const char kRemoteCopyReceiverDescription[];
 

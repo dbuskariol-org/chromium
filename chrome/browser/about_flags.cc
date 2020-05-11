@@ -5520,6 +5520,12 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(chromeos::features::kSuggestedContentToggle)},
 #endif  // defined(OS_CHROMEOS)
 
+#if !defined(OS_ANDROID)
+    {"enable-media-feeds", flag_descriptions::kEnableMediaFeedsName,
+     flag_descriptions::kEnableMediaFeedsDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(media::kMediaFeeds)},
+#endif  // !defined(OS_ANDROID)
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

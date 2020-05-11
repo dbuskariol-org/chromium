@@ -3916,6 +3916,11 @@ const char kClickToCallUIDescription[] =
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) || \
     defined(OS_CHROMEOS)
 
+const char kEnableMediaFeedsName[] = "Enables Media Feeds";
+const char kEnableMediaFeedsDescription[] =
+    "Enables the Media Feeds feature which allows us to fetch feeds of media "
+    "items from websites that support the feature. ";
+
 const char kRemoteCopyReceiverName[] =
     "Enables the remote copy feature to receive messages";
 const char kRemoteCopyReceiverDescription[] =
