@@ -1741,14 +1741,7 @@ void Animation::StartAnimationOnCompositor(
   // Asynchronous updates have an associated pending play or pending pause
   // task associated with them.
   if (start_time_ && !PendingInternal()) {
-    double zero_time = 0;
-    if (timeline_->IsDocumentTimeline()) {
-      zero_time = To<DocumentTimeline>(*timeline_)
-                      .ZeroTime()
-                      .since_origin()
-                      .InSecondsF();
-    }
-    start_time = zero_time + start_time_.value();
+    start_time = timeline_->ZeroTimeInSeconds() + start_time_.value();
     if (reversed) {
       start_time =
           start_time.value() - (EffectEnd() / fabs(EffectivePlaybackRate()));
