@@ -738,6 +738,9 @@ extern const char kNearbySharingDescription[];
 extern const char kUsernameFirstFlowName[];
 extern const char kUsernameFirstFlowDescription[];
 
+extern const char kNewCanvas2DAPIName[];
+extern const char kNewCanvas2DAPIDescription[];
+
 extern const char kNewProfilePickerName[];
 extern const char kNewProfilePickerDescription[];
 

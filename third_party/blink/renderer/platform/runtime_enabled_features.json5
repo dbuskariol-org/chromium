@@ -1201,6 +1201,10 @@
     {
       name: "NeverSlowMode",
     },
+    {
+      name: "NewCanvas2DAPI",
+      status: "experimental",
+    },
     // Not a web exposed feature, enabled from the command line.
     {
       name: "NewRemotePlaybackPipeline",

@@ -5504,6 +5504,9 @@ const FeatureEntry kFeatureEntries[] = {
      kOsMac | kOsWin | kOsLinux,
      FEATURE_VALUE_TYPE(kDiceWebSigninInterceptionFeature)},
 #endif  // ENABLE_DICE_SUPPORT
+    {"new-canvas-2d-api", flag_descriptions::kNewCanvas2DAPIName,
+     flag_descriptions::kNewCanvas2DAPIDescription, kOsAll,
+     SINGLE_VALUE_TYPE(switches::kEnableNewCanvas2DAPI)},
 
     {"enable-translate-sub-frames",
      flag_descriptions::kEnableTranslateSubFramesName,

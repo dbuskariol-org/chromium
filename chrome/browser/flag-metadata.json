@@ -2947,6 +2947,11 @@
     "expiry_milestone": 84
   },
   {
+    "name": "new-canvas-2d-api",
+    "owners": [ "aaronhk", "fserb", "juanmihd", "yiyix" ],
+    "expiry_milestone": 95
+  },
+  {
     "name": "new-net-error-page-ui",
     "owners": [ "sclittle", "srsudar", "offline-dev" ],
     "expiry_milestone": 75

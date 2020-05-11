@@ -39503,6 +39503,7 @@ from previous Chrome versions.
   <int value="-616508634" label="DisableCryptAuthV1DeviceSync:enabled"/>
   <int value="-614223913"
       label="ClickToCallContextMenuForSelectedText:enabled"/>
+  <int value="-613596048" label="new-canvas-2d-api"/>
   <int value="-612633819" label="NotificationScrollBar:disabled"/>
   <int value="-612480090" label="FasterLocationReload:enabled"/>
   <int value="-610411643" label="enable-printer-app-search"/>
