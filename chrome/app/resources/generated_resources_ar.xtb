@@ -1683,7 +1683,7 @@
 <ph name="LIST_ITEM" />الإشارات المرجعية من جهاز Chromebook الخاص بالمدرسة
 <ph name="LIST_ITEM" />الملء التلقائي لكلمات المرور في المواقع الإلكترونية التعليمية
 <ph name="END_LIST" />
-للاستفادة من التجربة المدرسية الكاملة على هذا الجهاز، يجب على طفلك إجراء ما يلي:
+للاستفادة من التجربة المدرسية الكاملة على هذا الجهاز، على طفلك إجراء ما يلي:
 <ph name="BEGIN_OLIST" />
 <ph name="OLIST_ITEM" />تسجيل الخروج من حسابه المُدار من خلال Family Link
 <ph name="OLIST_ITEM" />تسجيل الدخول باستخدام حساب "G Suite للتعليم" على شاشة تسجيل الدخول. ويُرجى ملاحظة أن هذا يعني أن سياسات المدرسة التي تتضمّن إعدادات الوصول للمواقع الإلكترونية والتطبيقات ستكون لها الأولوية على ميزات إشراف Family Link (على سبيل المثال، قد يسمح مشرفو المدرسة بالوصول إلى YouTube إذا كان ضروريًا لأداء الواجبات المنزلية، ولن يتم فرض قيود على وقت النظر إلى الشاشة وما إلى ذلك).
@@ -2202,7 +2202,7 @@
 <translation id="3855441664322950881">إنشاء حزمة للإضافة</translation>
 <translation id="3855676282923585394">إشارات وإعدادات الاستيراد...</translation>
 <translation id="3856096718352044181">يُرجى إثبات صلاحية مقدّم الخدمة أو المحاولة مجددًا.</translation>
-<translation id="3856800405688283469">تحديد منطقة زمنية</translation>
+<translation id="3856800405688283469">اختيار منطقة زمنية</translation>
 <translation id="3857807444929313943">رفع الإصبع، ثم اللمس مرة أخرى</translation>
 <translation id="3860104611854310167"><ph name="PROFILE_NAME" />: تم إيقاف المزامنة مؤقتًا</translation>
 <translation id="3861638017150647085">اسم المستخدم "<ph name="USERNAME" />" غير متوفر.</translation>
@@ -2317,7 +2317,7 @@
 <translation id="3984159763196946143">تعذَّر بدء الوضع التجريبي</translation>
 <translation id="3984431586879874039">هل تريد السماح لهذا الموقع الإلكتروني بالاطّلاع على مفتاح الأمان؟</translation>
 <translation id="3987938432087324095">عذرًا، لم يتم التعرف على ذلك.</translation>
-<translation id="3988996860813292272">تحديد منطقة زمنية</translation>
+<translation id="3988996860813292272">اختيار منطقة زمنية</translation>
 <translation id="399179161741278232">المستوردة</translation>
 <translation id="3994374631886003300">ألغِ قفل هاتفك وقرِّبه لإلغاء قفل جهاز <ph name="DEVICE_TYPE" />.</translation>
 <translation id="3994878504415702912">&amp;تكبير/تصغير</translation>
@@ -4889,7 +4889,7 @@
 <translation id="7553242001898162573">إدخال كلمة المرور</translation>
 <translation id="7554791636758816595">علامة تبويب جديدة</translation>
 <translation id="7556033326131260574">‏لم يتمكن Smart Lock من التحقق من حسابك. اكتب كلمة المرور للدخول.</translation>
-<translation id="7556242789364317684">‏للأسف، يتعذّر على <ph name="SHORT_PRODUCT_NAME" /> استعادة إعداداتك. ولإصلاح الخطأ، يجب على <ph name="SHORT_PRODUCT_NAME" /> إعادة ضبط جهازك باستخدام Powerwash.</translation>
+<translation id="7556242789364317684">‏للأسف، يتعذّر على <ph name="SHORT_PRODUCT_NAME" /> استعادة إعداداتك. ولإصلاح الخطأ، على <ph name="SHORT_PRODUCT_NAME" /> إعادة ضبط جهازك باستخدام Powerwash.</translation>
 <translation id="7559719679815339381">‏يُرجى الانتظار ...بينما يتم تحديث تطبيق Kiosk. لا تقم بإزالة جهاز USB.</translation>
 <translation id="7561196759112975576">دومًا</translation>
 <translation id="756445078718366910">فتح نافذة المتصفح</translation>
