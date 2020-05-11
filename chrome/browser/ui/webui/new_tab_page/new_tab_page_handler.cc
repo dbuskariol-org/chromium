@@ -223,11 +223,16 @@ void NewTabPageHandler::AddMostVisitedTile(
     AddMostVisitedTileCallback callback) {
   bool success = instant_service_->AddCustomLink(url, title);
   std::move(callback).Run(success);
+  NTPUserDataLogger::GetOrCreateFromWebContents(web_contents_)
+      ->LogEvent(NTP_CUSTOMIZE_SHORTCUT_ADD, base::TimeDelta() /* unused */);
 }
 
 void NewTabPageHandler::DeleteMostVisitedTile(const GURL& url) {
   if (instant_service_->IsCustomLinksEnabled()) {
     instant_service_->DeleteCustomLink(url);
+    NTPUserDataLogger::GetOrCreateFromWebContents(web_contents_)
+        ->LogEvent(NTP_CUSTOMIZE_SHORTCUT_REMOVE,
+                   base::TimeDelta() /* unused */);
   } else {
     instant_service_->DeleteMostVisitedItem(url);
     last_blacklisted_ = url;
@@ -237,6 +242,9 @@ void NewTabPageHandler::DeleteMostVisitedTile(const GURL& url) {
 void NewTabPageHandler::RestoreMostVisitedDefaults() {
   if (instant_service_->IsCustomLinksEnabled()) {
     instant_service_->ResetCustomLinks();
+    NTPUserDataLogger::GetOrCreateFromWebContents(web_contents_)
+        ->LogEvent(NTP_CUSTOMIZE_SHORTCUT_RESTORE_ALL,
+                   base::TimeDelta() /* unused */);
   } else {
     instant_service_->UndoAllMostVisitedDeletions();
   }
@@ -261,15 +269,23 @@ void NewTabPageHandler::SetMostVisitedSettings(bool custom_links_enabled,
   if (old_visible != visible) {
     instant_service_->ToggleShortcutsVisibility(
         /* do_notify= */ !toggleCustomLinksEnabled);
+    NTPUserDataLogger::GetOrCreateFromWebContents(web_contents_)
+        ->LogEvent(NTP_CUSTOMIZE_SHORTCUT_TOGGLE_VISIBILITY,
+                   base::TimeDelta() /* unused */);
   }
   if (toggleCustomLinksEnabled) {
     instant_service_->ToggleMostVisitedOrCustomLinks();
+    NTPUserDataLogger::GetOrCreateFromWebContents(web_contents_)
+        ->LogEvent(NTP_CUSTOMIZE_SHORTCUT_TOGGLE_TYPE,
+                   base::TimeDelta() /* unused */);
   }
 }
 
 void NewTabPageHandler::UndoMostVisitedTileAction() {
   if (instant_service_->IsCustomLinksEnabled()) {
     instant_service_->UndoCustomLinkAction();
+    NTPUserDataLogger::GetOrCreateFromWebContents(web_contents_)
+        ->LogEvent(NTP_CUSTOMIZE_SHORTCUT_UNDO, base::TimeDelta() /* unused */);
   } else if (last_blacklisted_.is_valid()) {
     instant_service_->UndoMostVisitedDeletion(last_blacklisted_);
     last_blacklisted_ = GURL();
@@ -362,6 +378,8 @@ void NewTabPageHandler::UpdateMostVisitedTile(
   bool success = instant_service_->UpdateCustomLink(
       url, new_url != url ? new_url : GURL(), new_title);
   std::move(callback).Run(success);
+  NTPUserDataLogger::GetOrCreateFromWebContents(web_contents_)
+      ->LogEvent(NTP_CUSTOMIZE_SHORTCUT_UPDATE, base::TimeDelta() /* unused */);
 }
 
 void NewTabPageHandler::GetBackgroundCollections(
