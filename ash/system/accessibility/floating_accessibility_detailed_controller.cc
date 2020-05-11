@@ -88,7 +88,7 @@ void FloatingAccessibilityDetailedController::Show(
       std::make_unique<tray::AccessibilityDetailedView>(this));
   bubble_view_->SetPreferredSize(
       gfx::Size(kTrayMenuWidth, kDetailedViewHeightDip));
-  detailed_view_->SetFocusBehavior(ActionableView::FocusBehavior::ALWAYS);
+  bubble_view_->SetFocusBehavior(ActionableView::FocusBehavior::ALWAYS);
   detailed_view_->SetPaintToLayer();
   detailed_view_->layer()->SetFillsBoundsOpaquely(false);
 
@@ -98,7 +98,7 @@ void FloatingAccessibilityDetailedController::Show(
   bubble_view_->InitializeAndShowBubble();
 
   // Focus on the bubble whenever it is shown.
-  detailed_view_->RequestFocus();
+  bubble_view_->RequestFocus();
 }
 
 void FloatingAccessibilityDetailedController::UpdateAnchorRect(
