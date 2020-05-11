@@ -4,6 +4,8 @@
 
 #import "ios/chrome/common/ui/util/pointer_interaction_util.h"
 
+#include <ostream>
+
 #include "base/check_op.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
