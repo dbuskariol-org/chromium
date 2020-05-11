@@ -2374,13 +2374,6 @@ jumbo_static_library("ui") {
     }
   }
 
-  if (is_win || is_mac || is_chromeos) {
-    sources += [
-      "webui/cast/cast_ui.cc",
-      "webui/cast/cast_ui.h",
-    ]
-  }
-
   if (is_win || is_mac) {
     sources += [
       "webui/settings/native_certificates_handler.cc",
