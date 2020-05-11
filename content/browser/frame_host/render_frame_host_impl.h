@@ -1874,9 +1874,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // mojom::DomAutomationControllerHost:
   void DomOperationResponse(const std::string& json_string) override;
 
-  // Registers Mojo interfaces that this frame host makes available.
-  void RegisterMojoInterfaces();
-
   // Resets any waiting state of this RenderFrameHost that is no longer
   // relevant.
   void ResetWaitingState();

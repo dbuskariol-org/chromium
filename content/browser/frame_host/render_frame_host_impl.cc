@@ -5003,13 +5003,6 @@ void RenderFrameHostImpl::HandleAXLocationChanges(
   }
 }
 
-void RenderFrameHostImpl::RegisterMojoInterfaces() {
-  file_system_manager_.reset(new FileSystemManagerImpl(
-      GetProcess()->GetID(),
-      GetProcess()->GetStoragePartition()->GetFileSystemContext(),
-      ChromeBlobStorageContext::GetFor(GetProcess()->GetBrowserContext())));
-}
-
 media::MediaMetricsProvider::RecordAggregateWatchTimeCallback
 RenderFrameHostImpl::GetRecordAggregateWatchTimeCallback() {
   return delegate_->GetRecordAggregateWatchTimeCallback();
@@ -6138,7 +6131,11 @@ void RenderFrameHostImpl::SetUpMojoIfNeeded() {
       },
       base::Unretained(this)));
 
-  RegisterMojoInterfaces();
+  file_system_manager_.reset(new FileSystemManagerImpl(
+      GetProcess()->GetID(),
+      GetProcess()->GetStoragePartition()->GetFileSystemContext(),
+      ChromeBlobStorageContext::GetFor(GetProcess()->GetBrowserContext())));
+
   mojo::PendingRemote<mojom::FrameFactory> frame_factory;
   GetProcess()->BindReceiver(frame_factory.InitWithNewPipeAndPassReceiver());
   mojo::Remote<mojom::FrameFactory>(std::move(frame_factory))
