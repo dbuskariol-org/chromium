@@ -1562,7 +1562,7 @@ EventDispatchDetails EventRewriterChromeOS::RewriteKeyEventInContext(
 bool EventRewriterChromeOS::RewriteTopRowKeysForLayoutWilco(
     const KeyEvent& key_event,
     bool search_is_pressed,
-    EventRewriterChromeOS::MutableKeyState* state,
+    MutableKeyState* state,
     KeyboardTopRowLayout layout) {
   // When the kernel issues an function key (Fn modifier help down) and the
   // search key is pressed, the function key needs to be mapped to its
@@ -1638,7 +1638,7 @@ bool EventRewriterChromeOS::RewriteTopRowKeysForLayoutWilco(
        {EF_NONE, DomCode::F12, DomKey::F12, VKEY_F12}},
   };
 
-  EventRewriterChromeOS::MutableKeyState incoming_without_command = *state;
+  MutableKeyState incoming_without_command = *state;
   incoming_without_command.flags &= ~EF_COMMAND_DOWN;
 
   if ((state->key_code >= VKEY_F1) && (state->key_code <= VKEY_F12)) {
