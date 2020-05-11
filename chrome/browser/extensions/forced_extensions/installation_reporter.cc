@@ -17,6 +17,8 @@ InstallationReporter::InstallationData::InstallationData() = default;
 InstallationReporter::InstallationData::InstallationData(
     const InstallationData&) = default;
 
+// TODO(crbug/1071837): Add all fields from
+// InstallationReporter::InstallationData to this method.
 std::string InstallationReporter::GetFormattedInstallationData(
     const InstallationData& data) {
   std::ostringstream str;
@@ -55,6 +57,15 @@ InstallationReporter::~InstallationReporter() = default;
 InstallationReporter* InstallationReporter::Get(
     content::BrowserContext* context) {
   return InstallationReporterFactory::GetForBrowserContext(context);
+}
+
+void InstallationReporter::ReportManifestInvalidFailure(
+    const ExtensionId& id,
+    ManifestInvalidError error) {
+  InstallationData& data = installation_data_map_[id];
+  data.failure_reason = FailureReason::MANIFEST_INVALID;
+  data.manifest_invalid_error = error;
+  NotifyObserversOfFailure(id, data.failure_reason.value(), data);
 }
 
 void InstallationReporter::ReportInstallationStage(const ExtensionId& id,
