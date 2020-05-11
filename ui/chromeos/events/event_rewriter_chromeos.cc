@@ -545,11 +545,12 @@ EventDispatchDetails EventRewriterChromeOS::RewriteEvent(
 void EventRewriterChromeOS::BuildRewrittenKeyEvent(
     const KeyEvent& key_event,
     const MutableKeyState& state,
-    std::unique_ptr<Event>* rewritten_event) {
-  KeyEvent* rewritten_key_event =
-      new KeyEvent(key_event.type(), state.key_code, state.code, state.flags,
-                   state.key, key_event.time_stamp());
-  rewritten_event->reset(rewritten_key_event);
+    std::unique_ptr<ui::Event>* rewritten_event) {
+  auto key_event_ptr = std::make_unique<KeyEvent>(
+      key_event.type(), state.key_code, state.code, state.flags, state.key,
+      key_event.time_stamp());
+  key_event_ptr->set_scan_code(key_event.scan_code());
+  *rewritten_event = std::move(key_event_ptr);
 }
 
 // static
@@ -1497,10 +1498,11 @@ EventDispatchDetails EventRewriterChromeOS::RewriteKeyEventInContext(
 
       if (should_release) {
         // If the key should be released, create a key event for it.
-        std::unique_ptr<KeyEvent> dispatched_event = std::make_unique<KeyEvent>(
+        auto dispatched_event = std::make_unique<KeyEvent>(
             key_event.type(), key_state_iter->first.key_code,
             key_state_iter->first.code, event_flags, key_state_iter->first.key,
             key_event.time_stamp());
+        dispatched_event->set_scan_code(key_event.scan_code());
         details = SendEventFinally(continuation, dispatched_event.get());
 
         key_state_iter = pressed_key_states_.erase(key_state_iter);
