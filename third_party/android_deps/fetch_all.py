@@ -65,6 +65,11 @@ _ANDROID_DEPS_LIBS_SUBDIR = _ANDROID_DEPS_SUBDIR + '/libs'
 # Location of the buildSrc directory used implement our gradle task.
 _GRADLE_BUILDSRC_PATH = _ANDROID_DEPS_SUBDIR + '/buildSrc'
 
+_JAVA_HOME = os.path.join(_CHROMIUM_SRC, 'third_party', 'jdk', 'current')
+_JETIFY_PATH = os.path.join(_CHROMIUM_SRC, 'third_party',
+                            'jetifier_standalone', 'bin',
+                            'jetifier-standalone')
+
 # The lis_ of git-controlled files that are checked or updated by this tool.
 _UPDATED_GIT_FILES = [
     'DEPS',
@@ -319,6 +324,38 @@ def GenerateCipdUploadCommand(cipd_pkg_info):
             pkg_path, pkg_name, pkg_tag)
 
 
+def _JetifyAll(aar_files):
+    env = os.environ.copy()
+    env['JAVA_HOME'] = _JAVA_HOME
+
+    # Don't jetify support lib or androidx.
+    EXCLUDE = ('android_arch_', 'androidx_', 'com_android_support_')
+
+    jobs = []
+    for aar_file in aar_files:
+        if any(x in aar_file for x in EXCLUDE):
+            continue
+        cmd = [_JETIFY_PATH, '-i', aar_file, '-o', aar_file]
+        # Hide output: "You don't need to run Jetifier."
+        proc = subprocess.Popen(cmd,
+                                env=env,
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT,
+                                encoding='ascii')
+        jobs.append((cmd, proc))
+
+    num_required = 0
+    for cmd, proc in jobs:
+        output = proc.communicate()[0]
+        if proc.returncode:
+            raise Exception('Jetify failed for command: ' + ' '.join(cmd))
+        if "You don't need to run Jetifier" not in output:
+            logging.info('Needed jetify: %s', cmd[-1])
+            num_required += 1
+    logging.info('Jetify was needed for %d out of %d files', num_required,
+                 len(jobs))
+
+
 def main():
     parser = argparse.ArgumentParser(
         description=__doc__,
@@ -473,9 +510,12 @@ def main():
         ]
         RunCommand(gn_args, print_stdout=debug)
 
+        logging.info('# Jetify all libraries.')
+        aar_files = FindInDirectory(libs_dir, '*.aar')
+        _JetifyAll(aar_files)
+
         logging.info(
             '# Generate Android .aar info and third-party license files.')
-        aar_files = FindInDirectory(libs_dir, '*.aar')
         for aar_file in aar_files:
             aar_dirname = os.path.dirname(aar_file)
             aar_info_name = os.path.basename(aar_dirname) + '.info'
