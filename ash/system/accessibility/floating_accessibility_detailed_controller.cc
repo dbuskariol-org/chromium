@@ -127,16 +127,6 @@ views::Button* FloatingAccessibilityDetailedController::CreateHelpButton(
   return button;
 }
 
-views::Button* FloatingAccessibilityDetailedController::CreateSettingsButton(
-    views::ButtonListener* listener,
-    int setting_accessible_name_id) {
-  auto* button = DetailedViewDelegate::CreateSettingsButton(
-      listener, setting_accessible_name_id);
-  // TODO(crbug.com/1061068): Enable when the settings UI is ready.
-  button->SetEnabled(false);
-  return button;
-}
-
 void FloatingAccessibilityDetailedController::BubbleViewDestroyed() {
   detailed_view_ = nullptr;
   bubble_view_ = nullptr;

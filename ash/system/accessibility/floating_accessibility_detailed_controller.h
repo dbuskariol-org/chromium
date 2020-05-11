@@ -47,8 +47,6 @@ class ASH_EXPORT FloatingAccessibilityDetailedController
   class DetailedBubbleView;
   // DetailedViewDelegate:
   views::Button* CreateHelpButton(views::ButtonListener* listener) override;
-  views::Button* CreateSettingsButton(views::ButtonListener* listener,
-                                      int setting_accessible_name_id) override;
   // TrayBubbleView::Delegate:
   void BubbleViewDestroyed() override;
 
