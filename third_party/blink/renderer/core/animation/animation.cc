@@ -1278,13 +1278,6 @@ void Animation::reverse(ExceptionState& exception_state) {
 
 // https://drafts.csswg.org/web-animations/#finishing-an-animation-section
 void Animation::finish(ExceptionState& exception_state) {
-  // TODO(crbug.com/916117): Implement finish for scroll-linked animations.
-  if (timeline_ && timeline_->IsScrollTimeline()) {
-    exception_state.ThrowDOMException(
-        DOMExceptionCode::kNotSupportedError,
-        "Scroll-linked WebAnimation currently does not support finish.");
-    return;
-  }
   if (!EffectivePlaybackRate()) {
     exception_state.ThrowDOMException(
         DOMExceptionCode::kInvalidStateError,
