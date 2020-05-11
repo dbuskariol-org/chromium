@@ -91,10 +91,12 @@ GetFileDataBlocking(const base::FilePath& path) {
 
 }  // namespace
 
-FileSourceRequest::FileSourceRequest(base::FilePath path,
+FileSourceRequest::FileSourceRequest(bool block_unsupported_types,
+                                     base::FilePath path,
                                      BinaryUploadService::Callback callback)
     : Request(std::move(callback)),
       has_cached_result_(false),
+      block_unsupported_types_(block_unsupported_types),
       path_(std::move(path)) {
   set_filename(path_.BaseName().AsUTF8Unsafe());
 }
@@ -126,13 +128,20 @@ void FileSourceRequest::OnGotFileData(
     return;
   }
 
-  bool malware = deep_scanning_request().has_malware_scan_request();
-  bool dlp = deep_scanning_request().has_dlp_scan_request();
-  if ((malware || dlp) && !FileTypeSupported(malware, dlp, path_)) {
-    CacheResultAndData(BinaryUploadService::Result::UNSUPPORTED_FILE_TYPE,
-                       std::move(result_and_data.second));
-    std::move(callback).Run(cached_result_, cached_data_);
-    return;
+  if (deep_scanning_request().has_dlp_scan_request() &&
+      !FileTypeSupportedForDlp(path_)) {
+    // Abort the request early if settings say to block unsupported types or if
+    // there was no malware request to be done, otherwise proceed with the
+    // malware request only.
+    if (block_unsupported_types_ ||
+        !deep_scanning_request().has_malware_scan_request()) {
+      CacheResultAndData(BinaryUploadService::Result::UNSUPPORTED_FILE_TYPE,
+                         std::move(result_and_data.second));
+      std::move(callback).Run(cached_result_, cached_data_);
+      return;
+    } else {
+      clear_dlp_scan_request();
+    }
   }
 
   base::FilePath::StringType ext(path_.FinalExtension());

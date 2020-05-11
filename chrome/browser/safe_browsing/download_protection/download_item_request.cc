@@ -80,10 +80,8 @@ void DownloadItemRequest::GetRequestData(DataCallback callback) {
     return;
   }
 
-  bool malware = deep_scanning_request().has_malware_scan_request();
-  bool dlp = deep_scanning_request().has_dlp_scan_request();
-  if (item_ && (malware || dlp) &&
-      !FileTypeSupported(malware, dlp, item_->GetTargetFilePath())) {
+  if (item_ && deep_scanning_request().has_dlp_scan_request() &&
+      !FileTypeSupportedForDlp(item_->GetTargetFilePath())) {
     base::SequencedTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,
         base::BindOnce(std::move(callback),
