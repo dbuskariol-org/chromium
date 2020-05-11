@@ -15,6 +15,7 @@
 #include "third_party/blink/renderer/core/layout/ng/ng_out_of_flow_layout_part.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_physical_box_fragment.h"
 #include "third_party/blink/renderer/core/layout/ng/ng_space_utils.h"
+#include "third_party/blink/renderer/core/paint/paint_layer.h"
 
 namespace blink {
 
@@ -23,12 +24,8 @@ NGSimplifiedLayoutAlgorithm::NGSimplifiedLayoutAlgorithm(
     const NGLayoutResult& result)
     : NGLayoutAlgorithm(params),
       previous_result_(result),
-      border_scrollbar_padding_(params.fragment_geometry.border +
-                                params.fragment_geometry.scrollbar +
-                                params.fragment_geometry.padding),
       writing_mode_(Style().GetWritingMode()),
-      direction_(Style().Direction()),
-      exclusion_space_(ConstraintSpace().ExclusionSpace()) {
+      direction_(Style().Direction()) {
   // Currently this only supports block-flow layout due to the static-position
   // calculations. If support for other layout types is added this logic will
   // need to be changed.
@@ -132,20 +129,9 @@ NGSimplifiedLayoutAlgorithm::NGSimplifiedLayoutAlgorithm(
     container_builder_.SetBlockSize(old_block_size);
   }
 
-  child_available_inline_size_ =
-      ShrinkAvailableSize(container_builder_.InitialBorderBoxSize(),
-                          border_scrollbar_padding_)
-          .inline_size;
-
   // We need the previous physical container size to calculate the position of
   // any child fragments.
   previous_physical_container_size_ = physical_fragment.Size();
-
-  // The static-position needs to account for any intrinsic-padding.
-  if (ConstraintSpace().IsTableCell()) {
-    border_scrollbar_padding_ += ComputeIntrinsicPadding(
-        ConstraintSpace(), Style(), container_builder_.Scrollbar());
-  }
 }
 
 scoped_refptr<const NGLayoutResult> NGSimplifiedLayoutAlgorithm::Layout() {
@@ -168,9 +154,6 @@ scoped_refptr<const NGLayoutResult> NGSimplifiedLayoutAlgorithm::Layout() {
     ++it;
   }
 
-  // Initialize the static block-offset for any OOF-positioned children.
-  static_block_offset_ = border_scrollbar_padding_.block_start;
-
   for (NGLayoutInputNode child = Node().FirstChild(); child;
        child = child.NextSibling()) {
     // We've already dealt with any list-markers, so just skip this node.
@@ -178,7 +161,15 @@ scoped_refptr<const NGLayoutResult> NGSimplifiedLayoutAlgorithm::Layout() {
       continue;
 
     if (child.IsOutOfFlowPositioned()) {
-      HandleOutOfFlowPositioned(To<NGBlockNode>(child));
+      // TODO(ikilpatrick): Accessing the static-position from the layer isn't
+      // ideal. We should save this on the physical fragment which initially
+      // calculated it.
+      const auto* layer = child.GetLayoutBox()->Layer();
+      NGLogicalStaticPosition position = layer->GetStaticPosition();
+
+      container_builder_.AddOutOfFlowChildCandidate(
+          To<NGBlockNode>(child), position.offset, position.inline_edge,
+          position.block_edge, /* needs_block_offset_adjustment */ false);
       continue;
     }
 
@@ -227,24 +218,6 @@ scoped_refptr<const NGLayoutResult> NGSimplifiedLayoutAlgorithm::Layout() {
     const NGPhysicalContainerFragment& fragment = result->PhysicalFragment();
     AddChildFragment(*it, fragment);
 
-    // Update the static block-offset for any OOF-positioned children.
-    // Only consider inflow children (floats don't contribute to the intrinsic
-    // block-size).
-    if (!child.IsFloating()) {
-      const ComputedStyle& child_style = child.Style();
-      NGBoxStrut child_margins = ComputeMarginsFor(
-          child_style, child_available_inline_size_, writing_mode_, direction_);
-
-      NGMarginStrut margin_strut = result->EndMarginStrut();
-      margin_strut.Append(child_margins.block_end,
-                          child_style.HasMarginBeforeQuirk());
-      static_block_offset_ += margin_strut.Sum();
-    }
-
-    // Only take exclusion spaces from children which don't establish their own
-    // formatting context.
-    if (!fragment.IsFormattingContextRoot())
-      exclusion_space_ = result->ExclusionSpace();
     ++it;
   }
 
@@ -255,27 +228,6 @@ scoped_refptr<const NGLayoutResult> NGSimplifiedLayoutAlgorithm::Layout() {
       .Run();
 
   return container_builder_.ToBoxFragment();
-}
-
-void NGSimplifiedLayoutAlgorithm::HandleOutOfFlowPositioned(
-    const NGBlockNode& child) {
-  LogicalOffset static_offset = {border_scrollbar_padding_.inline_start,
-                                 static_block_offset_};
-
-  if (child.Style().IsOriginalDisplayInlineType()) {
-    NGBfcOffset origin_bfc_offset = {
-        container_builder_.BfcLineOffset() +
-            border_scrollbar_padding_.LineLeft(direction_),
-        container_builder_.BfcBlockOffset().value_or(
-            ConstraintSpace().ExpectedBfcBlockOffset()) +
-            static_block_offset_};
-
-    static_offset.inline_offset += CalculateOutOfFlowStaticInlineLevelOffset(
-        Style(), origin_bfc_offset, exclusion_space_,
-        child_available_inline_size_);
-  }
-
-  container_builder_.AddOutOfFlowChildCandidate(child, static_offset);
 }
 
 NOINLINE scoped_refptr<const NGLayoutResult>
@@ -295,58 +247,13 @@ void NGSimplifiedLayoutAlgorithm::AddChildFragment(
     const NGPhysicalContainerFragment& new_fragment) {
   DCHECK_EQ(old_fragment->Size(), new_fragment.Size());
 
-  PhysicalSize physical_child_size = new_fragment.Size();
-  LogicalSize child_size = physical_child_size.ConvertToLogical(writing_mode_);
-
   // Determine the previous position in the logical coordinate system.
   LogicalOffset child_offset = old_fragment.Offset().ConvertToLogical(
       writing_mode_, direction_, previous_physical_container_size_,
-      physical_child_size);
+      new_fragment.Size());
 
   // Add the new fragment to the builder.
   container_builder_.AddChild(new_fragment, child_offset);
-
-  if (!new_fragment.IsFloating()) {
-    // Update the static block-offset for any OOF-positioned children.
-    // Only consider inflow children (floats don't contribute to the intrinsic
-    // block-size).
-    static_block_offset_ = child_offset.block_offset + child_size.block_size;
-  } else {
-    // We need to add the float to the exclusion space so that any inline-level
-    // OOF-positioned nodes can correctly determine their static-position.
-    const ComputedStyle& child_style = new_fragment.Style();
-    NGBoxStrut child_margins = ComputeMarginsFor(
-        child_style, child_available_inline_size_, writing_mode_, direction_);
-
-    LayoutUnit child_line_offset = IsLtr(direction_)
-                                       ? child_offset.inline_offset
-                                       : container_builder_.InlineSize() -
-                                             child_size.inline_size -
-                                             child_offset.inline_offset;
-
-    NGBfcOffset container_bfc_offset = {
-        container_builder_.BfcLineOffset(),
-        container_builder_.BfcBlockOffset().value_or(
-            ConstraintSpace().ExpectedBfcBlockOffset())};
-
-    // Determine the offsets for the exclusion (the margin-box of the float).
-    NGBfcOffset start_offset = {
-        container_bfc_offset.line_offset + child_line_offset -
-            child_margins.LineLeft(direction_),
-        container_bfc_offset.block_offset + child_offset.block_offset -
-            child_margins.block_start};
-    NGBfcOffset end_offset = {
-        start_offset.line_offset +
-            (child_size.inline_size + child_margins.InlineSum())
-                .ClampNegativeToZero(),
-        start_offset.block_offset +
-            (child_size.block_size + child_margins.BlockSum())
-                .ClampNegativeToZero()};
-
-    exclusion_space_.Add(
-        NGExclusion::Create(NGBfcRect(start_offset, end_offset),
-                            child_style.Floating(Style()), nullptr));
-  }
 }
 
 }  // namespace blink
