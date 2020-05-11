@@ -506,6 +506,10 @@ bool OmniboxPopupModel::IsSelectionAvailable(Selection selection) const {
       //  should be driven by the model, so this is really the place to decide.
       //  In other words, this duplicates logic within OmniboxResultView.
       //  This is the proper place. OmniboxResultView should refer to here.
+
+      // Buttons are suppressed for matches with an associated keyword.
+      if (match.associated_keyword != nullptr)
+        return false;
       if (match.ShouldShowTabMatchButton())
         return true;
       if (base::FeatureList::IsEnabled(
