@@ -588,10 +588,6 @@
       status: "test",
     },
     {
-      name: "CSSViewport",
-      status: "experimental",
-    },
-    {
       name: "CustomElementDefaultStyle",
       status: "experimental",
     },
