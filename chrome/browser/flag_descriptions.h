@@ -419,9 +419,6 @@ extern const char kEnableLazyImageLoadingDescription[];
 extern const char kEnableMediaSessionServiceName[];
 extern const char kEnableMediaSessionServiceDescription[];
 
-extern const char kEnableNavigationTracingName[];
-extern const char kEnableNavigationTracingDescription[];
-
 extern const char kEnableNetworkLoggingToFileName[];
 extern const char kEnableNetworkLoggingToFileDescription[];
 

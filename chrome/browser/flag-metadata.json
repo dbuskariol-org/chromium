@@ -1744,11 +1744,6 @@
     "expiry_milestone": 90
   },
   {
-    "name": "enable-navigation-tracing",
-    "owners": [ "oysteine" ],
-    "expiry_milestone": 85
-  },
-  {
     "name": "enable-network-logging-to-file",
     "owners": [ "eroman", "net-dev" ],
     // This flag is used to capture early-browser network logging on platforms

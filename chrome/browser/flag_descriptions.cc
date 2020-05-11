@@ -718,14 +718,6 @@ const char kEnableMediaSessionServiceDescription[] =
     "Enables the media session mojo service and internal media session "
     "support.";
 
-const char kEnableNavigationTracingName[] = "Enable navigation tracing";
-const char kEnableNavigationTracingDescription[] =
-    "This is to be used in conjunction with the trace-upload-url flag. "
-    "WARNING: When enabled, Chrome will record performance data for every "
-    "navigation and upload it to the URL specified by the trace-upload-url "
-    "flag. The trace may include personally identifiable information (PII) "
-    "such as the titles and URLs of websites you visit.";
-
 const char kEnableNetworkLoggingToFileName[] = "Enable network logging to file";
 const char kEnableNetworkLoggingToFileDescription[] =
     "Enables network logging to a file named netlog.json in the user data "

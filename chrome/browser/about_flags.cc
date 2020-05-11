@@ -2413,10 +2413,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kTouchSelectionStrategyDescription,
      kOsAndroid,  // TODO(mfomitchev): Add CrOS/Win/Linux support soon.
      MULTI_VALUE_TYPE(kTouchTextSelectionStrategyChoices)},
-    {"enable-navigation-tracing",
-     flag_descriptions::kEnableNavigationTracingName,
-     flag_descriptions::kEnableNavigationTracingDescription, kOsAll,
-     SINGLE_VALUE_TYPE(switches::kEnableNavigationTracing)},
     {"trace-upload-url", flag_descriptions::kTraceUploadUrlName,
      flag_descriptions::kTraceUploadUrlDescription, kOsAll,
      MULTI_VALUE_TYPE(kTraceUploadURL)},
