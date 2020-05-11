@@ -66963,6 +66963,7 @@ Full version information for the fingerprint enum values:
   <int value="7" label="Extension not synced"/>
   <int value="8" label="Not matched"/>
   <int value="9" label="Empty URL"/>
+  <int value="10" label="Rejected by filter"/>
 </enum>
 
 <enum name="UkmResetReason">
