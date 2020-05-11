@@ -938,7 +938,7 @@
   {
     "name": "dns-httpssvc",
     "owners": [ "dmcardle", "ericorth" ],
-    "expiry_milestone": 85
+    "expiry_milestone": 88
   },
   {
     "name": "dns-over-https",
