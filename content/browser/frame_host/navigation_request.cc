@@ -1627,6 +1627,12 @@ void NavigationRequest::OnRequestRedirected(
   if (redirect_info.new_method != "POST")
     common_params_->post_data.reset();
 
+  // Record the first request start time and response start time.
+  if (first_request_start_.is_null())
+    first_request_start_ = response_head_->load_timing.send_start;
+  if (first_response_start_.is_null())
+    first_response_start_ = response_head_->load_timing.receive_headers_start;
+
   // Mark time for the Navigation Timing API.
   if (commit_params_->navigation_timing->redirect_start.is_null()) {
     commit_params_->navigation_timing->redirect_start =
@@ -1862,6 +1868,13 @@ void NavigationRequest::OnResponseStarted(
       appcache_handle_
           ? base::make_optional(appcache_handle_->appcache_host_id())
           : base::nullopt;
+
+  // Record the first request start time and first response start time. Skip if
+  // the timings are already recorded for redirection etc.
+  if (first_request_start_.is_null())
+    first_request_start_ = response_head_->load_timing.send_start;
+  if (first_response_start_.is_null())
+    first_response_start_ = response_head_->load_timing.receive_headers_start;
 
   // Update fetch start timing. While NavigationRequest updates fetch start
   // timing for redirects, it's not aware of service worker interception so
@@ -3976,6 +3989,14 @@ base::TimeTicks NavigationRequest::NavigationStart() {
 
 base::TimeTicks NavigationRequest::NavigationInputStart() {
   return common_params().input_start;
+}
+
+base::TimeTicks NavigationRequest::FirstRequestStart() {
+  return first_request_start_;
+}
+
+base::TimeTicks NavigationRequest::FirstResponseStart() {
+  return first_response_start_;
 }
 
 bool NavigationRequest::IsPost() {
