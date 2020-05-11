@@ -39,6 +39,7 @@ class ASH_EXPORT FloatingAccessibilityDetailedController
   // DetailedViewDelegate:
   void CloseBubble() override;
   void TransitionToMainView(bool restore_focus) override;
+  base::string16 GetAccessibleNameForBubble() override;
 
   void OnAccessibilityStatusChanged();
 
@@ -46,6 +47,7 @@ class ASH_EXPORT FloatingAccessibilityDetailedController
   friend class FloatingAccessibilityControllerTest;
   class DetailedBubbleView;
   // DetailedViewDelegate:
+  views::Button* CreateBackButton(views::ButtonListener* listener) override;
   views::Button* CreateHelpButton(views::ButtonListener* listener) override;
   // TrayBubbleView::Delegate:
   void BubbleViewDestroyed() override;
