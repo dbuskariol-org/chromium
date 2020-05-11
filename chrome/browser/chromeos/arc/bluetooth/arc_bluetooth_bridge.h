@@ -378,7 +378,7 @@ class ArcBluetoothBridge
   void OnPairedError(
       mojom::BluetoothAddressPtr addr,
       device::BluetoothDevice::ConnectErrorCode error_code) const;
-  void OnForgetDone(mojom::BluetoothAddressPtr addr) const;
+  void OnForgetDone(mojom::BluetoothAddressPtr addr);
   void OnForgetError(mojom::BluetoothAddressPtr addr) const;
 
   void OnGattConnectStateChanged(mojom::BluetoothAddressPtr addr,
@@ -608,6 +608,15 @@ class ArcBluetoothBridge
   std::unordered_map<int32_t, int32_t> last_characteristic_;
   // Monotonically increasing value to use as handle to give to Android side.
   int32_t gatt_server_attribute_next_handle_ = 0;
+
+  // The devices that ARC has tried to pair by CreateBond() (including the
+  // devices that the pair request is ongoing) but there is no
+  // BluetoothGattConnection object associated to, during the lifetime of
+  // Android BT service. The main reason we need to maintain this set is that we
+  // need to manually close the links created by pair but not used by any GATT
+  // connection when Android BT service goes down, otherwise these links will be
+  // lingering.
+  std::set<std::string> devices_paired_by_arc_;
 
   // For established connection from remote device, this is { CONNECTED, null }.
   // For ongoing connection to remote device, this is { CONNECTING, null }.

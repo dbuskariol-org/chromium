@@ -554,6 +554,9 @@ void ArcBluetoothBridge::DeviceAddressChanged(BluetoothAdapter* adapter,
   if (!(device->GetType() & device::BLUETOOTH_TRANSPORT_LE))
     return;
 
+  if (devices_paired_by_arc_.erase(old_address) == 1)
+    devices_paired_by_arc_.insert(new_address);
+
   auto it = gatt_connections_.find(old_address);
   if (it == gatt_connections_.end())
     return;
@@ -1298,6 +1301,8 @@ void ArcBluetoothBridge::CreateBond(mojom::BluetoothAddressPtr addr,
     return;
   }
 
+  devices_paired_by_arc_.insert(addr_str);
+
   // BluetoothPairingDialog will automatically pair the device and handle all
   // the incoming pairing requests.
   chromeos::BluetoothPairingDialog::ShowDialog(
@@ -1387,8 +1392,10 @@ void ArcBluetoothBridge::OnGattConnected(
     mojom::BluetoothAddressPtr addr,
     std::unique_ptr<BluetoothGattConnection> connection) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-  gatt_connections_[addr->To<std::string>()] = GattConnection(
+  const std::string addr_str = addr->To<std::string>();
+  gatt_connections_[addr_str] = GattConnection(
       GattConnection::ConnectionState::CONNECTED, std::move(connection));
+  devices_paired_by_arc_.erase(addr_str);
   OnGattConnectStateChanged(std::move(addr), true);
 }
 
@@ -2397,7 +2404,8 @@ void ArcBluetoothBridge::OnPairedError(
                                          mojom::BluetoothBondState::NONE);
 }
 
-void ArcBluetoothBridge::OnForgetDone(mojom::BluetoothAddressPtr addr) const {
+void ArcBluetoothBridge::OnForgetDone(mojom::BluetoothAddressPtr addr) {
+  devices_paired_by_arc_.erase(addr->To<std::string>());
   auto* bluetooth_instance = ARC_GET_INSTANCE_FOR_METHOD(
       arc_bridge_service_->bluetooth(), OnBondStateChanged);
   if (!bluetooth_instance)
@@ -3125,6 +3133,23 @@ void ArcBluetoothBridge::BluetoothArcConnectionObserver::OnConnectionClosed() {
   // Stops the ongoing discovery sessions.
   arc_bluetooth_bridge_->CancelDiscovery();
   arc_bluetooth_bridge_->StopLEScan();
+
+  // Cleanup for CreateBond().
+  for (const auto& addr : arc_bluetooth_bridge_->devices_paired_by_arc_) {
+    BluetoothDevice* device =
+        arc_bluetooth_bridge_->bluetooth_adapter_->GetDevice(addr);
+    if (!device)
+      continue;
+    if (device->IsPaired()) {
+      device->Disconnect(base::DoNothing(), base::DoNothing());
+    } else {
+      device->CancelPairing();
+    }
+  }
+  arc_bluetooth_bridge_->devices_paired_by_arc_.clear();
+
+  // Cleanup for GATT connections.
+  arc_bluetooth_bridge_->gatt_connections_.clear();
 }
 
 }  // namespace arc
