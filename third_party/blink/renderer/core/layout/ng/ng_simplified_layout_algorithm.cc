@@ -140,74 +140,27 @@ scoped_refptr<const NGLayoutResult> NGSimplifiedLayoutAlgorithm::Layout() {
   if (Node().LayoutBlockedByDisplayLock(DisplayLockLifecycleTarget::kChildren))
     return container_builder_.ToBoxFragment();
 
-  const auto previous_child_fragments =
-      To<NGPhysicalBoxFragment>(previous_result_.PhysicalFragment()).Children();
+  const auto& previous_fragment =
+      To<NGPhysicalBoxFragment>(previous_result_.PhysicalFragment());
 
-  auto it = previous_child_fragments.begin();
-  auto end = previous_child_fragments.end();
+  for (const auto& child_link : previous_fragment.Children()) {
+    const auto& child_fragment =
+        *To<NGPhysicalContainerFragment>(child_link.get());
 
-  // We may have a list-marker as our first child. This may have been
-  // propagated up to this container by an arbitrary child. As we don't know
-  // where it came from initially add it as the first child again.
-  if (it != end && (*it)->IsListMarker()) {
-    AddChildFragment(*it, *To<NGPhysicalContainerFragment>(it->get()));
-    ++it;
-  }
-
-  for (NGLayoutInputNode child = Node().FirstChild(); child;
-       child = child.NextSibling()) {
-    // We've already dealt with any list-markers, so just skip this node.
-    if (child.IsListMarker())
+    // We'll add OOF-positioned candidates below.
+    if (child_fragment.IsOutOfFlowPositioned())
       continue;
 
-    if (child.IsOutOfFlowPositioned()) {
-      // TODO(ikilpatrick): Accessing the static-position from the layer isn't
-      // ideal. We should save this on the physical fragment which initially
-      // calculated it.
-      const auto* layer = child.GetLayoutBox()->Layer();
-      NGLogicalStaticPosition position = layer->GetStaticPosition();
-
-      container_builder_.AddOutOfFlowChildCandidate(
-          To<NGBlockNode>(child), position.offset, position.inline_edge,
-          position.block_edge, /* needs_block_offset_adjustment */ false);
+    // We don't need to relayout list-markers, or line-box fragments.
+    if (child_fragment.IsListMarker() || child_fragment.IsLineBox()) {
+      AddChildFragment(child_link, child_fragment);
       continue;
     }
-
-    DCHECK(it != end);
-
-    if (child.IsInline()) {
-      // Simplified layout will only run if none of the lineboxes are dirty.
-      while (it != end && (*it)->IsLineBox()) {
-        // NOTE: When we remove continuations it'll be necessary for lineboxes
-        // to keep track of any exclusions they've added (and update the
-        // exclusion space).
-        AddChildFragment(*it, *To<NGPhysicalContainerFragment>(it->get()));
-        ++it;
-      }
-      if (!RuntimeEnabledFeatures::LayoutNGFragmentItemEnabled())
-        continue;
-      // We add both items and LineBox fragments for existing mechanisms to
-      // work. We may revisit this in future. See also
-      // |NGBoxFragmentBuilder::AddResult|.
-      DCHECK(container_builder_.ItemsBuilder());
-      const NGPhysicalBoxFragment& previous_box_fragment =
-          To<NGPhysicalBoxFragment>(previous_result_.PhysicalFragment());
-      if (const NGFragmentItems* previous_items =
-              previous_box_fragment.Items()) {
-        container_builder_.ItemsBuilder()->AddItems(
-            *previous_items, writing_mode_, direction_,
-            previous_physical_container_size_);
-        continue;
-      }
-      NOTREACHED();
-      continue;
-    }
-
-    DCHECK_EQ((*it)->GetLayoutObject(), child.GetLayoutBox());
 
     // Add the (potentially updated) layout result.
     scoped_refptr<const NGLayoutResult> result =
-        To<NGBlockNode>(child).SimplifiedLayout(**it);
+        NGBlockNode(ToLayoutBox(child_fragment.GetMutableLayoutObject()))
+            .SimplifiedLayout(child_fragment);
 
     // The child may have failed "simplified" layout! (Due to adding/removing
     // scrollbars). In this case we also return a nullptr, indicating a full
@@ -215,10 +168,35 @@ scoped_refptr<const NGLayoutResult> NGSimplifiedLayoutAlgorithm::Layout() {
     if (!result)
       return nullptr;
 
-    const NGPhysicalContainerFragment& fragment = result->PhysicalFragment();
-    AddChildFragment(*it, fragment);
+    AddChildFragment(child_link, result->PhysicalFragment());
+  }
 
-    ++it;
+  // Iterate through all our OOF-positioned children and add them as candidates.
+  for (NGLayoutInputNode child = Node().FirstChild(); child;
+       child = child.NextSibling()) {
+    if (!child.IsOutOfFlowPositioned())
+      continue;
+
+    // TODO(ikilpatrick): Accessing the static-position from the layer isn't
+    // ideal. We should save this on the physical fragment which initially
+    // calculated it.
+    const auto* layer = child.GetLayoutBox()->Layer();
+    NGLogicalStaticPosition position = layer->GetStaticPosition();
+
+    container_builder_.AddOutOfFlowChildCandidate(
+        To<NGBlockNode>(child), position.offset, position.inline_edge,
+        position.block_edge, /* needs_block_offset_adjustment */ false);
+  }
+
+  // We add both items and line-box fragments for existing mechanisms to work.
+  // We may revisit this in future. See also |NGBoxFragmentBuilder::AddResult|.
+  if (RuntimeEnabledFeatures::LayoutNGFragmentItemEnabled()) {
+    if (const NGFragmentItems* previous_items = previous_fragment.Items()) {
+      auto* items_builder = container_builder_.ItemsBuilder();
+      DCHECK(items_builder);
+      items_builder->AddItems(*previous_items, writing_mode_, direction_,
+                              previous_physical_container_size_);
+    }
   }
 
   NGOutOfFlowLayoutPart(
