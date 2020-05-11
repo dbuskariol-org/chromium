@@ -540,7 +540,7 @@ bool DeepScanningDialogDelegate::UploadData() {
 void DeepScanningDialogDelegate::PrepareFileRequest(
     const base::FilePath& path) {
   auto request = std::make_unique<FileSourceRequest>(
-      data_.settings.block_unsupported_file_types, path,
+      data_.settings.block_unsupported_file_types, path, path.BaseName(),
       base::BindOnce(&DeepScanningDialogDelegate::FileRequestCallback,
                      weak_ptr_factory_.GetWeakPtr(), path));
 
