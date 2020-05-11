@@ -1462,7 +1462,7 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
         // edited. If the current URL is only bookmarked by managed bookmarks, this will return
         // INVALID_ID, so the code below will fall back on adding a new bookmark instead.
         // TODO(bauerb): This does not take partner bookmarks into account.
-        final long bookmarkId = BookmarkBridge.getUserBookmarkIdForTab(tabToBookmark);
+        final long bookmarkId = bridge.getUserBookmarkIdForTab(tabToBookmark);
 
         final BookmarkModel bookmarkModel = new BookmarkModel();
 
@@ -2337,5 +2337,11 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
             mNightModeReparentingController.onNightModeStateChanged();
         }
         super.onNightModeStateChanged();
+    }
+
+    @VisibleForTesting
+    @Nullable
+    public BookmarkBridge getBookmarkBridgeForTesting() {
+        return mBookmarkBridgeSupplier.get();
     }
 }
