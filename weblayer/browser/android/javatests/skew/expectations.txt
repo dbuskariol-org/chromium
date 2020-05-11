@@ -30,3 +30,6 @@
 
 # Fixed in https://crrev.com/c/2180022, see https://crbug.com/1077243.
 [ impl_lte_83 ] org.chromium.weblayer.test.FullscreenCallbackTest#testExitFullscreenWhenTabDestroyed [ Skip ]
+
+# Implemented in https://crrev.com/f933c913dd25657b0d6ed6201f14
+[ impl_lte_81 ] org.chromium.weblayer.test.FindInPageTest#testHideOnNavigate [ Skip ]
