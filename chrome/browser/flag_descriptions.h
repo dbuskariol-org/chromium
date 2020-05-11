@@ -1007,6 +1007,9 @@ extern const char kSameSiteByDefaultCookiesDescription[];
 extern const char kScrollableTabStripName[];
 extern const char kScrollableTabStripDescription[];
 
+extern const char kScrollUnificationName[];
+extern const char kScrollUnificationDescription[];
+
 extern const char kSendTabToSelfOmniboxSendingAnimationName[];
 extern const char kSendTabToSelfOmniboxSendingAnimationDescription[];
 

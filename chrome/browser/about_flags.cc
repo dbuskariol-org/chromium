@@ -5102,6 +5102,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kPercentBasedScrollingDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kPercentBasedScrolling)},
 
+    {"scroll-unification", flag_descriptions::kScrollUnificationName,
+     flag_descriptions::kScrollUnificationDescription, kOsAll,
+     FEATURE_VALUE_TYPE(features::kScrollUnification)},
+
 #if defined(OS_WIN)
     {"elastic-overscroll-win", flag_descriptions::kElasticOverscrollWinName,
      flag_descriptions::kElasticOverscrollWinDescription, kOsWin,

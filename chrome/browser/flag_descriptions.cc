@@ -1716,6 +1716,11 @@ const char kScrollableTabStripDescription[] =
     "Allows users to access tabs by scrolling when they no longer fit in the "
     "tabstrip.";
 
+const char kScrollUnificationName[] = "Scroll Unification";
+const char kScrollUnificationDescription[] =
+    "Refactoring project that eliminates scroll handling code from Blink. "
+    "Does not affect behavior or performance.";
+
 const char kSendTabToSelfOmniboxSendingAnimationName[] =
     "Send tab to self omnibox sending animation";
 const char kSendTabToSelfOmniboxSendingAnimationDescription[] =
