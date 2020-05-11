@@ -1093,9 +1093,9 @@ void AppListControllerImpl::OpenSearchResult(const std::string& result_id,
     // doesn't account for whether it's being displayed in the suggestion chips
     // or app tiles.
     if (launched_from == AppListLaunchedFrom::kLaunchedFromSuggestionChip) {
-      notifier->NotifyLaunch(SearchResultDisplayType::kChip, result->id());
+      notifier->NotifyLaunched(SearchResultDisplayType::kChip, result->id());
     } else {
-      notifier->NotifyLaunch(result->display_type(), result->id());
+      notifier->NotifyLaunched(result->display_type(), result->id());
     }
   }
 
