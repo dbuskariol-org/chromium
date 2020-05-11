@@ -2720,7 +2720,7 @@ message AppInstallReportLogEvent {
   optional int64 android_id = 9;
 }
 
-// Log bucket for an extension.
+// Log bucket for an app.
 message ExtensionInstallReport {
   // Extension id for the extension.
   optional string extension_id = 1;
