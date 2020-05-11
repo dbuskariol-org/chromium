@@ -332,6 +332,12 @@ extern const char kEnableEduCoexistenceConsentLogDescription[];
 extern const char kEnableSaveDataName[];
 extern const char kEnableSaveDataDescription[];
 
+extern const char kEnableNavigationPredictorName[];
+extern const char kEnableNavigationPredictorDescription[];
+
+extern const char kEnablePreconnectToSearchName[];
+extern const char kEnablePreconnectToSearchDescription[];
+
 extern const char kEnableNoScriptPreviewsName[];
 extern const char kEnableNoScriptPreviewsDescription[];
 

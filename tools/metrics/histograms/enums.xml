@@ -38422,6 +38422,7 @@ from previous Chrome versions.
   <int value="-1738416948" label="OptimizationHints:enabled"/>
   <int value="-1736075054" label="EnableFullscreenAppList:enabled"/>
   <int value="-1735643253" label="enable-display-list-2d-canvas"/>
+  <int value="-1734885284" label="enable-navigation-predictor"/>
   <int value="-1734254845" label="ash-enable-night-light"/>
   <int value="-1732888954" label="UseButtonTranslateBubbleUI:enabled"/>
   <int value="-1732561795" label="ConsistentOmniboxGeolocation:enabled"/>
@@ -39694,6 +39695,7 @@ from previous Chrome versions.
   <int value="-310615515" label="EnableSuggestedFiles:disabled"/>
   <int value="-307260007" label="ExtensionsCheckup:disabled"/>
   <int value="-304951461" label="TextSuggestionsTouchBar:enabled"/>
+  <int value="-304777110" label="PreconnectToSearch:disabled"/>
   <int value="-300018686" label="disable-cloud-import"/>
   <int value="-299841473" label="top-document-isolation:enabled"/>
   <int value="-297716805"
@@ -40065,6 +40067,7 @@ from previous Chrome versions.
       label="OmniboxUIExperimentMaxAutocompleteMatches:disabled"/>
   <int value="119309423" label="WebAssemblyThreads:disabled"/>
   <int value="120429808" label="disable-new-profile-management"/>
+  <int value="120519004" label="NavigationPredictor:disabled"/>
   <int value="121684313" label="QuickUnlockPin:enabled"/>
   <int value="121858954" label="enable-supervised-user-safesites"/>
   <int value="123097915" label="FaviconsFromWebManifest:enabled"/>
@@ -40874,6 +40877,7 @@ from previous Chrome versions.
   <int value="1094095931" label="enable-vulkan"/>
   <int value="1094506652" label="UseGoogleLocalNtp:enabled"/>
   <int value="1095061640" label="enable-prominent-url-app-flow"/>
+  <int value="1095706700" label="NavigationPredictor:enabled"/>
   <int value="1096477444" label="AssistantVoiceMatch:enabled"/>
   <int value="1097935876" label="CrostiniShowMicSetting:enabled"/>
   <int value="1098823967" label="ash-enable-window-cycle-ui"/>
@@ -40909,6 +40913,7 @@ from previous Chrome versions.
   <int value="1133207726" label="MediaInspectorLogging:enabled"/>
   <int value="1133635187" label="force-gpu-rasterization"/>
   <int value="1138349838" label="EnableMDRoundedCornersOnDialogs:disabled"/>
+  <int value="1138690502" label="PreconnectToSearch:enabled"/>
   <int value="1139226452" label="enable-nacl-debug"/>
   <int value="1139363314" label="disable-supervised-user-blacklist"/>
   <int value="1140541604" label="WinrtGeolocationImplementation:enabled"/>
@@ -41558,6 +41563,7 @@ from previous Chrome versions.
   <int value="1874195462" label="ChromeHomeMenuItemsExpandSheet:disabled"/>
   <int value="1874604540" label="UseSuggestionsEvenIfFew:disabled"/>
   <int value="1878331098" label="GuestViewCrossProcessFrames:enabled"/>
+  <int value="1880955305" label="enable-preconnect-to-search"/>
   <int value="1881036528" label="disable-multilingual-spellchecker"/>
   <int value="1881174782" label="disable-brotli"/>
   <int value="1885368291" label="TurnOffStreamingMediaCaching:enabled"/>

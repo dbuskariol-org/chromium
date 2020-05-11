@@ -36,6 +36,7 @@
 #include "chrome/browser/browser_features.h"
 #include "chrome/browser/chromeos/android_sms/android_sms_switches.h"
 #include "chrome/browser/flag_descriptions.h"
+#include "chrome/browser/navigation_predictor/search_engine_preconnector.h"
 #include "chrome/browser/net/stub_resolver_config_reader.h"
 #include "chrome/browser/net/system_network_context_manager.h"
 #include "chrome/browser/notifications/scheduler/public/features.h"
@@ -2632,10 +2633,19 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // OS_ANDROID
 #if defined(OS_CHROMEOS) || defined(OS_LINUX)
     {"enable-save-data", flag_descriptions::kEnableSaveDataName,
-     flag_descriptions::kEnableSaveDataDescription, kOsCrOS,
+     flag_descriptions::kEnableSaveDataDescription, kOsCrOS | kOsLinux,
      SINGLE_VALUE_TYPE(
          data_reduction_proxy::switches::kEnableDataReductionProxy)},
-#endif  // OS_CHROMEOS
+    {"enable-navigation-predictor",
+     flag_descriptions::kEnableNavigationPredictorName,
+     flag_descriptions::kEnableNavigationPredictorDescription,
+     kOsCrOS | kOsLinux,
+     FEATURE_VALUE_TYPE(blink::features::kNavigationPredictor)},
+#endif  // OS_CHROMEOS || OS_LINUX
+    {"enable-preconnect-to-search",
+     flag_descriptions::kEnablePreconnectToSearchName,
+     flag_descriptions::kEnablePreconnectToSearchDescription, kOsAll,
+     FEATURE_VALUE_TYPE(features::kPreconnectToSearch)},
     {"enable-noscript-previews", flag_descriptions::kEnableNoScriptPreviewsName,
      flag_descriptions::kEnableNoScriptPreviewsDescription, kOsAll,
      FEATURE_VALUE_TYPE(previews::features::kNoScriptPreviews)},

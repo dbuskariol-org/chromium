@@ -543,6 +543,16 @@ const char kEnableSaveDataDescription[] =
     "Enables save data feature. May cause user's traffic to be proxied via "
     "Google's data reduction proxy.";
 
+const char kEnableNavigationPredictorName[] = "Enables navigation predictor";
+const char kEnableNavigationPredictorDescription[] =
+    "Enables navigation predictor feature that predicts the next likely "
+    "navigation using a set of heuristics.";
+
+const char kEnablePreconnectToSearchName[] =
+    "Enables preconnections to default search engine";
+const char kEnablePreconnectToSearchDescription[] =
+    "Enables the feature that preconnects to the user's default search engine.";
+
 const char kEnableNoScriptPreviewsName[] = "NoScript previews";
 
 const char kEnableNoScriptPreviewsDescription[] =
