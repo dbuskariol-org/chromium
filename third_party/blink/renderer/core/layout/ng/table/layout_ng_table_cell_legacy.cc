@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/core/layout/ng/layout_ng_table_cell.h"
+#include "third_party/blink/renderer/core/layout/ng/table/layout_ng_table_cell_legacy.h"
 
 #include "third_party/blink/renderer/core/layout/layout_analyzer.h"
 #include "third_party/blink/renderer/core/layout/layout_view.h"
@@ -15,10 +15,10 @@
 
 namespace blink {
 
-LayoutNGTableCell::LayoutNGTableCell(Element* element)
+LayoutNGTableCellLegacy::LayoutNGTableCellLegacy(Element* element)
     : LayoutNGBlockFlowMixin<LayoutTableCell>(element) {}
 
-void LayoutNGTableCell::UpdateBlockLayout(bool relayout_children) {
+void LayoutNGTableCellLegacy::UpdateBlockLayout(bool relayout_children) {
   LayoutAnalyzer::BlockScope analyzer(*this);
 
   SetOverrideLogicalWidth(LogicalWidth());

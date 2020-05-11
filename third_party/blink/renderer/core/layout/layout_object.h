@@ -675,6 +675,9 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
   bool IsLayoutTableCol() const {
     return IsOfType(kLayoutObjectLayoutTableCol);
   }
+  bool IsLayoutNGTableCol() const {
+    return IsOfType(kLayoutObjectLayoutNGTableCol);
+  }
   bool IsListItem() const { return IsOfType(kLayoutObjectListItem); }
   bool IsMathML() const { return IsOfType(kLayoutObjectMathML); }
   bool IsMathMLRoot() const { return IsOfType(kLayoutObjectMathMLRoot); }
@@ -713,6 +716,9 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
   bool IsTable() const { return IsOfType(kLayoutObjectTable); }
   bool IsTableCaption() const { return IsOfType(kLayoutObjectTableCaption); }
   bool IsTableCell() const { return IsOfType(kLayoutObjectTableCell); }
+  bool IsTableCellLegacy() const {
+    return IsOfType(kLayoutObjectTableCellLegacy);
+  }
   bool IsTableRow() const { return IsOfType(kLayoutObjectTableRow); }
   bool IsTableSection() const { return IsOfType(kLayoutObjectTableSection); }
   bool IsTextArea() const { return IsOfType(kLayoutObjectTextArea); }
@@ -2594,6 +2600,7 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
     kLayoutObjectFrameSet,
     kLayoutObjectInsideListMarker,
     kLayoutObjectLayoutTableCol,
+    kLayoutObjectLayoutNGTableCol,
     kLayoutObjectListItem,
     kLayoutObjectMathML,
     kLayoutObjectMathMLRoot,
@@ -2634,6 +2641,7 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
     kLayoutObjectTable,
     kLayoutObjectTableCaption,
     kLayoutObjectTableCell,
+    kLayoutObjectTableCellLegacy,
     kLayoutObjectTableRow,
     kLayoutObjectTableSection,
     kLayoutObjectTextArea,

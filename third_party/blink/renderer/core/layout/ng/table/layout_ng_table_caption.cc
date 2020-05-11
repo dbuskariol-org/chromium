@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/core/layout/ng/layout_ng_table_caption.h"
+#include "third_party/blink/renderer/core/layout/ng/table/layout_ng_table_caption.h"
 
 #include "third_party/blink/renderer/core/layout/layout_analyzer.h"
 #include "third_party/blink/renderer/core/layout/layout_view.h"
@@ -19,6 +19,7 @@ namespace blink {
 LayoutNGTableCaption::LayoutNGTableCaption(Element* element)
     : LayoutNGBlockFlowMixin<LayoutTableCaption>(element) {}
 
+// Legacy method.
 void LayoutNGTableCaption::CalculateAndSetMargins(
     const NGConstraintSpace& constraint_space,
     const NGPhysicalFragment& physical_fragment) {
@@ -66,7 +67,8 @@ void LayoutNGTableCaption::UpdateBlockLayout(bool relayout_children) {
   // NGBoxFragmentPainter::Paint will have to handle it until table layout is
   // implemented in NG, in which case that algorithm will set each child's
   // offsets. See https://crbug.com/788590 for more info.
-  DCHECK(!result->PhysicalFragment().IsPlacedByLayoutNG())
+  DCHECK(RuntimeEnabledFeatures::LayoutNGTableEnabled() ||
+         !result->PhysicalFragment().IsPlacedByLayoutNG())
       << "Only a table should be placing table caption fragments and the ng "
          "table algorithm doesn't exist yet!";
 }
