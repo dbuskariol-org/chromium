@@ -199,7 +199,6 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
     private int mFullscreenMenuToken = TokenHolder.INVALID_TOKEN;
     private int mFullscreenHighlightToken = TokenHolder.INVALID_TOKEN;
 
-    private boolean mNativeLibraryReady;
     private boolean mTabRestoreCompleted;
 
     private AppMenuButtonHelper mAppMenuButtonHelper;
@@ -890,8 +889,6 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
         assert controlsVisibilityDelegate != null;
         mControlsVisibilityDelegate = controlsVisibilityDelegate;
 
-        mNativeLibraryReady = false;
-
         if (overviewModeBehavior != null) {
             mOverviewModeBehavior = overviewModeBehavior;
             mOverviewModeBehavior.addOverviewModeObserver(mOverviewModeObserver);
@@ -921,8 +918,16 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
                     mLocationBar.getContainerView(), R.id.bottom_toolbar);
         }
 
-        onNativeLibraryReady();
+        TemplateUrlServiceFactory.get().runWhenLoaded(this::registerTemplateUrlObserver);
         mInitializedWithNative = true;
+        mTabModelSelector.addObserver(mTabModelSelectorObserver);
+        refreshSelectedTab(mActivityTabProvider.get());
+        if (mTabModelSelector.isTabStateInitialized()) mTabRestoreCompleted = true;
+        handleTabRestoreCompleted();
+        mTabCountProvider.setTabModelSelector(mTabModelSelector);
+        mIncognitoStateProvider.setTabModelSelector(mTabModelSelector);
+        mAppThemeColorProvider.setIncognitoStateProvider(mIncognitoStateProvider);
+
         if (mOnInitializedRunnable != null) {
             mOnInitializedRunnable.run();
             mOnInitializedRunnable = null;
@@ -960,13 +965,6 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
      */
     public Toolbar getToolbar() {
         return mToolbar;
-    }
-
-    /**
-     * @return Whether the UI has been initialized.
-     */
-    public boolean isInitialized() {
-        return mInitializedWithNative;
     }
 
     @Override
@@ -1173,37 +1171,8 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
                 SearchEngineLogoUtils.getSearchLogoUrl());
     }
 
-    private void onNativeLibraryReady() {
-        mNativeLibraryReady = true;
-
-        final TemplateUrlService templateUrlService = TemplateUrlServiceFactory.get();
-        TemplateUrlService.LoadListener mTemplateServiceLoadListener =
-                new TemplateUrlService.LoadListener() {
-                    @Override
-                    public void onTemplateUrlServiceLoaded() {
-                        registerTemplateUrlObserver();
-                        templateUrlService.unregisterLoadListener(this);
-                    }
-                };
-        templateUrlService.registerLoadListener(mTemplateServiceLoadListener);
-        if (templateUrlService.isLoaded()) {
-            mTemplateServiceLoadListener.onTemplateUrlServiceLoaded();
-        } else {
-            templateUrlService.load();
-        }
-
-        mTabModelSelector.addObserver(mTabModelSelectorObserver);
-
-        refreshSelectedTab(mActivityTabProvider.get());
-        if (mTabModelSelector.isTabStateInitialized()) mTabRestoreCompleted = true;
-        handleTabRestoreCompleted();
-        mTabCountProvider.setTabModelSelector(mTabModelSelector);
-        mIncognitoStateProvider.setTabModelSelector(mTabModelSelector);
-        mAppThemeColorProvider.setIncognitoStateProvider(mIncognitoStateProvider);
-    }
-
     private void handleTabRestoreCompleted() {
-        if (!mTabRestoreCompleted || !mNativeLibraryReady) return;
+        if (!mTabRestoreCompleted || !mInitializedWithNative) return;
         mToolbar.onStateRestored();
     }
 
@@ -1431,7 +1400,7 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
      * @param reason The given reason.
      */
     public void setUrlBarFocus(boolean focused, @LocationBar.OmniboxFocusReason int reason) {
-        if (!isInitialized()) return;
+        if (!mInitializedWithNative) return;
         boolean wasFocused = mLocationBar.isUrlBarFocused();
         mLocationBar.setUrlBarFocus(focused, null, reason);
         if (wasFocused && focused) {
@@ -1445,7 +1414,7 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
      */
     public void setUrlBarFocusOnceNativeInitialized(
             boolean focused, @LocationBar.OmniboxFocusReason int reason) {
-        if (isInitialized()) {
+        if (mInitializedWithNative) {
             setUrlBarFocus(focused, reason);
             return;
         }
@@ -1520,7 +1489,7 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
      * Finish any toolbar animations.
      */
     public void finishAnimations() {
-        if (isInitialized()) mToolbar.finishAnimations();
+        if (mInitializedWithNative) mToolbar.finishAnimations();
     }
 
     /**
@@ -1555,7 +1524,7 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
         Tab currentTab = mLocationBarModel.getTab();
         boolean isLoading = false;
         if (!tabCrashed) {
-            isLoading = (currentTab != null && currentTab.isLoading()) || !mNativeLibraryReady;
+            isLoading = (currentTab != null && currentTab.isLoading()) || !mInitializedWithNative;
         }
         mToolbar.updateReloadButtonVisibility(isLoading);
         if (mMenuDelegatePhone != null) mMenuDelegatePhone.updateReloadButtonState(isLoading);
