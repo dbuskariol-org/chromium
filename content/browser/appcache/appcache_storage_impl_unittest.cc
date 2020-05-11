@@ -185,11 +185,11 @@ class AppCacheStorageImplTest : public testing::Test {
       last_origin_ = origin;
     }
 
-    void NotifyStorageModified(storage::QuotaClient::ID client_id,
+    void NotifyStorageModified(storage::QuotaClientType client_id,
                                const url::Origin& origin,
                                StorageType type,
                                int64_t delta) override {
-      EXPECT_EQ(storage::QuotaClient::kAppcache, client_id);
+      EXPECT_EQ(storage::QuotaClientType::kAppcache, client_id);
       EXPECT_EQ(StorageType::kTemporary, type);
       ++notify_storage_modified_count_;
       last_origin_ = origin;
@@ -200,7 +200,7 @@ class AppCacheStorageImplTest : public testing::Test {
     void RegisterClient(scoped_refptr<storage::QuotaClient> client) override {}
     void NotifyOriginInUse(const url::Origin& origin) override {}
     void NotifyOriginNoLongerInUse(const url::Origin& origin) override {}
-    void SetUsageCacheEnabled(storage::QuotaClient::ID client_id,
+    void SetUsageCacheEnabled(storage::QuotaClientType client_id,
                               const url::Origin& origin,
                               StorageType type,
                               bool enabled) override {}

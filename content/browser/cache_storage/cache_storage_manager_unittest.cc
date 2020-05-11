@@ -2526,7 +2526,8 @@ class CacheStorageQuotaClientTestP : public CacheStorageQuotaClientTest,
 };
 
 TEST_P(CacheStorageQuotaClientTestP, QuotaID) {
-  EXPECT_EQ(storage::QuotaClient::kServiceWorkerCache, quota_client_->id());
+  EXPECT_EQ(storage::QuotaClientType::kServiceWorkerCache,
+            quota_client_->type());
 }
 
 TEST_P(CacheStorageQuotaClientTestP, QuotaGetOriginUsage) {
