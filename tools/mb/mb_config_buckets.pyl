@@ -543,7 +543,6 @@
       'linux_android_dbg_ng': 'android_debug_bot',
       'linux_angle_deqp_rel_ng': 'angle_deqp_release_trybot',
       'linux_angle_ozone_rel_ng': 'angle_ozone_linux_system_gbm_libdrm_release_trybot',
-      'linux_arm': 'release_trybot_arm',
       'linux_chromium_archive_rel_ng': 'release_bot',
       'linux_chromium_asan_rel_ng': 'asan_lsan_release_trybot',
       'linux_chromium_cfi_rel_ng': 'cfi_full_cfi_icall_cfi_diag_thin_lto_release_static_dcheck_always_on_goma',
@@ -2071,10 +2070,6 @@
     'release_trybot_dcheck_off': [
       'release_trybot',
       'dcheck_off'
-    ],
-    'release_trybot_arm': [
-      'release_trybot',
-      'arm'
     ],
     'release_trybot_enable_blink_heap_verification': [
       'release_trybot',
