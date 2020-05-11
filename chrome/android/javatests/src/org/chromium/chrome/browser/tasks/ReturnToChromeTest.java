@@ -134,9 +134,6 @@ public class ReturnToChromeTest {
             + "/start_surface_variation/single"})
     public void testTabSwitcherModeNotTriggeredWithinThreshold() throws Exception {
         // clang-format on
-        // TODO(crbug.com/1077627): Start surface should show with Instant start.
-        if (mUseInstantStart) return;
-
         InstantStartTest.createTabStateFile(new int[] {0, 1});
         startMainActivityWithURLWithoutCurrentTab(null);
 

@@ -1077,7 +1077,8 @@ public class ChromeTabbedActivity
             String intentUrl = IntentHandler.getUrlFromIntent(getIntent());
             if (NewTabPage.isNTPUrl(intentUrl)
                     || (isMainIntentFromLauncher(getIntent())
-                            && (getTabModelSelector().getTotalTabCount() <= 0))) {
+                            && ReturnToChromeExperimentsUtil.getTotalTabCount(getTabModelSelector())
+                                    <= 0)) {
                 return true;
             }
         }
