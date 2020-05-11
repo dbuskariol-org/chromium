@@ -180,54 +180,6 @@ void OptimizationGuideNavigationData::RecordOptimizationGuideUKM() const {
     }
   }
 
-  // Record hint metrics.
-  if (serialized_hint_version_string_.has_value() &&
-      !serialized_hint_version_string_.value().empty()) {
-    // Deserialize the serialized version string into its protobuffer.
-    std::string binary_version_pb;
-    if (base::Base64Decode(serialized_hint_version_string_.value(),
-                           &binary_version_pb)) {
-      optimization_guide::proto::Version hint_version;
-      if (hint_version.ParseFromString(binary_version_pb)) {
-        if (hint_version.has_generation_timestamp() &&
-            hint_version.generation_timestamp().seconds() > 0) {
-          did_record_metric = true;
-          builder.SetHintGenerationTimestamp(
-              hint_version.generation_timestamp().seconds());
-        }
-        if (hint_version.has_hint_source() &&
-            hint_version.hint_source() !=
-                optimization_guide::proto::HINT_SOURCE_UNKNOWN) {
-          did_record_metric = true;
-          builder.SetHintSource(static_cast<int>(hint_version.hint_source()));
-        }
-      }
-    }
-  }
-
-  // Record hint coverage metrics.
-  if (has_hint_before_commit_.has_value() ||
-      has_hint_after_commit_.has_value()) {
-    // Only record if we would potentially have had to provide optimization
-    // guidance for the navigation.
-    if (WasHostCoveredByHintOrFetchAtNavigationStart() ||
-        WasHostCoveredByHintOrFetchAtCommit()) {
-      builder.SetNavigationHostCovered(static_cast<int>(
-          optimization_guide::NavigationHostCoveredStatus::kCovered));
-    } else {
-      bool hint_was_attempted_to_be_fetched =
-          was_hint_for_host_attempted_to_be_fetched_.value_or(false);
-      optimization_guide::NavigationHostCoveredStatus status =
-          hint_was_attempted_to_be_fetched
-              ? optimization_guide::NavigationHostCoveredStatus::
-                    kFetchNotSuccessful
-              : optimization_guide::NavigationHostCoveredStatus::
-                    kFetchNotAttempted;
-      builder.SetNavigationHostCovered(static_cast<int>(status));
-    }
-    did_record_metric = true;
-  }
-
   // Record fetch latency metrics.
   if (hints_fetch_start_.has_value()) {
     if (hints_fetch_latency().has_value()) {
@@ -242,18 +194,6 @@ void OptimizationGuideNavigationData::RecordOptimizationGuideUKM() const {
   // Only record UKM if a metric was recorded.
   if (did_record_metric)
     builder.Record(ukm::UkmRecorder::Get());
-}
-
-bool OptimizationGuideNavigationData::
-    WasHostCoveredByHintOrFetchAtNavigationStart() const {
-  return has_hint_before_commit_.value_or(false) ||
-         was_host_covered_by_fetch_at_navigation_start_.value_or(false);
-}
-
-bool OptimizationGuideNavigationData::WasHostCoveredByHintOrFetchAtCommit()
-    const {
-  return has_hint_after_commit_.value_or(false) ||
-         was_host_covered_by_fetch_at_commit_.value_or(false);
 }
 
 base::Optional<optimization_guide::OptimizationTypeDecision>

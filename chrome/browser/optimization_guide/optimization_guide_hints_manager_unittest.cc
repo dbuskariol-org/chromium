@@ -768,12 +768,6 @@ TEST_F(OptimizationGuideHintsManagerTest,
 
   histogram_tester.ExpectUniqueSample("OptimizationGuide.LoadedHint.Result",
                                       true, 1);
-  // Make sure navigation data is populated correctly.
-  OptimizationGuideNavigationData* navigation_data =
-      OptimizationGuideNavigationData::GetFromNavigationHandle(
-          navigation_handle.get());
-  EXPECT_FALSE(navigation_data->has_hint_before_commit().has_value());
-  EXPECT_TRUE(navigation_data->has_hint_after_commit().value());
 }
 
 TEST_F(OptimizationGuideHintsManagerTest, OnNavigationStartOrRedirectWithHint) {
@@ -791,11 +785,6 @@ TEST_F(OptimizationGuideHintsManagerTest, OnNavigationStartOrRedirectWithHint) {
 
   histogram_tester.ExpectUniqueSample("OptimizationGuide.LoadedHint.Result",
                                       true, 1);
-  // Make sure navigation data is populated correctly.
-  OptimizationGuideNavigationData* navigation_data =
-      OptimizationGuideNavigationData::GetFromNavigationHandle(
-          navigation_handle.get());
-  EXPECT_TRUE(navigation_data->has_hint_before_commit());
 }
 
 TEST_F(OptimizationGuideHintsManagerTest, OnNavigationStartOrRedirectNoHint) {
@@ -813,11 +802,6 @@ TEST_F(OptimizationGuideHintsManagerTest, OnNavigationStartOrRedirectNoHint) {
 
   histogram_tester.ExpectUniqueSample("OptimizationGuide.LoadedHint.Result",
                                       false, 1);
-  // Make sure navigation data is populated correctly.
-  OptimizationGuideNavigationData* navigation_data =
-      OptimizationGuideNavigationData::GetFromNavigationHandle(
-          navigation_handle.get());
-  EXPECT_FALSE(navigation_data->has_hint_before_commit().value());
 }
 
 TEST_F(OptimizationGuideHintsManagerTest, OnNavigationStartOrRedirectNoHost) {
@@ -834,11 +818,6 @@ TEST_F(OptimizationGuideHintsManagerTest, OnNavigationStartOrRedirectNoHost) {
   run_loop.Run();
 
   histogram_tester.ExpectTotalCount("OptimizationGuide.LoadedHint.Result", 0);
-  // Make sure navigation data is populated correctly.
-  OptimizationGuideNavigationData* navigation_data =
-      OptimizationGuideNavigationData::GetFromNavigationHandle(
-          navigation_handle.get());
-  EXPECT_FALSE(navigation_data->has_hint_before_commit().has_value());
 }
 
 TEST_F(OptimizationGuideHintsManagerTest,
@@ -2446,18 +2425,11 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
   hints_manager()->OnNavigationStartOrRedirect(navigation_handle.get(),
                                                base::DoNothing());
   RunUntilIdle();
+
   histogram_tester.ExpectUniqueSample(
       "OptimizationGuide.HintsFetcher.GetHintsRequest.HostCount", 1, 1);
   histogram_tester.ExpectUniqueSample(
       "OptimizationGuide.HintsFetcher.GetHintsRequest.UrlCount", 1, 1);
-
-  // Make sure navigation data is populated correctly.
-  OptimizationGuideNavigationData* navigation_data =
-      OptimizationGuideNavigationData::GetFromNavigationHandle(
-          navigation_handle.get());
-  EXPECT_FALSE(navigation_data->has_hint_before_commit().value());
-  EXPECT_TRUE(
-      navigation_data->was_hint_for_host_attempted_to_be_fetched().value());
   histogram_tester.ExpectUniqueSample(
       "OptimizationGuide.HintsManager.RaceNavigationFetchAttemptStatus",
       optimization_guide::RaceNavigationFetchAttemptStatus::
@@ -2488,15 +2460,6 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
   RunUntilIdle();
   histogram_tester.ExpectTotalCount(
       "OptimizationGuide.HintsFetcher.GetHintsRequest.HostCount", 0);
-
-  // Make sure navigation data is populated correctly.
-  OptimizationGuideNavigationData* navigation_data =
-      OptimizationGuideNavigationData::GetFromNavigationHandle(
-          navigation_handle.get());
-  EXPECT_TRUE(navigation_data->has_hint_before_commit().value());
-  EXPECT_FALSE(
-      navigation_data->was_hint_for_host_attempted_to_be_fetched().has_value());
-
   histogram_tester.ExpectUniqueSample(
       "OptimizationGuide.HintsManager.RaceNavigationFetchAttemptStatus",
       optimization_guide::RaceNavigationFetchAttemptStatus::
@@ -2536,9 +2499,6 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
     OptimizationGuideNavigationData* navigation_data =
         OptimizationGuideNavigationData::GetFromNavigationHandle(
             navigation_handle.get());
-    EXPECT_TRUE(navigation_data->has_hint_before_commit().value());
-    EXPECT_FALSE(navigation_data->was_hint_for_host_attempted_to_be_fetched()
-                     .has_value());
     EXPECT_TRUE(navigation_data->hints_fetch_latency().has_value());
 
     histogram_tester.ExpectBucketCount(
@@ -2603,8 +2563,6 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
     OptimizationGuideNavigationData* navigation_data =
         OptimizationGuideNavigationData::GetFromNavigationHandle(
             navigation_handle.get());
-    EXPECT_TRUE(navigation_data->was_hint_for_host_attempted_to_be_fetched()
-                    .has_value());
     EXPECT_TRUE(navigation_data->hints_fetch_latency().has_value());
 
     histogram_tester.ExpectBucketCount(
@@ -2663,9 +2621,6 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
   OptimizationGuideNavigationData* navigation_data =
       OptimizationGuideNavigationData::GetFromNavigationHandle(
           navigation_handle.get());
-  EXPECT_FALSE(navigation_data->has_hint_before_commit().value());
-  EXPECT_FALSE(
-      navigation_data->was_hint_for_host_attempted_to_be_fetched().has_value());
   EXPECT_FALSE(navigation_data->hints_fetch_latency().has_value());
 
   histogram_tester.ExpectTotalCount(
@@ -3401,8 +3356,7 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
                       decision);
           }));
   hints_manager()->OnNavigationFinish(
-      {url_that_redirected, GURL("https://otherurl.com/")},
-      /*navigation_data=*/nullptr);
+      {url_that_redirected, GURL("https://otherurl.com/")});
   RunUntilIdle();
 
   histogram_tester.ExpectUniqueSample(
@@ -3442,8 +3396,7 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
             EXPECT_EQ(optimization_guide::OptimizationGuideDecision::kFalse,
                       decision);
           }));
-  hints_manager()->OnNavigationFinish({url_with_url_keyed_hint()},
-                                      /*navigation_data=*/nullptr);
+  hints_manager()->OnNavigationFinish({url_with_url_keyed_hint()});
   RunUntilIdle();
 
   histogram_tester.ExpectUniqueSample(
@@ -3524,8 +3477,7 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
                       decision);
             EXPECT_TRUE(metadata.public_image_metadata().has_value());
           }));
-  hints_manager()->OnNavigationFinish({url_with_url_keyed_hint()},
-                                      /*navigation_data=*/nullptr);
+  hints_manager()->OnNavigationFinish({url_with_url_keyed_hint()});
   RunUntilIdle();
 
   histogram_tester.ExpectUniqueSample(
@@ -3542,18 +3494,9 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
 
   InitializeWithDefaultConfig("1.0.0.0");
 
-  std::unique_ptr<content::MockNavigationHandle> navigation_handle =
-      CreateMockNavigationHandleWithOptimizationGuideWebContentsObserver(
-          url_with_url_keyed_hint());
-  OptimizationGuideNavigationData* navigation_data =
-      OptimizationGuideNavigationData::GetFromNavigationHandle(
-          navigation_handle.get());
-  hints_manager()->OnNavigationFinish({url_with_url_keyed_hint()},
-                                      navigation_data);
+  hints_manager()->OnNavigationFinish({url_with_url_keyed_hint()});
 
   RunUntilIdle();
-
-  EXPECT_TRUE(navigation_data->has_hint_after_commit().value());
 }
 
 TEST_F(OptimizationGuideHintsManagerFetchingTest,

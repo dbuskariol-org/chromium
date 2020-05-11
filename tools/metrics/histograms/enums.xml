@@ -49821,6 +49821,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="OptimizationGuideNavigationHostCoveredStatus">
+  <obsolete>
+    Removed as of 04/2020.
+  </obsolete>
   <int value="0" label="Unknown"/>
   <int value="1" label="Covered">
     The main frame host of the navigation was covered by a hint or was attempted

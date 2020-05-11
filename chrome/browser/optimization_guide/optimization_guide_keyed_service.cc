@@ -153,14 +153,11 @@ void OptimizationGuideKeyedService::OnNavigationStartOrRedirect(
 }
 
 void OptimizationGuideKeyedService::OnNavigationFinish(
-    const std::vector<GURL>& navigation_redirect_chain,
-    OptimizationGuideNavigationData* navigation_data) {
+    const std::vector<GURL>& navigation_redirect_chain) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
-  if (hints_manager_) {
-    hints_manager_->OnNavigationFinish(navigation_redirect_chain,
-                                       navigation_data);
-  }
+  if (hints_manager_)
+    hints_manager_->OnNavigationFinish(navigation_redirect_chain);
 }
 
 void OptimizationGuideKeyedService::RegisterOptimizationTypesAndTargets(

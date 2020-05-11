@@ -7085,12 +7085,18 @@ be describing additional metrics about the same event.
     See //components/optimization_guide/.
   </summary>
   <metric name="HintGenerationTimestamp">
+    <obsolete>
+      Obsolete as of 04/2020.
+    </obsolete>
     <summary>
       The timestamp, in seconds from epoch, that the server generated the hint
       for the optimization applied on the page load.
     </summary>
   </metric>
   <metric name="HintSource">
+    <obsolete>
+      Obsolete as of 04/2020.
+    </obsolete>
     <summary>
       The |optimization_guide::proto::HintSource| for the optimization that was
       applied on the page load.
@@ -7106,6 +7112,9 @@ be describing additional metrics about the same event.
   </metric>
   <metric name="NavigationHostCovered"
       enum="OptimizationGuideNavigationHostCoveredStatus">
+    <obsolete>
+      Obsolete as of 04/2020.
+    </obsolete>
     <summary>
       An enum value representing whether Chrome had a hint cached for the
       navigation or had attempted to fetch a hint from the remote Optimization

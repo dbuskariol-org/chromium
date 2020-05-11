@@ -44,15 +44,6 @@ class OptimizationGuideNavigationData {
   // with.
   int64_t navigation_id() const { return navigation_id_; }
 
-  // The serialized hints version for the hint that applied to the navigation.
-  base::Optional<std::string> serialized_hint_version_string() const {
-    return serialized_hint_version_string_;
-  }
-  void set_serialized_hint_version_string(
-      const std::string& serialized_hint_version_string) {
-    serialized_hint_version_string_ = serialized_hint_version_string;
-  }
-
   // Returns the latest decision made for |optimization_type|.
   base::Optional<optimization_guide::OptimizationTypeDecision>
   GetDecisionForOptimizationType(
@@ -96,22 +87,6 @@ class OptimizationGuideNavigationData {
       optimization_guide::proto::ClientModelFeature model_feature,
       float value);
 
-  // Whether the hint cache had a hint for the navigation before commit.
-  base::Optional<bool> has_hint_before_commit() const {
-    return has_hint_before_commit_;
-  }
-  void set_has_hint_before_commit(bool has_hint_before_commit) {
-    has_hint_before_commit_ = has_hint_before_commit;
-  }
-
-  // Whether the hint cache had a hint after commit.
-  base::Optional<bool> has_hint_after_commit() const {
-    return has_hint_after_commit_;
-  }
-  void set_has_hint_after_commit(bool has_hint_after_commit) {
-    has_hint_after_commit_ = has_hint_after_commit;
-  }
-
   // The page hint applicable for the navigation.
   bool has_page_hint_value() const { return !!page_hint_; }
   const optimization_guide::proto::PageHint* page_hint() const {
@@ -120,36 +95,6 @@ class OptimizationGuideNavigationData {
   void set_page_hint(
       std::unique_ptr<optimization_guide::proto::PageHint> page_hint) {
     page_hint_ = std::move(page_hint);
-  }
-
-  // Whether the host was covered by a hints fetch at the start of navigation.
-  base::Optional<bool> was_host_covered_by_fetch_at_navigation_start() const {
-    return was_host_covered_by_fetch_at_navigation_start_;
-  }
-  void set_was_host_covered_by_fetch_at_navigation_start(
-      bool was_host_covered_by_fetch_at_navigation_start) {
-    was_host_covered_by_fetch_at_navigation_start_ =
-        was_host_covered_by_fetch_at_navigation_start;
-  }
-
-  // Whether the host was covered by a hints fetch at commit.
-  base::Optional<bool> was_host_covered_by_fetch_at_commit() const {
-    return was_host_covered_by_fetch_at_commit_;
-  }
-  void set_was_host_covered_by_fetch_at_commit(
-      bool was_host_covered_by_fetch_at_commit) {
-    was_host_covered_by_fetch_at_commit_ = was_host_covered_by_fetch_at_commit;
-  }
-
-  // Whether a hint was attempted to be fetched from the remote Optimization
-  // Guide Service at some point during the navigation.
-  base::Optional<bool> was_hint_for_host_attempted_to_be_fetched() const {
-    return was_hint_for_host_attempted_to_be_fetched_;
-  }
-  void set_was_hint_for_host_attempted_to_be_fetched(
-      bool was_hint_for_host_attempted_to_be_fetched) {
-    was_hint_for_host_attempted_to_be_fetched_ =
-        was_hint_for_host_attempted_to_be_fetched;
   }
 
   // Whether the initiation of the navigation was from a same origin URL or not.
@@ -182,20 +127,9 @@ class OptimizationGuideNavigationData {
   // |this|.
   void RecordOptimizationGuideUKM() const;
 
-  // Returns whether the host was covered by a hint or a fetch based on data
-  // currently held in |this| at navigation start.
-  bool WasHostCoveredByHintOrFetchAtNavigationStart() const;
-
-  // Returns whether the host was covered by a hint or a fetch based on data
-  // currently held in |this| at commit.
-  bool WasHostCoveredByHintOrFetchAtCommit() const;
-
   // The navigation ID of the navigation handle that this data is associated
   // with.
   const int64_t navigation_id_;
-
-  // The serialized hints version for the hint that applied to the navigation.
-  base::Optional<std::string> serialized_hint_version_string_;
 
   // The map from optimization type to the last decision made for that type.
   base::flat_map<optimization_guide::proto::OptimizationType,
@@ -222,26 +156,9 @@ class OptimizationGuideNavigationData {
   base::flat_map<optimization_guide::proto::ClientModelFeature, float>
       prediction_model_features_;
 
-  // Whether the hint cache had a hint for the navigation before commit.
-  base::Optional<bool> has_hint_before_commit_;
-
-  // Whether the hint cache had a hint for the navigation after commit.
-  base::Optional<bool> has_hint_after_commit_;
-
   // The page hint for the navigation.
   base::Optional<std::unique_ptr<optimization_guide::proto::PageHint>>
       page_hint_;
-
-  // Whether the host was covered by a hints fetch at the start of
-  // navigation.
-  base::Optional<bool> was_host_covered_by_fetch_at_navigation_start_;
-
-  // Whether the host was covered by a hints fetch at commit.
-  base::Optional<bool> was_host_covered_by_fetch_at_commit_;
-
-  // Whether a hint for the host was attempted to be fetched at some point
-  // during the navigation.
-  base::Optional<bool> was_hint_for_host_attempted_to_be_fetched_;
 
   // Whether the initiation of the navigation was from a same origin URL or not.
   bool is_same_origin_navigation_ = false;

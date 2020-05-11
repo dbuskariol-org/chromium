@@ -1130,11 +1130,7 @@ IN_PROC_BROWSER_TEST_F(
     ui_test_utils::NavigateToURL(browser(), GURL("http://nohints.com/"));
     auto entries = prev_nav_ukm_recorder.GetEntriesByName(
         ukm::builders::OptimizationGuide::kEntryName);
-    EXPECT_EQ(1u, entries.size());
-    auto* entry = entries[0];
-    EXPECT_FALSE(prev_nav_ukm_recorder.EntryHasMetric(
-        entry, ukm::builders::OptimizationGuide::
-                   kNavigationHintsFetchRequestLatencyName));
+    EXPECT_EQ(0u, entries.size());
   }
 
   // Change ECT back to a low value. Hints should be fetched at the time of
