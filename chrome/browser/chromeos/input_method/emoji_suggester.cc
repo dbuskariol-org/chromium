@@ -21,6 +21,7 @@ namespace {
 
 const int kMaxCandidateSize = 5;
 const char kSpaceChar = ' ';
+const char kDefaultEngine[] = "default_engine";
 const base::FilePath::CharType kEmojiMapFilePath[] =
     FILE_PATH_LITERAL("/emoji/emoji-map.csv");
 
@@ -170,7 +171,7 @@ void EmojiSuggester::ShowSuggestion(const std::string& text) {
 
   candidate_id_ = 0;
   engine_->SetCandidateWindowProperty(
-      CreateProperty(static_cast<int>(candidates_.size())));
+      kDefaultEngine, CreateProperty(static_cast<int>(candidates_.size())));
   engine_->SetCandidateWindowVisible(true, &error);
   engine_->SetCursorPosition(context_id_, candidate_id_, &error);
   if (!error.empty()) {
