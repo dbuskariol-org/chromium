@@ -17,10 +17,6 @@ template <typename T>
 struct DefaultSingletonTraits;
 }
 
-namespace x11 {
-class Connection;
-}
-
 namespace gfx {
 
 // Gets the X atom for default display corresponding to atom_name.
@@ -45,7 +41,7 @@ class GFX_EXPORT X11AtomCache {
   // On failure, x11::None is returned.
   XAtom GetAtom(const char*) const;
 
-  x11::Connection* connection_;
+  XDisplay* xdisplay_;
 
   // Using std::map, as it is possible for thousands of atoms to be registered.
   mutable std::map<std::string, XAtom> cached_atoms_;
