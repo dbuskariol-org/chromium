@@ -1864,9 +1864,6 @@ crbug.com/1075869 http/tests/devtools/elements/styles-3/spectrum.js [ Pass Failu
 crbug.com/1075869 http/tests/devtools/elements/styles-4/styles-invalid-color-values.js [ Pass Failure ]
 crbug.com/1075869 http/tests/devtools/extensions/extensions-timeline-api.js [ Pass Failure Timeout ]
 
-# Disabled for DevTools roll (userAgent CDP method changes).
-crbug.com/1031511 http/tests/devtools/report-API-errors.js [ Pass Failure ]
-
 # On these platforms (all but Android) media tests don't currently use gpu-accelerated (proprietary) codecs, so no
 # benefit to running them again with gpu acceleration enabled.
 crbug.com/555703 [ Linux ] virtual/media-gpu-accelerated/* [ Skip ]
