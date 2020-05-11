@@ -2,12 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/webui_allowlist.h"
+#include "ui/webui/webui_allowlist.h"
+
 #include <memory>
 
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/ui/webui/webui_allowlist_provider.h"
+#include "content/public/browser/browser_context.h"
 #include "content/public/common/url_constants.h"
+#include "ui/webui/webui_allowlist_provider.h"
+#include "url/gurl.h"
 
 const char kWebUIAllowlistKeyName[] = "WebUIAllowlist";
 
@@ -43,13 +45,14 @@ class AllowlistRuleIterator : public content_settings::RuleIterator {
 }  // namespace
 
 // static
-WebUIAllowlist* WebUIAllowlist::GetOrCreate(Profile* profile) {
-  if (!profile->GetUserData(kWebUIAllowlistKeyName)) {
-    profile->SetUserData(kWebUIAllowlistKeyName,
-                         std::make_unique<WebUIAllowlist>());
+WebUIAllowlist* WebUIAllowlist::GetOrCreate(
+    content::BrowserContext* browser_context) {
+  if (!browser_context->GetUserData(kWebUIAllowlistKeyName)) {
+    browser_context->SetUserData(kWebUIAllowlistKeyName,
+                                 std::make_unique<WebUIAllowlist>());
   }
   return static_cast<WebUIAllowlist*>(
-      profile->GetUserData(kWebUIAllowlistKeyName));
+      browser_context->GetUserData(kWebUIAllowlistKeyName));
 }
 
 WebUIAllowlist::WebUIAllowlist() = default;

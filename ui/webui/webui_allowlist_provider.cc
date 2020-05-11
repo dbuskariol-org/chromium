@@ -2,11 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/webui_allowlist_provider.h"
+#include "ui/webui/webui_allowlist_provider.h"
 
-#include "chrome/browser/ui/webui/webui_allowlist.h"
 #include "components/content_settings/core/common/content_settings_pattern.h"
-#include "url/gurl.h"
+#include "ui/webui/webui_allowlist.h"
 
 WebUIAllowlistProvider::WebUIAllowlistProvider(WebUIAllowlist* allowlist)
     : allowlist_(allowlist) {

@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_WEBUI_WEBUI_ALLOWLIST_PROVIDER_H_
-#define CHROME_BROWSER_UI_WEBUI_WEBUI_ALLOWLIST_PROVIDER_H_
+#ifndef UI_WEBUI_WEBUI_ALLOWLIST_PROVIDER_H_
+#define UI_WEBUI_WEBUI_ALLOWLIST_PROVIDER_H_
 
-#include "chrome/browser/ui/webui/webui_allowlist.h"
 #include "components/content_settings/core/browser/content_settings_observable_provider.h"
 #include "components/content_settings/core/common/content_settings.h"
+#include "ui/webui/webui_allowlist.h"
 
 class ContentSettingsPattern;
 
@@ -45,4 +45,4 @@ class WebUIAllowlistProvider : public content_settings::ObservableProvider {
   WebUIAllowlist* allowlist_;
 };
 
-#endif  // CHROME_BROWSER_UI_WEBUI_WEBUI_ALLOWLIST_PROVIDER_H_
+#endif  // UI_WEBUI_WEBUI_ALLOWLIST_PROVIDER_H_

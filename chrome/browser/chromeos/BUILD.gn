@@ -336,6 +336,7 @@ source_set("chromeos") {
     "//ui/views",
     "//ui/views/controls/webview",
     "//ui/web_dialogs",
+    "//ui/webui",
     "//ui/wm",
     "//ui/wm/public",
     "//url",

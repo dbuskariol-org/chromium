@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_WEBUI_WEBUI_ALLOWLIST_H_
-#define CHROME_BROWSER_UI_WEBUI_WEBUI_ALLOWLIST_H_
+#ifndef UI_WEBUI_WEBUI_ALLOWLIST_H_
+#define UI_WEBUI_WEBUI_ALLOWLIST_H_
 
 #include <map>
 
@@ -13,7 +13,9 @@
 #include "components/content_settings/core/common/content_settings_types.h"
 #include "url/origin.h"
 
-class Profile;
+namespace content {
+class BrowserContext;
+}
 class WebUIAllowlistProvider;
 
 // This class is the underlying storage for WebUIAllowlistProvider, it stores a
@@ -22,7 +24,7 @@ class WebUIAllowlistProvider;
 // as the profile it's attached to. It outlives WebUIAllowlistProvider.
 class WebUIAllowlist : public base::SupportsUserData::Data {
  public:
-  static WebUIAllowlist* GetOrCreate(Profile* profile);
+  static WebUIAllowlist* GetOrCreate(content::BrowserContext* browser_context);
 
   WebUIAllowlist();
   WebUIAllowlist(const WebUIAllowlist&) = delete;
@@ -47,4 +49,4 @@ class WebUIAllowlist : public base::SupportsUserData::Data {
   WebUIAllowlistProvider* provider_ = nullptr;
 };
 
-#endif  // CHROME_BROWSER_UI_WEBUI_WEBUI_ALLOWLIST_H_
+#endif  // UI_WEBUI_WEBUI_ALLOWLIST_H_
