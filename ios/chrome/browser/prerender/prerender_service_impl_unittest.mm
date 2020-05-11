@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/prerender/prerender_service.h"
+#import "ios/chrome/browser/prerender/prerender_service_impl.h"
 
 #include <memory>
 
@@ -18,14 +18,14 @@
 
 namespace {
 
-class PrerenderServiceTest : public PlatformTest {
+class PrerenderServiceImplTest : public PlatformTest {
  public:
-  PrerenderServiceTest() {
+  PrerenderServiceImplTest() {
     TestChromeBrowserState::Builder builder;
     browser_state_ = builder.Build();
-    service_ = std::make_unique<PrerenderService>(browser_state_.get());
+    service_ = std::make_unique<PrerenderServiceImpl>(browser_state_.get());
   }
-  ~PrerenderServiceTest() override = default;
+  ~PrerenderServiceImplTest() override = default;
 
  protected:
   web::WebTaskEnvironment task_environment_;
@@ -34,12 +34,12 @@ class PrerenderServiceTest : public PlatformTest {
   web::TestWebState web_state_;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(PrerenderServiceTest);
+  DISALLOW_COPY_AND_ASSIGN(PrerenderServiceImplTest);
 };
 
 }  // namespace
 
-TEST_F(PrerenderServiceTest, NoPrerender) {
+TEST_F(PrerenderServiceImplTest, NoPrerender) {
   GURL test_url("https://www.google.com");
   EXPECT_FALSE(service_->HasPrerenderForUrl(test_url));
 

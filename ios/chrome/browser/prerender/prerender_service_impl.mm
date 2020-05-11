@@ -1,8 +1,8 @@
-// Copyright 2017 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/prerender/prerender_service.h"
+#import "ios/chrome/browser/prerender/prerender_service_impl.h"
 
 #include "base/metrics/histogram_macros.h"
 #import "ios/chrome/browser/main/browser.h"
@@ -20,35 +20,35 @@
 #error "This file requires ARC support."
 #endif
 
-PrerenderService::PrerenderService(ChromeBrowserState* browser_state)
+PrerenderServiceImpl::PrerenderServiceImpl(ChromeBrowserState* browser_state)
     : controller_(
-          [[PreloadController alloc] initWithBrowserState:browser_state]),
-      loading_prerender_(false) {}
+          [[PreloadController alloc] initWithBrowserState:browser_state]) {}
 
-PrerenderService::~PrerenderService() {}
+PrerenderServiceImpl::~PrerenderServiceImpl() = default;
 
-void PrerenderService::Shutdown() {
+void PrerenderServiceImpl::Shutdown() {
   [controller_ browserStateDestroyed];
   controller_ = nil;
 }
 
-void PrerenderService::SetDelegate(id<PreloadControllerDelegate> delegate) {
+void PrerenderServiceImpl::SetDelegate(id<PreloadControllerDelegate> delegate) {
   controller_.delegate = delegate;
 }
 
-void PrerenderService::StartPrerender(const GURL& url,
-                                      const web::Referrer& referrer,
-                                      ui::PageTransition transition,
-                                      bool immediately) {
+void PrerenderServiceImpl::StartPrerender(const GURL& url,
+                                          const web::Referrer& referrer,
+                                          ui::PageTransition transition,
+                                          bool immediately) {
   [controller_ prerenderURL:url
                    referrer:referrer
                  transition:transition
                 immediately:immediately];
 }
 
-bool PrerenderService::MaybeLoadPrerenderedURL(const GURL& url,
-                                               ui::PageTransition transition,
-                                               Browser* browser) {
+bool PrerenderServiceImpl::MaybeLoadPrerenderedURL(
+    const GURL& url,
+    ui::PageTransition transition,
+    Browser* browser) {
   if (!HasPrerenderForUrl(url)) {
     CancelPrerender();
     return false;
@@ -108,14 +108,18 @@ bool PrerenderService::MaybeLoadPrerenderedURL(const GURL& url,
   return true;
 }
 
-void PrerenderService::CancelPrerender() {
+bool PrerenderServiceImpl::IsLoadingPrerender() {
+  return loading_prerender_;
+}
+
+void PrerenderServiceImpl::CancelPrerender() {
   [controller_ cancelPrerender];
 }
 
-bool PrerenderService::HasPrerenderForUrl(const GURL& url) {
+bool PrerenderServiceImpl::HasPrerenderForUrl(const GURL& url) {
   return url == controller_.prerenderedURL;
 }
 
-bool PrerenderService::IsWebStatePrerendered(web::WebState* web_state) {
+bool PrerenderServiceImpl::IsWebStatePrerendered(web::WebState* web_state) {
   return [controller_ isWebStatePrerendered:web_state];
 }
