@@ -1690,7 +1690,7 @@
     },
     {
       name: "SmsReceiver",
-      status: {"default": "experimental", "Android": "experimental"},
+      status: {"default": "experimental", "Android": "stable"},
     },
     {
       name: "SquashAfterPaint",
