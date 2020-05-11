@@ -762,7 +762,9 @@ public class ChromeTabbedActivity
 
             mLayoutManager.setToolbarManager(getToolbarManager());
 
-            mOverviewModeController.hideOverview(false);
+            if (!TabUiFeatureUtilities.supportInstantStart(isTablet())) {
+                assert !mOverviewModeController.overviewVisible();
+            }
         }
     }
 
@@ -1593,6 +1595,7 @@ public class ChromeTabbedActivity
 
             if (TabUiFeatureUtilities.supportStartSurfaceInInstantStart(
                         isTablet(), mInactivityTracker.getLastBackgroundedTimeMs())) {
+                mIsAccessibilityTabSwitcherEnabled = DeviceClassManager.enableAccessibilityLayout();
                 setInitialOverviewState();
             }
         }
