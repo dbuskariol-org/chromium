@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_POLICY_SYSTEM_PROXY_SETTINGS_POLICY_HANDLER_H_
-#define CHROME_BROWSER_CHROMEOS_POLICY_SYSTEM_PROXY_SETTINGS_POLICY_HANDLER_H_
+#ifndef CHROME_BROWSER_CHROMEOS_POLICY_SYSTEM_PROXY_MANAGER_H_
+#define CHROME_BROWSER_CHROMEOS_POLICY_SYSTEM_PROXY_MANAGER_H_
 
 #include <memory>
 
@@ -19,18 +19,18 @@ namespace policy {
 
 // This class observes the device setting |SystemProxySettings|, and controls
 // the availability of System-proxy service and the configuration of the web
-// proxy credentials for system services connecting through System-proxy.
-class SystemProxySettingsPolicyHandler {
+// proxy credentials for system services connecting through System-proxy. It
+// also listens for the |WorkerActive| dbus signal sent by the System-proxy
+// daemon and stores connection information regarding the active worker
+// processes.
+class SystemProxyManager {
  public:
-  explicit SystemProxySettingsPolicyHandler(
-      chromeos::CrosSettings* cros_settings);
-  SystemProxySettingsPolicyHandler(const SystemProxySettingsPolicyHandler&) =
-      delete;
+  explicit SystemProxyManager(chromeos::CrosSettings* cros_settings);
+  SystemProxyManager(const SystemProxyManager&) = delete;
 
-  SystemProxySettingsPolicyHandler& operator=(
-      const SystemProxySettingsPolicyHandler&) = delete;
+  SystemProxyManager& operator=(const SystemProxyManager&) = delete;
 
-  ~SystemProxySettingsPolicyHandler();
+  ~SystemProxyManager();
 
  private:
   void OnSetSystemTrafficCredentials(
@@ -46,9 +46,9 @@ class SystemProxySettingsPolicyHandler {
   std::unique_ptr<chromeos::CrosSettings::ObserverSubscription>
       system_proxy_subscription_;
 
-  base::WeakPtrFactory<SystemProxySettingsPolicyHandler> weak_factory_{this};
+  base::WeakPtrFactory<SystemProxyManager> weak_factory_{this};
 };
 
 }  // namespace policy
 
-#endif  // CHROME_BROWSER_CHROMEOS_POLICY_SYSTEM_PROXY_SETTINGS_POLICY_HANDLER_H_
+#endif  // CHROME_BROWSER_CHROMEOS_POLICY_SYSTEM_PROXY_MANAGER_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/policy/system_proxy_settings_policy_handler.h"
+#include "chrome/browser/chromeos/policy/system_proxy_manager.h"
 
 #include "base/bind.h"
 #include "base/values.h"
@@ -18,24 +18,23 @@ const char kSystemProxyService[] = "system-proxy-service";
 
 namespace policy {
 
-SystemProxySettingsPolicyHandler::SystemProxySettingsPolicyHandler(
-    chromeos::CrosSettings* cros_settings)
+SystemProxyManager::SystemProxyManager(chromeos::CrosSettings* cros_settings)
     : cros_settings_(cros_settings),
       system_proxy_subscription_(cros_settings_->AddSettingsObserver(
           chromeos::kSystemProxySettings,
-          base::BindRepeating(&SystemProxySettingsPolicyHandler::
-                                  OnSystemProxySettingsPolicyChanged,
-                              base::Unretained(this)))) {
+          base::BindRepeating(
+              &SystemProxyManager::OnSystemProxySettingsPolicyChanged,
+              base::Unretained(this)))) {
   // Fire it once so we're sure we get an invocation on startup.
   OnSystemProxySettingsPolicyChanged();
 }
 
-SystemProxySettingsPolicyHandler::~SystemProxySettingsPolicyHandler() {}
+SystemProxyManager::~SystemProxyManager() {}
 
-void SystemProxySettingsPolicyHandler::OnSystemProxySettingsPolicyChanged() {
+void SystemProxyManager::OnSystemProxySettingsPolicyChanged() {
   chromeos::CrosSettingsProvider::TrustedStatus status =
       cros_settings_->PrepareTrustedValues(base::BindOnce(
-          &SystemProxySettingsPolicyHandler::OnSystemProxySettingsPolicyChanged,
+          &SystemProxyManager::OnSystemProxySettingsPolicyChanged,
           base::Unretained(this)));
   if (status != chromeos::CrosSettingsProvider::TRUSTED)
     return;
@@ -56,9 +55,8 @@ void SystemProxySettingsPolicyHandler::OnSystemProxySettingsPolicyChanged() {
     // daemon and tell it to exit.
     // TODO(crbug.com/1055245,acostinas): Do not send shut-down command if
     // System-proxy is inactive.
-    chromeos::SystemProxyClient::Get()->ShutDownDaemon(
-        base::BindOnce(&SystemProxySettingsPolicyHandler::OnDaemonShutDown,
-                       weak_factory_.GetWeakPtr()));
+    chromeos::SystemProxyClient::Get()->ShutDownDaemon(base::BindOnce(
+        &SystemProxyManager::OnDaemonShutDown, weak_factory_.GetWeakPtr()));
     return;
   }
 
@@ -80,12 +78,11 @@ void SystemProxySettingsPolicyHandler::OnSystemProxySettingsPolicyChanged() {
 
   chromeos::SystemProxyClient::Get()->SetSystemTrafficCredentials(
       request,
-      base::BindOnce(
-          &SystemProxySettingsPolicyHandler::OnSetSystemTrafficCredentials,
-          weak_factory_.GetWeakPtr()));
+      base::BindOnce(&SystemProxyManager::OnSetSystemTrafficCredentials,
+                     weak_factory_.GetWeakPtr()));
 }
 
-void SystemProxySettingsPolicyHandler::OnSetSystemTrafficCredentials(
+void SystemProxyManager::OnSetSystemTrafficCredentials(
     const system_proxy::SetSystemTrafficCredentialsResponse& response) {
   if (response.has_error_message()) {
     NET_LOG(ERROR)
@@ -94,7 +91,7 @@ void SystemProxySettingsPolicyHandler::OnSetSystemTrafficCredentials(
   }
 }
 
-void SystemProxySettingsPolicyHandler::OnDaemonShutDown(
+void SystemProxyManager::OnDaemonShutDown(
     const system_proxy::ShutDownResponse& response) {
   if (response.has_error_message() && !response.error_message().empty()) {
     NET_LOG(ERROR) << "Failed to shutdown system proxy: " << kSystemProxyService

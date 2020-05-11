@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/policy/system_proxy_settings_policy_handler.h"
+#include "chrome/browser/chromeos/policy/system_proxy_manager.h"
 
 #include "base/test/task_environment.h"
 #include "chrome/browser/chromeos/settings/scoped_testing_cros_settings.h"
@@ -11,10 +11,10 @@
 #include "testing/gtest/include/gtest/gtest.h"
 
 namespace policy {
-class SystemProxySettingsPolicyHandlerTest : public testing::Test {
+class SystemProxyManagerTest : public testing::Test {
  public:
-  SystemProxySettingsPolicyHandlerTest() = default;
-  ~SystemProxySettingsPolicyHandlerTest() override = default;
+  SystemProxyManagerTest() = default;
+  ~SystemProxyManagerTest() override = default;
 
   // testing::Test
   void SetUp() override {
@@ -48,9 +48,8 @@ class SystemProxySettingsPolicyHandlerTest : public testing::Test {
 
 // Verifies that System-proxy is configured with the system traffic credentials
 // set by |kSystemProxySettings| policy.
-TEST_F(SystemProxySettingsPolicyHandlerTest, SetSystemTrafficCredentials) {
-  SystemProxySettingsPolicyHandler proxy_policy_handler(
-      chromeos::CrosSettings::Get());
+TEST_F(SystemProxyManagerTest, SetSystemTrafficCredentials) {
+  SystemProxyManager system_proxy_manager(chromeos::CrosSettings::Get());
   EXPECT_EQ(0,
             client_test_interface()->GetSetSystemTrafficCredentialsCallCount());
 
@@ -71,9 +70,8 @@ TEST_F(SystemProxySettingsPolicyHandlerTest, SetSystemTrafficCredentials) {
 
 // Verifies requests to shut down are sent to System-proxy according to the
 // |kSystemProxySettings| policy.
-TEST_F(SystemProxySettingsPolicyHandlerTest, ShutDownDaemon) {
-  SystemProxySettingsPolicyHandler proxy_policy_handler(
-      chromeos::CrosSettings::Get());
+TEST_F(SystemProxyManagerTest, ShutDownDaemon) {
+  SystemProxyManager system_proxy_manager(chromeos::CrosSettings::Get());
 
   EXPECT_EQ(0, client_test_interface()->GetShutDownCallCount());
 
