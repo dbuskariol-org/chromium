@@ -27,7 +27,7 @@ typedef struct {
   int expected_value;
 } ClientHostModelFeaturesTestCase;
 
-TEST(OptimizationGuideNavigationDataTest, RecordMetricsNoDataNoCommit) {
+TEST(OptimizationGuideNavigationDataTest, RecordMetricsNoData) {
   base::test::TaskEnvironment env;
 
   base::HistogramTester histogram_tester;
@@ -48,6 +48,58 @@ TEST(OptimizationGuideNavigationDataTest, RecordMetricsNoDataNoCommit) {
   auto entries = ukm_recorder.GetEntriesByName(
       ukm::builders::OptimizationGuide::kEntryName);
   EXPECT_TRUE(entries.empty());
+}
+
+TEST(OptimizationGuideNavigtaionDataTest,
+     RecordMetricsRegisteredOptimizationTypes) {
+  base::test::TaskEnvironment env;
+
+  ukm::TestAutoSetUkmRecorder ukm_recorder;
+
+  std::unique_ptr<OptimizationGuideNavigationData> data =
+      std::make_unique<OptimizationGuideNavigationData>(/*navigation_id=*/3);
+  data->set_registered_optimization_types(
+      {optimization_guide::proto::NOSCRIPT,
+       optimization_guide::proto::RESOURCE_LOADING});
+  data.reset();
+
+  auto entries = ukm_recorder.GetEntriesByName(
+      ukm::builders::OptimizationGuide::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  auto* entry = entries[0];
+  EXPECT_TRUE(ukm_recorder.EntryHasMetric(
+      entry,
+      ukm::builders::OptimizationGuide::kRegisteredOptimizationTypesName));
+  // The bitmask should be 110 since NOSCRIPT=1 and RESOURCE_LOADING=2.
+  ukm_recorder.ExpectEntryMetric(
+      entry, ukm::builders::OptimizationGuide::kRegisteredOptimizationTypesName,
+      6);
+}
+
+TEST(OptimizationGuideNavigtaionDataTest,
+     RecordMetricsRegisteredOptimizationTargets) {
+  base::test::TaskEnvironment env;
+
+  ukm::TestAutoSetUkmRecorder ukm_recorder;
+
+  std::unique_ptr<OptimizationGuideNavigationData> data =
+      std::make_unique<OptimizationGuideNavigationData>(/*navigation_id=*/3);
+  data->set_registered_optimization_targets(
+      {optimization_guide::proto::OPTIMIZATION_TARGET_UNKNOWN,
+       optimization_guide::proto::OPTIMIZATION_TARGET_PAINFUL_PAGE_LOAD});
+  data.reset();
+
+  auto entries = ukm_recorder.GetEntriesByName(
+      ukm::builders::OptimizationGuide::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  auto* entry = entries[0];
+  EXPECT_TRUE(ukm_recorder.EntryHasMetric(
+      entry,
+      ukm::builders::OptimizationGuide::kRegisteredOptimizationTargetsName));
+  // The bitmask should be 11 since UNKNOWN=0 and PAINFUL_PAGE_LOAD=1.
+  ukm_recorder.ExpectEntryMetric(
+      entry,
+      ukm::builders::OptimizationGuide::kRegisteredOptimizationTargetsName, 3);
 }
 
 TEST(OptimizationGuideNavigationDataTest,
@@ -133,6 +185,33 @@ TEST(OptimizationGuideNavigationDataTest,
   auto entries = ukm_recorder.GetEntriesByName(
       ukm::builders::OptimizationGuide::kEntryName);
   EXPECT_TRUE(entries.empty());
+}
+
+TEST(OptimizationGuideNavigationDataTest,
+     RecordMetricsFetchAttemptStatusForNavigation) {
+  base::test::TaskEnvironment env;
+
+  ukm::TestAutoSetUkmRecorder ukm_recorder;
+
+  std::unique_ptr<OptimizationGuideNavigationData> data =
+      std::make_unique<OptimizationGuideNavigationData>(/*navigation_id=*/3);
+  data->set_hints_fetch_attempt_status(
+      optimization_guide::RaceNavigationFetchAttemptStatus::
+          kRaceNavigationFetchHost);
+  data.reset();
+
+  auto entries = ukm_recorder.GetEntriesByName(
+      ukm::builders::OptimizationGuide::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  auto* entry = entries[0];
+  EXPECT_TRUE(ukm_recorder.EntryHasMetric(
+      entry, ukm::builders::OptimizationGuide::
+                 kNavigationHintsFetchAttemptStatusName));
+  ukm_recorder.ExpectEntryMetric(
+      entry,
+      ukm::builders::OptimizationGuide::kNavigationHintsFetchAttemptStatusName,
+      static_cast<int>(optimization_guide::RaceNavigationFetchAttemptStatus::
+                           kRaceNavigationFetchHost));
 }
 
 TEST(OptimizationGuideNavigationDataTest,

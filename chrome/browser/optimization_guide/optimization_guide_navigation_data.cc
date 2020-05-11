@@ -180,7 +180,7 @@ void OptimizationGuideNavigationData::RecordOptimizationGuideUKM() const {
     }
   }
 
-  // Record fetch latency metrics.
+  // Record hints fetch metrics.
   if (hints_fetch_start_.has_value()) {
     if (hints_fetch_latency().has_value()) {
       builder.SetNavigationHintsFetchRequestLatency(
@@ -188,6 +188,29 @@ void OptimizationGuideNavigationData::RecordOptimizationGuideUKM() const {
     } else {
       builder.SetNavigationHintsFetchRequestLatency(INT64_MAX);
     }
+    did_record_metric = true;
+  }
+  if (hints_fetch_attempt_status_.has_value()) {
+    builder.SetNavigationHintsFetchAttemptStatus(
+        static_cast<int>(*hints_fetch_attempt_status_));
+    did_record_metric = true;
+  }
+
+  // Record registered types/targets metrics.
+  if (!registered_optimization_types_.empty()) {
+    int64_t types_bitmask = 0;
+    for (const auto& optimization_type : registered_optimization_types_) {
+      types_bitmask |= (1 << static_cast<int>(optimization_type));
+    }
+    builder.SetRegisteredOptimizationTypes(types_bitmask);
+    did_record_metric = true;
+  }
+  if (!registered_optimization_targets_.empty()) {
+    int64_t targets_bitmask = 0;
+    for (const auto& optimization_target : registered_optimization_targets_) {
+      targets_bitmask |= (1 << static_cast<int>(optimization_target));
+    }
+    builder.SetRegisteredOptimizationTargets(targets_bitmask);
     did_record_metric = true;
   }
 

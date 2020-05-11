@@ -332,11 +332,18 @@ IN_PROC_BROWSER_TEST_F(
     NavigateToPageWithHintsButNoRegistrationDoesNotAttemptToLoadHint) {
   PushHintsComponentAndWaitForCompletion();
 
+  ukm::TestAutoSetUkmRecorder ukm_recorder;
   base::HistogramTester histogram_tester;
 
   ui_test_utils::NavigateToURL(browser(), url_with_hints());
-
   histogram_tester.ExpectTotalCount("OptimizationGuide.LoadedHint.Result", 0);
+
+  // Navigate away so UKM get recorded.
+  ui_test_utils::NavigateToURL(browser(), url_with_hints());
+
+  auto entries = ukm_recorder.GetEntriesByName(
+      ukm::builders::OptimizationGuide::kEntryName);
+  EXPECT_EQ(0u, entries.size());
 }
 
 IN_PROC_BROWSER_TEST_F(OptimizationGuideKeyedServiceBrowserTest,
@@ -405,6 +412,7 @@ IN_PROC_BROWSER_TEST_F(OptimizationGuideKeyedServiceBrowserTest,
   PushHintsComponentAndWaitForCompletion();
   RegisterWithKeyedService();
 
+  ukm::TestAutoSetUkmRecorder ukm_recorder;
   base::HistogramTester histogram_tester;
 
   ui_test_utils::NavigateToURL(browser(), url_with_hints());
@@ -425,11 +433,18 @@ IN_PROC_BROWSER_TEST_F(OptimizationGuideKeyedServiceBrowserTest,
   // Navigate away so metrics get recorded.
   ui_test_utils::NavigateToURL(browser(), url_with_hints());
 
-  // Expect that the optimization guide UMA is recorded.
-  histogram_tester.ExpectTotalCount("OptimizationGuide.ApplyDecision.NoScript",
-                                    1);
-  histogram_tester.ExpectTotalCount(
-      "OptimizationGuide.TargetDecision.PainfulPageLoad", 1);
+  // Expect that UKM is recorded.
+  auto entries = ukm_recorder.GetEntriesByName(
+      ukm::builders::OptimizationGuide::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  auto* entry = entries[0];
+  EXPECT_TRUE(ukm_recorder.EntryHasMetric(
+      entry,
+      ukm::builders::OptimizationGuide::kRegisteredOptimizationTypesName));
+  // NOSCRIPT = 1, so bit mask is 10, which equals 2.
+  ukm_recorder.ExpectEntryMetric(
+      entry, ukm::builders::OptimizationGuide::kRegisteredOptimizationTypesName,
+      2);
 }
 
 IN_PROC_BROWSER_TEST_F(OptimizationGuideKeyedServiceBrowserTest,
@@ -437,6 +452,7 @@ IN_PROC_BROWSER_TEST_F(OptimizationGuideKeyedServiceBrowserTest,
   PushHintsComponentAndWaitForCompletion();
   RegisterWithKeyedService();
 
+  ukm::TestAutoSetUkmRecorder ukm_recorder;
   base::HistogramTester histogram_tester;
 
   ui_test_utils::NavigateToURL(browser(), url_with_hints());
@@ -457,11 +473,18 @@ IN_PROC_BROWSER_TEST_F(OptimizationGuideKeyedServiceBrowserTest,
   // Make sure metrics get recorded when tab is hidden.
   browser()->tab_strip_model()->GetActiveWebContents()->WasHidden();
 
-  // Expect that the optimization guide UMA is recorded.
-  histogram_tester.ExpectTotalCount("OptimizationGuide.ApplyDecision.NoScript",
-                                    1);
-  histogram_tester.ExpectTotalCount(
-      "OptimizationGuide.TargetDecision.PainfulPageLoad", 1);
+  // Expect that the optimization guide UKM is recorded.
+  auto entries = ukm_recorder.GetEntriesByName(
+      ukm::builders::OptimizationGuide::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  auto* entry = entries[0];
+  EXPECT_TRUE(ukm_recorder.EntryHasMetric(
+      entry,
+      ukm::builders::OptimizationGuide::kRegisteredOptimizationTypesName));
+  // NOSCRIPT = 1, so bit mask is 10, which equals 2.
+  ukm_recorder.ExpectEntryMetric(
+      entry, ukm::builders::OptimizationGuide::kRegisteredOptimizationTypesName,
+      2);
 }
 
 IN_PROC_BROWSER_TEST_F(
@@ -715,4 +738,15 @@ IN_PROC_BROWSER_TEST_F(
       static_cast<int>(optimization_guide::OptimizationTargetDecision::
                            kModelNotAvailableOnClient),
       1);
+  auto entries = ukm_recorder.GetEntriesByName(
+      ukm::builders::OptimizationGuide::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  auto* entry = entries[0];
+  EXPECT_TRUE(ukm_recorder.EntryHasMetric(
+      entry,
+      ukm::builders::OptimizationGuide::kRegisteredOptimizationTargetsName));
+  // PAINFUL_PAGE_LOAD = 1 so bit mask should be 10 which equals 2.
+  ukm_recorder.ExpectEntryMetric(
+      entry,
+      ukm::builders::OptimizationGuide::kRegisteredOptimizationTargetsName, 2);
 }

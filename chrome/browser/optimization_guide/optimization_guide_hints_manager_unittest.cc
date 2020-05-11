@@ -458,7 +458,7 @@ TEST_F(OptimizationGuideHintsManagerTest,
   CreateServiceAndHintsManager(optimization_targets,
                                /*top_host_provider=*/nullptr);
 
-  EXPECT_TRUE(hints_manager()->HasRegisteredOptimizationTypes());
+  EXPECT_FALSE(hints_manager()->registered_optimization_types().empty());
   optimization_guide::proto::Configuration config;
   optimization_guide::BloomFilter blacklist_bloom_filter(
       kBlackBlacklistBloomFilterNumHashFunctions,
@@ -2500,6 +2500,9 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
         OptimizationGuideNavigationData::GetFromNavigationHandle(
             navigation_handle.get());
     EXPECT_TRUE(navigation_data->hints_fetch_latency().has_value());
+    EXPECT_EQ(navigation_data->hints_fetch_attempt_status(),
+              optimization_guide::RaceNavigationFetchAttemptStatus::
+                  kRaceNavigationFetchURL);
 
     histogram_tester.ExpectBucketCount(
         "OptimizationGuide.HintsManager.RaceNavigationFetchAttemptStatus",
@@ -2529,6 +2532,9 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
         OptimizationGuideNavigationData::GetFromNavigationHandle(
             navigation_handle.get());
     EXPECT_FALSE(navigation_data->hints_fetch_latency().has_value());
+    EXPECT_EQ(navigation_data->hints_fetch_attempt_status(),
+              optimization_guide::RaceNavigationFetchAttemptStatus::
+                  kRaceNavigationFetchNotAttempted);
   }
 }
 
@@ -2564,6 +2570,9 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
         OptimizationGuideNavigationData::GetFromNavigationHandle(
             navigation_handle.get());
     EXPECT_TRUE(navigation_data->hints_fetch_latency().has_value());
+    EXPECT_EQ(navigation_data->hints_fetch_attempt_status(),
+              optimization_guide::RaceNavigationFetchAttemptStatus::
+                  kRaceNavigationFetchHostAndURL);
 
     histogram_tester.ExpectBucketCount(
         "OptimizationGuide.HintsManager.RaceNavigationFetchAttemptStatus",
@@ -2594,6 +2603,9 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
         OptimizationGuideNavigationData::GetFromNavigationHandle(
             navigation_handle.get());
     EXPECT_TRUE(navigation_data->hints_fetch_latency().has_value());
+    EXPECT_EQ(navigation_data->hints_fetch_attempt_status(),
+              optimization_guide::RaceNavigationFetchAttemptStatus::
+                  kRaceNavigationFetchHost);
   }
 }
 
@@ -2622,6 +2634,7 @@ TEST_F(OptimizationGuideHintsManagerFetchingTest,
       OptimizationGuideNavigationData::GetFromNavigationHandle(
           navigation_handle.get());
   EXPECT_FALSE(navigation_data->hints_fetch_latency().has_value());
+  EXPECT_FALSE(navigation_data->hints_fetch_attempt_status().has_value());
 
   histogram_tester.ExpectTotalCount(
       "OptimizationGuide.HintsManager.RaceNavigationFetchAttemptStatus", 0);

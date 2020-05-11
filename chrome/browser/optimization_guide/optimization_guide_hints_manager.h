@@ -97,9 +97,10 @@ class OptimizationGuideHintsManager
       const std::vector<optimization_guide::proto::OptimizationType>&
           optimization_types);
 
-  // Returns whether there have been any optimization types registered.
-  bool HasRegisteredOptimizationTypes() const {
-    return !registered_optimization_types_.empty();
+  // Returns the optimization types that are registered.
+  base::flat_set<optimization_guide::proto::OptimizationType>
+  registered_optimization_types() const {
+    return registered_optimization_types_;
   }
 
   // Returns whether there is an optimization filter loaded for

@@ -7102,6 +7102,14 @@ be describing additional metrics about the same event.
       applied on the page load.
     </summary>
   </metric>
+  <metric name="NavigationHintsFetchAttemptStatus"
+      enum="OptimizationGuideRaceNavigationFetchAttemptStatus">
+    <summary>
+      An enum value representing the status of a fetch attempt for the page load
+      and what it contains (i.e. hosts or URLs). Captured at the start of the
+      navigation.
+    </summary>
+  </metric>
   <metric name="NavigationHintsFetchRequestLatency">
     <summary>
       The duration (in milliseconds) for how long it took from the request to go
@@ -7176,6 +7184,20 @@ be describing additional metrics about the same event.
     <summary>
       The site engagement score of the host of the current navigation at the
       time a prediction was requested. Recorded once per page load.
+    </summary>
+  </metric>
+  <metric name="RegisteredOptimizationTargets">
+    <summary>
+      A bitmask of the optimization targets that were registered at the start of
+      the page load where each flipped bit corresponds to its int value in
+      |optimization_guide::proto::OptimizationTarget|.
+    </summary>
+  </metric>
+  <metric name="RegisteredOptimizationTypes">
+    <summary>
+      A bitmask of the optimization types that were registered at the start of
+      the page load where each flipped bit corresponds to its int value in
+      |optimization_guide::proto::OptimizationTarget|.
     </summary>
   </metric>
 </event>

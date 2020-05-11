@@ -201,9 +201,13 @@ bool IsOptimizationTypeSupportedByPageHint(
 // and its destructor is called.
 class ScopedHintsManagerRaceNavigationHintsFetchAttemptRecorder {
  public:
-  ScopedHintsManagerRaceNavigationHintsFetchAttemptRecorder()
+  explicit ScopedHintsManagerRaceNavigationHintsFetchAttemptRecorder(
+      content::NavigationHandle* navigation_handle)
       : race_attempt_status_(
-            optimization_guide::RaceNavigationFetchAttemptStatus::kUnknown) {}
+            optimization_guide::RaceNavigationFetchAttemptStatus::kUnknown),
+        navigation_data_(
+            OptimizationGuideNavigationData::GetFromNavigationHandle(
+                navigation_handle)) {}
 
   ~ScopedHintsManagerRaceNavigationHintsFetchAttemptRecorder() {
     DCHECK_NE(race_attempt_status_,
@@ -215,6 +219,8 @@ class ScopedHintsManagerRaceNavigationHintsFetchAttemptRecorder {
     base::UmaHistogramEnumeration(
         "OptimizationGuide.HintsManager.RaceNavigationFetchAttemptStatus",
         race_attempt_status_);
+    if (navigation_data_)
+      navigation_data_->set_hints_fetch_attempt_status(race_attempt_status_);
   }
 
   void set_race_attempt_status(
@@ -225,6 +231,7 @@ class ScopedHintsManagerRaceNavigationHintsFetchAttemptRecorder {
 
  private:
   optimization_guide::RaceNavigationFetchAttemptStatus race_attempt_status_;
+  OptimizationGuideNavigationData* navigation_data_;
 };
 
 // Returns true if the optimization type should be ignored when is newly
@@ -1192,7 +1199,7 @@ void OptimizationGuideHintsManager::MaybeFetchHintsForNavigation(
     return;
 
   ScopedHintsManagerRaceNavigationHintsFetchAttemptRecorder
-      race_navigation_recorder;
+      race_navigation_recorder(navigation_handle);
 
   // We expect that if the URL is being fetched for, we have already run through
   // the logic to decide if we also require fetching hints for the host.

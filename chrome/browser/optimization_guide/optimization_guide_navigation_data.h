@@ -11,6 +11,7 @@
 #include <utility>
 
 #include "base/containers/flat_map.h"
+#include "base/containers/flat_set.h"
 #include "base/memory/weak_ptr.h"
 #include "base/optional.h"
 #include "base/time/time.h"
@@ -43,6 +44,29 @@ class OptimizationGuideNavigationData {
   // The navigation ID of the navigation handle that this data is associated
   // with.
   int64_t navigation_id() const { return navigation_id_; }
+
+  // The optimization types that were registered at the start of the navigation.
+  base::flat_set<optimization_guide::proto::OptimizationType>
+  registered_optimization_types() const {
+    return registered_optimization_types_;
+  }
+  void set_registered_optimization_types(
+      base::flat_set<optimization_guide::proto::OptimizationType>
+          registered_optimization_types) {
+    registered_optimization_types_ = registered_optimization_types;
+  }
+
+  // The optimization targets that were registered at the start of the
+  // navigation.
+  base::flat_set<optimization_guide::proto::OptimizationTarget>
+  registered_optimization_targets() const {
+    return registered_optimization_targets_;
+  }
+  void set_registered_optimization_targets(
+      base::flat_set<optimization_guide::proto::OptimizationTarget>
+          registered_optimization_targets) {
+    registered_optimization_targets_ = registered_optimization_targets;
+  }
 
   // Returns the latest decision made for |optimization_type|.
   base::Optional<optimization_guide::OptimizationTypeDecision>
@@ -114,6 +138,18 @@ class OptimizationGuideNavigationData {
     hints_fetch_end_ = hints_fetch_end;
   }
 
+  // The status for whether a hint for the page load was attempted to be fetched
+  // from the remote Optimization Guide Service.
+  base::Optional<optimization_guide::RaceNavigationFetchAttemptStatus>
+  hints_fetch_attempt_status() const {
+    return hints_fetch_attempt_status_;
+  }
+  void set_hints_fetch_attempt_status(
+      optimization_guide::RaceNavigationFetchAttemptStatus
+          hints_fetch_attempt_status) {
+    hints_fetch_attempt_status_ = hints_fetch_attempt_status;
+  }
+
  private:
   // Records metrics based on data currently held in |this|.
   void RecordMetrics() const;
@@ -130,6 +166,15 @@ class OptimizationGuideNavigationData {
   // The navigation ID of the navigation handle that this data is associated
   // with.
   const int64_t navigation_id_;
+
+  // The optimization types that were registered at the start of the navigation.
+  base::flat_set<optimization_guide::proto::OptimizationType>
+      registered_optimization_types_;
+
+  // The optimization targets that were registered at the start of the
+  // navigation.
+  base::flat_set<optimization_guide::proto::OptimizationTarget>
+      registered_optimization_targets_;
 
   // The map from optimization type to the last decision made for that type.
   base::flat_map<optimization_guide::proto::OptimizationType,
@@ -170,6 +215,11 @@ class OptimizationGuideNavigationData {
   // The time that the hints fetch for the navigation ended. Is only present if
   // a fetch was initiated and successfully completed for this navigation.
   base::Optional<base::TimeTicks> hints_fetch_end_;
+
+  // The status for whether a hint for the page load was attempted to be fetched
+  // from the remote Optimization Guide Service.
+  base::Optional<optimization_guide::RaceNavigationFetchAttemptStatus>
+      hints_fetch_attempt_status_;
 
   // Used to get |weak_ptr_| to self on the UI thread.
   base::WeakPtrFactory<OptimizationGuideNavigationData> weak_ptr_factory_{this};
