@@ -176,6 +176,8 @@ class ASH_EXPORT TabletModeController
     return is_in_tablet_physical_state_;
   }
 
+  float lid_angle() const { return lid_angle_; }
+
   // Enable/disable the tablet mode for development. Please see cc file
   // for more details.
   void SetEnabledForDev(bool enabled);
