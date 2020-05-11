@@ -5029,7 +5029,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="7614260613810441905">Întreabă când un site vrea să modifice fișiere sau dosare de pe dispozitiv (recomandat)</translation>
 <translation id="761530003705945209">Fă backup în Google Drive. Restabilește datele sau schimbă dispozitivul cu ușurință, în orice moment. Backupul include datele aplicațiilor. Backupurile sunt încărcate pe serverele Google și sunt criptate folosind parola pentru Contul Google.</translation>
 <translation id="7616214729753637086">Se înregistrează dispozitivul...</translation>
-<translation id="7617263010641145920">Activează Magazin Play</translation>
+<translation id="7617263010641145920">Activează Magazinul Play</translation>
 <translation id="7617366389578322136">Se conectează la „<ph name="DEVICE_NAME" />”</translation>
 <translation id="761763866592998929">Modul ambiental</translation>
 <translation id="762068974690945752">Adaugă un cont de la școală sau gestionează conturile copiilor aici. <ph name="LINK_BEGIN" />Află mai multe<ph name="LINK_END" /></translation>
@@ -5539,7 +5539,7 @@ Păstrează fișierul cu cheia într-un loc sigur. Acesta va fi necesar la crear
 <translation id="8241040075392580210">Norișor</translation>
 <translation id="8241806945692107836">Se determină configurația dispozitivului...</translation>
 <translation id="8241868517363889229">Citește și modifică marcajele</translation>
-<translation id="8242370300221559051">Activează Magazin Play</translation>
+<translation id="8242370300221559051">Activează Magazinul Play</translation>
 <translation id="8242426110754782860">Continuă</translation>
 <translation id="8244514732452879619">Se apropie ora de culcare</translation>
 <translation id="8246209727385807362">Operator necunoscut</translation>
@@ -6203,7 +6203,7 @@ Păstrează fișierul cu cheia într-un loc sigur. Acesta va fi necesar la crear
 <translation id="9074836595010225693">Mouse USB conectat</translation>
 <translation id="9076283476770535406">Poate include conținut destinat adulților</translation>
 <translation id="9076523132036239772">Din păcate, adresa de e-mail sau parola nu a putut fi verificată. Încearcă să te conectezi mai întâi la o rețea.</translation>
-<translation id="9076977315710973122">Spații comune de stocare SMB</translation>
+<translation id="9076977315710973122">Dispozitiv de stocare în rețea</translation>
 <translation id="9084064520949870008">Deschideți ca fereastră</translation>
 <translation id="9085256200913095638">Fila selectată este o dublură</translation>
 <translation id="9087949559523851360">Adaugă un utilizator cu permisiuni limitate</translation>
@@ -6289,7 +6289,7 @@ Păstrează fișierul cu cheia într-un loc sigur. Acesta va fi necesar la crear
 <translation id="9214520840402538427">Hopa! Inițializarea atributelor necesare în momentul instalării a expirat. Contactați reprezentantul dvs. de asistență.</translation>
 <translation id="9214695392875603905">Brioșă</translation>
 <translation id="9215293857209265904">S-a adăugat „<ph name="EXTENSION_NAME" />”</translation>
-<translation id="9215742531438648683">Dezinstalează Magazin Google Play</translation>
+<translation id="9215742531438648683">Dezinstalează Magazinul Google Play</translation>
 <translation id="9218430445555521422">Setează ca prestabilit</translation>
 <translation id="9219103736887031265">Imagini</translation>
 <translation id="9220525904950070496">Eliminați contul</translation>
