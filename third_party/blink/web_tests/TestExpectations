@@ -322,11 +322,6 @@ crbug.com/997202 external/wpt/css/css-images/image-orientation/svg-image-orienta
 crbug.com/997202 external/wpt/css/css-images/image-orientation/svg-image-orientation-none.html [ Failure ]
 crbug.com/997202 external/wpt/css/css-images/image-orientation/svg-image-orientation-aspect-ratio.html [ Failure ]
 
-crbug.com/1047818 [ Win ] external/wpt/css/filter-effects/idlharness.any.html [ Timeout Pass ]
-crbug.com/1047818 [ Mac ] external/wpt/css/filter-effects/idlharness.any.html [ Timeout Pass ]
-crbug.com/1047818 [ Win ] external/wpt/css/filter-effects/idlharness.any.worker.html [ Timeout Pass ]
-crbug.com/1047818 [ Mac ] external/wpt/css/filter-effects/idlharness.any.worker.html [ Timeout Pass ]
-
 crbug.com/1042783 external/wpt/css/css-backgrounds/background-size/background-size-near-zero-png.html [ Failure ]
 crbug.com/1042783 external/wpt/css/css-backgrounds/background-size/background-size-near-zero-svg.html [ Failure ]
 
