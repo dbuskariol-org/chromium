@@ -5829,9 +5829,6 @@ crbug.com/1058244 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/scr
 # Sheriff 2020-03-08
 crbug.com/1059645 [ Mac10.14 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
 
-# Support for SharedWorker must be added.
-crbug.com/1058785 external/wpt/html/cross-origin-embedder-policy/cache-storage-reporting-shared-worker.https.html [ Timeout ]
-
 # Failing on Fuchsia due to dependency on FuchsiaMediaResourceProvider, which is not implemented in content_shell.
 crbug.com/1061226 [ Fuchsia ] fast/mediastream/MediaStream-onactive-oninactive.html [ Crash ]
 crbug.com/1061226 [ Fuchsia ] fast/speech/scripted/speechrecognition-restart-onend.html [ Crash ]
