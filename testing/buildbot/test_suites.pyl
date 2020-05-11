@@ -5067,6 +5067,24 @@
       }
     },
 
+    'ios_simulator_multi_window_tests': {
+      'ios_common_tests': {
+        'variants': [
+          'SIM_IPAD_AIR_2_13_3',
+        ]
+      },
+      'ios_eg2_tests': {
+        'variants': [
+          'SIM_IPAD_AIR_2_13_3',
+        ]
+      },
+      'ios_screen_size_dependent_tests': {
+        'variants': [
+          'SIM_IPAD_AIR_2_13_3',
+        ]
+      }
+    },
+
     'ios_simulator_tests': {
       'ios_common_tests': {
         'variants': [

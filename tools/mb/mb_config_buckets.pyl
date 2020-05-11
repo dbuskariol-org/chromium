@@ -231,6 +231,7 @@
       'ios-simulator-cr-recipe': 'ios_simulator_debug_static_bot',
       'ios-simulator-cronet': 'ios_cronet',
       'ios-simulator-full-configs': 'ios_simulator_debug_static_bot',
+      'ios-simulator-multi-window': 'ios_simulator_debug_static_bot_multi_window',
       'ios-webkit-tot': 'ios_simulator_debug_static_rbe_bot',
       'ios13-beta-simulator': 'ios_simulator_debug_static_bot',
       'ios13-sdk-device': 'ios_device_release_static_rbe_bot',
@@ -504,6 +505,7 @@
       'ios-simulator-cr-recipe': 'ios_simulator_debug_static_bot',
       'ios-simulator-cronet': 'ios_cronet',
       'ios-simulator-full-configs': 'ios_simulator_debug_static_bot',
+      'ios-simulator-multi-window': 'ios_simulator_debug_static_bot_multi_window',
       'ios13-beta-simulator': 'ios_simulator_debug_static_rbe_bot',
       'ios13-sdk-simulator': 'ios_simulator_debug_static_rbe_bot',
       'layout_test_leak_detection': 'release_trybot',
@@ -1781,6 +1783,11 @@
       'debug_static_bot',
       'ios_simulator'
     ],
+    'ios_simulator_debug_static_bot_multi_window': [
+        'debug_static_bot',
+        'ios_enable_multi_window',
+        'ios_simulator',
+    ],
     'ios_simulator_debug_static_rbe_bot': [
       'debug_static_bot',
       'ios_simulator',
@@ -2496,6 +2503,10 @@
 
     'ios_disable_code_signing': {
       'gn_args': 'ios_enable_code_signing=false'
+    },
+
+    'ios_enable_multi_window': {
+      'gn_args': 'ios_enable_multi_window=true'
     },
 
     'ios_simulator': {

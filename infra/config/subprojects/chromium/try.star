@@ -580,6 +580,11 @@ try_.chromium_mac_ios_builder(
 )
 
 try_.chromium_mac_ios_builder(
+    name = 'ios-simulator-multi-window',
+    executable = 'recipe:chromium_trybot',
+)
+
+try_.chromium_mac_ios_builder(
     name = 'ios-simulator-noncq',
 )
 
