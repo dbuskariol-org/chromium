@@ -1844,6 +1844,10 @@
       name: "VideoRotateToFullscreen",
     },
     {
+      name: "VirtualKeyboard",
+      status: "test",
+    },
+    {
       name: "VisibilityCollapseColumn",
     },
     {
