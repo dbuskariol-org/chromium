@@ -460,6 +460,11 @@ class ASH_EXPORT TabletModeController
 
   TabletModeBehavior tablet_mode_behavior_;
 
+  // True if the initial input device setup has been finished. Only after it's
+  // finished, we'll start monitoring input device add/remove events and respond
+  // to these events to enter/exit tablet mode accordingly.
+  bool initial_input_device_set_up_finished_ = false;
+
   base::WeakPtrFactory<TabletModeController> weak_factory_{this};
 
   DISALLOW_COPY_AND_ASSIGN(TabletModeController);
