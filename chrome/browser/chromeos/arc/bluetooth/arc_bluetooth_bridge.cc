@@ -1393,8 +1393,9 @@ void ArcBluetoothBridge::OnGattConnected(
     std::unique_ptr<BluetoothGattConnection> connection) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
   const std::string addr_str = addr->To<std::string>();
-  gatt_connections_[addr_str] = GattConnection(
-      GattConnection::ConnectionState::CONNECTED, std::move(connection));
+  GattConnection& conn = gatt_connections_[addr_str];
+  conn.state = GattConnection::ConnectionState::CONNECTED;
+  conn.connection = std::move(connection);
   devices_paired_by_arc_.erase(addr_str);
   OnGattConnectStateChanged(std::move(addr), true);
 }
@@ -1445,11 +1446,15 @@ void ArcBluetoothBridge::ConnectLEDevice(
     return;
   }
 
+  bool need_hard_disconnect =
+      devices_paired_by_arc_.find(addr) != devices_paired_by_arc_.end() ||
+      !device->IsConnected();
+
   // Also pass disconnect callback in error case since it would be disconnected
   // anyway.
   gatt_connections_.emplace(
-      addr,
-      GattConnection(GattConnection::ConnectionState::CONNECTING, nullptr));
+      addr, GattConnection(GattConnection::ConnectionState::CONNECTING, nullptr,
+                           need_hard_disconnect));
   mojom::BluetoothAddressPtr remote_addr_clone = remote_addr.Clone();
   device->CreateGattConnection(
       base::BindOnce(&ArcBluetoothBridge::OnGattConnected,
@@ -1466,21 +1471,23 @@ void ArcBluetoothBridge::DisconnectLEDevice(
   if (!bluetooth_instance)
     return;
 
-  BluetoothDevice* device =
-      bluetooth_adapter_->GetDevice(remote_addr->To<std::string>());
+  const std::string addr_str = remote_addr->To<std::string>();
 
-  if (!device || !device->IsConnected()) {
+  BluetoothDevice* device = bluetooth_adapter_->GetDevice(addr_str);
+  const auto conn_itr = gatt_connections_.find(remote_addr->To<std::string>());
+
+  if (!device || !device->IsConnected() ||
+      conn_itr == gatt_connections_.end()) {
     bluetooth_instance->OnLEConnectionStateChange(std::move(remote_addr),
                                                   false);
     return;
   }
 
-  mojom::BluetoothAddressPtr remote_addr_clone = remote_addr.Clone();
-  device->Disconnect(
-      base::Bind(&ArcBluetoothBridge::OnGattDisconnected,
-                 weak_factory_.GetWeakPtr(), base::Passed(&remote_addr)),
-      base::Bind(&ArcBluetoothBridge::OnGattDisconnected,
-                 weak_factory_.GetWeakPtr(), base::Passed(&remote_addr_clone)));
+  if (conn_itr->second.need_hard_disconnect)
+    device->Disconnect(base::DoNothing(), base::DoNothing());
+
+  // Removes the connection object held by us and notifies Android.
+  OnGattDisconnected(std::move(remote_addr));
 }
 
 void ArcBluetoothBridge::SearchService(mojom::BluetoothAddressPtr remote_addr) {
@@ -2855,9 +2862,13 @@ void ArcBluetoothBridge::SetPrimaryUserBluetoothPowerSetting(
 
 ArcBluetoothBridge::GattConnection::GattConnection(
     ArcBluetoothBridge::GattConnection::ConnectionState state,
-    std::unique_ptr<device::BluetoothGattConnection> connection)
-    : state(state), connection(std::move(connection)) {}
-ArcBluetoothBridge::GattConnection::GattConnection() = default;
+    std::unique_ptr<device::BluetoothGattConnection> connection,
+    bool need_hard_disconnect)
+    : state(state),
+      connection(std::move(connection)),
+      need_hard_disconnect(need_hard_disconnect) {}
+ArcBluetoothBridge::GattConnection::GattConnection()
+    : connection(nullptr), need_hard_disconnect(false) {}
 ArcBluetoothBridge::GattConnection::~GattConnection() = default;
 ArcBluetoothBridge::GattConnection::GattConnection(
     ArcBluetoothBridge::GattConnection&&) = default;
@@ -3149,6 +3160,15 @@ void ArcBluetoothBridge::BluetoothArcConnectionObserver::OnConnectionClosed() {
   arc_bluetooth_bridge_->devices_paired_by_arc_.clear();
 
   // Cleanup for GATT connections.
+  // TODO(b/151573141): Remove the following loops when Chrome can perform hard
+  // disconnect on a paired device correctly.
+  for (const auto& addr_conn : arc_bluetooth_bridge_->gatt_connections_) {
+    BluetoothDevice* device =
+        arc_bluetooth_bridge_->bluetooth_adapter_->GetDevice(addr_conn.first);
+    if (!device || !device->IsPaired() || !device->IsConnected())
+      continue;
+    device->Disconnect(base::DoNothing(), base::DoNothing());
+  }
   arc_bluetooth_bridge_->gatt_connections_.clear();
 }
 

@@ -618,14 +618,23 @@ class ArcBluetoothBridge
   // lingering.
   std::set<std::string> devices_paired_by_arc_;
 
-  // For established connection from remote device, this is { CONNECTED, null }.
-  // For ongoing connection to remote device, this is { CONNECTING, null }.
-  // For established connection to remote device, this is { CONNECTED, ptr }.
+  // {state, connection}
+  // - For established connection from remote device, this is {CONNECTED, null}.
+  // - For ongoing connection to remote device, this is {CONNECTING, null}.
+  // - For established connection to remote device, this is {CONNECTED, ptr}.
   struct GattConnection {
     enum class ConnectionState { CONNECTING, CONNECTED } state;
     std::unique_ptr<device::BluetoothGattConnection> connection;
+    // Indicates whether we should call BluetoothDevice::Disconnect() when
+    // |connection| is closed. This field is true when the connection is
+    // initiated by ARC, i.e, when ConnectLEDevice is called, either 1) the link
+    // is down or 2) the remote device is paired by ARC firstly.
+    // TODO(b/151573141): Remove this field when Chrome can perform hard
+    // disconnect on a paired device correctly.
+    bool need_hard_disconnect;
     GattConnection(ConnectionState state,
-                   std::unique_ptr<device::BluetoothGattConnection> connection);
+                   std::unique_ptr<device::BluetoothGattConnection> connection,
+                   bool need_hard_disconnect);
     GattConnection();
     ~GattConnection();
     GattConnection(GattConnection&&);
