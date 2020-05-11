@@ -206,9 +206,15 @@ class CONTENT_EXPORT NavigationRequest
   // Returns true if this request's URL matches |origin| and the request state
   // is at (or past) WILL_PROCESS_RESPONSE.
   bool HasCommittingOrigin(const url::Origin& origin);
-  // Returns true if this navigation request is requesting opt-in
-  // origin-isolation, via Origin Policy or headers.
-  bool IsOptInIsolationRequested(const GURL& url);
+
+  // Returns whether and how this navigation request is requesting opt-in
+  // origin-isolation.
+  enum class OptInIsolationCheckResult {
+    NONE,          // no isolation requested
+    HEADER,        // requested using the Origin-Isolation header
+    ORIGIN_POLICY  // requested using origin policy
+  };
+  OptInIsolationCheckResult IsOptInIsolationRequested(const GURL& url);
 
   // NavigationHandle implementation:
   int64_t GetNavigationId() override;

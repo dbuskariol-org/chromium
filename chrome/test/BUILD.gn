@@ -1164,6 +1164,7 @@ if (!is_android) {
       "../browser/site_isolation/chrome_site_per_process_browsertest.cc",
       "../browser/site_isolation/chrome_site_per_process_test.cc",
       "../browser/site_isolation/chrome_site_per_process_test.h",
+      "../browser/site_isolation/origin_isolation_browsertest.cc",
       "../browser/site_isolation/site_details_browsertest.cc",
       "../browser/ssl/known_interception_disclosure_ui_browsertest.cc",
       "../browser/ui/blocked_content/popup_opener_tab_helper_browsertest.cc",
