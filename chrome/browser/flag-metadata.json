@@ -3563,7 +3563,7 @@
   {
     "name": "reduced-referrer-granularity",
     "owners": [ "davidvc", "mkwst", "jochen" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "related-searches",
