@@ -331,9 +331,7 @@ IN_PROC_BROWSER_TEST_F(CrossOriginOpenerPolicyBrowserTest,
   EXPECT_EQ(iframe_rfh->GetLastCommittedURL(), iframe_navigation_url);
   EXPECT_EQ(iframe_rfh->GetSiteInstance(), non_coop_iframe_site_instance);
 
-  // TODO(pmeuleman, ahemery): Don't store COOP on subframes as it will not be
-  // used anyway.
-  EXPECT_EQ(iframe_rfh->cross_origin_opener_policy(), CoopSameOrigin());
+  EXPECT_EQ(iframe_rfh->cross_origin_opener_policy(), CoopUnsafeNone());
 }
 
 IN_PROC_BROWSER_TEST_F(CrossOriginOpenerPolicyBrowserTest,
