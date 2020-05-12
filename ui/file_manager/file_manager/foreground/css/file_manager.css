@@ -2189,25 +2189,57 @@ html[dir='rtl'] .badge {
 /* Padding counterweights negative margins of items, thus eliminating scroll
    bar when it's not needed. Max height is set to fit 8 items before showing
    scroll bar. */
-#default-tasks-list {
+body:not(.files-ng) #default-tasks-list {
   max-height: 328px;
   padding: 1px 0;
 }
 
-#default-tasks-list li {
+body.files-ng #default-tasks-list {
+  border-top: solid 1px rgba(0, 0, 0, 14%);
+  height: 240px;
+  margin: 16px -16px;
+  margin-bottom: 12px;
+  padding-top: 8px;
+}
+
+body.files-ng #default-task-dialog::after {
+  background: linear-gradient(180deg, #FFF 0, rgba(255, 255, 255, 0) 100%);
+  bottom: 24px;
+  content: '';
+  height: 40px;
+  left: 0;
+  position: absolute;
+  transform: rotate(-180deg);
+  width: 100%
+}
+
+
+body:not(.files-ng) #default-tasks-list li {
   height: 32px;
   line-height: 32px;
 }
 
-#default-tasks-list > li > * {
+body.files-ng #default-tasks-list li {
+  height: 40px;
+  line-height: 40px;
+}
+
+body:not(.files-ng) #default-tasks-list > li > * {
   background-position: 5px center;
   background-repeat: no-repeat;
   background-size: 16px 16px;
   padding-inline-start: 26px;
 }
 
-.files-ng #default-tasks-list {
-  margin-top: 16px;
+body.files-ng #default-tasks-list > li > * {
+  background-position: 16px center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+  padding-inline-start: 52px;
+}
+
+html[dir='rtl'] body.files-ng #default-tasks-list > li > * {
+  background-position-x: calc(100% - 16px);
 }
 
 #list-container list > li[selected],
@@ -2237,10 +2269,34 @@ body.files-ng #list-container list:focus > li[lead] {
   background-color: var(--google-blue-50);
 }
 
-#default-tasks-list:focus > li[selected],
-#default-tasks-list > li[selected] {
+body:not(.files-ng) #default-tasks-list:focus > li[selected],
+body:not(.files-ng) #default-tasks-list > li[selected] {
   background-color: rgb(216, 223, 240);
   outline: none;
+}
+
+body.files-ng #default-tasks-list:focus > li[selected],
+body.files-ng #default-tasks-list > li[selected] {
+  background-color: var(--google-blue-50);
+  outline: none;
+}
+
+body.files-ng #default-tasks-list li[selected]::after {
+  background-image: url(../images/files/ui/list_check.svg);
+  background-position: right;
+  background-repeat: no-repeat;
+  content: ' ';
+  height: 40px;
+  position: absolute;
+  right: 16px;
+  top: 0;
+  width: 40px;
+}
+
+html[dir='rtl'] body.files-ng #default-tasks-list li[selected]::after {
+  background-position: left;
+  left: 16px;
+  right: unset;
 }
 
 body.check-select #list-container list > li[lead]:not([selected]),
