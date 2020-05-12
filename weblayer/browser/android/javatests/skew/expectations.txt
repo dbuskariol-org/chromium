@@ -21,6 +21,9 @@
 [ impl_lte_82 ] org.chromium.weblayer.test.CookieManagerTest#testSetCookieNotSet [ Skip ]
 [ impl_lte_82 ] org.chromium.weblayer.test.CookieManagerTest#testSetCookieNullCallback [ Skip ]
 
+# Strict mode violation was fixed in M83 in https://crrev.com/c/2108603.
+[ impl_lte_82 ] org.chromium.weblayer.test.InputTypesTest#testColorInput [ Skip ]
+
 # ExternalNavigationTests are testing intent launching that changed after M83.
 [ impl_lte_83 ] org.chromium.weblayer.test.ExternalNavigationTest#testExternalIntentInNewTabLaunchedOnLinkClick [ Skip ]
 [ impl_lte_83 ] org.chromium.weblayer.test.ExternalNavigationTest#testExternalIntentViaOnLoadBlocked [ Skip ]
