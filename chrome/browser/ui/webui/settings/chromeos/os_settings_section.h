@@ -38,7 +38,7 @@ class OsSettingsSection {
  public:
   class Delegate {
    public:
-    ~Delegate() = default;
+    virtual ~Delegate() = default;
     virtual void AddSearchTags(
         const std::vector<SearchConcept>& tags_group) = 0;
     virtual void RemoveSearchTags(
