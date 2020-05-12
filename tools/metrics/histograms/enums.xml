@@ -48162,6 +48162,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="1" label="Regular menu option"/>
   <int value="2" label="Tab strip menu option"/>
   <int value="3" label="New tab button in toolbar for touch"/>
+  <int value="4" label="New tab button in the WebUI tab strip"/>
 </enum>
 
 <enum name="NewTabURLState">
