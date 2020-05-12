@@ -611,6 +611,13 @@ const char kDesktopPWAsTabStripDescription[] =
     "Experimental UI for exploring what PWA windows would look like with a tab "
     "strip.";
 
+const char kDesktopPWAsTabStripLinkCapturingName[] =
+    "Desktop PWA tab strip link capturing";
+const char kDesktopPWAsTabStripLinkCapturingDescription[] =
+    "Experimental behaviour for \"Desktop PWA tab strips\" to capture link "
+    "navigations within the app scope and bring them into the app's tabbed "
+    "window.";
+
 const char kDesktopPWAsWithoutExtensionsName[] =
     "Desktop PWAs without Extensions";
 const char kDesktopPWAsWithoutExtensionsDescription[] =

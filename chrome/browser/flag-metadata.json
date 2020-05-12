@@ -1399,6 +1399,11 @@
     "expiry_milestone": 88
   },
   {
+    "name": "enable-desktop-pwas-tab-strip-link-capturing",
+    "owners": [ "desktop-pwas-team@google.com" ],
+    "expiry_milestone": 88
+  },
+  {
     "name": "enable-desktop-pwas-without-extensions",
     "owners": [ "desktop-pwas-team@google.com" ],
     "expiry_milestone": 88

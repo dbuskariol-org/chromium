@@ -234,6 +234,12 @@ const base::Feature kDesktopPWAsLocalUpdating{"DesktopPWAsLocalUpdating",
 const base::Feature kDesktopPWAsTabStrip{"DesktopPWAsTabStrip",
                                          base::FEATURE_DISABLED_BY_DEFAULT};
 
+// Makes user navigations via links within web app scopes get captured tab
+// tabbed app windows.
+// TODO(crbug.com/897314): Enable this feature.
+const base::Feature kDesktopPWAsTabStripLinkCapturing{
+    "DesktopPWAsTabStripLinkCapturing", base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Enables Desktop PWA installs to have a menu of shortcuts associated with
 // the app icon in the taskbar on Windows, or the dock on macOS or Linux.
 const base::Feature kDesktopPWAsAppIconShortcutsMenu{

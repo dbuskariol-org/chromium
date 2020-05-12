@@ -374,6 +374,9 @@ extern const char kDesktopPWAsAppIconShortcutsMenuDescription[];
 extern const char kDesktopPWAsTabStripName[];
 extern const char kDesktopPWAsTabStripDescription[];
 
+extern const char kDesktopPWAsTabStripLinkCapturingName[];
+extern const char kDesktopPWAsTabStripLinkCapturingDescription[];
+
 extern const char kDesktopPWAsWithoutExtensionsName[];
 extern const char kDesktopPWAsWithoutExtensionsDescription[];
 
