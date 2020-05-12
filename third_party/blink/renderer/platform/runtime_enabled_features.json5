@@ -371,10 +371,12 @@
     },
     {
       name: "CookieStoreDocument",
+      origin_trial_feature_name: "CookieStore",
       status: "experimental",
     },
     {
       name: "CookieStoreWorker",
+      origin_trial_feature_name: "CookieStore",
       status: "experimental",
     },
     {
