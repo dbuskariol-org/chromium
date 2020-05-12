@@ -6665,14 +6665,6 @@ void WebContentsImpl::RequestFindMatchRects(int current_version) {
   GetOrCreateFindRequestManager()->RequestFindMatchRects(current_version);
 }
 
-bool WebContentsImpl::CreateRenderViewForInitialEmptyDocument() {
-  return CreateRenderViewForRenderManager(
-      GetRenderViewHost(), MSG_ROUTING_NONE, MSG_ROUTING_NONE,
-      frame_tree_.root()->current_frame_host()->frame_token(),
-      frame_tree_.root()->devtools_frame_token(),
-      frame_tree_.root()->current_replication_state());
-}
-
 service_manager::InterfaceProvider* WebContentsImpl::GetJavaInterfaces() {
   if (!java_interfaces_) {
     mojo::PendingRemote<service_manager::mojom::InterfaceProvider> provider;

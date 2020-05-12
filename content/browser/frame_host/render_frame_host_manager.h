@@ -484,9 +484,10 @@ class CONTENT_EXPORT RenderFrameHostManager
       NavigationRequest* navigation_request);
 
   // Helper to initialize the current RenderFrame if it's not initialized.
-  // TODO(https://crbug.com/1006814): Remove this. For now debug URLs are an
-  // exception to replacing all crashed frames for RenderDocument.
-  void InitializeRenderFrameForDebugURLIfNecessary();
+  // TODO(https://crbug.com/1006814): Remove this. For now debug URLs and
+  // WebView JS execution are an exception to replacing all crashed frames for
+  // RenderDocument. This is a no-op if the frame is already initialized.
+  bool InitializeRenderFrameForImmediateUse();
 
   // Prepares the FrameTreeNode for attaching an inner WebContents. This step
   // may involve replacing |current_frame_host()| with a new RenderFrameHost

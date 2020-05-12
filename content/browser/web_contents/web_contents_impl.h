@@ -207,15 +207,6 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   // Returns the SavePackage which manages the page saving job. May be NULL.
   SavePackage* save_package() const { return save_package_.get(); }
 
-#if defined(OS_ANDROID)
-  // In Android WebView, the RenderView needs created even there is no
-  // navigation entry, this allows Android WebViews to use
-  // javascript: URLs that load into the DOMWindow before the first page
-  // load. This is not safe to do in any context that a web page could get a
-  // reference to the DOMWindow before the first page load.
-  bool CreateRenderViewForInitialEmptyDocument();
-#endif
-
   // Expose the render manager for testing.
   // TODO(creis): Remove this now that we can get to it via FrameTreeNode.
   RenderFrameHostManager* GetRenderManagerForTesting();
