@@ -2001,9 +2001,17 @@ void WebContentsImpl::SyncRendererPrefs() {
       new PageMsg_SetRendererPrefs(MSG_ROUTING_NONE, renderer_preferences));
 }
 
-void WebContentsImpl::OnCookiesAccessed(const CookieAccessDetails& details) {
+void WebContentsImpl::OnCookiesAccessed(NavigationHandle* navigation,
+                                        const CookieAccessDetails& details) {
   for (auto& observer : observers_) {
-    observer.OnCookiesAccessed(details);
+    observer.OnCookiesAccessed(navigation, details);
+  }
+}
+
+void WebContentsImpl::OnCookiesAccessed(RenderFrameHostImpl* rfh,
+                                        const CookieAccessDetails& details) {
+  for (auto& observer : observers_) {
+    observer.OnCookiesAccessed(rfh, details);
   }
 }
 

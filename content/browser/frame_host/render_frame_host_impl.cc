@@ -52,6 +52,7 @@
 #include "content/browser/file_system/file_system_manager_impl.h"
 #include "content/browser/file_system/file_system_url_loader_factory.h"
 #include "content/browser/frame_host/back_forward_cache_impl.h"
+#include "content/browser/frame_host/cookie_utils.h"
 #include "content/browser/frame_host/cross_process_frame_connector.h"
 #include "content/browser/frame_host/debug_urls.h"
 #include "content/browser/frame_host/file_chooser_impl.h"
@@ -193,6 +194,7 @@
 #include "services/network/public/cpp/is_potentially_trustworthy.h"
 #include "services/network/public/cpp/web_sandbox_flags.h"
 #include "services/network/public/cpp/wrapper_shared_url_loader_factory.h"
+#include "services/network/public/mojom/cookie_access_observer.mojom.h"
 #include "services/network/public/mojom/network_service.mojom.h"
 #include "services/network/public/mojom/web_sandbox_flags.mojom-shared.h"
 #include "services/service_manager/public/cpp/connector.h"
@@ -7138,12 +7140,13 @@ void RenderFrameHostImpl::BindSmsReceiverReceiver(
 
 void RenderFrameHostImpl::BindRestrictedCookieManager(
     mojo::PendingReceiver<network::mojom::RestrictedCookieManager> receiver) {
-  GetProcess()->GetStoragePartition()->CreateRestrictedCookieManager(
-      network::mojom::RestrictedCookieManagerRole::SCRIPT,
-      GetLastCommittedOrigin(), isolation_info_.site_for_cookies(),
-      ComputeTopFrameOrigin(GetLastCommittedOrigin()),
-      /* is_service_worker = */ false, GetProcess()->GetID(), routing_id(),
-      std::move(receiver));
+  static_cast<StoragePartitionImpl*>(GetProcess()->GetStoragePartition())
+      ->CreateRestrictedCookieManager(
+          network::mojom::RestrictedCookieManagerRole::SCRIPT,
+          GetLastCommittedOrigin(), isolation_info_.site_for_cookies(),
+          ComputeTopFrameOrigin(GetLastCommittedOrigin()),
+          /* is_service_worker = */ false, GetProcess()->GetID(), routing_id(),
+          std::move(receiver), CreateCookieAccessObserver());
 }
 
 void RenderFrameHostImpl::BindHasTrustTokensAnswerer(
@@ -7758,14 +7761,18 @@ bool RenderFrameHostImpl::DidCommitNavigationInternal(
     }
     last_committed_cross_document_navigation_id_ =
         navigation_request->GetNavigationId();
-  }
 
-  // Clear all the user data associated with the non speculative RenderFrameHost
-  // when the navigation is a cross-document navigation not served from the
-  // back-forward cache.
-  if (!is_same_document_navigation &&
-      !navigation_request->IsServedFromBackForwardCache() && IsCurrent()) {
-    document_associated_data_.ClearAllUserData();
+    if (IsCurrent()) {
+      // Clear all the user data associated with the non speculative
+      // RenderFrameHost when the navigation is a cross-document navigation not
+      // served from the back-forward cache.
+      document_associated_data_.ClearAllUserData();
+    }
+
+    // Continue observing the events for the committed navigation.
+    for (auto& receiver : navigation_request->TakeCookieObservers()) {
+      cookie_observers_.Add(this, std::move(receiver));
+    }
   }
 
   // If we still have a PeakGpuMemoryTracker, then the loading it was observing
@@ -8755,6 +8762,31 @@ void RenderFrameHostImpl::SetLifecycleState(LifecycleState state) {
 void RenderFrameHostImpl::BindReportingObserver(
     mojo::PendingReceiver<blink::mojom::ReportingObserver> receiver) {
   GetAssociatedLocalFrame()->BindReportingObserver(std::move(receiver));
+}
+
+mojo::PendingRemote<network::mojom::CookieAccessObserver>
+RenderFrameHostImpl::CreateCookieAccessObserver() {
+  mojo::PendingRemote<network::mojom::CookieAccessObserver> remote;
+  cookie_observers_.Add(this, remote.InitWithNewPipeAndPassReceiver());
+  return remote;
+}
+
+void RenderFrameHostImpl::Clone(
+    mojo::PendingReceiver<network::mojom::CookieAccessObserver> observer) {
+  cookie_observers_.Add(this, std::move(observer));
+}
+
+void RenderFrameHostImpl::OnCookiesAccessed(
+    network::mojom::CookieAccessDetailsPtr details) {
+  EmitSameSiteCookiesDeprecationWarning(this, details);
+
+  CookieAccessDetails allowed;
+  CookieAccessDetails blocked;
+  SplitCookiesIntoAllowedAndBlocked(details, &allowed, &blocked);
+  if (!allowed.cookie_list.empty())
+    delegate_->OnCookiesAccessed(this, allowed);
+  if (!blocked.cookie_list.empty())
+    delegate_->OnCookiesAccessed(this, blocked);
 }
 
 }  // namespace content

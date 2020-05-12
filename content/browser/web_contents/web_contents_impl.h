@@ -695,6 +695,8 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
       RenderFrameHost* render_frame_host,
       const GlobalRequestID& request_id,
       blink::mojom::ResourceLoadInfoPtr resource_load_information) override;
+  void OnCookiesAccessed(RenderFrameHostImpl*,
+                         const CookieAccessDetails& details) override;
 
   // Called when WebAudio starts or stops playing audible audio in an
   // AudioContext.
@@ -854,6 +856,8 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   void OnServiceWorkerAccessed(NavigationHandle* navigation,
                                const GURL& scope,
                                AllowServiceWorkerResult allowed) override;
+  void OnCookiesAccessed(NavigationHandle*,
+                         const CookieAccessDetails& details) override;
   void RegisterExistingOriginToPreventOptInIsolation(
       const url::Origin& origin,
       NavigationRequest* navigation_request_to_exclude) override;
@@ -1207,8 +1211,6 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
 
   // Returns the focused frame's input handler.
   mojom::FrameInputHandler* GetFocusedFrameInputHandler();
-
-  void OnCookiesAccessed(const CookieAccessDetails& details);
 
  private:
   friend class WebContentsObserver;
