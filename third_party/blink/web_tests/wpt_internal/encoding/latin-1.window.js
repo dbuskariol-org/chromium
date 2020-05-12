@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<title>Encoding API: Latin-1 decoders</title>
-<script src="../../../resources/testharness.js"></script>
-<script src="../../../resources/testharnessreport.js"></script>
-<script src="resources/encodings.js"></script>
-<script>
+// META: title=Encoding API: Latin-1 decoders
+// META: script=/encoding/resources/encodings.js
 
 // Blink uses separate decoder object intances for these encoding aliases,
 // so test that they are behaving identically.
@@ -32,5 +28,3 @@ test(function() {
     });
 
 }, 'Latin-1 decoders (windows-1252, iso-8859-1, us-ascii, etc) decode identically.');
-
-</script>

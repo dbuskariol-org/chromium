@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<title>Ensure encoding labels match the Encoding standard</title>
-<script src="../../resources/testharness.js"></script>
-<script src="../../resources/testharnessreport.js"></script>
-<script src="../../external/wpt/encoding/resources/encodings.js"></script>
-<script>
+// META: title=Ensure encoding labels match the Encoding standard
+// META: script=/encoding/resources/encodings.js
 
 // The list of encoding labels is not web-exposed. This test makes
 // use of the "internals" API for testing and therefore can not be
@@ -32,5 +28,3 @@ for (const label of union) {
                 `${label} should only be supported if it is specified`);
   }, `Supported label: ${label}`);
 }
-
-</script>

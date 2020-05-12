@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<title>Encoding API: UTF encoding round trips</title>
-<script src="../../../resources/testharness.js"></script>
-<script src="../../../resources/testharnessreport.js"></script>
-<script src="resources/encodings.js"></script>
-<script>
+// META: title=Encoding API: UTF encoding round trips
+// META: script=/encoding/resources/encodings.js
 
 var BATCH_SIZE = 0x1000; // Convert in batches spanning this many code points.
 var SKIP_SIZE = 0x77; // For efficiency, don't test every code point.
@@ -30,7 +26,7 @@ function makeBatch(cp) {
     return string;
  }
 
-utf_encodings.forEach(function(encoding) {
+['utf-8', 'utf-16le', 'utf-16be'].forEach(function(encoding) {
     if (encoding === 'utf-8') {
         test(function() {
             for (var i = 0; i < 0x10FFFF; i += BATCH_SIZE) {
@@ -50,7 +46,7 @@ utf_encodings.forEach(function(encoding) {
 
             if (encoding === 'utf-16le')
                 var encoded = encode_utf16(string, true);
-            else 
+            else
                 var encoded = encode_utf16(string, false);
 
             var decoded = new TextDecoder(encoding).decode(encoded);
@@ -100,4 +96,3 @@ test(function() {
         assert_equals(actual, expected);
     }
 }, 'UTF-8 decoding (compare against decodeURIComponent/escape)');
-</script>

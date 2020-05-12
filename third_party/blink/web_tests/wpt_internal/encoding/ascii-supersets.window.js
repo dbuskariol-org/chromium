@@ -1,20 +1,16 @@
-<!DOCTYPE html>
-<title>Encoding API: ASCII supersets</title>
-<script src="../../../resources/testharness.js"></script>
-<script src="../../../resources/testharnessreport.js"></script>
-<script src="resources/encodings.js"></script>
-<script>
+// META: title=Encoding API: ASCII supersets
+// META: script=/encoding/resources/encodings.js
 
 // Encodings that have escape codes in 0x00-0x7F
 var escape_codes = {
-    'iso-2022-jp': [ 0x1B ]
+    'ISO-2022-JP': [ 0x0E, 0x0F, 0x1B ]
 };
 
 encodings_table.forEach(function(section) {
     section.encodings.filter(function(encoding) {
         return encoding.name !== 'replacement';
     }).forEach(function(encoding) {
-        if (utf_encodings.indexOf(encoding.name) !== -1)
+        if (['UTF-16LE', 'UTF-16BE'].indexOf(encoding.name) !== -1)
             return;
 
         test(function() {
@@ -33,5 +29,3 @@ encodings_table.forEach(function(section) {
         }, 'ASCII superset encoding: ' + encoding.name);
     });
 });
-
-</script>
