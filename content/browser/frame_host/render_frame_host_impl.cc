@@ -1077,7 +1077,7 @@ void RenderFrameHostImpl::AudioContextPlaybackStopped(int audio_context_id) {
 }
 
 // The current frame went into the BackForwardCache.
-void RenderFrameHostImpl::EnterBackForwardCache() {
+void RenderFrameHostImpl::DidEnterBackForwardCache() {
   TRACE_EVENT0("navigation", "RenderFrameHostImpl::EnterBackForwardCache");
   DCHECK(IsBackForwardCacheEnabled());
   DCHECK_EQ(lifecycle_state_, LifecycleState::kActive);
@@ -1087,7 +1087,7 @@ void RenderFrameHostImpl::EnterBackForwardCache() {
   if (!GetParent())
     StartBackForwardCacheEvictionTimer();
   for (auto& child : children_)
-    child->current_frame_host()->EnterBackForwardCache();
+    child->current_frame_host()->DidEnterBackForwardCache();
 
   if (service_worker_container_hosts_.empty())
     return;
@@ -1107,15 +1107,14 @@ void RenderFrameHostImpl::EnterBackForwardCache() {
 }
 
 // The frame as been restored from the BackForwardCache.
-void RenderFrameHostImpl::LeaveBackForwardCache() {
+void RenderFrameHostImpl::WillLeaveBackForwardCache() {
   TRACE_EVENT0("navigation", "RenderFrameHostImpl::LeaveBackForwardCache");
   DCHECK(IsBackForwardCacheEnabled());
   DCHECK_EQ(lifecycle_state_, LifecycleState::kInBackForwardCache);
-  SetLifecycleState(LifecycleState::kActive);
   if (back_forward_cache_eviction_timer_.IsRunning())
     back_forward_cache_eviction_timer_.Stop();
   for (auto& child : children_)
-    child->current_frame_host()->LeaveBackForwardCache();
+    child->current_frame_host()->WillLeaveBackForwardCache();
 
   if (service_worker_container_hosts_.empty())
     return;
@@ -8727,6 +8726,17 @@ bool RenderFrameHostImpl::IsPendingDeletion() {
 }
 
 void RenderFrameHostImpl::SetLifecycleStateToActive() {
+  // If the RenderFrameHost is restored from BackForwardCache, update states of
+  // all the children to kActive. This is called from
+  // RenderFrameHostManager::SetRenderFrameHost which happens after commit.
+  if (IsInBackForwardCache()) {
+    for (auto& child : children_) {
+      DCHECK_EQ(child->current_frame_host()->lifecycle_state_,
+                LifecycleState::kInBackForwardCache);
+      child->current_frame_host()->SetLifecycleStateToActive();
+    }
+  }
+
   SetLifecycleState(LifecycleState::kActive);
 }
 

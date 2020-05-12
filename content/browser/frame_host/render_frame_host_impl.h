@@ -1069,11 +1069,11 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   // Called when this RenderFrameHostImpl enters the BackForwardCache, the
   // document enters in a "Frozen" state where no Javascript can run.
-  void EnterBackForwardCache();
+  void DidEnterBackForwardCache();
 
   // Called when this RenderFrameHostImpl leaves the BackForwardCache. This
   // occurs immediately before a restored document is committed.
-  void LeaveBackForwardCache();
+  void WillLeaveBackForwardCache();
 
   // Take ownership over the DidCommitProvisionalLoad_Params that
   // were last used to commit this navigation.
