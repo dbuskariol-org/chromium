@@ -2313,6 +2313,22 @@ ci.gpu_fyi_linux_builder(
 )
 
 ci.gpu_fyi_linux_builder(
+    name = 'ChromeOS FYI Release (amd64-generic)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ChromeOS|amd64|generic',
+        short_name = 'x64'
+    ),
+)
+
+ci.gpu_fyi_linux_builder(
+    name = 'ChromeOS FYI Release (kevin)',
+    console_view_entry = ci.console_view_entry(
+        category = 'ChromeOS|arm|kevin',
+        short_name = 'kvn'
+    ),
+)
+
+ci.gpu_fyi_linux_builder(
     name = 'GPU FYI Linux Builder',
     console_view_entry = ci.console_view_entry(
         category = 'Linux|Builder',

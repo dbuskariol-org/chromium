@@ -48,6 +48,8 @@
       'Cast Android (dbg)': 'android_cast_debug_static_bot',
       'Cast Audio Linux': 'cast_audio_release_bot',
       'Cast Linux': 'cast_release_bot',
+      'ChromeOS FYI Release (amd64-generic)': 'gpu_fyi_tests_chromeos_amd64_release_trybot_dcheck_off',
+      'ChromeOS FYI Release (kevin)': 'gpu_fyi_tests_chromeos_kevin_release_trybot_dcheck_off',
       'ChromiumOS ASAN Release': 'chromeos_asan_lsan_fuzzer_v8_heap_release_bot',
       'CrWinAsan': 'asan_clang_fuzzer_static_v8_heap_minimal_symbols_release_tot',
       'CrWinAsan(dll)': 'asan_clang_shared_v8_heap_minimal_symbols_release_tot',
@@ -452,6 +454,8 @@
       'gpu-fyi-try-android-q-pixel-2-deqp-vk-64': 'angle_deqp_android_vulkan_ndk_release_trybot_arm64',
       'gpu-fyi-try-android-q-pixel-2-vk-32': 'gpu_fyi_tests_android_vulkan_ndk_release_trybot',
       'gpu-fyi-try-android-q-pixel-2-vk-64': 'gpu_fyi_tests_android_vulkan_ndk_release_trybot_arm64',
+      'gpu-fyi-try-chromeos-amd64-generic': 'gpu_fyi_tests_chromeos_amd64_release_trybot_dcheck_off',
+      'gpu-fyi-try-chromeos-kevin': 'gpu_fyi_tests_chromeos_kevin_release_trybot_dcheck_off',
       'gpu-fyi-try-linux-intel-dqp': 'angle_deqp_release_trybot',
       'gpu-fyi-try-linux-intel-exp': 'gpu_fyi_tests_release_trybot',
       'gpu-fyi-try-linux-intel-rel': 'gpu_fyi_tests_release_trybot',
@@ -1275,26 +1279,22 @@
       'goma'
     ],
     'chromeos_amd64-generic': [
-      'chromeos_device',
-      'amd64-generic'
+      'chromeos_amd64-generic',
     ],
     'chromeos_amd64-generic_lacros_rel': [
       'amd64-generic', 'amd64-lacros', 'goma',
     ],
     'chromeos_amd64-generic_cfi_thin_lto': [
-      'chromeos_device',
-      'amd64-generic',
+      'chromeos_amd64-generic',
       'cfi_full',
       'thin_lto'
     ],
     'chromeos_amd64-generic_dcheck_always_on': [
-      'chromeos_device',
-      'amd64-generic',
+      'chromeos_amd64-generic',
       'dcheck_always_on'
     ],
     'chromeos_amd64-generic_dbg': [
-      'chromeos_device',
-      'amd64-generic',
+      'chromeos_amd64-generic',
       'debug'
     ],
     'chromeos_arm-generic': [
@@ -1320,8 +1320,7 @@
       'release_bot'
     ],
     'chromeos_kevin': [
-      'chromeos_device',
-      'kevin'
+      'chromeos_kevin',
     ],
     'chromeos_msan_release_bot': [
       'chromeos',
@@ -1535,6 +1534,16 @@
       'release_trybot',
       'arm64',
       'static_angle'
+    ],
+    'gpu_fyi_tests_chromeos_amd64_release_trybot_dcheck_off': [
+      'gpu_fyi_tests',
+      'chromeos_amd64-generic',
+      'release_trybot_dcheck_off',
+    ],
+    'gpu_fyi_tests_chromeos_kevin_release_trybot_dcheck_off': [
+      'gpu_fyi_tests',
+      'chromeos_kevin',
+      'release_trybot_dcheck_off',
     ],
     'gpu_fyi_tests_debug_trybot': [
       'gpu_fyi_tests',
@@ -2075,8 +2084,7 @@
       'release_trybot'
     ],
     'release_trybot_dcheck_off': [
-      'release_trybot',
-      'dcheck_off'
+      'release_trybot_dcheck_off',
     ],
     'release_trybot_enable_blink_heap_verification': [
       'release_trybot',
@@ -2296,6 +2304,20 @@
       'gn_args': 'is_chromeos_device=true ozone_platform_headless=true',
       'mixins': [
         'goma'
+      ]
+    },
+
+    'chromeos_amd64-generic': {
+      'mixins': [
+        'chromeos_device',
+        'amd64-generic',
+      ],
+    },
+
+    'chromeos_kevin': {
+      'mixins': [
+        'chromeos_device',
+        'kevin',
       ]
     },
 
@@ -2621,6 +2643,13 @@
         'release_bot',
         'minimal_symbols',
         'dcheck_always_on'
+      ],
+    },
+
+    'release_trybot_dcheck_off': {
+      'mixins': [
+        'release_trybot',
+        'dcheck_off',
       ],
     },
 
