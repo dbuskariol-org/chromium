@@ -46,8 +46,6 @@
 [ impl_lte_83 ] org.chromium.weblayer.test.NavigationTest#testSetUserAgentString [ Skip ]
 
 # Many M81 tests are broken, see https://crbug.com/1081102.
-[ impl_lte_81 ] org.chromium.weblayer.test.BottomControlsTest#testBasic [ Skip ]
-[ impl_lte_81 ] org.chromium.weblayer.test.BottomControlsTest#testNoTopControl [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.BrowserFragmentLifecycleTest#restoreAfterRecreate [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.BrowserFragmentLifecycleTest#restoreTabGuidAfterRecreate [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.BrowserFragmentLifecycleTest#restoresTabGuid [ Skip ]
@@ -68,14 +66,12 @@
 [ impl_lte_81 ] org.chromium.weblayer.test.ExternalNavigationTest#testExternalIntentInSameTabLaunchedOnLinkClick [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.ExternalNavigationTest#testExternalIntentWithFallbackUrlAfterRedirectLaunched [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.ExternalNavigationTest#testNonHandledExternalIntentWithFallbackUrlAfterRedirectGoesToFallbackUrl [ Skip ]
-[ impl_lte_81 ] org.chromium.weblayer.test.FindInPageTest#testHideOnNavigate [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.InputTypesTest#testColorInput [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.NavigationTest#testRepostConfirmation [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.NavigationTest#testSetRequestHeaderInRedirect [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.NavigationTest#testSetRequestHeaderInStart [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.NavigationTest#testSetRequestHeaderThrowsExceptionInCompleted [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.NavigationTest#testSetRequestHeaderThrowsExceptionWithInvalidValue [ Skip ]
-[ impl_lte_81 ] org.chromium.weblayer.test.NavigationTest#testSetUserAgentString [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.NavigationTest#testStopFromOnNavigationStarted [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.ProfileTest#testDestroyAndDeleteDataFromDisk [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.ProfileTest#testDestroyAndDeleteDataFromDiskIncognito [ Skip ]
