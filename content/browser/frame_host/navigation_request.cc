@@ -835,9 +835,7 @@ std::unique_ptr<NavigationRequest> NavigationRequest::CreateRendererInitiated(
 std::unique_ptr<NavigationRequest> NavigationRequest::CreateForCommit(
     FrameTreeNode* frame_tree_node,
     RenderFrameHostImpl* render_frame_host,
-    NavigationEntryImpl* entry,
     const FrameHostMsg_DidCommitProvisionalLoad_Params& params,
-    bool is_renderer_initiated,
     bool is_same_document) {
   // TODO(clamy): Improve the *NavigationParams and *CommitParams to avoid
   // copying so many parameters here.
@@ -893,9 +891,9 @@ std::unique_ptr<NavigationRequest> NavigationRequest::CreateForCommit(
       mojom::BeginNavigationParams::New();
   std::unique_ptr<NavigationRequest> navigation_request(new NavigationRequest(
       frame_tree_node, std::move(common_params), std::move(begin_params),
-      std::move(commit_params), !is_renderer_initiated,
+      std::move(commit_params), false /* browser_initiated */,
       false /* from_begin_navigation */, true /* is_for_commit */,
-      entry ? entry->GetFrameEntry(frame_tree_node) : nullptr, entry,
+      nullptr /* frame_navigation_entry */, nullptr /* navitation_entry */,
       nullptr /* navigation_ui_data */, mojo::NullAssociatedRemote(),
       mojo::NullRemote(), nullptr /* rfh_restored_from_back_forward_cache */));
 

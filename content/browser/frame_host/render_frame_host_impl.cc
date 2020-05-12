@@ -7309,13 +7309,9 @@ void RenderFrameHostImpl::GetVirtualAuthenticatorManager(
 std::unique_ptr<NavigationRequest>
 RenderFrameHostImpl::CreateNavigationRequestForCommit(
     const FrameHostMsg_DidCommitProvisionalLoad_Params& params,
-    bool is_same_document,
-    NavigationEntryImpl* entry_for_request) {
-  bool is_renderer_initiated =
-      entry_for_request ? entry_for_request->is_renderer_initiated() : true;
-  return NavigationRequest::CreateForCommit(
-      frame_tree_node_, this, entry_for_request, params, is_renderer_initiated,
-      is_same_document);
+    bool is_same_document) {
+  return NavigationRequest::CreateForCommit(frame_tree_node_, this, params,
+                                            is_same_document);
 }
 
 bool RenderFrameHostImpl::NavigationRequestWasIntendedForPendingEntry(
@@ -7721,8 +7717,8 @@ bool RenderFrameHostImpl::DidCommitNavigationInternal(
   // one in order to properly issue DidFinishNavigation calls to
   // WebContentsObservers.
   if (!navigation_request) {
-    navigation_request = CreateNavigationRequestForCommit(
-        *params, is_same_document_navigation, nullptr);
+    navigation_request =
+        CreateNavigationRequestForCommit(*params, is_same_document_navigation);
   }
 
   DCHECK(navigation_request);

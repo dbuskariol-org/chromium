@@ -194,9 +194,7 @@ class CONTENT_EXPORT NavigationRequest
   static std::unique_ptr<NavigationRequest> CreateForCommit(
       FrameTreeNode* frame_tree_node,
       RenderFrameHostImpl* render_frame_host,
-      NavigationEntryImpl* entry,
       const FrameHostMsg_DidCommitProvisionalLoad_Params& params,
-      bool is_renderer_initiated,
       bool is_same_document);
 
   static NavigationRequest* From(NavigationHandle* handle);
