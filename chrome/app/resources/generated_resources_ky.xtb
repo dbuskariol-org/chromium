@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">Жүктөлүп алынган</translation>
 <translation id="1629314197035607094">Сырсөздүн жарамдуулук мөөнөтү аяктады</translation>
 <translation id="1630768113285622200">Өчүрүп-күйгүзүү жана улантуу</translation>
+<translation id="1630873818549593964">Балаңыздын Класстагы маалыматы корголот. <ph name="LINK_BEGIN" />Кеңири маалымат<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Баскычтобуңуздун кайталоо ылдамдыгын, кийинки сөздү божомолдоону жана башкаларды тууралай аласыз</translation>
 <translation id="1635033183663317347">Кароолчуңуз орноткон.</translation>
 <translation id="1637224376458524414">Бул кыстарманы iPhone’уңузга көчүрүп алыңыз</translation>
@@ -3149,7 +3150,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="5204967432542742771">Сырсөз киргизүү</translation>
 <translation id="5206215183583316675">"<ph name="CERTIFICATE_NAME" />" жок кылынсынбы?</translation>
 <translation id="520621735928254154">Тастыктаманы импорттоодогу ката</translation>
-<translation id="5209307736170827035">Балаңыздын Класстагы маалыматы корголот. <ph name="LINK_BEGIN" />Кеңири маалымат<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Түзмөктөр табылган жок</translation>
 <translation id="5210990770352357081">Plugin VM чыгарылган жок</translation>
 <translation id="5213481667492808996">"<ph name="NAME" />" дайындарды өткөрүү кызматын колдонуп баштасаңыз болот</translation>

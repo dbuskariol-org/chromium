@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">Ֆայլն արդեն ներբեռնվել է</translation>
 <translation id="1629314197035607094">Գաղտնաբառի ժամկետը լրացել է</translation>
 <translation id="1630768113285622200">Վերագործարկել և շարունակել</translation>
+<translation id="1630873818549593964">Ձեր երեխայի Classroom-ի տվյալները կպաշտպանվեն։ <ph name="LINK_BEGIN" />Իմանալ ավելին<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Թույլ է տալիս կարգավորել բառերի կանխատեսումը, ստեղների կրկնման արագությունը և այլն</translation>
 <translation id="1635033183663317347">Տեղադրվել է ձեր խնամակալի կողմից:</translation>
 <translation id="1637224376458524414">Օգտագործեք այս էջանիշը ձեր iPhone-ում</translation>
@@ -3150,7 +3151,6 @@
 <translation id="5204967432542742771">Մուտքագրեք գաղտնաբառը</translation>
 <translation id="5206215183583316675">Ջնջե՞լ «<ph name="CERTIFICATE_NAME" />» հավաստագիրը։</translation>
 <translation id="520621735928254154">Վկայագիրը ներմուծելիս սխալ առաջացավ</translation>
-<translation id="5209307736170827035">Ձեր երեխայի Classroom-ի տվյալները կպաշտպանվեն։ <ph name="LINK_BEGIN" />Իմանալ ավելին<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Սարքեր չեն գտնվել</translation>
 <translation id="5210990770352357081">Չհաջողվեց հեռացնել Plugin VM-ը</translation>
 <translation id="5213481667492808996">Տվյալների փոխանցման «<ph name="NAME" />» ծառայությունը պատրաստ է օգտագործման</translation>

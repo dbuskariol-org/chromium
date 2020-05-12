@@ -472,6 +472,7 @@
 <translation id="1627408615528139100">Жүктеп алынған</translation>
 <translation id="1629314197035607094">Құпия сөз мерзімі аяқталды.</translation>
 <translation id="1630768113285622200">Қайта қосу және жалғастыру</translation>
+<translation id="1630873818549593964">Classroom қызметіндегі балаңыздың деректері қорғалады. <ph name="LINK_BEGIN" />Толығырақ<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Пернетақтаның қайталау жиілігін, сөз болжамдарын, т.б. реттеуге мүмкіндік береді</translation>
 <translation id="1635033183663317347">Сақтаушы орнатқан.</translation>
 <translation id="1637224376458524414">Осы бетбелгіні iPhone телефонында алыңыз</translation>
@@ -3146,7 +3147,6 @@
 <translation id="5204967432542742771">Құпия сөз енгізу</translation>
 <translation id="5206215183583316675">"<ph name="CERTIFICATE_NAME" />" сертификатын жою керек пе?</translation>
 <translation id="520621735928254154">Сертификатты импорттау қатесі</translation>
-<translation id="5209307736170827035">Classroom қызметіндегі балаңыздың деректері қорғалады. <ph name="LINK_BEGIN" />Толығырақ<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Құрылғылар табылмады</translation>
 <translation id="5210990770352357081">Plugin VM плагині жойылмады.</translation>
 <translation id="5213481667492808996">"<ph name="NAME" />" деректер қызметі пайдалануға дайын</translation>

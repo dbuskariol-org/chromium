@@ -473,6 +473,7 @@ xizmatlarini sizga moslashtirish maqsadlarida foydalanishi mumkin. Bu ruxsatni m
 <translation id="1627408615528139100">Allaqachon yuklab olingan</translation>
 <translation id="1629314197035607094">Parol eskirdi</translation>
 <translation id="1630768113285622200">Oʻchirib yoqish va davom etish</translation>
+<translation id="1630873818549593964">Google Classroom xizmatidagi farzandingizning maʼlumotlari himoyalanadi. <ph name="LINK_BEGIN" />Batafsil<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Tugmalar qaytarilish tezligi, so‘zlar taklifi va boshqalarni sozlash imkonini beradi</translation>
 <translation id="1635033183663317347">Vasiyingiz tomonidan o‘rnatilgan.</translation>
 <translation id="1637224376458524414">Bu xatcho‘pni iPhone’ga saqlang</translation>
@@ -3147,7 +3148,6 @@ Oʻz qurilmangizda Family Link ilovasini oʻrnatib, bu hisob sozlamalarini boshq
 <translation id="5204967432542742771">Parolni kiriting</translation>
 <translation id="5206215183583316675">“<ph name="CERTIFICATE_NAME" />” o‘chirilsinmi?</translation>
 <translation id="520621735928254154">Sertifikatini import qilishda xatolik yuz berdi</translation>
-<translation id="5209307736170827035">Google Classroom xizmatidagi farzandingizning maʼlumotlari himoyalanadi. <ph name="LINK_BEGIN" />Batafsil<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Qurilmalar topilmadi</translation>
 <translation id="5210990770352357081">Plugin VM oʻchirilmadi</translation>
 <translation id="5213481667492808996">“<ph name="NAME" />” internet paketingiz faollashtirildi</translation>

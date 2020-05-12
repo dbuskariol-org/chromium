@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">ดาวน์โหลดแล้ว</translation>
 <translation id="1629314197035607094">รหัสผ่านหมดอายุ</translation>
 <translation id="1630768113285622200">รีสตาร์ตและดำเนินการต่อ</translation>
+<translation id="1630873818549593964">ข้อมูลของบุตรหลานใน Classroom จะได้รับการปกป้อง <ph name="LINK_BEGIN" />ดูข้อมูลเพิ่มเติม<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">ให้คุณปรับเปลี่ยนอัตราการพิมพ์ซ้ำของแป้นพิมพ์ การคาดคะเนคำ และอื่นๆ</translation>
 <translation id="1635033183663317347">ติดตั้งโดยผู้ดูแล</translation>
 <translation id="1637224376458524414">รับบุ๊กมาร์กนี้ใน iPhone ของคุณ</translation>
@@ -3149,7 +3150,6 @@
 <translation id="5204967432542742771">ป้อนรหัสผ่าน</translation>
 <translation id="5206215183583316675">ลบ " <ph name="CERTIFICATE_NAME" /> " ไหม</translation>
 <translation id="520621735928254154">เกิดข้อผิดพลาดในการนำเข้าใบรับรอง</translation>
-<translation id="5209307736170827035">ข้อมูลของบุตรหลานจะได้รับการปกป้องใน Classroom <ph name="LINK_BEGIN" />ดูข้อมูลเพิ่มเติม<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">ไม่พบอุปกรณ์</translation>
 <translation id="5210990770352357081">ถอนการติดตั้ง Plugin VM ไม่ได้</translation>
 <translation id="5213481667492808996">บริการอินเทอร์เน็ต "<ph name="NAME" />" พร้อมใช้งานแล้ว</translation>

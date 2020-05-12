@@ -472,6 +472,7 @@
 <translation id="1627408615528139100">දැනටමත් බාගැනිණි</translation>
 <translation id="1629314197035607094">මුරපදය කල් ඉකුත් විය</translation>
 <translation id="1630768113285622200">යළි අරඹා ඉදිරියට යන්න</translation>
+<translation id="1630873818549593964">පන්ති කාමරය තුළ ඇති ඔබේ දරුවාගේ දත්ත ආරක්‍ෂා කෙරේ. <ph name="LINK_BEGIN" />තවත් දැන ගන්න<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">ඔබට ඔබේ යතුරු පුවරුවේ පුනරාවර්තන අනුපාතය, වචන පුරෝකථනය, සහ තවත් දේ වෙනස් කිරීමට ඉඩ දේ</translation>
 <translation id="1635033183663317347">ඔබේ භාරකරු විසින් ස්ථාපනය කරන ලදී.</translation>
 <translation id="1637224376458524414">ඔබේ iPhone මත මෙම පිටුසන ලබා ගන්න</translation>
@@ -3147,7 +3148,6 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="5204967432542742771">මුරපදය ඇතුළත් කරන්න</translation>
 <translation id="5206215183583316675">"<ph name="CERTIFICATE_NAME" />" මකන්නද?</translation>
 <translation id="520621735928254154">සහතිකය ආයාත කිරීමේ දෝෂයකි</translation>
-<translation id="5209307736170827035">පන්ති කාමරය තුළ ඇති ඔබේ දරුවාගේ දත්ත ආරක්‍ෂා කෙරේ. <ph name="LINK_BEGIN" />තවත් දැන ගන්න<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">උපාංග කිසිවක් හමු නොවිනි</translation>
 <translation id="5210990770352357081">Plugin VM අස්ථාපන කළ නොහැකි විය</translation>
 <translation id="5213481667492808996">ඔබේ '<ph name="NAME" />' දත්ත සේවය භාවිතයට සූදානම්</translation>

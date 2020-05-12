@@ -474,6 +474,7 @@
 <translation id="1627408615528139100">O ficheiro xa se descargou.</translation>
 <translation id="1629314197035607094">Caducou o contrasinal</translation>
 <translation id="1630768113285622200">Reiniciar e continuar</translation>
+<translation id="1630873818549593964">Os datos de Classroom do teu fillo ou filla estarán protexidos. <ph name="LINK_BEGIN" />Máis información<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Permíteche axustar o índice de repetición, a predición de palabras e outras funcións do teclado</translation>
 <translation id="1635033183663317347">Extensión instalada polo titor</translation>
 <translation id="1637224376458524414">Accede a este marcador no iPhone</translation>
@@ -3148,7 +3149,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="5204967432542742771">Introduce o contrasinal</translation>
 <translation id="5206215183583316675">Queres eliminar "<ph name="CERTIFICATE_NAME" />"?</translation>
 <translation id="520621735928254154">Produciuse un erro ao importar o certificado</translation>
-<translation id="5209307736170827035">Os datos de Classroom do teu fillo estarán protexidos. <ph name="LINK_BEGIN" />Máis información<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Non se atopou ningún dispositivo</translation>
 <translation id="5210990770352357081">Non se puido desinstalar Plugin VM</translation>
 <translation id="5213481667492808996">Xa podes usar o servizo de datos <ph name="NAME" /></translation>

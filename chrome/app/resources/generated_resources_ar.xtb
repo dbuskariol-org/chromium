@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">تم التنزيل من قبل</translation>
 <translation id="1629314197035607094">انتهت صلاحية كلمة المرور.</translation>
 <translation id="1630768113285622200">إعادة التشغيل والمواصلة</translation>
+<translation id="1630873818549593964">‏ستتم حماية بيانات طفلك في Classroom. <ph name="LINK_BEGIN" />مزيد من المعلومات<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">تسمح لك بضبط معدل تكرار لوحة المفاتيح، وتوقّع الكلمات، والمزيد</translation>
 <translation id="1635033183663317347">تم التثبيت من قبل الوصيّ.</translation>
 <translation id="1637224376458524414">‏الحصول على هذه الإشارة المرجعية على جهاز iPhone</translation>
@@ -3146,7 +3147,6 @@
 <translation id="5204967432542742771">إدخال كلمة المرور</translation>
 <translation id="5206215183583316675">هل تريد حذف "<ph name="CERTIFICATE_NAME" />"؟</translation>
 <translation id="520621735928254154">خطأ في استيراد الشهادة</translation>
-<translation id="5209307736170827035">‏ستتم حماية بيانات طفلك في Classroom. <ph name="LINK_BEGIN" />مزيد من المعلومات<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">لم يتم العثور على أي أجهزة</translation>
 <translation id="5210990770352357081">‏تعذّر إلغاء تثبيت Plugin VM.</translation>
 <translation id="5213481667492808996">خدمة بيانات "<ph name="NAME" />" جاهزة للاستخدام</translation>

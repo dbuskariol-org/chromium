@@ -472,6 +472,7 @@
 <translation id="1627408615528139100">已下载</translation>
 <translation id="1629314197035607094">密码已过期</translation>
 <translation id="1630768113285622200">重启并继续</translation>
+<translation id="1630873818549593964">您孩子的 Google 课堂数据会受到妥善保护。<ph name="LINK_BEGIN" />了解详情<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">可让您调整键盘重复输入速率、字词预测功能等</translation>
 <translation id="1635033183663317347">这是您的监护人安装的。</translation>
 <translation id="1637224376458524414">在您的 iPhone 上获取此书签</translation>
@@ -3144,7 +3145,6 @@
 <translation id="5204967432542742771">输入密码</translation>
 <translation id="5206215183583316675">要删除“<ph name="CERTIFICATE_NAME" />”吗？</translation>
 <translation id="520621735928254154">导入证书时出现错误</translation>
-<translation id="5209307736170827035">您孩子的 Google 课堂数据会受到妥善保护。<ph name="LINK_BEGIN" />了解详情<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">未找到任何设备</translation>
 <translation id="5210990770352357081">无法卸载 Plugin VM</translation>
 <translation id="5213481667492808996">您可以使用“<ph name="NAME" />”的数据流量服务了</translation>

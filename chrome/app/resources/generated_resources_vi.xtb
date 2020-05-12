@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">Đã tải xuống</translation>
 <translation id="1629314197035607094">Mật khẩu đã hết hạn</translation>
 <translation id="1630768113285622200">Khởi động lại và tiếp tục</translation>
+<translation id="1630873818549593964">Dữ liệu của con bạn trong Lớp học sẽ được bảo vệ. <ph name="LINK_BEGIN" />Tìm hiểu thêm<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Cho phép bạn điều chỉnh tốc độ lặp lại, tính năng dự đoán từ và các chức năng khác của bàn phím</translation>
 <translation id="1635033183663317347">Do người giám hộ của bạn cài đặt.</translation>
 <translation id="1637224376458524414">Truy cập dấu trang này trên iPhone của bạn</translation>
@@ -3149,7 +3150,6 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="5204967432542742771">Nhập mật khẩu</translation>
 <translation id="5206215183583316675">Xóa "<ph name="CERTIFICATE_NAME" />"?</translation>
 <translation id="520621735928254154">Lỗi nhập chứng chỉ</translation>
-<translation id="5209307736170827035">Dữ liệu của con bạn trong Lớp học sẽ được bảo vệ. <ph name="LINK_BEGIN" />Tìm hiểu thêm<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Không tìm thấy thiết bị nào</translation>
 <translation id="5210990770352357081">Không thể gỡ cài đặt Plugin VM</translation>
 <translation id="5213481667492808996">Dịch vụ dữ liệu '<ph name="NAME" />' đã sẵn sàng cho bạn sử dụng</translation>

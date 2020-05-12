@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">Ya se ha descargado</translation>
 <translation id="1629314197035607094">Contraseña caducada</translation>
 <translation id="1630768113285622200">Reiniciar y continuar</translation>
+<translation id="1630873818549593964">Los datos de tu hijo en Classroom estarán protegidos. <ph name="LINK_BEGIN" />Más información<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Te permite configurar la frecuencia de repetición del teclado, la predicción de palabras y otros ajustes</translation>
 <translation id="1635033183663317347">Instalada por tu tutor legal.</translation>
 <translation id="1637224376458524414">Obtener este marcador en tu iPhone</translation>
@@ -3148,7 +3149,6 @@ Puedes gestionar la configuración de esta cuenta instalando la aplicación Fami
 <translation id="5204967432542742771">Escribe tu contraseña</translation>
 <translation id="5206215183583316675">¿Quieres eliminar el certificado <ph name="CERTIFICATE_NAME" />?</translation>
 <translation id="520621735928254154">Error al importar el certificado</translation>
-<translation id="5209307736170827035">Los datos de tu hijo/a en Classroom estarán protegidos. <ph name="LINK_BEGIN" />Más información<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">No se ha encontrado ningún dispositivo.</translation>
 <translation id="5210990770352357081">No se ha podido desinstalar Plugin VM</translation>
 <translation id="5213481667492808996">Ya puedes usar tu servicio de datos de "<ph name="NAME" />"</translation>

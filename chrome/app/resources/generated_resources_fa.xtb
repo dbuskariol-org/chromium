@@ -472,6 +472,7 @@
 <translation id="1627408615528139100">قبلاً بارگیری شده است</translation>
 <translation id="1629314197035607094">گذرواژه منقضی شده است</translation>
 <translation id="1630768113285622200">بازراه‌اندازی و ادامه</translation>
+<translation id="1630873818549593964">‏از داده‌های فرزندتان در Classroom محافظت خواهد شد. <ph name="LINK_BEGIN" />بیشتر بدانید<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">به شما امکان می‌دهد سرعت تکرار صفحه‌کلید، پیش‌بینی کلمه و سایر موارد را تنظیم کنید</translation>
 <translation id="1635033183663317347">قیم شما نصب کرده است.</translation>
 <translation id="1637224376458524414">‏این نشانک را در iPhone خود دریافت کنید</translation>
@@ -3146,7 +3147,6 @@
 <translation id="5204967432542742771">گذرواژه را وارد کنید</translation>
 <translation id="5206215183583316675">«<ph name="CERTIFICATE_NAME" />» حذف شود؟</translation>
 <translation id="520621735928254154">خطا در وارد کردن گواهی</translation>
-<translation id="5209307736170827035">‏از داده‌های فرزندتان در Classroom محافظت می‌شود. <ph name="LINK_BEGIN" />بیشتر بدانید<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">دستگاهی یافت نشد</translation>
 <translation id="5210990770352357081">‏Plugin VM حذف نصب نشد</translation>
 <translation id="5213481667492808996">سرویس داده «<ph name="NAME" />» شما آماده استفاده است</translation>

@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">ఇప్పటికే డౌన్‌లోడ్ చేయబడింది</translation>
 <translation id="1629314197035607094">పాస్‌వర్డ్ గడువు ముగిసింది</translation>
 <translation id="1630768113285622200">రీస్టార్ట్ చేసి, కొనసాగించు</translation>
+<translation id="1630873818549593964">తరగతిలోని మీ చిన్నారి డేటా రక్షించబడుతుంది. <ph name="LINK_BEGIN" />మరింత తెలుసుకోండి<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">మీ కీబోర్డ్ పునరావృత రేటు, పద సూచన మొదలైనవి సర్దుబాటు చేయడానికి మిమ్మల్ని అనుమతిస్తుంది</translation>
 <translation id="1635033183663317347">మీ పర్యవేక్షకుడు ఇన్‌స్టాల్ చేసారు.</translation>
 <translation id="1637224376458524414">ఈ బుక్‌మార్క్‌ను మీ iPhoneలో పొందండి</translation>
@@ -3149,7 +3150,6 @@
 <translation id="5204967432542742771">పాస్‌వర్డ్‌ని నమోదు చేయండి</translation>
 <translation id="5206215183583316675">"<ph name="CERTIFICATE_NAME" />"ని తొలగించాలా?</translation>
 <translation id="520621735928254154">ప్రమాణపత్ర దిగుమతి లోపం</translation>
-<translation id="5209307736170827035">తరగతిలోని మీ చిన్నారి డేటా రక్షించబడుతుంది. <ph name="LINK_BEGIN" />మరింత తెలుసుకోండి<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">పరికరాలు కనుగొనబడలేదు</translation>
 <translation id="5210990770352357081">Plugin VMను అన్‌ఇన్‌స్టాల్ చేయడం సాధ్యం కాలేదు</translation>
 <translation id="5213481667492808996">మీ '<ph name="NAME" />' డేటా సేవ ఉపయోగించడానికి సిద్ధంగా ఉంది</translation>

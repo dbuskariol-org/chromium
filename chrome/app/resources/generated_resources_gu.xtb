@@ -471,6 +471,7 @@
 <translation id="1627408615528139100">પહેલેથી જ ડાઉનલોડ કરેલ છે</translation>
 <translation id="1629314197035607094">પાસવર્ડની સમયસીમા સમાપ્ત થઈ</translation>
 <translation id="1630768113285622200">ફરી શરૂ કરો અને ચાલુ રાખો</translation>
+<translation id="1630873818549593964">વર્ગખંડમાં તમારા બાળકનો ડેટા સુરક્ષિત રાખવામાં આવશે. <ph name="LINK_BEGIN" />વધુ જાણો<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">તમને તમારા કીબોર્ડ પુનરાવર્તન દર, શબ્દ પૂર્વાનુમાન અને વધુને સમાયોજિત કરવાની મંજૂરી આપે છે</translation>
 <translation id="1635033183663317347">તમારા સંરક્ષક દ્વારા ઇન્સ્ટોલ કરાયું</translation>
 <translation id="1637224376458524414">આ બુકમાર્ક તમારા iPhone પર મેળવો</translation>
@@ -3145,7 +3146,6 @@
 <translation id="5204967432542742771">પાસવર્ડ દાખલ કરો</translation>
 <translation id="5206215183583316675">"<ph name="CERTIFICATE_NAME" />"ને ડિલીટ કરી દઈએ?</translation>
 <translation id="520621735928254154">પ્રમાણપત્ર આયાત કરવામાં ભૂલ</translation>
-<translation id="5209307736170827035">વર્ગખંડમાં તમારા બાળકનો ડેટા સુરક્ષિત રાખવામાં આવશે. <ph name="LINK_BEGIN" />વધુ જાણો<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">કોઈ ઉપકરણો મળ્યાં નથી</translation>
 <translation id="5210990770352357081">Plugin VM અનઇન્સ્ટૉલ કરી શકાયું નથી</translation>
 <translation id="5213481667492808996">તમારી '<ph name="NAME" />' ડેટા સેવા ઉપયોગમાં લેવા માટે તૈયાર છે</translation>

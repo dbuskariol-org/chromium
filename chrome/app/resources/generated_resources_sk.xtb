@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">Už je stiahnutý</translation>
 <translation id="1629314197035607094">Platnosť hesla vypršala</translation>
 <translation id="1630768113285622200">Reštartovať a pokračovať</translation>
+<translation id="1630873818549593964">Údaje vášho dieťaťa v Učebni budú chránené. <ph name="LINK_BEGIN" />Ďalšie informácie<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Umožňuje nastaviť rýchlosť opakovania klávesnice, predpoveď ďalšieho slova a ďalšie</translation>
 <translation id="1635033183663317347">Nainštalované vaším opatrovníkom</translation>
 <translation id="1637224376458524414">Uložte si túto záložku do zariadenia iPhone</translation>
@@ -3148,7 +3149,6 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="5204967432542742771">Zadajte heslo</translation>
 <translation id="5206215183583316675">Odstrániť certifikát <ph name="CERTIFICATE_NAME" />?</translation>
 <translation id="520621735928254154">Chyba importovania certifikátu</translation>
-<translation id="5209307736170827035">Údaje vášho dieťaťa v Učebni budú chránené. <ph name="LINK_BEGIN" />Ďalšie informácie<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Nenašli sa žiadne zariadenia</translation>
 <translation id="5210990770352357081">Plugin VM sa nepodarilo nainštalovať</translation>
 <translation id="5213481667492808996">Dátová služba <ph name="NAME" /> je pripravená na použitie</translation>

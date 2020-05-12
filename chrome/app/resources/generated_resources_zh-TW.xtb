@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">已下載</translation>
 <translation id="1629314197035607094">密碼已過期</translation>
 <translation id="1630768113285622200">重新啟動並繼續</translation>
+<translation id="1630873818549593964">貴子女的 Classroom 資料會受到妥善保護。<ph name="LINK_BEGIN" />瞭解詳情<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">讓你調整鍵盤按鍵重複輸入速率、字詞預測功能等等</translation>
 <translation id="1635033183663317347">由您的監護人安裝。</translation>
 <translation id="1637224376458524414">在 iPhone 上取得這個書籤</translation>
@@ -3147,7 +3148,6 @@
 <translation id="5204967432542742771">輸入密碼</translation>
 <translation id="5206215183583316675">要刪除「<ph name="CERTIFICATE_NAME" />」嗎？</translation>
 <translation id="520621735928254154">憑證匯入錯誤</translation>
-<translation id="5209307736170827035">貴子女的 Classroom 資料將受到保護。<ph name="LINK_BEGIN" />瞭解詳情<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">找不到裝置</translation>
 <translation id="5210990770352357081">無法解除安裝 Plugin VM</translation>
 <translation id="5213481667492808996">現在可以使用「<ph name="NAME" />」的數據服務了</translation>

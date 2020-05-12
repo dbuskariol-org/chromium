@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">Já transferido</translation>
 <translation id="1629314197035607094">A palavra-passe expirou.</translation>
 <translation id="1630768113285622200">Reiniciar e continuar</translation>
+<translation id="1630873818549593964">Os dados da sua criança no Classroom serão protegidos. <ph name="LINK_BEGIN" />Saiba mais<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Permite-lhe ajustar a taxa de repetição do teclado, a previsão de palavras e muito mais</translation>
 <translation id="1635033183663317347">Instalada pelo supervisor.</translation>
 <translation id="1637224376458524414">Obter este marcador no seu iPhone</translation>
@@ -3149,7 +3150,6 @@ Pretende pará-lo?</translation>
 <translation id="5204967432542742771">Introduzir palavra-passe</translation>
 <translation id="5206215183583316675">Pretende eliminar "<ph name="CERTIFICATE_NAME" />"?</translation>
 <translation id="520621735928254154">Erro de importação do certificado</translation>
-<translation id="5209307736170827035">Os dados da criança no Classroom serão protegidos. <ph name="LINK_BEGIN" />Saber mais<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Não foram encontrados aparelhos</translation>
 <translation id="5210990770352357081">Não foi possível instalar o Plugin VM.</translation>
 <translation id="5213481667492808996">O serviço de dados de "<ph name="NAME" />" está pronto a ser utilizado.</translation>

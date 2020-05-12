@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">Descărcat deja</translation>
 <translation id="1629314197035607094">Parola a expirat</translation>
 <translation id="1630768113285622200">Repornește și continuă</translation>
+<translation id="1630873818549593964">Datele copilului din Classroom sunt protejate. <ph name="LINK_BEGIN" />Află mai multe<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Cu ajutorul acestor setări, poți să ajustezi frecvența de repetare a tastelor, predicția cuvintelor și altele</translation>
 <translation id="1635033183663317347">Instalată de custode.</translation>
 <translation id="1637224376458524414">Obține marcajul pe iPhone</translation>
@@ -3149,7 +3150,6 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="5204967432542742771">Introdu parola</translation>
 <translation id="5206215183583316675">Ștergi „<ph name="CERTIFICATE_NAME" />”?</translation>
 <translation id="520621735928254154">Eroare la importul certificatului</translation>
-<translation id="5209307736170827035">Datele copilului din Classroom vor fi protejate. <ph name="LINK_BEGIN" />Află mai multe<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Nu s-a găsit niciun dispozitiv</translation>
 <translation id="5210990770352357081">Nu s-a putut dezinstala Plugin VM</translation>
 <translation id="5213481667492808996">Serviciul de date „<ph name="NAME" />” este gata de utilizare.</translation>

@@ -472,6 +472,7 @@
 <translation id="1627408615528139100">നേരത്തേതന്നെ ഡൗൺലോഡുചെയ്‌തിട്ടുണ്ട്</translation>
 <translation id="1629314197035607094">പാസ്‌വേഡ് കാലഹരണപ്പെട്ടു</translation>
 <translation id="1630768113285622200">റീസ്റ്റാർട്ട് ചെയ്‌ത ശേഷം തുടരുക</translation>
+<translation id="1630873818549593964">നിങ്ങളുടെ കുട്ടിയുടെ ക്ലാസ് റൂമിലെ ഡാറ്റ പരിരക്ഷിക്കപ്പെടും. <ph name="LINK_BEGIN" />കൂടുതലറിയുക<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">കീബോർഡ് ആവർത്തന നിരക്കും പദത്തിന്റെ പ്രവചനവും മറ്റും ക്രമീകരിക്കാൻ നിങ്ങളെ അനുവദിക്കുന്നു</translation>
 <translation id="1635033183663317347">നിങ്ങളുടെ സൂക്ഷിപ്പുകാരൻ ഇൻസ്റ്റാൾ ചെയ്‌തു.</translation>
 <translation id="1637224376458524414">നിങ്ങളുടെ iPhone-ൽ ഈ ബുക്ക്‌മാർക്ക് ലഭ്യമാക്കുക</translation>
@@ -3145,7 +3146,6 @@
 <translation id="5204967432542742771">പാസ്‌വേഡ് നല്‍കുക</translation>
 <translation id="5206215183583316675">"<ph name="CERTIFICATE_NAME" />" ഇല്ലാതാക്കണോ?</translation>
 <translation id="520621735928254154">സർട്ടിഫിക്കറ്റ് ഇമ്പോർട്ട് ചെയ്യുന്നതിൽ പിശക്</translation>
-<translation id="5209307736170827035">ക്ലാസ് റൂമിലെ നിങ്ങളുടെ കുട്ടിയുടെ ഡാറ്റ പരിരക്ഷിക്കപ്പെടും. <ph name="LINK_BEGIN" />കൂടുതലറിയുക<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">ഉപകരണങ്ങളൊന്നും കണ്ടെത്തിയില്ല</translation>
 <translation id="5210990770352357081">Plugin VM അൺഇൻ‌സ്‌റ്റാൾ ചെയ്യാനായില്ല</translation>
 <translation id="5213481667492808996">നിങ്ങളുടെ '<ph name="NAME" />' ഡാറ്റാ സേവനം ഉപയോഗിക്കാൻ തയ്യാറാണ്</translation>

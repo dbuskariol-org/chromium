@@ -474,6 +474,7 @@
 <translation id="1627408615528139100">आधीच डाउनलोड केलेले आहे</translation>
 <translation id="1629314197035607094">पासवर्ड एक्स्पायर झाला</translation>
 <translation id="1630768113285622200">रीस्टार्ट करा आणि सुरू ठेवा</translation>
+<translation id="1630873818549593964">तुमच्या लहान मुलाचा Classroom मधील डेटा सुरक्षित ठेवला जाईल. <ph name="LINK_BEGIN" />अधिक जाणून घ्या<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">आपल्या कीबोर्डचा पुनरावृत्ती दर, शब्दाचे पूर्वानुमान आणि बरेच काही समायोजित करण्याची तुम्हाला अनुमती देते</translation>
 <translation id="1635033183663317347">आपल्‍या पालकाद्वारे इंस्टॉल केले.</translation>
 <translation id="1637224376458524414">आपल्या iPhone वर हा बुकमार्क मिळवा</translation>
@@ -3146,7 +3147,6 @@
 <translation id="5204967432542742771">पासवर्ड एंटर करा</translation>
 <translation id="5206215183583316675">"<ph name="CERTIFICATE_NAME" />" हटवायचे?</translation>
 <translation id="520621735928254154">सर्टिफिकेट आया‍त एरर</translation>
-<translation id="5209307736170827035">तुमच्या मुलाच्या Classroom मधील डेटाचे संरक्षण केले जाईल. <ph name="LINK_BEGIN" />अधिक जाणून घ्या<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">कोणतीही डिव्हाइसेस आढळली नाहीत</translation>
 <translation id="5210990770352357081">Plugin VM अनइंस्टॉल करता आले नाही</translation>
 <translation id="5213481667492808996">तुमची '<ph name="NAME" />' डेटा सेवा वापरण्यासाठी तयार आहे</translation>

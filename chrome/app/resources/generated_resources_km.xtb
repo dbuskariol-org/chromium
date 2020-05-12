@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">បានទាញយក​រួចហើយ</translation>
 <translation id="1629314197035607094">ពាក្យសម្ងាត់បាន​ផុតកំណត់ហើយ</translation>
 <translation id="1630768113285622200">ចាប់ផ្ដើម​ឡើងវិញ និងបន្ត</translation>
+<translation id="1630873818549593964">ទិន្នន័យ​របស់កូនអ្នក​នៅក្នុងថ្នាក់រៀន​នឹងត្រូវបានការពារ។ <ph name="LINK_BEGIN" />ស្វែងយល់បន្ថែម<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">អនុញ្ញាតឲ្យអ្នកកែសម្រួលអត្រាធ្វើឡើងវិញនៃក្តារចុច ការទស្សន៍ទាយពាក្យ និងសកម្មភាពជាច្រើនទៀត</translation>
 <translation id="1635033183663317347">ដំឡើងដោយអាណាព្យាបាលរបស់អ្នក។</translation>
 <translation id="1637224376458524414">ទទួល​ចំណាំនេះ​នៅលើ iPhone របស់​អ្នក</translation>
@@ -3149,7 +3150,6 @@
 <translation id="5204967432542742771">បញ្ចូលពាក្យសម្ងាត់</translation>
 <translation id="5206215183583316675">លុប "<ph name="CERTIFICATE_NAME" />" ឬ?</translation>
 <translation id="520621735928254154">មានកំហុសក្នុងការនាំចូលវិញ្ញាបនបត្រ</translation>
-<translation id="5209307736170827035">ទិន្នន័យ​របស់កូនអ្នក​នៅក្នុងថ្នាក់រៀន​នឹងត្រូវបានការពារ។ <ph name="LINK_BEGIN" />ស្វែងយល់បន្ថែម<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">គ្មានឧបករណ៍ត្រូវបានរកឃើញទេ</translation>
 <translation id="5210990770352357081">មិន​អាចលុប Plugin VM បានទេ</translation>
 <translation id="5213481667492808996">​អាច​ប្រើសេវាកម្ម​ទិន្នន័យ '<ph name="NAME" />' របស់អ្នកបានហើយ</translation>

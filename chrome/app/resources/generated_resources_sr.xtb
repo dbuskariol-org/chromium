@@ -472,6 +472,7 @@
 <translation id="1627408615528139100">Већ је преузето</translation>
 <translation id="1629314197035607094">Лозинка је истекла</translation>
 <translation id="1630768113285622200">Рестартуј и настави</translation>
+<translation id="1630873818549593964">Дететови подаци у Учионици ће бити заштићени. <ph name="LINK_BEGIN" />Сазнајте више<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">Омогућавају вам да прилагодите брзину понављања за тастатуру, предвиђање речи и још пуно тога</translation>
 <translation id="1635033183663317347">Инсталирао је надређени корисник.</translation>
 <translation id="1637224376458524414">Користите овај обележивач на iPhone-у</translation>
@@ -3146,7 +3147,6 @@
 <translation id="5204967432542742771">Унесите лозинку</translation>
 <translation id="5206215183583316675">Желите ли да избришете „<ph name="CERTIFICATE_NAME" />“?</translation>
 <translation id="520621735928254154">Грешка при увозу сертификата</translation>
-<translation id="5209307736170827035">Дететови подаци у Учионици ће бити заштићени. <ph name="LINK_BEGIN" />Сазнајте више<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">Није пронађен ниједан уређај</translation>
 <translation id="5210990770352357081">Деинсталирање Plugin VM-а није успело</translation>
 <translation id="5213481667492808996">Услуга преноса података „<ph name="NAME" />“ је спремна за коришћење</translation>

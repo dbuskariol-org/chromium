@@ -475,6 +475,7 @@
 <translation id="1627408615528139100">ஏற்கனவே பதிவிறக்கப்பட்டது</translation>
 <translation id="1629314197035607094">கடவுச்சொல் காலாவதியாகிவிட்டது</translation>
 <translation id="1630768113285622200">மீண்டும் தொடங்கி தொடர்க</translation>
+<translation id="1630873818549593964">'வகுப்பறையில்' இருக்கும் உங்கள் பிள்ளையின் தரவு பாதுகாக்கப்படும். <ph name="LINK_BEGIN" />மேலும் அறிக<ph name="LINK_END" /></translation>
 <translation id="1632803087685957583">ஒரு விசை மீண்டும் மீண்டும் உள்ளிடப்படும் வேகம், சொல்லைக் கணித்தல் போன்ற விசைப்பலகை அமைப்புகள் பலவற்றை மாற்ற அனுமதிக்கும்</translation>
 <translation id="1635033183663317347">பாதுகாப்பாளர் நிறுவியது.</translation>
 <translation id="1637224376458524414">இந்தப் புத்தகக்குறியை உங்கள் iPhone இல் பெறுங்கள்</translation>
@@ -3149,7 +3150,6 @@
 <translation id="5204967432542742771">கடவுச்சொல்</translation>
 <translation id="5206215183583316675">"<ph name="CERTIFICATE_NAME" />"ஐ நீக்கவா?</translation>
 <translation id="520621735928254154">சான்றிதழ் இறக்குமதியாவதில் பிழை</translation>
-<translation id="5209307736170827035">'வகுப்பறை' இல் இருக்கும் உங்கள் பிள்ளையின் தரவு பாதுகாக்கப்படும். <ph name="LINK_BEGIN" />மேலும் அறிக<ph name="LINK_END" /></translation>
 <translation id="5209320130288484488">சாதனங்கள் காணப்படவில்லை</translation>
 <translation id="5210990770352357081">Plugin VMமின் நிறுவலை நீக்க முடியவில்லை</translation>
 <translation id="5213481667492808996">இப்போது உங்கள் '<ph name="NAME" />' டேட்டா சேவையைப் பயன்படுத்தலாம்</translation>
