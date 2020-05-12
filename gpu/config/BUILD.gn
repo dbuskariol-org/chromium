@@ -94,7 +94,8 @@ if (enable_vulkan) {
     deps = [ "//gpu/ipc/common:vulkan_interface" ]
     public_deps = [ "//ui/gfx" ]
 
-    all_dependent_configs = [ "//third_party/vulkan:vulkan_config" ]
+    all_dependent_configs =
+        [ "//third_party/vulkan_headers:vulkan_headers_config" ]
 
     # surpass linke error 4217. It is because vulkan_info depends on
     # //gpu/ipc/common:vulkan_interface and //gpu/ipc/common:vulkan_interface"

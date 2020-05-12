@@ -45,7 +45,7 @@ if (enable_vulkan) {
 
     all_dependent_configs = [
       ":vulkan_config",
-      "//third_party/vulkan:vulkan_config",
+      "//third_party/vulkan_headers:vulkan_headers_config",
     ]
 
     defines = [ "IS_VULKAN_IMPL" ]

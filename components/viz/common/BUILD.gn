@@ -91,7 +91,7 @@ if (enable_vulkan) {
       "gpu/vulkan_in_process_context_provider.h",
       "viz_vulkan_context_provider_export.h",
     ]
-    configs = [ "//third_party/vulkan:vulkan_config" ]
+    configs = [ "//third_party/vulkan_headers:vulkan_headers_config" ]
 
     public_deps = [ "//skia" ]
 
