@@ -58682,6 +58682,13 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="2" label="Unable to determine user opt-in"/>
 </enum>
 
+<enum name="SafeBrowsingUserPopulation">
+  <int value="0" label="Unknown user"/>
+  <int value="1" label="Safe browsing user"/>
+  <int value="2" label="Extended reporting user"/>
+  <int value="3" label="Enhanced protection user"/>
+</enum>
+
 <enum name="SafeBrowsingV4ApplyUpdateResult">
   <int value="0" label="APPLY_UPDATE_SUCCESS"/>
   <int value="1" label="UNEXPECTED_APPLY_UPDATE_FAILURE"/>
