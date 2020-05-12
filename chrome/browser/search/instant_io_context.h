@@ -10,6 +10,8 @@
 #include "base/macros.h"
 #include "base/memory/ref_counted.h"
 
+class GURL;
+
 namespace content {
 class ResourceContext;
 }
@@ -41,6 +43,12 @@ class InstantIOContext : public base::RefCountedThreadSafe<InstantIOContext> {
       int process_id);
   static void ClearInstantProcessesOnIO(
       scoped_refptr<InstantIOContext> instant_io_context);
+
+  // Determine if this chrome-search: request is coming from an Instant render
+  // process.
+  static bool ShouldServiceRequest(const GURL& url,
+                                   content::ResourceContext* resource_context,
+                                   int render_process_id);
 
   // Returns true if the given |render_process_id| represents an Instant
   // renderer.
