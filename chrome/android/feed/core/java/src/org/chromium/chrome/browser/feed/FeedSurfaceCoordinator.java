@@ -332,7 +332,7 @@ public class FeedSurfaceCoordinator implements FeedSurfaceProvider {
         if (ChromeFeatureList.isEnabled(ChromeFeatureList.INTEREST_FEED_V2)) {
             // TODO(jianli): Temporary: simulate opening the feed V2 surface. This should probably
             // move to FeedSurfaceMediator.
-            mFeedStreamSurface = new FeedStreamSurface(tabModelSelector, tabProvider);
+            mFeedStreamSurface = new FeedStreamSurface(tabModelSelector, tabProvider, mActivity);
             mFeedStreamSurface.surfaceOpened();
         }
     }
