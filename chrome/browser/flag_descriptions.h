@@ -437,6 +437,9 @@ extern const char kCorsForContentScriptsDescription[];
 extern const char kCrossOriginOpenerPolicyName[];
 extern const char kCrossOriginOpenerPolicyDescription[];
 
+extern const char kCrossOriginOpenerPolicyReportingName[];
+extern const char kCrossOriginOpenerPolicyReportingDescription[];
+
 extern const char kDisableKeepaliveFetchName[];
 extern const char kDisableKeepaliveFetchDescription[];
 

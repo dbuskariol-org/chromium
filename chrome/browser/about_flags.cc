@@ -3551,6 +3551,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kCrossOriginOpenerPolicyDescription, kOsAll,
      FEATURE_VALUE_TYPE(network::features::kCrossOriginOpenerPolicy)},
 
+    {"cross-origin-opener-policy-reporting",
+     flag_descriptions::kCrossOriginOpenerPolicyReportingName,
+     flag_descriptions::kCrossOriginOpenerPolicyReportingDescription, kOsAll,
+     FEATURE_VALUE_TYPE(network::features::kCrossOriginOpenerPolicyReporting)},
+
     {"disable-keepalive-fetch", flag_descriptions::kDisableKeepaliveFetchName,
      flag_descriptions::kDisableKeepaliveFetchDescription, kOsAll,
      FEATURE_VALUE_TYPE(network::features::kDisableKeepaliveFetch)},

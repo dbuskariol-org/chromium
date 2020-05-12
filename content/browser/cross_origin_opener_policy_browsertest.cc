@@ -47,6 +47,7 @@ class CrossOriginOpenerPolicyBrowserTest : public ContentBrowserTest {
     std::vector<base::Feature> features;
     feature_list_.InitWithFeatures(
         {network::features::kCrossOriginOpenerPolicy,
+         network::features::kCrossOriginOpenerPolicyReporting,
          network::features::kCrossOriginEmbedderPolicy},
         {});
     base::CommandLine::ForCurrentProcess()->AppendSwitch(
