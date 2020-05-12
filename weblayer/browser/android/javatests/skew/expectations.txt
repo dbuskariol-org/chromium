@@ -4,7 +4,7 @@
 # Lines tagged with "impl_lte_$VERSION" will be active when testing trunk client
 # with versions less than or equal to $VERSION of the implementation.
 #
-# tags: [ impl_lte_81 impl_lte_83 client_lte_83 ]
+# tags: [ impl_lte_81 impl_lte_82 impl_lte_83 client_lte_83 ]
 # results: [ Skip ]
 
 # ---------------------------------------------
