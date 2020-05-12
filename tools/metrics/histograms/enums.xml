@@ -61055,6 +61055,17 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   </int>
 </enum>
 
+<!--
+  SharingActionSource must be kept in sync with ValidSharingActionSource defined
+  in //ui/file_manager/file_manager/foreground/js/file_manager_commands.js.
+-->
+
+<enum name="SharingActionSource">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Context Menu"/>
+  <int value="2" label="Share Button"/>
+</enum>
+
 <enum name="SharingClickToCallEntryPoint">
   <int value="0" label="Left click on a phone link"/>
   <int value="1" label="Right click on a phone link"/>
