@@ -128,8 +128,8 @@ SafeBrowsingTabHelper::PolicyDecider::PolicyDecider(
 
 SafeBrowsingTabHelper::PolicyDecider::~PolicyDecider() = default;
 
-void SafeBrowsingTabHelper::PolicyDecider::MainFrameWasCommitted() {
-  // Since a new main frame was committed, sub frame navigations from the
+void SafeBrowsingTabHelper::PolicyDecider::UpdateForMainFrameDocumentChange() {
+  // Since a new main frame document was loaded, sub frame navigations from the
   // previous page are cancelled and their policy decisions can be erased.
   pending_sub_frame_queries_.clear();
 }
@@ -387,8 +387,10 @@ SafeBrowsingTabHelper::NavigationObserver::~NavigationObserver() = default;
 void SafeBrowsingTabHelper::NavigationObserver::DidFinishNavigation(
     web::WebState* web_state,
     web::NavigationContext* navigation_context) {
-  if (navigation_context->HasCommitted())
-    policy_decider_->MainFrameWasCommitted();
+  if (navigation_context->HasCommitted() &&
+      !navigation_context->IsSameDocument()) {
+    policy_decider_->UpdateForMainFrameDocumentChange();
+  }
 }
 
 void SafeBrowsingTabHelper::NavigationObserver::WebStateDestroyed(
