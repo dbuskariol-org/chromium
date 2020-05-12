@@ -208,10 +208,21 @@ public class HomepagePromoTest {
      */
     @Test
     @MediumTest
-    public void testDismiss() {
+    public void testDismiss_Compact() {
         // In order to dismiss the promo, we have to use the large / compact variation.
         setVariationForTests(LayoutStyle.COMPACT);
+        testDismissImpl();
+    }
 
+    @Test
+    @MediumTest
+    public void testDismiss_Large() {
+        // In order to dismiss the promo, we have to use the large / compact variation.
+        setVariationForTests(LayoutStyle.LARGE);
+        testDismissImpl();
+    }
+
+    private void testDismissImpl() {
         SignInPromo.setDisablePromoForTests(true);
         mActivityTestRule.loadUrl(UrlConstants.NTP_URL);
 
@@ -235,7 +246,28 @@ public class HomepagePromoTest {
     @Test
     @MediumTest
     @DisableIf.Build(sdk_is_greater_than = VERSION_CODES.O, message = "crbug.com/1077316")
-    public void testChangeHomepageAndUndo() {
+    public void testChangeHomepageAndUndo_Compact() {
+        setVariationForTests(LayoutStyle.COMPACT);
+        testChangeHomepageAndUndoImpl();
+    }
+
+    @Test
+    @MediumTest
+    @DisableIf.Build(sdk_is_greater_than = VERSION_CODES.O, message = "crbug.com/1077316")
+    public void testChangeHomepageAndUndo_Slim() {
+        setVariationForTests(LayoutStyle.SLIM);
+        testChangeHomepageAndUndoImpl();
+    }
+
+    @Test
+    @MediumTest
+    @DisableIf.Build(sdk_is_greater_than = VERSION_CODES.O, message = "crbug.com/1077316")
+    public void testChangeHomepageAndUndo_Large() {
+        setVariationForTests(LayoutStyle.LARGE);
+        testChangeHomepageAndUndoImpl();
+    }
+
+    private void testChangeHomepageAndUndoImpl() {
         SignInPromo.setDisablePromoForTests(true);
         mActivityTestRule.loadUrl(UrlConstants.NTP_URL);
 
