@@ -11617,7 +11617,7 @@ Called by update_net_error_codes.py.-->
 
 <enum name="CookieControlsMode">
   <int value="0" label="Off"/>
-  <int value="1" label="On"/>
+  <int value="1" label="BlockThirdParty"/>
   <int value="2" label="IncognitoOnly"/>
 </enum>
 
