@@ -1702,6 +1702,9 @@ extern const char kPasswordCheckDescription[];
 extern const char kTabFreezeName[];
 extern const char kTabFreezeDescription[];
 
+extern const char kWebUIA11yEnhancementsName[];
+extern const char kWebUIA11yEnhancementsDescription[];
+
 extern const char kSyncSetupFriendlySettingsName[];
 extern const char kSyncSetupFriendlySettingsDescription[];
 
