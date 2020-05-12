@@ -4,25 +4,18 @@
 
 assert(is_fuchsia)
 
-source_set("cast_streaming") {
+import("//build/config/fuchsia/generate_runner_scripts.gni")
+
+source_set("receiver") {
   deps = [
     "//base",
     "//components/openscreen_platform",
-    "//fuchsia/base",
-    "//media",
-    "//net",  # TODO(crbug.com/1079502): Remove this dependency.
-    "//third_party/fuchsia-sdk/sdk/fidl/fuchsia.web",
+    "//net",
     "//third_party/openscreen/src/cast/streaming:receiver",
     "//third_party/openscreen/src/platform:api",
-    "//third_party/openscreen/src/util",
   ]
-  visibility = [ "//fuchsia/engine/*" ]
-  public = [ "public/cast_streaming_session.h" ]
   sources = [
-    "cast_message_port_impl.cc",
-    "cast_message_port_impl.h",
-    "cast_streaming_session.cc",
-    "stream_consumer.cc",
-    "stream_consumer.h",
+    "receiver_udp_socket.cc",
+    "receiver_udp_socket.h",
   ]
 }
