@@ -43,7 +43,7 @@ class OsSettingsSections {
  public:
   OsSettingsSections(
       Profile* profile,
-      OsSettingsSection::Delegate* delegate,
+      SearchTagRegistry* search_tag_registry,
       multidevice_setup::MultiDeviceSetupClient* multidevice_setup_client,
       syncer::SyncService* sync_service,
       SupervisedUserService* supervised_user_service,

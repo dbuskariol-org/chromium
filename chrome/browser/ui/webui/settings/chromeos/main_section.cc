@@ -60,8 +60,9 @@ void AddSearchInSettingsStrings(content::WebUIDataSource* html_source) {
 
 }  // namespace
 
-MainSection::MainSection(Profile* profile, Delegate* per_page_delegate)
-    : OsSettingsSection(profile, per_page_delegate) {}
+MainSection::MainSection(Profile* profile,
+                         SearchTagRegistry* search_tag_registry)
+    : OsSettingsSection(profile, search_tag_registry) {}
 
 MainSection::~MainSection() = default;
 

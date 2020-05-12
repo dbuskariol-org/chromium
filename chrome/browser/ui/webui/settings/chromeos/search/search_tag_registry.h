@@ -22,17 +22,16 @@ struct SearchConcept;
 
 // Processes all registered search tags by adding/removing them from
 // LocalSearchService and providing metadata via GetCanonicalTagMetadata().
-class SearchTagRegistry : public OsSettingsSection::Delegate {
+class SearchTagRegistry {
  public:
   SearchTagRegistry(
       local_search_service::LocalSearchService* local_search_service);
   SearchTagRegistry(const SearchTagRegistry& other) = delete;
   SearchTagRegistry& operator=(const SearchTagRegistry& other) = delete;
-  ~SearchTagRegistry() override;
+  virtual ~SearchTagRegistry();
 
-  // OsSettingsSection::Delegate:
-  void AddSearchTags(const std::vector<SearchConcept>& search_tags) override;
-  void RemoveSearchTags(const std::vector<SearchConcept>& search_tags) override;
+  void AddSearchTags(const std::vector<SearchConcept>& search_tags);
+  void RemoveSearchTags(const std::vector<SearchConcept>& search_tags);
 
   // Returns the tag metadata associated with |canonical_message_id|, which must
   // be one of the canonical IDS_OS_SETTINGS_TAG_* identifiers used for a search
