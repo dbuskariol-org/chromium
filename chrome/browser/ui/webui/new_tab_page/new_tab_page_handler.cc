@@ -471,6 +471,7 @@ void NewTabPageHandler::GetOneGoogleBarParts(
       !wait_for_refresh) {
     OnOneGoogleBarDataUpdated();
   }
+  one_google_bar_load_start_time_ = base::TimeTicks::Now();
   one_google_bar_service_->Refresh();
 }
 
@@ -483,6 +484,11 @@ void NewTabPageHandler::OnMostVisitedTilesRendered(
   // This call flushes all most visited impression logs to UMA histograms.
   // Therefore, it must come last.
   logger_->LogEvent(NTP_ALL_TILES_LOADED,
+                    base::Time::FromJsTime(time) - ntp_navigation_start_time_);
+}
+
+void NewTabPageHandler::OnOneGoogleBarRendered(double time) {
+  logger_->LogEvent(NTP_ONE_GOOGLE_BAR_SHOWN,
                     base::Time::FromJsTime(time) - ntp_navigation_start_time_);
 }
 
@@ -818,6 +824,14 @@ void NewTabPageHandler::OnOmniboxFocusChanged(OmniboxFocusState state,
 void NewTabPageHandler::OnOneGoogleBarDataUpdated() {
   base::Optional<OneGoogleBarData> data =
       one_google_bar_service_->one_google_bar_data();
+
+  if (one_google_bar_load_start_time_.has_value()) {
+    NTPUserDataLogger::LogOneGoogleBarFetchDuration(
+        /*success=*/data.has_value(),
+        /*duration=*/base::TimeTicks::Now() - *one_google_bar_load_start_time_);
+    one_google_bar_load_start_time_ = base::nullopt;
+  }
+
   for (auto& callback : one_google_bar_parts_callbacks_) {
     if (data.has_value()) {
       auto parts = new_tab_page::mojom::OneGoogleBarParts::New();
