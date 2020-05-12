@@ -109,8 +109,8 @@ bool LacrosLoader::IsReady() const {
   return !lacros_path_.empty();
 }
 
-void LacrosLoader::SetReadyCallback(base::OnceClosure ready_callback) {
-  ready_callback_ = std::move(ready_callback);
+void LacrosLoader::SetLoadCompleteCallback(LoadCompleteCallback callback) {
+  load_complete_callback_ = std::move(callback);
 }
 
 void LacrosLoader::Start() {
@@ -150,15 +150,16 @@ void LacrosLoader::Start() {
 void LacrosLoader::OnLoadComplete(
     component_updater::CrOSComponentManager::Error error,
     const base::FilePath& path) {
-  if (error != CrOSComponentManager::Error::NONE) {
+  bool success = (error == CrOSComponentManager::Error::NONE);
+  if (success) {
+    lacros_path_ = path;
+    LOG(WARNING) << "Loaded lacros image at " << lacros_path_.MaybeAsASCII();
+  } else {
     LOG(WARNING) << "Error loading lacros component image: "
                  << static_cast<int>(error);
-    return;
   }
-  lacros_path_ = path;
-  LOG(WARNING) << "Loaded lacros image at " << lacros_path_.MaybeAsASCII();
-  if (ready_callback_)
-    std::move(ready_callback_).Run();
+  if (load_complete_callback_)
+    std::move(load_complete_callback_).Run(success);
 }
 
 void LacrosLoader::CleanUp(bool previously_installed) {
