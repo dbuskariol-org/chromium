@@ -2641,6 +2641,11 @@ const char kQueryTilesName[] = "Show query tiles";
 const char kQueryTilesDescription[] = "Shows query tiles in Chrome";
 const char kQueryTilesOmniboxName[] = "Show query tiles in omnibox";
 const char kQueryTilesOmniboxDescription[] = "Shows query tiles in omnibox";
+const char kQueryTilesEnableQueryEditingName[] =
+    "Query Tiles - Enable query edit mode";
+const char kQueryTilesEnableQueryEditingDescription[] =
+    "When a query tile is tapped, the query text will be shown in the omnibox "
+    "and user will have a chance to edit the text before submitting";
 const char kQueryTilesCountryCode[] = "Country code for getting tiles";
 const char kQueryTilesCountryCodeDescription[] =
     "When query tiles are enabled, this value determines tiles for which "

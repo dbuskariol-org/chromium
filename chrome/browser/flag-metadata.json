@@ -3555,6 +3555,11 @@
     "expiry_milestone": 88
   },
   {
+    "name": "query-tiles-enable-query-editing",
+    "owners": [ "shaktisahu"],
+    "expiry_milestone": 88
+  },
+  {
     "name": "query-tiles-instant-fetch",
     "owners": [ "xingliu"],
     "expiry_milestone": 88
