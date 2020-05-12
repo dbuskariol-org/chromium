@@ -165,7 +165,7 @@ public class HomepagePromoController implements HomepageStateListener {
                     .with(PromoCardProperties.TITLE,
                             r.getString(R.string.homepage_promo_title_slim))
                     .with(PromoCardProperties.PRIMARY_BUTTON_TEXT,
-                            r.getString(R.string.homepage_promo_primary_button));
+                            r.getString(R.string.homepage_promo_primary_button_slim));
 
         } else if (layoutStyle == LayoutStyle.LARGE) {
             Drawable illustration = AppCompatResources.getDrawable(

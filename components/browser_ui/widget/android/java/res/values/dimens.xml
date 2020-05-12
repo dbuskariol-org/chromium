@@ -65,13 +65,14 @@
     <!-- Promo cards dimensions -->
     <dimen name="promo_image_size">24dp</dimen>
     <dimen name="promo_between_text_margin">8dp</dimen>
-    <dimen name="promo_text_group_margin_horizontal">8dp</dimen>
-    <dimen name="promo_buttons_margin_horizontal">8dp</dimen>
 
     <dimen name="promo_compact_padding">12dp</dimen>
-    <dimen name="promo_compact_header_margin_vertical">16dp</dimen>
+    <dimen name="promo_compact_padding_bottom">7dp</dimen>
+    <dimen name="promo_compact_header_margin_vertical">11dp</dimen>
 
+    <dimen name="promo_slim_text_margin_horizontal">8dp</dimen>
     <dimen name="promo_slim_button_max_width">84dp</dimen>
+    <dimen name="promo_slim_padding_vertical">10dp</dimen>
 
     <dimen name="promo_large_padding_bottom">8dp</dimen>
     <dimen name="promo_large_padding_horizontal">24dp</dimen>
