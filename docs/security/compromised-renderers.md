@@ -208,11 +208,11 @@ Examples of protected storage technologies:
 - webSQL
 
 Protection techniques:
-- Using CanAccessDataForOrigin to verify IPCs sent by a renderer process
+- Using `CanAccessDataForOrigin` to verify IPCs sent by a renderer process
   (e.g. see `StoragePartitionImpl::OpenLocalStorage`).
 - Binding Mojo interfaces to a single origin obtained from browser-side
   information in `RenderFrameHost::GetLastCommittedOrigin()`
-  (e.g. see RenderFrameHostImpl::CreateIDBFactory).
+  (e.g. see `RenderFrameHostImpl::CreateIDBFactory`).
 
 **Known gaps in protection**:
 - https://crbug.com/917457: FileSystem API (deprecated, Chrome-only).
@@ -229,7 +229,7 @@ Compromised renderers shouldn’t be able to:
   (see also [MessageSender documentation](https://developers.chrome.com/extensions/runtime#type-MessageSender) and [content script security guidance](https://groups.google.com/a/chromium.org/forum/#!topic/chromium-extensions/0ei-UCHNm34)).
 
 Protection techniques:
-- Using CanAccessDataForOrigin to verify IPCs sent by a renderer process
+- Using `CanAccessDataForOrigin` to verify IPCs sent by a renderer process
   (e.g. in `RenderFrameProxyHost::OnRouteMessageEvent` or
   `BroadcastChannelProvider::ConnectToChannel`).
 
@@ -253,7 +253,7 @@ Protection techniques:
 ## Cross-Origin-Resource-Policy response header
 
 A compromised renderer shouldn’t be able to bypass
-Cross-Origin-Resource-Policy (CORS),
+[Cross-Origin-Resource-Policy (CORP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/Cross-Origin_Resource_Policy_%28CORP%29),
 which prevents or allows responses from being requested cross-origin, more
 explicitly than CORB.
 
