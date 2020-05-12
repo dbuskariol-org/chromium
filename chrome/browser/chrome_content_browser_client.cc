@@ -3700,16 +3700,6 @@ void ChromeContentBrowserClient::WillStartServiceManager() {
             ->GetPolicies(policy::PolicyNamespace(policy::POLICY_DOMAIN_CHROME,
                                                   std::string()));
 
-#if defined(OS_WIN)
-    const base::Value* force_network_in_process_value =
-        policies.GetValue(policy::key::kForceNetworkInProcess);
-    bool force_network_in_process = false;
-    if (force_network_in_process_value)
-      force_network_in_process_value->GetAsBoolean(&force_network_in_process);
-    if (force_network_in_process)
-      content::ForceInProcessNetworkService(true);
-#endif
-
     service_manager::EnableAudioSandbox(ShouldEnableAudioSandbox(policies));
   }
 #endif
