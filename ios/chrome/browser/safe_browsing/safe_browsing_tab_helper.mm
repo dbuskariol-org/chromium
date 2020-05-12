@@ -163,7 +163,7 @@ SafeBrowsingTabHelper::PolicyDecider::ShouldAllowRequest(
   // called multiple times consecutively for the same URL.
   SafeBrowsingUnsafeResourceContainer* unsafe_resource_container =
       SafeBrowsingUnsafeResourceContainer::FromWebState(web_state());
-  if (is_main_frame && unsafe_resource_container) {
+  if (is_main_frame) {
     const security_interstitials::UnsafeResource* main_frame_resource =
         unsafe_resource_container->GetMainFrameUnsafeResource();
     if (main_frame_resource && main_frame_resource->url == request_url) {
@@ -182,7 +182,6 @@ SafeBrowsingTabHelper::PolicyDecider::ShouldAllowRequest(
   if (ui::PageTransitionCoreTypeIs(request_info.transition_type,
                                    ui::PAGE_TRANSITION_RELOAD) &&
       reloaded_item == navigation_manager->GetLastCommittedItem() &&
-      unsafe_resource_container &&
       unsafe_resource_container->GetSubFrameUnsafeResource(reloaded_item)) {
     // Store the safe browsing error decision without re-checking the URL.
     // TODO(crbug.com/1064803): This should directly return the safe browsing
