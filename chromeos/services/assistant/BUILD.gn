@@ -105,7 +105,7 @@ component("lib") {
 
     deps += [
       "//chromeos/assistant/internal",
-      "//chromeos/assistant/internal:build_libassistant",
+      "//chromeos/assistant/internal:libassistant",
       "//chromeos/assistant/internal/proto/google3",
       "//chromeos/dbus",
       "//chromeos/resources",
@@ -123,10 +123,6 @@ component("lib") {
       "//ui/base",
       "//url",
     ]
-
-    libs = [ "$root_out_dir/libassistant.so" ]
-
-    data = [ "$root_out_dir/libassistant.so" ]
   }
 }
 
