@@ -53302,6 +53302,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="11" label="User cancelled setup due to low free disk space"/>
   <int value="12" label="User cancelled setup during disk space check"/>
   <int value="13" label="Error, see PluginVm.SetupFailureReason"/>
+  <int value="14" label="User cancelled without starting installation"/>
 </enum>
 
 <enum name="PNaClOptionsOptLevelEnum">
