@@ -14248,6 +14248,14 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="MobileSyncPassphraseSettingsClose">
+  <owner>jlebel@chromium.org</owner>
+  <owner>fernandex@chromium.org</owner>
+  <description>
+    Sync Passphrase Settings UI was dismissed. iOS only.
+  </description>
+</action>
+
 <action name="MobileTabbedModeViewIntentFromApp">
   <owner>tedchoc@chromium.org</owner>
   <description>
