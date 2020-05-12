@@ -8397,6 +8397,32 @@ histogram as enum -->
   <int value="6" label="FAILED_INCLUSION_PROOF_SERVER"/>
 </enum>
 
+<enum name="CertProvisioningEvent">
+  <int value="0" label="kRegisteredToInvalidationTopic"/>
+  <int value="1" label="kInvalidationReceived"/>
+  <int value="2" label="kWorkerRetryWithoutInvalidation"/>
+  <int value="3" label="kWorkerRetrySucceededWithoutInvalidation"/>
+  <int value="4" label="kProfileRetriedManually"/>
+  <int value="5" label="kWorkerCreated"/>
+  <int value="6" label="kWorkerDeserialized"/>
+  <int value="7" label="kWorkerDeserializationFailed"/>
+</enum>
+
+<enum name="CertProvisioningWorkerState">
+  <int value="0" label="kInitState"/>
+  <int value="1" label="kKeypairGenerated"/>
+  <int value="2" label="kStartCsrResponseReceived"/>
+  <int value="3" label="kVaChallengeFinished"/>
+  <int value="4" label="kKeyRegistered"/>
+  <int value="5" label="kKeypairMarked"/>
+  <int value="6" label="kSignCsrFinished"/>
+  <int value="7" label="kFinishCsrResponseReceived"/>
+  <int value="8" label="kSucceeded"/>
+  <int value="9" label="kInconsistentDataError"/>
+  <int value="10" label="kFailed"/>
+  <int value="11" label="kCanceled"/>
+</enum>
+
 <enum name="CertVerifierTrialComparisonResult">
   <int value="0" label="Invalid"/>
   <int value="1" label="Equal"/>

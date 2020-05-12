@@ -242,7 +242,7 @@ TEST_F(CertProvisioningSchedulerTest, Success) {
 
   // Emulate callback from the worker.
   scheduler.OnProfileFinished(cert_profile,
-                              CertProvisioningWorkerState::kSucceed);
+                              CertProvisioningWorkerState::kSucceeded);
 
   // Finished worker should be deleted.
   EXPECT_EQ(scheduler.GetWorkers().size(), 0U);
@@ -392,7 +392,7 @@ TEST_F(CertProvisioningSchedulerTest, InitialAndDailyUpdates) {
   ASSERT_EQ(scheduler.GetWorkers().size(), 1U);
 
   // Emulate callback from the worker.
-  scheduler.OnProfileFinished(profile, CertProvisioningWorkerState::kSucceed);
+  scheduler.OnProfileFinished(profile, CertProvisioningWorkerState::kSucceeded);
 
   ASSERT_EQ(scheduler.GetWorkers().size(), 0U);
   EXPECT_TRUE(scheduler.GetFailedCertProfileIds().empty());
@@ -471,7 +471,7 @@ TEST_F(CertProvisioningSchedulerTest, MultipleWorkers) {
 
   // worker0 successfully finished. Should be just deleted.
   scheduler.OnProfileFinished(cert_profile0,
-                              CertProvisioningWorkerState::kSucceed);
+                              CertProvisioningWorkerState::kSucceeded);
 
   // worker1 is waiting. Should be continued.
   worker1->SetExpectations(/*do_step_times=*/AtLeast(1), /*is_waiting=*/true,

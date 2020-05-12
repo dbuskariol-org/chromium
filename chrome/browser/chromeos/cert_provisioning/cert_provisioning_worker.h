@@ -117,7 +117,8 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   friend class CertProvisioningSerializer;
 
   void GenerateKey();
-  void OnGenerateKeyDone(const attestation::TpmChallengeKeyResult& result);
+  void OnGenerateKeyDone(base::TimeTicks start_time,
+                         const attestation::TpmChallengeKeyResult& result);
 
   void StartCsr();
   void OnStartCsrDone(policy::DeviceManagementStatus status,
@@ -130,6 +131,7 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
 
   void BuildVaChallengeResponse();
   void OnBuildVaChallengeResponseDone(
+      base::TimeTicks start_time,
       const attestation::TpmChallengeKeyResult& result);
 
   void RegisterKey();
@@ -139,7 +141,8 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   void OnMarkKeyDone(const std::string& error_message);
 
   void SignCsr();
-  void OnSignCsrDone(const std::string& signature,
+  void OnSignCsrDone(base::TimeTicks start_time,
+                     const std::string& signature,
                      const std::string& error_message);
 
   void FinishCsr();
@@ -160,7 +163,8 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   void ScheduleNextStep(base::TimeDelta delay);
   void CancelScheduledTasks();
 
-  void OnShouldContinue();
+  enum class ContinueReason { kTimeout, kInvalidation };
+  void OnShouldContinue(ContinueReason reason);
 
   // Registers for |invalidation_topic_| that allows to receive notification
   // when server side is ready to continue provisioning process.
@@ -174,7 +178,6 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   // worker can be destroyed in callback and should not use any member fields
   // after that.
   void UpdateState(CertProvisioningWorkerState state);
-  bool IsFinished() const;
 
   // Serializes the worker or deletes serialized state accroding to the current
   // state. Some states are considered unrecoverable, some can be reached again
@@ -208,6 +211,9 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   // on failure.
   CertProvisioningWorkerState prev_state_ = state_;
   bool is_waiting_ = false;
+  // Used for an UMA metric to track situation when the worker did not receive
+  // an invalidation for a completed server side task.
+  bool is_continued_without_invalidation_for_uma_ = false;
   // Calculates retry timeout for network related failures.
   net::BackoffEntry request_backoff_;
 
