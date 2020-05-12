@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_DEVICE_BASE_H_
-#define UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_DEVICE_BASE_H_
+#ifndef UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_DEVICE_BASE_H_
+#define UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_DEVICE_BASE_H_
 
 #include <string>
 
@@ -11,14 +11,11 @@
 #include "base/files/scoped_file.h"
 #include "base/macros.h"
 #include "ui/ozone/platform/wayland/common/wayland_object.h"
+#include "ui/ozone/platform/wayland/host/wayland_data_offer_base.h"
 
 namespace ui {
 
 class WaylandConnection;
-
-namespace internal {
-
-class WaylandDataOfferBase;
 
 // Implements high level (protocol-agnostic) interface to a Wayland data device.
 class WaylandDataDeviceBase {
@@ -75,7 +72,6 @@ class WaylandDataDeviceBase {
   DISALLOW_COPY_AND_ASSIGN(WaylandDataDeviceBase);
 };
 
-}  // namespace internal
 }  // namespace ui
 
-#endif  // UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_DEVICE_BASE_H_
+#endif  // UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_DEVICE_BASE_H_

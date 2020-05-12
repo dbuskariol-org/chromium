@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_OFFER_BASE_H_
-#define UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_OFFER_BASE_H_
+#ifndef UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_OFFER_BASE_H_
+#define UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_OFFER_BASE_H_
 
 #include <string>
 #include <vector>
@@ -12,7 +12,6 @@
 #include "base/macros.h"
 
 namespace ui {
-namespace internal {
 
 // Implements common part of WaylandDataOffer and GtkPrimarySelectionOffer
 // (which is handling of the clipboard data).
@@ -51,7 +50,6 @@ class WaylandDataOfferBase {
   DISALLOW_COPY_AND_ASSIGN(WaylandDataOfferBase);
 };
 
-}  // namespace internal
 }  // namespace ui
 
-#endif  // UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_OFFER_BASE_H_
+#endif  // UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_OFFER_BASE_H_

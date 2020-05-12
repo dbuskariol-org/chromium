@@ -2,13 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/ozone/platform/wayland/host/internal/wayland_data_offer_base.h"
+#include "ui/ozone/platform/wayland/host/wayland_data_offer_base.h"
 
 #include "base/stl_util.h"
 #include "ui/base/clipboard/clipboard_constants.h"
 
 namespace ui {
-namespace internal {
 
 namespace {
 
@@ -40,5 +39,4 @@ void WaylandDataOfferBase::AddMimeType(const char* mime_type) {
   mime_types_.push_back(mime_type);
 }
 
-}  // namespace internal
 }  // namespace ui

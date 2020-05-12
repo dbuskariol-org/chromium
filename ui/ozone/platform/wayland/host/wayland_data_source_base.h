@@ -2,14 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_SOURCE_BASE_H_
-#define UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_SOURCE_BASE_H_
+#ifndef UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_SOURCE_BASE_H_
+#define UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_SOURCE_BASE_H_
 
 #include "base/macros.h"
 #include "ui/ozone/public/platform_clipboard.h"
 
 namespace ui {
-namespace internal {
 
 // Implements high level (protocol-agnostic) interface to a Wayland data source.
 class WaylandDataSourceBase {
@@ -34,7 +33,6 @@ class WaylandDataSourceBase {
   DISALLOW_COPY_AND_ASSIGN(WaylandDataSourceBase);
 };
 
-}  // namespace internal
 }  // namespace ui
 
-#endif  // UI_OZONE_PLATFORM_WAYLAND_HOST_INTERNAL_WAYLAND_DATA_SOURCE_BASE_H_
+#endif  // UI_OZONE_PLATFORM_WAYLAND_HOST_WAYLAND_DATA_SOURCE_BASE_H_

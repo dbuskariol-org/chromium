@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/ozone/platform/wayland/host/internal/wayland_data_device_base.h"
+#include "ui/ozone/platform/wayland/host/wayland_data_device_base.h"
 
 #include <utility>
 
@@ -11,7 +11,6 @@
 #include "ui/ozone/platform/wayland/host/wayland_connection.h"
 
 namespace ui {
-namespace internal {
 
 WaylandDataDeviceBase::WaylandDataDeviceBase(WaylandConnection* connection)
     : connection_(connection) {}
@@ -41,7 +40,7 @@ bool WaylandDataDeviceBase::RequestSelectionData(const std::string& mime_type) {
   // Ensure there is not pending operation to be performed by the compositor,
   // otherwise read(..) can block awaiting data to be sent to pipe.
   RegisterDeferredReadClosure(
-      base::BindOnce(&GtkPrimarySelectionDevice::ReadClipboardDataFromFD,
+      base::BindOnce(&WaylandDataDeviceBase::ReadClipboardDataFromFD,
                      base::Unretained(this), std::move(fd), mime_type));
   RegisterDeferredReadCallback();
   return true;
@@ -99,5 +98,4 @@ void WaylandDataDeviceBase::DeferredReadCallbackInternal(struct wl_callback* cb,
   std::move(deferred_read_closure_).Run();
 }
 
-}  // namespace internal
 }  // namespace ui
