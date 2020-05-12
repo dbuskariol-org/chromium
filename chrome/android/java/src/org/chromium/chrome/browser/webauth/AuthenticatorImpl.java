@@ -127,7 +127,7 @@ public class AuthenticatorImpl extends HandlerResponseCallback implements Authen
                 (status, response)
                         -> AuthenticatorImplJni.get().invokeMakeCredentialResponse(
                                 mNativeInternalAuthenticatorAndroid, status.intValue(),
-                                response.serialize()));
+                                response == null ? ByteBuffer.allocate(0) : response.serialize()));
     }
 
     @Override
@@ -161,7 +161,7 @@ public class AuthenticatorImpl extends HandlerResponseCallback implements Authen
                 (status, response)
                         -> AuthenticatorImplJni.get().invokeGetAssertionResponse(
                                 mNativeInternalAuthenticatorAndroid, status.intValue(),
-                                response.serialize()));
+                                response == null ? ByteBuffer.allocate(0) : response.serialize()));
     }
 
     @Override
