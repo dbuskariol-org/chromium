@@ -446,6 +446,24 @@ RenderFrameHostOrProxy LookupRenderFrameHostOrProxy(int process_id,
   return RenderFrameHostOrProxy(rfh, proxy);
 }
 
+RenderFrameHostOrProxy LookupRenderFrameHostOrProxy(
+    int process_id,
+    const base::UnguessableToken& frame_token) {
+  auto it = g_token_frame_map.Get().find(frame_token);
+  RenderFrameHostImpl* rfh = nullptr;
+  RenderFrameProxyHost* proxy = nullptr;
+  if (it != g_token_frame_map.Get().end()) {
+    // The check against |process_id| isn't strictly necessary, but represents
+    // an extra level of protection against a renderer trying to force a frame
+    // token.
+    rfh =
+        process_id == it->second->GetProcess()->GetID() ? it->second : nullptr;
+  } else {
+    proxy = RenderFrameProxyHost::FromFrameToken(process_id, frame_token);
+  }
+  return RenderFrameHostOrProxy(rfh, proxy);
+}
+
 // Takes the lower 31 bits of the metric-name-hash of a Mojo interface |name|.
 base::Histogram::Sample HashInterfaceNameToHistogramSample(
     base::StringPiece name) {
@@ -1627,8 +1645,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeOpener, OnDidChangeOpener)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeFramePolicy,
                         OnDidChangeFramePolicy)
-    IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeFrameOwnerProperties,
-                        OnDidChangeFrameOwnerProperties)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidStopLoading, OnDidStopLoading)
     IPC_MESSAGE_HANDLER(FrameHostMsg_SelectionChanged, OnSelectionChanged)
     IPC_MESSAGE_HANDLER(FrameHostMsg_FrameDidCallFocus, OnFrameDidCallFocus)
@@ -3642,6 +3658,8 @@ void RenderFrameHostImpl::EnforceInsecureNavigationsSet(
   frame_tree_node()->SetInsecureNavigationsSet(set);
 }
 
+// TODO(https://crbug.com/1058038): Share the common code between the two
+// overloads below.
 RenderFrameHostImpl* RenderFrameHostImpl::FindAndVerifyChild(
     int32_t child_frame_routing_id,
     bad_message::BadMessageReason reason) {
@@ -3661,6 +3679,36 @@ RenderFrameHostImpl* RenderFrameHostImpl::FindAndVerifyChild(
     // TODO(altimin, lfg): Reconsider what the correct behaviour here should be.
     return nullptr;
   }
+  if (child_frame_or_proxy.GetFrameTreeNode()->parent() != this) {
+    bad_message::ReceivedBadMessage(GetProcess(), reason);
+    return nullptr;
+  }
+  return child_frame_or_proxy.proxy
+             ? child_frame_or_proxy.proxy->frame_tree_node()
+                   ->current_frame_host()
+             : child_frame_or_proxy.frame;
+}
+
+RenderFrameHostImpl* RenderFrameHostImpl::FindAndVerifyChild(
+    const base::UnguessableToken& child_frame_token,
+    bad_message::BadMessageReason reason) {
+  auto child_frame_or_proxy =
+      LookupRenderFrameHostOrProxy(GetProcess()->GetID(), child_frame_token);
+  // A race can result in |child| to be nullptr. Avoid killing the renderer in
+  // that case.
+  if (!child_frame_or_proxy)
+    return nullptr;
+
+  if (child_frame_or_proxy.GetFrameTreeNode()->frame_tree() !=
+      frame_tree_node()->frame_tree()) {
+    // Ignore the cases when the child lives in a different frame tree.
+    // This is possible when we create a proxy for inner WebContents (e.g.
+    // for portals) so the |child_frame_or_proxy| points to the root frame
+    // of the nested WebContents, which is in a different tree.
+    // TODO(altimin, lfg): Reconsider what the correct behaviour here should be.
+    return nullptr;
+  }
+
   if (child_frame_or_proxy.GetFrameTreeNode()->parent() != this) {
     bad_message::ReceivedBadMessage(GetProcess(), reason);
     return nullptr;
@@ -3692,28 +3740,6 @@ void RenderFrameHostImpl::OnDidChangeFramePolicy(
   // navigates and the new policies take effect.
   if (child->GetSiteInstance() != GetSiteInstance()) {
     child->GetAssociatedLocalFrame()->DidUpdateFramePolicy(frame_policy);
-  }
-}
-
-void RenderFrameHostImpl::OnDidChangeFrameOwnerProperties(
-    int32_t frame_routing_id,
-    const blink::mojom::FrameOwnerProperties& properties) {
-  RenderFrameHostImpl* child =
-      FindAndVerifyChild(frame_routing_id, bad_message::RFH_OWNER_PROPERTY);
-  if (!child)
-    return;
-
-  bool has_display_none_property_changed =
-      properties.is_display_none !=
-      child->frame_tree_node()->frame_owner_properties().is_display_none;
-
-  child->frame_tree_node()->set_frame_owner_properties(properties);
-
-  child->frame_tree_node()->render_manager()->OnDidUpdateFrameOwnerProperties(
-      properties);
-  if (has_display_none_property_changed) {
-    delegate_->DidChangeDisplayState(
-        child, properties.is_display_none /* is_display_none */);
   }
 }
 
@@ -4372,6 +4398,28 @@ void RenderFrameHostImpl::DidLoadResourceFromMemoryCache(
     network::mojom::RequestDestination request_destination) {
   delegate_->DidLoadResourceFromMemoryCache(this, url, http_method, mime_type,
                                             request_destination);
+}
+
+void RenderFrameHostImpl::DidChangeFrameOwnerProperties(
+    const base::UnguessableToken& child_frame_token,
+    blink::mojom::FrameOwnerPropertiesPtr properties) {
+  auto* child =
+      FindAndVerifyChild(child_frame_token, bad_message::RFH_OWNER_PROPERTY);
+  if (!child)
+    return;
+
+  bool has_display_none_property_changed =
+      properties->is_display_none !=
+      child->frame_tree_node()->frame_owner_properties().is_display_none;
+
+  child->frame_tree_node()->set_frame_owner_properties(*properties);
+
+  child->frame_tree_node()->render_manager()->OnDidUpdateFrameOwnerProperties(
+      *properties);
+  if (has_display_none_property_changed) {
+    delegate_->DidChangeDisplayState(
+        child, properties->is_display_none /* is_display_none */);
+  }
 }
 
 void RenderFrameHostImpl::BindInterfaceProviderReceiver(

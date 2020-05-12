@@ -1549,6 +1549,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
       const std::string& http_method,
       const std::string& mime_type,
       network::mojom::RequestDestination request_destination) override;
+  void DidChangeFrameOwnerProperties(
+      const base::UnguessableToken& child_frame_token,
+      blink::mojom::FrameOwnerPropertiesPtr frame_owner_properties) override;
 
   // blink::LocalMainFrameHost overrides:
   void ScaleFactorChanged(float scale) override;
@@ -1596,6 +1599,14 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // RenderFrameHostImpl that is not a child of this node.
   RenderFrameHostImpl* FindAndVerifyChild(int32_t child_frame_routing_id,
                                           bad_message::BadMessageReason reason);
+
+  // Returns the child RenderFrameHostImpl if |child_frame_token| is an
+  // immediate child of this FrameTreeNode. |child_frame_token| is considered
+  // untrusted, so the renderer process is killed if it refers to a
+  // RenderFrameHostImpl that is not a child of this node.
+  RenderFrameHostImpl* FindAndVerifyChild(
+      const base::UnguessableToken& child_frame_token,
+      bad_message::BadMessageReason reason);
 
   mojo::PendingRemote<network::mojom::CookieAccessObserver>
   CreateCookieAccessObserver();
@@ -1769,9 +1780,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   void OnDidChangeFramePolicy(int32_t frame_routing_id,
                               const blink::FramePolicy& frame_policy);
-  void OnDidChangeFrameOwnerProperties(
-      int32_t frame_routing_id,
-      const blink::mojom::FrameOwnerProperties& properties);
   void OnForwardResourceTimingToParent(
       const ResourceTimingInfo& resource_timing);
   void OnDidStopLoading();
