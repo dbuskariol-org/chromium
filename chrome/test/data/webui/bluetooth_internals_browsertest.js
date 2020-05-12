@@ -758,7 +758,7 @@ TEST_F('BluetoothInternalsTest', 'Startup_BluetoothInternals', function() {
           value = value[part];
         }
 
-        if (propName == 'isGattConnected') {
+        if (propName === 'isGattConnected') {
           value = value ? 'Connected' : 'Not Connected';
         }
 
