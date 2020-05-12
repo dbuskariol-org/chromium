@@ -3,14 +3,9 @@
 // found in the LICENSE file.
 
 import './elements/viewer-error-screen.js';
-import './elements/viewer-password-screen.js';
-import './elements/viewer-pdf-toolbar.js';
+import './elements/viewer-page-indicator.js';
 import './elements/viewer-zoom-toolbar.js';
 import './elements/shared-vars.js';
-// <if expr="chromeos">
-import './elements/viewer-ink-host.js';
-import './elements/viewer-form-warning.js';
-// </if>
 
 import {main} from './main_util.js';
 
