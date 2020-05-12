@@ -1663,6 +1663,7 @@ jumbo_source_set("browser") {
     "service_manager/service_manager_context.cc",
     "service_manager/service_manager_context.h",
     "service_process_host_impl.cc",
+    "service_sandbox_type.h",
     "service_worker/embedded_worker_instance.cc",
     "service_worker/embedded_worker_instance.h",
     "service_worker/embedded_worker_status.h",
