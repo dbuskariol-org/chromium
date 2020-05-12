@@ -45827,6 +45827,12 @@ Called by update_use_counter_css.py.-->
   <int value="7"
       label="A navigation suggestion is found using target embedding against
              a top domain"/>
+  <int value="8"
+      label="A navigation suggestion is found using a skeleton match against
+             a top 500 domain"/>
+  <int value="9"
+      label="A navigation suggestion is found using a skeleton match against
+             a top 5k (but not top 500) domain"/>
 </enum>
 
 <enum name="NavigationURLScheme">
