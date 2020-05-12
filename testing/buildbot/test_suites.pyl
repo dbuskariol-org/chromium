@@ -3228,15 +3228,6 @@
       'views_unittests': {},
     },
 
-    'non_android_chromium_gtests_skia_gold': {
-      'views_examples_unittests': {
-        'mixins': [
-          'chrome-gold-service-account',
-          'skia_gold_test',
-        ],
-      },
-    },
-
     'non_skia_renderer_gtests': {
       'non_skia_renderer_content_browsertests': {
         'args': [
@@ -4356,7 +4347,6 @@
       'chromium_gtests_for_win_and_linux_only',
       'non_android_and_cast_and_chromeos_chromium_gtests',
       'non_android_chromium_gtests',
-      'non_android_chromium_gtests_skia_gold',
       'non_skia_renderer_gtests',
       'pixel_browser_tests_gtests',
       'storage_service_gtests',
@@ -4381,7 +4371,6 @@
       'chromium_gtests_for_win_and_linux_only',
       'non_android_and_cast_and_chromeos_chromium_gtests',
       'non_android_chromium_gtests',
-      'non_android_chromium_gtests_skia_gold',
       'vr_platform_specific_chromium_gtests',
       'weblayer_gtests',
       'weblayer_unittests',
