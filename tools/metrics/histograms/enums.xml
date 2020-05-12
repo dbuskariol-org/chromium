@@ -50334,6 +50334,25 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="Chrome on Mac"/>
 </enum>
 
+<enum name="OSXOtherChromeInstancesResult">
+  <int value="0" label="Failure: didn't find data on last usage"/>
+  <int value="1" label="Failure: couldn't read plist"/>
+  <int value="2" label="No other copies of Chrome"/>
+  <int value="3" label="One other copy of Chrome, used within the last week"/>
+  <int value="4" label="One other copy of Chrome, used within the last month"/>
+  <int value="5"
+      label="One other copy of Chrome, not used within the last month"/>
+  <int value="6"
+      label="More than one other copy of Chrome, at least one of which was
+             used within the last week"/>
+  <int value="7"
+      label="More than one other copy of Chrome, at least one of which was
+             used within the last month"/>
+  <int value="8"
+      label="More than one other copy of Chrome, none of which were used
+             within the last month"/>
+</enum>
+
 <enum name="OSXOtherInstancesCheckResult">
   <obsolete>
     Removed 2020 January.
