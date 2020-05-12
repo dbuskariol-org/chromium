@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef STORAGE_BROWSER_TEST_MOCK_STORAGE_CLIENT_H_
-#define STORAGE_BROWSER_TEST_MOCK_STORAGE_CLIENT_H_
+#ifndef STORAGE_BROWSER_TEST_MOCK_QUOTA_CLIENT_H_
+#define STORAGE_BROWSER_TEST_MOCK_QUOTA_CLIENT_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -33,12 +33,12 @@ struct MockOriginData {
 };
 
 // Mock QuotaClient implementation for testing.
-class MockStorageClient : public QuotaClient {
+class MockQuotaClient : public QuotaClient {
  public:
-  MockStorageClient(scoped_refptr<QuotaManagerProxy> quota_manager_proxy,
-                    const MockOriginData* mock_data,
-                    storage::QuotaClientType id,
-                    size_t mock_data_size);
+  MockQuotaClient(scoped_refptr<QuotaManagerProxy> quota_manager_proxy,
+                  const MockOriginData* mock_data,
+                  storage::QuotaClientType id,
+                  size_t mock_data_size);
 
   // To add or modify mock data in this client.
   void AddOriginAndNotify(const url::Origin& origin,
@@ -73,7 +73,7 @@ class MockStorageClient : public QuotaClient {
   bool DoesSupport(blink::mojom::StorageType type) const override;
 
  private:
-  ~MockStorageClient() override;
+  ~MockQuotaClient() override;
 
   void RunGetOriginUsage(const url::Origin& origin,
                          blink::mojom::StorageType type,
@@ -98,11 +98,11 @@ class MockStorageClient : public QuotaClient {
 
   int mock_time_counter_;
 
-  base::WeakPtrFactory<MockStorageClient> weak_factory_{this};
+  base::WeakPtrFactory<MockQuotaClient> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(MockStorageClient);
+  DISALLOW_COPY_AND_ASSIGN(MockQuotaClient);
 };
 
 }  // namespace storage
 
-#endif  // STORAGE_BROWSER_TEST_MOCK_STORAGE_CLIENT_H_
+#endif  // STORAGE_BROWSER_TEST_MOCK_QUOTA_CLIENT_H_
