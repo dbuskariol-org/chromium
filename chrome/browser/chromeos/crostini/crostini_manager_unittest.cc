@@ -853,9 +853,7 @@ TEST_F(CrostiniManagerRestartTest, RestartSuccess) {
   ExpectRestarterUmaCount(1);
 }
 
-// Crashes on chromeos.  http://crbug.com/1081232
-TEST_F(CrostiniManagerRestartTest,
-       DISABLED_RestartDelayAndSuccessWhenVmStopping) {
+TEST_F(CrostiniManagerRestartTest, RestartDelayAndSuccessWhenVmStopping) {
   crostini_manager()->AddStoppingVmForTesting(kVmName);
   on_stage_started_ =
       base::BindLambdaForTesting([this](mojom::InstallerState state) {
