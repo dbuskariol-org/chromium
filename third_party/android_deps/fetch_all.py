@@ -324,9 +324,10 @@ def GenerateCipdUploadCommand(cipd_pkg_info):
             pkg_path, pkg_name, pkg_tag)
 
 
-def _JetifyAll(aar_files):
+def _JetifyAll(aar_files, libs_dir):
     env = os.environ.copy()
     env['JAVA_HOME'] = _JAVA_HOME
+    env['ANDROID_DEPS'] = libs_dir
 
     # Don't jetify support lib or androidx.
     EXCLUDE = ('android_arch_', 'androidx_', 'com_android_support_')
@@ -348,7 +349,9 @@ def _JetifyAll(aar_files):
     for cmd, proc in jobs:
         output = proc.communicate()[0]
         if proc.returncode:
-            raise Exception('Jetify failed for command: ' + ' '.join(cmd))
+            raise Exception(
+                'Jetify failed for command: {}\nOutput:\n{}'.format(
+                    ' '.join(cmd), output))
         if "You don't need to run Jetifier" not in output:
             logging.info('Needed jetify: %s', cmd[-1])
             num_required += 1
@@ -512,7 +515,7 @@ def main():
 
         logging.info('# Jetify all libraries.')
         aar_files = FindInDirectory(libs_dir, '*.aar')
-        _JetifyAll(aar_files)
+        _JetifyAll(aar_files, libs_dir)
 
         logging.info(
             '# Generate Android .aar info and third-party license files.')
