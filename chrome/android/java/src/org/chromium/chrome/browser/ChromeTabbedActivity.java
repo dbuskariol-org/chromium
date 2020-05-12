@@ -135,6 +135,7 @@ import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorTabObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.browser.tabmodel.TabWindowManager;
+import org.chromium.chrome.browser.tasks.ConditionalTabStripUtils;
 import org.chromium.chrome.browser.tasks.EngagementTimeUtil;
 import org.chromium.chrome.browser.tasks.JourneyManager;
 import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
@@ -975,6 +976,11 @@ public class ChromeTabbedActivity
                 && !(TabUiFeatureUtilities.supportInstantStart(isTablet())
                         && shouldShowTabSwitcherOnStart())) {
             setInitialOverviewState();
+        }
+
+        if (TabUiFeatureUtilities.isConditionalTabStripEnabled()) {
+            ConditionalTabStripUtils.updateFeatureExpiration(
+                    mInactivityTracker.getLastBackgroundedTimeMs());
         }
 
         resetSavedInstanceState();
