@@ -75,9 +75,10 @@ class CertProvisioningWorker {
 
   // Continue provisioning a certificate.
   virtual void DoStep() = 0;
-  // Stops the worker, triggers clean ups (deletes serialized state, keys, and
-  // so on), Canceled workers will never call the callback.
-  virtual void Cancel() = 0;
+  // Sets worker's state to one of final ones. That triggers corresponding
+  // clean ups (deletes serialized state, keys, and so on) and returns |state|
+  // via callback.
+  virtual void Stop(CertProvisioningWorkerState state) = 0;
   // Returns true, if the worker is waiting for some future event. |DoStep| can
   // be called to try continue right now.
   virtual bool IsWaiting() const = 0;
@@ -106,7 +107,7 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
 
   // CertProvisioningWorker
   void DoStep() override;
-  void Cancel() override;
+  void Stop(CertProvisioningWorkerState state) override;
   bool IsWaiting() const override;
   const CertProfile& GetCertProfile() const override;
   const std::string& GetPublicKey() const override;
@@ -187,7 +188,7 @@ class CertProvisioningWorkerImpl : public CertProvisioningWorker {
   // to be called from CertProvisioningDeserializer.
   void InitAfterDeserialization();
 
-  void CleanUpAndMaybeRunCallback();
+  void CleanUpAndRunCallback();
   void OnDeleteVaKeyDone(base::Optional<bool> delete_result);
   void OnRemoveKeyDone(const std::string& error_message);
   void OnCleanUpDone();

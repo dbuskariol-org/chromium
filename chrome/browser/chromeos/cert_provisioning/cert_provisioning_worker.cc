@@ -235,9 +235,12 @@ void CertProvisioningWorkerImpl::DoStep() {
   NOTREACHED() << " " << static_cast<uint>(state_);
 }
 
-void CertProvisioningWorkerImpl::Cancel() {
+void CertProvisioningWorkerImpl::Stop(CertProvisioningWorkerState state) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-  UpdateState(CertProvisioningWorkerState::kCanceled);
+  DCHECK(IsFinalState(state));
+
+  CancelScheduledTasks();
+  UpdateState(state);
 }
 
 void CertProvisioningWorkerImpl::UpdateState(
@@ -248,18 +251,17 @@ void CertProvisioningWorkerImpl::UpdateState(
   prev_state_ = state_;
   state_ = new_state;
 
-  HandleSerialization();
-
-  if (IsFinalState(state_)) {
-    CleanUpAndMaybeRunCallback();
-    return;
-  }
-
   if (is_continued_without_invalidation_for_uma_) {
     RecordEvent(
         cert_scope_,
         CertProvisioningEvent::kWorkerRetrySucceededWithoutInvalidation);
     is_continued_without_invalidation_for_uma_ = false;
+  }
+
+  HandleSerialization();
+
+  if (IsFinalState(state_)) {
+    CleanUpAndRunCallback();
   }
 }
 
@@ -660,7 +662,7 @@ void CertProvisioningWorkerImpl::CancelScheduledTasks() {
   weak_factory_.InvalidateWeakPtrs();
 }
 
-void CertProvisioningWorkerImpl::CleanUpAndMaybeRunCallback() {
+void CertProvisioningWorkerImpl::CleanUpAndRunCallback() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   UnregisterFromInvalidationTopic();
@@ -723,12 +725,7 @@ void CertProvisioningWorkerImpl::OnRemoveKeyDone(
 
 void CertProvisioningWorkerImpl::OnCleanUpDone() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-
   RecordResult(cert_scope_, state_, prev_state_);
-
-  if (state_ == CertProvisioningWorkerState::kCanceled) {
-    return;
-  }
   std::move(callback_).Run(cert_profile_, state_);
 }
 

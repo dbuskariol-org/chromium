@@ -1320,7 +1320,11 @@ TEST_F(CertProvisioningWorkerTest, CancelDeviceWorker) {
     pref_val = ParseJson("{}");
     EXPECT_CALL(pref_observer, OnPrefValueUpdated(IsJson(pref_val))).Times(1);
 
-    worker->Cancel();
+    worker->Stop(CertProvisioningWorkerState::kCanceled);
+
+    EXPECT_CALL(callback_observer_,
+                Callback(cert_profile, CertProvisioningWorkerState::kCanceled))
+        .Times(1);
     FastForwardBy(TimeDelta::FromSeconds(1));
   }
 

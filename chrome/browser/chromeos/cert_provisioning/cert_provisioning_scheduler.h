@@ -91,7 +91,7 @@ class CertProvisioningScheduler : public NetworkStateHandlerObserver {
   void InitialUpdateCerts();
   void DeleteCertsWithoutPolicy();
   void OnDeleteCertsWithoutPolicyDone(const std::string& error_message);
-  void DeleteWorkersWithoutPolicy(const std::vector<CertProfile>& profiles);
+  void CancelWorkersWithoutPolicy(const std::vector<CertProfile>& profiles);
   void CleanVaKeysIfIdle();
   void OnCleanVaKeysIfIdleDone(base::Optional<bool> delete_result);
   void RegisterForPrefsChanges();
@@ -148,7 +148,6 @@ class CertProvisioningScheduler : public NetworkStateHandlerObserver {
   std::unique_ptr<CertProvisioningCertDeleter> cert_deleter_;
   std::unique_ptr<CertProvisioningInvalidatorFactory> invalidator_factory_;
 
-  SEQUENCE_CHECKER(sequence_checker_);
   base::WeakPtrFactory<CertProvisioningScheduler> weak_factory_{this};
 };
 

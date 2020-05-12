@@ -367,7 +367,7 @@ void CertProvisioningScheduler::OnGetCertsWithIdsDone(
 
   std::vector<CertProfile> profiles = GetCertProfiles();
 
-  DeleteWorkersWithoutPolicy(profiles);
+  CancelWorkersWithoutPolicy(profiles);
 
   for (const auto& profile : profiles) {
     if (base::Contains(existing_certs_with_ids, profile.profile_id) ||
@@ -384,11 +384,17 @@ void CertProvisioningScheduler::ProcessProfile(
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
   CertProvisioningWorker* worker = FindWorker(cert_profile.profile_id);
-  if (!worker || (worker->GetCertProfile().policy_version !=
-                  cert_profile.policy_version)) {
-    EraseKey(failed_cert_profiles_, cert_profile.profile_id);
-    // Create new worker or replace an existing one.
+  if (!worker) {
     CreateCertProvisioningWorker(cert_profile);
+    return;
+  }
+
+  if ((worker->GetCertProfile().policy_version !=
+       cert_profile.policy_version)) {
+    // The worker has outdated policy version. Make it stop, clean up current
+    // state and report back through its callback. That will trigger retry for
+    // its certificate profile.
+    worker->Stop(CertProvisioningWorkerState::kInconsistentDataError);
     return;
   }
 
@@ -437,6 +443,8 @@ void CertProvisioningScheduler::OnProfileFinished(
       LOG(WARNING) << "Inconsistent data error for certificate profile: "
                    << profile.profile_id;
       ScheduleRetry(profile);
+      break;
+    case CertProvisioningWorkerState::kCanceled:
       break;
     default:
       LOG(ERROR) << "Failed to process certificate profile: "
@@ -554,7 +562,7 @@ void CertProvisioningScheduler::UpdateFailedCertProfiles(
   failed_cert_profiles_[worker.GetCertProfile().profile_id] = std::move(info);
 }
 
-void CertProvisioningScheduler::DeleteWorkersWithoutPolicy(
+void CertProvisioningScheduler::CancelWorkersWithoutPolicy(
     const std::vector<CertProfile>& profiles) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 
@@ -567,14 +575,13 @@ void CertProvisioningScheduler::DeleteWorkersWithoutPolicy(
     cert_profile_ids.insert(profile.profile_id);
   }
 
-  for (auto iter = workers_.begin(); iter != workers_.end();) {
-    const auto& worker = iter->second;
-    if (cert_profile_ids.find(worker->GetCertProfile().profile_id) ==
+  for (auto& kv : workers_) {
+    auto& worker_ptr = kv.second;
+    if (cert_profile_ids.find(worker_ptr->GetCertProfile().profile_id) ==
         cert_profile_ids.end()) {
-      worker->Cancel();
-      iter = workers_.erase(iter);
-    } else {
-      ++iter;
+      // This will trigger clean up (if any) in the worker and make it call its
+      // callback.
+      worker_ptr->Stop(CertProvisioningWorkerState::kCanceled);
     }
   }
 }
