@@ -6471,6 +6471,27 @@
                     "enable_features": [
                         "WebAssemblyBaseline",
                         "WebAssemblyTiering"
+                    ],
+                    "disable_features": [
+                        "WebAssemblyLazyCompilation"
+                    ]
+                },
+                {
+                    "name": "LazyLiftoff",
+                    "enable_features": [
+                        "WebAssemblyBaseline",
+                        "WebAssemblyLazyCompilation"
+                    ],
+                    "disable_features": [
+                        "WebAssemblyTiering"
+                    ]
+                },
+                {
+                    "name": "LazyTiering",
+                    "enable_features": [
+                        "WebAssemblyBaseline",
+                        "WebAssemblyLazyCompilation",
+                        "WebAssemblyTiering"
                     ]
                 },
                 {
@@ -6479,6 +6500,7 @@
                         "WebAssemblyBaseline"
                     ],
                     "disable_features": [
+                        "WebAssemblyLazyCompilation",
                         "WebAssemblyTiering"
                     ]
                 },
@@ -6488,7 +6510,8 @@
                         "WebAssemblyTiering"
                     ],
                     "disable_features": [
-                        "WebAssemblyBaseline"
+                        "WebAssemblyBaseline",
+                        "WebAssemblyLazyCompilation"
                     ]
                 }
             ]
