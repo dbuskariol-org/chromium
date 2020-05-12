@@ -2263,6 +2263,10 @@ const char kAndroidAutofillAccessibilityName[] = "Autofill Accessibility";
 const char kAndroidAutofillAccessibilityDescription[] =
     "Enable accessibility for autofill popup.";
 
+const char kAndroidMultipleDisplayName[] = "Multiple Display";
+const char kAndroidMultipleDisplayDescription[] =
+    "When enabled, tabs can be moved to the secondary display.";
+
 const char kAppNotificationStatusMessagingName[] =
     "App notification status messaging";
 const char kAppNotificationStatusMessagingDescription[] =

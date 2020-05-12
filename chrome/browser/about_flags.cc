@@ -5449,6 +5449,11 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kNearbySharing)},
 #endif  // !defined(OS_ANDROID)
 
+#if defined(OS_ANDROID)
+    {"android-multiple-display", flag_descriptions::kAndroidMultipleDisplayName,
+     flag_descriptions::kAndroidMultipleDisplayDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kAndroidMultipleDisplay)},
+#endif  // defined(OS_ANDROID)
     {"autofill-enable-surfacing-server-card-nickname",
      flag_descriptions::kAutofillEnableSurfacingServerCardNicknameName,
      flag_descriptions::kAutofillEnableSurfacingServerCardNicknameDescription,

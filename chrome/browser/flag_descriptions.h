@@ -1321,6 +1321,9 @@ extern const char kEnableVulkanDescription[];
 extern const char kAndroidAutofillAccessibilityName[];
 extern const char kAndroidAutofillAccessibilityDescription[];
 
+extern const char kAndroidMultipleDisplayName[];
+extern const char kAndroidMultipleDisplayDescription[];
+
 extern const char kAndroidPartnerCustomizationPhenotypeName[];
 extern const char kAndroidPartnerCustomizationPhenotypeDescription[];
 

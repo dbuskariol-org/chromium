@@ -297,6 +297,7 @@ public final class ChromePreferenceKeys {
      * Default value is true.
      */
     public static final String FLAGS_CACHED_ADAPTIVE_TOOLBAR_ENABLED = "adaptive_toolbar_enabled";
+
     /**
      * Whether or not the bottom toolbar is enabled.
      * Default value is false.

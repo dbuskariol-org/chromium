@@ -40078,6 +40078,7 @@ from previous Chrome versions.
   <int value="57639188" label="SoundContentSetting:disabled"/>
   <int value="57791920" label="MemoryCoordinator:enabled"/>
   <int value="58099178" label="SecondaryUiMd:enabled"/>
+  <int value="58619646" label="AndroidMultipleDisplay:disabled"/>
   <int value="58695502" label="NTPButton:disabled"/>
   <int value="58727839" label="WebAssemblyLazyCompilation:enabled"/>
   <int value="59784035" label="ImeThread:disabled"/>
@@ -40565,6 +40566,7 @@ from previous Chrome versions.
   <int value="638845342"
       label="OmniboxUIExperimentShowSuffixOnAllSearchSuggestions:enabled"/>
   <int value="638865852" label="UsePreferredIntervalForVideo:disabled"/>
+  <int value="640174751" label="AndroidMultipleDisplay:enabled"/>
   <int value="642037198" label="SoleIntegration:disabled"/>
   <int value="643725031" label="disable-touch-feedback"/>
   <int value="644084236" label="CloseButtonsInactiveTabs:enabled"/>
