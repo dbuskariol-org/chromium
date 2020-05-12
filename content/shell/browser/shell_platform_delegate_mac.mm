@@ -259,6 +259,23 @@ void ShellPlatformDelegate::SetContents(Shell* shell) {
   [web_view setNeedsDisplay:YES];
 }
 
+void ShellPlatformDelegate::ResizeWebContent(Shell* shell,
+                                             const gfx::Size& content_size) {
+  ShellData* shell_data = shell->platform_data();
+
+  if (!shell->headless()) {
+    int toolbar_height = Shell::ShouldHideToolbar() ? 0 : kURLBarHeight;
+    NSRect frame = NSMakeRect(0, 0, content_size.width(),
+                              content_size.height() + toolbar_height);
+    [shell_data->window.GetNativeNSWindow().contentView setFrame:frame];
+    return;
+  }
+
+  NSView* web_view = shell->web_contents()->GetNativeView().GetNativeNSView();
+  NSRect frame = NSMakeRect(0, 0, content_size.width(), content_size.height());
+  [web_view setFrame:frame];
+}
+
 void ShellPlatformDelegate::EnableUIControl(Shell* shell,
                                             UIControl control,
                                             bool is_enabled) {
@@ -317,23 +334,6 @@ bool ShellPlatformDelegate::DestroyShell(Shell* shell) {
 
   [shell_data->window.GetNativeNSWindow() performClose:nil];
   return true;  // The performClose() will do the destruction of Shell.
-}
-
-void ShellPlatformDelegate::ResizeWebContent(Shell* shell,
-                                             const gfx::Size& content_size) {
-  ShellData* shell_data = shell->platform_data();
-
-  if (!shell->headless()) {
-    int toolbar_height = Shell::ShouldHideToolbar() ? 0 : kURLBarHeight;
-    NSRect frame = NSMakeRect(0, 0, content_size.width(),
-                              content_size.height() + toolbar_height);
-    [shell_data->window.GetNativeNSWindow().contentView setFrame:frame];
-    return;
-  }
-
-  NSView* web_view = shell->web_contents()->GetNativeView().GetNativeNSView();
-  NSRect frame = NSMakeRect(0, 0, content_size.width(), content_size.height());
-  [web_view setFrame:frame];
 }
 
 void ShellPlatformDelegate::ActivateContents(Shell* shell,

@@ -46,6 +46,9 @@ class ShellPlatformDelegate {
   // Links the WebContents into the newly created window.
   virtual void SetContents(Shell* shell);
 
+  // Resize the web contents in the shell window to the given size.
+  void ResizeWebContent(Shell* shell, const gfx::Size& content_size);
+
   // Enable/disable a button.
   virtual void EnableUIControl(Shell* shell,
                                UIControl control,
@@ -70,9 +73,6 @@ class ShellPlatformDelegate {
 #endif
 
 #if defined(OS_MACOSX)
-  // Resize the web contents in the shell window to the given size.
-  void ResizeWebContent(Shell* shell, const gfx::Size& content_size);
-
   // Activate (make key) the native window, and focus the web contents.
   virtual void ActivateContents(Shell* shell, WebContents* contents);
 

@@ -96,18 +96,13 @@ namespace content {
 
 void ResizeWebContentsView(Shell* shell, const gfx::Size& size,
                            bool set_start_page) {
-#if defined(OS_MACOSX)
-  // Mac requires platform-specific code to resize the WebContents directly
-  // (independent of the Shell window). It needs to happen after the
-  // RenderWidgetHostView exists, so we do a navigation first if
-  // |set_start_page| is true.
+  // Resizing the web content directly, independent of the Shell window,
+  // requires the RenderWidgetHostView to exist. So we do a navigation
+  // first if |set_start_page| is true.
   if (set_start_page)
     EXPECT_TRUE(NavigateToURL(shell, GURL(url::kAboutBlankURL)));
+
   shell->ResizeWebContentForTests(size);
-#else
-  static_cast<WebContentsImpl*>(shell->web_contents())->GetView()->
-      SizeContents(size);
-#endif  // defined(OS_MACOSX)
 }
 
 // Class to test that OverrideWebkitPrefs has been called for all relevant

@@ -2745,10 +2745,8 @@ void RenderFrameHostManager::CommitPending(
     old_view->Hide();
   }
 
-  // Make sure the size is up to date.  (Fix for bug 1079768.)
-  delegate_->UpdateRenderViewSizeForRenderManager(is_main_frame);
-
   RenderWidgetHostView* new_view = render_frame_host_->GetView();
+
   if (will_focus_location_bar) {
     delegate_->SetFocusToLocationBar();
   } else if (focus_render_view && new_view) {

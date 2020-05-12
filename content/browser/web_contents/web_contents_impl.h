@@ -958,14 +958,13 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
       bool* proceed_to_fire_unload) override;
   void RenderProcessGoneFromRenderManager(
       RenderViewHost* render_view_host) override;
-  void UpdateRenderViewSizeForRenderManager(bool is_main_frame) override;
   void CancelModalDialogsForRenderManager() override;
-  void NotifySwappedFromRenderManager(RenderFrameHost* old_host,
-                                      RenderFrameHost* new_host,
+  void NotifySwappedFromRenderManager(RenderFrameHost* old_frame,
+                                      RenderFrameHost* new_frame,
                                       bool is_main_frame) override;
   void NotifyMainFrameSwappedFromRenderManager(
-      RenderFrameHost* old_host,
-      RenderFrameHost* new_host) override;
+      RenderFrameHost* old_frame,
+      RenderFrameHost* new_frame) override;
   NavigationControllerImpl& GetControllerForRenderManager() override;
   bool FocusLocationBarByDefault() override;
   void SetFocusToLocationBar() override;
@@ -1559,9 +1558,9 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
                                         int history_length);
 
   // Helper functions for sending notifications.
-  void NotifyViewSwapped(RenderViewHost* old_host, RenderViewHost* new_host);
-  void NotifyFrameSwapped(RenderFrameHost* old_host,
-                          RenderFrameHost* new_host,
+  void NotifyViewSwapped(RenderViewHost* old_view, RenderViewHost* new_view);
+  void NotifyFrameSwapped(RenderFrameHost* old_frame,
+                          RenderFrameHost* new_frame,
                           bool is_main_frame);
   void NotifyDisconnected();
 
@@ -1572,8 +1571,8 @@ class CONTENT_EXPORT WebContentsImpl : public WebContents,
   // Removes browser plugin embedder if there is one.
   void RemoveBrowserPluginEmbedder();
 
-  // Helper function to invoke WebContentsDelegate::GetSizeForNewRenderView().
-  gfx::Size GetSizeForNewRenderView(bool is_main_frame);
+  // Returns the size that the main frame should be sized to.
+  gfx::Size GetSizeForMainFrame();
 
   void OnFrameRemoved(RenderFrameHost* render_frame_host);
 

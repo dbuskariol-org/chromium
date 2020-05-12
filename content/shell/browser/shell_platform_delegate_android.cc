@@ -11,6 +11,7 @@
 #include "base/command_line.h"
 #include "base/notreached.h"
 #include "base/strings/string_piece.h"
+#include "content/public/browser/render_widget_host_view.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/content_switches.h"
 #include "content/shell/android/content_shell_jni_headers/Shell_jni.h"
@@ -70,6 +71,11 @@ void ShellPlatformDelegate::SetContents(Shell* shell) {
   Java_Shell_initFromNativeTabContents(
       env, shell_data->java_object,
       shell->web_contents()->GetJavaWebContents());
+}
+
+void ShellPlatformDelegate::ResizeWebContent(Shell* shell,
+                                             const gfx::Size& content_size) {
+  shell->web_contents()->GetRenderWidgetHostView()->SetSize(content_size);
 }
 
 void ShellPlatformDelegate::EnableUIControl(Shell* shell,

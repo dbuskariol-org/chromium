@@ -391,11 +391,9 @@ void Shell::CloseDevTools() {
   devtools_frontend_ = nullptr;
 }
 
-#if defined(OS_MACOSX)
 void Shell::ResizeWebContentForTests(const gfx::Size& content_size) {
   g_platform->ResizeWebContent(this, content_size);
 }
-#endif
 
 gfx::NativeView Shell::GetContentView() {
   if (!web_contents_)

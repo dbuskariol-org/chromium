@@ -60,10 +60,8 @@ class Shell : public WebContentsDelegate,
   void Close();
   void ShowDevTools();
   void CloseDevTools();
-#if defined(OS_MACOSX)
   // Resizes the web content view to the given dimensions.
   void ResizeWebContentForTests(const gfx::Size& content_size);
-#endif
 
   // Do one-time initialization at application startup.
   static void Initialize(std::unique_ptr<ShellPlatformDelegate> platform);

@@ -431,6 +431,11 @@ void ShellPlatformDelegate::SetContents(Shell* shell) {
   }
 }
 
+void ShellPlatformDelegate::ResizeWebContent(Shell* shell,
+                                             const gfx::Size& content_size) {
+  shell->web_contents()->GetRenderWidgetHostView()->SetSize(content_size);
+}
+
 void ShellPlatformDelegate::EnableUIControl(Shell* shell,
                                             UIControl control,
                                             bool is_enabled) {

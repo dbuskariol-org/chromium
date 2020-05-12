@@ -4,6 +4,7 @@
 
 #include "content/shell/browser/shell_platform_delegate.h"
 
+#include "content/public/browser/render_widget_host_view.h"
 #include "content/public/browser/web_contents.h"
 #include "content/shell/browser/shell.h"
 #include "content/shell/browser/shell_platform_data_aura.h"
@@ -65,6 +66,11 @@ void ShellPlatformDelegate::SetContents(Shell* shell) {
     parent->AddChild(content);
 
   content->Show();
+}
+
+void ShellPlatformDelegate::ResizeWebContent(Shell* shell,
+                                             const gfx::Size& content_size) {
+  shell->web_contents()->GetRenderWidgetHostView()->SetSize(content_size);
 }
 
 void ShellPlatformDelegate::EnableUIControl(Shell* shell,
