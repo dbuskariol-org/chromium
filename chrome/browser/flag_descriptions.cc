@@ -2597,6 +2597,10 @@ const char kPageInfoPerformanceHintsName[] = "Page info performance hints";
 const char kPageInfoPerformanceHintsDescription[] =
     "Show site performance information in the page info menu.";
 
+const char kPageInfoV2Name[] = "Page info version two";
+const char kPageInfoV2Description[] =
+    "Enable the second version of the page info menu.";
+
 const char kPasswordManagerOnboardingAndroidName[] =
     "Password manager onboarding experience";
 const char kPasswordManagerOnboardingAndroidDescription[] =

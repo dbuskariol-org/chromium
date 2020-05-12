@@ -1512,6 +1512,9 @@ extern const char kOffliningRecentPagesDescription[];
 extern const char kPageInfoPerformanceHintsName[];
 extern const char kPageInfoPerformanceHintsDescription[];
 
+extern const char kPageInfoV2Name[];
+extern const char kPageInfoV2Description[];
+
 extern const char kPasswordManagerOnboardingAndroidName[];
 extern const char kPasswordManagerOnboardingAndroidDescription[];
 

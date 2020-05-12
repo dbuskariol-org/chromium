@@ -39836,6 +39836,7 @@ from previous Chrome versions.
   <int value="-203968600" label="SyncSupportSecondaryAccount:disabled"/>
   <int value="-202007318" label="AndroidAIAFetching:enabled"/>
   <int value="-200805659" label="ContextualSuggestionsButton:enabled"/>
+  <int value="-199690952" label="PageInfoV2:enabled"/>
   <int value="-196110497" label="force-text-direction"/>
   <int value="-195029497" label="MediaRemoting:disabled"/>
   <int value="-192919826" label="ViewsSimplifiedFullscreenUI:enabled"/>
@@ -40208,6 +40209,7 @@ from previous Chrome versions.
   <int value="229476202" label="CryptAuthV2Enrollment:enabled"/>
   <int value="229877058" label="ShelfScrollable:disabled"/>
   <int value="233721248" label="DownloadRename:disabled"/>
+  <int value="237066116" label="PageInfoV2:disabled"/>
   <int value="237570976" label="CommandLineOnNonRooted:disabled"/>
   <int value="237964589"
       label="enable-manual-fallback-for-password-saving:disabled"/>
