@@ -149,6 +149,9 @@ base::string16 ErrorToString(int error_code) {
     case 33:
       error_string = "RESULT_CODE_DOWNGRADE_AND_RELAUNCH";
       break;
+    case 34:
+      error_string = "RESULT_CODE_GPU_EXIT_ON_CONTEXT_LOST";
+      break;
     case 131:
       error_string = "SIGQUIT";
       break;
