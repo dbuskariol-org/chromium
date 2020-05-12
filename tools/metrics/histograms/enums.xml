@@ -65292,7 +65292,8 @@ would be helpful to identify which type is being sent.
   <int value="3" label="Turned off and setup not completed"/>
   <int value="4" label="Must confirm sync settings"/>
   <int value="5" label="Disallowed by enterprise policy"/>
-  <int value="6" label="Disallowed by the platform"/>
+  <int value="6"
+      label="Disallowed by the platform (obsolete, was never recorded)"/>
 </enum>
 
 <enum name="SyncKeystoreDecryptionFailure">
