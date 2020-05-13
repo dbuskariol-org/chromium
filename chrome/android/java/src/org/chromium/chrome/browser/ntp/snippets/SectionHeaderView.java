@@ -108,7 +108,7 @@ public class SectionHeaderView extends LinearLayout implements View.OnClickListe
     public void showMenuIph(UserEducationHelper helper) {
         helper.requestShowIPH(new IPHCommandBuilder(mMenuView.getContext().getResources(),
                 FeatureConstants.FEED_HEADER_MENU_FEATURE, R.string.ntp_feed_menu_iph,
-                R.string.ntp_feed_menu_iph)
+                R.string.accessibility_ntp_feed_menu_iph)
                                       .setAnchorView(mMenuView)
                                       .setCircleHighlight(true)
                                       .setShouldHighlight(true)
