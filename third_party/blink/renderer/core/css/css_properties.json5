@@ -706,6 +706,7 @@
       style_builder_custom_functions: ["value"],
       priority: "High",
       valid_for_marker: true,
+      computed_value_comparable: true,
     },
     {
       name: "font-family",
@@ -985,6 +986,7 @@
       type_name: "WritingMode",
       style_builder_custom_functions: ["value"],
       priority: "High",
+      computed_value_comparable: true,
     },
     {
       name: "-webkit-writing-mode",
@@ -994,6 +996,7 @@
       style_builder_custom_functions: ["value"],
       priority: "High",
       surrogate_for: "writing-mode",
+      computed_value_comparable: true,
     },
     {
       name: "text-rendering",

@@ -136,16 +136,23 @@ TEST_F(CSSPropertyTest, ComputedValuesEqualsSelf) {
 
 namespace {
 
+// Examples must produce unique computed values. For example, it's not
+// allowed to list both 2px and calc(1px + 1px).
 const char* color_examples[] = {"red", "green", "#fef", "#faf", nullptr};
+const char* direction_examples[] = {"ltr", "rtl", nullptr};
+const char* writing_mode_examples[] = {"horizontal-tb", "vertical-rl", nullptr};
 
 struct ComputedValuesEqualData {
   const char* name;
   const char** examples;
 } computed_values_equal_data[] = {
+    {"-webkit-writing-mode", writing_mode_examples},
     {"border-bottom-color", color_examples},
     {"border-left-color", color_examples},
     {"border-right-color", color_examples},
     {"border-top-color", color_examples},
+    {"direction", direction_examples},
+    {"writing-mode", writing_mode_examples},
 };
 
 }  // namespace
