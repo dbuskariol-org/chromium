@@ -4,7 +4,8 @@
 
 /**
  * @fileoverview 'cr-lottie' is a wrapper around the player for lottie
- * animations.
+ * animations. Since the player runs on a worker thread, 'cr-lottie' requires
+ * the document CSP to be set to "worker-src blob: 'self';".
  * Fires a 'cr-lottie-initialized' event when the animation was successfully
  * initialized.
  * Fires a 'cr-lottie-playing' event when the animation starts playing.
