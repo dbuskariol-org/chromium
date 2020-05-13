@@ -125,9 +125,13 @@ void FakeCiceroneClient::LaunchContainerApplication(
     const vm_tools::cicerone::LaunchContainerApplicationRequest& request,
     DBusMethodCallback<vm_tools::cicerone::LaunchContainerApplicationResponse>
         callback) {
-  base::ThreadTaskRunnerHandle::Get()->PostTask(
-      FROM_HERE, base::BindOnce(std::move(callback),
-                                launch_container_application_response_));
+  if (launch_container_application_callback_) {
+    launch_container_application_callback_.Run(request, std::move(callback));
+  } else {
+    base::ThreadTaskRunnerHandle::Get()->PostTask(
+        FROM_HERE, base::BindOnce(std::move(callback),
+                                  launch_container_application_response_));
+  }
 }
 
 void FakeCiceroneClient::GetContainerAppIcons(
@@ -155,6 +159,11 @@ void FakeCiceroneClient::InstallLinuxPackage(
   base::ThreadTaskRunnerHandle::Get()->PostTask(
       FROM_HERE,
       base::BindOnce(std::move(callback), install_linux_package_response_));
+}
+
+void FakeCiceroneClient::SetOnLaunchContainerApplicationCallback(
+    LaunchContainerApplicationCallback callback) {
+  launch_container_application_callback_ = std::move(callback);
 }
 
 void FakeCiceroneClient::SetOnUninstallPackageOwningFileCallback(

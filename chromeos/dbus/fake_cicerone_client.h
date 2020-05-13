@@ -16,6 +16,10 @@ namespace chromeos {
 class COMPONENT_EXPORT(CHROMEOS_DBUS) FakeCiceroneClient
     : public CiceroneClient {
  public:
+  using LaunchContainerApplicationCallback = base::RepeatingCallback<void(
+      const vm_tools::cicerone::LaunchContainerApplicationRequest& request,
+      DBusMethodCallback<vm_tools::cicerone::LaunchContainerApplicationResponse>
+          callback)>;
   using UninstallPackageOwningFileCallback = base::RepeatingCallback<void(
       const vm_tools::cicerone::UninstallPackageOwningFileRequest&,
       DBusMethodCallback<
@@ -126,6 +130,9 @@ class COMPONENT_EXPORT(CHROMEOS_DBUS) FakeCiceroneClient
   void WaitForServiceToBeAvailable(
       dbus::ObjectProxy::WaitForServiceToBeAvailableCallback callback) override;
 
+  // Sets a callback to be called during any call to LaunchContainerApplication.
+  void SetOnLaunchContainerApplicationCallback(
+      LaunchContainerApplicationCallback callback);
   // Sets a callback to be called during any call to UninstallPackageOwningFile.
   void SetOnUninstallPackageOwningFileCallback(
       UninstallPackageOwningFileCallback callback);
@@ -391,6 +398,7 @@ class COMPONENT_EXPORT(CHROMEOS_DBUS) FakeCiceroneClient
 
   vm_tools::cicerone::OsRelease lxd_container_os_release_;
 
+  LaunchContainerApplicationCallback launch_container_application_callback_;
   UninstallPackageOwningFileCallback uninstall_package_owning_file_callback_;
 
   base::ObserverList<Observer>::Unchecked observer_list_;
