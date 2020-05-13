@@ -179,6 +179,24 @@
       'service_account': 'chrome-tester@chops-service-accounts.iam.gserviceaccount.com',
     },
   },
+  'chromeos-amd64-generic': {
+    'swarming': {
+      'dimensions': {
+        'kvm': '1',
+        'os': 'Ubuntu-16.04',
+        'pool': 'chromium.tests.cros.vm.template',
+      },
+    },
+  },
+  'chromeos-kevin': {
+    'swarming': {
+      'dimensions': {
+        'os': 'ChromeOS',
+        'device_type': 'kevin',
+        'pool': 'chrome-cros-dut.template',
+      },
+    },
+  },
   # TODO(crbug.com/812428): Remove this mixin after all test pools have migrated
   # to using templates.
   'chromium-template-pool': {
