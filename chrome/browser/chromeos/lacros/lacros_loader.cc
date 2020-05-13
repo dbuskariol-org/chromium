@@ -69,6 +69,17 @@ void LacrosLoader::Init() {
   if (chromeos::features::IsLacrosSupportEnabled()) {
     // TODO(crbug.com/1078607): Remove non-error logging from this class.
     LOG(WARNING) << "Starting lacros component load.";
+
+    // If the user has specified a path for the lacros-chrome binary, use that
+    // rather than component manager.
+    base::FilePath lacros_chrome_path =
+        base::CommandLine::ForCurrentProcess()->GetSwitchValuePath(
+            chromeos::switches::kLacrosChromePath);
+    if (!lacros_chrome_path.empty()) {
+      OnLoadComplete(CrOSComponentManager::Error::NONE, lacros_chrome_path);
+      return;
+    }
+
     cros_component_manager_->Load(kLacrosComponentName,
                                   CrOSComponentManager::MountPolicy::kMount,
                                   CrOSComponentManager::UpdatePolicy::kForce,
