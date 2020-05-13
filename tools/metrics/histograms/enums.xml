@@ -27312,6 +27312,10 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3289" label="GridRowGapPercentIndefinite"/>
   <int value="3290" label="FlexRowGapPercent"/>
   <int value="3291" label="FlexRowGapPercentIndefinite"/>
+  <int value="3292" label="V8RTCRtpSender_CreateEncodedStreams_Method"/>
+  <int value="3293" label="V8RTCRtpReceiver_CreateEncodedStreams_Method"/>
+  <int value="3294" label="ForceEncodedAudioInsertableStreams"/>
+  <int value="3295" label="ForceEncodedVideoInsertableStreams"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
