@@ -732,6 +732,11 @@
     "args": ["--enable-features=AllowClientHintsToThirdParty"]
   },
   {
+    "prefix": "disable-user-agent-client-hint-feature",
+    "bases": ["external/wpt/client-hints", "wpt_internal/client-hints"],
+    "args": ["--disable-features=UserAgentClientHint"]
+  },
+  {
     "prefix": "legacy-client-hints-no-fp-delegation",
     "bases": [ "external/wpt/client-hints" ],
     "args": [ "--enable-features=AllowClientHintsToThirdParty",
