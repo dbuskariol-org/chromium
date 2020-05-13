@@ -43839,6 +43839,11 @@ Called by update_use_counter_css.py.-->
   <int value="3" label="kInvalidPlayerState"/>
 </enum>
 
+<enum name="MediaKeySystem">
+  <int value="0" label="Clear Key"/>
+  <int value="1" label="Widevine"/>
+</enum>
+
 <enum name="MediaKeySystemSupportStatus">
   <int value="0" label="Queried"/>
   <int value="1" label="Supported"/>
