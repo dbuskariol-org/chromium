@@ -600,7 +600,7 @@ void Stop(Browser* browser) {
 
 void NewWindow(Browser* browser) {
   Profile* const profile = browser->profile();
-#if BUILDFLAG(ENABLE_EXTENSIONS)
+#if BUILDFLAG(ENABLE_EXTENSIONS) && defined(OS_MACOSX)
   // Web apps should open a window to their launch page.
   if (browser->app_controller() && browser->app_controller()->HasAppId()) {
     const web_app::AppId app_id = browser->app_controller()->GetAppId();
