@@ -41,9 +41,6 @@ public class ShareParams {
      */
     private final String mText;
 
-    /** The URL of the page to be shared. */
-    private final String mUrl;
-
     /** The common MIME type of the files to be shared. A wildcard if they have differing types. */
     private final String mFileContentType;
 
@@ -63,7 +60,7 @@ public class ShareParams {
     private TargetChosenCallback mCallback;
 
     private ShareParams(boolean shareDirectly, boolean saveLastUsed, WindowAndroid window,
-            String title, String text, String url, @Nullable String fileContentType,
+            String title, String text, @Nullable String fileContentType,
             @Nullable ArrayList<Uri> fileUris, @Nullable Uri offlineUri,
             @Nullable Uri screenshotUri, @Nullable TargetChosenCallback callback) {
         mShareDirectly = shareDirectly;
@@ -71,7 +68,6 @@ public class ShareParams {
         mWindow = window;
         mTitle = title;
         mText = text;
-        mUrl = url;
         mFileContentType = fileContentType;
         mFileUris = fileUris;
         mOfflineUri = offlineUri;
@@ -113,13 +109,6 @@ public class ShareParams {
      */
     public String getText() {
         return mText;
-    }
-
-    /**
-     * @return The URL of the page to be shared.
-     */
-    public String getUrl() {
-        return mUrl;
     }
 
     /**
@@ -175,7 +164,6 @@ public class ShareParams {
         private Uri mOfflineUri;
         private Uri mScreenshotUri;
         private TargetChosenCallback mCallback;
-        private boolean mIsExternalUrl;
 
         public Builder(@NonNull WindowAndroid window, @NonNull String title, @NonNull String url) {
             mWindow = window;
@@ -205,14 +193,6 @@ public class ShareParams {
          */
         public Builder setSaveLastUsed(boolean saveLastUsed) {
             mSaveLastUsed = saveLastUsed;
-            return this;
-        }
-
-        /**
-         * Sets the URL of the page to be shared.
-         */
-        public Builder setUrl(@NonNull String url) {
-            mUrl = url;
             return this;
         }
 
@@ -256,20 +236,10 @@ public class ShareParams {
             return this;
         }
 
-        /**
-         * Set whether the params are created by the url from external app.
-         */
-        public Builder setIsExternalUrl(boolean isExternalUrl) {
-            mIsExternalUrl = isExternalUrl;
-            return this;
-        }
-
         /** @return A fully constructed {@link ShareParams} object. */
         public ShareParams build() {
             if (!TextUtils.isEmpty(mUrl)) {
-                if (!mIsExternalUrl) {
-                    mUrl = DomDistillerUrlUtils.getOriginalUrlFromDistillerUrl(mUrl);
-                }
+                mUrl = DomDistillerUrlUtils.getOriginalUrlFromDistillerUrl(mUrl);
                 if (!TextUtils.isEmpty(mText)) {
                     // Concatenate text and URL with a space.
                     mText = mText + " " + mUrl;
@@ -277,7 +247,7 @@ public class ShareParams {
                     mText = mUrl;
                 }
             }
-            return new ShareParams(mShareDirectly, mSaveLastUsed, mWindow, mTitle, mText, mUrl,
+            return new ShareParams(mShareDirectly, mSaveLastUsed, mWindow, mTitle, mText,
                     mFileContentType, mFileUris, mOfflineUri, mScreenshotUri, mCallback);
         }
     }
