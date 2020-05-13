@@ -89,6 +89,8 @@ void CastActivityManager::LaunchSession(
       MediaRoute::GetMediaRouteId(presentation_id, sink_id, source);
   MediaRoute route(route_id, source, sink_id, /* description */ std::string(),
                    /* is_local */ true, /* for_display */ true);
+  route.set_presentation_id(presentation_id);
+  route.set_local_presentation(true);
   route.set_incognito(incognito);
   if (cast_source.ContainsStreamingApp()) {
     route.set_controller_type(RouteControllerType::kMirroring);
