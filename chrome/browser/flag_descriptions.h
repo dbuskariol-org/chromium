@@ -1879,9 +1879,6 @@ extern const char kBluetoothAggressiveAppearanceFilterDescription[];
 extern const char kBluetoothFixA2dpPacketSizeName[];
 extern const char kBluetoothFixA2dpPacketSizeDescription[];
 
-extern const char kBluetoothKernelSuspendNotifierName[];
-extern const char kBluetoothKernelSuspendNotifierDescription[];
-
 extern const char kBluetoothNextHandsfreeProfileName[];
 extern const char kBluetoothNextHandsfreeProfileDescription[];
 

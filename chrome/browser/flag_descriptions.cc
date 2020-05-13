@@ -3234,12 +3234,6 @@ const char kBluetoothFixA2dpPacketSizeDescription[] =
     "Fixes Bluetooth A2DP packet size to a smaller default value to improve "
     "audio quality and may fix audio stutter.";
 
-const char kBluetoothKernelSuspendNotifierName[] =
-    "Bluetooth kernel suspend notifier handler";
-const char kBluetoothKernelSuspendNotifierDescription[] =
-    "Enables the Bluetooth kernel suspend notifier which will allow wake from "
-    "suspend using Bluetooth HID devices.";
-
 const char kBluetoothNextHandsfreeProfileName[] =
     "Enable next version of Bluetooth Handsfree profile";
 const char kBluetoothNextHandsfreeProfileDescription[] =
