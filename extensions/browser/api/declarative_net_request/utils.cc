@@ -274,7 +274,7 @@ std::string GetPublicRulesetID(const Extension& extension,
     return dnr_api::DYNAMIC_RULESET_ID;
 
   DCHECK_GE(ruleset_id, kMinValidStaticRulesetID);
-  return DNRManifestData::GetManifestID(extension, ruleset_id);
+  return DNRManifestData::GetRuleset(extension, ruleset_id).manifest_id;
 }
 
 }  // namespace declarative_net_request

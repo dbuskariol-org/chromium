@@ -59,6 +59,11 @@ constexpr char kJSONRulesFilename[] = "rules_file.json";
 
 constexpr char kLargeRegexFilter[] = ".{512}x";
 
+constexpr char kId1[] = "1.json";
+constexpr char kId2[] = "2.json";
+constexpr char kId3[] = "3.json";
+constexpr char kId4[] = "4.json";
+
 namespace dnr_api = extensions::api::declarative_net_request;
 
 using ::testing::Field;
@@ -203,6 +208,48 @@ class DeclarativeNetRequestUnittest : public DNRTestBase {
     update_function->set_has_callback(true);
     return api_test_utils::RunFunction(update_function.get(), json_args,
                                        browser_context());
+  }
+
+  void RunUpdateEnabledRulesetsFunction(
+      const Extension& extension,
+      const std::vector<std::string>& ruleset_ids_to_remove,
+      const std::vector<std::string>& ruleset_ids_to_add,
+      base::Optional<std::string> expected_error) {
+    std::unique_ptr<base::Value> args =
+        ListBuilder()
+            .Append(ToListValue(ruleset_ids_to_remove))
+            .Append(ToListValue(ruleset_ids_to_add))
+            .Build();
+    std::string json_args;
+    base::JSONWriter::WriteWithOptions(
+        *args, base::JSONWriter::OPTIONS_PRETTY_PRINT, &json_args);
+
+    auto function = base::MakeRefCounted<
+        DeclarativeNetRequestUpdateEnabledRulesetsFunction>();
+    function->set_extension(&extension);
+    function->set_has_callback(true);
+
+    if (!expected_error) {
+      EXPECT_TRUE(api_test_utils::RunFunction(function.get(), json_args,
+                                              browser_context()));
+      return;
+    }
+
+    EXPECT_EQ(expected_error,
+              api_test_utils::RunFunctionAndReturnError(
+                  function.get(), json_args, browser_context()));
+  }
+
+  void VerifyPublicRulesetIDs(
+      const Extension& extension,
+      const std::vector<std::string>& expected_public_ruleset_ids) {
+    CompositeMatcher* matcher =
+        manager()->GetMatcherForExtension(extension.id());
+    ASSERT_TRUE(matcher);
+
+    EXPECT_THAT(
+        expected_public_ruleset_ids,
+        UnorderedElementsAreArray(GetPublicRulesetIDs(extension, *matcher)));
   }
 
   ChromeTestExtensionLoader* extension_loader() { return loader_.get(); }
@@ -886,12 +933,12 @@ TEST_P(MultipleRulesetsTest, EmptyRulesets) {
 // specifying an invalid rules file.
 TEST_P(MultipleRulesetsTest, ListNotPassed) {
     std::vector<TestRule> rules({CreateGenericRule()});
-    AddRuleset(TestRulesetInfo("id1", "path1", *ToListValue(rules)));
+    AddRuleset(TestRulesetInfo(kId1, "path1", *ToListValue(rules)));
 
     // Persist a ruleset with an invalid rules file.
-    AddRuleset(TestRulesetInfo("id2", "path2", base::DictionaryValue()));
+    AddRuleset(TestRulesetInfo(kId2, "path2", base::DictionaryValue()));
 
-    AddRuleset(TestRulesetInfo("id3", "path3", base::ListValue()));
+    AddRuleset(TestRulesetInfo(kId3, "path3", base::ListValue()));
 
     LoadAndExpectError(kErrorListNotPassed, "path2" /* filename */);
 }
@@ -914,7 +961,7 @@ TEST_P(MultipleRulesetsTest, InstallWarnings) {
     rule.condition->regex_filter = kLargeRegexFilter;
     rules.push_back(rule);
 
-    TestRulesetInfo info("id1", "path1", *ToListValue(rules), true);
+    TestRulesetInfo info(kId1, "path1", *ToListValue(rules), true);
     AddRuleset(info);
 
     expected_warnings.push_back(
@@ -927,7 +974,7 @@ TEST_P(MultipleRulesetsTest, InstallWarnings) {
   {
     // Persist a ruleset with an install warning for exceeding the rule count.
     TestRulesetInfo info =
-        CreateRuleset("id2", dnr_api::MAX_NUMBER_OF_RULES + 1, 0, false);
+        CreateRuleset(kId2, dnr_api::MAX_NUMBER_OF_RULES + 1, 0, false);
     AddRuleset(info);
 
     expected_warnings.push_back(
@@ -941,7 +988,7 @@ TEST_P(MultipleRulesetsTest, InstallWarnings) {
     // count.
     size_t kCountNonRegexRules = 5;
     TestRulesetInfo info =
-        CreateRuleset("id3", kCountNonRegexRules,
+        CreateRuleset(kId3, kCountNonRegexRules,
                       dnr_api::MAX_NUMBER_OF_REGEX_RULES + 1, false);
     AddRuleset(info);
 
@@ -969,9 +1016,9 @@ TEST_P(MultipleRulesetsTest, InstallWarnings) {
 }
 
 TEST_P(MultipleRulesetsTest, EnabledRulesCount) {
-  AddRuleset(CreateRuleset("id1", 100, 10, true));
-  AddRuleset(CreateRuleset("id2", 200, 20, false));
-  AddRuleset(CreateRuleset("id3", 300, 30, true));
+  AddRuleset(CreateRuleset(kId1, 100, 10, true));
+  AddRuleset(CreateRuleset(kId2, 200, 20, false));
+  AddRuleset(CreateRuleset(kId3, 300, 30, true));
 
   RulesetManagerObserver ruleset_waiter(manager());
   LoadAndExpectSuccess();
@@ -982,8 +1029,7 @@ TEST_P(MultipleRulesetsTest, EnabledRulesCount) {
       manager()->GetMatcherForExtension(extension()->id());
   ASSERT_TRUE(composite_matcher);
 
-  EXPECT_THAT(GetPublicRulesetIDs(*extension(), *composite_matcher),
-              UnorderedElementsAre("id1", "id3"));
+  VerifyPublicRulesetIDs(*extension(), {kId1, kId3});
 
   EXPECT_THAT(composite_matcher->matchers(),
               UnorderedElementsAre(
@@ -995,14 +1041,13 @@ TEST_P(MultipleRulesetsTest, EnabledRulesCount) {
 // warning.
 TEST_P(MultipleRulesetsTest, StaticRuleCountExceeded) {
   // Enabled on load.
-  AddRuleset(CreateRuleset("1.json", 10, 0, true));
+  AddRuleset(CreateRuleset(kId1, 10, 0, true));
   // Disabled by default.
-  AddRuleset(CreateRuleset("2.json", 20, 0, false));
+  AddRuleset(CreateRuleset(kId2, 20, 0, false));
   // Not enabled on load since including it exceeds the static rules count.
-  AddRuleset(
-      CreateRuleset("3.json", dnr_api::MAX_NUMBER_OF_RULES + 10, 0, true));
+  AddRuleset(CreateRuleset(kId3, dnr_api::MAX_NUMBER_OF_RULES + 10, 0, true));
   // Enabled on load.
-  AddRuleset(CreateRuleset("4.json", 30, 0, true));
+  AddRuleset(CreateRuleset(kId4, 30, 0, true));
 
   RulesetManagerObserver ruleset_waiter(manager());
   extension_loader()->set_ignore_manifest_warnings(true);
@@ -1027,7 +1072,7 @@ TEST_P(MultipleRulesetsTest, StaticRuleCountExceeded) {
         extension()->install_warnings(),
         UnorderedElementsAre(
             Field(&InstallWarning::message,
-                  GetErrorWithFilename(kRuleCountExceeded, "3.json")),
+                  GetErrorWithFilename(kRuleCountExceeded, kId3)),
             Field(&InstallWarning::message, kEnabledRuleCountExceeded)));
   }
 
@@ -1037,8 +1082,7 @@ TEST_P(MultipleRulesetsTest, StaticRuleCountExceeded) {
       manager()->GetMatcherForExtension(extension_id);
   ASSERT_TRUE(composite_matcher);
 
-  EXPECT_THAT(GetPublicRulesetIDs(*extension(), *composite_matcher),
-              UnorderedElementsAre("1.json", "4.json"));
+  VerifyPublicRulesetIDs(*extension(), {kId1, kId4});
 
   EXPECT_THAT(composite_matcher->matchers(),
               UnorderedElementsAre(
@@ -1049,15 +1093,14 @@ TEST_P(MultipleRulesetsTest, StaticRuleCountExceeded) {
 // Ensure that exceeding the regex rules limit across rulesets raises a warning.
 TEST_P(MultipleRulesetsTest, RegexRuleCountExceeded) {
   // Enabled on load.
-  AddRuleset(CreateRuleset("1.json", 10000, 100, true));
+  AddRuleset(CreateRuleset(kId1, 10000, 100, true));
   // Won't be enabled on load since including it will exceed the regex rule
   // count.
-  AddRuleset(
-      CreateRuleset("2.json", 1, dnr_api::MAX_NUMBER_OF_REGEX_RULES, true));
+  AddRuleset(CreateRuleset(kId2, 1, dnr_api::MAX_NUMBER_OF_REGEX_RULES, true));
   // Won't be enabled on load since it is disabled by default.
-  AddRuleset(CreateRuleset("3.json", 10, 10, false));
+  AddRuleset(CreateRuleset(kId3, 10, 10, false));
   // Enabled on load.
-  AddRuleset(CreateRuleset("4.json", 20, 20, true));
+  AddRuleset(CreateRuleset(kId4, 20, 20, true));
 
   RulesetManagerObserver ruleset_waiter(manager());
   extension_loader()->set_ignore_manifest_warnings(true);
@@ -1078,14 +1121,156 @@ TEST_P(MultipleRulesetsTest, RegexRuleCountExceeded) {
       manager()->GetMatcherForExtension(extension()->id());
   ASSERT_TRUE(composite_matcher);
 
-  EXPECT_THAT(GetPublicRulesetIDs(*extension(), *composite_matcher),
-              UnorderedElementsAre("1.json", "4.json"));
+  VerifyPublicRulesetIDs(*extension(), {kId1, kId4});
 
   EXPECT_THAT(
       composite_matcher->matchers(),
       UnorderedElementsAre(
           Pointee(Property(&RulesetMatcher::GetRulesCount, 10000 + 100)),
           Pointee(Property(&RulesetMatcher::GetRulesCount, 20 + 20))));
+}
+
+TEST_P(MultipleRulesetsTest, UpdateEnabledRulesets_InvalidRulesetID) {
+  AddRuleset(CreateRuleset(kId1, 10, 10, true));
+  AddRuleset(CreateRuleset(kId2, 10, 10, false));
+  AddRuleset(CreateRuleset(kId3, 10, 10, true));
+
+  RulesetManagerObserver ruleset_waiter(manager());
+  LoadAndExpectSuccess();
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
+
+  constexpr char kInvalidRulesetId[] = "invalid_id";
+  RunUpdateEnabledRulesetsFunction(
+      *extension(), {kId1, kInvalidRulesetId}, {},
+      ErrorUtils::FormatErrorMessage(kInvalidRulesetIDError,
+                                     kInvalidRulesetId));
+  VerifyPublicRulesetIDs(*extension(), {kId1, kId3});
+
+  RunUpdateEnabledRulesetsFunction(
+      *extension(), {kId1}, {kId2, kInvalidRulesetId},
+      ErrorUtils::FormatErrorMessage(kInvalidRulesetIDError,
+                                     kInvalidRulesetId));
+  VerifyPublicRulesetIDs(*extension(), {kId1, kId3});
+}
+
+TEST_P(MultipleRulesetsTest, UpdateEnabledRulesets_RuleCountExceeded) {
+  AddRuleset(CreateRuleset(kId1, 10, 10, true));
+  AddRuleset(CreateRuleset(kId2, dnr_api::MAX_NUMBER_OF_RULES, 0, false));
+
+  RulesetManagerObserver ruleset_waiter(manager());
+  LoadAndExpectSuccess();
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
+
+  RunUpdateEnabledRulesetsFunction(*extension(), {}, {kId2},
+                                   kEnabledRulesetsRuleCountExceeded);
+  VerifyPublicRulesetIDs(*extension(), {kId1});
+
+  // updateEnabledRulesets looks at the rule counts at the end of the update, so
+  // disabling |kId1| and enabling |kId2| works (because the total rule count is
+  // under the limit).
+  RunUpdateEnabledRulesetsFunction(*extension(), {kId1}, {kId2}, base::nullopt);
+  VerifyPublicRulesetIDs(*extension(), {kId2});
+}
+
+TEST_P(MultipleRulesetsTest, UpdateEnabledRulesets_RegexRuleCountExceeded) {
+  AddRuleset(CreateRuleset(kId1, 0, 10, false));
+  AddRuleset(CreateRuleset(kId2, 0, dnr_api::MAX_NUMBER_OF_REGEX_RULES, true));
+
+  RulesetManagerObserver ruleset_waiter(manager());
+  LoadAndExpectSuccess();
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
+
+  RunUpdateEnabledRulesetsFunction(*extension(), {}, {kId1},
+                                   kEnabledRulesetsRegexRuleCountExceeded);
+  VerifyPublicRulesetIDs(*extension(), {kId2});
+}
+
+TEST_P(MultipleRulesetsTest, UpdateEnabledRulesets_InternalError) {
+  AddRuleset(CreateRuleset(kId1, 10, 10, true));
+  AddRuleset(CreateRuleset(kId2, 10, 10, false));
+
+  RulesetManagerObserver ruleset_waiter(manager());
+  LoadAndExpectSuccess();
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
+
+  std::vector<RulesetSource> static_sources =
+      RulesetSource::CreateStatic(*extension());
+  ASSERT_EQ(2u, static_sources.size());
+
+  constexpr char kReindexHistogram[] =
+      "Extensions.DeclarativeNetRequest.RulesetReindexSuccessful";
+  {
+    // First delete the indexed ruleset file for the second ruleset. Enabling it
+    // should cause re-indexing and succeed in enabling the ruleset.
+    base::HistogramTester tester;
+    ASSERT_TRUE(base::DeleteFile(static_sources[1].indexed_path(),
+                                 false /* recursive */));
+
+    RunUpdateEnabledRulesetsFunction(*extension(), {kId1}, {kId2},
+                                     base::nullopt);
+    VerifyPublicRulesetIDs(*extension(), {kId2});
+
+    tester.ExpectBucketCount(kReindexHistogram, true /*sample*/, 1 /*count*/);
+
+    EXPECT_TRUE(base::PathExists(static_sources[1].indexed_path()));
+  }
+
+  {
+    // Now delete both the indexed and json ruleset file for the first ruleset.
+    // This will prevent enabling the first ruleset since re-indexing will fail.
+    base::HistogramTester tester;
+    ASSERT_TRUE(base::DeleteFile(static_sources[0].indexed_path(),
+                                 false /* recursive */));
+    ASSERT_TRUE(
+        base::DeleteFile(static_sources[0].json_path(), false /* recursive */));
+
+    RunUpdateEnabledRulesetsFunction(*extension(), {}, {kId1},
+                                     kInternalErrorUpdatingEnabledRulesets);
+    VerifyPublicRulesetIDs(*extension(), {kId2});
+
+    tester.ExpectBucketCount(kReindexHistogram, false /*sample*/, 1 /*count*/);
+  }
+}
+
+TEST_P(MultipleRulesetsTest, UpdateEnabledRulesets_Success) {
+  AddRuleset(CreateRuleset(kId1, 10, 10, true));
+  AddRuleset(CreateRuleset(kId2, 10, 10, false));
+  AddRuleset(CreateRuleset(kId3, 10, 10, true));
+
+  RulesetManagerObserver ruleset_waiter(manager());
+  LoadAndExpectSuccess();
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
+
+  std::vector<std::string> ruleset_ids;
+  RunUpdateEnabledRulesetsFunction(*extension(), {kId1, kId3}, {kId2},
+                                   base::nullopt /* expected_error */);
+  VerifyPublicRulesetIDs(*extension(), {kId2});
+
+  RunUpdateEnabledRulesetsFunction(*extension(), {}, {kId3, kId3},
+                                   base::nullopt /* expected_error */);
+  VerifyPublicRulesetIDs(*extension(), {kId2, kId3});
+
+  // Ensure no-op calls succeed.
+  RunUpdateEnabledRulesetsFunction(*extension(), {}, {kId2, kId3},
+                                   base::nullopt /* expected_error */);
+  VerifyPublicRulesetIDs(*extension(), {kId2, kId3});
+
+  RunUpdateEnabledRulesetsFunction(*extension(), {kId1}, {},
+                                   base::nullopt /* expected_error */);
+  VerifyPublicRulesetIDs(*extension(), {kId2, kId3});
+
+  // Add dynamic rules and ensure that the setEnabledRulesets call doesn't have
+  // any effect on the dynamic ruleset.
+  ASSERT_TRUE(
+      RunDynamicRuleUpdateFunction(*extension(), {}, {CreateGenericRule()}));
+  VerifyPublicRulesetIDs(*extension(),
+                         {kId2, kId3, dnr_api::DYNAMIC_RULESET_ID});
+
+  // Ensure enabling a ruleset takes priority over disabling.
+  RunUpdateEnabledRulesetsFunction(*extension(), {kId1}, {kId1},
+                                   base::nullopt /* expected_error */);
+  VerifyPublicRulesetIDs(*extension(),
+                         {kId1, kId2, kId3, dnr_api::DYNAMIC_RULESET_ID});
 }
 
 INSTANTIATE_TEST_SUITE_P(All,

@@ -21,6 +21,7 @@
 #include "extensions/browser/browser_context_keyed_api_factory.h"
 #include "extensions/browser/extension_registry.h"
 #include "extensions/browser/extension_registry_observer.h"
+#include "extensions/common/api/declarative_net_request/constants.h"
 #include "extensions/common/extension_id.h"
 
 namespace content {
@@ -84,6 +85,15 @@ class RulesMonitorService : public BrowserContextKeyedAPI,
       std::vector<api::declarative_net_request::Rule> rules_to_add,
       DynamicRuleUpdateUICallback callback);
 
+  // Updates the set of enabled static rulesets for the |extension| and then
+  // invokes |callback| with an optional error.
+  using UpdateEnabledRulesetsUICallback =
+      base::OnceCallback<void(base::Optional<std::string> error)>;
+  void UpdateEnabledStaticRulesets(const Extension& extension,
+                                   std::set<RulesetID> ids_to_disable,
+                                   std::set<RulesetID> ids_to_enable,
+                                   UpdateEnabledRulesetsUICallback callback);
+
   RulesetManager* ruleset_manager() { return &ruleset_manager_; }
 
   const ActionTracker& action_tracker() const { return action_tracker_; }
@@ -136,24 +146,43 @@ class RulesMonitorService : public BrowserContextKeyedAPI,
                                   DynamicRuleUpdate update);
 
   // Invoked when we have loaded the rulesets in |load_data| on
-  // |file_task_runner_|.
-  void OnRulesetsLoaded(LoadRequestData load_data);
+  // |file_task_runner_| in response to OnExtensionLoaded.
+  void OnInitialRulesetsLoaded(LoadRequestData load_data);
 
-  // Invoked when the dynamic rules for the extension have been updated.
+  // Invoked when rulesets are loaded in response to
+  // UpdateEnabledStaticRulesets.
+  void OnNewStaticRulesetsLoaded(UpdateEnabledRulesetsUICallback callback,
+                                 std::set<RulesetID> ids_to_disable,
+                                 std::set<RulesetID> ids_to_enable,
+                                 LoadRequestData load_data);
+
+  // Invoked when the dynamic rules for the extension have been updated in
+  // response to UpdateDynamicRules.
   void OnDynamicRulesUpdated(DynamicRuleUpdateUICallback callback,
                              LoadRequestData load_data,
                              base::Optional<std::string> error);
 
   // Unloads all rulesets for the given |extension_id|.
-  void UnloadRulesets(const ExtensionId& extension_id);
+  void RemoveCompositeMatcher(const ExtensionId& extension_id);
 
   // Loads the given |matcher| for the given |extension_id|.
-  void LoadRulesets(const ExtensionId& extension_id,
-                    std::unique_ptr<CompositeMatcher> matcher);
+  void AddCompositeMatcher(const ExtensionId& extension_id,
+                           std::unique_ptr<CompositeMatcher> matcher);
 
-  // Adds the given ruleset for the given |extension_id|.
-  void UpdateRuleset(const ExtensionId& extension_id,
-                     std::unique_ptr<RulesetMatcher> ruleset_matcher);
+  // Adds the given |ruleset_matcher| to the set of matchers for the given
+  // |extension_id|. If a RulesetMatcher with the same ID is already present for
+  // the extension, it is replaced.
+  void UpdateRulesetMatcher(const ExtensionId& extension_id,
+                            std::unique_ptr<RulesetMatcher> ruleset_matcher);
+
+  // Adjusts the extra headers listener count on the
+  // ExtensionWebRequestEventRouter. Usually called after an update to the
+  // RulesetManager. |had_extra_headers_matcher| denotes whether the
+  // RulesetManager had an extra headers matcher before the update.
+  void AdjustExtraHeaderListenerCountIfNeeded(bool had_extra_headers_matcher);
+
+  // Updates ruleset checksum in preferences from |load_data|.
+  void UpdateRulesetChecksumsIfNeeded(const LoadRequestData& load_data);
 
   ScopedObserver<ExtensionRegistry, ExtensionRegistryObserver>
       registry_observer_{this};

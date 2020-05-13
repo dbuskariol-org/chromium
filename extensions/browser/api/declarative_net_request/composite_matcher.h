@@ -53,6 +53,12 @@ class CompositeMatcher {
 
   const MatcherList& matchers() const { return matchers_; }
 
+  // Returns the set of matchers and resets |matchers_| to an empty vector.
+  MatcherList GetAndResetMatchers();
+
+  // Updates the set of matchers. IDs for all the |matchers| must be unique.
+  void SetMatchers(MatcherList matchers);
+
   // Adds the |new_matcher| to the list of matchers. If a matcher with the
   // corresponding ID is already present, updates the matcher.
   void AddOrUpdateRuleset(std::unique_ptr<RulesetMatcher> new_matcher);
@@ -87,8 +93,12 @@ class CompositeMatcher {
   void OnDidFinishNavigation(content::RenderFrameHost* host);
 
  private:
+  // This must be called whenever |matchers_| are modified.
+  void OnMatchersModified();
+
   bool ComputeHasAnyExtraHeadersMatcher() const;
 
+  // The RulesetMatchers, in an arbitrary order.
   MatcherList matchers_;
 
   // Denotes the cached return value for |HasAnyExtraHeadersMatcher|. Care must

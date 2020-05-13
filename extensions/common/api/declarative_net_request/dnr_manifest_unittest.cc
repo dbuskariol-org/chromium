@@ -80,8 +80,8 @@ class DNRManifestTest : public testing::Test {
 
       EXPECT_EQ(info[i].enabled, rulesets[i].enabled);
 
-      EXPECT_EQ(rulesets[i].manifest_id,
-                DNRManifestData::GetManifestID(*extension, rulesets[i].id));
+      EXPECT_EQ(&rulesets[i],
+                &DNRManifestData::GetRuleset(*extension, rulesets[i].id));
     }
   }
 

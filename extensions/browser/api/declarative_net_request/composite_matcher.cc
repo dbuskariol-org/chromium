@@ -10,6 +10,7 @@
 #include <utility>
 
 #include "base/metrics/histogram_macros.h"
+#include "base/stl_util.h"
 #include "base/time/time.h"
 #include "base/timer/elapsed_timer.h"
 #include "extensions/browser/api/declarative_net_request/flat/extension_ruleset_generated.h"
@@ -71,27 +72,29 @@ CompositeMatcher::CompositeMatcher(MatcherList matchers)
 
 CompositeMatcher::~CompositeMatcher() = default;
 
+CompositeMatcher::MatcherList CompositeMatcher::GetAndResetMatchers() {
+  MatcherList result;
+  std::swap(result, matchers_);
+  OnMatchersModified();
+  return result;
+}
+
+void CompositeMatcher::SetMatchers(MatcherList matchers) {
+  matchers_ = std::move(matchers);
+  OnMatchersModified();
+}
+
 void CompositeMatcher::AddOrUpdateRuleset(
     std::unique_ptr<RulesetMatcher> new_matcher) {
   // A linear search is ok since the number of rulesets per extension is
   // expected to be quite small.
-  auto it = std::find_if(
-      matchers_.begin(), matchers_.end(),
-      [&new_matcher](const std::unique_ptr<RulesetMatcher>& matcher) {
-        return new_matcher->id() == matcher->id();
-      });
+  base::EraseIf(matchers_,
+                [&new_matcher](const std::unique_ptr<RulesetMatcher>& matcher) {
+                  return matcher->id() == new_matcher->id();
+                });
+  matchers_.push_back(std::move(new_matcher));
 
-  if (it == matchers_.end()) {
-    matchers_.push_back(std::move(new_matcher));
-  } else {
-    // Update the matcher.
-    *it = std::move(new_matcher);
-  }
-
-  // Clear the renderers' cache so that they take the updated rules into
-  // account.
-  ClearRendererCacheOnNavigation();
-  has_any_extra_headers_matcher_.reset();
+  OnMatchersModified();
 }
 
 ActionInfo CompositeMatcher::GetBeforeRequestAction(
@@ -203,6 +206,16 @@ void CompositeMatcher::OnRenderFrameDeleted(content::RenderFrameHost* host) {
 void CompositeMatcher::OnDidFinishNavigation(content::RenderFrameHost* host) {
   for (auto& matcher : matchers_)
     matcher->OnDidFinishNavigation(host);
+}
+
+void CompositeMatcher::OnMatchersModified() {
+  DCHECK(AreIDsUnique(matchers_));
+
+  // Clear the renderers' cache so that they take the updated rules into
+  // account.
+  ClearRendererCacheOnNavigation();
+
+  has_any_extra_headers_matcher_.reset();
 }
 
 bool CompositeMatcher::ComputeHasAnyExtraHeadersMatcher() const {

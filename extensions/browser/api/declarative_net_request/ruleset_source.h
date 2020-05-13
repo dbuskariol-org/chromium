@@ -14,6 +14,7 @@
 #include "base/time/time.h"
 #include "extensions/common/api/declarative_net_request.h"
 #include "extensions/common/api/declarative_net_request/constants.h"
+#include "extensions/common/api/declarative_net_request/dnr_manifest_data.h"
 #include "extensions/common/extension_id.h"
 
 namespace content {
@@ -122,9 +123,13 @@ struct ReadJSONRulesResult {
 class RulesetSource {
  public:
   // Creates RulesetSources corresponding to the static rulesets in the
-  // extension package. This must only be called for extensions which specified
-  // a declarative ruleset.
+  // extension package.
   static std::vector<RulesetSource> CreateStatic(const Extension& extension);
+
+  // Creates a static RulesetSource corresponding to |info| for the given
+  // |extension|.
+  static RulesetSource CreateStatic(const Extension& extension,
+                                    const DNRManifestData::RulesetInfo& info);
 
   // Creates RulesetSource corresponding to the dynamic rules added by the
   // extension. This must only be called for extensions which specified a

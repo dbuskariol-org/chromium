@@ -302,14 +302,20 @@ std::vector<RulesetSource> RulesetSource::CreateStatic(
       declarative_net_request::DNRManifestData::GetRulesets(extension);
 
   std::vector<RulesetSource> sources;
-  for (const auto& info : rulesets) {
-    sources.push_back(RulesetSource(
-        extension.path().Append(info.relative_path),
-        extension.path().Append(
-            file_util::GetIndexedRulesetRelativePath(info.id.value())),
-        info.id, dnr_api::MAX_NUMBER_OF_RULES, extension.id(), info.enabled));
-  }
+  for (const auto& info : rulesets)
+    sources.push_back(CreateStatic(extension, info));
+
   return sources;
+}
+
+RulesetSource RulesetSource::CreateStatic(
+    const Extension& extension,
+    const DNRManifestData::RulesetInfo& info) {
+  return RulesetSource(
+      extension.path().Append(info.relative_path),
+      extension.path().Append(
+          file_util::GetIndexedRulesetRelativePath(info.id.value())),
+      info.id, dnr_api::MAX_NUMBER_OF_RULES, extension.id(), info.enabled);
 }
 
 // static
