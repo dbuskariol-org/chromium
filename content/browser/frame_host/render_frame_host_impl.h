@@ -403,17 +403,17 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   // BrowserAccessibilityDelegate
   void AccessibilityPerformAction(const ui::AXActionData& data) override;
-  bool AccessibilityViewHasFocus() const override;
+  bool AccessibilityViewHasFocus() override;
   void AccessibilityViewSetFocus() override;
-  gfx::Rect AccessibilityGetViewBounds() const override;
-  float AccessibilityGetDeviceScaleFactor() const override;
+  gfx::Rect AccessibilityGetViewBounds() override;
+  float AccessibilityGetDeviceScaleFactor() override;
   void AccessibilityFatalError() override;
   gfx::AcceleratedWidget AccessibilityGetAcceleratedWidget() override;
   gfx::NativeViewAccessible AccessibilityGetNativeViewAccessible() override;
   gfx::NativeViewAccessible AccessibilityGetNativeViewAccessibleForWindow()
       override;
   WebContents* AccessibilityWebContents() override;
-  bool AccessibilityIsMainFrame() const override;
+  bool AccessibilityIsMainFrame() override;
 
   // RenderProcessHostObserver implementation.
   void RenderProcessExited(RenderProcessHost* host,

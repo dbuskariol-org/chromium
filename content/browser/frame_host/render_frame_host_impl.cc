@@ -1683,7 +1683,7 @@ void RenderFrameHostImpl::AccessibilityPerformAction(
   render_accessibility_->PerformAction(action_data);
 }
 
-bool RenderFrameHostImpl::AccessibilityViewHasFocus() const {
+bool RenderFrameHostImpl::AccessibilityViewHasFocus() {
   if (!is_active())
     return false;
 
@@ -1702,7 +1702,7 @@ void RenderFrameHostImpl::AccessibilityViewSetFocus() {
     view->Focus();
 }
 
-gfx::Rect RenderFrameHostImpl::AccessibilityGetViewBounds() const {
+gfx::Rect RenderFrameHostImpl::AccessibilityGetViewBounds() {
   if (!is_active())
     return gfx::Rect();
 
@@ -1712,7 +1712,7 @@ gfx::Rect RenderFrameHostImpl::AccessibilityGetViewBounds() const {
   return gfx::Rect();
 }
 
-float RenderFrameHostImpl::AccessibilityGetDeviceScaleFactor() const {
+float RenderFrameHostImpl::AccessibilityGetDeviceScaleFactor() {
   if (!is_active())
     return 1.0f;
 
@@ -1788,7 +1788,7 @@ WebContents* RenderFrameHostImpl::AccessibilityWebContents() {
   return delegate()->GetAsWebContents();
 }
 
-bool RenderFrameHostImpl::AccessibilityIsMainFrame() const {
+bool RenderFrameHostImpl::AccessibilityIsMainFrame() {
   if (!is_active())
     return false;
   return frame_tree_node()->IsMainFrame();
