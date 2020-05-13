@@ -59,6 +59,7 @@ class RenderFrame;
 class SpellCheckClient;
 class TestInterfaces;
 class TestRunnerForSpecificView;
+class WebViewTestProxy;
 
 // TestRunner class currently has dual purpose:
 // 1. It implements TestRunner javascript bindings for "global" / "ambient".
@@ -85,7 +86,10 @@ class TestRunner {
   void SetDelegate(BlinkTestRunner*);
   void SetMainView(blink::WebView*);
 
+  // Resets state on the TestRunner for the next test.
   void Reset();
+  // Resets state on the |web_view_test_proxy| for the next test.
+  void ResetWebView(WebViewTestProxy* web_view_test_proxy);
 
   void SetTestIsRunning(bool);
   bool TestIsRunning() const { return test_is_running_; }
