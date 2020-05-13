@@ -458,8 +458,7 @@ class FeedSurfaceMediator
             mPageNavigationDelegate.openUrl(WindowOpenDisposition.CURRENT_TAB,
                     new LoadUrlParams("https://www.google.com/preferences/interests"));
         } else if (itemId == R.id.ntp_feed_header_menu_item_learn) {
-            mPageNavigationDelegate.openUrl(WindowOpenDisposition.CURRENT_TAB,
-                    new LoadUrlParams("https://www.google.com/chrome/privacy"));
+            mPageNavigationDelegate.navigateToHelpPage();
         } else if (itemId == R.id.ntp_feed_header_menu_item_toggle_switch) {
             mSectionHeader.toggleHeader();
             SuggestionsMetrics.recordExpandableHeaderTapped(mSectionHeader.isExpanded());
