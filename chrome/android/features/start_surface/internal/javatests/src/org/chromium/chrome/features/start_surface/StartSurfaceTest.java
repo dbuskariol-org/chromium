@@ -48,7 +48,7 @@ import org.chromium.base.test.params.ParameterAnnotations.UseRunnerDelegate;
 import org.chromium.base.test.params.ParameterSet;
 import org.chromium.base.test.params.ParameterizedRunner;
 import org.chromium.base.test.util.CommandLineFlags;
-import org.chromium.base.test.util.DisabledTest;
+import org.chromium.base.test.util.DisableIf;
 import org.chromium.base.test.util.Feature;
 import org.chromium.base.test.util.Restriction;
 import org.chromium.chrome.browser.ChromeTabbedActivity;
@@ -176,7 +176,7 @@ public class StartSurfaceTest {
     @Test
     @MediumTest
     @Feature({"StartSurface"})
-    @DisabledTest
+    @DisableIf.Build(hardware_is = "bullhead", message = "crbug.com/1081657")
     // clang-format off
     @CommandLineFlags.Add({BASE_PARAMS + "/omniboxonly" +
             "/hide_switch_when_no_incognito_tabs/true"})
@@ -230,7 +230,7 @@ public class StartSurfaceTest {
     @Test
     @MediumTest
     @Feature({"StartSurface"})
-    @DisabledTest
+    @DisableIf.Build(hardware_is = "bullhead", message = "crbug.com/1081657")
     @CommandLineFlags.Add({BASE_PARAMS + "/twopanes"})
     public void testShow_TwoPanes() {
         final ChromeTabbedActivity cta = mActivityTestRule.getActivity();
