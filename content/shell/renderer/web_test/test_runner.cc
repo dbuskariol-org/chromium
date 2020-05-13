@@ -265,7 +265,6 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
   void SetTextSubpixelPositioning(bool value);
   void SetTrustTokenKeyCommitments(const std::string& raw_commitments,
                                    v8::Local<v8::Function> callback);
-  void SetViewSourceForFrame(const std::string& name, bool enabled);
   void SetWillSendRequestClearHeader(const std::string& header);
   void SetWillSendRequestClearReferrer();
   void SimulateBrowserWindowFocus(bool value);
@@ -635,8 +634,6 @@ gin::ObjectTemplateBuilder TestRunnerBindings::GetObjectTemplateBuilder(
                  &TestRunnerBindings::SetTrustTokenKeyCommitments)
       .SetMethod("setUseDashboardCompatibilityMode",
                  &TestRunnerBindings::NotImplemented)
-      .SetMethod("setViewSourceForFrame",
-                 &TestRunnerBindings::SetViewSourceForFrame)
       .SetMethod("setWillSendRequestClearHeader",
                  &TestRunnerBindings::SetWillSendRequestClearHeader)
       .SetMethod("setWillSendRequestClearReferrer",
@@ -1544,17 +1541,6 @@ void TestRunnerBindings::CopyImageAtAndCapturePixelsAsyncThen(
 void TestRunnerBindings::SetCustomTextOutput(const std::string& output) {
   if (runner_)
     runner_->SetCustomTextOutput(output);
-}
-
-void TestRunnerBindings::SetViewSourceForFrame(const std::string& name,
-                                               bool enabled) {
-  blink::WebFrame* target_frame =
-      frame_->GetWebFrame()->FindFrameByName(blink::WebString::FromUTF8(name));
-  if (target_frame) {
-    CHECK(target_frame->IsWebLocalFrame())
-        << "This function requires that the target frame is a local frame.";
-    target_frame->ToWebLocalFrame()->EnableViewSourceMode(enabled);
-  }
 }
 
 void TestRunnerBindings::SetPermission(const std::string& name,
