@@ -91,4 +91,14 @@ void PerformanceManager::RemoveObserver(
   PerformanceManagerRegistryImpl::GetInstance()->RemoveObserver(observer);
 }
 
+// static
+void AddMechanism(PerformanceManagerMainThreadMechanism* mechanism) {
+  PerformanceManagerRegistryImpl::GetInstance()->AddMechanism(mechanism);
+}
+
+// static
+void RemoveMechanism(PerformanceManagerMainThreadMechanism* mechanism) {
+  PerformanceManagerRegistryImpl::GetInstance()->RemoveMechanism(mechanism);
+}
+
 }  // namespace performance_manager
