@@ -1311,6 +1311,9 @@
         ],
       },
       'net_unittests': {
+        'swarming': {
+          'shards': 4,
+        },
         'args': [
           '--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.net_unittests.filter',
         ],
