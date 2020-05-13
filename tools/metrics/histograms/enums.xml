@@ -66024,6 +66024,21 @@ would be helpful to identify which type is being sent.
   </int>
 </enum>
 
+<enum name="TextFragmentAnchorParameters">
+  <summary>
+    Indicates which parameters were specified in a text fragment anchor.
+  </summary>
+  <int value="0" label="Unknown"/>
+  <int value="1" label="ExactText"/>
+  <int value="2" label="ExactTextWithPrefix"/>
+  <int value="3" label="ExactTextWithSuffix"/>
+  <int value="4" label="ExactTextWithContext"/>
+  <int value="5" label="TextRange"/>
+  <int value="6" label="TextRangeWithPrefix"/>
+  <int value="7" label="TextRangeWithSuffix"/>
+  <int value="8" label="TextRangeWithContext"/>
+</enum>
+
 <enum name="TextToSpeechEvent">
   <int value="0" label="Start"/>
   <int value="1" label="End"/>
