@@ -23,7 +23,7 @@
 #include "components/query_tiles/internal/tile_service_impl.h"
 #include "services/network/public/cpp/shared_url_loader_factory.h"
 
-namespace upboarding {
+namespace query_tiles {
 namespace {
 const base::FilePath::CharType kTileDbName[] =
     FILE_PATH_LITERAL("UpboardingQueryTileDatabase");
@@ -70,4 +70,4 @@ std::unique_ptr<TileService> CreateTileService(
   return std::make_unique<InitAwareTileService>(std::move(tile_service_impl));
 }
 
-}  // namespace upboarding
+}  // namespace query_tiles

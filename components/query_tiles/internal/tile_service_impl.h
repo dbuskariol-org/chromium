@@ -16,7 +16,7 @@
 #include "components/query_tiles/internal/tile_types.h"
 #include "components/query_tiles/tile_service.h"
 
-namespace upboarding {
+namespace query_tiles {
 
 // A TileService that needs to be explicitly initialized.
 class InitializableTileService : public TileService {
@@ -86,6 +86,6 @@ class TileServiceImpl : public InitializableTileService {
   base::WeakPtrFactory<TileServiceImpl> weak_ptr_factory_{this};
 };
 
-}  // namespace upboarding
+}  // namespace query_tiles
 
 #endif  // COMPONENTS_QUERY_TILES_INTERNAL_TILE_SERVICE_IMPL_H_

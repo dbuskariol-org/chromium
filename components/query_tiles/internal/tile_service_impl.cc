@@ -17,7 +17,7 @@
 #include "components/query_tiles/internal/tile_config.h"
 #include "components/query_tiles/switches.h"
 
-namespace upboarding {
+namespace query_tiles {
 namespace {
 
 // Default periodic interval of background task.
@@ -146,4 +146,4 @@ void TileServiceImpl::OnTilesSaved(
   std::move(task_finished_callback).Run(false /*reschedule*/);
 }
 
-}  // namespace upboarding
+}  // namespace query_tiles

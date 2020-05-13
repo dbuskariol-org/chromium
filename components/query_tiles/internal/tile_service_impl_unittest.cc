@@ -23,7 +23,7 @@
 using testing::_;
 using ::testing::Invoke;
 
-namespace upboarding {
+namespace query_tiles {
 namespace {
 
 class MockTileManager : public TileManager {
@@ -162,4 +162,4 @@ TEST_F(TileServiceImplTest, FetchForTilesFailed) {
   FetchForTilesWithError();
 }
 
-}  // namespace upboarding
+}  // namespace query_tiles
