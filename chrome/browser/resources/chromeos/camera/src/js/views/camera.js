@@ -344,6 +344,7 @@ export class Camera extends View {
         return false;
       }
     }
+    state.set(state.State.CAMERA_CONFIGURING, true);
     this.configuring_ = (async () => {
       try {
         if (state.get(state.State.TAKING)) {
@@ -460,6 +461,7 @@ export class Camera extends View {
         throw new CameraSuspendedError();
       });
       this.configuring_ = null;
+      state.set(state.State.CAMERA_CONFIGURING, false);
 
       return true;
     } catch (error) {
