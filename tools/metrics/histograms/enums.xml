@@ -48969,13 +48969,6 @@ Called by update_net_trust_anchors.py.-->
   <int value="1" label="Clicked"/>
 </enum>
 
-<enum name="OfflineIndicatorSurfaceState">
-  <int value="0" label="Can animate controls"/>
-  <int value="1" label="Can animate controls, omnibox focused"/>
-  <int value="2" label="Cannot animate controls"/>
-  <int value="3" label="Cannot animate controls, omnibox focused"/>
-</enum>
-
 <enum name="OfflineItemsStateAtCancel">
   <int value="0" label="Downloading"/>
   <int value="1" label="Paused"/>
