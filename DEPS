@@ -1453,7 +1453,7 @@ deps = {
   },
 
   'src/third_party/webrtc':
-    Var('webrtc_git') + '/src.git' + '@' + '381d10963ae256d3d0bce7d74a7b08f600c63439',
+    Var('webrtc_git') + '/src.git' + '@' + 'f3319816ad981ead6a584e3ff6a4dc9fe24e7996',
 
   'src/third_party/libgifcodec':
      Var('skia_git') + '/libgifcodec' + '@'+  Var('libgifcodec_revision'),
