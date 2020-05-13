@@ -502,6 +502,11 @@ void NewTabPageHandler::OnOneGoogleBarRendered(double time) {
                     base::Time::FromJsTime(time) - ntp_navigation_start_time_);
 }
 
+void NewTabPageHandler::OnPromoRendered(double time) {
+  logger_->LogEvent(NTP_MIDDLE_SLOT_PROMO_SHOWN,
+                    base::Time::FromJsTime(time) - ntp_navigation_start_time_);
+}
+
 void NewTabPageHandler::OnMostVisitedTileNavigation(
     new_tab_page::mojom::MostVisitedTilePtr tile,
     uint32_t index) {
@@ -598,6 +603,10 @@ void NewTabPageHandler::OnDoodleImageRendered(
   }
   logger_->LogEvent(event,
                     base::Time::FromJsTime(time) - ntp_navigation_start_time_);
+}
+
+void NewTabPageHandler::OnPromoLinkClicked() {
+  LogEvent(NTP_MIDDLE_SLOT_PROMO_LINK_CLICKED);
 }
 
 void NewTabPageHandler::QueryAutocomplete(const base::string16& input,

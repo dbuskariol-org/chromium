@@ -306,6 +306,8 @@ interface PageHandler {
   // Logs that the One Google Bar was added to the DOM / loaded in an iframe at
   // |time|.
   OnOneGoogleBarRendered(double time);
+  // Logs that the promo iframe was loaded at |time|.
+  OnPromoRendered(double time);
   // Logs that |tile| at position |index| was triggered to navigate to that
   // most visited entry.
   OnMostVisitedTileNavigation(MostVisitedTile tile, uint32 index);
@@ -315,6 +317,8 @@ interface PageHandler {
   OnDoodleImageClicked(DoodleImageType type);
   // Logs that the |type| image of an image doodle has been shown at |time|.
   OnDoodleImageRendered(DoodleImageType type, double time);
+  // Logs that a link on a promo has been clicked.
+  OnPromoLinkClicked();
 
   // ======= REALBOX =======
   // Queries autocomplete matches from the browser.
