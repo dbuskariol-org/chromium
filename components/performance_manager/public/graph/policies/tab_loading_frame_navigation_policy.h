@@ -76,7 +76,8 @@ class TabLoadingFrameNavigationPolicy
 
   // Exposed for testing. Can be called on any sequence, as this is initialized
   // at construction and stays constant afterwards.
-  base::TimeDelta GetTimeoutForTesting() const { return timeout_; }
+  base::TimeDelta GetMinTimeoutForTesting() const { return timeout_min_; }
+  base::TimeDelta GetMaxTimeoutForTesting() const { return timeout_max_; }
 
   // Exposed for testing. Allows setting a MechanismDelegate. This should be
   // done immediately after construction and *before* passing to the PM graph.
@@ -155,10 +156,10 @@ class TabLoadingFrameNavigationPolicy
   };
   base::IntrusiveHeap<Timeout> timeouts_;
 
-  // The timeout after which throttling is stopped. This defaults to the 99th
-  // %ile of LargestContentfulPaint (LCP).
-  // TODO(chrisha): Make this Finch configurable.
-  const base::TimeDelta timeout_ = base::TimeDelta::FromSeconds(40);
+  // The timeout after which throttling is stopped. Configured via Finch.
+  // See features.cc.
+  base::TimeDelta timeout_min_;
+  base::TimeDelta timeout_max_;
 
   // A one shot timer that is used to timeout existing throttles. This will be
   // running whenever |timeouts_| is not empty.

@@ -9,6 +9,7 @@
 #include "base/task/post_task.h"
 #include "base/task/task_traits.h"
 #include "components/performance_manager/graph/page_node_impl.h"
+#include "components/performance_manager/public/features.h"
 #include "components/performance_manager/public/mechanisms/tab_loading_frame_navigation_scheduler.h"
 #include "components/performance_manager/public/performance_manager.h"
 #include "content/public/browser/browser_task_traits.h"
@@ -55,7 +56,11 @@ bool CanThrottleUrlScheme(const GURL& url) {
 }  // namespace
 
 TabLoadingFrameNavigationPolicy::TabLoadingFrameNavigationPolicy()
-    : mechanism_(DefaultMechanismDelegate::Instance()) {}
+    : mechanism_(DefaultMechanismDelegate::Instance()) {
+  auto params = features::TabLoadingFrameNavigationThrottlesParams::GetParams();
+  timeout_min_ = params.minimum_throttle_timeout;
+  timeout_max_ = params.maximum_throttle_timeout;
+}
 
 TabLoadingFrameNavigationPolicy::~TabLoadingFrameNavigationPolicy() {
   // All timers and timeouts should have been canceled, as no page nodes
@@ -137,9 +142,9 @@ void TabLoadingFrameNavigationPolicy::OnFirstContentfulPaint(
   if (!frame_node->IsMainFrame() || !frame_node->IsCurrent())
     return;
 
-  // Wait for another FCP time period, waiting a minimum of 1 second.
+  // Wait for another FCP time period, but enforce a lower bound.
   double fcp_ms = time_since_navigation_start.InMillisecondsF();
-  double delta_ms = std::max(1000.0, fcp_ms);
+  double delta_ms = std::max(timeout_min_.InMillisecondsF(), fcp_ms);
   MaybeUpdatePageTimeout(frame_node->GetPageNode(),
                          base::TimeDelta::FromMillisecondsD(delta_ms));
 }
@@ -195,8 +200,7 @@ void TabLoadingFrameNavigationPolicy::SetPageNodeThrottledImpl(
   }
 
   // Create a brand new timeout for the page.
-  // TODO(chrisha): Make this configurable via Finch experiment.
-  CreatePageTimeout(page_node, timeout_);
+  CreatePageTimeout(page_node, timeout_max_);
 }
 
 void TabLoadingFrameNavigationPolicy::CreatePageTimeout(

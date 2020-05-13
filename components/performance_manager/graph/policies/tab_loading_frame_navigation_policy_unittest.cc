@@ -8,7 +8,9 @@
 #include "base/task/post_task.h"
 #include "base/task/task_traits.h"
 #include "base/test/bind_test_util.h"
+#include "base/test/scoped_feature_list.h"
 #include "base/test/task_environment.h"
+#include "components/performance_manager/public/features.h"
 #include "components/performance_manager/public/performance_manager.h"
 #include "components/performance_manager/test_support/performance_manager_test_harness.h"
 #include "content/public/browser/browser_task_traits.h"
@@ -140,7 +142,7 @@ class TabLoadingFrameNavigationPolicyTest
     base::TimeTicks now = task_environment()->GetMockTickClock()->NowTicks();
     base::TimeDelta elapsed = now - start_;
     double relative =
-        elapsed.InSecondsF() / policy_->GetTimeoutForTesting().InSecondsF();
+        elapsed.InSecondsF() / policy_->GetMaxTimeoutForTesting().InSecondsF();
     return relative;
   }
 
@@ -283,7 +285,7 @@ TEST_F(TabLoadingFrameNavigationPolicyTest, TimeoutWorks) {
   ASSERT_EQ(0.0, GetRelativeTime());
 
   // Advance time by half of a timeout. No callbacks should fire.
-  task_environment()->FastForwardBy(policy()->GetTimeoutForTesting() * 0.5);
+  task_environment()->FastForwardBy(policy()->GetMaxTimeoutForTesting() * 0.5);
   testing::Mock::VerifyAndClearExpectations(this);
 
   // We are now at time T / 2.
@@ -301,7 +303,7 @@ TEST_F(TabLoadingFrameNavigationPolicyTest, TimeoutWorks) {
   RunUntilStopThrottling();
   ExpectThrottledPageCount(1);
   base::TimeTicks stop1 = task_environment()->GetMockTickClock()->NowTicks();
-  EXPECT_EQ(policy()->GetTimeoutForTesting(), stop1 - start());
+  EXPECT_EQ(policy()->GetMaxTimeoutForTesting(), stop1 - start());
 
   // We are now at time T.
   ASSERT_EQ(1.0, GetRelativeTime());
@@ -316,7 +318,7 @@ TEST_F(TabLoadingFrameNavigationPolicyTest, TimeoutWorks) {
   // Advance time by a quarter of the timeout period, bringing us to time
   // 1.25 T. This means there will be 1/4 of the timeout left on the second as
   // it expires at 1.5 T.
-  task_environment()->FastForwardBy(policy()->GetTimeoutForTesting() * 0.25);
+  task_environment()->FastForwardBy(policy()->GetMaxTimeoutForTesting() * 0.25);
   testing::Mock::VerifyAndClearExpectations(this);
   ExpectThrottledPageCount(2);
 
@@ -333,7 +335,7 @@ TEST_F(TabLoadingFrameNavigationPolicyTest, TimeoutWorks) {
 
   // Advance time to a time past when the second notification *would* have
   // expired, and expect no notifications. We'll go to 1.6 T, so 0.35 T further.
-  task_environment()->FastForwardBy(policy()->GetTimeoutForTesting() * 0.35);
+  task_environment()->FastForwardBy(policy()->GetMaxTimeoutForTesting() * 0.35);
   testing::Mock::VerifyAndClearExpectations(this);
 
   // We are now at time 1.6 T.
@@ -344,10 +346,30 @@ TEST_F(TabLoadingFrameNavigationPolicyTest, TimeoutWorks) {
   RunUntilStopThrottling();
   ExpectThrottledPageCount(0);
   base::TimeTicks stop3 = task_environment()->GetMockTickClock()->NowTicks();
-  EXPECT_EQ(policy()->GetTimeoutForTesting(), stop3 - stop1);
+  EXPECT_EQ(policy()->GetMaxTimeoutForTesting(), stop3 - stop1);
 
   // We are now at time 2 T.
   ASSERT_EQ(2.0, GetRelativeTime());
+}
+
+TEST(TabLoadingFrameNavigationThrottlesParams, FeatureParamsWork) {
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitAndEnableFeatureWithParameters(
+      features::kTabLoadingFrameNavigationThrottles,
+      {{"MinimumThrottleTimeoutMilliseconds", "2500"},
+       {"MaximumThrottleTimeoutMilliseconds", "25000"}});
+
+  // Make sure the parsing works.
+  auto params = features::TabLoadingFrameNavigationThrottlesParams::GetParams();
+  EXPECT_EQ(base::TimeDelta::FromMilliseconds(2500),
+            params.minimum_throttle_timeout);
+  EXPECT_EQ(base::TimeDelta::FromSeconds(25), params.maximum_throttle_timeout);
+
+  // And make sure the plumbing works.
+  std::unique_ptr<TabLoadingFrameNavigationPolicy> policy =
+      std::make_unique<TabLoadingFrameNavigationPolicy>();
+  EXPECT_EQ(params.minimum_throttle_timeout, policy->GetMinTimeoutForTesting());
+  EXPECT_EQ(params.maximum_throttle_timeout, policy->GetMaxTimeoutForTesting());
 }
 
 }  // namespace policies
