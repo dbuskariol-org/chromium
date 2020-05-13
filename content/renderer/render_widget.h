@@ -102,7 +102,6 @@ class Range;
 
 namespace ui {
 class Cursor;
-struct DidOverscrollParams;
 }
 
 namespace content {
@@ -306,7 +305,7 @@ class CONTENT_EXPORT RenderWidget
       bool event_processed) override;
 
   void OnDidHandleKeyEvent() override;
-  void OnDidOverscroll(const ui::DidOverscrollParams& params) override;
+  void OnDidOverscroll(blink::mojom::DidOverscrollParamsPtr params) override;
   void SetInputHandler(RenderWidgetInputHandler* input_handler) override;
   void ShowVirtualKeyboard() override;
   void UpdateTextInputState() override;

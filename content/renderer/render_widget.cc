@@ -1245,10 +1245,11 @@ void RenderWidget::ClearEditCommands() {
   edit_commands_.clear();
 }
 
-void RenderWidget::OnDidOverscroll(const ui::DidOverscrollParams& params) {
+void RenderWidget::OnDidOverscroll(
+    blink::mojom::DidOverscrollParamsPtr params) {
   if (mojom::WidgetInputHandlerHost* host =
           widget_input_handler_manager_->GetWidgetInputHandlerHost()) {
-    host->DidOverscroll(params);
+    host->DidOverscroll(std::move(params));
   }
 }
 

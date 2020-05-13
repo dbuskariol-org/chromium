@@ -138,7 +138,7 @@ class QueuedWebInputEvent : public blink::WebCoalescedInputEvent,
   void HandledEvent(MainThreadEventQueue* queue,
                     blink::mojom::InputEventResultState ack_result,
                     const ui::LatencyInfo& latency_info,
-                    std::unique_ptr<ui::DidOverscrollParams> overscroll,
+                    blink::mojom::DidOverscrollParamsPtr overscroll,
                     base::Optional<cc::TouchAction> touch_action) {
     if (callback_) {
       std::move(callback_).Run(ack_result, latency_info, std::move(overscroll),

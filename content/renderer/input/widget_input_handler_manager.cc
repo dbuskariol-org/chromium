@@ -39,32 +39,31 @@ using ::perfetto::protos::pbzero::TrackEvent;
 
 namespace {
 
-base::Optional<ui::DidOverscrollParams> ToDidOverscrollParams(
-    const std::unique_ptr<blink::InputHandlerProxy::DidOverscrollParams>&
-        overscroll_params) {
+blink::mojom::DidOverscrollParamsPtr ToDidOverscrollParams(
+    const blink::InputHandlerProxy::DidOverscrollParams* overscroll_params) {
   if (!overscroll_params)
-    return base::nullopt;
-  return ui::DidOverscrollParams{overscroll_params->accumulated_overscroll,
-                                 overscroll_params->latest_overscroll_delta,
-                                 overscroll_params->current_fling_velocity,
-                                 overscroll_params->causal_event_viewport_point,
-                                 overscroll_params->overscroll_behavior};
+    return nullptr;
+  return blink::mojom::DidOverscrollParams::New(
+      overscroll_params->accumulated_overscroll,
+      overscroll_params->latest_overscroll_delta,
+      overscroll_params->current_fling_velocity,
+      overscroll_params->causal_event_viewport_point,
+      overscroll_params->overscroll_behavior);
 }
 
 void CallCallback(mojom::WidgetInputHandler::DispatchEventCallback callback,
                   blink::mojom::InputEventResultState result_state,
                   const ui::LatencyInfo& latency_info,
-                  std::unique_ptr<ui::DidOverscrollParams> overscroll_params,
+                  blink::mojom::DidOverscrollParamsPtr overscroll_params,
                   base::Optional<cc::TouchAction> touch_action) {
   ui::LatencyInfo::TraceIntermediateFlowEvents(
       {latency_info}, ChromeLatencyInfo::STEP_HANDLED_INPUT_EVENT_IMPL);
   std::move(callback).Run(
       blink::mojom::InputEventResultSource::kMainThread, latency_info,
-      result_state,
-      overscroll_params
-          ? base::Optional<ui::DidOverscrollParams>(*overscroll_params)
-          : base::nullopt,
-      touch_action);
+      result_state, std::move(overscroll_params),
+      touch_action
+          ? blink::mojom::TouchActionOptional::New(touch_action.value())
+          : nullptr);
 }
 
 blink::mojom::InputEventResultState InputEventDispositionToAck(
@@ -354,10 +353,9 @@ void WidgetInputHandlerManager::DispatchEvent(
     // Call |callback| if it was available indicating this event wasn't
     // handled.
     if (callback) {
-      std::move(callback).Run(blink::mojom::InputEventResultSource::kMainThread,
-                              ui::LatencyInfo(),
-                              blink::mojom::InputEventResultState::kNotConsumed,
-                              base::nullopt, base::nullopt);
+      std::move(callback).Run(
+          blink::mojom::InputEventResultSource::kMainThread, ui::LatencyInfo(),
+          blink::mojom::InputEventResultState::kNotConsumed, nullptr, nullptr);
     }
     return;
   }
@@ -379,10 +377,9 @@ void WidgetInputHandlerManager::DispatchEvent(
   // without a begin. Scrolling, pinch-zoom etc. don't seem dangerous.
   if (renderer_deferral_state_ && !allow_pre_commit_input_ && !event_is_move) {
     if (callback) {
-      std::move(callback).Run(blink::mojom::InputEventResultSource::kMainThread,
-                              ui::LatencyInfo(),
-                              blink::mojom::InputEventResultState::kNotConsumed,
-                              base::nullopt, base::nullopt);
+      std::move(callback).Run(
+          blink::mojom::InputEventResultSource::kMainThread, ui::LatencyInfo(),
+          blink::mojom::InputEventResultState::kNotConsumed, nullptr, nullptr);
     }
     return;
   }
@@ -401,8 +398,8 @@ void WidgetInputHandlerManager::DispatchEvent(
         std::move(callback).Run(
             blink::mojom::InputEventResultSource::kMainThread,
             ui::LatencyInfo(),
-            blink::mojom::InputEventResultState::kNotConsumed, base::nullopt,
-            base::nullopt);
+            blink::mojom::InputEventResultState::kNotConsumed, nullptr,
+            nullptr);
       }
       return;
     }
@@ -569,10 +566,9 @@ void WidgetInputHandlerManager::HandleInputEvent(
   // was just recreated for a provisional frame.
   if (!render_widget_ || render_widget_->IsForProvisionalFrame()) {
     if (callback) {
-      std::move(callback).Run(blink::mojom::InputEventResultSource::kMainThread,
-                              latency,
-                              blink::mojom::InputEventResultState::kNotConsumed,
-                              base::nullopt, base::nullopt);
+      std::move(callback).Run(
+          blink::mojom::InputEventResultSource::kMainThread, latency,
+          blink::mojom::InputEventResultState::kNotConsumed, nullptr, nullptr);
     }
     return;
   }
@@ -629,7 +625,7 @@ void WidgetInputHandlerManager::DidHandleInputEventAndOverscroll(
   if (callback) {
     std::move(callback).Run(
         blink::mojom::InputEventResultSource::kCompositorThread, latency_info,
-        ack_state, ToDidOverscrollParams(overscroll_params), base::nullopt);
+        ack_state, ToDidOverscrollParams(overscroll_params.get()), nullptr);
   }
 }
 
@@ -637,7 +633,7 @@ void WidgetInputHandlerManager::HandledInputEvent(
     mojom::WidgetInputHandler::DispatchEventCallback callback,
     blink::mojom::InputEventResultState ack_state,
     const ui::LatencyInfo& latency_info,
-    std::unique_ptr<ui::DidOverscrollParams> overscroll_params,
+    blink::mojom::DidOverscrollParamsPtr overscroll_params,
     base::Optional<cc::TouchAction> touch_action) {
   if (!callback)
     return;
@@ -672,11 +668,10 @@ void WidgetInputHandlerManager::HandledInputEvent(
         is_compositor_thread
             ? blink::mojom::InputEventResultSource::kCompositorThread
             : blink::mojom::InputEventResultSource::kMainThread,
-        latency_info, ack_state,
-        overscroll_params
-            ? base::Optional<ui::DidOverscrollParams>(*overscroll_params)
-            : base::nullopt,
-        touch_action);
+        latency_info, ack_state, std::move(overscroll_params),
+        touch_action
+            ? blink::mojom::TouchActionOptional::New(touch_action.value())
+            : nullptr);
   }
 }
 
