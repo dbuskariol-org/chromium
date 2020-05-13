@@ -4359,6 +4359,10 @@ const FeatureEntry kFeatureEntries[] = {
 #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX) ||
         // defined(OS_CHROMEOS)
 
+    {"sharing-prefer-vapid", flag_descriptions::kSharingPreferVapidName,
+     flag_descriptions::kSharingPreferVapidDescription, kOsAll,
+     FEATURE_VALUE_TYPE(kSharingPreferVapid)},
+
     {"sharing-qr-code-generator",
      flag_descriptions::kSharingQRCodeGeneratorName,
      flag_descriptions::kSharingQRCodeGeneratorDescription, kOsDesktop,

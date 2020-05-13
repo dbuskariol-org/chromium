@@ -1037,6 +1037,9 @@ extern const char kSharingPeerConnectionReceiverDescription[];
 extern const char kSharingPeerConnectionSenderName[];
 extern const char kSharingPeerConnectionSenderDescription[];
 
+extern const char kSharingPreferVapidName[];
+extern const char kSharingPreferVapidDescription[];
+
 extern const char kSharingQRCodeGeneratorName[];
 extern const char kSharingQRCodeGeneratorDescription[];
 
