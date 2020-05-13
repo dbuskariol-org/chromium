@@ -1,4 +1,4 @@
-vars = struct(
+settings = struct(
     # Switch this to False for branches
     is_master = True,
     ref = 'refs/heads/master',

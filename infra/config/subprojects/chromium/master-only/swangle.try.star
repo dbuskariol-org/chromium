@@ -1,10 +1,10 @@
 load('//lib/builders.star', 'builder', 'cpu', 'defaults', 'goma', 'os')
 load('//lib/try.star', 'try_')
-load('./versioned/trunk/vars.star', 'vars')
+load('//project.star', 'settings')
 
 
 try_.set_defaults(
-    vars,
+    settings,
     execution_timeout = 2 * time.hour,
     service_account = 'chromium-try-gpu-builder@chops-service-accounts.iam.gserviceaccount.com',
 )
