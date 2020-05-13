@@ -292,7 +292,6 @@ void AVIFImageDecoder::Decode(size_t index) {
 
   ImageFrame& buffer = frame_buffer_cache_[index];
   DCHECK_NE(buffer.GetStatus(), ImageFrame::kFrameComplete);
-  buffer.SetHasAlpha(!!image->alphaPlane);
   if (decode_to_half_float_)
     buffer.SetPixelFormat(ImageFrame::PixelFormat::kRGBA_F16);
 
@@ -319,6 +318,7 @@ void AVIFImageDecoder::Decode(size_t index) {
   }
 
   buffer.SetPixelsChanged(true);
+  buffer.SetHasAlpha(!!image->alphaPlane);
   buffer.SetStatus(ImageFrame::kFrameComplete);
 }
 

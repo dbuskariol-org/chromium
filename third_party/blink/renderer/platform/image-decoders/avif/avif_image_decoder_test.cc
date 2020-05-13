@@ -13,7 +13,6 @@
 #include "third_party/blink/renderer/platform/wtf/shared_buffer.h"
 #include "third_party/libavif/src/include/avif/avif.h"
 
-#define FIXME_HAS_ALPHA_ALWAYS_RETURNS_TRUE 0
 #define FIXME_SUPPORT_10BIT_IMAGE_WITH_ALPHA 0
 #define FIXME_SUPPORT_12BIT_IMAGE_WITH_ALPHA 0
 #define FIXME_CRASH_IF_COLOR_TRANSFORMATION_IS_ENABLED 0
@@ -546,11 +545,9 @@ TEST_P(StaticAVIFColorTests, InspectImage) {
   // TODO(ryoh): How should we treat imir(mirroring), irot(rotation) and
   // clap(cropping)?
   // EXPECT_EQ(xxxx, decoder->Orientation());
-#if FIXME_HAS_ALPHA_ALWAYS_RETURNS_TRUE
   EXPECT_EQ(param.color_type == ColorType::kRgbA ||
                 param.color_type == ColorType::kMonoA,
             frame->HasAlpha());
-#endif
   auto get_color_channel = [](SkColorChannel channel, SkColor color) {
     switch (channel) {
       case SkColorChannel::kR:
