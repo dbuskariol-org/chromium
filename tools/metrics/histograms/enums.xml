@@ -38954,6 +38954,8 @@ from previous Chrome versions.
   <int value="-1288130734" label="OpenVR:disabled"/>
   <int value="-1287511172"
       label="OmniboxUIExperimentHideSteadyStateUrlSchemeAndSubdomains:disabled"/>
+  <int value="-1286038936"
+      label="AutofillEnableCardNicknameManagement:enabled"/>
   <int value="-1285021473" label="save-page-as-mhtml"/>
   <int value="-1284637134" label="pull-to-refresh"/>
   <int value="-1282992935"
@@ -39647,6 +39649,8 @@ from previous Chrome versions.
   <int value="-513305102" label="LanguagesPreference:enabled"/>
   <int value="-513066193" label="SyncUSSPasswords:enabled"/>
   <int value="-512971943" label="disable-one-copy"/>
+  <int value="-512702391"
+      label="AutofillEnableCardNicknameManagement:disabled"/>
   <int value="-510488450" label="disable-pnacl"/>
   <int value="-508346329" label="TerminalSystemAppLegacySettings:disabled"/>
   <int value="-508250572" label="ServiceWorkerLongRunningMessage:disabled"/>

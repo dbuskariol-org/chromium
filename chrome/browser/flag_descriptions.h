@@ -115,6 +115,9 @@ extern const char kAutofillAssistantChromeEntryDescription[];
 extern const char kAutofillCacheQueryResponsesName[];
 extern const char kAutofillCacheQueryResponsesDescription[];
 
+extern const char kAutofillEnableCardNicknameManagementName[];
+extern const char kAutofillEnableCardNicknameManagementDescription[];
+
 extern const char kAutofillEnableCompanyNameName[];
 extern const char kAutofillEnableCompanyNameDescription[];
 

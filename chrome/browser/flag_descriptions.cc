@@ -178,6 +178,12 @@ const char kAutofillCacheQueryResponsesDescription[] =
     "When enabled, autofill will cache the responses it receives from the "
     "crowd-sourced field type prediction server.";
 
+const char kAutofillEnableCardNicknameManagementName[] =
+    "Enable Autofill card nickname management";
+const char kAutofillEnableCardNicknameManagementDescription[] =
+    "When enabled, nicknames for credit cards will be able to be uploaded to "
+    "Payments or modified locally.";
+
 const char kAutofillEnableCompanyNameName[] =
     "Enable Autofill Company Name field";
 const char kAutofillEnableCompanyNameDescription[] =
