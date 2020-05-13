@@ -65,6 +65,7 @@ static_library("performance_manager") {
     "graph/worker_node_impl.h",
     "graph/worker_node_impl_describer.cc",
     "graph/worker_node_impl_describer.h",
+    "mechanisms/tab_loading_frame_navigation_scheduler.cc",
     "performance_manager.cc",
     "performance_manager_feature_observer_client.cc",
     "performance_manager_feature_observer_client.h",
@@ -101,6 +102,7 @@ static_library("performance_manager") {
     "public/graph/process_node.h",
     "public/graph/system_node.h",
     "public/graph/worker_node.h",
+    "public/mechanisms/tab_loading_frame_navigation_scheduler.h",
     "public/performance_manager.h",
     "public/performance_manager_main_thread_observer.h",
     "public/render_frame_host_proxy.h",
@@ -230,6 +232,7 @@ source_set("browser_tests") {
   defines = [ "HAS_OUT_OF_PROC_TEST_RUNNER" ]
 
   sources = [
+    "mechanisms/tab_loading_frame_navigation_scheduler_browsertest.cc",
     "performance_manager_browsertest.cc",
     "render_process_host_proxy_browsertest.cc",
   ]
@@ -242,6 +245,7 @@ source_set("browser_tests") {
     "//content/shell:content_shell_lib",
     "//content/test:browsertest_support",
     "//content/test:test_support",
+    "//net:test_support",
     "//testing/gmock",
     "//testing/gtest",
   ]

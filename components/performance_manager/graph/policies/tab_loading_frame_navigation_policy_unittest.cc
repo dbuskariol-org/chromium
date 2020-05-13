@@ -26,7 +26,10 @@ namespace policies {
 namespace {
 
 class TabLoadingFrameNavigationPolicyTest
-    : public PerformanceManagerTestHarness {
+    : public PerformanceManagerTestHarness,
+      public TabLoadingFrameNavigationPolicy::MechanismDelegate {
+  using Super = PerformanceManagerTestHarness;
+
  public:
   TabLoadingFrameNavigationPolicyTest()
       : PerformanceManagerTestHarness(
@@ -38,23 +41,49 @@ class TabLoadingFrameNavigationPolicyTest
   ~TabLoadingFrameNavigationPolicyTest() override = default;
 
   void SetUp() override {
-    PerformanceManagerTestHarness::SetUp();
+    Super::SetUp();
 
-    // The unittest fixture outlives the graph under test, so passing an
-    // unretained pointer is safe.
-    auto callback = base::BindRepeating(
-        &TabLoadingFrameNavigationPolicyTest::OnStopThrottlingWrapper,
-        base::Unretained(this));
+    // When the policy is created we expect it to enable the mechanism.
+    base::RunLoop run_loop;
+    quit_closure_ = run_loop.QuitClosure();
+    EXPECT_CALL(*this, OnSetThrottlingEnabled(true));
+    PerformanceManager::CallOnGraph(
+        FROM_HERE,
+        base::BindLambdaForTesting([policy = this->policy_](Graph* graph) {
+          // Destroy the policy object early, so that it invokes
+          // StopThrottlingEverything in a controlled way.
+          graph->TakeFromGraph(policy);
+        }));
 
     // Create the policy object and inject it into the graph.
     std::unique_ptr<TabLoadingFrameNavigationPolicy> policy =
-        std::make_unique<TabLoadingFrameNavigationPolicy>(callback);
+        std::make_unique<TabLoadingFrameNavigationPolicy>();
+    policy->SetMechanismDelegateForTesting(this);
     policy_ = policy.get();
     PerformanceManager::PassToGraph(FROM_HERE, std::move(policy));
+    run_loop.Run();
+    testing::Mock::VerifyAndClearExpectations(this);
 
     // Ensure that the policy default initializes with no throttles in place.
     ExpectThrottledPageCount(0);
     start_ = task_environment()->GetMockTickClock()->NowTicks();
+  }
+
+  void TearDown() override {
+    base::RunLoop run_loop;
+    quit_closure_ = run_loop.QuitClosure();
+    EXPECT_CALL(*this, OnSetThrottlingEnabled(false));
+    PerformanceManager::CallOnGraph(
+        FROM_HERE,
+        base::BindLambdaForTesting([policy = this->policy_](Graph* graph) {
+          // Destroy the policy object early, so that it invokes
+          // StopThrottlingEverything in a controlled way.
+          graph->TakeFromGraph(policy);
+        }));
+    policy_ = nullptr;
+    run_loop.Run();
+    testing::Mock::VerifyAndClearExpectations(this);
+    Super::TearDown();
   }
 
   void RunUntilStopThrottling() {
@@ -98,7 +127,8 @@ class TabLoadingFrameNavigationPolicyTest
     run_loop.Run();
   }
 
-  // Invoked by the policy when throttling should stop for a given contents.
+  // The MechanismDelegate calls redirect here.
+  MOCK_METHOD1(OnSetThrottlingEnabled, void(bool));
   MOCK_METHOD1(OnStopThrottling, void(content::WebContents*));
 
   // Accessors.
@@ -115,7 +145,14 @@ class TabLoadingFrameNavigationPolicyTest
   }
 
  private:
-  void OnStopThrottlingWrapper(content::WebContents* contents) {
+  // MechanismDelegate implementation:
+  void SetThrottlingEnabled(bool enabled) override {
+    OnSetThrottlingEnabled(enabled);
+    // Always expect the quit closure to be set for calls to this.
+    quit_closure_.Run();
+  }
+  void StopThrottling(content::WebContents* contents,
+                      int64_t last_navigation_id_unused) override {
     OnStopThrottling(contents);
 
     // Time can be manually advanced as well, so we're not always in a RunLoop.
