@@ -333,7 +333,11 @@ class PlayerFrameMediator implements PlayerFrameViewDelegate {
 
     @Override
     public void onClick(int x, int y) {
-        mCompositorDelegate.onClick(mGuid, mViewportRect.left + x, mViewportRect.top + y);
+        // x and y are in the View's coordinate system (scaled). This needs to be adjusted to the
+        // absolute coordinate system for hit testing.
+        mCompositorDelegate.onClick(mGuid,
+                Math.round((float) (mViewportRect.left + x) / mScaleFactor),
+                Math.round((float) (mViewportRect.top + y) / mScaleFactor));
     }
 
     @Override
