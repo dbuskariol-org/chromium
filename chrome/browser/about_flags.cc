@@ -5618,8 +5618,8 @@ bool SkipConditionalFeatureEntry(const FeatureEntry& entry) {
     return true;
   }
 
-  // Lacros is only available on canary/dev channels and developer builds.
   if (!strcmp(kLacrosSupportInternalName, entry.internal_name) &&
+      channel != version_info::Channel::BETA &&
       channel != version_info::Channel::DEV &&
       channel != version_info::Channel::CANARY &&
       channel != version_info::Channel::UNKNOWN) {
