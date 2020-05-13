@@ -3055,13 +3055,16 @@ To change this setting, <ph name="BEGIN_LINK">&lt;resetlink&gt;</ph>reset sync<p
         Running in Chrome
       </message>
       <message name="IDS_TWA_RUNNING_IN_CHROME_V2" desc="Updated message on a snackbar indicating that the current Activity may use Chrome data (the rest of the app may not be).">
-        History is shared with Chrome. Preferences are shared with <ph name="SITE_NAME">%1$s<ex>www.youtube.com</ex></ph>.
+        You'll see your <ph name="SITE_NAME">%1$s<ex>www.youtube.com</ex></ph> sign-in status, browsing data, and site data in Chrome.
+      </message>
+      <message name="IDS_GOT_IT" desc="Button for the user to accept a disclosure/message">
+        Got it
       </message>
       <message name="IDS_TWA_RUNNING_IN_CHROME_CHANNEL_NAME_INITIAL" desc="Notification channel name for the initial, urgent priority notification telling the user a TWA is running in Chrome.">
-        Running in Chrome (Initial)
+        Web apps
       </message>
       <message name="IDS_TWA_RUNNING_IN_CHROME_CHANNEL_NAME_SUBSEQUENT" desc="Notification channel name for follow up notifications telling the user a TWA is running in Chrome.">
-        Running in Chrome
+        Web apps (quiet)
       </message>
       <message name="IDS_TWA_CLEAR_DATA_DIALOG_TITLE" desc="Title of the clear data dialog showing after user uninstalls or clears data of an app hosting a Trusted Web Activity">
         <ph name="APP_NAME">%1$s<ex>YouTube</ex></ph> also has data in Chrome
