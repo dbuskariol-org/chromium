@@ -1,10 +1,9 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.webapps;
+package org.chromium.chrome.browser.browserservices.ui.splashscreen.webapps;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -17,32 +16,57 @@ import android.widget.ImageView;
 import org.chromium.base.ContextUtils;
 import org.chromium.base.FileUtils;
 import org.chromium.base.StrictModeContext;
+import org.chromium.chrome.browser.ChromeActivity;
+import org.chromium.chrome.browser.browserservices.BrowserServicesIntentDataProvider;
 import org.chromium.chrome.browser.customtabs.content.TabObserverRegistrar;
 import org.chromium.chrome.browser.tab.Tab;
+import org.chromium.chrome.browser.webapps.SplashController;
+import org.chromium.chrome.browser.webapps.SplashDelegate;
+import org.chromium.chrome.browser.webapps.WebApkSplashNetworkErrorObserver;
+import org.chromium.chrome.browser.webapps.WebappDataStorage;
+import org.chromium.chrome.browser.webapps.WebappInfo;
+import org.chromium.chrome.browser.webapps.WebappRegistry;
 import org.chromium.ui.util.ColorUtils;
 import org.chromium.webapk.lib.common.WebApkCommonUtils;
 import org.chromium.webapk.lib.common.splash.SplashLayout;
 
-/** Delegate for splash screen for webapps and WebAPKs. */
-public class WebappSplashDelegate implements SplashDelegate {
+import javax.inject.Inject;
+
+/**
+ * Displays the splash screen for homescreen shortcuts and WebAPKs.
+ */
+public class WebappSplashController implements SplashDelegate {
     public static final int HIDE_ANIMATION_DURATION_MS = 300;
 
+    private SplashController mSplashController;
     private TabObserverRegistrar mTabObserverRegistrar;
-
     private WebappInfo mWebappInfo;
 
     private WebApkSplashNetworkErrorObserver mWebApkNetworkErrorObserver;
 
-    public WebappSplashDelegate(
-            Activity activity, TabObserverRegistrar tabObserverRegistrar, WebappInfo webappInfo) {
+    @Inject
+    public WebappSplashController(SplashController splashController, ChromeActivity<?> activity,
+            TabObserverRegistrar tabObserverRegistrar,
+            BrowserServicesIntentDataProvider intentDataProvider) {
+        mSplashController = splashController;
         mTabObserverRegistrar = tabObserverRegistrar;
-        mWebappInfo = webappInfo;
+        mWebappInfo = WebappInfo.create(intentDataProvider);
+
+        mSplashController.setConfig(this, HIDE_ANIMATION_DURATION_MS);
 
         if (mWebappInfo.isForWebApk()) {
             mWebApkNetworkErrorObserver =
                     new WebApkSplashNetworkErrorObserver(activity, mWebappInfo.name());
             mTabObserverRegistrar.registerTabObserver(mWebApkNetworkErrorObserver);
         }
+    }
+
+    /**
+     * Called once the Activity's main layout is inflated and added to the content view.
+     */
+    public void onInitialLayoutInflationComplete() {
+        // TODO: TWAs do this in onPostInflationStart(). Determine if there is a visual difference.
+        mSplashController.bringSplashBackToFront();
     }
 
     @Override
