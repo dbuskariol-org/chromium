@@ -109,6 +109,7 @@
 #include "services/network/public/mojom/url_response_head.mojom.h"
 #include "services/network/public/mojom/web_sandbox_flags.mojom.h"
 #include "third_party/blink/public/common/blob/blob_utils.h"
+#include "third_party/blink/public/common/client_hints/client_hints.h"
 #include "third_party/blink/public/common/origin_trials/trial_token_validator.h"
 #include "third_party/blink/public/mojom/appcache/appcache.mojom.h"
 #include "third_party/blink/public/mojom/fetch/fetch_api_request.mojom.h"
@@ -2603,7 +2604,12 @@ void NavigationRequest::OnRedirectChecksComplete(
 
   net::HttpRequestHeaders modified_headers = TakeModifiedRequestHeaders();
   std::vector<std::string> removed_headers = TakeRemovedRequestHeaders();
+  // Removes all Client Hints from the request, that were passed on from the
+  // previous one.
+  for (size_t i = 0; i < blink::kClientHintsMappingsCount; ++i)
+    removed_headers.push_back(blink::kClientHintsHeaderMapping[i]);
 
+  // Add any required Client Hints to the current request.
   BrowserContext* browser_context =
       frame_tree_node_->navigator()->GetController()->GetBrowserContext();
   ClientHintsControllerDelegate* client_hints_delegate =
