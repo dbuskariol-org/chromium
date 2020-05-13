@@ -95,5 +95,6 @@ export function createTheme() {
     dailyRefreshCollectionId: '',
     searchBox: searchBox,
     shortcutUseWhiteAddIcon: false,
+    shortcutUseTitlePill: false,
   };
 }
