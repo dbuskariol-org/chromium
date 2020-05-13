@@ -868,9 +868,7 @@ class TabListMediator {
      */
     void prepareOverview() {
         if (!TabUiFeatureUtilities.isTabToGtsAnimationEnabled()
-                || !mTabModelSelector.getTabModelFilterProvider()
-                            .getCurrentTabModelFilter()
-                            .isTabModelRestored()) {
+                || !mTabModelSelector.isTabStateInitialized()) {
             return;
         }
 
