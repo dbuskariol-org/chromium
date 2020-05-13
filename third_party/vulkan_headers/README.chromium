@@ -11,4 +11,4 @@ Description:
 Vulkan Header files and API registry
 
 Local Modifications:
-Added OWNERS, README.chromium and BUILD.gn files.
+Added OWNERS and README.chromium files.
