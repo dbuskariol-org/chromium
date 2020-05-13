@@ -925,7 +925,6 @@ jumbo_source_set("browser") {
     "frame_host/navigation_throttle_runner.h",
     "frame_host/navigator.cc",
     "frame_host/navigator.h",
-    "frame_host/navigator_delegate.cc",
     "frame_host/navigator_delegate.h",
     "frame_host/navigator_impl.cc",
     "frame_host/navigator_impl.h",
