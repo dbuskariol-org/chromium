@@ -161,6 +161,7 @@ void CastActivityManager::DoLaunchSession(DoLaunchSessionParams params) {
   }
   message_handler_->LaunchSession(
       sink.cast_data().cast_channel_id, app_id, launch_timeout, type_str,
+      cast_source.app_params(),
       base::BindOnce(&CastActivityManager::HandleLaunchSessionResponse,
                      weak_ptr_factory_.GetWeakPtr(), route_id, sink,
                      cast_source));
