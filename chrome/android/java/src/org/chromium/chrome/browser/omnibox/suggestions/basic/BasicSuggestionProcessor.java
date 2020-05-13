@@ -67,7 +67,7 @@ public class BasicSuggestionProcessor extends BaseSuggestionViewProcessor {
     }
 
     @Override
-    public void recordSuggestionPresented(OmniboxSuggestion suggestion, PropertyModel model) {
+    public void recordItemPresented(PropertyModel model) {
         RecordHistogram.recordEnumeratedHistogram("Omnibox.IconOrFaviconShown",
                 model.get(SuggestionViewProperties.SUGGESTION_ICON_TYPE),
                 SuggestionIcon.TOTAL_COUNT);

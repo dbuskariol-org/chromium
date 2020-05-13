@@ -56,7 +56,7 @@ public abstract class BaseSuggestionViewProcessor implements SuggestionProcessor
     public void onUrlFocusChange(boolean hasFocus) {}
 
     @Override
-    public void recordSuggestionPresented(OmniboxSuggestion suggestion, PropertyModel model) {}
+    public void recordItemPresented(PropertyModel model) {}
 
     @Override
     public void onNativeInitialized() {
@@ -78,7 +78,7 @@ public abstract class BaseSuggestionViewProcessor implements SuggestionProcessor
     public void onSuggestionsReceived() {}
 
     @Override
-    public int getMinimumSuggestionViewHeight() {
+    public int getMinimumViewHeight() {
         return mSuggestionSizePx;
     }
 
