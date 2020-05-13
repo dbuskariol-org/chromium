@@ -88,6 +88,8 @@ android_library("weblayer_java_test_support") {
   sources = [
     "src/org/chromium/weblayer/test/BoundedCountDownLatch.java",
     "src/org/chromium/weblayer/test/InstrumentationActivityTestRule.java",
+    "src/org/chromium/weblayer/test/MinWebLayerVersion.java",
+    "src/org/chromium/weblayer/test/MinWebLayerVersionSkipCheck.java",
     "src/org/chromium/weblayer/test/NavigationWaiter.java",
     "src/org/chromium/weblayer/test/ResourceUtil.java",
     "src/org/chromium/weblayer/test/WebLayerJUnit4ClassRunner.java",
