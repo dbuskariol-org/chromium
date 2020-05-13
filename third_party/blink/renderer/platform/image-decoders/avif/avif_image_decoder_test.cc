@@ -20,8 +20,6 @@
 #define FIXME_SUPPORT_ICC_PROFILE_NO_TRANSFORM 0
 #define FIXME_SUPPORT_ICC_PROFILE_TRANSFORM 0
 #define FIXME_DISTINGUISH_LOSSY_OR_LOSSLESS 0
-#define FIXME_SUPPORT_10BIT_FULL_RANGED_COLOR 0
-#define FIXME_SUPPORT_12BIT_FULL_RANGED_COLOR 0
 #define FIXME_CRASH_IF_COLOR_BEHAVIOR_IS_IGNORE 0
 
 namespace blink {
@@ -120,7 +118,7 @@ StaticColorCheckParam kTestParams[] = {
      ImageDecoder::kLosslessFormat,
      ImageDecoder::kAlphaNotPremultiplied,
      ColorBehavior::Tag(),
-     1,
+     0,
      {
          {gfx::Point(0, 0), SkColorSetARGB(255, 255, 0, 0)},
          {gfx::Point(1, 1), SkColorSetARGB(255, 255, 0, 0)},
@@ -241,20 +239,18 @@ StaticColorCheckParam kTestParams[] = {
      }},
 #endif
 #endif
-#if FIXME_SUPPORT_10BIT_FULL_RANGED_COLOR
     {"/images/resources/avif/red-full-ranged-10bpc.avif",
      10,
      ColorType::kRgb,
      ImageDecoder::kLosslessFormat,
      ImageDecoder::kAlphaNotPremultiplied,
      ColorBehavior::Tag(),
-     1,
+     0,
      {
          {gfx::Point(0, 0), SkColorSetARGB(255, 255, 0, 0)},
          {gfx::Point(1, 1), SkColorSetARGB(255, 255, 0, 0)},
          {gfx::Point(2, 2), SkColorSetARGB(255, 255, 0, 0)},
      }},
-#endif
     {"/images/resources/avif/alpha-mask-limited-ranged-10bpc.avif",
      10,
      ColorType::kMono,
@@ -354,20 +350,18 @@ StaticColorCheckParam kTestParams[] = {
      }},
 #endif
 #endif
-#if FIXME_SUPPORT_12BIT_FULL_RANGED_COLOR
     {"/images/resources/avif/red-full-ranged-12bpc.avif",
      12,
      ColorType::kRgb,
      ImageDecoder::kLosslessFormat,
      ImageDecoder::kAlphaNotPremultiplied,
      ColorBehavior::Tag(),
-     1,
+     0,
      {
          {gfx::Point(0, 0), SkColorSetARGB(255, 255, 0, 0)},
          {gfx::Point(1, 1), SkColorSetARGB(255, 255, 0, 0)},
          {gfx::Point(2, 2), SkColorSetARGB(255, 255, 0, 0)},
      }},
-#endif
     {"/images/resources/avif/alpha-mask-limited-ranged-12bpc.avif",
      12,
      ColorType::kMono,
