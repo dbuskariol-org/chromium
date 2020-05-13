@@ -3624,7 +3624,6 @@
       },
       'id': 700,
       'supported_on' : ['chrome.*:84-', 'chrome_os:84-'],
-      'future': True,
       'caption': '''List of file types that should be automatically opened on download''',
       'tags': [],
       'desc': '''List of file types that should be automatically opened on download. The leading separator should not be included when listing the file type, so list "txt" instead of ".txt".
