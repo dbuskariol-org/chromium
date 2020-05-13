@@ -1,12 +1,16 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-module ash.mojom;
+#ifndef CHROMEOS_SERVICES_ASSISTANT_PUBLIC_CPP_ASSISTANT_ENUMS_H_
+#define CHROMEOS_SERVICES_ASSISTANT_PUBLIC_CPP_ASSISTANT_ENUMS_H_
+
+namespace chromeos {
+namespace assistant {
 
 // The initial state is NOT_READY, after Assistant service started it becomes
 // READY. When Assistant UI shows up the state becomes VISIBLE.
-enum AssistantState {
+enum AssistantStatus {
   // The Assistant service is not ready yet.
   NOT_READY = 0,
   // The Assistant service is ready.
@@ -39,32 +43,12 @@ enum AssistantAllowedState {
   // Disallowed because the user's account type is currently not supported.
   DISALLOWED_BY_ACCOUNT_TYPE,
   // Disallowed because the device is in Kiosk mode.
-  DISALLOWED_BY_KIOSK_MODE
+  DISALLOWED_BY_KIOSK_MODE,
+
+  MAX_VALUE = DISALLOWED_BY_KIOSK_MODE,
 };
 
-// Allows observing changes to Assistant status and settings.
-interface AssistantStateObserver {
-  // Called when Assistant state changes.
-  OnAssistantStatusChanged(AssistantState state);
+}  // namespace assistant
+}  // namespace chromeos
 
-  // Called when assistant feature allowed state has changed.
-  OnAssistantFeatureAllowedChanged(AssistantAllowedState state);
-
-  // Called when Google Play Store is enabled/disabled.
-  OnArcPlayStoreEnabledChanged(bool enabled);
-
-  // Called when locale is changed in pref. The locale is in the format can be
-  // "en-US" or simply "en". When locale is not set in pref, it returns empty
-  // string.
-  OnLocaleChanged(string locale);
-
-  // Called when locked full screen state has changed.
-  OnLockedFullScreenStateChanged(bool enabled);
-};
-
-// Interface for ash client (Assistant service) to connect to state controller,
-// which notifies changes of Assistant status and settings.
-interface AssistantStateController {
-  // Add an observer.
-  AddMojomObserver(pending_remote<AssistantStateObserver> observer);
-};
+#endif  // CHROMEOS_SERVICES_ASSISTANT_PUBLIC_CPP_ASSISTANT_ENUMS_H_

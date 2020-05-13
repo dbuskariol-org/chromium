@@ -4,6 +4,9 @@
 
 #include "chrome/browser/ui/webui/settings/chromeos/search_section.h"
 
+#include <memory>
+#include <vector>
+
 #include "ash/public/cpp/assistant/assistant_state.h"
 #include "base/no_destructor.h"
 #include "base/strings/utf_string_conversions.h"
@@ -264,7 +267,7 @@ void SearchSection::OnAssistantHotwordEnabled(bool enabled) {
 bool SearchSection::IsAssistantAllowed() {
   // NOTE: This will be false when the flag is disabled.
   return ::assistant::IsAssistantAllowedForProfile(profile()) ==
-         ash::mojom::AssistantAllowedState::ALLOWED;
+         chromeos::assistant::AssistantAllowedState::ALLOWED;
 }
 
 void SearchSection::UpdateAssistantSearchTags() {
