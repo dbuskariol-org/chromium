@@ -2990,6 +2990,10 @@ const FeatureEntry kFeatureEntries[] = {
                                     "ForceDarkVariations")},
 #endif  // !OS_CHROMEOS
 #if defined(OS_ANDROID)
+    {"enable-android-dark-search", flag_descriptions::kAndroidDarkSearchName,
+     flag_descriptions::kAndroidDarkSearchDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(features::kAndroidDarkSearch)},
+
     {"enable-android-night-mode-tab-reparenting",
      flag_descriptions::kAndroidNightModeTabReparentingName,
      flag_descriptions::kAndroidNightModeTabReparentingDescription, kOsAndroid,

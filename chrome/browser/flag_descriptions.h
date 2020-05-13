@@ -1625,6 +1625,9 @@ extern const char kUsageStatsName[];
 extern const char kInlineUpdateFlowName[];
 extern const char kInlineUpdateFlowDescription[];
 
+extern const char kAndroidDarkSearchName[];
+extern const char kAndroidDarkSearchDescription[];
+
 extern const char kAndroidNightModeTabReparentingName[];
 extern const char kAndroidNightModeTabReparentingDescription[];
 

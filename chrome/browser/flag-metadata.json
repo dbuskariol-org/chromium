@@ -1077,10 +1077,15 @@
     "owners": [ "ftirelo" ],
     "expiry_milestone": 73
   },
+    {
+    "name": "enable-android-dark-search",
+    "owners": [ "wylieb", "twellington", "fgorski"],
+    "expiry_milestone": 90
+  },
   {
     "name": "enable-android-night-mode-tab-reparenting",
     "owners": [ "wylieb", "twellington", "tedchoc"],
-    "expiry_milestone": 85
+    "expiry_milestone": 88
   },
   {
     "name": "enable-android-spellchecker",
