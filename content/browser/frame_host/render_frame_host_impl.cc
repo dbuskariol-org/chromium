@@ -255,6 +255,28 @@ using base::TimeDelta;
 
 namespace content {
 
+struct RenderFrameHostOrProxy {
+  RenderFrameHostImpl* const frame;
+  RenderFrameProxyHost* const proxy;
+
+  RenderFrameHostOrProxy(RenderFrameHostImpl* frame,
+                         RenderFrameProxyHost* proxy)
+      : frame(frame), proxy(proxy) {
+    DCHECK(!frame || !proxy)
+        << "Both frame and proxy can't be non-null at the same time";
+  }
+
+  explicit operator bool() { return frame || proxy; }
+
+  FrameTreeNode* GetFrameTreeNode() {
+    if (frame)
+      return frame->frame_tree_node();
+    if (proxy)
+      return proxy->frame_tree_node();
+    return nullptr;
+  }
+};
+
 namespace {
 
 #if defined(OS_ANDROID)
@@ -412,28 +434,6 @@ void ForEachFrame(RenderFrameHostImpl* root_frame_host,
       frame_callback.Run(pending_frame_host);
   }
 }
-
-struct RenderFrameHostOrProxy {
-  RenderFrameHostImpl* const frame;
-  RenderFrameProxyHost* const proxy;
-
-  RenderFrameHostOrProxy(RenderFrameHostImpl* frame,
-                         RenderFrameProxyHost* proxy)
-      : frame(frame), proxy(proxy) {
-    DCHECK(!frame || !proxy)
-        << "Both frame and proxy can't be non-null at the same time";
-  }
-
-  explicit operator bool() { return frame || proxy; }
-
-  FrameTreeNode* GetFrameTreeNode() {
-    if (frame)
-      return frame->frame_tree_node();
-    if (proxy)
-      return proxy->frame_tree_node();
-    return nullptr;
-  }
-};
 
 RenderFrameHostOrProxy LookupRenderFrameHostOrProxy(int process_id,
                                                     int routing_id) {
@@ -3660,35 +3660,12 @@ void RenderFrameHostImpl::EnforceInsecureNavigationsSet(
   frame_tree_node()->SetInsecureNavigationsSet(set);
 }
 
-// TODO(https://crbug.com/1058038): Share the common code between the two
-// overloads below.
 RenderFrameHostImpl* RenderFrameHostImpl::FindAndVerifyChild(
     int32_t child_frame_routing_id,
     bad_message::BadMessageReason reason) {
   auto child_frame_or_proxy = LookupRenderFrameHostOrProxy(
       GetProcess()->GetID(), child_frame_routing_id);
-  // A race can result in |child| to be nullptr. Avoid killing the renderer in
-  // that case.
-  if (!child_frame_or_proxy)
-    return nullptr;
-
-  if (child_frame_or_proxy.GetFrameTreeNode()->frame_tree() !=
-      frame_tree_node()->frame_tree()) {
-    // Ignore the cases when the child lives in a different frame tree.
-    // This is possible when we create a proxy for inner WebContents (e.g.
-    // for portals) so the |child_frame_or_proxy| points to the root frame
-    // of the nested WebContents, which is in a different tree.
-    // TODO(altimin, lfg): Reconsider what the correct behaviour here should be.
-    return nullptr;
-  }
-  if (child_frame_or_proxy.GetFrameTreeNode()->parent() != this) {
-    bad_message::ReceivedBadMessage(GetProcess(), reason);
-    return nullptr;
-  }
-  return child_frame_or_proxy.proxy
-             ? child_frame_or_proxy.proxy->frame_tree_node()
-                   ->current_frame_host()
-             : child_frame_or_proxy.frame;
+  return FindAndVerifyChildInternal(child_frame_or_proxy, reason);
 }
 
 RenderFrameHostImpl* RenderFrameHostImpl::FindAndVerifyChild(
@@ -3696,6 +3673,12 @@ RenderFrameHostImpl* RenderFrameHostImpl::FindAndVerifyChild(
     bad_message::BadMessageReason reason) {
   auto child_frame_or_proxy =
       LookupRenderFrameHostOrProxy(GetProcess()->GetID(), child_frame_token);
+  return FindAndVerifyChildInternal(child_frame_or_proxy, reason);
+}
+
+RenderFrameHostImpl* RenderFrameHostImpl::FindAndVerifyChildInternal(
+    RenderFrameHostOrProxy child_frame_or_proxy,
+    bad_message::BadMessageReason reason) {
   // A race can result in |child| to be nullptr. Avoid killing the renderer in
   // that case.
   if (!child_frame_or_proxy)

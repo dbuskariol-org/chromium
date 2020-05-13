@@ -215,6 +215,7 @@ class WebBundleHandle;
 class WebBundleHandleTracker;
 struct UntrustworthyContextMenuParams;
 struct PendingNavigation;
+struct RenderFrameHostOrProxy;
 struct ResourceTimingInfo;
 struct SubresourceLoaderParams;
 
@@ -1765,6 +1766,10 @@ class CONTENT_EXPORT RenderFrameHostImpl
                            CheckInPendingDeletionState);
 
   class DroppedInterfaceRequestLogger;
+
+  RenderFrameHostImpl* FindAndVerifyChildInternal(
+      RenderFrameHostOrProxy child_frame_or_proxy,
+      bad_message::BadMessageReason reason);
 
   // Update the RenderProcessHost priority when a navigation occurs.
   void UpdateRenderProcessHostFramePriorities();
