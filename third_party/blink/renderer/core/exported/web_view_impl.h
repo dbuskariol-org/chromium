@@ -195,7 +195,6 @@ class CORE_EXPORT WebViewImpl final : public WebView,
   void DidCloseContextMenu() override;
   void CancelPagePopup() override;
   WebPagePopupImpl* GetPagePopup() const override { return page_popup_.get(); }
-  void SetMainFrameOverlayColor(SkColor) override;
   void AcceptLanguagesChanged() override;
   void SetPageFrozen(bool frozen) override;
   void PutPageIntoBackForwardCache() override;

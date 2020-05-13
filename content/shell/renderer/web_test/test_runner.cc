@@ -408,6 +408,8 @@ gin::ObjectTemplateBuilder TestRunnerBindings::GetObjectTemplateBuilder(
       .SetMethod("addDisallowedURL", &TestRunnerBindings::NotImplemented)
       .SetMethod("addOriginAccessAllowListEntry",
                  &TestRunnerBindings::AddOriginAccessAllowListEntry)
+      // Permits the adding of only one opaque overlay. May only be called from
+      // inside the main frame.
       .SetMethod("addWebPageOverlay", &TestRunnerBindings::AddWebPageOverlay)
       .SetMethod("capturePixelsAsyncThen",
                  &TestRunnerBindings::CapturePixelsAsyncThen)
@@ -524,6 +526,8 @@ gin::ObjectTemplateBuilder TestRunnerBindings::GetObjectTemplateBuilder(
       .SetMethod("queueReload", &TestRunnerBindings::QueueReload)
       .SetMethod("removeSpellCheckResolvedCallback",
                  &TestRunnerBindings::RemoveSpellCheckResolvedCallback)
+      // Removes an overlay added by addWebPageOverlay(). May only be called
+      // from inside the main frame.
       .SetMethod("removeWebPageOverlay",
                  &TestRunnerBindings::RemoveWebPageOverlay)
       .SetMethod("resolveBeforeInstallPromptPromise",
@@ -1462,11 +1466,13 @@ void TestRunnerBindings::SetHighlightAds() {
 }
 
 void TestRunnerBindings::AddWebPageOverlay() {
-  view_runner_->AddWebPageOverlay();
+  DCHECK(frame_->IsMainFrame());
+  frame_->GetWebFrame()->SetMainFrameOverlayColor(SK_ColorCYAN);
 }
 
 void TestRunnerBindings::RemoveWebPageOverlay() {
-  view_runner_->RemoveWebPageOverlay();
+  DCHECK(frame_->IsMainFrame());
+  frame_->GetWebFrame()->SetMainFrameOverlayColor(SK_ColorTRANSPARENT);
 }
 
 void TestRunnerBindings::UpdateAllLifecyclePhasesAndComposite() {
@@ -1797,6 +1803,14 @@ void TestRunner::ResetWebView(WebViewTestProxy* web_view_test_proxy) {
 
   web_view->SetTabKeyCyclesThroughElements(true);
   web_view->GetSettings()->SetHighlightAds(false);
+}
+
+void TestRunner::ResetWebFrame(WebFrameTestProxy* web_frame_test_proxy) {
+  blink::WebLocalFrame* web_frame = web_frame_test_proxy->GetWebFrame();
+
+  if (web_frame_test_proxy->IsMainFrame()) {
+    web_frame->SetMainFrameOverlayColor(SK_ColorTRANSPARENT);
+  }
 }
 
 void TestRunner::SetTestIsRunning(bool running) {

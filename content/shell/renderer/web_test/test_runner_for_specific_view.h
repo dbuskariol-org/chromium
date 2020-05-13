@@ -98,10 +98,6 @@ class TestRunnerForSpecificView {
   // Changes the direction of the focused element.
   void SetTextDirection(const std::string& direction_name);
 
-  // Permits the adding and removing of only one opaque overlay.
-  void AddWebPageOverlay();
-  void RemoveWebPageOverlay();
-
   // Pointer lock handling.
   void DidAcquirePointerLock();
   void DidNotAcquirePointerLock();

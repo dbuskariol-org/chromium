@@ -84,8 +84,6 @@ void TestRunnerForSpecificView::Reset() {
   if (!web_view() || !web_view()->MainFrame())
     return;
 
-  RemoveWebPageOverlay();
-
   if (web_view()->MainFrame()->IsWebLocalFrame()) {
     web_view()->MainFrame()->ToWebLocalFrame()->EnableViewSourceMode(false);
     web_view()->SetTextZoomFactor(1);
@@ -340,14 +338,6 @@ void TestRunnerForSpecificView::SetPageVisibility(
   }
   web_view_test_proxy_->ApplyPageVisibilityState(visibility,
                                                  /*initial_setting=*/false);
-}
-
-void TestRunnerForSpecificView::AddWebPageOverlay() {
-  web_view()->SetMainFrameOverlayColor(SK_ColorCYAN);
-}
-
-void TestRunnerForSpecificView::RemoveWebPageOverlay() {
-  web_view()->SetMainFrameOverlayColor(SK_ColorTRANSPARENT);
 }
 
 void TestRunnerForSpecificView::DidAcquirePointerLock() {

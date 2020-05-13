@@ -59,6 +59,7 @@ class RenderFrame;
 class SpellCheckClient;
 class TestInterfaces;
 class TestRunnerForSpecificView;
+class WebFrameTestProxy;
 class WebViewTestProxy;
 
 // TestRunner class currently has dual purpose:
@@ -90,6 +91,8 @@ class TestRunner {
   void Reset();
   // Resets state on the |web_view_test_proxy| for the next test.
   void ResetWebView(WebViewTestProxy* web_view_test_proxy);
+  // Resets state on the |web_frame_test_proxy| for the next test.
+  void ResetWebFrame(WebFrameTestProxy* web_frame_test_proxy);
 
   void SetTestIsRunning(bool);
   bool TestIsRunning() const { return test_is_running_; }

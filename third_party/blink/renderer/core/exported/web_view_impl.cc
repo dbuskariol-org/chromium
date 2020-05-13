@@ -3091,12 +3091,6 @@ void WebViewImpl::SetZoomFactorOverride(float zoom_factor) {
   SetZoomLevel(ZoomLevel());
 }
 
-void WebViewImpl::SetMainFrameOverlayColor(SkColor color) {
-  DCHECK(AsView().page->MainFrame());
-  if (auto* local_frame = DynamicTo<LocalFrame>(AsView().page->MainFrame()))
-    local_frame->SetMainFrameColorOverlay(color);
-}
-
 Element* WebViewImpl::FocusedElement() const {
   LocalFrame* frame = AsView().page->GetFocusController().FocusedFrame();
   if (!frame)

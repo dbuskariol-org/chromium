@@ -396,11 +396,6 @@ class WebView {
                                   bool is_initial_state) = 0;
   virtual mojom::PageVisibilityState GetVisibilityState() = 0;
 
-  // FrameOverlay ----------------------------------------------------------
-
-  // Overlay this WebView with a solid color.
-  virtual void SetMainFrameOverlayColor(SkColor) = 0;
-
   // Page Importance Signals ----------------------------------------------
 
   virtual WebPageImportanceSignals* PageImportanceSignals() { return nullptr; }
