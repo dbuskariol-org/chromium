@@ -265,8 +265,8 @@ public class TabbedRootUiCoordinator extends RootUiCoordinator implements Native
                 }
             }
         };
-        mOfflineIndicatorController = new OfflineIndicatorControllerV2(
-                mActivity, mStatusIndicatorCoordinator, isUrlBarFocusedSupplier);
+        mOfflineIndicatorController = new OfflineIndicatorControllerV2(mActivity,
+                mStatusIndicatorCoordinator, isUrlBarFocusedSupplier, canAnimateBrowserControls);
         mToolbarManager.getFakeboxDelegate().addUrlFocusChangeListener(mUrlFocusChangeListener);
     }
 
