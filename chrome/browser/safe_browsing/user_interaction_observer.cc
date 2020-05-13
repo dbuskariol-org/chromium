@@ -122,6 +122,7 @@ void SafeBrowsingUserInteractionObserver::RenderViewHostChanged(
 
 void SafeBrowsingUserInteractionObserver::WebContentsDestroyed() {
   CleanUp();
+  Detach();
 }
 
 void SafeBrowsingUserInteractionObserver::DidFinishNavigation(

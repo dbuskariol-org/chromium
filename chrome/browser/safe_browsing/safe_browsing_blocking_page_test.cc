@@ -35,6 +35,7 @@
 #include "chrome/browser/ssl/cert_verifier_browser_test.h"
 #include "chrome/browser/ssl/security_state_tab_helper.h"
 #include "chrome/browser/ui/browser.h"
+#include "chrome/browser/ui/browser_commands.h"
 #include "chrome/browser/ui/browser_tabstrip.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/common/chrome_features.h"
@@ -2002,6 +2003,22 @@ IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
   ui_test_utils::NavigateToURL(browser(), GURL(url::kAboutBlankURL));
 
   histograms.ExpectTotalCount(kDelayedWarningsHistogram, 0);
+}
+
+// Close the tab while a user interaction observer is attached to the tab. It
+// shouldn't crash.
+IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
+                       CloseTab_ShouldNotCrash) {
+  base::HistogramTester histograms;
+  chrome::NewTab(browser());
+  NavigateAndAssertNoInterstitial();
+  chrome::CloseTab(browser());
+
+  histograms.ExpectTotalCount(kDelayedWarningsHistogram, 2);
+  histograms.ExpectBucketCount(kDelayedWarningsHistogram,
+                               DelayedWarningEvent::kPageLoaded, 1);
+  histograms.ExpectBucketCount(kDelayedWarningsHistogram,
+                               DelayedWarningEvent::kWarningNotShown, 1);
 }
 
 IN_PROC_BROWSER_TEST_P(SafeBrowsingBlockingPageDelayedWarningBrowserTest,
