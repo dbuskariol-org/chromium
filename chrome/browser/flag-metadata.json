@@ -607,8 +607,8 @@
   },
   {
     "name": "cookie-deprecation-messages",
-    "owners": [ "chlily", "aarontag" ],
-    "expiry_milestone": 85
+    "owners": [ "bingler", "chlily", "aarontag" ],
+    "expiry_milestone": 90
   },
   {
     "name": "cookies-without-same-site-must-be-secure",

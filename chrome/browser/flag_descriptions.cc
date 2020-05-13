@@ -385,8 +385,8 @@ const char kCompositedLayerBordersDescription[] =
 
 const char kCookieDeprecationMessagesName[] = "Cookie deprecation messages";
 const char kCookieDeprecationMessagesDescription[] =
-    "Show messages in the DevTools console about upcoming deprecations that "
-    "would affect sent/received cookies.";
+    "Show messages in DevTools about upcoming deprecations that would affect "
+    "sent/received cookies.";
 
 const char kCookiesWithoutSameSiteMustBeSecureName[] =
     "Cookies without SameSite must be secure";
