@@ -55,6 +55,7 @@ class PerformanceManagerRegistryImpl
   // PerformanceManager interface.
   void AddMechanism(PerformanceManagerMainThreadMechanism* mechanism);
   void RemoveMechanism(PerformanceManagerMainThreadMechanism* mechanism);
+  bool HasMechanism(PerformanceManagerMainThreadMechanism* mechanism);
 
   // PerformanceManagerRegistry:
   void CreatePageNodeForWebContents(

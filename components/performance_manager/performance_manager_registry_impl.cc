@@ -72,6 +72,11 @@ void PerformanceManagerRegistryImpl::RemoveMechanism(
   mechanisms_.RemoveObserver(mechanism);
 }
 
+bool PerformanceManagerRegistryImpl::HasMechanism(
+    PerformanceManagerMainThreadMechanism* mechanism) {
+  return mechanisms_.HasObserver(mechanism);
+}
+
 void PerformanceManagerRegistryImpl::CreatePageNodeForWebContents(
     content::WebContents* web_contents) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);

@@ -82,6 +82,7 @@ class PerformanceManager {
   // thread (ie, to apply NavigationThrottles).
   static void AddMechanism(PerformanceManagerMainThreadMechanism* mechanism);
   static void RemoveMechanism(PerformanceManagerMainThreadMechanism* mechanism);
+  static bool HasMechanism(PerformanceManagerMainThreadMechanism* mechanism);
 
  protected:
   PerformanceManager();
