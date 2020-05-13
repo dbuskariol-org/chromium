@@ -4769,6 +4769,18 @@
     ]
   },
 
+  "UserPluginVmAllowed": {
+    "os": ["chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": {
+          "UserPluginVmAllowed": true
+        },
+        "prefs": { "plugin_vm.allowed": {} }
+      }
+    ]
+  },
+
   "PluginVmImage": {
     "os": ["chromeos"],
     "policy_pref_mapping_test": [
