@@ -1570,18 +1570,6 @@ void RenderWidget::DidChangeCursor(const ui::Cursor& cursor) {
     GetWebWidget()->SetCursor(cursor);
 }
 
-void RenderWidget::AutoscrollStart(const gfx::PointF& point) {
-  Send(new WidgetHostMsg_AutoscrollStart(routing_id_, point));
-}
-
-void RenderWidget::AutoscrollFling(const gfx::Vector2dF& velocity) {
-  Send(new WidgetHostMsg_AutoscrollFling(routing_id_, velocity));
-}
-
-void RenderWidget::AutoscrollEnd() {
-  Send(new WidgetHostMsg_AutoscrollEnd(routing_id_));
-}
-
 // We are supposed to get a single call to Show for a newly created RenderWidget
 // that was created via RenderWidget::CreateWebView.  So, we wait until this
 // point to dispatch the ShowWidget message.

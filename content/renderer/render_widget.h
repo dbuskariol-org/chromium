@@ -329,9 +329,6 @@ class CONTENT_EXPORT RenderWidget
   void ScheduleAnimation() override;
   void DidMeaningfulLayout(blink::WebMeaningfulLayout layout_type) override;
   void DidChangeCursor(const ui::Cursor& cursor) override;
-  void AutoscrollStart(const gfx::PointF& point) override;
-  void AutoscrollFling(const gfx::Vector2dF& velocity) override;
-  void AutoscrollEnd() override;
   void ClosePopupWidgetSoon() override;
   void Show(blink::WebNavigationPolicy) override;
   blink::WebScreenInfo GetScreenInfo() override;
