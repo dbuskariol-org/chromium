@@ -963,7 +963,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/guava',
-              'version': 'a6fba501f3a0de88b9be1daa2052632de5b96a46',
+              'version': 'y8Zx7cKTiOunLhOrfC4hOt5kDQrLJ_Rq7ISDmXkPdYsC',
           },
       ],
       'condition': 'checkout_android',
