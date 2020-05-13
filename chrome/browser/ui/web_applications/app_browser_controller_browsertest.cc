@@ -240,6 +240,24 @@ IN_PROC_BROWSER_TEST_F(AppBrowserControllerBrowserTest, TabLoadNoThemeChange) {
   EXPECT_EQ(GetTabColor(app_browser_), SK_ColorGREEN);
 }
 
+IN_PROC_BROWSER_TEST_F(AppBrowserControllerBrowserTest, NewWindow) {
+  InstallAndLaunchMockApp();
+
+  // Check we have 2 browsers: browser() and |app_browser_|.
+  EXPECT_EQ(BrowserList::GetInstance()->size(), 2u);
+
+  // Creating a new window from an app window should open another app window.
+  chrome::NewWindow(app_browser_);
+  EXPECT_EQ(BrowserList::GetInstance()->size(), 3u);
+  Browser* new_browser = BrowserList::GetInstance()->GetLastActive();
+  EXPECT_NE(new_browser, app_browser_);
+  EXPECT_TRUE(new_browser->is_type_app());
+  EXPECT_EQ(new_browser->tab_strip_model()->count(), 1);
+  EXPECT_EQ(
+      new_browser->tab_strip_model()->GetActiveWebContents()->GetVisibleURL(),
+      tabbed_app_url_);
+}
+
 // App Popups are only used on Chrome OS. See https://crbug.com/1060917.
 #if defined(OS_CHROMEOS)
 IN_PROC_BROWSER_TEST_F(AppBrowserControllerBrowserTest,
