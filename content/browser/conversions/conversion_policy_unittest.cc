@@ -73,6 +73,15 @@ TEST_F(ConversionPolicyTest, SantizizeConversionData_OutputHasNoise) {
                      ->GetSanitizedConversionData(4UL));
 }
 
+// This test will fail flakily if noise is used.
+TEST_F(ConversionPolicyTest, DebugMode_ConversionDataNotNoised) {
+  for (uint64_t conversion_data = 0; conversion_data < 8; conversion_data++) {
+    EXPECT_EQ(base::NumberToString(conversion_data),
+              ConversionPolicy(false /* debug_mode */)
+                  .GetSanitizedConversionData(conversion_data));
+  }
+}
+
 TEST_F(ConversionPolicyTest, NoExpiryForImpression_DefaultUsed) {
   base::Time impression_time = base::Time::Now();
   EXPECT_EQ(impression_time + base::TimeDelta::FromDays(30),
