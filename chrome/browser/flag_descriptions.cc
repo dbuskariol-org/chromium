@@ -2339,6 +2339,10 @@ const char kChromeSharingHubName[] = "Chrome Sharing Hub";
 const char kChromeSharingHubDescription[] =
     "Enables the Chrome Sharing Hub/custom share sheet.";
 
+const char kChromeSharingHubV15Name[] = "Chrome Sharing Hub V1.5";
+const char kChromeSharingHubV15Description[] =
+    "Enables v1.5 of the Chrome Sharing Hub.";
+
 const char kClearOldBrowsingDataName[] = "Clear older browsing data";
 const char kClearOldBrowsingDataDescription[] =
     "Enables clearing of browsing data which is older than a given time "

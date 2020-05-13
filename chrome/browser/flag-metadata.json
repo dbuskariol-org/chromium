@@ -469,6 +469,11 @@
     "expiry_milestone": 86
   },
   {
+    "name": "chrome-sharing-hub-v1-5",
+    "owners": ["sophey"],
+    "expiry_milestone": 89
+  },
+  {
     "name": "chromeos-video-decoder",
     "owners": [ "chromeos-video-eng@google.com" ],
     // This flag should expire once all VDA-based ChromeOS video decoders have

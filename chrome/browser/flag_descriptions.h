@@ -1375,6 +1375,9 @@ extern const char kChromeShareScreenshotDescription[];
 extern const char kChromeSharingHubName[];
 extern const char kChromeSharingHubDescription[];
 
+extern const char kChromeSharingHubV15Name[];
+extern const char kChromeSharingHubV15Description[];
+
 extern const char kClearOldBrowsingDataName[];
 extern const char kClearOldBrowsingDataDescription[];
 
