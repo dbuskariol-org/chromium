@@ -61,6 +61,11 @@
 # Implemented in https://crrev.com/0193f6791133ee7a90d034aa4009
 [ impl_lte_81 ] org.chromium.weblayer.test.TabTest#testBeforeUnload [ Skip ]
 
+# DownloadCallback moved from Tab to Profile in M83: https://crrev.com/cc967e92032594c0e54d02e31824f92aff5f30cd
+[ impl_lte_82 ] org.chromium.weblayer.test.DownloadCallbackTest#testBasic [ Skip ]
+[ impl_lte_82 ] org.chromium.weblayer.test.DownloadCallbackTest#testInterceptDownloadByContentDisposition [ Skip ]
+[ impl_lte_82 ] org.chromium.weblayer.test.DownloadCallbackTest#testInterceptDownloadByLinkAttribute [ Skip ]
+
 # Many M81 tests are broken, see https://crbug.com/1081102.
 [ impl_lte_81 ] org.chromium.weblayer.test.BrowserFragmentLifecycleTest#restoreAfterRecreate [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.BrowserFragmentLifecycleTest#restoreTabGuidAfterRecreate [ Skip ]
@@ -75,9 +80,6 @@
 [ impl_lte_81 ] org.chromium.weblayer.test.CookieManagerTest#testSetCookieNullCallback [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.CrashReporterTest#testCrashReporterLoading [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.DowngradeTest#testDowngradeDeletesData [ Skip ]
-[ impl_lte_81 ] org.chromium.weblayer.test.DownloadCallbackTest#testBasic [ Skip ]
-[ impl_lte_81 ] org.chromium.weblayer.test.DownloadCallbackTest#testInterceptDownloadByContentDisposition [ Skip ]
-[ impl_lte_81 ] org.chromium.weblayer.test.DownloadCallbackTest#testInterceptDownloadByLinkAttribute [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.ExternalNavigationTest#testExternalIntentAfterRedirectLaunched [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.ExternalNavigationTest#testExternalIntentInSameTabLaunchedOnLinkClick [ Skip ]
 [ impl_lte_81 ] org.chromium.weblayer.test.ExternalNavigationTest#testExternalIntentWithFallbackUrlAfterRedirectLaunched [ Skip ]
