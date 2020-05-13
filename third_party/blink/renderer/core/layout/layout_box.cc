@@ -304,6 +304,8 @@ void LayoutBox::WillBeDestroyed() {
       NGFragmentItems::LayoutObjectWillBeDestroyed(*this);
       ClearFirstInlineFragmentItemIndex();
     }
+    if (measure_result_)
+      measure_result_->PhysicalFragment().LayoutObjectWillBeDestroyed();
     for (auto result : layout_results_)
       result->PhysicalFragment().LayoutObjectWillBeDestroyed();
   }
@@ -2529,10 +2531,18 @@ void LayoutBox::SetCachedLayoutResult(
 
   if (result->GetConstraintSpaceForCaching().CacheSlot() ==
       NGCacheSlot::kMeasure) {
+    // We don't early return here, when setting the "measure" result we also
+    // set the "layout" result.
     if (measure_result_)
       InvalidateItems(*measure_result_);
     measure_result_ = result;
-    // When setting the "measure" result we also set the "layout" result.
+  } else {
+    // We have a "layout" result, and we may need to clear the old "measure"
+    // result if we needed non-simplified layout.
+    if (measure_result_ && NeedsLayout() && !NeedsSimplifiedLayoutOnly()) {
+      InvalidateItems(*measure_result_);
+      measure_result_ = nullptr;
+    }
   }
 
   AddLayoutResult(std::move(result), 0);
