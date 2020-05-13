@@ -2734,6 +2734,18 @@ Unknown properties are collapsed to zero. -->
   <int value="10" label="Peeking To Half"/>
 </enum>
 
+<enum name="AppListUserEvent">
+  <int value="0" label="Impression"/>
+  <int value="1" label="Launch"/>
+  <int value="2" label="Abandon"/>
+</enum>
+
+<enum name="AppListUserEventError">
+  <int value="0" label="Missing notifier"/>
+  <int value="1" label="Result not found"/>
+  <int value="2" label="Untracked location"/>
+</enum>
+
 <enum name="AppListZeroStateResultRemovalConfirmation">
   <int value="0" label="Removal Confirmed"/>
   <int value="1" label="Removal Canceled"/>
