@@ -611,6 +611,16 @@
     "expiry_milestone": 86
   },
   {
+    "name": "conversion-measurement-api",
+    "owners": [ "//content/browser/conversions/OWNERS" ],
+    "expiry_milestone": 87
+  },
+  {
+    "name": "conversion-measurement-debug-mode",
+    "owners": [ "//content/browser/conversions/OWNERS" ],
+    "expiry_milestone": 87
+  },
+  {
     "name": "cookie-deprecation-messages",
     "owners": [ "bingler", "chlily", "aarontag" ],
     "expiry_milestone": 90

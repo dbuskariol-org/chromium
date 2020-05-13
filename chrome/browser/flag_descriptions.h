@@ -76,6 +76,12 @@ extern const char kAllowSignedHTTPExchangeCertsWithoutExtensionDescription[];
 extern const char kAllowSyncXHRInPageDismissalName[];
 extern const char kAllowSyncXHRInPageDismissalDescription[];
 
+extern const char kConversionMeasurementApiName[];
+extern const char kConversionMeasurementApiDescription[];
+
+extern const char kConversionMeasurementDebugModeName[];
+extern const char kConversionMeasurementDebugModeDescription[];
+
 extern const char kEnableClipboardProviderImageSuggestionsName[];
 extern const char kEnableClipboardProviderImageSuggestionsDescription[];
 

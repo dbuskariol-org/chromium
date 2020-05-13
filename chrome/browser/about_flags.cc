@@ -5585,6 +5585,15 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(
          autofill::features::kAutofillEnableCardNicknameManagement)},
 
+    {"conversion-measurement-api",
+     flag_descriptions::kConversionMeasurementApiName,
+     flag_descriptions::kConversionMeasurementApiDescription, kOsAll,
+     FEATURE_VALUE_TYPE(features::kConversionMeasurement)},
+    {"conversion-measurement-debug-mode",
+     flag_descriptions::kConversionMeasurementDebugModeName,
+     flag_descriptions::kConversionMeasurementDebugModeDescription, kOsAll,
+     SINGLE_VALUE_TYPE(switches::kConversionsDebugMode)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

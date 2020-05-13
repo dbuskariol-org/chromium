@@ -75,6 +75,17 @@ const char kConditionalTabStripAndroidName[] = "Conditional Tab Strip";
 const char kConditionalTabStripAndroidDescription[] =
     "Allows users to access conditional tab strip.";
 
+const char kConversionMeasurementApiName[] = "Conversion Measurement API";
+const char kConversionMeasurementApiDescription[] =
+    "Enables usage of the Conversion Measurement API.";
+
+const char kConversionMeasurementDebugModeName[] =
+    "Conversion Measurement Debug Mode";
+const char kConversionMeasurementDebugModeDescription[] =
+    "Enables debug mode for the Conversion Measurement API. This removes all "
+    "reporting delays and noise. Only works if the Conversion Measurement API "
+    "is already enabled.";
+
 const char kEnableClipboardProviderImageSuggestionsName[] =
     "Omnibox clipboard image search suggestions";
 const char kEnableClipboardProviderImageSuggestionsDescription[] =
