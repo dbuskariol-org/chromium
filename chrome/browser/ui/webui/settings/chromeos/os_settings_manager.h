@@ -47,7 +47,7 @@ class MultiDeviceSetupClient;
 namespace settings {
 
 class OsSettingsSections;
-struct SearchConcept;
+class SearchHandler;
 class SearchTagRegistry;
 
 // Manager for the Chrome OS settings page. This class is implemented as a
@@ -101,13 +101,8 @@ class OsSettingsManager : public KeyedService {
   // Adds SettingsPageUIHandlers to an OS settings instance.
   void AddHandlers(content::WebUI* web_ui);
 
-  // Returns the tag metadata associated with |canonical_message_id|, which must
-  // be one of the canonical IDS_SETTINGS_TAG_* identifiers used for a search
-  // tag. If no metadata is available or if |canonical_message_id| instead
-  // refers to an alternate tag's ID, null is returned.
-  // TODO(khorimoto): Remove this once SearchHandler is integrated into this
-  // class.
-  const SearchConcept* GetCanonicalTagMetadata(int canonical_message_id) const;
+  // Note: Returns null when the kNewOsSettingsSearch flag is disabled.
+  SearchHandler* search_handler() { return search_handler_.get(); }
 
  private:
   FRIEND_TEST_ALL_PREFIXES(OsSettingsManagerTest, Sections);
@@ -117,6 +112,7 @@ class OsSettingsManager : public KeyedService {
 
   std::unique_ptr<SearchTagRegistry> search_tag_registry_;
   std::unique_ptr<OsSettingsSections> sections_;
+  std::unique_ptr<SearchHandler> search_handler_;
 };
 
 }  // namespace settings

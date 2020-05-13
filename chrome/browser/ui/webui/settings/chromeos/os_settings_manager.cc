@@ -5,9 +5,12 @@
 #include "chrome/browser/ui/webui/settings/chromeos/os_settings_manager.h"
 
 #include "base/bind.h"
+#include "base/feature_list.h"
 #include "chrome/browser/chromeos/local_search_service/local_search_service.h"
 #include "chrome/browser/ui/webui/settings/chromeos/os_settings_sections.h"
+#include "chrome/browser/ui/webui/settings/chromeos/search/search_handler.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_tag_registry.h"
+#include "chromeos/constants/chromeos_features.h"
 #include "content/public/browser/web_ui_data_source.h"
 #include "ui/base/l10n/l10n_util.h"
 
@@ -37,7 +40,12 @@ OsSettingsManager::OsSettingsManager(
                                                arc_app_list_prefs,
                                                identity_manager,
                                                android_sms_service,
-                                               printers_manager)) {}
+                                               printers_manager)) {
+  if (base::FeatureList::IsEnabled(features::kNewOsSettingsSearch)) {
+    search_handler_ = std::make_unique<SearchHandler>(
+        search_tag_registry_.get(), local_search_service);
+  }
+}
 
 OsSettingsManager::~OsSettingsManager() = default;
 
@@ -52,14 +60,10 @@ void OsSettingsManager::AddHandlers(content::WebUI* web_ui) {
     section->AddHandlers(web_ui);
 }
 
-const SearchConcept* OsSettingsManager::GetCanonicalTagMetadata(
-    int canonical_message_id) const {
-  return search_tag_registry_->GetCanonicalTagMetadata(canonical_message_id);
-}
-
 void OsSettingsManager::Shutdown() {
   // Note: These must be deleted in the opposite order of their creation to
   // prevent against UAF violations.
+  search_handler_.reset();
   sections_.reset();
   search_tag_registry_.reset();
 }
