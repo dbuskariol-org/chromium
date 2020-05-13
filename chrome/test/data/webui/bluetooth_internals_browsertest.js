@@ -227,6 +227,7 @@ BluetoothInternalsTest.prototype = {
       discovering: false,
       initialized: true,
       name: 'computer.example.com-0',
+      systemName: 'Example Bluetooth Stack 1.0',
       powered: true,
       present: true,
     };
