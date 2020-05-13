@@ -496,7 +496,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
       blink::mojom::FrameOwnerElementType owner_type);
 
   // Update this frame's state at the appropriate time when a navigation
-  // commits. This is called by NavigatorImpl::DidNavigate as a helper, in the
+  // commits. This is called by Navigator::DidNavigate as a helper, in the
   // midst of a DidCommitProvisionalLoad call.
   void DidNavigate(const FrameHostMsg_DidCommitProvisionalLoad_Params& params,
                    bool is_same_document_navigation);

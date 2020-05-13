@@ -64,7 +64,6 @@
 #include "content/browser/frame_host/navigation_entry_impl.h"
 #include "content/browser/frame_host/navigation_request.h"
 #include "content/browser/frame_host/navigator.h"
-#include "content/browser/frame_host/navigator_impl.h"
 #include "content/browser/frame_host/render_frame_host_delegate.h"
 #include "content/browser/frame_host/render_frame_proxy_host.h"
 #include "content/browser/generic_sensor/sensor_provider_proxy_impl.h"
@@ -5095,7 +5094,7 @@ CanCommitStatus RenderFrameHostImpl::CanCommitOriginAndUrl(
 
   // Verify that if this RenderFrameHost is for a WebUI it is not committing a
   // URL which is not allowed in a WebUI process.
-  if (!NavigatorImpl::CheckWebUIRendererDoesNotDisplayNormalURL(
+  if (!Navigator::CheckWebUIRendererDoesNotDisplayNormalURL(
           this, url,
           /* is_renderer_initiated_check */ true)) {
     return CanCommitStatus::CANNOT_COMMIT_URL;
