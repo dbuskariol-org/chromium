@@ -368,6 +368,7 @@ namespace declarativeNetRequest {
   callback GetAllowedPagesCallback = void(DOMString[] result);
   callback GetRulesCallback = void(Rule[] rules);
   callback GetMatchedRulesCallback = void(RulesMatchedDetails details);
+  callback GetEnabledRulesetsCallback = void(DOMString[] rulesetIds);
 
   interface Functions {
 
@@ -420,6 +421,13 @@ namespace declarativeNetRequest {
     static void updateEnabledRulesets(
         DOMString[] rulesetIdsToDisable, DOMString[] rulesetIdsToEnable,
         EmptyCallback callback);
+
+    // Returns the ids for the current set of enabled static rulesets.
+    // |callback|: Called with a list of ids, where each id corresponds to an
+    // enabled static $(ref:Ruleset).
+    // TODO(crbug.com/754526): Enable the documentation.
+    [nodoc]
+    static void getEnabledRulesets(GetEnabledRulesetsCallback callback);
 
     // Returns all rules matched for the extension. Callers can optionally
     // filter the list of matched rules by specifying a |filter|. This method is

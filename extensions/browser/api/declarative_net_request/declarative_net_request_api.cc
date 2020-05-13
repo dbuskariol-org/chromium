@@ -218,6 +218,34 @@ void DeclarativeNetRequestUpdateEnabledRulesetsFunction::
     Respond(NoArguments());
 }
 
+DeclarativeNetRequestGetEnabledRulesetsFunction::
+    DeclarativeNetRequestGetEnabledRulesetsFunction() = default;
+DeclarativeNetRequestGetEnabledRulesetsFunction::
+    ~DeclarativeNetRequestGetEnabledRulesetsFunction() = default;
+
+ExtensionFunction::ResponseAction
+DeclarativeNetRequestGetEnabledRulesetsFunction::Run() {
+  auto* rules_monitor_service =
+      declarative_net_request::RulesMonitorService::Get(browser_context());
+  DCHECK(rules_monitor_service);
+
+  std::vector<std::string> public_ids;
+  declarative_net_request::CompositeMatcher* matcher =
+      rules_monitor_service->ruleset_manager()->GetMatcherForExtension(
+          extension_id());
+  if (matcher) {
+    DCHECK(extension());
+    public_ids = GetPublicRulesetIDs(*extension(), *matcher);
+
+    // Exclude the dynamic ruleset ID if present, as expected by the API
+    // function.
+    base::Erase(public_ids, dnr_api::DYNAMIC_RULESET_ID);
+  }
+
+  return RespondNow(
+      ArgumentList(dnr_api::GetEnabledRulesets::Results::Create(public_ids)));
+}
+
 // static
 bool
     DeclarativeNetRequestGetMatchedRulesFunction::disable_throttling_for_test_ =

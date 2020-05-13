@@ -23,6 +23,7 @@
 #include "base/test/metrics/histogram_tester.h"
 #include "base/test/scoped_run_loop_timeout.h"
 #include "base/test/test_timeouts.h"
+#include "base/values.h"
 #include "build/build_config.h"
 #include "chrome/browser/extensions/api/declarative_net_request/dnr_test_base.h"
 #include "chrome/browser/extensions/chrome_test_extension_loader.h"
@@ -238,6 +239,29 @@ class DeclarativeNetRequestUnittest : public DNRTestBase {
     EXPECT_EQ(expected_error,
               api_test_utils::RunFunctionAndReturnError(
                   function.get(), json_args, browser_context()));
+  }
+
+  void VerifyGetEnabledRulesetsFunction(
+      const Extension& extension,
+      const std::vector<std::string>& expected_ids) {
+    auto function =
+        base::MakeRefCounted<DeclarativeNetRequestGetEnabledRulesetsFunction>();
+    function->set_extension(&extension);
+    function->set_has_callback(true);
+
+    std::unique_ptr<base::Value> result =
+        api_test_utils::RunFunctionAndReturnSingleResult(
+            function.get(), "[]" /* args */, browser_context());
+    ASSERT_TRUE(result);
+    ASSERT_TRUE(result->is_list());
+    const base::ListValue& ids_value = base::Value::AsListValue(*result);
+
+    base::string16 error;
+    std::vector<std::string> actual_ids;
+    for (const auto& val : ids_value)
+      actual_ids.push_back(val.GetString());
+
+    EXPECT_THAT(expected_ids, UnorderedElementsAreArray(actual_ids));
   }
 
   void VerifyPublicRulesetIDs(
@@ -917,6 +941,7 @@ TEST_P(MultipleRulesetsTest, Success) {
 // Tests an extension with no static rulesets.
 TEST_P(MultipleRulesetsTest, ZeroRulesets) {
   LoadAndExpectSuccess();
+  VerifyGetEnabledRulesetsFunction(*extension(), {});
 }
 
 // Tests an extension with multiple empty rulesets.
@@ -1232,7 +1257,7 @@ TEST_P(MultipleRulesetsTest, UpdateEnabledRulesets_InternalError) {
   }
 }
 
-TEST_P(MultipleRulesetsTest, UpdateEnabledRulesets_Success) {
+TEST_P(MultipleRulesetsTest, UpdateAndGetEnabledRulesets_Success) {
   AddRuleset(CreateRuleset(kId1, 10, 10, true));
   AddRuleset(CreateRuleset(kId2, 10, 10, false));
   AddRuleset(CreateRuleset(kId3, 10, 10, true));
@@ -1245,32 +1270,39 @@ TEST_P(MultipleRulesetsTest, UpdateEnabledRulesets_Success) {
   RunUpdateEnabledRulesetsFunction(*extension(), {kId1, kId3}, {kId2},
                                    base::nullopt /* expected_error */);
   VerifyPublicRulesetIDs(*extension(), {kId2});
+  VerifyGetEnabledRulesetsFunction(*extension(), {kId2});
 
   RunUpdateEnabledRulesetsFunction(*extension(), {}, {kId3, kId3},
                                    base::nullopt /* expected_error */);
   VerifyPublicRulesetIDs(*extension(), {kId2, kId3});
+  VerifyGetEnabledRulesetsFunction(*extension(), {kId2, kId3});
 
   // Ensure no-op calls succeed.
   RunUpdateEnabledRulesetsFunction(*extension(), {}, {kId2, kId3},
                                    base::nullopt /* expected_error */);
   VerifyPublicRulesetIDs(*extension(), {kId2, kId3});
+  VerifyGetEnabledRulesetsFunction(*extension(), {kId2, kId3});
 
   RunUpdateEnabledRulesetsFunction(*extension(), {kId1}, {},
                                    base::nullopt /* expected_error */);
   VerifyPublicRulesetIDs(*extension(), {kId2, kId3});
+  VerifyGetEnabledRulesetsFunction(*extension(), {kId2, kId3});
 
   // Add dynamic rules and ensure that the setEnabledRulesets call doesn't have
-  // any effect on the dynamic ruleset.
+  // any effect on the dynamic ruleset. Also ensure that the getEnabledRulesets
+  // call excludes the dynamic ruleset ID.
   ASSERT_TRUE(
       RunDynamicRuleUpdateFunction(*extension(), {}, {CreateGenericRule()}));
   VerifyPublicRulesetIDs(*extension(),
                          {kId2, kId3, dnr_api::DYNAMIC_RULESET_ID});
+  VerifyGetEnabledRulesetsFunction(*extension(), {kId2, kId3});
 
   // Ensure enabling a ruleset takes priority over disabling.
   RunUpdateEnabledRulesetsFunction(*extension(), {kId1}, {kId1},
                                    base::nullopt /* expected_error */);
   VerifyPublicRulesetIDs(*extension(),
                          {kId1, kId2, kId3, dnr_api::DYNAMIC_RULESET_ID});
+  VerifyGetEnabledRulesetsFunction(*extension(), {kId1, kId2, kId3});
 }
 
 INSTANTIATE_TEST_SUITE_P(All,

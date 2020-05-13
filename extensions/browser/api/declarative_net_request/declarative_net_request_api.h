@@ -67,6 +67,21 @@ class DeclarativeNetRequestUpdateEnabledRulesetsFunction
   ExtensionFunction::ResponseAction Run() override;
 };
 
+class DeclarativeNetRequestGetEnabledRulesetsFunction
+    : public ExtensionFunction {
+ public:
+  DeclarativeNetRequestGetEnabledRulesetsFunction();
+  DECLARE_EXTENSION_FUNCTION("declarativeNetRequest.getEnabledRulesets",
+                             DECLARATIVENETREQUEST_GETENABLEDRULESETS)
+
+ protected:
+  ~DeclarativeNetRequestGetEnabledRulesetsFunction() override;
+
+ private:
+  // ExtensionFunction override:
+  ExtensionFunction::ResponseAction Run() override;
+};
+
 class DeclarativeNetRequestGetMatchedRulesFunction : public ExtensionFunction {
  public:
   DeclarativeNetRequestGetMatchedRulesFunction();
