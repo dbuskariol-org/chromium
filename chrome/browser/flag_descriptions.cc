@@ -3524,6 +3524,11 @@ const char kEnableQuickAnswersRichUiName[] = "Enable Quick Answers Rich UI";
 const char kEnableQuickAnswersRichUiDescription[] =
     "Enable the Quick Answers rich UI.";
 
+const char kEnableQuickAnswersTextAnnotatorName[] =
+    "Enable Quick Answers text annotator";
+const char kEnableQuickAnswersTextAnnotatorDescription[] =
+    "Enable Quick Answers text annotator.";
+
 const char kEnableVideoPlayerNativeControlsName[] =
     "Enable native controls in video player app";
 const char kEnableVideoPlayerNativeControlsDescription[] =

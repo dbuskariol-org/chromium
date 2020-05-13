@@ -2050,6 +2050,9 @@ extern const char kEnableQuickAnswersDescription[];
 extern const char kEnableQuickAnswersRichUiName[];
 extern const char kEnableQuickAnswersRichUiDescription[];
 
+extern const char kEnableQuickAnswersTextAnnotatorName[];
+extern const char kEnableQuickAnswersTextAnnotatorDescription[];
+
 extern const char kEnableVideoPlayerNativeControlsName[];
 extern const char kEnableVideoPlayerNativeControlsDescription[];
 

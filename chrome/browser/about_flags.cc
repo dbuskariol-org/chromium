@@ -4289,6 +4289,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEnableQuickAnswersRichUiDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kQuickAnswersRichUi)},
 
+    {"enable-quick-answers-text-annotator",
+     flag_descriptions::kEnableQuickAnswersTextAnnotatorName,
+     flag_descriptions::kEnableQuickAnswersTextAnnotatorDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kQuickAnswersTextAnnotator)},
+
 #endif  // defined(OS_CHROMEOS)
 
 #if BUILDFLAG(ENABLE_CLICK_TO_CALL)
