@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser;
+package org.chromium.chrome.browser.flags;
 
 import android.support.test.filters.SmallTest;
 
@@ -14,13 +14,8 @@ import org.junit.rules.TestRule;
 import org.junit.runner.RunWith;
 
 import org.chromium.base.test.util.CommandLineFlags;
-import org.chromium.chrome.browser.flags.BooleanCachedFieldTrialParameter;
-import org.chromium.chrome.browser.flags.CachedFeatureFlags;
-import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.flags.ChromeSwitches;
-import org.chromium.chrome.browser.flags.DoubleCachedFieldTrialParameter;
-import org.chromium.chrome.browser.flags.IntCachedFieldTrialParameter;
-import org.chromium.chrome.browser.flags.StringCachedFieldTrialParameter;
+import org.chromium.chrome.browser.ChromeActivity;
+import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.test.ChromeActivityTestRule;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.util.browser.Features;
@@ -31,7 +26,7 @@ import org.chromium.chrome.test.util.browser.FieldTrials;
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
 @CommandLineFlags.Add(ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE)
-public final class FieldTrialsTest {
+public final class FieldTrialsInstrumentationTest {
     private static final String sFeature1 = ChromeFeatureList.TEST_DEFAULT_DISABLED;
     private static final String sFeature2 = ChromeFeatureList.TEST_DEFAULT_ENABLED;
 
