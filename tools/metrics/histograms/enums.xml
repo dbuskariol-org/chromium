@@ -70209,6 +70209,18 @@ Full version information for the fingerprint enum values:
   <int value="60" label="kXXSSProtection"/>
 </enum>
 
+<enum name="WebRequestConditionAttributeType">
+  <summary>
+    The types of WebRequestConditionAttribute in the DeclarativeWebRequest API.
+  </summary>
+  <int value="0" label="RESOURCE_TYPE"/>
+  <int value="1" label="CONTENT_TYPE"/>
+  <int value="2" label="RESPONSE_HEADERS"/>
+  <int value="3" label="THIRD_PARTY"/>
+  <int value="4" label="REQUEST_HEADERS"/>
+  <int value="5" label="STAGES"/>
+</enum>
+
 <enum name="WebRequestEventListenerFlag">
   <int value="0" label="Total"/>
   <int value="1" label="None"/>
