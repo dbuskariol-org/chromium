@@ -197,7 +197,7 @@ void FakeCiceroneClient::CreateLxdContainer(
   signal.set_status(lxd_container_created_signal_status_);
   base::ThreadTaskRunnerHandle::Get()->PostTask(
       FROM_HERE, base::BindOnce(&FakeCiceroneClient::NotifyLxdContainerCreated,
-                                base::Unretained(this), std::move(signal)));
+                                weak_factory_.GetWeakPtr(), std::move(signal)));
 }
 
 void FakeCiceroneClient::DeleteLxdContainer(
@@ -228,7 +228,7 @@ void FakeCiceroneClient::StartLxdContainer(
   signal.mutable_os_release()->CopyFrom(lxd_container_os_release_);
   base::ThreadTaskRunnerHandle::Get()->PostTask(
       FROM_HERE, base::BindOnce(&FakeCiceroneClient::NotifyLxdContainerStarting,
-                                base::Unretained(this), std::move(signal)));
+                                weak_factory_.GetWeakPtr(), std::move(signal)));
 
   if (send_container_started_signal_) {
     // Trigger CiceroneClient::Observer::NotifyContainerStartedSignal.
@@ -238,8 +238,9 @@ void FakeCiceroneClient::StartLxdContainer(
     signal.set_container_name(request.container_name());
     signal.set_container_username(last_container_username_);
     base::ThreadTaskRunnerHandle::Get()->PostTask(
-        FROM_HERE, base::BindOnce(&FakeCiceroneClient::NotifyContainerStarted,
-                                  base::Unretained(this), std::move(signal)));
+        FROM_HERE,
+        base::BindOnce(&FakeCiceroneClient::NotifyContainerStarted,
+                       weak_factory_.GetWeakPtr(), std::move(signal)));
   }
 }
 

@@ -5,6 +5,7 @@
 #ifndef CHROMEOS_DBUS_FAKE_CICERONE_CLIENT_H_
 #define CHROMEOS_DBUS_FAKE_CICERONE_CLIENT_H_
 
+#include "base/memory/weak_ptr.h"
 #include "base/observer_list.h"
 #include "chromeos/dbus/cicerone_client.h"
 
@@ -393,6 +394,8 @@ class COMPONENT_EXPORT(CHROMEOS_DBUS) FakeCiceroneClient
   UninstallPackageOwningFileCallback uninstall_package_owning_file_callback_;
 
   base::ObserverList<Observer>::Unchecked observer_list_;
+
+  base::WeakPtrFactory<FakeCiceroneClient> weak_factory_{this};
 
   DISALLOW_COPY_AND_ASSIGN(FakeCiceroneClient);
 };
