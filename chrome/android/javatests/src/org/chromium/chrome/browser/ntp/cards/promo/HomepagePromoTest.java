@@ -16,7 +16,6 @@ import static org.mockito.Mockito.times;
 import static org.chromium.chrome.test.util.ViewUtils.waitForView;
 
 import android.os.Build.VERSION_CODES;
-import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +56,7 @@ import org.chromium.chrome.browser.ui.messages.snackbar.Snackbar;
 import org.chromium.chrome.browser.ui.messages.snackbar.SnackbarManager;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.ChromeTabbedActivityTestRule;
+import org.chromium.chrome.test.util.ChromeTabUtils;
 import org.chromium.chrome.test.util.browser.Features;
 import org.chromium.chrome.test.util.browser.Features.EnableFeatures;
 import org.chromium.components.browser_ui.widget.promo.PromoCardCoordinator.LayoutStyle;
@@ -305,7 +305,6 @@ public class HomepagePromoTest {
 
     @Test
     @SmallTest
-    @DisableIf.Build(sdk_is_greater_than = VERSION_CODES.O, message = "crbug.com/1080995")
     public void testExperimentTrackerSignals() {
         mHomepageTestRule.useChromeNTPForTest();
         ToolbarManager toolbarManager = mActivityTestRule.getActivity().getToolbarManager();
@@ -313,9 +312,9 @@ public class HomepagePromoTest {
         if (toolbarManager != null) {
             HomeButton homeButton = toolbarManager.getHomeButtonForTesting();
             if (homeButton != null) {
-                TouchCommon.singleClickView(homeButton);
-
-                InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+                ChromeTabUtils.waitForTabPageLoaded(
+                        mActivityTestRule.getActivity().getActivityTab(), UrlConstants.NTP_URL,
+                        () -> { TouchCommon.singleClickView(homeButton); });
 
                 Mockito.verify(mTracker).notifyEvent(EventConstants.NTP_SHOWN);
                 Mockito.verify(mTracker).notifyEvent(EventConstants.NTP_HOME_BUTTON_CLICKED);
