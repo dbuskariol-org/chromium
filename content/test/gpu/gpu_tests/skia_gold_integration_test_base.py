@@ -445,7 +445,11 @@ class SkiaGoldIntegrationTestBase(gpu_integration_test.GpuIntegrationTest):
           '--failure-file', failure_file
       ] + build_id_args + extra_imgtest_args + algorithm_args)
       # yapf: enable
-      subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+      output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+      # TODO(skbug.com/10245): Remove this once the issue with auto-triaging
+      # inexactly matched images is fixed.
+      if 'VP9_YUY2' in image_name:
+        logging.error(output)
     except CalledProcessError as e:
       # We don't want to bother printing out triage links for local runs.
       # Instead, we print out local filepaths for debugging. However, we want
