@@ -77,8 +77,11 @@ public class NewTabPageUma {
     /** User clicked on the "Manage Interests" item in the snippet card menu. */
     public static final int ACTION_CLICKED_MANAGE_INTERESTS = 12;
 
+    /** User triggered a block content action. **/
+    public static final int ACTION_BLOCK_CONTENT = 13;
+
     /** The number of possible actions. */
-    private static final int NUM_ACTIONS = 13;
+    private static final int NUM_ACTIONS = 14;
 
     /** Regular NTP impression (usually when a new tab is opened). */
     public static final int NTP_IMPRESSION_REGULAR = 0;

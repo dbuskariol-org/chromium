@@ -48117,6 +48117,10 @@ Called by update_net_trust_anchors.py.-->
       label="Clicked on the Refresh button in the all dismissed state"/>
   <int value="11" label="Opened an explore sites tile"/>
   <int value="12" label="Opened the manage interests page from the feed"/>
+  <int value="13"
+      label="Triggered a block content action, which typically results in the
+             content being removed from the feed, and a setting written
+             server side to avoid serving that content again."/>
 </enum>
 
 <enum name="NewTabPageActioniOS">
