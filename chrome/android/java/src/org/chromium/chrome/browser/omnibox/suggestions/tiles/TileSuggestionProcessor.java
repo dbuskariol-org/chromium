@@ -70,8 +70,5 @@ public class TileSuggestionProcessor implements SuggestionProcessor {
     }
 
     @Override
-    public void recordSuggestionUsed(OmniboxSuggestion suggestion, PropertyModel model) {}
-
-    @Override
     public void onSuggestionsReceived() {}
 }

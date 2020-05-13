@@ -59,9 +59,6 @@ public abstract class BaseSuggestionViewProcessor implements SuggestionProcessor
     public void recordSuggestionPresented(OmniboxSuggestion suggestion, PropertyModel model) {}
 
     @Override
-    public void recordSuggestionUsed(OmniboxSuggestion suggestion, PropertyModel model) {}
-
-    @Override
     public void onNativeInitialized() {
         if (ChromeFeatureList.isEnabled(ChromeFeatureList.OMNIBOX_COMPACT_SUGGESTIONS)) {
             if (SUGGESTION_DENSITY_SEMICOMPACT.equals(ChromeFeatureList.getFieldTrialParamByFeature(

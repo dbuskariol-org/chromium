@@ -707,15 +707,6 @@ class AutocompleteMediator implements OnSuggestionsReceivedListener, StartStopWi
             return;
         }
 
-        // Note: this call is typically scheduled for execution, rather than invoked directly.
-        // In some situations this means the content of mCurrentModels may change meanwhile.
-        int verifiedIndex = findSuggestionInModel(suggestion, position);
-        if (verifiedIndex != SUGGESTION_NOT_FOUND) {
-            SuggestionViewInfo info =
-                    (SuggestionViewInfo) getSuggestionModelList().get(verifiedIndex);
-            info.processor.recordSuggestionUsed(info.suggestion, info.model);
-        }
-
         loadUrlFromOmniboxMatch(position, suggestion, mLastActionUpTimestamp, true);
         mDelegate.setKeyboardVisibility(false);
     }

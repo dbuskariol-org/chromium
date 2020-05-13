@@ -62,13 +62,6 @@ public interface SuggestionProcessor {
     void recordSuggestionPresented(OmniboxSuggestion suggestion, PropertyModel model);
 
     /**
-     * Record histograms for used suggestion.
-     * Invoked whenever user uses particular suggestion to navigate somewhere.
-     * Only the processor responsible for managing specific suggestion receives this call.
-     */
-    void recordSuggestionUsed(OmniboxSuggestion suggestion, PropertyModel model);
-
-    /**
      * Signals that the new suggestion list has been received.
      */
     void onSuggestionsReceived();
