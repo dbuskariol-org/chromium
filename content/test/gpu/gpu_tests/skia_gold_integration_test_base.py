@@ -368,6 +368,12 @@ class SkiaGoldIntegrationTestBase(gpu_integration_test.GpuIntegrationTest):
         'msaa': str(img_params.msaa),
         'model_name': _ToNonEmptyStrOrNone(img_params.model_name),
     }
+    # If we have a grace period active, then the test is potentially flaky.
+    # Include a pair that will cause Gold to ignore any untriaged images, which
+    # will prevent it from automatically commenting on unrelated CLs that happen
+    # to produce a new image.
+    if _GracePeriodActive(page):
+      gpu_keys['ignore'] = '1'
     return gpu_keys
 
 # TODO(crbug.com/1076144): This is due for a refactor, likely similar to how
@@ -530,7 +536,7 @@ class SkiaGoldIntegrationTestBase(gpu_integration_test.GpuIntegrationTest):
       return False
     # Don't surface if the test was recently added and we're still within its
     # grace period.
-    if page.grace_period_end and date.today() <= page.grace_period_end:
+    if _GracePeriodActive(page):
       return False
     return True
 
@@ -634,6 +640,19 @@ def _ToHexOrNone(num):
 
 def _ToNonEmptyStrOrNone(val):
   return 'None' if val == '' else str(val)
+
+
+def _GracePeriodActive(page):
+  """Returns whether a grace period is currently active for a test.
+
+  Args:
+    page: The GPU PixelTestPage object for the test in question.
+
+  Returns:
+    True if a grace period is defined for |page| and has not yet expired.
+    Otherwise, False.
+  """
+  return page.grace_period_end and date.today() <= page.grace_period_end
 
 
 def load_tests(loader, tests, pattern):
