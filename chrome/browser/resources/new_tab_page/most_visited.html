@@ -53,6 +53,7 @@
     height: var(--tile-size);
     margin-bottom: var(--tile-margin);
     opacity: 1;
+    outline: none;
     padding-top: var(--tile-margin);
     position: relative;
     text-decoration: none;
@@ -63,19 +64,16 @@
     width: var(--tile-size);
   }
 
+  :host-context(.focus-outline-visible) .tile:focus,
+  :host-context(.focus-outline-visible) #addShortcut:focus {
+    box-shadow: var(--ntp-focus-shadow);
+  }
+
   #addShortcut {
     background-color: transparent;
     border: none;
     box-shadow: none;
     padding: 0;
-  }
-
-  :host-context(.focus-outline-visible) #addShortcut:focus {
-    outline: auto;
-  }
-
-  :host-context(html:not(.focus-outline-visible)) .tile {
-    outline: none;
   }
 
   :host(:not([reordering_])) .tile:hover,
