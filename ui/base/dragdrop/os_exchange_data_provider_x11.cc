@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/base/dragdrop/os_exchange_data_provider_aurax11.h"
+#include "ui/base/dragdrop/os_exchange_data_provider_x11.h"
 
 #include <utility>
 
@@ -14,29 +14,29 @@
 
 namespace ui {
 
-OSExchangeDataProviderAuraX11::OSExchangeDataProviderAuraX11(
+OSExchangeDataProviderX11::OSExchangeDataProviderX11(
     XID x_window,
     const SelectionFormatMap& selection)
     : XOSExchangeDataProvider(x_window, selection) {}
 
-OSExchangeDataProviderAuraX11::OSExchangeDataProviderAuraX11() {
+OSExchangeDataProviderX11::OSExchangeDataProviderX11() {
   X11EventSource::GetInstance()->AddXEventDispatcher(this);
 }
 
-OSExchangeDataProviderAuraX11::~OSExchangeDataProviderAuraX11() {
+OSExchangeDataProviderX11::~OSExchangeDataProviderX11() {
   if (own_window())
     X11EventSource::GetInstance()->RemoveXEventDispatcher(this);
 }
 
-std::unique_ptr<OSExchangeDataProvider> OSExchangeDataProviderAuraX11::Clone()
+std::unique_ptr<OSExchangeDataProvider> OSExchangeDataProviderX11::Clone()
     const {
-  std::unique_ptr<OSExchangeDataProviderAuraX11> ret(
-      new OSExchangeDataProviderAuraX11());
+  std::unique_ptr<OSExchangeDataProviderX11> ret(
+      new OSExchangeDataProviderX11());
   ret->set_format_map(format_map());
   return std::move(ret);
 }
 
-void OSExchangeDataProviderAuraX11::SetFileContents(
+void OSExchangeDataProviderX11::SetFileContents(
     const base::FilePath& filename,
     const std::string& file_contents) {
   DCHECK(!filename.empty());
@@ -69,7 +69,7 @@ void OSExchangeDataProviderAuraX11::SetFileContents(
                  base::RefCountedString::TakeString(&file_contents_copy)));
 }
 
-bool OSExchangeDataProviderAuraX11::DispatchXEvent(XEvent* xev) {
+bool OSExchangeDataProviderX11::DispatchXEvent(XEvent* xev) {
   if (xev->type == SelectionRequest && xev->xany.window == x_window()) {
     selection_owner().OnSelectionRequest(*xev);
     return true;

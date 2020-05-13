@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/base/dragdrop/os_exchange_data_provider_aurax11.h"
+#include "ui/base/dragdrop/os_exchange_data_provider_x11.h"
 
 #include "base/strings/string16.h"
 #include "base/strings/utf_string_conversions.h"
@@ -21,9 +21,9 @@ const char kGoogleURL[] = "http://www.google.com/";
 
 namespace ui {
 
-class OSExchangeDataProviderAuraX11Test : public testing::Test {
+class OSExchangeDataProviderX11Test : public testing::Test {
  public:
-  OSExchangeDataProviderAuraX11Test()
+  OSExchangeDataProviderX11Test()
       : task_environment_(base::test::TaskEnvironment::MainThreadType::UI),
         event_source(gfx::GetXDisplay()) {}
 
@@ -38,10 +38,10 @@ class OSExchangeDataProviderAuraX11Test : public testing::Test {
  protected:
   base::test::TaskEnvironment task_environment_;
   X11EventSource event_source;
-  OSExchangeDataProviderAuraX11 provider;
+  OSExchangeDataProviderX11 provider;
 };
 
-TEST_F(OSExchangeDataProviderAuraX11Test, MozillaURL) {
+TEST_F(OSExchangeDataProviderX11Test, MozillaURL) {
   // Check that we can get titled entries.
   provider.SetURL(GURL(kGoogleURL), base::ASCIIToUTF16(kGoogleTitle));
   {
@@ -65,7 +65,7 @@ TEST_F(OSExchangeDataProviderAuraX11Test, MozillaURL) {
   }
 }
 
-TEST_F(OSExchangeDataProviderAuraX11Test, FilesArentURLs) {
+TEST_F(OSExchangeDataProviderX11Test, FilesArentURLs) {
   AddURLList(kFileURL);
 
   EXPECT_TRUE(provider.HasFile());
@@ -73,7 +73,7 @@ TEST_F(OSExchangeDataProviderAuraX11Test, FilesArentURLs) {
   EXPECT_FALSE(provider.HasURL(ui::DO_NOT_CONVERT_FILENAMES));
 }
 
-TEST_F(OSExchangeDataProviderAuraX11Test, HTTPURLsArentFiles) {
+TEST_F(OSExchangeDataProviderX11Test, HTTPURLsArentFiles) {
   AddURLList(kGoogleURL);
 
   EXPECT_FALSE(provider.HasFile());
@@ -81,7 +81,7 @@ TEST_F(OSExchangeDataProviderAuraX11Test, HTTPURLsArentFiles) {
   EXPECT_TRUE(provider.HasURL(ui::DO_NOT_CONVERT_FILENAMES));
 }
 
-TEST_F(OSExchangeDataProviderAuraX11Test, URIListWithBoth) {
+TEST_F(OSExchangeDataProviderX11Test, URIListWithBoth) {
   AddURLList("file:///home/user/file.txt\nhttp://www.google.com");
 
   EXPECT_TRUE(provider.HasFile());
@@ -103,7 +103,7 @@ TEST_F(OSExchangeDataProviderAuraX11Test, URIListWithBoth) {
   EXPECT_EQ(kGoogleURL, out_gurl.spec());
 }
 
-TEST_F(OSExchangeDataProviderAuraX11Test, OnlyStringURLIsUnfiltered) {
+TEST_F(OSExchangeDataProviderX11Test, OnlyStringURLIsUnfiltered) {
   const base::string16 file_url = base::UTF8ToUTF16(kFileURL);
   provider.SetString(file_url);
 
@@ -111,7 +111,7 @@ TEST_F(OSExchangeDataProviderAuraX11Test, OnlyStringURLIsUnfiltered) {
   EXPECT_FALSE(provider.HasURL(ui::DO_NOT_CONVERT_FILENAMES));
 }
 
-TEST_F(OSExchangeDataProviderAuraX11Test, StringAndURIListFilterString) {
+TEST_F(OSExchangeDataProviderX11Test, StringAndURIListFilterString) {
   const base::string16 file_url = base::UTF8ToUTF16(kFileURL);
   provider.SetString(file_url);
   AddURLList(kFileURL);
