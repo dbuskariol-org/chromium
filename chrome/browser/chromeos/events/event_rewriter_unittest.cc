@@ -48,6 +48,7 @@
 namespace {
 
 constexpr int kKeyboardDeviceId = 123;
+constexpr uint32_t kNoScanCode = 0;
 constexpr char kKbdSysPath[] = "/devices/platform/i8042/serio2/input/input1";
 constexpr char kKbdTopRowPropertyName[] = "CROS_KEYBOARD_TOP_ROW_LAYOUT";
 
@@ -90,17 +91,18 @@ std::string GetExpectedResultAsString(ui::EventType ui_type,
                                       ui::KeyboardCode ui_keycode,
                                       ui::DomCode code,
                                       int ui_flags,  // ui::EventFlags
-                                      ui::DomKey key) {
+                                      ui::DomKey key,
+                                      uint32_t scan_code) {
   return base::StringPrintf(
-      "type=%d code=0x%06X flags=0x%X vk=0x%02X key=0x%08X", ui_type,
-      static_cast<unsigned int>(code), ui_flags & ~ui::EF_IS_REPEAT, ui_keycode,
-      static_cast<unsigned int>(key));
+      "type=%d code=0x%06X flags=0x%X vk=0x%02X key=0x%08X scan=0x%08X",
+      ui_type, static_cast<unsigned int>(code), ui_flags & ~ui::EF_IS_REPEAT,
+      ui_keycode, static_cast<unsigned int>(key), scan_code);
 }
 
 std::string GetKeyEventAsString(const ui::KeyEvent& keyevent) {
   return GetExpectedResultAsString(keyevent.type(), keyevent.key_code(),
                                    keyevent.code(), keyevent.flags(),
-                                   keyevent.GetDomKey());
+                                   keyevent.GetDomKey(), keyevent.scan_code());
 }
 
 std::string GetRewrittenEventAsString(ui::EventRewriter* const rewriter,
@@ -109,9 +111,11 @@ std::string GetRewrittenEventAsString(ui::EventRewriter* const rewriter,
                                       ui::DomCode code,
                                       int ui_flags,  // ui::EventFlags
                                       ui::DomKey key,
+                                      uint32_t scan_code,
                                       int device_id = kKeyboardDeviceId) {
   ui::KeyEvent event(ui_type, ui_keycode, code, ui_flags, key,
                      ui::EventTimeForNow());
+  event.set_scan_code(scan_code);
   event.set_source_device_id(device_id);
   TestEventRewriterContinuation continuation;
   rewriter->RewriteEvent(event, continuation.weak_ptr_factory_.GetWeakPtr());
@@ -128,6 +132,7 @@ struct KeyTestCase {
     ui::DomCode code;
     int flags;  // ui::EventFlags
     ui::DomKey::Base key;
+    uint32_t scan_code = kNoScanCode;
   } input, expected;
   int device_id = kKeyboardDeviceId;
 };
@@ -135,7 +140,7 @@ struct KeyTestCase {
 std::string GetTestCaseAsString(ui::EventType ui_type,
                                 const KeyTestCase::Event& test) {
   return GetExpectedResultAsString(ui_type, test.key_code, test.code,
-                                   test.flags, test.key);
+                                   test.flags, test.key, test.scan_code);
 }
 
 // Tests a single stateless key rewrite operation.
@@ -145,7 +150,8 @@ void CheckKeyTestCase(ui::EventRewriter* const rewriter,
   EXPECT_EQ(GetTestCaseAsString(test.type, test.expected),
             GetRewrittenEventAsString(rewriter, test.type, test.input.key_code,
                                       test.input.code, test.input.flags,
-                                      test.input.key, test.device_id));
+                                      test.input.key, test.input.scan_code,
+                                      test.device_id));
 }
 
 }  // namespace
@@ -1210,40 +1216,45 @@ TEST_F(EventRewriterTest, TestRewriteModifiersRemapToCapsLock) {
   EXPECT_FALSE(ime_keyboard.caps_lock_is_enabled_);
 
   // Press Search.
-  EXPECT_EQ(GetExpectedResultAsString(
-                ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                ui::EF_MOD3_DOWN | ui::EF_CAPS_LOCK_ON, ui::DomKey::CAPS_LOCK),
-            GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED,
-                                      ui::VKEY_LWIN, ui::DomCode::META_LEFT,
-                                      ui::EF_COMMAND_DOWN, ui::DomKey::META));
+  EXPECT_EQ(
+      GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL,
+                                ui::DomCode::CAPS_LOCK,
+                                ui::EF_MOD3_DOWN | ui::EF_CAPS_LOCK_ON,
+                                ui::DomKey::CAPS_LOCK, kNoScanCode),
+      GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED, ui::VKEY_LWIN,
+                                ui::DomCode::META_LEFT, ui::EF_COMMAND_DOWN,
+                                ui::DomKey::META, kNoScanCode));
   EXPECT_FALSE(ime_keyboard.caps_lock_is_enabled_);
 
   // Release Search.
-  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
-                                      ui::DomCode::CAPS_LOCK, ui::EF_NONE,
-                                      ui::DomKey::CAPS_LOCK),
-            GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED,
-                                      ui::VKEY_LWIN, ui::DomCode::META_LEFT,
-                                      ui::EF_NONE, ui::DomKey::META));
+  EXPECT_EQ(
+      GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
+                                ui::DomCode::CAPS_LOCK, ui::EF_NONE,
+                                ui::DomKey::CAPS_LOCK, kNoScanCode),
+      GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED, ui::VKEY_LWIN,
+                                ui::DomCode::META_LEFT, ui::EF_NONE,
+                                ui::DomKey::META, kNoScanCode));
   EXPECT_TRUE(ime_keyboard.caps_lock_is_enabled_);
 
   // Press Search.
-  EXPECT_EQ(GetExpectedResultAsString(
-                ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN, ui::DomKey::CAPS_LOCK),
+  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL,
+                                      ui::DomCode::CAPS_LOCK,
+                                      ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN,
+                                      ui::DomKey::CAPS_LOCK, kNoScanCode),
             GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED,
                                       ui::VKEY_LWIN, ui::DomCode::META_LEFT,
                                       ui::EF_COMMAND_DOWN | ui::EF_CAPS_LOCK_ON,
-                                      ui::DomKey::META));
+                                      ui::DomKey::META, kNoScanCode));
   EXPECT_TRUE(ime_keyboard.caps_lock_is_enabled_);
 
   // Release Search.
-  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
-                                      ui::DomCode::CAPS_LOCK, ui::EF_NONE,
-                                      ui::DomKey::CAPS_LOCK),
-            GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED,
-                                      ui::VKEY_LWIN, ui::DomCode::META_LEFT,
-                                      ui::EF_NONE, ui::DomKey::META));
+  EXPECT_EQ(
+      GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
+                                ui::DomCode::CAPS_LOCK, ui::EF_NONE,
+                                ui::DomKey::CAPS_LOCK, kNoScanCode),
+      GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED, ui::VKEY_LWIN,
+                                ui::DomCode::META_LEFT, ui::EF_NONE,
+                                ui::DomKey::META, kNoScanCode));
   EXPECT_FALSE(ime_keyboard.caps_lock_is_enabled_);
 
   // Do the same on external Chrome OS keyboard.
@@ -1251,40 +1262,45 @@ TEST_F(EventRewriterTest, TestRewriteModifiersRemapToCapsLock) {
                 ui::INPUT_DEVICE_UNKNOWN);
 
   // Press Search.
-  EXPECT_EQ(GetExpectedResultAsString(
-                ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                ui::EF_MOD3_DOWN | ui::EF_CAPS_LOCK_ON, ui::DomKey::CAPS_LOCK),
-            GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED,
-                                      ui::VKEY_LWIN, ui::DomCode::META_LEFT,
-                                      ui::EF_COMMAND_DOWN, ui::DomKey::META));
+  EXPECT_EQ(
+      GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL,
+                                ui::DomCode::CAPS_LOCK,
+                                ui::EF_MOD3_DOWN | ui::EF_CAPS_LOCK_ON,
+                                ui::DomKey::CAPS_LOCK, kNoScanCode),
+      GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED, ui::VKEY_LWIN,
+                                ui::DomCode::META_LEFT, ui::EF_COMMAND_DOWN,
+                                ui::DomKey::META, kNoScanCode));
   EXPECT_FALSE(ime_keyboard.caps_lock_is_enabled_);
 
   // Release Search.
-  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
-                                      ui::DomCode::CAPS_LOCK, ui::EF_NONE,
-                                      ui::DomKey::CAPS_LOCK),
-            GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED,
-                                      ui::VKEY_LWIN, ui::DomCode::META_LEFT,
-                                      ui::EF_NONE, ui::DomKey::META));
+  EXPECT_EQ(
+      GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
+                                ui::DomCode::CAPS_LOCK, ui::EF_NONE,
+                                ui::DomKey::CAPS_LOCK, kNoScanCode),
+      GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED, ui::VKEY_LWIN,
+                                ui::DomCode::META_LEFT, ui::EF_NONE,
+                                ui::DomKey::META, kNoScanCode));
   EXPECT_TRUE(ime_keyboard.caps_lock_is_enabled_);
 
   // Press Search.
-  EXPECT_EQ(GetExpectedResultAsString(
-                ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN, ui::DomKey::CAPS_LOCK),
+  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL,
+                                      ui::DomCode::CAPS_LOCK,
+                                      ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN,
+                                      ui::DomKey::CAPS_LOCK, kNoScanCode),
             GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED,
                                       ui::VKEY_LWIN, ui::DomCode::META_LEFT,
                                       ui::EF_COMMAND_DOWN | ui::EF_CAPS_LOCK_ON,
-                                      ui::DomKey::META));
+                                      ui::DomKey::META, kNoScanCode));
   EXPECT_TRUE(ime_keyboard.caps_lock_is_enabled_);
 
   // Release Search.
-  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
-                                      ui::DomCode::CAPS_LOCK, ui::EF_NONE,
-                                      ui::DomKey::CAPS_LOCK),
-            GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED,
-                                      ui::VKEY_LWIN, ui::DomCode::META_LEFT,
-                                      ui::EF_NONE, ui::DomKey::META));
+  EXPECT_EQ(
+      GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
+                                ui::DomCode::CAPS_LOCK, ui::EF_NONE,
+                                ui::DomKey::CAPS_LOCK, kNoScanCode),
+      GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED, ui::VKEY_LWIN,
+                                ui::DomCode::META_LEFT, ui::EF_NONE,
+                                ui::DomKey::META, kNoScanCode));
   EXPECT_FALSE(ime_keyboard.caps_lock_is_enabled_);
 
   // Try external keyboard with Caps Lock.
@@ -1292,22 +1308,24 @@ TEST_F(EventRewriterTest, TestRewriteModifiersRemapToCapsLock) {
                 ui::INPUT_DEVICE_UNKNOWN);
 
   // Press Caps Lock.
-  EXPECT_EQ(GetExpectedResultAsString(
-                ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN, ui::DomKey::CAPS_LOCK),
+  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL,
+                                      ui::DomCode::CAPS_LOCK,
+                                      ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN,
+                                      ui::DomKey::CAPS_LOCK, kNoScanCode),
             GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED,
                                       ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
                                       ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN,
-                                      ui::DomKey::CAPS_LOCK));
+                                      ui::DomKey::CAPS_LOCK, kNoScanCode));
   EXPECT_FALSE(ime_keyboard.caps_lock_is_enabled_);
 
   // Release Caps Lock.
   EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
                                       ui::DomCode::CAPS_LOCK, ui::EF_NONE,
-                                      ui::DomKey::CAPS_LOCK),
+                                      ui::DomKey::CAPS_LOCK, kNoScanCode),
             GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED,
                                       ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                                      ui::EF_NONE, ui::DomKey::CAPS_LOCK));
+                                      ui::EF_NONE, ui::DomKey::CAPS_LOCK,
+                                      kNoScanCode));
   EXPECT_TRUE(ime_keyboard.caps_lock_is_enabled_);
 }
 
@@ -1321,20 +1339,23 @@ TEST_F(EventRewriterTest, TestRewriteCapsLock) {
   EXPECT_FALSE(ime_keyboard.caps_lock_is_enabled_);
 
   // On Chrome OS, CapsLock is mapped to CapsLock with Mod3Mask.
-  EXPECT_EQ(GetExpectedResultAsString(
-                ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN, ui::DomKey::CAPS_LOCK),
+  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_CAPITAL,
+                                      ui::DomCode::CAPS_LOCK,
+                                      ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN,
+                                      ui::DomKey::CAPS_LOCK, kNoScanCode),
             GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED,
                                       ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                                      ui::EF_MOD3_DOWN, ui::DomKey::CAPS_LOCK));
+                                      ui::EF_MOD3_DOWN, ui::DomKey::CAPS_LOCK,
+                                      kNoScanCode));
   EXPECT_FALSE(ime_keyboard.caps_lock_is_enabled_);
 
   EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CAPITAL,
                                       ui::DomCode::CAPS_LOCK, ui::EF_NONE,
-                                      ui::DomKey::CAPS_LOCK),
+                                      ui::DomKey::CAPS_LOCK, kNoScanCode),
             GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED,
                                       ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                                      ui::EF_MOD3_DOWN, ui::DomKey::CAPS_LOCK));
+                                      ui::EF_MOD3_DOWN, ui::DomKey::CAPS_LOCK,
+                                      kNoScanCode));
   EXPECT_TRUE(ime_keyboard.caps_lock_is_enabled_);
 
   // Remap Caps Lock to Control.
@@ -1343,21 +1364,22 @@ TEST_F(EventRewriterTest, TestRewriteCapsLock) {
                       ui::chromeos::ModifierKey::kControlKey);
 
   // Press Caps Lock.
-  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_CONTROL,
-                                      ui::DomCode::CONTROL_LEFT,
-                                      ui::EF_CONTROL_DOWN, ui::DomKey::CONTROL),
+  EXPECT_EQ(GetExpectedResultAsString(
+                ui::ET_KEY_PRESSED, ui::VKEY_CONTROL, ui::DomCode::CONTROL_LEFT,
+                ui::EF_CONTROL_DOWN, ui::DomKey::CONTROL, kNoScanCode),
             GetRewrittenEventAsString(rewriter(), ui::ET_KEY_PRESSED,
                                       ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
                                       ui::EF_CAPS_LOCK_ON | ui::EF_MOD3_DOWN,
-                                      ui::DomKey::CAPS_LOCK));
+                                      ui::DomKey::CAPS_LOCK, kNoScanCode));
 
   // Release Caps Lock.
   EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_RELEASED, ui::VKEY_CONTROL,
                                       ui::DomCode::CONTROL_LEFT, ui::EF_NONE,
-                                      ui::DomKey::CONTROL),
+                                      ui::DomKey::CONTROL, kNoScanCode),
             GetRewrittenEventAsString(rewriter(), ui::ET_KEY_RELEASED,
                                       ui::VKEY_CAPITAL, ui::DomCode::CAPS_LOCK,
-                                      ui::EF_NONE, ui::DomKey::CAPS_LOCK));
+                                      ui::EF_NONE, ui::DomKey::CAPS_LOCK,
+                                      kNoScanCode));
 }
 
 TEST_F(EventRewriterTest, TestRewriteCapsLockToControl) {
@@ -1407,12 +1429,13 @@ TEST_F(EventRewriterTest, TestRewriteCapsLockMod3InUse) {
 
   // Press CapsLock+a. Confirm that Mod3Mask is NOT rewritten to ControlMask
   // when Mod3Mask is already in use by the current XKB layout.
-  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_A,
-                                      ui::DomCode::US_A, ui::EF_NONE,
-                                      ui::DomKey::Constant<'a'>::Character),
-            GetRewrittenEventAsString(
-                rewriter(), ui::ET_KEY_PRESSED, ui::VKEY_A, ui::DomCode::US_A,
-                ui::EF_NONE, ui::DomKey::Constant<'a'>::Character));
+  EXPECT_EQ(
+      GetExpectedResultAsString(
+          ui::ET_KEY_PRESSED, ui::VKEY_A, ui::DomCode::US_A, ui::EF_NONE,
+          ui::DomKey::Constant<'a'>::Character, kNoScanCode),
+      GetRewrittenEventAsString(
+          rewriter(), ui::ET_KEY_PRESSED, ui::VKEY_A, ui::DomCode::US_A,
+          ui::EF_NONE, ui::DomKey::Constant<'a'>::Character, kNoScanCode));
 
   input_method_manager_mock_->set_mod3_used(false);
 }
@@ -3000,10 +3023,10 @@ TEST_F(EventRewriterAshTest, TopRowKeysAreFunctionKeys) {
   ASSERT_FALSE(details.dispatcher_destroyed);
   PopEvents(&events);
   EXPECT_EQ(1u, events.size());
-  EXPECT_EQ(
-      GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_F1,
-                                ui::DomCode::F1, ui::EF_NONE, ui::DomKey::F1),
-      GetKeyEventAsString(*static_cast<ui::KeyEvent*>(events[0].get())));
+  EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_F1,
+                                      ui::DomCode::F1, ui::EF_NONE,
+                                      ui::DomKey::F1, kNoScanCode),
+            GetKeyEventAsString(*static_cast<ui::KeyEvent*>(events[0].get())));
 
   // If the pref isn't set when an event is sent to a regular window, F1 is
   // rewritten to the back key.
@@ -3014,7 +3037,7 @@ TEST_F(EventRewriterAshTest, TopRowKeysAreFunctionKeys) {
   EXPECT_EQ(1u, events.size());
   EXPECT_EQ(GetExpectedResultAsString(ui::ET_KEY_PRESSED, ui::VKEY_BROWSER_BACK,
                                       ui::DomCode::BROWSER_BACK, ui::EF_NONE,
-                                      ui::DomKey::BROWSER_BACK),
+                                      ui::DomKey::BROWSER_BACK, kNoScanCode),
             GetKeyEventAsString(*static_cast<ui::KeyEvent*>(events[0].get())));
 }
 
