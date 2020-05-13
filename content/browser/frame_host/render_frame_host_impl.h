@@ -1174,10 +1174,11 @@ class CONTENT_EXPORT RenderFrameHostImpl
       CommitCallbackInterceptor* interceptor);
 
   // Posts a message from a frame in another process to the current renderer.
-  void PostMessageEvent(int32_t source_routing_id,
-                        const base::string16& source_origin,
-                        const base::string16& target_origin,
-                        blink::TransferableMessage message);
+  void PostMessageEvent(
+      const base::Optional<base::UnguessableToken>& source_token,
+      const base::string16& source_origin,
+      const base::string16& target_origin,
+      blink::TransferableMessage message);
 
   // Requests to swap the current frame into the frame tree, replacing the
   // RenderFrameProxy it is associated with.
