@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.page_info;
+package org.chromium.components.page_info;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,7 +16,6 @@ import androidx.core.app.NotificationManagerCompat;
 
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.base.Callback;
-import org.chromium.chrome.R;
 import org.chromium.components.browser_ui.site_settings.ContentSettingsResources;
 import org.chromium.components.browser_ui.site_settings.SiteSettingsFeatureList;
 import org.chromium.components.browser_ui.site_settings.WebsitePreferenceBridge;
@@ -24,8 +23,6 @@ import org.chromium.components.content_settings.ContentSettingValues;
 import org.chromium.components.content_settings.ContentSettingsType;
 import org.chromium.components.embedder_support.util.Origin;
 import org.chromium.components.location.LocationUtils;
-import org.chromium.components.page_info.PageInfoView;
-import org.chromium.components.page_info.SystemSettingsActivityRequiredListener;
 import org.chromium.components.permissions.PermissionUtil;
 import org.chromium.components.permissions.nfc.NfcSystemLevelSetting;
 import org.chromium.ui.base.AndroidPermissionDelegate;
@@ -39,8 +36,7 @@ import java.util.List;
  * permission values into PermissionParams suitable for PageInfoView to display.
  *
  */
-class PermissionParamsListBuilder {
-
+public class PermissionParamsListBuilder {
     private final List<PageInfoPermissionEntry> mEntries;
     private final String mFullUrl;
     private final boolean mShouldShowTitle;
@@ -62,8 +58,8 @@ class PermissionParamsListBuilder {
      * @param displayPermissionsCallback Callback to run to display fresh permissions in response to
      *                                   user interaction with a permission entry.
      */
-    PermissionParamsListBuilder(Context context, AndroidPermissionDelegate permissionDelegate,
-            String fullUrl, boolean shouldShowTitle,
+    public PermissionParamsListBuilder(Context context,
+            AndroidPermissionDelegate permissionDelegate, String fullUrl, boolean shouldShowTitle,
             SystemSettingsActivityRequiredListener systemSettingsActivityRequiredListener,
             Callback<PageInfoView.PermissionParams> displayPermissionsCallback,
             PermissionParamsListBuilderDelegate delegate) {
@@ -77,11 +73,11 @@ class PermissionParamsListBuilder {
         mDelegate = delegate;
     }
 
-    void addPermissionEntry(String name, int type, @ContentSettingValues int value) {
+    public void addPermissionEntry(String name, int type, @ContentSettingValues int value) {
         mEntries.add(new PageInfoPermissionEntry(name, type, value));
     }
 
-    PageInfoView.PermissionParams build() {
+    public PageInfoView.PermissionParams build() {
         List<PageInfoView.PermissionRowParams> rowParams = new ArrayList<>();
         for (PermissionParamsListBuilder.PageInfoPermissionEntry permission : mEntries) {
             rowParams.add(createPermissionParams(permission));
