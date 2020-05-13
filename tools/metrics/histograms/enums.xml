@@ -58629,6 +58629,8 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="4" label="User clicked on the page and the warning was shown."/>
   <int value="5"
       label="Page tried to enter fullscreen mode and the warning was shown."/>
+  <int value="6"
+      label="Page initiated a download and it was silently cancelled."/>
 </enum>
 
 <enum name="SafeBrowsingParseV4HashResult">
