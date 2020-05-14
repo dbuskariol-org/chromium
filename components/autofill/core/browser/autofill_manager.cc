@@ -103,7 +103,7 @@ using base::StartsWith;
 using base::TimeTicks;
 using mojom::SubmissionSource;
 
-const int kCreditCardSigninPromoImpressionLimit = 3;
+constexpr int kCreditCardSigninPromoImpressionLimit = 3;
 
 namespace {
 
@@ -414,6 +414,13 @@ const char* SubmissionSourceToString(SubmissionSource source) {
       return "FORM_SUBMISSION";
   }
   return "Unknown";
+}
+
+// Returns how many fields with type |field_type| may be filled in a form at
+// maximum.
+int TypeValueFormFillingLimit(ServerFieldType field_type) {
+  return field_type == CREDIT_CARD_NUMBER ? kCreditCardTypeValueFormFillingLimit
+                                          : kTypeValueFormFillingLimit;
 }
 
 }  // namespace
@@ -1716,6 +1723,10 @@ void AutofillManager::FillOrPreviewDataModelForm(
                               !filling_context->attempted_refill &&
                               !is_refill && !is_credit_card;
 
+  // Count the number of times the value of a specific type was filled into the
+  // form.
+  std::map<ServerFieldType, int> type_filling_count;
+
   for (size_t i = 0; i < form_structure->field_count(); ++i) {
     std::string field_number = base::StringPrintf("Field %zu", i);
 
@@ -1792,6 +1803,16 @@ void AutofillManager::FillOrPreviewDataModelForm(
             ->IsExpired(AutofillClock::Now())) {
       buffer << Tr{} << field_number
              << "Skipped: don't fill expiration date of expired cards";
+      continue;
+    }
+
+    // A field with a specific type is only allowed to be filled a limited
+    // number of times given by |TypeValueFormFillingLimit(field_type)|.
+    const auto field_type = cached_field->Type().GetStorableType();
+    if (++type_filling_count[field_type] >
+        TypeValueFormFillingLimit(field_type)) {
+      buffer << Tr{} << field_number
+             << "Skipped: field-type filling-limit reached";
       continue;
     }
 
