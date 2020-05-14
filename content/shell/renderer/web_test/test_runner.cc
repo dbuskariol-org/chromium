@@ -972,8 +972,8 @@ void TestRunnerBindings::AddOriginAccessAllowListEntry(
 }
 
 void TestRunnerBindings::InsertStyleSheet(const std::string& source_code) {
-  GetWebFrame()->GetDocument().InsertStyleSheet(
-      blink::WebString::FromUTF8(source_code));
+  if (runner_)
+    runner_->InsertStyleSheet(source_code);
 }
 
 bool TestRunnerBindings::FindString(

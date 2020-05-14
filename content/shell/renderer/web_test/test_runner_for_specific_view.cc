@@ -422,6 +422,12 @@ void TestRunnerForSpecificView::SetIsolatedWorldInfo(
   web_view()->FocusedFrame()->SetIsolatedWorldInfo(world_id, info);
 }
 
+void TestRunner::InsertStyleSheet(const std::string& source_code) {
+  blink::WebLocalFrame::FrameForCurrentContext()
+      ->GetDocument()
+      .InsertStyleSheet(blink::WebString::FromUTF8(source_code));
+}
+
 blink::WebLocalFrame* TestRunnerForSpecificView::GetLocalMainFrame() {
   if (!web_view()->MainFrame()->IsWebLocalFrame()) {
     // Hitting the check below uncovers a new scenario that requires OOPIF
