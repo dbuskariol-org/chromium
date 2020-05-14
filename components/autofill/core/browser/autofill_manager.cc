@@ -1810,20 +1810,23 @@ void AutofillManager::FillOrPreviewDataModelForm(
     bool has_value_before = !result.fields[i].value.empty();
     bool is_autofilled_before = result.fields[i].is_autofilled;
 
+    std::string failure_to_fill;  // Reason for failing to fill.
+
     // Fill the non-empty value from |data_model| into the result vector, which
     // will be sent to the renderer.
     FillFieldWithValue(
         cached_field, data_model, &result.fields[i], should_notify, cvc,
-        data_util::DetermineGroups(form_structure->GetServerFieldTypes()));
+        data_util::DetermineGroups(form_structure->GetServerFieldTypes()),
+        &failure_to_fill);
 
     bool has_value_after = !result.fields[i].value.empty();
     bool is_autofilled_after = result.fields[i].is_autofilled;
 
     buffer << Tr{} << field_number
            << base::StringPrintf(
-                  "Fillable - has value: %d->%d; autofilled: %d->%d",
+                  "Fillable - has value: %d->%d; autofilled: %d->%d. %s",
                   has_value_before, is_autofilled_before, has_value_after,
-                  is_autofilled_after);
+                  is_autofilled_after, failure_to_fill.c_str());
 
     if (!cached_field->IsVisible() && result.fields[i].is_autofilled)
       AutofillMetrics::LogHiddenOrPresentationalSelectFieldsFilled();
@@ -2345,9 +2348,12 @@ void AutofillManager::FillFieldWithValue(AutofillField* autofill_field,
                                          FormFieldData* field_data,
                                          bool should_notify,
                                          const base::string16& cvc,
-                                         uint32_t profile_form_bitmask) {
-  if (field_filler_.FillFormField(*autofill_field, data_model, field_data,
-                                  cvc)) {
+                                         uint32_t profile_form_bitmask,
+                                         std::string* failure_to_fill) {
+  if (field_filler_.FillFormField(*autofill_field, data_model, field_data, cvc,
+                                  failure_to_fill)) {
+    if (failure_to_fill)
+      *failure_to_fill = "Decided to fill";
     // Mark the cached field as autofilled, so that we can detect when a
     // user edits an autofilled field (for metrics).
     autofill_field->is_autofilled = true;
