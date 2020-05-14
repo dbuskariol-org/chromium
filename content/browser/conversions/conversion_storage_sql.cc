@@ -155,6 +155,9 @@ int ConversionStorageSql::MaybeCreateAndStoreConversionReports(
     return 0;
 
   const url::Origin& reporting_origin = conversion.reporting_origin();
+  DCHECK(!conversion_origin.opaque());
+  DCHECK(!reporting_origin.opaque());
+
   base::Time current_time = clock_->Now();
   int64_t serialized_current_time = SerializeTime(current_time);
 
@@ -180,6 +183,11 @@ int ConversionStorageSql::MaybeCreateAndStoreConversionReports(
     std::string impression_data = statement.ColumnString(1);
     url::Origin impression_origin =
         DeserializeOrigin(statement.ColumnString(2));
+
+    // Skip the report if the impression origin is opaque. This should only
+    // happen if there is some sort of database corruption.
+    if (impression_origin.opaque())
+      continue;
     base::Time impression_time = DeserializeTime(statement.ColumnInt64(3));
     base::Time expiry_time = DeserializeTime(statement.ColumnInt64(4));
 
@@ -291,6 +299,15 @@ std::vector<ConversionReport> ConversionStorageSql::GetConversionsToReport(
     base::Time impression_time = DeserializeTime(statement.ColumnInt64(8));
     base::Time expiry_time = DeserializeTime(statement.ColumnInt64(9));
     int64_t impression_id = statement.ColumnInt64(10);
+
+    // Ensure origins are valid before continuing. This could happen if there is
+    // database corruption.
+    // TODO(csharrison): This should be an extremely rare occurrence but it
+    // would entail that some records will remain in the DB as vestigial if a
+    // conversion is never sent. We should delete these entries from the DB.
+    if (impression_origin.opaque() || conversion_origin.opaque() ||
+        reporting_origin.opaque())
+      continue;
 
     // Create the impression and ConversionReport objects from the retrieved
     // columns.
