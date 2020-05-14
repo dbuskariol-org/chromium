@@ -6,6 +6,7 @@
 
 #include <cmath>
 #include <memory>
+#include <ostream>
 #include <vector>
 
 #include "testing/gtest/include/gtest/gtest.h"
@@ -60,6 +61,26 @@ struct StaticColorCheckParam {
   int color_threshold;
   std::vector<ExpectedColor> colors;
 };
+
+std::ostream& operator<<(std::ostream& os, const StaticColorCheckParam& param) {
+  const char* alpha_option =
+      (param.alpha_option == ImageDecoder::kAlphaPremultiplied
+           ? "AlphaPremultiplied"
+           : "AlphaNotPremultiplied");
+  const char* color_behavior;
+  if (param.color_behavior.IsIgnore()) {
+    color_behavior = "Ignore";
+  } else if (param.color_behavior.IsTag()) {
+    color_behavior = "Tag";
+  } else {
+    DCHECK(param.color_behavior.IsTransformToSRGB());
+    color_behavior = "TransformToSRGB";
+  }
+  return os << "StaticColorCheckParam { path: \"" << param.path
+            << "\", bit_depth: " << param.bit_depth
+            << ", alpha_option: " << alpha_option
+            << ", color_behavior: " << color_behavior << " }";
+}
 
 StaticColorCheckParam kTestParams[] = {
     {
