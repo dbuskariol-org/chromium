@@ -199,7 +199,7 @@ const base::Feature kExtraSafelistedRequestHeadersForOutOfBlinkCors{
 
 // Controls whether Client Hints are guarded by FeaturePolicy.
 const base::Feature kFeaturePolicyForClientHints{
-    "FeaturePolicyForClientHints", base::FEATURE_DISABLED_BY_DEFAULT};
+    "FeaturePolicyForClientHints", base::FEATURE_ENABLED_BY_DEFAULT};
 
 // When enabled Feature Policy propagation is similar to sandbox flags and,
 // sandbox flags are implemented on top of Feature Policy.
@@ -681,7 +681,7 @@ const base::Feature kUserActivationSameOriginVisibility{
 // An experimental replacement for the `User-Agent` header, defined in
 // https://tools.ietf.org/html/draft-west-ua-client-hints.
 const base::Feature kUserAgentClientHint{"UserAgentClientHint",
-                                         base::FEATURE_DISABLED_BY_DEFAULT};
+                                         base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Controls whether the <video>.getVideoPlaybackQuality() API is enabled.
 const base::Feature kVideoPlaybackQuality{"VideoPlaybackQuality",
