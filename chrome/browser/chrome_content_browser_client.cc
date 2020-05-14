@@ -4298,7 +4298,8 @@ ChromeContentBrowserClient::CreateURLLoaderThrottles(
         // |safe_browsing_service_| may be unavailable in tests.
         safe_browsing_service_ &&
                 safe_browsing::RealTimePolicyEngine::CanPerformFullURLLookup(
-                    profile->GetPrefs(), profile->IsOffTheRecord())
+                    profile->GetPrefs(), profile->IsOffTheRecord(),
+                    g_browser_process->variations_service())
             ? safe_browsing::RealTimeUrlLookupServiceFactory::GetForProfile(
                   profile)
             : nullptr;
