@@ -33,8 +33,15 @@
 #include "third_party/blink/renderer/core/css/css_property_value_set.h"
 #include "third_party/blink/renderer/core/css/resolver/style_resolver_state.h"
 #include "third_party/blink/renderer/core/style/computed_style.h"
+#include "third_party/blink/renderer/platform/wtf/text/string_hasher.h"
 
 namespace blink {
+
+static unsigned ComputeMatchedPropertiesHash(const MatchResult& result) {
+  const MatchedPropertiesVector& vector = result.GetMatchedProperties();
+  return StringHasher::HashMemory(vector.data(),
+                                  sizeof(MatchedProperties) * vector.size());
+}
 
 void CachedMatchedProperties::Set(const ComputedStyle& style,
                                   const ComputedStyle& parent_style,
@@ -59,19 +66,22 @@ void CachedMatchedProperties::Clear() {
 
 MatchedPropertiesCache::MatchedPropertiesCache() = default;
 
-const CachedMatchedProperties* MatchedPropertiesCache::Find(
-    unsigned hash,
-    const StyleResolverState& style_resolver_state,
-    const MatchedPropertiesVector& properties) {
-  DCHECK(hash);
+MatchedPropertiesCache::Key::Key(const MatchResult& result)
+    : result_(result),
+      hash_(result.IsCacheable() ? ComputeMatchedPropertiesHash(result) : 0) {}
 
-  Cache::iterator it = cache_.find(hash);
+const CachedMatchedProperties* MatchedPropertiesCache::Find(
+    const Key& key,
+    const StyleResolverState& style_resolver_state) {
+  DCHECK(key.IsValid());
+  DCHECK(key.hash_);
+  Cache::iterator it = cache_.find(key.hash_);
   if (it == cache_.end())
     return nullptr;
   CachedMatchedProperties* cache_item = it->value.Get();
   if (!cache_item)
     return nullptr;
-  if (*cache_item != properties)
+  if (*cache_item != key.result_.GetMatchedProperties())
     return nullptr;
   if (cache_item->computed_style->InsideLink() !=
       style_resolver_state.Style()->InsideLink())
@@ -104,12 +114,12 @@ bool CachedMatchedProperties::operator!=(
   return !(*this == properties);
 }
 
-void MatchedPropertiesCache::Add(const ComputedStyle& style,
-                                 const ComputedStyle& parent_style,
-                                 unsigned hash,
-                                 const MatchedPropertiesVector& properties) {
-  DCHECK(hash);
-  Cache::AddResult add_result = cache_.insert(hash, nullptr);
+void MatchedPropertiesCache::Add(const Key& key,
+                                 const ComputedStyle& style,
+                                 const ComputedStyle& parent_style) {
+  DCHECK(key.IsValid());
+  DCHECK(key.hash_);
+  Cache::AddResult add_result = cache_.insert(key.hash_, nullptr);
   if (add_result.is_new_entry || !add_result.stored_value->value) {
     add_result.stored_value->value =
         MakeGarbageCollected<CachedMatchedProperties>();
@@ -119,7 +129,7 @@ void MatchedPropertiesCache::Add(const ComputedStyle& style,
   if (!add_result.is_new_entry)
     cache_item->Clear();
 
-  cache_item->Set(style, parent_style, properties);
+  cache_item->Set(style, parent_style, key.result_.GetMatchedProperties());
 }
 
 void MatchedPropertiesCache::Clear() {

@@ -67,13 +67,21 @@ class CORE_EXPORT MatchedPropertiesCache {
   MatchedPropertiesCache();
   ~MatchedPropertiesCache() { DCHECK(cache_.IsEmpty()); }
 
-  const CachedMatchedProperties* Find(unsigned hash,
-                                      const StyleResolverState&,
-                                      const MatchedPropertiesVector&);
-  void Add(const ComputedStyle&,
-           const ComputedStyle& parent_style,
-           unsigned hash,
-           const MatchedPropertiesVector&);
+  class CORE_EXPORT Key {
+    STACK_ALLOCATED();
+
+   public:
+    explicit Key(const MatchResult&);
+    bool IsValid() const { return hash_ != 0; }
+
+   private:
+    friend class MatchedPropertiesCache;
+    const MatchResult& result_;
+    unsigned hash_;
+  };
+
+  const CachedMatchedProperties* Find(const Key&, const StyleResolverState&);
+  void Add(const Key&, const ComputedStyle&, const ComputedStyle& parent_style);
 
   void Clear();
   void ClearViewportDependent();
