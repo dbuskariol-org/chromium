@@ -550,6 +550,11 @@ cr.define('cr.login', function() {
       const parser = new DOMParser();
       const xmlDoc = parser.parseFromString(samlResponse, 'text/xml');
       let certificate = xmlDoc.getElementsByTagName('ds:X509Certificate');
+      if (!certificate || certificate.length == 0) {
+        // tag 'ds:X509Certificate' doesn't exist
+        certificate = xmlDoc.getElementsByTagName('X509Certificate');
+      }
+
       if (certificate && certificate.length > 0 && certificate[0].childNodes &&
           certificate[0].childNodes[0] &&
           certificate[0].childNodes[0].nodeValue) {
