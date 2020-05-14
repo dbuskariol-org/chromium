@@ -25,6 +25,12 @@ class PasswordControllerJsTest
   PasswordControllerJsTest()
       : web::WebJsTest<web::WebTestWithWebState>(
             @[ @"chrome_bundle_all_frames", @"chrome_bundle_main_frame" ]) {}
+
+  void SetUpUniqueIDs() {
+    ExecuteJavaScript(@"__gCrWeb.fill.setUpForUniqueIDs(0);");
+    // Run password forms search to set up unique IDs.
+    EXPECT_TRUE(ExecuteJavaScript(@"__gCrWeb.passwords.findPasswordForms();"));
+  }
 };
 
 // IDs used in the Username and Password <input> elements.
@@ -80,9 +86,7 @@ TEST_F(PasswordControllerJsTest,
   NSString* const username = @"john.doe@gmail.com";
   NSString* const password = @"super!secret";
   LoadHtmlAndInject(GAIASignInForm(formOrigin, username, YES), GURL(origin));
-  ExecuteJavaScript(@"__gCrWeb.fill.setUpForUniqueIDs(0);");
-  // Run password forms search to set up unique IDs.
-  EXPECT_TRUE(ExecuteJavaScript(@"__gCrWeb.passwords.findPasswordForms();"));
+  SetUpUniqueIDs();
   EXPECT_NSEQ(
       @YES, ExecuteJavaScriptWithFormat(
                 @"__gCrWeb.passwords.fillPasswordForm(%@, '%@', '%@')",
@@ -105,9 +109,7 @@ TEST_F(PasswordControllerJsTest,
   NSString* const username2 = @"jean.dubois@gmail.com";
   NSString* const password = @"super!secret";
   LoadHtmlAndInject(GAIASignInForm(formOrigin, username1, YES), GURL(origin));
-  ExecuteJavaScript(@"__gCrWeb.fill.setUpForUniqueIDs(0);");
-  // Run password forms search to set up unique IDs.
-  EXPECT_TRUE(ExecuteJavaScript(@"__gCrWeb.passwords.findPasswordForms();"));
+  SetUpUniqueIDs();
   EXPECT_NSEQ(
       @NO, ExecuteJavaScriptWithFormat(
                @"__gCrWeb.passwords.fillPasswordForm(%@, '%@', '%@')",
@@ -130,9 +132,7 @@ TEST_F(PasswordControllerJsTest,
   NSString* const username2 = @"jane.doe@gmail.com";
   NSString* const password = @"super!secret";
   LoadHtmlAndInject(GAIASignInForm(formOrigin, username1, NO), GURL(origin));
-  ExecuteJavaScript(@"__gCrWeb.fill.setUpForUniqueIDs(0);");
-  // Run password forms search to set up unique IDs.
-  EXPECT_TRUE(ExecuteJavaScript(@"__gCrWeb.passwords.findPasswordForms();"));
+  SetUpUniqueIDs();
   EXPECT_NSEQ(
       @YES, ExecuteJavaScriptWithFormat(
                 @"__gCrWeb.passwords.fillPasswordForm(%@, '%@', '%@')",
@@ -404,9 +404,7 @@ TEST_F(PasswordControllerJsTest, OriginsAreDifferentInPathes) {
        "  <input type='submit' value='Submit'>"
        "</form>"
        "</body></html>");
-  ExecuteJavaScript(@"__gCrWeb.fill.setUpForUniqueIDs(0);");
-  // Run password forms search to set up unique IDs.
-  EXPECT_TRUE(ExecuteJavaScript(@"__gCrWeb.passwords.findPasswordForms();"));
+  SetUpUniqueIDs();
 
   NSString* const username = @"john.doe@gmail.com";
   NSString* const password = @"super!secret";
@@ -447,15 +445,16 @@ TEST_F(PasswordControllerJsTest,
                      "    </form>"
                      "  </body"
                      "</html>");
-  NSString* const formName = @"bar";
+  SetUpUniqueIDs();
+
+  uint32_t formIdentifier = 404;
   NSString* const password = @"abc";
-  NSString* const newPasswordIdentifier = @"ps1";
-  EXPECT_NSEQ(
-      @NO,
-      ExecuteJavaScriptWithFormat(
-          @"__gCrWeb.passwords."
-          @"fillPasswordFormWithGeneratedPassword('%@',  '%@', '%@', '%@')",
-          formName, newPasswordIdentifier, @"", password));
+  uint32_t newPasswordIdentifier = 1;
+  EXPECT_NSEQ(@NO,
+              ExecuteJavaScriptWithFormat(
+                  @"__gCrWeb.passwords."
+                  @"fillPasswordFormWithGeneratedPassword(%d, %d, %d, '%@')",
+                  formIdentifier, newPasswordIdentifier, -1, password));
 }
 
 // Check that filling a form without password fields fails.
@@ -469,15 +468,17 @@ TEST_F(PasswordControllerJsTest,
                      "    </form>"
                      "  </body"
                      "</html>");
-  NSString* const formName = @"foo";
+  SetUpUniqueIDs();
+
+  uint32_t formIdentifier = 0;
   NSString* const password = @"abc";
-  NSString* const newPasswordIdentifier = @"ps1";
-  NSString* const confirmPasswordIdentifier = @"ps2";
+  uint32_t const newPasswordIdentifier = 2;
+  uint32_t const confirmPasswordIdentifier = 3;
   EXPECT_NSEQ(
       @NO, ExecuteJavaScriptWithFormat(
                @"__gCrWeb.passwords."
-               @"fillPasswordFormWithGeneratedPassword('%@', '%@', '%@', '%@')",
-               formName, newPasswordIdentifier, confirmPasswordIdentifier,
+               @"fillPasswordFormWithGeneratedPassword(%d, %d, %d, '%@')",
+               formIdentifier, newPasswordIdentifier, confirmPasswordIdentifier,
                password));
 }
 
@@ -495,17 +496,18 @@ TEST_F(PasswordControllerJsTest,
                      "    </form>"
                      "  </body"
                      "</html>");
-  NSString* const formName = @"foo";
+  SetUpUniqueIDs();
+
+  uint32_t formIdentifier = 0;
   NSString* const password = @"abc";
-  NSString* const newPasswordIdentifier = @"ps1";
-  NSString* const confirmPasswordIdentifier = @"ps2";
-  EXPECT_NSEQ(
-      @YES,
-      ExecuteJavaScriptWithFormat(
-          @"__gCrWeb.passwords."
-          @"fillPasswordFormWithGeneratedPassword('%@', '%@', '%@', '%@')",
-          formName, newPasswordIdentifier, confirmPasswordIdentifier,
-          password));
+  uint32_t const newPasswordIdentifier = 2;
+  uint32_t const confirmPasswordIdentifier = 3;
+  EXPECT_NSEQ(@YES,
+              ExecuteJavaScriptWithFormat(
+                  @"__gCrWeb.passwords."
+                  @"fillPasswordFormWithGeneratedPassword(%u, %u, %u, '%@')",
+                  formIdentifier, newPasswordIdentifier,
+                  confirmPasswordIdentifier, password));
   EXPECT_NSEQ(@YES,
               ExecuteJavaScriptWithFormat(
                   @"document.getElementById('ps1').value == '%@'", password));
@@ -532,15 +534,16 @@ TEST_F(
                      "    </form>"
                      "  </body"
                      "</html>");
-  NSString* const formName = @"foo";
+  SetUpUniqueIDs();
+
+  uint32_t formIdentifier = 0;
   NSString* const password = @"abc";
-  NSString* const newPasswordIdentifier = @"ps1";
-  EXPECT_NSEQ(
-      @YES,
-      ExecuteJavaScriptWithFormat(
-          @"__gCrWeb.passwords."
-          @"fillPasswordFormWithGeneratedPassword('%@', '%@', '%@', '%@')",
-          formName, newPasswordIdentifier, @"", password));
+  uint32_t const newPasswordIdentifier = 2;
+  EXPECT_NSEQ(@YES,
+              ExecuteJavaScriptWithFormat(
+                  @"__gCrWeb.passwords."
+                  @"fillPasswordFormWithGeneratedPassword(%u, %u, %u, '%@')",
+                  formIdentifier, newPasswordIdentifier, -1, password));
   EXPECT_NSEQ(@YES,
               ExecuteJavaScriptWithFormat(
                   @"document.getElementById('ps1').value == '%@'", password));
@@ -566,14 +569,16 @@ TEST_F(
                      "    </form>"
                      "  </body"
                      "</html>");
-  NSString* const formName = @"foo";
+  SetUpUniqueIDs();
+
+  uint32_t formIdentifier = 0;
   NSString* const password = @"abc";
-  NSString* const confirmPasswordIdentifier = @"ps2";
-  EXPECT_NSEQ(
-      @NO, ExecuteJavaScriptWithFormat(
-               @"__gCrWeb.passwords."
-               @"fillPasswordFormWithGeneratedPassword('%@', '%@', '%@', '%@')",
-               formName, @"", confirmPasswordIdentifier, password));
+  uint32_t const confirmPasswordIdentifier = 3;
+  EXPECT_NSEQ(@NO,
+              ExecuteJavaScriptWithFormat(
+                  @"__gCrWeb.passwords."
+                  @"fillPasswordFormWithGeneratedPassword(%u, %u, %u, '%@')",
+                  formIdentifier, -1, confirmPasswordIdentifier, password));
   EXPECT_NSEQ(@YES, ExecuteJavaScriptWithFormat(
                         @"document.getElementById('ps1').value == '%@'", @""));
   EXPECT_NSEQ(@YES, ExecuteJavaScriptWithFormat(
@@ -596,13 +601,15 @@ TEST_F(
                      "    </form>"
                      "  </body"
                      "</html>");
-  NSString* const formName = @"foo";
+  SetUpUniqueIDs();
+
+  uint32_t formIdentifier = 0;
   NSString* const password = @"abc";
   EXPECT_NSEQ(
       @NO, ExecuteJavaScriptWithFormat(
                @"__gCrWeb.passwords."
-               @"fillPasswordFormWithGeneratedPassword('%@', '%@', null, '%@')",
-               formName, @"hello", password));
+               @"fillPasswordFormWithGeneratedPassword(%u, '%@', null, '%@')",
+               formIdentifier, @"hello", password));
   EXPECT_NSEQ(@YES, ExecuteJavaScriptWithFormat(
                         @"document.getElementById('ps1').value == '%@'", @""));
   EXPECT_NSEQ(@YES, ExecuteJavaScriptWithFormat(
@@ -620,9 +627,8 @@ TEST_F(PasswordControllerJsTest, FillOnlyPasswordField) {
        "  Password: <input type='password' name='password' id='password'>"
        "</form>"
        "</body></html>");
-  ExecuteJavaScript(@"__gCrWeb.fill.setUpForUniqueIDs(0);");
-  // Run password forms search to set up unique IDs.
-  EXPECT_TRUE(ExecuteJavaScript(@"__gCrWeb.passwords.findPasswordForms();"));
+  SetUpUniqueIDs();
+
   NSString* const password = @"super!secret";
   std::string page_origin = BaseUrl() + "origin1";
   std::string form_fill_data_origin = BaseUrl() + "origin2";
