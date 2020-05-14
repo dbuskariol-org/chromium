@@ -24,6 +24,7 @@ import * as toast from '../toast.js';
 import {
   Facing,
   Mode,
+  ViewName,
 } from '../type.js';
 import * as util from '../util.js';
 
@@ -36,7 +37,7 @@ import {
 import {Options} from './camera/options.js';
 import {Preview} from './camera/preview.js';
 import * as timertick from './camera/timertick.js';
-import {View, ViewName} from './view.js';
+import {View} from './view.js';
 
 /**
  * Thrown when app window suspended during stream reconfiguration.
@@ -248,7 +249,10 @@ export class Camera extends View {
    * @return {!Promise}
    */
   async initialize() {
-    await ChromeHelper.getInstance().initTabletModeMonitor();
+    const setTablet = (isTablet) => state.set(state.State.TABLET, isTablet);
+    const isTablet =
+        await ChromeHelper.getInstance().initTabletModeMonitor(setTablet);
+    setTablet(isTablet);
   }
 
   /**
@@ -265,7 +269,7 @@ export class Camera extends View {
    * @private
    */
   isTabletBackground_() {
-    return ChromeHelper.getInstance().isTabletMode() && !this.isVisible_;
+    return state.get(state.State.TABLET) && !this.isVisible_;
   }
 
   /**
@@ -390,8 +394,7 @@ export class Camera extends View {
       return true;
     }
     if ((key === 'AudioVolumeUp' || key === 'AudioVolumeDown') &&
-        ChromeHelper.getInstance().isTabletMode() &&
-        state.get(state.State.STREAMING)) {
+        state.get(state.State.TABLET) && state.get(state.State.STREAMING)) {
       if (state.get(state.State.TAKING)) {
         this.endTake_();
       } else {
@@ -452,8 +455,7 @@ export class Camera extends View {
       }
     }
     if (resolCandidates === null) {
-      resolCandidates =
-          await this.modes_.getResolutionCandidatesV1(mode, deviceId);
+      resolCandidates = this.modes_.getResolutionCandidatesV1(mode, deviceId);
     }
     for (const {resolution: captureR, previewCandidates} of resolCandidates) {
       for (const constraints of previewCandidates) {
