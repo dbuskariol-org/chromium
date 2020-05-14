@@ -31,6 +31,7 @@
 #include "third_party/blink/renderer/core/css/resolver/matched_properties_cache.h"
 
 #include "third_party/blink/renderer/core/css/css_property_value_set.h"
+#include "third_party/blink/renderer/core/css/properties/css_property_ref.h"
 #include "third_party/blink/renderer/core/css/resolver/style_resolver_state.h"
 #include "third_party/blink/renderer/core/style/computed_style.h"
 #include "third_party/blink/renderer/platform/wtf/text/string_hasher.h"
@@ -43,9 +44,11 @@ static unsigned ComputeMatchedPropertiesHash(const MatchResult& result) {
                                   sizeof(MatchedProperties) * vector.size());
 }
 
-void CachedMatchedProperties::Set(const ComputedStyle& style,
-                                  const ComputedStyle& parent_style,
-                                  const MatchedPropertiesVector& properties) {
+void CachedMatchedProperties::Set(
+    const ComputedStyle& style,
+    const ComputedStyle& parent_style,
+    const MatchedPropertiesVector& properties,
+    const HashSet<CSSPropertyName>& dependencies) {
   for (const auto& new_matched_properties : properties) {
     matched_properties.push_back(new_matched_properties.properties);
     matched_properties_types.push_back(new_matched_properties.types_);
@@ -56,12 +59,33 @@ void CachedMatchedProperties::Set(const ComputedStyle& style,
   // for the substructures and never used as-is.
   this->computed_style = ComputedStyle::Clone(style);
   this->parent_computed_style = ComputedStyle::Clone(parent_style);
+
+  for (const CSSPropertyName& name : dependencies)
+    this->dependencies.push_back(name);
 }
 
 void CachedMatchedProperties::Clear() {
   matched_properties.clear();
   computed_style = nullptr;
   parent_computed_style = nullptr;
+  dependencies.clear();
+}
+
+bool CachedMatchedProperties::DependenciesEqual(
+    const StyleResolverState& state) {
+  if (!state.ParentStyle())
+    return false;
+
+  for (const CSSPropertyName& name : dependencies) {
+    CSSPropertyRef ref(name, state.GetDocument());
+    DCHECK(ref.IsValid());
+    if (!ref.GetProperty().ComputedValuesEqual(*parent_computed_style,
+                                               *state.ParentStyle())) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 MatchedPropertiesCache::MatchedPropertiesCache() = default;
@@ -88,6 +112,8 @@ const CachedMatchedProperties* MatchedPropertiesCache::Find(
     return nullptr;
   if (cache_item->computed_style->InsideLink() !=
       style_resolver_state.Style()->InsideLink())
+    return nullptr;
+  if (!cache_item->DependenciesEqual(style_resolver_state))
     return nullptr;
   return cache_item;
 }
@@ -119,7 +145,8 @@ bool CachedMatchedProperties::operator!=(
 
 void MatchedPropertiesCache::Add(const Key& key,
                                  const ComputedStyle& style,
-                                 const ComputedStyle& parent_style) {
+                                 const ComputedStyle& parent_style,
+                                 const HashSet<CSSPropertyName>& dependencies) {
   DCHECK(key.IsValid());
   DCHECK(key.hash_);
   Cache::AddResult add_result = cache_.insert(key.hash_, nullptr);
@@ -132,7 +159,8 @@ void MatchedPropertiesCache::Add(const Key& key,
   if (!add_result.is_new_entry)
     cache_item->Clear();
 
-  cache_item->Set(style, parent_style, key.result_.GetMatchedProperties());
+  cache_item->Set(style, parent_style, key.result_.GetMatchedProperties(),
+                  dependencies);
 }
 
 void MatchedPropertiesCache::Clear() {

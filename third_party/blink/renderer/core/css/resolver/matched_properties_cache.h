@@ -49,10 +49,17 @@ class CachedMatchedProperties final
   scoped_refptr<ComputedStyle> computed_style;
   scoped_refptr<ComputedStyle> parent_computed_style;
 
+  Vector<CSSPropertyName> dependencies;
+
   void Set(const ComputedStyle&,
            const ComputedStyle& parent_style,
-           const MatchedPropertiesVector&);
+           const MatchedPropertiesVector&,
+           const HashSet<CSSPropertyName>& dependencies);
   void Clear();
+
+  // True if the computed value for each dependency is equal for the
+  // cached parent style vs. the incoming parent style.
+  bool DependenciesEqual(const StyleResolverState&);
 
   void Trace(Visitor*) {}
 
@@ -85,7 +92,10 @@ class CORE_EXPORT MatchedPropertiesCache {
   };
 
   const CachedMatchedProperties* Find(const Key&, const StyleResolverState&);
-  void Add(const Key&, const ComputedStyle&, const ComputedStyle& parent_style);
+  void Add(const Key&,
+           const ComputedStyle&,
+           const ComputedStyle& parent_style,
+           const HashSet<CSSPropertyName>& dependencies);
 
   void Clear();
   void ClearViewportDependent();

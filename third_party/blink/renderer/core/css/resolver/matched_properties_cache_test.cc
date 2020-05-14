@@ -4,6 +4,7 @@
 
 #include "third_party/blink/renderer/core/css/resolver/matched_properties_cache.h"
 
+#include "third_party/blink/renderer/core/css/css_property_name.h"
 #include "third_party/blink/renderer/core/css/css_test_helpers.h"
 #include "third_party/blink/renderer/core/css/resolver/style_resolver.h"
 #include "third_party/blink/renderer/core/html/html_element.h"
@@ -11,6 +12,8 @@
 #include "third_party/blink/renderer/core/testing/page_test_base.h"
 
 namespace blink {
+
+using css_test_helpers::CreateVariableData;
 
 class MatchedPropertiesCacheTestKey {
   STACK_ALLOCATED();
@@ -53,8 +56,14 @@ class MatchedPropertiesCacheTestCache {
 
   void Add(const TestKey& key,
            const ComputedStyle& style,
-           const ComputedStyle& parent_style) {
-    cache_.Add(key.InnerKey(), style, parent_style);
+           const ComputedStyle& parent_style,
+           const Vector<String>& dependencies = Vector<String>()) {
+    HashSet<CSSPropertyName> set;
+    for (String name_string : dependencies) {
+      set.insert(
+          *CSSPropertyName::From(document_.GetExecutionContext(), name_string));
+    }
+    cache_.Add(key.InnerKey(), style, parent_style, set);
   }
 
   const CachedMatchedProperties* Find(const TestKey& key,
@@ -114,6 +123,125 @@ TEST_F(MatchedPropertiesCacheTest, HitOnlyForAddedEntry) {
 
   EXPECT_TRUE(cache.Find(key1, *style, *parent));
   EXPECT_FALSE(cache.Find(key2, *style, *parent));
+}
+
+TEST_F(MatchedPropertiesCacheTest, HitWithStandardDependency) {
+  TestCache cache(GetDocument());
+
+  auto style = CreateStyle();
+  auto parent = CreateStyle();
+
+  TestKey key("top:inherit", 1);
+
+  cache.Add(key, *style, *parent, Vector<String>{"top"});
+  EXPECT_TRUE(cache.Find(key, *style, *parent));
+}
+
+TEST_F(MatchedPropertiesCacheTest, MissWithStandardDependency) {
+  TestCache cache(GetDocument());
+
+  auto style = CreateStyle();
+
+  auto parent1 = CreateStyle();
+  parent1->SetTop(Length(1, Length::kFixed));
+
+  auto parent2 = CreateStyle();
+  parent2->SetTop(Length(2, Length::kFixed));
+
+  TestKey key("top:inherit", 1);
+  cache.Add(key, *style, *parent1, Vector<String>{"top"});
+  EXPECT_TRUE(cache.Find(key, *style, *parent1));
+  EXPECT_FALSE(cache.Find(key, *style, *parent2));
+}
+
+TEST_F(MatchedPropertiesCacheTest, HitWithCustomDependency) {
+  TestCache cache(GetDocument());
+
+  auto style = CreateStyle();
+
+  auto parent = CreateStyle();
+  parent->SetVariableData("--x", CreateVariableData("1px"), true);
+
+  TestKey key("top:var(--x)", 1);
+
+  cache.Add(key, *style, *parent, Vector<String>{"--x"});
+  EXPECT_TRUE(cache.Find(key, *style, *parent));
+}
+
+TEST_F(MatchedPropertiesCacheTest, MissWithCustomDependency) {
+  TestCache cache(GetDocument());
+
+  auto style = CreateStyle();
+
+  auto parent1 = CreateStyle();
+  parent1->SetVariableData("--x", CreateVariableData("1px"), true);
+
+  auto parent2 = CreateStyle();
+  parent2->SetVariableData("--x", CreateVariableData("2px"), true);
+
+  TestKey key("top:var(--x)", 1);
+
+  cache.Add(key, *style, *parent1, Vector<String>{"--x"});
+  EXPECT_FALSE(cache.Find(key, *style, *parent2));
+}
+
+TEST_F(MatchedPropertiesCacheTest, HitWithMultipleCustomDependencies) {
+  TestCache cache(GetDocument());
+
+  auto style = CreateStyle();
+
+  auto parent1 = CreateStyle();
+  parent1->SetVariableData("--x", CreateVariableData("1px"), true);
+  parent1->SetVariableData("--y", CreateVariableData("2px"), true);
+  parent1->SetVariableData("--z", CreateVariableData("3px"), true);
+
+  auto parent2 = ComputedStyle::Clone(*parent1);
+  parent2->SetVariableData("--z", CreateVariableData("4px"), true);
+
+  TestKey key("top:var(--x);left:var(--y)", 1);
+
+  // Does not depend on --z, so doesn't matter that --z changed.
+  cache.Add(key, *style, *parent1, Vector<String>{"--x", "--y"});
+  EXPECT_TRUE(cache.Find(key, *style, *parent2));
+}
+
+TEST_F(MatchedPropertiesCacheTest, MissWithMultipleCustomDependencies) {
+  TestCache cache(GetDocument());
+
+  auto style = CreateStyle();
+
+  auto parent1 = CreateStyle();
+  parent1->SetVariableData("--x", CreateVariableData("1px"), true);
+  parent1->SetVariableData("--y", CreateVariableData("2px"), true);
+
+  auto parent2 = ComputedStyle::Clone(*parent1);
+  parent2->SetVariableData("--y", CreateVariableData("3px"), true);
+
+  TestKey key("top:var(--x);left:var(--y)", 1);
+
+  cache.Add(key, *style, *parent1, Vector<String>{"--x", "--y"});
+  EXPECT_FALSE(cache.Find(key, *style, *parent2));
+}
+
+TEST_F(MatchedPropertiesCacheTest, HitWithMixedDependencies) {
+  TestCache cache(GetDocument());
+
+  auto style = CreateStyle();
+
+  auto parent1 = CreateStyle();
+  parent1->SetVariableData("--x", CreateVariableData("1px"), true);
+  parent1->SetVariableData("--y", CreateVariableData("2px"), true);
+  parent1->SetLeft(Length(3, Length::kFixed));
+  parent1->SetRight(Length(4, Length::kFixed));
+
+  auto parent2 = ComputedStyle::Clone(*parent1);
+  parent2->SetVariableData("--y", CreateVariableData("5px"), true);
+  parent2->SetRight(Length(6, Length::kFixed));
+
+  TestKey key("left:inherit;top:var(--x)", 1);
+
+  cache.Add(key, *style, *parent1, Vector<String>{"left", "--x"});
+  EXPECT_TRUE(cache.Find(key, *style, *parent2));
 }
 
 }  // namespace blink
