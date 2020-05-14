@@ -1019,6 +1019,7 @@
         'ExternalPrintServers',
         'ExternalPrintServersWhitelist',
         'PrinterTypeDenyList',
+        'PrintRasterizationMode',
       ]
     },
     {
@@ -20657,6 +20658,45 @@
       Local printers are also known as native printing destinations, and include destinations available to the local machine and shared network printers.'''
     },
     {
+      'name': 'PrintRasterizationMode',
+      'owners': ['thestig@chromium.org', 'file://printing/OWNERS'],
+      'type': 'int-enum',
+      'schema': {
+        'type': 'integer',
+        'enum': [ 0, 1 ],
+      },
+      'items': [
+        {
+          'name': 'Full',
+          'value': 0,
+          'caption': '''available''',
+        },
+        {
+          'name': 'Fast',
+          'value': 1,
+          'caption': '''disabled''',
+        },
+      ],
+      'supported_on': ['chrome.win:84-'],
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': True,
+      },
+      'example_value': 1,
+      'id': 706,
+      'caption': '''Print Rasterization Mode''',
+      'tags': [],
+      'desc': '''Controls how <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> prints on Windows.
+
+      When printing to a non-PostScript printer on Windows, sometimes print jobs need to be rasterized to print correctly.
+
+      When this policy is set to Full, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will do full page rasterization if necessary.
+
+      When this policy is set to Fast, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will avoid rasterization if possible, reducing the amount of rasterization can help reduce print job sizes and increase printing speed.
+
+      When this policy is not set, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will be in Full mode.'''
+    },
+    {
       'name': 'AmbientAuthenticationInPrivateModesEnabled',
       'owners': ['rhalavati@chromium.org', 'roagarwal@chromium.org', 'chrome-privacy-core@google.com'],
       'type': 'int-enum',
@@ -22034,6 +22074,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 476, 546, 562, 569, 578],
-  'highest_id_currently_used': 705,
+  'highest_id_currently_used': 706,
   'highest_atomic_group_id_currently_used': 38
 }

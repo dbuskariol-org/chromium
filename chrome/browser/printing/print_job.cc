@@ -26,7 +26,11 @@
 #if defined(OS_WIN)
 #include "base/command_line.h"
 #include "chrome/browser/printing/pdf_to_emf_converter.h"
+#include "chrome/browser/profiles/profile.h"
 #include "chrome/common/chrome_features.h"
+#include "chrome/common/pref_names.h"
+#include "components/prefs/pref_service.h"
+#include "content/public/browser/web_contents.h"
 #include "printing/pdf_render_settings.h"
 #include "printing/printed_page_win.h"
 #include "printing/printing_features.h"
@@ -44,8 +48,22 @@ void HoldRefCallback(scoped_refptr<PrintJob> job, base::OnceClosure callback) {
 }
 
 #if defined(OS_WIN)
-bool PrintWithReducedRasterization() {
-  // TODO(crbug.com/674771): Support setting via policy.
+// Those must be kept in sync with the values defined in policy_templates.json.
+enum class PrintRasterizationMode {
+  // Do full page rasterization if necessary. Default value when policy not set.
+  kFull = 0,
+  // Avoid rasterization if possible.
+  kFast = 1,
+  kMaxValue = kFast,
+};
+
+bool PrintWithReducedRasterization(PrefService* prefs) {
+  // Managed preference takes precedence over user preference and field trials.
+  if (prefs->IsManagedPreference(prefs::kPrintRasterizationMode)) {
+    int value = prefs->GetInteger(prefs::kPrintRasterizationMode);
+    return value == static_cast<int>(PrintRasterizationMode::kFast);
+  }
+
   return base::FeatureList::IsEnabled(features::kPrintWithReducedRasterization);
 }
 #endif
@@ -331,7 +349,11 @@ void PrintJob::StartPdfToEmfConversion(
   bool print_text_with_gdi =
       settings.print_text_with_gdi() && !settings.printer_is_xps() &&
       base::FeatureList::IsEnabled(::features::kGdiTextPrinting);
-  bool print_with_reduced_rasterization = PrintWithReducedRasterization();
+
+  Profile* profile = Profile::FromBrowserContext(
+      worker_->GetWebContents()->GetBrowserContext());
+  bool print_with_reduced_rasterization =
+      PrintWithReducedRasterization(profile->GetPrefs());
 
   using RenderMode = PdfRenderSettings::Mode;
   RenderMode mode;

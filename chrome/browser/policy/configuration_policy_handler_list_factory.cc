@@ -1115,6 +1115,9 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kNativeWindowOcclusionEnabled,
     policy::policy_prefs::kNativeWindowOcclusionEnabled,
     base::Value::Type::BOOLEAN },
+  { key::kPrintRasterizationMode,
+    prefs::kPrintRasterizationMode,
+    base::Value::Type::INTEGER },
 #else  // defined(OS_WIN)
   { key::kNtlmV2Enabled,
     prefs::kNtlmV2Enabled,
