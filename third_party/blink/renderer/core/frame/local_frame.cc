@@ -61,6 +61,7 @@
 #include "third_party/blink/public/platform/web_string.h"
 #include "third_party/blink/public/platform/web_url_request.h"
 #include "third_party/blink/public/web/web_content_capture_client.h"
+#include "third_party/blink/public/web/web_frame.h"
 #include "third_party/blink/public/web/web_local_frame_client.h"
 #include "third_party/blink/public/web/web_plugin.h"
 #include "third_party/blink/renderer/bindings/core/v8/script_controller.h"
@@ -1568,6 +1569,21 @@ IntPoint LocalFrame::GetMainFrameScrollOffset() const {
                    local_root.View()->GetScrollableArea()->GetScrollOffset())
              : IntPoint(
                    local_root.intersection_state_.main_frame_scroll_offset);
+}
+
+void LocalFrame::SetOpener(Frame* opener_frame) {
+  // Only a local frame should be able to update another frame's opener.
+  DCHECK(!opener_frame || opener_frame->IsLocalFrame());
+
+  auto* opener_web_frame = WebFrame::FromFrame(opener_frame);
+  auto* web_frame = WebFrame::FromFrame(this);
+  if (web_frame && web_frame->Opener() != opener_web_frame) {
+    GetLocalFrameHostRemote().DidChangeOpener(
+        opener_frame ? base::Optional<base::UnguessableToken>(
+                           opener_frame->GetFrameToken())
+                     : base::nullopt);
+    web_frame->SetOpener(opener_web_frame);
+  }
 }
 
 FrameOcclusionState LocalFrame::GetOcclusionState() const {

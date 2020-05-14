@@ -370,6 +370,8 @@ class CORE_EXPORT LocalFrame final : public Frame,
   IntSize GetMainFrameViewportSize() const override;
   IntPoint GetMainFrameScrollOffset() const override;
 
+  void SetOpener(Frame* opener) override;
+
   // See viewport_intersection_state.h for more info on these methods.
   gfx::Point RemoteViewportOffset() const {
     return intersection_state_.viewport_offset;

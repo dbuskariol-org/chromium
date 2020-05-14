@@ -802,6 +802,23 @@ RenderFrameHostImpl* RenderFrameHostImpl::FromID(int render_process_id,
   return RenderFrameHostImpl::FromID(
       GlobalFrameRoutingId(render_process_id, render_frame_id));
 }
+
+// static
+RenderFrameHostImpl* RenderFrameHostImpl::FromFrameToken(
+    int process_id,
+    const base::UnguessableToken& frame_token) {
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  auto it = g_token_frame_map.Get().find(frame_token);
+  if (it == g_token_frame_map.Get().end())
+    return nullptr;
+
+  // TODO(tonikitoo): Consider killing the renderer when this happens
+  if (it->second->GetProcess()->GetID() != process_id)
+    return nullptr;
+
+  return it->second;
+}
+
 // static
 RenderFrameHost* RenderFrameHost::FromAXTreeID(ui::AXTreeID ax_tree_id) {
   return RenderFrameHostImpl::FromAXTreeID(ax_tree_id);
@@ -1685,7 +1702,6 @@ bool RenderFrameHostImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameHostMsg_Unload_ACK, OnUnloadACK)
     IPC_MESSAGE_HANDLER(FrameHostMsg_ContextMenu, OnContextMenu)
     IPC_MESSAGE_HANDLER(FrameHostMsg_VisualStateResponse, OnVisualStateResponse)
-    IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeOpener, OnDidChangeOpener)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidChangeFramePolicy,
                         OnDidChangeFramePolicy)
     IPC_MESSAGE_HANDLER(FrameHostMsg_DidStopLoading, OnDidStopLoading)
@@ -3632,11 +3648,6 @@ void RenderFrameHostImpl::DidAccessInitialDocument() {
   delegate_->DidAccessInitialDocument();
 }
 
-void RenderFrameHostImpl::OnDidChangeOpener(int32_t opener_routing_id) {
-  frame_tree_node_->render_manager()->DidChangeOpener(opener_routing_id,
-                                                      GetSiteInstance());
-}
-
 void RenderFrameHostImpl::DidChangeName(const std::string& name,
                                         const std::string& unique_name) {
   if (GetParent() != nullptr) {
@@ -4454,6 +4465,12 @@ void RenderFrameHostImpl::DidChangeFrameOwnerProperties(
     delegate_->DidChangeDisplayState(
         child, properties->is_display_none /* is_display_none */);
   }
+}
+
+void RenderFrameHostImpl::DidChangeOpener(
+    const base::Optional<base::UnguessableToken>& opener_frame_token) {
+  frame_tree_node_->render_manager()->DidChangeOpener(
+      opener_frame_token.value_or(base::UnguessableToken()), GetSiteInstance());
 }
 
 void RenderFrameHostImpl::BindInterfaceProviderReceiver(

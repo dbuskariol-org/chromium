@@ -183,6 +183,9 @@ void FakeLocalFrameHost::DidChangeFrameOwnerProperties(
     const base::UnguessableToken& child_frame_token,
     mojom::blink::FrameOwnerPropertiesPtr frame_owner_properties) {}
 
+void FakeLocalFrameHost::DidChangeOpener(
+    const base::Optional<base::UnguessableToken>& opener_frame) {}
+
 void FakeLocalFrameHost::BindFrameHostReceiver(
     mojo::ScopedInterfaceEndpointHandle handle) {
   receiver_.Bind(mojo::PendingAssociatedReceiver<mojom::blink::LocalFrameHost>(
