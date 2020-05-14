@@ -65702,6 +65702,14 @@ would be helpful to identify which type is being sent.
   <int value="2" label="Active"/>
 </enum>
 
+<enum name="SystemFeature">
+  <summary>System Features to be disabled by a policy.</summary>
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Camera"/>
+  <int value="2" label="Browser Settings"/>
+  <int value="3" label="OS Settings"/>
+</enum>
+
 <enum name="SystemLogPIIType">
   <obsolete>
     Deprecated and removed from code as of 01/2016.
