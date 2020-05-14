@@ -27336,6 +27336,8 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3293" label="V8RTCRtpReceiver_CreateEncodedStreams_Method"/>
   <int value="3294" label="ForceEncodedAudioInsertableStreams"/>
   <int value="3295" label="ForceEncodedVideoInsertableStreams"/>
+  <int value="3296" label="TransformStyleContainingBlockComputedUsedMismatch"/>
+  <int value="3297" label="AdditionalGroupingPropertiesForCompat"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
