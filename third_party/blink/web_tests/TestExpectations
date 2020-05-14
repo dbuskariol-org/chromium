@@ -5939,3 +5939,4 @@ crbug.com/1082739 external/wpt/event-timing/dblclick.html [ Pass Failure ]
 # Sheriff 2020-05-14
 crbug.com/1082804 [ Win7 ] fast/forms/select/listbox-appearance-basic.html [ Pass Failure ]
 crbug.com/1082804 [ Win7 ] fast/forms/select/select-disabled-appearance.html [ Pass Failure ]
+crbug.com/1082820 [ Win ] media/video-layer-crash.html [ Pass Failure ]
