@@ -25,11 +25,62 @@ uint8_t GetTestFrameValue(gfx::Size size, int x, int y, uint8_t salt) {
   return static_cast<uint8_t>(y + x * size.height() + salt);
 }
 
+// Fills one plane of a test frame. |data| points at the location of the pixel
+// (0, 0). |orientation| specifies frame orientation transformation that will be
+// applied on the receiving end, so this function applies _reverse_ of the
+// |orientation| transformation.
 void FillPlane(uint8_t* data,
                gfx::Size size,
-               size_t x_step,
-               size_t y_step,
+               int x_step,
+               int y_step,
+               fuchsia::camera3::Orientation orientation,
                uint8_t salt) {
+  // First flip X axis for flipped orientation.
+  if (orientation == fuchsia::camera3::Orientation::UP_FLIPPED ||
+      orientation == fuchsia::camera3::Orientation::DOWN_FLIPPED ||
+      orientation == fuchsia::camera3::Orientation::RIGHT_FLIPPED ||
+      orientation == fuchsia::camera3::Orientation::LEFT_FLIPPED) {
+    // Move the origin to the top right corner and flip the X axis.
+    data += (size.width() - 1) * x_step;
+    x_step = -x_step;
+  }
+
+  switch (orientation) {
+    case fuchsia::camera3::Orientation::UP:
+    case fuchsia::camera3::Orientation::UP_FLIPPED:
+      break;
+
+    case fuchsia::camera3::Orientation::DOWN:
+    case fuchsia::camera3::Orientation::DOWN_FLIPPED:
+      // Move |data| to point to the bottom right corner and reverse direction
+      // of both axes.
+      data += (size.width() - 1) * x_step + (size.height() - 1) * y_step;
+      x_step = -x_step;
+      y_step = -y_step;
+      break;
+
+    case fuchsia::camera3::Orientation::LEFT:
+    case fuchsia::camera3::Orientation::LEFT_FLIPPED:
+      // Rotate 90 degrees clockwise by moving |data| to point to the right top
+      // corner, swapping the axes and reversing direction of the Y axis.
+      data += (size.width() - 1) * x_step;
+      size = gfx::Size(size.height(), size.width());
+      std::swap(x_step, y_step);
+      y_step = -y_step;
+      break;
+
+    case fuchsia::camera3::Orientation::RIGHT:
+    case fuchsia::camera3::Orientation::RIGHT_FLIPPED:
+      // Rotate 90 degrees counter-clockwise by moving |data| to point to the
+      // bottom left corner, swapping the axes and reversing direction of the X
+      // axis.
+      data += (size.height() - 1) * y_step;
+      size = gfx::Size(size.height(), size.width());
+      std::swap(x_step, y_step);
+      x_step = -x_step;
+      break;
+  }
+
   for (int y = 0; y < size.height(); ++y) {
     for (int x = 0; x < size.width(); ++x) {
       data[x * x_step + y * y_step] = GetTestFrameValue(size, x, y, salt);
@@ -111,6 +162,13 @@ void FakeCameraStream::SetFakeResolution(gfx::Size resolution) {
   SendResolution();
 }
 
+void FakeCameraStream::SetFakeOrientation(
+    fuchsia::camera3::Orientation orientation) {
+  orientation_ = orientation;
+  orientation_update_ = orientation;
+  SendOrientation();
+}
+
 bool FakeCameraStream::WaitBuffersAllocated() {
   EXPECT_FALSE(wait_buffers_allocated_run_loop_);
 
@@ -158,16 +216,16 @@ void FakeCameraStream::ProduceFrame(base::TimeTicks timestamp, uint8_t salt) {
   // Fill Y plane.
   uint8_t* y_plane = reinterpret_cast<uint8_t*>(buffer->mapping.memory());
   size_t stride = kMaxFrameSize.width();
-  FillPlane(y_plane, coded_size, /*x_step=*/1, /*y_step=*/stride,
+  FillPlane(y_plane, coded_size, /*x_step=*/1, /*y_step=*/stride, orientation_,
             salt + kYPlaneSalt);
 
   // Fill UV plane.
   gfx::Size uv_size(coded_size.width() / 2, coded_size.height() / 2);
   uint8_t* uv_plane = y_plane + kMaxFrameSize.width() * kMaxFrameSize.height();
-  FillPlane(uv_plane, uv_size, /*x_step=*/2, /*y_step=*/stride,
+  FillPlane(uv_plane, uv_size, /*x_step=*/2, /*y_step=*/stride, orientation_,
             salt + kUPlaneSalt);
   FillPlane(uv_plane + 1, uv_size, /*x_step=*/2, /*y_step=*/stride,
-            salt + kVPlaneSalt);
+            orientation_, salt + kVPlaneSalt);
 
   // Create FrameInfo.
   fuchsia::camera3::FrameInfo frame;
@@ -192,6 +250,12 @@ void FakeCameraStream::WatchResolution(WatchResolutionCallback callback) {
   EXPECT_FALSE(watch_resolution_callback_);
   watch_resolution_callback_ = std::move(callback);
   SendResolution();
+}
+
+void FakeCameraStream::WatchOrientation(WatchOrientationCallback callback) {
+  EXPECT_FALSE(watch_orientation_callback_);
+  watch_orientation_callback_ = std::move(callback);
+  SendOrientation();
 }
 
 void FakeCameraStream::SetBufferCollection(
@@ -325,6 +389,14 @@ void FakeCameraStream::SendResolution() {
   watch_resolution_callback_(resolution_update_.value());
   watch_resolution_callback_ = {};
   resolution_update_.reset();
+}
+
+void FakeCameraStream::SendOrientation() {
+  if (!watch_orientation_callback_ || !orientation_update_)
+    return;
+  watch_orientation_callback_(orientation_update_.value());
+  watch_orientation_callback_ = {};
+  orientation_update_.reset();
 }
 
 void FakeCameraStream::SendBufferCollection() {

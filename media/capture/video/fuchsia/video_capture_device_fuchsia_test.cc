@@ -256,6 +256,37 @@ TEST_F(VideoCaptureDeviceFuchsiaTest, MultipleFrames) {
   }
 }
 
+TEST_F(VideoCaptureDeviceFuchsiaTest, FrameRotation) {
+  const gfx::Size kResolution(4, 2);
+  fake_stream_.SetFakeResolution(kResolution);
+
+  StartCapturer();
+
+  EXPECT_TRUE(fake_stream_.WaitBuffersAllocated());
+
+  for (int i = static_cast<int>(fuchsia::camera3::Orientation::UP);
+       i <= static_cast<int>(fuchsia::camera3::Orientation::RIGHT_FLIPPED);
+       ++i) {
+    SCOPED_TRACE(testing::Message() << "Orientation " << i);
+
+    auto orientation = static_cast<fuchsia::camera3::Orientation>(i);
+
+    ASSERT_TRUE(fake_stream_.WaitFreeBuffer());
+    fake_stream_.SetFakeOrientation(orientation);
+    fake_stream_.ProduceFrame(base::TimeTicks::Now(), i);
+    client_->WaitFrame();
+
+    gfx::Size expected_size = kResolution;
+    if (orientation == fuchsia::camera3::Orientation::LEFT ||
+        orientation == fuchsia::camera3::Orientation::LEFT_FLIPPED ||
+        orientation == fuchsia::camera3::Orientation::RIGHT ||
+        orientation == fuchsia::camera3::Orientation::RIGHT_FLIPPED) {
+      expected_size = gfx::Size(expected_size.height(), expected_size.width());
+    }
+    ValidateReceivedFrame(client_->received_frames().back(), expected_size, i);
+  }
+}
+
 TEST_F(VideoCaptureDeviceFuchsiaTest, FrameDimensionsNotDivisibleBy2) {
   const gfx::Size kOddResolution(21, 7);
   fake_stream_.SetFakeResolution(kOddResolution);

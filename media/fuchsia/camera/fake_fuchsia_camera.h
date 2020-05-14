@@ -39,6 +39,7 @@ class FakeCameraStream : public fuchsia::camera3::testing::Stream_TestBase,
   void Bind(fidl::InterfaceRequest<fuchsia::camera3::Stream> request);
 
   void SetFakeResolution(gfx::Size resolution);
+  void SetFakeOrientation(fuchsia::camera3::Orientation orientation);
 
   // Waits for the buffer collection to be allocated. Returns true if the buffer
   // collection was allocated successfully.
@@ -55,6 +56,7 @@ class FakeCameraStream : public fuchsia::camera3::testing::Stream_TestBase,
 
   // fuchsia::camera3::Stream implementation.
   void WatchResolution(WatchResolutionCallback callback) final;
+  void WatchOrientation(WatchOrientationCallback callback) final;
   void SetBufferCollection(
       fidl::InterfaceHandle<fuchsia::sysmem::BufferCollectionToken>
           token_handle) final;
@@ -74,6 +76,10 @@ class FakeCameraStream : public fuchsia::camera3::testing::Stream_TestBase,
   // resolution has been updated.
   void SendResolution();
 
+  // Calls callback for the pending WatchOrientation() if the call is pending
+  // and orientation has been updated.
+  void SendOrientation();
+
   // Calls callback for the pending WatchBufferCollection() if we have a new
   // token and the call is pending.
   void SendBufferCollection();
@@ -89,10 +95,16 @@ class FakeCameraStream : public fuchsia::camera3::testing::Stream_TestBase,
   fidl::Binding<fuchsia::camera3::Stream> binding_;
 
   gfx::Size resolution_ = kDefaultFrameSize;
+  fuchsia::camera3::Orientation orientation_ =
+      fuchsia::camera3::Orientation::UP;
 
   base::Optional<fuchsia::math::Size> resolution_update_ = fuchsia::math::Size{
       kDefaultFrameSize.width(), kDefaultFrameSize.height()};
   WatchResolutionCallback watch_resolution_callback_;
+
+  base::Optional<fuchsia::camera3::Orientation> orientation_update_ =
+      fuchsia::camera3::Orientation::UP;
+  WatchOrientationCallback watch_orientation_callback_;
 
   base::Optional<fidl::InterfaceHandle<fuchsia::sysmem::BufferCollectionToken>>
       new_buffer_collection_token_;
