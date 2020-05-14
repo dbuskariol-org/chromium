@@ -97,8 +97,9 @@ std::unique_ptr<KeyedService> TileServiceFactory::BuildServiceInstanceFor(
   auto* background_task_scheduler =
       background_task::BackgroundTaskSchedulerFactory::GetForKey(key);
 
-  std::string accept_languanges = language::GetApplicationLocale(
-      ProfileKey::FromSimpleFactoryKey(key)->GetPrefs());
+  std::string accept_languanges =
+      ProfileKey::FromSimpleFactoryKey(key)->GetPrefs()->GetString(
+          language::prefs::kAcceptLanguages);
 
   auto url_loader_factory =
       SystemNetworkContextManager::GetInstance()->GetSharedURLLoaderFactory();

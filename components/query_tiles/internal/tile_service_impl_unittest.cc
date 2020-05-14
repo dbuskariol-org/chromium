@@ -35,7 +35,7 @@ class MockTileManager : public TileManager {
   MOCK_METHOD2(GetTile, void(const std::string&, TileCallback));
   MOCK_METHOD2(SaveTiles,
                void(std::unique_ptr<TileGroup>, TileGroupStatusCallback));
-  MOCK_METHOD1(SetLocaleForTesting, void(const std::string&));
+  MOCK_METHOD1(SetAcceptLanguagesForTesting, void(const std::string&));
 };
 
 class MockBackgroundTaskScheduler
