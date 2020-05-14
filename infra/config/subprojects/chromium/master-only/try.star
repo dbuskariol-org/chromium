@@ -16,20 +16,6 @@ try_.set_defaults(
 
 # *** After this point everything is trunk only ***
 
-[try_.list_view(
-    name = name,
-) for name in (
-    'tryserver.blink',
-    'tryserver.chromium.android',
-    'tryserver.chromium.angle',
-    'tryserver.chromium.chromiumos',
-    'tryserver.chromium.dawn',
-    'tryserver.chromium.linux',
-    'tryserver.chromium.mac',
-    'tryserver.chromium.swangle',
-    'tryserver.chromium.win',
-)]
-
 
 # Builders are sorted first lexicographically by the function used to define
 # them, then lexicographically by their name

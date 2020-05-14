@@ -1,4 +1,6 @@
+load('//project.star', 'master_only_exec')
+
 exec('./ci.star')
 exec('./try.star')
 
-exec('./master-only/main.star')
+master_only_exec('./master-only/main.star')
