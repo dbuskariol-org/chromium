@@ -1741,7 +1741,8 @@ NGLayoutResult::EStatus NGBlockLayoutAlgorithm::FinishInflow(
 
   // Only non self-collapsing children (e.g. "normal children") can be pushed
   // by floats in this way.
-  bool normal_child_had_clearance = layout_result->IsPushedByFloats();
+  bool normal_child_had_clearance =
+      layout_result->IsPushedByFloats() && child.IsBlock();
   DCHECK(!normal_child_had_clearance || !is_self_collapsing);
 
   // A child may have aborted its layout if it resolved its BFC block-offset.
