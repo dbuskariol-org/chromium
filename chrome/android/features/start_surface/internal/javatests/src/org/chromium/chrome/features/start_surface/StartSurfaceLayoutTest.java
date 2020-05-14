@@ -4,6 +4,7 @@
 
 package org.chromium.chrome.features.start_surface;
 
+import static android.os.Build.VERSION_CODES.N_MR1;
 import static android.os.Build.VERSION_CODES.O_MR1;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -1686,7 +1687,7 @@ public class StartSurfaceLayoutTest {
 
     @Test
     @MediumTest
-    @DisableIf.Build(sdk_is_greater_than = O_MR1, message = "crbug.com/1077191")
+    @DisableIf.Build(sdk_is_greater_than = N_MR1, message = "crbug.com/1077191, crbug.com/1081909")
     public void testActivityCanBeGarbageCollectedAfterFinished() throws Exception {
         prepareTabs(1, 0, "about:blank");
 
