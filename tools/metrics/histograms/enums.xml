@@ -20229,6 +20229,7 @@ Called by update_document_policy_enum.py.-->
   <int value="704" label="AppCacheForceEnabled"/>
   <int value="705" label="UserPluginVmAllowed"/>
   <int value="706" label="PrintRasterizationMode"/>
+  <int value="707" label="AutoOpenAllowedForURLs"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
