@@ -246,7 +246,8 @@
            results when a custom background is set. Therefore, wrap customize
            button in container to enfore solid background color. -->
       <div id="customizeButtonContainer">
-        <cr-button id="customizeButton" on-click="onCustomizeClick_">
+        <cr-button id="customizeButton" on-click="onCustomizeClick_"
+            title="$i18n{customizeThisPage}">
           <div id="customizeIcon"></div>
           <div id="customizeText" hidden$="[[showBackgroundImage_]]">
             $i18n{customizeButton}
