@@ -384,20 +384,20 @@ ContentSettingBubbleContents::ContentSettingBubbleContents(
       content_setting_bubble_model_->bubble_content().done_button_text;
   const base::string16& cancel_text =
       content_setting_bubble_model_->bubble_content().cancel_button_text;
-  DialogDelegate::SetButtons(
-      cancel_text.empty() ? ui::DIALOG_BUTTON_OK
-                          : (ui::DIALOG_BUTTON_OK | ui::DIALOG_BUTTON_CANCEL));
-  DialogDelegate::SetButtonLabel(
-      ui::DIALOG_BUTTON_OK,
-      done_text.empty() ? l10n_util::GetStringUTF16(IDS_DONE) : done_text);
-  DialogDelegate::SetExtraView(CreateHelpAndManageView());
-  DialogDelegate::SetAcceptCallback(
+  SetButtons(cancel_text.empty()
+                 ? ui::DIALOG_BUTTON_OK
+                 : (ui::DIALOG_BUTTON_OK | ui::DIALOG_BUTTON_CANCEL));
+  SetButtonLabel(ui::DIALOG_BUTTON_OK, done_text.empty()
+                                           ? l10n_util::GetStringUTF16(IDS_DONE)
+                                           : done_text);
+  SetExtraView(CreateHelpAndManageView());
+  SetAcceptCallback(
       base::BindOnce(&ContentSettingBubbleModel::OnDoneButtonClicked,
                      base::Unretained(content_setting_bubble_model_.get())));
 
   if (!cancel_text.empty()) {
-    DialogDelegate::SetButtonLabel(ui::DIALOG_BUTTON_CANCEL, cancel_text);
-    DialogDelegate::SetCancelCallback(
+    SetButtonLabel(ui::DIALOG_BUTTON_CANCEL, cancel_text);
+    SetCancelCallback(
         base::BindOnce(&ContentSettingBubbleModel::OnCancelButtonClicked,
                        base::Unretained(content_setting_bubble_model_.get())));
   }
