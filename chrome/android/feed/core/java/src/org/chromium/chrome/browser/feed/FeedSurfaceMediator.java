@@ -311,12 +311,19 @@ class FeedSurfaceMediator
     /** Returns the section header text based on the selected default search engine */
     private String getSectionHeaderText(boolean isExpanded) {
         Resources res = mCoordinator.getSectionHeaderView().getResources();
+        final boolean isDefaultSearchEngineGoogle =
+                TemplateUrlServiceFactory.get().isDefaultSearchEngineGoogle();
         final int sectionHeaderStringId;
         if (mHasHeaderMenu) {
-            sectionHeaderStringId =
-                    isExpanded ? R.string.ntp_discover_on : R.string.ntp_discover_off;
+            if (isDefaultSearchEngineGoogle) {
+                sectionHeaderStringId =
+                        isExpanded ? R.string.ntp_discover_on : R.string.ntp_discover_off;
+            } else {
+                sectionHeaderStringId = isExpanded ? R.string.ntp_discover_on_branded
+                                                   : R.string.ntp_discover_off_branded;
+            }
         } else {
-            sectionHeaderStringId = TemplateUrlServiceFactory.get().isDefaultSearchEngineGoogle()
+            sectionHeaderStringId = isDefaultSearchEngineGoogle
                     ? R.string.ntp_article_suggestions_section_header
                     : R.string.ntp_article_suggestions_section_header_branded;
         }
