@@ -49,7 +49,6 @@ import org.chromium.chrome.browser.lifecycle.LifecycleObserver;
 import org.chromium.chrome.browser.lifecycle.PauseResumeWithNativeObserver;
 import org.chromium.chrome.browser.native_page.ContextMenuManager;
 import org.chromium.chrome.browser.ntp.snippets.SectionHeaderView;
-import org.chromium.chrome.browser.offlinepages.OfflinePageBridge;
 import org.chromium.chrome.browser.omnibox.LocationBar.OmniboxFocusReason;
 import org.chromium.chrome.browser.omnibox.voice.VoiceRecognitionHandler;
 import org.chromium.chrome.browser.profiles.Profile;
@@ -424,8 +423,6 @@ public class NewTabPage implements NativePage, InvalidationAwareThumbnailProvide
         Profile profile = Profile.fromWebContents(mTab.getWebContents());
         ActionApi actionApi = new FeedActionHandler(mNewTabPageManager.getNavigationDelegate(),
                 FeedProcessScopeFactory.getFeedConsumptionObserver(),
-                FeedProcessScopeFactory.getFeedOfflineIndicator(),
-                OfflinePageBridge.getForProfile(profile),
                 FeedProcessScopeFactory.getFeedLoggingBridge(), activity, profile);
         LayoutInflater inflater = LayoutInflater.from(activity);
         mNewTabPageLayout = (NewTabPageLayout) inflater.inflate(R.layout.new_tab_page_layout, null);
