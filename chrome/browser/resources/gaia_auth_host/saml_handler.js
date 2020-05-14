@@ -118,17 +118,6 @@ cr.define('cr.login', function() {
   }
 
   /**
-   * Extract domain name from an URL.
-   * @param {string} url An URL string.
-   * @return {string} The host name of the URL.
-   */
-  function extractDomain(url) {
-    const a = document.createElement('a');
-    a.href = url;
-    return a.hostname;
-  }
-
-  /**
    * A handler to provide saml support for the given webview that hosts the
    * auth IdP pages.
    */
@@ -193,12 +182,6 @@ cr.define('cr.login', function() {
        * @private {?string}
        */
       this.abortedTopLevelUrl_ = null;
-
-      /**
-       * The domain of the Saml IdP.
-       * @type {string}
-       */
-      this.authDomain = '';
 
       /**
        * Scraped password stored in an id to password field value map.
@@ -848,14 +831,8 @@ cr.define('cr.login', function() {
     }
 
     onPageLoaded_(channel, msg) {
-      this.authDomain = extractDomain(msg.url);
-      this.dispatchEvent(new CustomEvent('authPageLoaded', {
-        detail: {
-          url: msg.url,
-          isSAMLPage: this.isSamlPage_,
-          domain: this.authDomain
-        }
-      }));
+      this.dispatchEvent(new CustomEvent(
+          'authPageLoaded', {detail: {isSAMLPage: this.isSamlPage_}}));
     }
 
     onScrollInfo_(channel, msg) {
