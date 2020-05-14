@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.view.View;
 
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 
@@ -32,7 +33,7 @@ public class AssistStatusHandler {
     public AssistStatusHandler(Activity activity) {
         mActivity = activity;
 
-        mSelectorObserver = new TabModelSelectorObserver() {
+        mSelectorObserver = new EmptyTabModelSelectorObserver() {
             @Override
             public void onChange() {
                 updateAssistState();

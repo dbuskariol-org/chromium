@@ -9,6 +9,7 @@ import android.text.format.DateUtils;
 
 import org.chromium.base.UserData;
 import org.chromium.base.metrics.RecordHistogram;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.net.NetError;
@@ -230,7 +231,7 @@ public class TabUma extends EmptyTabObserver implements UserData {
         if (mLastShownTimestamp == -1) {
             // Register the observer for context menu-triggering event here to avoid the case
             // where this is created too early and we start missing out on metrics suddenly.
-            mNewTabObserver = new TabModelSelectorObserver() {
+            mNewTabObserver = new EmptyTabModelSelectorObserver() {
                 @Override
                 public void onNewTabCreated(Tab newTab, @TabCreationState int creationState) {
                     if (newTab.getParentId() == tab.getId()

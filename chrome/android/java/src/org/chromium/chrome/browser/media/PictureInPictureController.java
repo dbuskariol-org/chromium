@@ -30,6 +30,7 @@ import org.chromium.chrome.browser.infobar.InfoBarContainer;
 import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabObserver;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.content_public.browser.WebContents;
@@ -348,7 +349,7 @@ public class PictureInPictureController {
 
     /** A class to dismiss the Activity when a new tab is created. */
     private class DismissActivityOnTabModelSelectorEventObserver
-            implements TabModelSelectorObserver {
+            extends EmptyTabModelSelectorObserver {
         private final ChromeActivity mActivity;
         private final Tab mTab;
         public DismissActivityOnTabModelSelectorEventObserver(ChromeActivity activity) {

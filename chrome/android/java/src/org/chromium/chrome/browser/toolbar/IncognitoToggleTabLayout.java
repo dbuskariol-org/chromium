@@ -15,6 +15,7 @@ import com.google.android.material.tabs.TabLayout;
 
 import org.chromium.base.ApiCompatibilityUtils;
 import org.chromium.chrome.R;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
@@ -90,7 +91,7 @@ public class IncognitoToggleTabLayout extends TabLayout implements TabCountObser
     public void setTabModelSelector(TabModelSelector selector) {
         mTabModelSelector = selector;
         if (mTabModelSelector == null) return;
-        mTabModelSelectorObserver = new TabModelSelectorObserver() {
+        mTabModelSelectorObserver = new EmptyTabModelSelectorObserver() {
             @Override
             public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
                 setStateBasedOnModel();

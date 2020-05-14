@@ -43,6 +43,7 @@ import org.chromium.chrome.browser.tab.TabHidingType;
 import org.chromium.chrome.browser.tab.TabLaunchType;
 import org.chromium.chrome.browser.tab.TabSelectionType;
 import org.chromium.chrome.browser.tab.TabThemeColorHelper;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabCreatorManager;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelObserver;
@@ -439,7 +440,7 @@ public class LayoutManager implements LayoutUpdateHost, LayoutProvider,
 
         updateLayoutForTabModelSelector();
 
-        mTabModelSelectorObserver = new TabModelSelectorObserver() {
+        mTabModelSelectorObserver = new EmptyTabModelSelectorObserver() {
             @Override
             public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
                 tabModelSwitched(newModel.isIncognito());
@@ -938,18 +939,19 @@ public class LayoutManager implements LayoutUpdateHost, LayoutProvider,
     /**
      * Updates the Layout for the state of the {@link TabModelSelector} after initialization.
      * If the TabModelSelector is not yet initialized when this function is called, a
-     * {@link TabModelSelectorObserver} is created to listen for when it is ready.
+     * {@link org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver} is created to
+     * listen for when it is ready.
      */
     private void updateLayoutForTabModelSelector() {
         if (mTabModelSelector.isTabStateInitialized() && getActiveLayout() != null) {
             getActiveLayout().onTabStateInitialized();
         } else {
-            mTabModelSelector.addObserver(new TabModelSelectorObserver() {
+            mTabModelSelector.addObserver(new EmptyTabModelSelectorObserver() {
                 @Override
                 public void onTabStateInitialized() {
                     if (getActiveLayout() != null) getActiveLayout().onTabStateInitialized();
 
-                    final TabModelSelectorObserver observer = this;
+                    final EmptyTabModelSelectorObserver observer = this;
                     new Handler().post(new Runnable() {
                         @Override
                         public void run() {

@@ -42,8 +42,8 @@ import org.chromium.chrome.browser.share.LensUtils;
 import org.chromium.chrome.browser.share.ShareHelper;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabCreationState;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModel;
-import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.util.browser.Features.DisableFeatures;
 import org.chromium.chrome.test.util.browser.Features.EnableFeatures;
@@ -215,9 +215,11 @@ public class ContextMenuTest implements CustomMainActivityStart {
         final CallbackHelper newTabCallback = new CallbackHelper();
         final AtomicReference<Tab> newTab = new AtomicReference<>();
         mDownloadTestRule.getActivity().getTabModelSelector().addObserver(
-                new TabModelSelectorObserver() {
+                new EmptyTabModelSelectorObserver() {
                     @Override
                     public void onNewTabCreated(Tab tab, @TabCreationState int creationState) {
+                        super.onNewTabCreated(tab, creationState);
+
                         if (tab.getParentId() != activityTab.getId()) return;
                         newTab.set(tab);
                         newTabCallback.notifyCalled();

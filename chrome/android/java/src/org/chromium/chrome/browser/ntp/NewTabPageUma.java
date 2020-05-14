@@ -20,8 +20,8 @@ import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabCreationState;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
-import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.components.embedder_support.util.UrlUtilitiesJni;
 import org.chromium.net.NetworkChangeNotifier;
 import org.chromium.ui.base.PageTransition;
@@ -323,7 +323,7 @@ public class NewTabPageUma {
      * Records the number of new NTPs opened in a new tab. Use through
      * {@link NewTabPageUma#monitorNTPCreation(TabModelSelector)}.
      */
-    private static class TabCreationRecorder implements TabModelSelectorObserver {
+    private static class TabCreationRecorder extends EmptyTabModelSelectorObserver {
         @Override
         public void onNewTabCreated(Tab tab, @TabCreationState int creationState) {
             if (!NewTabPage.isNTPUrl(tab.getUrlString())) return;

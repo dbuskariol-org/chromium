@@ -32,6 +32,7 @@ import org.chromium.chrome.browser.tab.EmptyTabObserver;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabHidingType;
 import org.chromium.chrome.browser.tab.TabObserver;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.chrome.browser.ui.messages.infobar.InfoBarUiItem;
@@ -170,7 +171,7 @@ public class ChromeSurveyController implements InfoBarContainer.InfoBarAnimation
     void onSurveyAvailable(String siteId) {
         if (attemptToShowOnTab(mTabModelSelector.getCurrentTab(), siteId)) return;
 
-        mTabModelObserver = new TabModelSelectorObserver() {
+        mTabModelObserver = new EmptyTabModelSelectorObserver() {
             @Override
             public void onChange() {
                 attemptToShowOnTab(mTabModelSelector.getCurrentTab(), siteId);

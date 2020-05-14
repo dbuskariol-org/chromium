@@ -43,6 +43,7 @@ import org.chromium.chrome.browser.night_mode.NightModeStateProvider;
 import org.chromium.chrome.browser.ntp.FakeboxDelegate;
 import org.chromium.chrome.browser.omnibox.UrlFocusChangeListener;
 import org.chromium.chrome.browser.tab.Tab;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
@@ -154,7 +155,7 @@ class StartSurfaceMediator
 
             mIsIncognito = mTabModelSelector.isIncognitoSelected();
 
-            mTabModelSelectorObserver = new TabModelSelectorObserver() {
+            mTabModelSelectorObserver = new EmptyTabModelSelectorObserver() {
                 @Override
                 public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
                     // TODO(crbug.com/982018): Optimize to not listen for selected Tab model change

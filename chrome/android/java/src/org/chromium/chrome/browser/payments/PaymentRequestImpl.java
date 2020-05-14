@@ -41,6 +41,7 @@ import org.chromium.chrome.browser.profiles.Profile;
 import org.chromium.chrome.browser.settings.SettingsLauncherImpl;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabSelectionType;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
@@ -372,7 +373,7 @@ public class PaymentRequestImpl
     private static PaymentRequestImpl sShowingPaymentRequest;
 
     /** Monitors changes in the TabModelSelector. */
-    private final TabModelSelectorObserver mSelectorObserver = new TabModelSelectorObserver() {
+    private final TabModelSelectorObserver mSelectorObserver = new EmptyTabModelSelectorObserver() {
         @Override
         public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
             mJourneyLogger.setAborted(AbortReason.ABORTED_BY_USER);

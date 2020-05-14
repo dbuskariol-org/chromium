@@ -39,6 +39,7 @@ import org.chromium.chrome.browser.init.FirstDrawDetector;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabCreationState;
 import org.chromium.chrome.browser.tab.TabSelectionType;
+import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabList;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelFilter;
@@ -199,7 +200,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
         mTabModelSelector = tabModelSelector;
         mFullscreenManager = fullscreenManager;
 
-        mTabModelSelectorObserver = new TabModelSelectorObserver() {
+        mTabModelSelectorObserver = new EmptyTabModelSelectorObserver() {
             @Override
             public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
                 mShouldIgnoreNextSelect = true;
@@ -310,7 +311,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
         mFullscreenManager.addListener(mFullscreenListener);
 
         if (mTabModelSelector.getModels().isEmpty()) {
-            TabModelSelectorObserver selectorObserver = new TabModelSelectorObserver() {
+            TabModelSelectorObserver selectorObserver = new EmptyTabModelSelectorObserver() {
                 @Override
                 public void onChange() {
                     assert !mTabModelSelector.getModels().isEmpty();
