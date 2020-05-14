@@ -23847,6 +23847,21 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="TabStrip">
+  <owner>yusufo@chromium.org</owner>
+  <owner>wychen@chromium.org</owner>
+  <description>User actions about conditional tab strip.</description>
+</action>
+
+<action name="TabStrip.SessionVisibility">
+  <owner>yusufo@chromium.org</owner>
+  <owner>wychen@chromium.org</owner>
+  <description>
+    Records the visibility of conditional tab strip when Chrome on Android shows
+    in the foreground.
+  </description>
+</action>
+
 <action name="TabStrip.UndoCloseTab">
   <owner>yusufo@chromium.org</owner>
   <owner>wychen@chromium.org</owner>
@@ -25331,6 +25346,16 @@ should be able to be added at any place in this file.
 </action-suffix>
 
 <action-suffix separator="." ordering="suffix">
+  <suffix name="Hidden"
+      label="The conditional tab strip is hidden when Chrome is brought to
+             foreground."/>
+  <suffix name="Visible"
+      label="The conditional tab strip is visible when Chrome is brought to
+             foreground."/>
+  <affected-action name="TabStrip.SessionVisibility"/>
+</action-suffix>
+
+<action-suffix separator="." ordering="suffix">
   <suffix name="NewTabTile"
       label="Users tapped the new tab tile in GridTabSwitcher, causing a new
              tab to be created."/>
@@ -25430,6 +25455,19 @@ should be able to be added at any place in this file.
       label="Users long tap on a tab to trigger dragging in tab group bottom
              sheet."/>
   <affected-action name="TabGrid.Drag"/>
+</action-suffix>
+
+<action-suffix separator="." ordering="suffix">
+  <suffix name="ShownOnTabUse"
+      label="The conditional tab strip shows when user did some intentional
+             tab-related interaction."/>
+  <suffix name="UndoDismiss"
+      label="After the tab strip is dismissed, users clicked on the undo
+             button in the snackbar to undo the dismissal."/>
+  <suffix name="UserDismissed"
+      label="Users clicked on the left button in conditional tab strip to
+             dismiss the strip in current session"/>
+  <affected-action name="TabStrip"/>
 </action-suffix>
 
 <action-suffix separator="." ordering="suffix">
