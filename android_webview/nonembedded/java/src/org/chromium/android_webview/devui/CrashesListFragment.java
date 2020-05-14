@@ -476,6 +476,7 @@ public class CrashesListFragment extends DevUiBaseFragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.options_menu_refresh) {
+            MainActivity.logMenuSelection(MainActivity.MenuChoice.CRASHES_REFRESH);
             mCrashListViewAdapter.updateCrashes();
             return true;
         }
