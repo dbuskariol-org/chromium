@@ -48,6 +48,7 @@ android_library("test_support_java") {
 
   deps = [
     "//chrome/android:chrome_java",
+    "//content/public/test/android:content_java_test_support",
     "//third_party/android_deps:androidx_preference_preference_java",
     "//third_party/android_support_test_runner:rules_java",
   ]
