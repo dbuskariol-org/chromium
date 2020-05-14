@@ -1763,6 +1763,9 @@ extern const char kUseWinrtMidiApiName[];
 extern const char kUseWinrtMidiApiDescription[];
 
 #if BUILDFLAG(ENABLE_PRINTING)
+extern const char kPrintWithReducedRasterizationName[];
+extern const char kPrintWithReducedRasterizationDescription[];
+
 extern const char kUseXpsForPrintingName[];
 extern const char kUseXpsForPrintingDescription[];
 

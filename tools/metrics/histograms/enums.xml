@@ -40847,6 +40847,7 @@ from previous Chrome versions.
   <int value="879699575" label="disable-gesture-tap-highlight"/>
   <int value="879992337" label="disable-pull-to-refresh-effect"/>
   <int value="880510010" label="enable-permissions-bubbles"/>
+  <int value="883190338" label="PrintWithReducedRasterization:disabled"/>
   <int value="884106779" label="supervised-user-safesites"/>
   <int value="885004540" label="ArcEnableApplicationZoomFeature:enabled"/>
   <int value="885971656" label="EnablePlayStoreAppSearch:enabled"/>
@@ -41522,6 +41523,7 @@ from previous Chrome versions.
   <int value="1639314588" label="LookalikeUrlNavigationSuggestions:disabled"/>
   <int value="1640386037" label="ContextualSuggestionsSlimPeekUI:disabled"/>
   <int value="1643626730" label="PrinterStatus:disabled"/>
+  <int value="1643712769" label="PrintWithReducedRasterization:enabled"/>
   <int value="1645447927" label="MixedContentSiteSetting:disabled"/>
   <int value="1645479440" label="HistoryManipulationIntervention:disabled"/>
   <int value="1646498561" label="OfflineBookmarks:disabled"/>

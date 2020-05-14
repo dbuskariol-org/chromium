@@ -3052,6 +3052,11 @@ const char kUseWinrtMidiApiDescription[] =
     "later).";
 
 #if BUILDFLAG(ENABLE_PRINTING)
+const char kPrintWithReducedRasterizationName[] =
+    "Print with reduced rasterization";
+const char kPrintWithReducedRasterizationDescription[] =
+    "When using GDI printing, avoid rasterization if possible.";
+
 const char kUseXpsForPrintingName[] = "Use XPS for printing";
 const char kUseXpsForPrintingDescription[] =
     "When enabled, use XPS printing API instead of the GDI print API.";

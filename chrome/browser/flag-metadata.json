@@ -3539,6 +3539,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "print-with-reduced-rasterization",
+    "owners": [ "thestig" ],
+    "expiry_milestone": 89
+  },
+  {
     "name": "printer-status",
     "owners": [ "gavinwill", "cros-peripherals@google.com" ],
     "expiry_milestone": 85
