@@ -14,6 +14,7 @@
 #include "base/macros.h"
 #include "base/memory/ref_counted.h"
 #include "base/memory/weak_ptr.h"
+#include "base/one_shot_event.h"
 #include "base/optional.h"
 #include "base/scoped_observer.h"
 #include "extensions/browser/api/declarative_net_request/action_tracker.h"
@@ -106,22 +107,6 @@ class RulesMonitorService : public BrowserContextKeyedAPI,
 
   friend class BrowserContextKeyedAPIFactory<RulesMonitorService>;
 
-  struct DynamicRuleUpdate {
-    DynamicRuleUpdate(
-        std::vector<int> rule_ids_to_remove,
-        std::vector<api::declarative_net_request::Rule> rules_to_add,
-        DynamicRuleUpdateUICallback ui_callback);
-
-    DynamicRuleUpdate(DynamicRuleUpdate&&);
-    DynamicRuleUpdate& operator=(DynamicRuleUpdate&&);
-
-    ~DynamicRuleUpdate();
-
-    std::vector<int> rule_ids_to_remove;
-    std::vector<api::declarative_net_request::Rule> rules_to_add;
-    DynamicRuleUpdateUICallback ui_callback;
-  };
-
   // The constructor is kept private since this should only be created by the
   // BrowserContextKeyedAPIFactory.
   explicit RulesMonitorService(content::BrowserContext* browser_context);
@@ -142,8 +127,18 @@ class RulesMonitorService : public BrowserContextKeyedAPI,
                               UninstallReason reason) override;
 
   // Internal helper for UpdateDynamicRules.
-  void UpdateDynamicRulesInternal(const ExtensionId& extension_id,
-                                  DynamicRuleUpdate update);
+  void UpdateDynamicRulesInternal(
+      const ExtensionId& extension_id,
+      std::vector<int> rule_ids_to_remove,
+      std::vector<api::declarative_net_request::Rule> rules_to_add,
+      DynamicRuleUpdateUICallback callback);
+
+  // Internal helper for UpdateEnabledStaticRulesets.
+  void UpdateEnabledStaticRulesetsInternal(
+      const ExtensionId& extension_id,
+      std::set<RulesetID> ids_to_disable,
+      std::set<RulesetID> ids_to_enable,
+      UpdateEnabledRulesetsUICallback callback);
 
   // Invoked when we have loaded the rulesets in |load_data| on
   // |file_task_runner_| in response to OnExtensionLoaded.
@@ -155,6 +150,13 @@ class RulesMonitorService : public BrowserContextKeyedAPI,
                                  std::set<RulesetID> ids_to_disable,
                                  std::set<RulesetID> ids_to_enable,
                                  LoadRequestData load_data);
+
+  // Helper to execute a |task| only once the initial ruleset load for the
+  // |extension| is complete. Should be called in response to API function calls
+  // which modify rulesets on disk in order to prevent a race with the initial
+  // ruleset load.
+  void ExecuteOrQueueAPICall(const Extension& extension,
+                             base::OnceClosure task);
 
   // Invoked when the dynamic rules for the extension have been updated in
   // response to UpdateDynamicRules.
@@ -204,11 +206,11 @@ class RulesMonitorService : public BrowserContextKeyedAPI,
   // Non-owned pointer.
   TestObserver* test_observer_ = nullptr;
 
-  // Stores the pending dynamic rule updates to be performed once ruleset
-  // loading is done for an extension. This is only maintained for extensions
-  // which are undergoing a ruleset load in response to OnExtensionLoaded.
-  std::map<ExtensionId, std::vector<DynamicRuleUpdate>>
-      pending_dynamic_rule_updates_;
+  // Stores the tasks to be performed once ruleset loading is done for an
+  // extension. This is only maintained for extensions which are undergoing a
+  // ruleset load in response to OnExtensionLoaded.
+  std::map<ExtensionId, std::unique_ptr<base::OneShotEvent>>
+      tasks_pending_on_load_;
 
   // Must be the last member variable. See WeakPtrFactory documentation for
   // details.

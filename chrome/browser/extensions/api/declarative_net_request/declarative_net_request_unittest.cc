@@ -29,6 +29,7 @@
 #include "chrome/browser/extensions/chrome_test_extension_loader.h"
 #include "chrome/browser/extensions/extension_service.h"
 #include "chrome/browser/extensions/load_error_reporter.h"
+#include "content/public/test/test_utils.h"
 #include "extensions/browser/api/declarative_net_request/composite_matcher.h"
 #include "extensions/browser/api/declarative_net_request/constants.h"
 #include "extensions/browser/api/declarative_net_request/declarative_net_request_api.h"
@@ -64,6 +65,7 @@ constexpr char kId1[] = "1.json";
 constexpr char kId2[] = "2.json";
 constexpr char kId3[] = "3.json";
 constexpr char kId4[] = "4.json";
+constexpr char kDefaultRulesetID[] = "id";
 
 namespace dnr_api = extensions::api::declarative_net_request;
 
@@ -347,10 +349,9 @@ class SingleRulesetTest : public DeclarativeNetRequestUnittest {
     if (!rules_value_)
       rules_value_ = ToListValue(rules_list_);
 
-    constexpr char kRulesetID[] = "id";
     WriteManifestAndRuleset(
         extension_dir(),
-        TestRulesetInfo(kRulesetID, kJSONRulesFilename, *rules_value_),
+        TestRulesetInfo(kDefaultRulesetID, kJSONRulesFilename, *rules_value_),
         {} /* hosts */);
 
     // Overwrite the JSON rules file with some invalid json.
@@ -852,9 +853,55 @@ TEST_P(SingleRulesetTest, DynamicRulesetRace) {
   // The API function to update the dynamic ruleset should only complete once
   // the initial ruleset loading (in response to OnExtensionLoaded) is complete.
   // Hence by now, both the static and dynamic matchers must be loaded.
-  CompositeMatcher* matcher = manager()->GetMatcherForExtension(extension_id);
-  ASSERT_TRUE(matcher);
-  EXPECT_EQ(2u, matcher->matchers().size());
+  VerifyPublicRulesetIDs(*extension,
+                         {kDefaultRulesetID, dnr_api::DYNAMIC_RULESET_ID});
+}
+
+// Ensures that an updateEnabledRulesets call in the midst of an initial ruleset
+// load (in response to OnExtensionLoaded) behaves predictably and doesn't
+// DCHECK.
+TEST_P(SingleRulesetTest, UpdateEnabledRulesetsRace) {
+  RulesetManagerObserver ruleset_waiter(manager());
+
+  AddRule(CreateGenericRule());
+  LoadAndExpectSuccess();
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
+
+  const ExtensionId extension_id = extension()->id();
+  service()->DisableExtension(extension_id,
+                              disable_reason::DISABLE_USER_ACTION);
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(0);
+
+  // Simulate indexed ruleset format version change. This will cause a re-index
+  // on subsequent extension load. Since this will further delay the initial
+  // ruleset load, it helps test that the ruleset loading doesn't race with the
+  // updateEnabledRulesets call.
+  ScopedIncrementRulesetVersion scoped_version_change =
+      CreateScopedIncrementRulesetVersionForTesting();
+
+  TestExtensionRegistryObserver registry_observer(registry());
+  service()->EnableExtension(extension_id);
+  scoped_refptr<const Extension> extension =
+      registry_observer.WaitForExtensionLoaded();
+  ASSERT_TRUE(extension);
+  ASSERT_EQ(extension_id, extension->id());
+
+  // At this point, the ruleset will still be loading.
+  ASSERT_FALSE(manager()->GetMatcherForExtension(extension_id));
+
+  // Disable the sole extension ruleset.
+  RunUpdateEnabledRulesetsFunction(*extension, {kDefaultRulesetID}, {},
+                                   base::nullopt);
+
+  // Wait for any pending tasks. This isn't actually necessary for this test
+  // (there shouldn't be any pending tasks at this point). However still do this
+  // to not rely on any task ordering assumption.
+  content::RunAllTasksUntilIdle();
+
+  // The API function to update the enabled rulesets should only complete after
+  // the initial ruleset loading (in response to OnExtensionLoaded) is complete.
+  // Hence by now, the extension shouldn't have any active rulesets.
+  VerifyPublicRulesetIDs(*extension, {});
 }
 
 // Tests that multiple static rulesets are correctly indexed.
