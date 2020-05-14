@@ -1299,9 +1299,9 @@ message LoginDetailsProto {
     // If the option was chosen, this payload will be returned to the server.
     optional bytes payload = 1;
 
-    // Whether the UI should automatically choose this login option if it is the
-    // only available choice.
-    optional bool choose_automatically_if_no_other_options = 2;
+    // Whether the UI should automatically choose this login option if no
+    // password manager login options are available.
+    optional bool choose_automatically_if_no_stored_login = 2;
 
     // Determines the priority with which to pre-select this login choice.
     // The lower the value, the higher the priority.
