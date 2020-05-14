@@ -785,15 +785,10 @@ const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
     case CanvasResourceProvider::ResourceUsage::kSoftwareResourceUsage:
     case CanvasResourceProvider::ResourceUsage::
         kSoftwareCompositedDirect2DResourceUsage:
-      NOTREACHED();
-      return kEmptyList;
     case CanvasResourceProvider::ResourceUsage::
         kSoftwareCompositedResourceUsage:
-      if (base::FeatureList::IsEnabled(blink::features::kDawn2dCanvas)) {
-        return kCompositedFallbackListWithDawn;
-      }
-      return kCompositedFallbackList;
-
+      NOTREACHED();
+      return kEmptyList;
     case CanvasResourceProvider::ResourceUsage::
         kAcceleratedCompositedResourceUsage:
       if (base::FeatureList::IsEnabled(blink::features::kDawn2dCanvas)) {
@@ -828,6 +823,7 @@ std::unique_ptr<CanvasResourceProvider> CanvasResourceProvider::Create(
   DCHECK(usage != ResourceUsage::kSoftwareResourceUsage);
   DCHECK(usage != ResourceUsage::kAcceleratedResourceUsage);
   DCHECK(usage != ResourceUsage::kSoftwareCompositedDirect2DResourceUsage);
+  DCHECK(usage != ResourceUsage::kSoftwareCompositedResourceUsage);
 
   std::unique_ptr<CanvasResourceProvider> provider;
 
