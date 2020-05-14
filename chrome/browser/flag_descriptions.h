@@ -1464,6 +1464,9 @@ extern const char kHomepagePromoCardDescription[];
 extern const char kHomepageSettingsUIConversionName[];
 extern const char kHomepageSettingsUIConversionDescription[];
 
+extern const char kInstantStartName[];
+extern const char kInstantStartDescription[];
+
 extern const char kIntentBlockExternalFormRedirectsNoGestureName[];
 extern const char kIntentBlockExternalFormRedirectsNoGestureDescription[];
 

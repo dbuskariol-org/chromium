@@ -3869,6 +3869,10 @@ const FeatureEntry kFeatureEntries[] = {
                                     kStartSurfaceAndroidVariations,
                                     "ChromeStart")},
 
+    {"enable-instant-start", flag_descriptions::kInstantStartName,
+     flag_descriptions::kInstantStartDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(chrome::android::kInstantStart)},
+
     {"enable-close-tab-suggestions",
      flag_descriptions::kCloseTabSuggestionsName,
      flag_descriptions::kCloseTabSuggestionsDescription, kOsAndroid,
