@@ -1230,17 +1230,11 @@ void RenderFrameHostImpl::OnGrantedMediaStreamAccess() {
 }
 
 void RenderFrameHostImpl::OnPortalActivated(
-    std::unique_ptr<WebContents> predecessor_web_contents,
+    std::unique_ptr<Portal> predecessor,
+    mojo::PendingAssociatedRemote<blink::mojom::Portal> pending_portal,
+    mojo::PendingAssociatedReceiver<blink::mojom::PortalClient> client_receiver,
     blink::TransferableMessage data,
     base::OnceCallback<void(blink::mojom::PortalActivateResult)> callback) {
-  mojo::PendingAssociatedRemote<blink::mojom::Portal> pending_portal;
-  auto portal_receiver = pending_portal.InitWithNewEndpointAndPassReceiver();
-  mojo::PendingAssociatedRemote<blink::mojom::PortalClient> pending_client;
-  auto client_receiver = pending_client.InitWithNewEndpointAndPassReceiver();
-
-  auto predecessor =
-      std::make_unique<Portal>(this, std::move(predecessor_web_contents));
-  predecessor->Bind(std::move(portal_receiver), std::move(pending_client));
   auto it = portals_.insert(std::move(predecessor)).first;
 
   GetNavigationControl()->OnPortalActivated(

@@ -1125,12 +1125,14 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void NavigationRequestCancelled(NavigationRequest* navigation_request);
 
   // Called on the main frame of a page embedded in a Portal when it is
-  // activated. The frame has the option to adopt the previous page as a portal
-  // containing the contents |predecessor_web_contents|. The activation
-  // can optionally include a message |data| dispatched with the
-  // PortalActivateEvent.
+  // activated. The frame has the option to adopt the previous page,
+  // |predecessor|, as a portal. The activation can optionally include a message
+  // |data| dispatched with the PortalActivateEvent.
   void OnPortalActivated(
-      std::unique_ptr<WebContents> predecessor_web_contents,
+      std::unique_ptr<Portal> predecessor,
+      mojo::PendingAssociatedRemote<blink::mojom::Portal> pending_portal,
+      mojo::PendingAssociatedReceiver<blink::mojom::PortalClient>
+          client_receiver,
       blink::TransferableMessage data,
       base::OnceCallback<void(blink::mojom::PortalActivateResult)> callback);
 
