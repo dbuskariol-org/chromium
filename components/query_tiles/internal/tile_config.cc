@@ -4,6 +4,7 @@
 
 #include "components/query_tiles/internal/tile_config.h"
 
+#include "base/command_line.h"
 #include "base/metrics/field_trial_params.h"
 #include "components/query_tiles/switches.h"
 
@@ -67,6 +68,10 @@ constexpr int kDefaultBackoffInitDelayInMs = 30 * 1000;  // 30 seconds.
 constexpr int kDefaultBackoffMaxDelayInMs = 24 * 3600 * 1000;  // 1 day.
 
 namespace {
+
+// For testing. Json string for single tier experiment tag.
+const char kQueryTilesSingleTierExperimentTag[] = "{\"maxLevels\": \"1\"}";
+
 const GURL BuildGetQueryTileURL(const GURL& base_url, const char* path) {
   GURL::Replacements replacements;
   replacements.SetPathStr(path);
@@ -90,6 +95,11 @@ bool TileConfig::GetIsUnMeteredNetworkRequired() {
 
 // static
 std::string TileConfig::GetExperimentTag() {
+  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
+          switches::kQueryTilesSingleTier)) {
+    return kQueryTilesSingleTierExperimentTag;
+  }
+
   return base::GetFieldTrialParamValueByFeature(features::kQueryTiles,
                                                 kExperimentTagKey);
 }
