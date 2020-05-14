@@ -211,9 +211,9 @@ base::string16 WebAppConfirmationView::GetTrimmedTitle() const {
 
 namespace chrome {
 
-void ShowWebAppDialog(content::WebContents* web_contents,
-                      std::unique_ptr<WebApplicationInfo> web_app_info,
-                      AppInstallationAcceptanceCallback callback) {
+void ShowWebAppInstallDialog(content::WebContents* web_contents,
+                             std::unique_ptr<WebApplicationInfo> web_app_info,
+                             AppInstallationAcceptanceCallback callback) {
   auto* dialog =
       new WebAppConfirmationView(std::move(web_app_info), std::move(callback));
   constrained_window::ShowWebModalDialogViews(dialog, web_contents);
