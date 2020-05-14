@@ -76,6 +76,10 @@ class CORE_EXPORT MatchedPropertiesCache {
 
    private:
     friend class MatchedPropertiesCache;
+    friend class MatchedPropertiesCacheTestKey;
+
+    Key(const MatchResult&, unsigned hash);
+
     const MatchResult& result_;
     unsigned hash_;
   };

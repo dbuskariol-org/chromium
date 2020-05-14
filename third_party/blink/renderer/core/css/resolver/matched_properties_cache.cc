@@ -67,8 +67,11 @@ void CachedMatchedProperties::Clear() {
 MatchedPropertiesCache::MatchedPropertiesCache() = default;
 
 MatchedPropertiesCache::Key::Key(const MatchResult& result)
-    : result_(result),
-      hash_(result.IsCacheable() ? ComputeMatchedPropertiesHash(result) : 0) {}
+    : Key(result,
+          result.IsCacheable() ? ComputeMatchedPropertiesHash(result) : 0) {}
+
+MatchedPropertiesCache::Key::Key(const MatchResult& result, unsigned hash)
+    : result_(result), hash_(hash) {}
 
 const CachedMatchedProperties* MatchedPropertiesCache::Find(
     const Key& key,
