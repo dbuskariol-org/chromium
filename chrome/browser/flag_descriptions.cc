@@ -3673,6 +3673,10 @@ const char kImeInputLogicHmmName[] = "Enable HMM Input Logic on IME";
 const char kImeInputLogicHmmDescription[] =
     "Enable HMM Input Logic to replace the IME legacy input logic on NaCl";
 
+const char kImeInputLogicMozcName[] = "Enable MOZC Input Logic on IME";
+const char kImeInputLogicMozcDescription[] =
+    "Enable MOZC Input Logic to replace the IME legacy input logic on NaCl";
+
 const char kImeMozcProtoName[] = "Enable protobuf on Japanese IME";
 const char kImeMozcProtoDescription[] =
     "Enable Japanese IME to use protobuf as interactive message format to "

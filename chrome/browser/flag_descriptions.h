@@ -2153,6 +2153,9 @@ extern const char kImeInputLogicFstDescription[];
 extern const char kImeInputLogicHmmName[];
 extern const char kImeInputLogicHmmDescription[];
 
+extern const char kImeInputLogicMozcName[];
+extern const char kImeInputLogicMozcDescription[];
+
 extern const char kImeMozcProtoName[];
 extern const char kImeMozcProtoDescription[];
 
