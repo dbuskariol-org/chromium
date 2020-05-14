@@ -44,6 +44,12 @@ void PermissionsClient::AreSitesImportant(
     entry.second = false;
 }
 
+bool PermissionsClient::IsCookieDeletionDisabled(
+    content::BrowserContext* browser_context,
+    const GURL& origin) {
+  return false;
+}
+
 void PermissionsClient::GetUkmSourceId(content::BrowserContext* browser_context,
                                        const content::WebContents* web_contents,
                                        const GURL& requesting_origin,

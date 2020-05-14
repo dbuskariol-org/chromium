@@ -82,6 +82,12 @@ class PermissionsClient {
       content::BrowserContext* browser_context,
       std::vector<std::pair<url::Origin, bool>>* origins);
 
+  // Returns whether cookie deletion is allowed for |browser_context| and
+  // |origin|.
+  virtual bool IsCookieDeletionDisabled(
+      content::BrowserContext* browser_context,
+      const GURL& origin);
+
   // Retrieves the ukm::SourceId (if any) associated with this |browser_context|
   // and |web_contents|. |web_contents| may be null. |callback| will be called
   // with the result, and may be run synchronously if the result is available
