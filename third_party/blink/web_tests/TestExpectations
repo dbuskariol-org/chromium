@@ -3833,7 +3833,6 @@ crbug.com/789139 http/tests/devtools/sources/debugger/live-edit-no-reveal.js [ F
 # ====== Begin web-components-v0-disabled virtual suite tests ======
 
 # Ignore these - they are tests of the disabled features. Eventually remove these.
-crbug.com/937746 virtual/web-components-v0-disabled/fast/html/imports/* [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/callback-context.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/crash-without-dom-wrapper.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/created-callback.html [ Skip ]
