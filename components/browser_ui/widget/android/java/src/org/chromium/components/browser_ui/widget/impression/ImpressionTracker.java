@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.metrics;
+package org.chromium.components.browser_ui.widget.impression;
 
 import android.graphics.Rect;
 import android.view.View;
@@ -35,6 +35,7 @@ public class ImpressionTracker
     private final View mView;
     private @Nullable Listener mListener;
     private int mImpressionThresholdPx;
+    private double mImpressionThresholdRatio;
 
     /**
      * Creates a new instance tracking the given {@code view} as soon as and while a listener is
@@ -66,6 +67,20 @@ public class ImpressionTracker
     public void setImpressionThreshold(int impressionThresholdPx) {
         assert impressionThresholdPx > 0;
         mImpressionThresholdPx = impressionThresholdPx;
+    }
+
+    /**
+     * Sets a custom threshold ratio that defines "impression". If not set, the default ratio will
+     * be 2/3.
+     *
+     * If impression pixel are set to a non-zero value through {@link #setImpressionThreshold(int)},
+     * the px will precedence over this ratio.
+     *
+     * @param ratio The fraction of the view that needs to be visible.
+     */
+    public void setImpressionThresholdRatio(double ratio) {
+        assert ratio > 0 && ratio <= 1;
+        mImpressionThresholdRatio = ratio;
     }
 
     /**
@@ -108,7 +123,13 @@ public class ImpressionTracker
             int impressionThresholdPx = mImpressionThresholdPx;
             // If no threshold is specified, track impression if at least 2/3 of the view is
             // visible.
-            if (impressionThresholdPx == 0) impressionThresholdPx = 2 * mView.getHeight() / 3;
+            if (impressionThresholdPx == 0) {
+                if (mImpressionThresholdRatio != 0.0) {
+                    impressionThresholdPx = (int) (mView.getHeight() * mImpressionThresholdRatio);
+                } else {
+                    impressionThresholdPx = 2 * mView.getHeight() / 3;
+                }
+            }
 
             // |getChildVisibleRect| returns false when the view is empty, which may happen when
             // dismissing or reassigning a View. In this case |rect| appears to be invalid.

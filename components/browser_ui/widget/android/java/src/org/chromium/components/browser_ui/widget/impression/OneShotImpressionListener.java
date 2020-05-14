@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.metrics;
+package org.chromium.components.browser_ui.widget.impression;
 
-import org.chromium.chrome.browser.metrics.ImpressionTracker.Listener;
+import org.chromium.components.browser_ui.widget.impression.ImpressionTracker.Listener;
 
 /**
  * Filters {@link ImpressionTracker} impressions to only forward the first impression.
