@@ -64863,6 +64863,26 @@ would be helpful to identify which type is being sent.
   <int value="1" label="Extensions allowlist hit"/>
 </enum>
 
+<enum name="SupervisedUserExtensionInstallDialog">
+  <summary>
+    Tracks the actions of a supervised user on the Extension Install Dialog.
+  </summary>
+  <int value="0" label="Opened"/>
+  <int value="1" label="Asked Parent"/>
+  <int value="2" label="Child Canceled"/>
+</enum>
+
+<enum name="SupervisedUserParentPermissionDialog">
+  <summary>
+    Tracks the actions of a parent on the Parent Permission Dialog.
+  </summary>
+  <int value="0" label="Opened"/>
+  <int value="1" label="Parent Approved"/>
+  <int value="2" label="Parent Canceled"/>
+  <int value="3" label="Failed"/>
+  <int value="4" label="No Parent Error"/>
+</enum>
+
 <enum name="SupervisedUserSafetyFilterResult">
   <int value="100" label="LINK_ALLOWED">Link; Allowed as safe</int>
   <int value="101" label="TYPED_ALLOWED">Typed URL; Allowed as safe</int>

@@ -2049,6 +2049,9 @@ if (!is_android) {
           "../browser/ui/views/toolbar/toolbar_account_icon_container_browsertest.cc",
         ]
       }
+      if (enable_supervised_users) {
+        sources += [ "../browser/ui/views/extensions/extension_install_dialog_view_supervised_browsertest.cc" ]
+      }
       deps += [
         "//ui/views",
         "//url",
