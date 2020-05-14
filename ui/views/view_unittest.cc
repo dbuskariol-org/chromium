@@ -379,6 +379,22 @@ TEST_F(ViewTest, OnBoundsChanged) {
   EXPECT_EQ(v.bounds(), new_rect);
 }
 
+TEST_F(ViewTest, TransformFiresA11yEvent) {
+  TestView v;
+  v.SetPaintToLayer();
+
+  gfx::Rect bounds(0, 0, 200, 200);
+  v.last_a11y_event_ = ax::mojom::Event::kNone;
+  v.SetBoundsRect(bounds);
+  EXPECT_EQ(v.last_a11y_event_, ax::mojom::Event::kLocationChanged);
+
+  gfx::Transform transform;
+  transform.Translate(gfx::Vector2dF(10, 10));
+  v.last_a11y_event_ = ax::mojom::Event::kNone;
+  v.layer()->SetTransform(transform);
+  EXPECT_EQ(v.last_a11y_event_, ax::mojom::Event::kLocationChanged);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 // OnStateChanged
 ////////////////////////////////////////////////////////////////////////////////
