@@ -118,6 +118,7 @@ struct SearchBoxTheme {
   skia.mojom.SkColor results_dim_selected;
   skia.mojom.SkColor results_text;
   skia.mojom.SkColor results_text_selected;
+  skia.mojom.SkColor results_url;
   skia.mojom.SkColor results_url_selected;
   skia.mojom.SkColor text;
 };

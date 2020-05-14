@@ -148,6 +148,7 @@ new_tab_page::mojom::ThemePtr MakeTheme(const NtpTheme& ntp_theme) {
   search_box->results_text = ntp_theme.search_box.results_text;
   search_box->results_text_selected =
       ntp_theme.search_box.results_text_selected;
+  search_box->results_url = ntp_theme.search_box.results_url;
   search_box->results_url_selected = ntp_theme.search_box.results_url_selected;
   search_box->text = ntp_theme.search_box.text;
   theme->search_box = std::move(search_box);
