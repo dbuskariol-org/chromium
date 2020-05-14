@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_ACTIONS_REQUIRED_FIELDS_FALLBACK_HANDLER_H_
-#define COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_ACTIONS_REQUIRED_FIELDS_FALLBACK_HANDLER_H_
+#ifndef COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_ACTIONS_FALLBACK_HANDLER_REQUIRED_FIELDS_FALLBACK_HANDLER_H_
+#define COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_ACTIONS_FALLBACK_HANDLER_REQUIRED_FIELDS_FALLBACK_HANDLER_H_
 
 #include <map>
 #include <memory>
@@ -16,6 +16,8 @@
 #include "base/optional.h"
 #include "components/autofill/core/browser/data_model/autofill_profile.h"
 #include "components/autofill_assistant/browser/actions/action.h"
+#include "components/autofill_assistant/browser/actions/fallback_handler/fallback_data.h"
+#include "components/autofill_assistant/browser/actions/fallback_handler/required_field.h"
 #include "components/autofill_assistant/browser/batch_element_checker.h"
 
 namespace autofill_assistant {
@@ -25,49 +27,6 @@ class ClientStatus;
 // UseAddressAction.
 class RequiredFieldsFallbackHandler {
  public:
-  enum FieldValueStatus { UNKNOWN, EMPTY, NOT_EMPTY };
-  struct RequiredField {
-    RequiredField();
-    ~RequiredField();
-    RequiredField(const RequiredField& copy);
-
-    Selector selector;
-    KeyboardValueFillStrategy fill_strategy;
-    DropdownSelectStrategy select_strategy;
-    int delay_in_millisecond = 0;
-    bool forced = false;
-    FieldValueStatus status = UNKNOWN;
-    std::string value_expression;
-
-    // Returns true if fallback is required for this field.
-    bool ShouldFallback(bool has_fallback_data) const {
-      return status == EMPTY || (forced && has_fallback_data);
-    }
-  };
-
-  // Data necessary for filling in the fallback fields. This is kept in a
-  // separate struct to make sure we don't keep it for longer than strictly
-  // necessary.
-  // TODO(marianfe): Refactor this to use a map instead.
-  struct FallbackData {
-    FallbackData();
-    ~FallbackData();
-
-    // The key of the map. Should be either an entry of  field_types.h or an
-    // enum of Use*Action::AutofillAssistantCustomField.
-    std::map<int, std::string> field_values;
-
-    void AddFormGroup(const autofill::FormGroup& form_group);
-
-    base::Optional<std::string> GetValue(int key);
-
-    base::Optional<std::string> EvaluateExpression(
-        const std::string& value_expression);
-
-   private:
-    DISALLOW_COPY_AND_ASSIGN(FallbackData);
-  };
-
   explicit RequiredFieldsFallbackHandler(
       const std::vector<RequiredField>& required_fields,
       ActionDelegate* delegate);
@@ -110,13 +69,25 @@ class RequiredFieldsFallbackHandler {
       std::unique_ptr<FallbackData> fallback_data);
 
   // Called after retrieving tag name from a field.
-  void OnGetFallbackFieldTag(size_t required_fields_index,
+  void OnGetFallbackFieldTag(const std::string& value,
+                             size_t required_fields_index,
                              std::unique_ptr<FallbackData> fallback_data,
                              const ClientStatus& element_tag_status,
                              const std::string& element_tag);
 
-  // Called after trying to set form values without Autofill in case of fallback
-  // after failed validation.
+  // Called after clicking a fallback element.
+  void OnClickOrTapFallbackElement(const std::string& value,
+                                   size_t required_fields_index,
+                                   std::unique_ptr<FallbackData> fallback_data,
+                                   const ClientStatus& element_click_status);
+  // Called after waiting for option element to appear before clicking it.
+  void OnShortWaitForElement(const Selector& selector_to_click,
+                             size_t required_fields_index,
+                             std::unique_ptr<FallbackData> fallback_data,
+                             const ClientStatus& find_element_status);
+
+  // Called after trying to set form values without Autofill in case of
+  // fallback after failed validation.
   void OnSetFallbackFieldValue(size_t required_fields_index,
                                std::unique_ptr<FallbackData> fallback_data,
                                const ClientStatus& status);
@@ -135,4 +106,4 @@ class RequiredFieldsFallbackHandler {
 };
 
 }  // namespace autofill_assistant
-#endif  // COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_ACTIONS_REQUIRED_FIELDS_FALLBACK_HANDLER_H_
+#endif  // COMPONENTS_AUTOFILL_ASSISTANT_BROWSER_ACTIONS_FALLBACK_HANDLER_REQUIRED_FIELDS_FALLBACK_HANDLER_H_
