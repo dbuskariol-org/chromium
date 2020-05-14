@@ -107,7 +107,8 @@ std::unique_ptr<KeyedService> TileServiceFactory::BuildServiceInstanceFor(
   return CreateTileService(image_fetcher_service, db_provider, storage_dir,
                            background_task_scheduler, accept_languanges,
                            GetCountryCode(), GetGoogleAPIKey(),
-                           url_loader_factory);
+                           url_loader_factory,
+                           ProfileKey::FromSimpleFactoryKey(key)->GetPrefs());
 }
 
 }  // namespace query_tiles
