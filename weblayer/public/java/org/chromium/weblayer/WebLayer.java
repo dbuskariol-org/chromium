@@ -32,7 +32,6 @@ import org.chromium.weblayer_private.interfaces.IWebLayerFactory;
 import org.chromium.weblayer_private.interfaces.ObjectWrapper;
 import org.chromium.weblayer_private.interfaces.StrictModeWorkaround;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -94,15 +93,6 @@ public class WebLayer {
     private static void checkAvailable(Context context) {
         if (!isAvailable(context)) {
             throw new UnsupportedVersionException(sLoader.getVersion());
-        }
-    }
-
-    /** Deprecated. Use initializeWebViewCompatibilityMode(Context) instead. */
-    public static void initializeWebViewCompatibilityMode(@NonNull Context appContext,
-            @NonNull File baseDir, @NonNull Callback<WebViewCompatibilityResult> callback) {
-        WebViewCompatibilityResult result = initializeWebViewCompatibilityMode(appContext);
-        if (callback != null) {
-            callback.onResult(result);
         }
     }
 
