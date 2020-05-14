@@ -5932,3 +5932,7 @@ crbug.com/984467 [ Mac Debug ] virtual/gpu/fast/canvas/canvas-composite-stroke-a
 # Sheriff 2020-05-06
 crbug.com/1078863 [ Mac ] fast/speech/scripted/speechrecognition-restart-onend.html [ Pass Timeout ]
 crbug.com/1071915 fast/hidpi/image-srcset-png-canvas.html [ Pass Failure ]
+
+# Flaky test blocking wpt import
+crbug.com/1082739 external/wpt/event-timing/dblclick.html [ Pass Failure ]
+
