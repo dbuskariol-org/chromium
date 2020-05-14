@@ -343,6 +343,11 @@ const base::Feature kMediaDevicesSystemMonitorCache {
 #endif
 };
 
+// If enabled Mojo uses a dedicated background thread to listen for incoming
+// IPCs. Otherwise it's configured to use Content's IO thread for that purpose.
+const base::Feature kMojoDedicatedThread{"MojoDedicatedThread",
+                                         base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Enables/disables the video capture service.
 const base::Feature kMojoVideoCapture{"MojoVideoCapture",
                                       base::FEATURE_ENABLED_BY_DEFAULT};
