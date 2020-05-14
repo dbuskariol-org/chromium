@@ -5936,3 +5936,6 @@ crbug.com/1071915 fast/hidpi/image-srcset-png-canvas.html [ Pass Failure ]
 # Flaky test blocking wpt import
 crbug.com/1082739 external/wpt/event-timing/dblclick.html [ Pass Failure ]
 
+# Sheriff 2020-05-14
+crbug.com/1082804 [ Win7 ] fast/forms/select/listbox-appearance-basic.html [ Pass Failure ]
+crbug.com/1082804 [ Win7 ] fast/forms/select/select-disabled-appearance.html [ Pass Failure ]
