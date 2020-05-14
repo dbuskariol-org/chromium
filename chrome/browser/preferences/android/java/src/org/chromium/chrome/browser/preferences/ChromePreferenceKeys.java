@@ -498,6 +498,7 @@ public final class ChromePreferenceKeys {
      */
     public static final KeyPrefix PROMO_IS_DISMISSED =
             new KeyPrefix("Chrome.PromoCard.IsDismissed.*");
+    public static final KeyPrefix PROMO_TIMES_SEEN = new KeyPrefix("Chrome.PromoCard.TimesSeen.*");
 
     /**
      * Key to cache the enabled bottom toolbar parameter.
@@ -739,6 +740,7 @@ public final class ChromePreferenceKeys {
                 HOMEPAGE_LOCATION_POLICY,
                 HOMEPAGE_USE_CHROME_NTP,
                 PROMO_IS_DISMISSED.pattern(),
+                PROMO_TIMES_SEEN.pattern(),
                 TWA_DISCLOSURE_SEEN_PACKAGES
         );
         // clang-format on
