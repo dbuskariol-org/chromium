@@ -25,6 +25,18 @@ content::GetServiceSandboxType<audio::mojom::AudioService>() {
   return content::SandboxType::kAudio;
 }
 
+// network::mojom::NetworkService
+namespace network {
+namespace mojom {
+class NetworkService;
+}
+}  // namespace network
+template <>
+inline content::SandboxType
+content::GetServiceSandboxType<network::mojom::NetworkService>() {
+  return content::SandboxType::kNetwork;
+}
+
 // device::mojom::XRDeviceService
 #if defined(OS_WIN)
 namespace device {
