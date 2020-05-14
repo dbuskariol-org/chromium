@@ -59827,14 +59827,6 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="8" label="SKIPPED_VERSION_CHECK_EQUAL"/>
 </enum>
 
-<enum name="SBPhishingClassifierEvent">
-  <int value="0" label="Phishing detection was requested to start"/>
-  <int value="1" label="Page text was captured"/>
-  <int value="2" label="Page text not loaded"/>
-  <int value="3" label="Url should not be classified"/>
-  <int value="4" label="Phishing classifier was destructed"/>
-</enum>
-
 <enum name="ScheduledNavigationType">
   <obsolete>
     Deprecated August 2018
