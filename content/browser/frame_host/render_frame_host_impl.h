@@ -694,9 +694,6 @@ class CONTENT_EXPORT RenderFrameHostImpl
            lifecycle_state_ == LifecycleState::kSpeculative;
   }
 
-  // Navigates to an interstitial page represented by the provided data URL.
-  void NavigateToInterstitialURL(const GURL& data_url);
-
   // Stop the load in progress.
   void Stop();
 

@@ -491,8 +491,7 @@ void LogCanCommitOriginAndUrlFailureReason(const std::string& failure_reason) {
 
 url::Origin GetOriginForURLLoaderFactoryUnchecked(
     NavigationRequest* navigation_request) {
-  // Return a safe opaque origin when there is no |navigation_request| (e.g.
-  // when RFHI::CommitNavigation is called via RFHI::NavigateToInterstitialURL).
+  // Return a safe opaque origin when there is no |navigation_request|
   if (!navigation_request)
     return url::Origin();
 
@@ -5200,32 +5199,6 @@ CanCommitStatus RenderFrameHostImpl::CanCommitOriginAndUrl(
   }
 
   return CanCommitStatus::CAN_COMMIT_ORIGIN_AND_URL;
-}
-
-void RenderFrameHostImpl::NavigateToInterstitialURL(const GURL& data_url) {
-  TRACE_EVENT1("navigation", "RenderFrameHostImpl::NavigateToInterstitialURL",
-               "frame_tree_node", frame_tree_node_->frame_tree_node_id());
-  DCHECK(data_url.SchemeIs(url::kDataScheme));
-  NavigationDownloadPolicy download_policy;
-  download_policy.SetDisallowed(NavigationDownloadType::kInterstitial);
-
-  auto common_params = mojom::CommonNavigationParams::New(
-      data_url, base::nullopt, blink::mojom::Referrer::New(),
-      ui::PAGE_TRANSITION_LINK, mojom::NavigationType::DIFFERENT_DOCUMENT,
-      download_policy, false, GURL(), GURL(), PREVIEWS_OFF,
-      base::TimeTicks::Now(), "GET", nullptr,
-      network::mojom::SourceLocation::New(),
-      false /* started_from_context_menu */, false /* has_user_gesture */,
-      CreateInitiatorCSPInfo(), std::vector<int>(), std::string(),
-      false /* is_history_navigation_in_new_child_frame */, base::TimeTicks());
-  CommitNavigation(nullptr /* navigation_request */, std::move(common_params),
-                   CreateCommitNavigationParams(), nullptr /* response_head */,
-                   mojo::ScopedDataPipeConsumerHandle(),
-                   network::mojom::URLLoaderClientEndpointsPtr(), false,
-                   base::nullopt, base::nullopt /* subresource_overrides */,
-                   nullptr /* provider_info */,
-                   base::UnguessableToken::Create() /* not traced */,
-                   nullptr /* web_bundle_factory */);
 }
 
 void RenderFrameHostImpl::Stop() {
