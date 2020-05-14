@@ -722,7 +722,7 @@
   },
   {
     "name": "cups-ipp-printing-backend",
-    "owners": [ "dhoss", "chrome-print@google.com" ],
+    "owners": [ "dhoss", "//printing/OWNERS" ],
     "expiry_milestone": 89
   },
   {
@@ -2592,7 +2592,7 @@
   {
     "name": "gdi-text-printing",
     "owners": [ "//printing/OWNERS" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 89
   },
   {
     "name": "gesture-properties-dbus-service",
@@ -3476,7 +3476,7 @@
   {
     "name": "pdf-form-save",
     "owners": [ "thestig" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 89
   },
   {
     "name": "pdf-two-up-view",
