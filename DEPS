@@ -1529,6 +1529,17 @@ deps = {
     'condition': 'checkout_src_internal',
   },
 
+  'src/chromeos/components/help_app_ui/resources/prod': {
+    'packages': [
+      {
+        'package': 'chromeos_internal/apps/help_app/app',
+        'version': '4LNO2QORJBlLuLF5s9dotu4sFJmSIF4tM_K_Xa7AxcIC',
+      },
+    ],
+    'condition': 'checkout_chromeos and checkout_src_internal',
+    'dep_type': 'cipd',
+  },
+
   'src/third_party/google_android_play_core': {
       'packages': [
           {
