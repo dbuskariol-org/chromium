@@ -117,7 +117,15 @@ class SystemNetworkContextManager {
   void AddSSLConfigToNetworkContextParams(
       network::mojom::NetworkContextParams* network_context_params);
 
-  // Returns default set of parameters for configuring the network service.
+  // Configures default set of parameters for configuring the network context.
+  void ConfigureDefaultNetworkContextParams(
+      network::mojom::NetworkContextParams* network_context_params,
+      network::mojom::CertVerifierCreationParams*
+          cert_verifier_creation_params);
+
+  // Same as ConfigureDefaultNetworkContextParams() but returns a newly
+  // allocated network::mojom::NetworkContextParams with the
+  // CertVerifierCreationParams already placed into the NetworkContextParams.
   network::mojom::NetworkContextParamsPtr CreateDefaultNetworkContextParams();
 
   // Returns a shared global NetExportFileWriter instance, used by net-export.

@@ -4766,13 +4766,16 @@ void ChromeContentBrowserClient::OnNetworkServiceCreated(
       network_service);
 }
 
-mojo::Remote<network::mojom::NetworkContext>
-ChromeContentBrowserClient::CreateNetworkContext(
+void ChromeContentBrowserClient::ConfigureNetworkContextParams(
     content::BrowserContext* context,
     bool in_memory,
-    const base::FilePath& relative_partition_path) {
+    const base::FilePath& relative_partition_path,
+    network::mojom::NetworkContextParams* network_context_params,
+    network::mojom::CertVerifierCreationParams* cert_verifier_creation_params) {
   Profile* profile = Profile::FromBrowserContext(context);
-  return profile->CreateNetworkContext(in_memory, relative_partition_path);
+  profile->ConfigureNetworkContextParams(in_memory, relative_partition_path,
+                                         network_context_params,
+                                         cert_verifier_creation_params);
 }
 
 std::vector<base::FilePath>
