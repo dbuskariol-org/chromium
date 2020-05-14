@@ -60934,6 +60934,12 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="2" label="From TWA manage space activity"/>
 </enum>
 
+<enum name="SettingsOverriddenDialogResult">
+  <int value="0" label="Change settings back"/>
+  <int value="1" label="Keep new settings"/>
+  <int value="2" label="Dialog dismissed"/>
+</enum>
+
 <enum name="SettingsPageInteractions">
   <obsolete>
     Removed 03/2020 because the only associated histogram was deprecated due to
