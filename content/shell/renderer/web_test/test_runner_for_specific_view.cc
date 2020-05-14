@@ -257,36 +257,6 @@ void TestRunnerForSpecificView::RunJSCallbackWithBitmap(
   PostV8CallbackWithArgs(std::move(callback), base::size(argv), argv);
 }
 
-void TestRunnerForSpecificView::GetBluetoothManualChooserEvents(
-    v8::Local<v8::Function> callback) {
-  return blink_test_runner()->GetBluetoothManualChooserEvents(base::BindOnce(
-      &TestRunnerForSpecificView::GetBluetoothManualChooserEventsCallback,
-      weak_factory_.GetWeakPtr(),
-      v8::UniquePersistent<v8::Function>(blink::MainThreadIsolate(),
-                                         callback)));
-}
-
-void TestRunnerForSpecificView::GetBluetoothManualChooserEventsCallback(
-    v8::UniquePersistent<v8::Function> callback,
-    const std::vector<std::string>& events) {
-  // Build the V8 context.
-  v8::Isolate* isolate = blink::MainThreadIsolate();
-  v8::HandleScope handle_scope(isolate);
-  v8::Local<v8::Context> context =
-      GetLocalMainFrame()->MainWorldScriptContext();
-  if (context.IsEmpty())
-    return;
-  v8::Context::Scope context_scope(context);
-
-  // Convert the argument.
-  v8::Local<v8::Value> arg;
-  if (!gin::TryConvertToV8(isolate, events, &arg))
-    return;
-
-  // Call the callback.
-  PostV8CallbackWithArgs(std::move(callback), 1, &arg);
-}
-
 void TestRunnerForSpecificView::SetPageVisibility(
     const std::string& new_visibility) {
   content::PageVisibilityState visibility;

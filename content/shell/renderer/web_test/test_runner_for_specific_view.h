@@ -81,13 +81,6 @@ class TestRunnerForSpecificView {
       int y,
       const v8::Local<v8::Function> callback);
 
-  // Calls |callback| with a DOMString[] representing the events recorded since
-  // the last call to this function.
-  void GetBluetoothManualChooserEvents(v8::Local<v8::Function> callback);
-  void GetBluetoothManualChooserEventsCallback(
-      v8::UniquePersistent<v8::Function> callback,
-      const std::vector<std::string>& events);
-
   // Switch the visibility of the page.
   void SetPageVisibility(const std::string& new_visibility);
 

@@ -1478,9 +1478,38 @@ void TestRunnerBindings::SetBluetoothManualChooser(bool enable) {
   runner_->blink_test_runner_->SetBluetoothManualChooser(enable);
 }
 
+static void GetBluetoothManualChooserEventsReply(
+    base::WeakPtr<TestRunnerBindings> test_runner,
+    RenderFrame* frame,
+    BoundV8Callback callback,
+    const std::vector<std::string>& events) {
+  if (!test_runner)  // This guards the validity of the |frame|.
+    return;
+
+  v8::Isolate* isolate = blink::MainThreadIsolate();
+  v8::HandleScope handle_scope(isolate);
+
+  // gin::TryConvertToV8() requires a v8::Context.
+  v8::Local<v8::Context> context =
+      frame->GetWebFrame()->MainWorldScriptContext();
+  CHECK(!context.IsEmpty());
+  v8::Context::Scope context_scope(context);
+
+  v8::Local<v8::Value> arg;
+  bool converted = gin::TryConvertToV8(isolate, events, &arg);
+  CHECK(converted);
+
+  std::move(callback).Run({
+      arg,
+  });
+}
+
 void TestRunnerBindings::GetBluetoothManualChooserEvents(
     v8::Local<v8::Function> callback) {
-  return view_runner_->GetBluetoothManualChooserEvents(callback);
+  return runner_->blink_test_runner_->GetBluetoothManualChooserEvents(
+      base::BindOnce(&GetBluetoothManualChooserEventsReply,
+                     weak_ptr_factory_.GetWeakPtr(), frame_,
+                     WrapV8Callback(std::move(callback))));
 }
 
 void TestRunnerBindings::SendBluetoothManualChooserEvent(
