@@ -13,8 +13,6 @@
 #include "third_party/blink/renderer/platform/wtf/shared_buffer.h"
 #include "third_party/libavif/src/include/avif/avif.h"
 
-#define FIXME_SUPPORT_10BIT_IMAGE_WITH_ALPHA 0
-#define FIXME_SUPPORT_12BIT_IMAGE_WITH_ALPHA 0
 #define FIXME_CRASH_IF_COLOR_TRANSFORMATION_IS_ENABLED 0
 #define FIXME_SUPPORT_ICC_PROFILE_NO_TRANSFORM 0
 #define FIXME_SUPPORT_ICC_PROFILE_TRANSFORM 0
@@ -196,7 +194,6 @@ StaticColorCheckParam kTestParams[] = {
          {gfx::Point(2, 2), SkColorSetARGB(255, 255, 0, 0)},
      }},
 #endif
-#if FIXME_SUPPORT_10BIT_IMAGE_WITH_ALPHA
     {"/images/resources/avif/red-with-alpha-10bpc.avif",
      10,
      ColorType::kRgbA,
@@ -236,7 +233,6 @@ StaticColorCheckParam kTestParams[] = {
          {gfx::Point(1, 1), SkColorSetARGB(128, 188, 0, 0)},
          {gfx::Point(2, 2), SkColorSetARGB(255, 255, 0, 0)},
      }},
-#endif
 #endif
     {"/images/resources/avif/red-full-ranged-10bpc.avif",
      10,
@@ -307,7 +303,6 @@ StaticColorCheckParam kTestParams[] = {
          {gfx::Point(2, 2), SkColorSetARGB(255, 255, 0, 0)},
      }},
 #endif
-#if FIXME_SUPPORT_12BIT_IMAGE_WITH_ALPHA
     {"/images/resources/avif/red-with-alpha-12bpc.avif",
      12,
      ColorType::kRgbA,
@@ -347,7 +342,6 @@ StaticColorCheckParam kTestParams[] = {
          {gfx::Point(1, 1), SkColorSetARGB(128, 188, 0, 0)},
          {gfx::Point(2, 2), SkColorSetARGB(255, 255, 0, 0)},
      }},
-#endif
 #endif
     {"/images/resources/avif/red-full-ranged-12bpc.avif",
      12,
@@ -467,19 +461,15 @@ TEST(AnimatedAVIFTests, ValidImages) {
   TestByteByByteDecode(&CreateAVIFDecoder,
                        "/images/resources/avif/star-10bpc.avifs", 5u,
                        kAnimationLoopInfinite);
-#if FIXME_SUPPORT_10BIT_IMAGE_WITH_ALPHA
   TestByteByByteDecode(&CreateAVIFDecoder,
                        "/images/resources/avif/star-10bpc-with-alpha.avifs", 5u,
                        kAnimationLoopInfinite);
-#endif
   TestByteByByteDecode(&CreateAVIFDecoder,
                        "/images/resources/avif/star-12bpc.avifs", 5u,
                        kAnimationLoopInfinite);
-#if FIXME_SUPPORT_12BIT_IMAGE_WITH_ALPHA
   TestByteByByteDecode(&CreateAVIFDecoder,
                        "/images/resources/avif/star-12bpc-with-alpha.avifs", 5u,
                        kAnimationLoopInfinite);
-#endif
   // TODO(ryoh): Add avifs with EditListBox.
 }
 
