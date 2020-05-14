@@ -7204,6 +7204,12 @@ void WebContentsImpl::AudioContextPlaybackStopped(RenderFrameHost* host,
     observer.AudioContextPlaybackStopped(audio_context_id);
 }
 
+void WebContentsImpl::OnFrameAudioStateChanged(RenderFrameHost* host,
+                                               bool is_audible) {
+  for (auto& observer : observers_)
+    observer.OnFrameAudioStateChanged(host, is_audible);
+}
+
 media::MediaMetricsProvider::RecordAggregateWatchTimeCallback
 WebContentsImpl::GetRecordAggregateWatchTimeCallback() {
   if (!delegate_ || !delegate_->GetDelegateWeakPtr())

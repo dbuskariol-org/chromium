@@ -497,6 +497,10 @@ class CONTENT_EXPORT RenderFrameHostDelegate {
   virtual void AudioContextPlaybackStopped(RenderFrameHost* host,
                                            int context_id) {}
 
+  // Notifies observers if the frame has changed audible state.
+  virtual void OnFrameAudioStateChanged(RenderFrameHost* host,
+                                        bool is_audible) {}
+
   // Returns the main frame of the inner delegate that is attached to this
   // delegate using |frame_tree_node|. Returns nullptr if no such inner delegate
   // exists.

@@ -463,6 +463,10 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   // Returns true if the frame recently plays an audio.
   bool is_audible() const { return is_audible_; }
+
+  // Toggles the audible state of this render frame. This should only be called
+  // from AudioStreamMonitor, and should not be invoked with the same value
+  // successively.
   void OnAudibleStateChanged(bool is_audible);
 
   int routing_id() const { return routing_id_; }

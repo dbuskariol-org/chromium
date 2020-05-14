@@ -1014,7 +1014,8 @@ RenderFrameHostImpl::~RenderFrameHostImpl() {
   // streams from this frame have terminated. This is required to ensure the
   // process host has the correct media stream count, which affects its
   // background priority.
-  OnAudibleStateChanged(false);
+  if (is_audible_)
+    OnAudibleStateChanged(false);
 
   // If this was the last active frame in the SiteInstance, the
   // DecrementActiveFrameCount call will trigger the deletion of the
@@ -1929,7 +1930,8 @@ void RenderFrameHostImpl::RenderProcessGone(
   // process should be ignored until the next commit.
   set_nav_entry_id(0);
 
-  OnAudibleStateChanged(false);
+  if (is_audible_)
+    OnAudibleStateChanged(false);
 }
 
 void RenderFrameHostImpl::ReportContentSecurityPolicyViolation(
@@ -2235,13 +2237,14 @@ void RenderFrameHostImpl::Init() {
 }
 
 void RenderFrameHostImpl::OnAudibleStateChanged(bool is_audible) {
-  if (is_audible_ == is_audible)
-    return;
-  if (is_audible)
+  DCHECK_NE(is_audible_, is_audible);
+  if (is_audible) {
     GetProcess()->OnMediaStreamAdded();
-  else
+  } else {
     GetProcess()->OnMediaStreamRemoved();
+  }
   is_audible_ = is_audible;
+  delegate_->OnFrameAudioStateChanged(this, is_audible_);
 }
 
 void RenderFrameHostImpl::DidAddMessageToConsole(
