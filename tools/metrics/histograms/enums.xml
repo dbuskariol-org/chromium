@@ -65128,6 +65128,7 @@ would be helpful to identify which type is being sent.
 <enum name="SwipeHomeToOverviewResult">
   <int value="0" label="Remained on the home screen"/>
   <int value="1" label="Transitioned to overview"/>
+  <int value="2" label="Went back on the home screen"/>
 </enum>
 
 <enum name="SwReporterRunningTimeRegistryError">
