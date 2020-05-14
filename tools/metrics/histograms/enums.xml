@@ -70577,6 +70577,7 @@ Called by update_scheduler_enums.py.-->
   <int value="42" label="AppBanner"/>
   <int value="43" label="Printing"/>
   <int value="44" label="WebDatabase"/>
+  <int value="45" label="PictureInPicture"/>
 </enum>
 
 <enum name="WebShareMethod">
