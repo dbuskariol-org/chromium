@@ -84,7 +84,6 @@ import org.chromium.chrome.browser.omnibox.UrlBar;
 import org.chromium.chrome.browser.preferences.ChromePreferenceKeys;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabCreationState;
-import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelUtils;
 import org.chromium.chrome.test.ChromeActivityTestRule;
@@ -1808,7 +1807,7 @@ public class ContextualSearchManagerTest {
         // Track Tab creation with this helper.
         final CallbackHelper tabCreatedHelper = new CallbackHelper();
         int tabCreatedHelperCallCount = tabCreatedHelper.getCallCount();
-        TabModelSelectorObserver observer = new EmptyTabModelSelectorObserver() {
+        TabModelSelectorObserver observer = new TabModelSelectorObserver() {
             @Override
             public void onNewTabCreated(Tab tab, @TabCreationState int creationState) {
                 tabCreatedHelper.notifyCalled();

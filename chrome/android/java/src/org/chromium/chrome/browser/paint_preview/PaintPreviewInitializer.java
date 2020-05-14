@@ -8,8 +8,8 @@ import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.multiwindow.MultiWindowUtils;
 import org.chromium.chrome.browser.paint_preview.services.PaintPreviewTabServiceFactory;
-import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
+import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 
 /**
  * Handles initialization of the Paint Preview tab observers.
@@ -24,7 +24,7 @@ public class PaintPreviewInitializer {
             ChromeActivity activity, TabModelSelector tabModelSelector) {
         // TODO(crbug/1074428): verify this doesn't cause a memory leak if the user exits Chrome
         // prior to onTabStateInitialized being called.
-        tabModelSelector.addObserver(new EmptyTabModelSelectorObserver() {
+        tabModelSelector.addObserver(new TabModelSelectorObserver() {
             @Override
             public void onTabStateInitialized() {
                 if (ChromeFeatureList.isEnabled(ChromeFeatureList.PAINT_PREVIEW_SHOW_ON_STARTUP)) {

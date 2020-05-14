@@ -13,7 +13,6 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import org.chromium.chrome.R;
-import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModel;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
@@ -55,7 +54,7 @@ class IncognitoSwitchCoordinator {
                                                   .START_SURFACE_HIDE_INCOGNITO_SWITCH.getValue())
                                  .build();
 
-        mTabModelSelectorObserver = new EmptyTabModelSelectorObserver() {
+        mTabModelSelectorObserver = new TabModelSelectorObserver() {
             @Override
             public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
                 mPropertyModel.set(IS_INCOGNITO, mTabModelSelector.isIncognitoSelected());
