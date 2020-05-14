@@ -44,11 +44,13 @@ void PermissionsClient::AreSitesImportant(
     entry.second = false;
 }
 
+#if defined(OS_ANDROID) || defined(OS_CHROMEOS)
 bool PermissionsClient::IsCookieDeletionDisabled(
     content::BrowserContext* browser_context,
     const GURL& origin) {
   return false;
 }
+#endif
 
 void PermissionsClient::GetUkmSourceId(content::BrowserContext* browser_context,
                                        const content::WebContents* web_contents,

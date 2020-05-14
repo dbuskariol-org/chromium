@@ -122,6 +122,7 @@ void ChromePermissionsClient::AreSitesImportant(
   }
 }
 
+#if defined(OS_ANDROID) || defined(OS_CHROMEOS)
 // Some Google-affiliated domains are not allowed to delete cookies for
 // supervised accounts.
 bool ChromePermissionsClient::IsCookieDeletionDisabled(
@@ -133,6 +134,7 @@ bool ChromePermissionsClient::IsCookieDeletionDisabled(
   return google_util::IsYoutubeDomainUrl(origin, google_util::ALLOW_SUBDOMAIN,
                                          google_util::ALLOW_NON_STANDARD_PORTS);
 }
+#endif
 
 void ChromePermissionsClient::GetUkmSourceId(
     content::BrowserContext* browser_context,
