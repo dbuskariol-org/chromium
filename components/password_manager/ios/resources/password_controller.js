@@ -301,7 +301,7 @@ const fillPasswordFormWithData = function(formData, username, password, win) {
 function fillUsernameAndPassword_(inputs, formData, username, password) {
   const usernameIdentifier = formData.fields[0].unique_renderer_id;
   let usernameInput = null;
-  if (usernameIdentifier !== __gCrWeb.fill.RENDERER_ID_NOT_SET) {
+  if (usernameIdentifier !== Number(__gCrWeb.fill.RENDERER_ID_NOT_SET)) {
     usernameInput = findInputByUniqueFieldId(inputs, usernameIdentifier);
     if (!usernameInput || !__gCrWeb.common.isTextField(usernameInput) ||
         usernameInput.disabled) {
