@@ -13085,6 +13085,11 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="2" label="The system clock is known to be inaccurate"/>
 </enum>
 
+<enum name="CrosSystemTrayFirstInteraction">
+  <int value="0" label="Quick Settings"/>
+  <int value="1" label="Message Center"/>
+</enum>
+
 <enum name="CrosSystemTrayInteraction">
   <int value="0" label="Tap"/>
   <int value="1" label="Click"/>
