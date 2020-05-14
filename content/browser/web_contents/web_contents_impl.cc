@@ -2122,8 +2122,6 @@ void WebContentsImpl::Init(const WebContents::CreateParams& params) {
 
   screen_orientation_provider_.reset(new ScreenOrientationProvider(this));
 
-  manifest_manager_host_.reset(new ManifestManagerHost(this));
-
 #if defined(OS_ANDROID)
   DateTimeChooserAndroid::CreateForWebContents(this);
 #endif
@@ -4204,7 +4202,10 @@ bool WebContentsImpl::WasEverAudible() {
 }
 
 void WebContentsImpl::GetManifest(GetManifestCallback callback) {
-  manifest_manager_host_->GetManifest(std::move(callback));
+  // TODO(yuzus, 1061899): Move this function to RenderFrameHostImpl.
+  ManifestManagerHost* manifest_manager_host =
+      ManifestManagerHost::GetOrCreateForCurrentDocument(GetMainFrame());
+  manifest_manager_host->GetManifest(std::move(callback));
 }
 
 void WebContentsImpl::ExitFullscreen(bool will_cause_resize) {
