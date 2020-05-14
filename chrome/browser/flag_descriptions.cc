@@ -1214,11 +1214,6 @@ const char kMediaHistoryDescription[] =
     "Enables Media History which records data around media playbacks on "
     "websites.";
 
-const char kMediaInspectorLoggingName[] = "Enable media log in developer tools";
-const char kMediaInspectorLoggingDescription[] =
-    "Move media logging from chrome://media-internals into the developer tools "
-    "project.";
-
 const char kMediaRouterCastAllowAllIPsName[] =
     "Connect to Cast devices on all IP addresses";
 const char kMediaRouterCastAllowAllIPsDescription[] =

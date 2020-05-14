@@ -5228,11 +5228,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kMixBrowserTypeTabs)},
 #endif  // !defined(OS_ANDROID)
 
-    {"enable-media-internals-devtools",
-     flag_descriptions::kMediaInspectorLoggingName,
-     flag_descriptions::kMediaInspectorLoggingDescription, kOsAll,
-     FEATURE_VALUE_TYPE(media::kMediaInspectorLogging)},
-
 #if defined(OS_ANDROID)
     {"enable-games-hub", flag_descriptions::kGamesHubName,
      flag_descriptions::kGamesHubDescription, kOsAndroid,

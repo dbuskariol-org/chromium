@@ -729,9 +729,6 @@ extern const char kMarkHttpAsWarningAndDangerousOnFormEdits[];
 extern const char kMediaHistoryName[];
 extern const char kMediaHistoryDescription[];
 
-extern const char kMediaInspectorLoggingName[];
-extern const char kMediaInspectorLoggingDescription[];
-
 extern const char kMediaRouterCastAllowAllIPsName[];
 extern const char kMediaRouterCastAllowAllIPsDescription[];
 
