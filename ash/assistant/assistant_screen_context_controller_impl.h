@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_ASSISTANT_ASSISTANT_SCREEN_CONTEXT_CONTROLLER_H_
-#define ASH_ASSISTANT_ASSISTANT_SCREEN_CONTEXT_CONTROLLER_H_
+#ifndef ASH_ASSISTANT_ASSISTANT_SCREEN_CONTEXT_CONTROLLER_IMPL_H_
+#define ASH_ASSISTANT_ASSISTANT_SCREEN_CONTEXT_CONTROLLER_IMPL_H_
 
 #include <memory>
 #include <vector>
@@ -14,6 +14,7 @@
 #include "ash/assistant/ui/assistant_view_delegate.h"
 #include "ash/public/cpp/assistant/controller/assistant_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_controller_observer.h"
+#include "ash/public/cpp/assistant/controller/assistant_screen_context_controller.h"
 #include "ash/public/mojom/assistant_controller.mojom.h"
 #include "base/callback_forward.h"
 #include "base/macros.h"
@@ -34,8 +35,8 @@ namespace ash {
 
 class AssistantControllerImpl;
 
-class ASH_EXPORT AssistantScreenContextController
-    : public mojom::AssistantScreenContextController,
+class ASH_EXPORT AssistantScreenContextControllerImpl
+    : public AssistantScreenContextController,
       public AssistantControllerObserver,
       public AssistantUiModelObserver,
       public AssistantViewDelegateObserver {
@@ -44,12 +45,9 @@ class ASH_EXPORT AssistantScreenContextController
       base::OnceCallback<void(ax::mojom::AssistantStructurePtr,
                               const std::vector<uint8_t>&)>;
 
-  explicit AssistantScreenContextController(
+  explicit AssistantScreenContextControllerImpl(
       AssistantControllerImpl* assistant_controller);
-  ~AssistantScreenContextController() override;
-
-  void BindReceiver(
-      mojo::PendingReceiver<mojom::AssistantScreenContextController> receiver);
+  ~AssistantScreenContextControllerImpl() override;
 
   // Provides a pointer to the |assistant| owned by AssistantController.
   void SetAssistant(chromeos::assistant::mojom::Assistant* assistant);
@@ -57,11 +55,9 @@ class ASH_EXPORT AssistantScreenContextController
   // Returns a reference to the underlying model.
   const AssistantScreenContextModel* model() const { return &model_; }
 
-  // ash::mojom::AssistantScreenContextController:
-  void RequestScreenshot(
-      const gfx::Rect& rect,
-      mojom::AssistantScreenContextController::RequestScreenshotCallback
-          callback) override;
+  // AssistantScreenContextController:
+  void RequestScreenshot(const gfx::Rect& rect,
+                         RequestScreenshotCallback callback) override;
 
   // AssistantControllerObserver:
   void OnAssistantControllerConstructed() override;
@@ -104,8 +100,6 @@ class ASH_EXPORT AssistantScreenContextController
 
   AssistantControllerImpl* const assistant_controller_;  // Owned by Shell.
 
-  mojo::Receiver<mojom::AssistantScreenContextController> receiver_{this};
-
   // Owned by AssistantController.
   chromeos::assistant::mojom::Assistant* assistant_ = nullptr;
 
@@ -114,11 +108,12 @@ class ASH_EXPORT AssistantScreenContextController
   ScopedObserver<AssistantController, AssistantControllerObserver>
       assistant_controller_observer_{this};
 
-  base::WeakPtrFactory<AssistantScreenContextController> weak_factory_{this};
+  base::WeakPtrFactory<AssistantScreenContextControllerImpl> weak_factory_{
+      this};
 
-  DISALLOW_COPY_AND_ASSIGN(AssistantScreenContextController);
+  DISALLOW_COPY_AND_ASSIGN(AssistantScreenContextControllerImpl);
 };
 
 }  // namespace ash
 
-#endif  // ASH_ASSISTANT_ASSISTANT_SCREEN_CONTEXT_CONTROLLER_H_
+#endif  // ASH_ASSISTANT_ASSISTANT_SCREEN_CONTEXT_CONTROLLER_IMPL_H_

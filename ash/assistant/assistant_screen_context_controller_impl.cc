@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/assistant/assistant_screen_context_controller.h"
+#include "ash/assistant/assistant_screen_context_controller_impl.h"
 
 #include <utility>
 #include <vector>
@@ -10,6 +10,7 @@
 #include "ash/assistant/assistant_controller_impl.h"
 #include "ash/public/cpp/assistant/assistant_client.h"
 #include "ash/public/cpp/assistant/assistant_state.h"
+#include "ash/public/cpp/assistant/controller/assistant_screen_context_controller.h"
 #include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "ash/public/cpp/shell_window_ids.h"
 #include "ash/public/cpp/window_properties.h"
@@ -55,7 +56,7 @@ std::vector<uint8_t> DownsampleAndEncodeImage(gfx::Image image) {
 }
 
 void EncodeScreenshotAndRunCallback(
-    mojom::AssistantScreenContextController::RequestScreenshotCallback callback,
+    AssistantScreenContextController::RequestScreenshotCallback callback,
     std::unique_ptr<ui::LayerTreeOwner> layer_owner,
     gfx::Image image) {
   base::ThreadPool::PostTaskAndReplyWithResult(
@@ -179,28 +180,23 @@ ax::mojom::AssistantStructurePtr CloneAssistantStructure(
 
 }  // namespace
 
-AssistantScreenContextController::AssistantScreenContextController(
+AssistantScreenContextControllerImpl::AssistantScreenContextControllerImpl(
     AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   assistant_controller_observer_.Add(AssistantController::Get());
 }
 
-AssistantScreenContextController::~AssistantScreenContextController() = default;
+AssistantScreenContextControllerImpl::~AssistantScreenContextControllerImpl() =
+    default;
 
-void AssistantScreenContextController::BindReceiver(
-    mojo::PendingReceiver<mojom::AssistantScreenContextController> receiver) {
-  receiver_.Bind(std::move(receiver));
-}
-
-void AssistantScreenContextController::SetAssistant(
+void AssistantScreenContextControllerImpl::SetAssistant(
     chromeos::assistant::mojom::Assistant* assistant) {
   assistant_ = assistant;
 }
 
-void AssistantScreenContextController::RequestScreenshot(
+void AssistantScreenContextControllerImpl::RequestScreenshot(
     const gfx::Rect& rect,
-    mojom::AssistantScreenContextController::RequestScreenshotCallback
-        callback) {
+    RequestScreenshotCallback callback) {
   aura::Window* root_window = Shell::Get()->GetRootWindowForNewWindows();
 
   std::unique_ptr<ui::LayerTreeOwner> layer_owner =
@@ -225,17 +221,17 @@ void AssistantScreenContextController::RequestScreenshot(
                      base::Passed(std::move(layer_owner))));
 }
 
-void AssistantScreenContextController::OnAssistantControllerConstructed() {
+void AssistantScreenContextControllerImpl::OnAssistantControllerConstructed() {
   AssistantUiController::Get()->AddModelObserver(this);
   assistant_controller_->view_delegate()->AddObserver(this);
 }
 
-void AssistantScreenContextController::OnAssistantControllerDestroying() {
+void AssistantScreenContextControllerImpl::OnAssistantControllerDestroying() {
   assistant_controller_->view_delegate()->RemoveObserver(this);
   AssistantUiController::Get()->RemoveModelObserver(this);
 }
 
-void AssistantScreenContextController::OnUiVisibilityChanged(
+void AssistantScreenContextControllerImpl::OnUiVisibilityChanged(
     AssistantVisibility new_visibility,
     AssistantVisibility old_visibility,
     base::Optional<AssistantEntryPoint> entry_point,
@@ -253,7 +249,7 @@ void AssistantScreenContextController::OnUiVisibilityChanged(
   UpdateAssistantStructure(visible);
 }
 
-void AssistantScreenContextController::OnHostViewVisibilityChanged(
+void AssistantScreenContextControllerImpl::OnHostViewVisibilityChanged(
     bool visible) {
   // See the comments in OnUiVisibilityChanged().
   if (IsTabletMode())
@@ -262,19 +258,20 @@ void AssistantScreenContextController::OnHostViewVisibilityChanged(
   UpdateAssistantStructure(visible);
 }
 
-void AssistantScreenContextController::RequestScreenContext(
+void AssistantScreenContextControllerImpl::RequestScreenContext(
     bool include_assistant_structure,
     const gfx::Rect& region,
     ScreenContextCallback callback) {
   RequestScreenshot(
       region,
       base::BindOnce(
-          &AssistantScreenContextController::OnRequestScreenshotCompleted,
+          &AssistantScreenContextControllerImpl::OnRequestScreenshotCompleted,
           weak_factory_.GetWeakPtr(), include_assistant_structure,
           std::move(callback)));
 }
 
-void AssistantScreenContextController::UpdateAssistantStructure(bool visible) {
+void AssistantScreenContextControllerImpl::UpdateAssistantStructure(
+    bool visible) {
   if (!AssistantState::Get()->IsScreenContextAllowed())
     return;
 
@@ -284,24 +281,25 @@ void AssistantScreenContextController::UpdateAssistantStructure(bool visible) {
     ClearAssistantStructure();
 }
 
-void AssistantScreenContextController::RequestAssistantStructure() {
+void AssistantScreenContextControllerImpl::RequestAssistantStructure() {
   DCHECK(AssistantState::Get()->IsScreenContextAllowed());
 
   auto* assistant_client = AssistantClient::Get();
   DCHECK(assistant_client);
 
   // Request and cache Assistant structure for the active window.
-  assistant_client->RequestAssistantStructure(base::BindOnce(
-      &AssistantScreenContextController::OnRequestAssistantStructureCompleted,
-      weak_factory_.GetWeakPtr()));
+  assistant_client->RequestAssistantStructure(
+      base::BindOnce(&AssistantScreenContextControllerImpl::
+                         OnRequestAssistantStructureCompleted,
+                     weak_factory_.GetWeakPtr()));
 }
 
-void AssistantScreenContextController::ClearAssistantStructure() {
+void AssistantScreenContextControllerImpl::ClearAssistantStructure() {
   weak_factory_.InvalidateWeakPtrs();
   model_.Clear();
 }
 
-void AssistantScreenContextController::OnRequestAssistantStructureCompleted(
+void AssistantScreenContextControllerImpl::OnRequestAssistantStructureCompleted(
     ax::mojom::AssistantExtraPtr assistant_extra,
     std::unique_ptr<ui::AssistantTree> assistant_tree) {
   auto structure = ax::mojom::AssistantStructure::New();
@@ -310,7 +308,7 @@ void AssistantScreenContextController::OnRequestAssistantStructureCompleted(
   model_.assistant_structure()->SetValue(std::move(structure));
 }
 
-void AssistantScreenContextController::OnRequestScreenshotCompleted(
+void AssistantScreenContextControllerImpl::OnRequestScreenshotCompleted(
     bool include_assistant_structure,
     ScreenContextCallback callback,
     const std::vector<uint8_t>& screenshot) {
@@ -328,7 +326,7 @@ void AssistantScreenContextController::OnRequestScreenshotCompleted(
 }
 
 std::unique_ptr<ui::LayerTreeOwner>
-AssistantScreenContextController::CreateLayerForAssistantSnapshotForTest() {
+AssistantScreenContextControllerImpl::CreateLayerForAssistantSnapshotForTest() {
   aura::Window* root_window = Shell::GetPrimaryRootWindow();
   return CreateLayerForAssistantSnapshot(root_window);
 }

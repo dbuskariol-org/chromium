@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/assistant/assistant_screen_context_controller.h"
+#include "ash/assistant/assistant_screen_context_controller_impl.h"
 
 #include <memory>
 
@@ -56,7 +56,7 @@ class AssistantScreenContextControllerTest : public AssistantAshTestBase {
     DCHECK(controller_);
   }
 
-  AssistantScreenContextController* controller() { return controller_; }
+  AssistantScreenContextControllerImpl* controller() { return controller_; }
 
   AssistantScreenContextModel* model() { return &controller_->model_; }
 
@@ -95,7 +95,7 @@ class AssistantScreenContextControllerTest : public AssistantAshTestBase {
   }
 
  private:
-  AssistantScreenContextController* controller_ = nullptr;
+  AssistantScreenContextControllerImpl* controller_ = nullptr;
 
   DISALLOW_COPY_AND_ASSIGN(AssistantScreenContextControllerTest);
 };
