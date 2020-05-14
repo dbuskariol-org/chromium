@@ -364,9 +364,7 @@ void FrameFetchContext::PrepareRequest(
     ResourceType resource_type) {
   // TODO(yhirano): Clarify which statements are actually needed when
   // this is called during redirect.
-  const bool for_redirect =
-      (request.GetRedirectStatus() ==
-       ResourceRequest::RedirectStatus::kFollowedRedirect);
+  const bool for_redirect = request.GetRedirectInfo().has_value();
 
   SetFirstPartyCookie(request);
   if (request.GetRequestContext() ==
@@ -1007,7 +1005,7 @@ bool FrameFetchContext::CalculateIfAdSubresource(
 
 bool FrameFetchContext::SendConversionRequestInsteadOfRedirecting(
     const KURL& url,
-    ResourceRequest::RedirectStatus redirect_status,
+    const base::Optional<ResourceRequest::RedirectInfo>& redirect_info,
     ReportingDisposition reporting_disposition) const {
   if (!RuntimeEnabledFeatures::ConversionMeasurementEnabled())
     return false;
@@ -1018,11 +1016,8 @@ bool FrameFetchContext::SendConversionRequestInsteadOfRedirecting(
   LocalFrame* frame = document_->GetFrame();
   DCHECK(frame);
   // Only register conversions pings that are redirects in the main frame.
-  // TODO(https://crbug.com/1042919): This should also validate that the
-  // redirect is same origin to ensure that the reporting domain has consented
-  // to the registration event.
-  if (!frame->IsMainFrame() ||
-      redirect_status != ResourceRequest::RedirectStatus::kFollowedRedirect) {
+  if (!frame->IsMainFrame() || !redirect_info ||
+      !SecurityOrigin::AreSameOrigin(url, redirect_info->previous_url)) {
     return false;
   }
 
@@ -1092,7 +1087,7 @@ base::Optional<ResourceRequestBlockedReason> FrameFetchContext::CanRequest(
     const KURL& url,
     const ResourceLoaderOptions& options,
     ReportingDisposition reporting_disposition,
-    ResourceRequest::RedirectStatus redirect_status) const {
+    const base::Optional<ResourceRequest::RedirectInfo>& redirect_info) const {
   if (!GetResourceFetcherProperties().IsDetached() &&
       document_->IsFreezingInProgress() && !resource_request.GetKeepalive()) {
     AddConsoleMessage(MakeGarbageCollected<ConsoleMessage>(
@@ -1102,7 +1097,7 @@ base::Optional<ResourceRequestBlockedReason> FrameFetchContext::CanRequest(
     return ResourceRequestBlockedReason::kOther;
   }
   return BaseFetchContext::CanRequest(type, resource_request, url, options,
-                                      reporting_disposition, redirect_status);
+                                      reporting_disposition, redirect_info);
 }
 
 CoreProbeSink* FrameFetchContext::Probe() const {
