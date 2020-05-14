@@ -44,6 +44,7 @@ import org.chromium.android_webview.devui.util.WebViewCrashInfoCollector;
 import org.chromium.android_webview.devui.util.WebViewPackageHelper;
 import org.chromium.base.CommandLine;
 import org.chromium.base.Log;
+import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.task.AsyncTask;
 import org.chromium.ui.widget.Toast;
 
@@ -157,6 +158,8 @@ public class CrashesListFragment extends DevUiBaseFragment {
                 public void onChanged() {
                     crashesSummaryView.setText(
                             String.format(Locale.US, "Crashes (%d)", mCrashInfoList.size()));
+                    RecordHistogram.recordCount100Histogram(
+                            "Android.WebView.DevUi.CrashList.NumberShown", mCrashInfoList.size());
                 }
             });
         }
