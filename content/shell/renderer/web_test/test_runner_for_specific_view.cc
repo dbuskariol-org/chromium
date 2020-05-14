@@ -138,14 +138,6 @@ void TestRunnerForSpecificView::PostTask(base::OnceClosure callback) {
       FROM_HERE, std::move(callback));
 }
 
-void TestRunnerForSpecificView::PostV8Callback(
-    const v8::Local<v8::Function>& callback) {
-  PostTask(base::BindOnce(&TestRunnerForSpecificView::InvokeV8Callback,
-                          weak_factory_.GetWeakPtr(),
-                          v8::UniquePersistent<v8::Function>(
-                              blink::MainThreadIsolate(), callback)));
-}
-
 void TestRunnerForSpecificView::PostV8CallbackWithArgs(
     v8::UniquePersistent<v8::Function> callback,
     int argc,
@@ -159,12 +151,6 @@ void TestRunnerForSpecificView::PostV8CallbackWithArgs(
   PostTask(base::BindOnce(&TestRunnerForSpecificView::InvokeV8CallbackWithArgs,
                           weak_factory_.GetWeakPtr(), std::move(callback),
                           std::move(args)));
-}
-
-void TestRunnerForSpecificView::InvokeV8Callback(
-    const v8::UniquePersistent<v8::Function>& callback) {
-  std::vector<v8::UniquePersistent<v8::Value>> empty_args;
-  InvokeV8CallbackWithArgs(callback, std::move(empty_args));
 }
 
 void TestRunnerForSpecificView::InvokeV8CallbackWithArgs(
@@ -187,16 +173,6 @@ void TestRunnerForSpecificView::InvokeV8CallbackWithArgs(
   frame->CallFunctionEvenIfScriptDisabled(
       v8::Local<v8::Function>::New(isolate, callback), context->Global(),
       local_args.size(), local_args.data());
-}
-
-base::OnceClosure TestRunnerForSpecificView::CreateClosureThatPostsV8Callback(
-    const v8::Local<v8::Function>& callback) {
-  return base::BindOnce(
-      &TestRunnerForSpecificView::PostTask, weak_factory_.GetWeakPtr(),
-      base::BindOnce(&TestRunnerForSpecificView::InvokeV8Callback,
-                     weak_factory_.GetWeakPtr(),
-                     v8::UniquePersistent<v8::Function>(
-                         blink::MainThreadIsolate(), callback)));
 }
 
 void TestRunnerForSpecificView::CapturePixelsAsyncThen(
