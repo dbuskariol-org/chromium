@@ -402,8 +402,6 @@ namespace declarativeNetRequest {
     // $(ref:runtime.lastError) will be set and no change will be made to set of
     // enabled rulesets. This can happen for multiple reasons, such as invalid
     // ruleset IDs, rule count limit exceeded, or internal errors.
-    // TODO(crbug.com/754526): Enable the documentation.
-    [nodoc]
     static void updateEnabledRulesets(
         DOMString[] rulesetIdsToDisable, DOMString[] rulesetIdsToEnable,
         EmptyCallback callback);
@@ -411,8 +409,6 @@ namespace declarativeNetRequest {
     // Returns the ids for the current set of enabled static rulesets.
     // |callback|: Called with a list of ids, where each id corresponds to an
     // enabled static $(ref:Ruleset).
-    // TODO(crbug.com/754526): Enable the documentation.
-    [nodoc]
     static void getEnabledRulesets(GetEnabledRulesetsCallback callback);
 
     // Returns all rules matched for the extension. Callers can optionally
@@ -425,9 +421,9 @@ namespace declarativeNetRequest {
     // than five minutes ago will not be returned.
     // |filter|: An object to filter the list of matched rules.
     // |callback|: Called once the list of matched rules has been fetched. In
-    // case of an error, $(ref:runtime.lastError) will be set to denote the
-    // error and no rules will be returned. This can happen for multiple
-    // reasons, such as insufficient permissions, or exceeding the quota.
+    // case of an error, $(ref:runtime.lastError) will be set and no rules will
+    // be returned. This can happen for multiple reasons, such as insufficient
+    // permissions, or exceeding the quota.
     static void getMatchedRules(optional MatchedRulesFilter filter,
                                 GetMatchedRulesCallback callback);
 
@@ -438,9 +434,9 @@ namespace declarativeNetRequest {
   };
 
   interface Properties {
-    // The maximum number of rules that an extension can specify in the rule
-    // resources file. Any excess rules will be ignored and an install warning
-    // will be raised.
+    // The maximum number of rules that an extension can specify across its
+    // enabled static rulesets. Any excess rules will be ignored and an install
+    // warning will be raised.
     [value=30000] static long MAX_NUMBER_OF_RULES();
 
     // The maximum number of dynamic rules that an extension can add.
@@ -464,7 +460,7 @@ namespace declarativeNetRequest {
 
     // The maximum number of static <code>Rulesets</code> an extension can
     // specify as part of the <code>"rule_resources"</code> manifest key.
-    [value=10, nodoc] static long MAX_NUMBER_OF_STATIC_RULESETS();
+    [value=10] static long MAX_NUMBER_OF_STATIC_RULESETS();
 
     // Ruleset ID for the dynamic rules added by the extension.
     [value="_dynamic"] static DOMString DYNAMIC_RULESET_ID();
