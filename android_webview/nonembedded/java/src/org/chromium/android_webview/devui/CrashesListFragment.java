@@ -30,6 +30,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -93,6 +94,27 @@ public class CrashesListFragment extends DevUiBaseFragment {
             + "Crash ID: http://crash/%s\n"
             + "Instructions for triaging this report (Chromium members only): "
             + "https://bit.ly/2SM1Y9t\n";
+
+    // These values are persisted to logs. Entries should not be renumbered and
+    // numeric values should never be reused.
+    @IntDef({CollectionState.ENABLED_BY_COMMANDLINE, CollectionState.ENABLED_BY_FLAG_UI,
+            CollectionState.ENABLED_BY_USER_CONSENT, CollectionState.DISABLED_BY_USER_CONSENT,
+            CollectionState.DISABLED_BY_USER_CONSENT_CANNOT_FIND_SETTINGS,
+            CollectionState.DISABLED_CANNOT_USE_GMS})
+    private @interface CollectionState {
+        int ENABLED_BY_COMMANDLINE = 0;
+        int ENABLED_BY_FLAG_UI = 1;
+        int ENABLED_BY_USER_CONSENT = 2;
+        int DISABLED_BY_USER_CONSENT = 3;
+        int DISABLED_BY_USER_CONSENT_CANNOT_FIND_SETTINGS = 4;
+        int DISABLED_CANNOT_USE_GMS = 5;
+        int COUNT = 6;
+    }
+
+    private static void logCrashCollectionState(@CollectionState int state) {
+        RecordHistogram.recordEnumeratedHistogram(
+                "Android.WebView.DevUi.CrashList.CollectionState", state, CollectionState.COUNT);
+    }
 
     @Override
     public void onAttach(Context context) {
@@ -420,19 +442,24 @@ public class CrashesListFragment extends DevUiBaseFragment {
 
     @Override
     void maybeShowErrorView(PersistentErrorView errorView) {
-        buildCrashConsentError(errorView);
         // Check if crash collection is enabled and show or hide the error message.
         // Firstly, check for the flag value in commandline, since it doesn't require any IPCs.
         // Then check for flags value in the DeveloperUi ContentProvider (it involves an IPC but
         // it's guarded by quick developer mode check). Finally check the GMS service since it
         // is the slowest check.
-        if (isCrashUploadsEnabledFromCommandLine() || isCrashUploadsEnabledFromFlagsUi()) {
+        if (isCrashUploadsEnabledFromCommandLine()) {
+            logCrashCollectionState(CollectionState.ENABLED_BY_COMMANDLINE);
+            errorView.hide();
+        } else if (isCrashUploadsEnabledFromFlagsUi()) {
+            logCrashCollectionState(CollectionState.ENABLED_BY_FLAG_UI);
             errorView.hide();
         } else {
             PlatformServiceBridge.getInstance().queryMetricsSetting(enabled -> {
                 if (Boolean.TRUE.equals(enabled)) {
+                    logCrashCollectionState(CollectionState.ENABLED_BY_USER_CONSENT);
                     errorView.hide();
                 } else {
+                    buildCrashConsentError(errorView);
                     errorView.show();
                 }
             });
@@ -450,11 +477,15 @@ public class CrashesListFragment extends DevUiBaseFragment {
                     mContext.getPackageManager().queryIntentActivities(settingsIntent, 0);
             // Show a button to open GMS settings activity only if it exists.
             if (intentResolveInfo.size() > 0) {
+                logCrashCollectionState(CollectionState.DISABLED_BY_USER_CONSENT);
                 errorView.setActionButton("Open Settings", v -> startActivity(settingsIntent));
             } else {
+                logCrashCollectionState(
+                        CollectionState.DISABLED_BY_USER_CONSENT_CANNOT_FIND_SETTINGS);
                 Log.e(TAG, "Cannot find GMS settings activity");
             }
         } else {
+            logCrashCollectionState(CollectionState.DISABLED_CANNOT_USE_GMS);
             errorView.setText("Crash collection is not supported at the moment.");
         }
     }
