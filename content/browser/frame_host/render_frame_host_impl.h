@@ -937,7 +937,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void ResetLoadingState();
 
   // Returns the feature policy which should be enforced on this RenderFrame.
-  blink::FeaturePolicy* feature_policy() { return feature_policy_.get(); }
+  const blink::FeaturePolicy* feature_policy() const {
+    return feature_policy_.get();
+  }
 
   void ClearFocusedElement();
 
@@ -1962,7 +1964,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
       const url::Origin& main_world_origin,
       network::mojom::ClientSecurityStatePtr client_security_state,
       mojo::PendingRemote<network::mojom::CrossOriginEmbedderPolicyReporter>
-          coep_reporter);
+          coep_reporter,
+      network::mojom::TrustTokenRedemptionPolicy trust_token_redemption_policy);
 
   // Creates a Network Service-backed factory from appropriate |NetworkContext|
   // and sets a connection error handler to trigger
@@ -2203,7 +2206,8 @@ class CONTENT_EXPORT RenderFrameHostImpl
   CreateURLLoaderFactoriesForIsolatedWorlds(
       const url::Origin& main_world_origin,
       const base::flat_set<url::Origin>& isolated_world_origins,
-      network::mojom::ClientSecurityStatePtr client_security_state);
+      network::mojom::ClientSecurityStatePtr client_security_state,
+      network::mojom::TrustTokenRedemptionPolicy trust_token_redemption_policy);
 
   // Based on the termination |status| and |exit_code|, may generate a crash
   // report to be routed to the Reporting API.

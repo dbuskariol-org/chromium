@@ -192,10 +192,12 @@
 #include "services/metrics/public/cpp/ukm_source_id.h"
 #include "services/network/public/cpp/features.h"
 #include "services/network/public/cpp/is_potentially_trustworthy.h"
+#include "services/network/public/cpp/trust_token_operation_authorization.h"
 #include "services/network/public/cpp/web_sandbox_flags.h"
 #include "services/network/public/cpp/wrapper_shared_url_loader_factory.h"
 #include "services/network/public/mojom/cookie_access_observer.mojom.h"
 #include "services/network/public/mojom/network_service.mojom.h"
+#include "services/network/public/mojom/url_loader.mojom-shared.h"
 #include "services/network/public/mojom/web_sandbox_flags.mojom-shared.h"
 #include "services/service_manager/public/cpp/connector.h"
 #include "services/service_manager/public/cpp/interface_provider.h"
@@ -648,15 +650,59 @@ bool ParentNeedsTrustTokenFeaturePolicy(
   if (!begin_params.trust_token_params)
     return false;
 
-  switch (begin_params.trust_token_params->type) {
-    case network::mojom::TrustTokenOperationType::kRedemption:
-    case network::mojom::TrustTokenOperationType::kSigning:
-      return true;
-    case network::mojom::TrustTokenOperationType::kIssuance:
-      return false;
+  return network::DoesTrustTokenOperationRequireFeaturePolicy(
+      begin_params.trust_token_params->type);
+}
+
+// Analyzes trusted sources of a frame's trust-token-redemption Feature Policy
+// feature to see if the feature is definitely disabled or potentially enabled.
+//
+// This information will be bound to a URLLoaderFactory; if the answer is
+// "definitely disabled," the network service will report a bad message if it
+// receives a request from the renderer to execute a Trust Tokens redemption or
+// signing operation in the frame.
+//
+// A return value of kForbid denotes that the feature is disabled for the
+// frame. A return value of kPotentiallyPermit means that all trusted
+// information sources say that the policy is enabled.
+network::mojom::TrustTokenRedemptionPolicy
+DetermineWhetherToForbidTrustTokenRedemption(
+    const RenderFrameHostImpl* parent,
+    const mojom::CommitNavigationParams& commit_params,
+    const url::Origin& subframe_origin) {
+  // For main frame loads, the frame's feature policy is determined entirely by
+  // response headers, which are provided by the renderer.
+  if (!parent || !commit_params.frame_policy)
+    return network::mojom::TrustTokenRedemptionPolicy::kPotentiallyPermit;
+
+  const blink::FeaturePolicy* parent_policy = parent->feature_policy();
+  blink::ParsedFeaturePolicy container_policy =
+      commit_params.frame_policy->container_policy;
+
+  auto subframe_policy = blink::FeaturePolicy::CreateFromParentPolicy(
+      parent_policy, container_policy, subframe_origin);
+
+  if (subframe_policy->IsFeatureEnabled(
+          blink::mojom::FeaturePolicyFeature::kTrustTokenRedemption)) {
+    return network::mojom::TrustTokenRedemptionPolicy::kPotentiallyPermit;
   }
-  NOTREACHED();
-  return false;
+  return network::mojom::TrustTokenRedemptionPolicy::kForbid;
+}
+
+// When a frame creates its initial subresource loaders, it needs to know
+// whether the trust-token-redemption Feature Policy feature will be enabled
+// after the commit finishes, which is a little involved (see
+// DetermineWhetherToForbidTrustTokenRedemption). In contrast, if it needs to
+// make this decision once the frame has committted---for instance, to create
+// more loaders after the network service crashes---it can directly consult the
+// current Feature Policy state to determine whether the feature is enabled.
+network::mojom::TrustTokenRedemptionPolicy
+DetermineAfterCommitWhetherToForbidTrustTokenRedemption(
+    RenderFrameHostImpl* impl) {
+  return impl->IsFeatureEnabled(
+             blink::mojom::FeaturePolicyFeature::kTrustTokenRedemption)
+             ? network::mojom::TrustTokenRedemptionPolicy::kPotentiallyPermit
+             : network::mojom::TrustTokenRedemptionPolicy::kForbid;
 }
 
 }  // namespace
@@ -1403,7 +1449,8 @@ bool RenderFrameHostImpl::CreateNetworkServiceDefaultFactory(
       CreateURLLoaderFactoryParamsForMainWorld(
           last_committed_origin_,
           mojo::Clone(last_committed_client_security_state_),
-          std::move(coep_reporter_remote)),
+          std::move(coep_reporter_remote),
+          DetermineAfterCommitWhetherToForbidTrustTokenRedemption(this)),
       std::move(default_factory_receiver));
 }
 
@@ -1436,7 +1483,8 @@ void RenderFrameHostImpl::MarkIsolatedWorldsAsRequiringSeparateURLLoaderFactory(
         CreateURLLoaderFactoriesForIsolatedWorlds(
             GetExpectedMainWorldOriginForUrlLoaderFactory(),
             isolated_world_origins,
-            mojo::Clone(last_committed_client_security_state_));
+            mojo::Clone(last_committed_client_security_state_),
+            DetermineAfterCommitWhetherToForbidTrustTokenRedemption(this));
     GetNavigationControl()->UpdateSubresourceLoaderFactories(
         std::move(subresource_loader_factories));
   }
@@ -1456,7 +1504,8 @@ blink::PendingURLLoaderFactoryBundle::OriginMap
 RenderFrameHostImpl::CreateURLLoaderFactoriesForIsolatedWorlds(
     const url::Origin& main_world_origin,
     const base::flat_set<url::Origin>& isolated_world_origins,
-    network::mojom::ClientSecurityStatePtr client_security_state) {
+    network::mojom::ClientSecurityStatePtr client_security_state,
+    network::mojom::TrustTokenRedemptionPolicy trust_token_redemption_policy) {
   WebPreferences preferences = GetRenderViewHost()->GetWebkitPreferences();
 
   blink::PendingURLLoaderFactoryBundle::OriginMap result;
@@ -1464,7 +1513,7 @@ RenderFrameHostImpl::CreateURLLoaderFactoriesForIsolatedWorlds(
     network::mojom::URLLoaderFactoryParamsPtr factory_params =
         URLLoaderFactoryParamsHelper::CreateForIsolatedWorld(
             this, isolated_world_origin, main_world_origin,
-            mojo::Clone(client_security_state));
+            mojo::Clone(client_security_state), trust_token_redemption_policy);
 
     mojo::PendingRemote<network::mojom::URLLoaderFactory> factory_remote;
     CreateNetworkServiceDefaultFactoryAndObserve(
@@ -3553,7 +3602,8 @@ void RenderFrameHostImpl::UpdateSubresourceLoaderFactories() {
         CreateURLLoaderFactoryParamsForMainWorld(
             last_committed_origin_,
             mojo::Clone(last_committed_client_security_state_),
-            std::move(coep_reporter_remote)),
+            std::move(coep_reporter_remote),
+            DetermineAfterCommitWhetherToForbidTrustTokenRedemption(this)),
         default_factory_remote.InitWithNewPipeAndPassReceiver());
   }
 
@@ -3565,7 +3615,9 @@ void RenderFrameHostImpl::UpdateSubresourceLoaderFactories() {
               CreateURLLoaderFactoriesForIsolatedWorlds(
                   GetExpectedMainWorldOriginForUrlLoaderFactory(),
                   isolated_worlds_requiring_separate_url_loader_factory_,
-                  mojo::Clone(last_committed_client_security_state_)),
+                  mojo::Clone(last_committed_client_security_state_),
+                  DetermineAfterCommitWhetherToForbidTrustTokenRedemption(
+                      this)),
               bypass_redirect_checks);
   GetNavigationControl()->UpdateSubresourceLoaderFactories(
       std::move(subresource_loader_factories));
@@ -4481,7 +4533,8 @@ RenderFrameHostImpl::CreateCrossOriginPrefetchLoaderFactoryBundle() {
       CreateURLLoaderFactoriesForIsolatedWorlds(
           GetExpectedMainWorldOriginForUrlLoaderFactory(),
           isolated_worlds_requiring_separate_url_loader_factory_,
-          mojo::Clone(last_committed_client_security_state_)),
+          mojo::Clone(last_committed_client_security_state_),
+          DetermineAfterCommitWhetherToForbidTrustTokenRedemption(this)),
       bypass_redirect_checks);
 }
 
@@ -5741,6 +5794,7 @@ void RenderFrameHostImpl::CommitNavigation(
         coep_reporter->Clone(
             coep_reporter_remote.InitWithNewPipeAndPassReceiver());
       }
+
       bool bypass_redirect_checks =
           CreateNetworkServiceDefaultFactoryAndObserve(
               CreateURLLoaderFactoryParamsForMainWorld(
@@ -5748,7 +5802,10 @@ void RenderFrameHostImpl::CommitNavigation(
                   navigation_request
                       ? mojo::Clone(navigation_request->client_security_state())
                       : network::mojom::ClientSecurityState::New(),
-                  std::move(coep_reporter_remote)),
+                  std::move(coep_reporter_remote),
+                  DetermineWhetherToForbidTrustTokenRedemption(
+                      GetParent(), *commit_params,
+                      main_world_origin_for_url_loader_factory)),
               pending_default_factory.InitWithNewPipeAndPassReceiver());
       subresource_loader_factories->set_bypass_redirect_checks(
           bypass_redirect_checks);
@@ -5870,7 +5927,10 @@ void RenderFrameHostImpl::CommitNavigation(
             isolated_worlds_requiring_separate_url_loader_factory_,
             navigation_request
                 ? mojo::Clone(navigation_request->client_security_state())
-                : network::mojom::ClientSecurityState::New());
+                : network::mojom::ClientSecurityState::New(),
+            DetermineWhetherToForbidTrustTokenRedemption(
+                GetParent(), *commit_params,
+                main_world_origin_for_url_loader_factory));
   }
 
   // It is imperative that cross-document navigations always provide a set of
@@ -6055,7 +6115,8 @@ void RenderFrameHostImpl::FailedNavigation(
   bool bypass_redirect_checks = CreateNetworkServiceDefaultFactoryAndObserve(
       CreateURLLoaderFactoryParamsForMainWorld(
           origin, mojo::Clone(navigation_request->client_security_state()),
-          /*coep_reporter=*/mojo::NullRemote()),
+          /*coep_reporter=*/mojo::NullRemote(),
+          network::mojom::TrustTokenRedemptionPolicy::kForbid),
       default_factory_remote.InitWithNewPipeAndPassReceiver());
   subresource_loader_factories =
       std::make_unique<blink::PendingURLLoaderFactoryBundle>(
@@ -6619,10 +6680,11 @@ RenderFrameHostImpl::CreateURLLoaderFactoryParamsForMainWorld(
     const url::Origin& main_world_origin,
     network::mojom::ClientSecurityStatePtr client_security_state,
     mojo::PendingRemote<network::mojom::CrossOriginEmbedderPolicyReporter>
-        coep_reporter) {
+        coep_reporter,
+    network::mojom::TrustTokenRedemptionPolicy trust_token_redemption_policy) {
   return URLLoaderFactoryParamsHelper::CreateForFrame(
       this, main_world_origin, std::move(client_security_state),
-      std::move(coep_reporter), GetProcess());
+      std::move(coep_reporter), GetProcess(), trust_token_redemption_policy);
 }
 
 bool RenderFrameHostImpl::CreateNetworkServiceDefaultFactoryAndObserve(
