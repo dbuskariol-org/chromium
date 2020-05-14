@@ -526,6 +526,31 @@ public class WebLayer {
     }
 
     /**
+     * Provide WebLayer with a set of active external experiment IDs.
+     *
+     * These experiment IDs are to be incorporated into metrics collection performed by WebLayer
+     * to aid in interpretation of data and elimination of confounding factors.
+     *
+     * This method may be called multiple times to update experient IDs if they change.
+     *
+     * @param experimentIds An array of integer active experiment IDs relevant to WebLayer.
+     *
+     * @since 84
+     */
+    public void registerExternalExperimentIDs(
+            @NonNull String trialName, @NonNull int[] experimentIds) {
+        ThreadCheck.ensureOnUiThread();
+        if (getSupportedMajorVersionInternal() < 84) {
+            throw new UnsupportedOperationException();
+        }
+        try {
+            mImpl.registerExternalExperimentIDs(trialName, experimentIds);
+        } catch (RemoteException e) {
+            throw new APICallException(e);
+        }
+    }
+
+    /**
      * Returns remote counterpart for the BrowserFragment: an {@link IBrowserFragment}.
      */
     /* package */ IBrowserFragment connectFragment(
