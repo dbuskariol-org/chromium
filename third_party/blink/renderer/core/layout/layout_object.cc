@@ -455,6 +455,19 @@ void LayoutObject::RemoveChild(LayoutObject* old_child) {
   children->RemoveChildNode(this, old_child);
 }
 
+void LayoutObject::NotifyPriorityScrollAnchorStatusChanged() {
+  if (!Parent())
+    return;
+  for (auto* layer = Parent()->EnclosingLayer(); layer;
+       layer = layer->Parent()) {
+    if (PaintLayerScrollableArea* scrollable_area =
+            layer->GetScrollableArea()) {
+      DCHECK(scrollable_area->GetScrollAnchor());
+      scrollable_area->GetScrollAnchor()->ClearSelf();
+    }
+  }
+}
+
 void LayoutObject::RegisterSubtreeChangeListenerOnDescendants(bool value) {
   // If we're set to the same value then we're done as that means it's
   // set down the tree that way already.
