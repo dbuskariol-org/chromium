@@ -189,7 +189,7 @@ const FeatureEntry::FeatureParam kOmniboxNTPZPSRemote[] = {
 
 const FeatureEntry::FeatureVariation kOmniboxOnFocusSuggestionsVariations[] = {
     {"ZPS on NTP: Remote History", kOmniboxNTPZPSRemote,
-     base::size(kOmniboxNTPZPSRemote), "t3316653" /* variation_id */},
+     base::size(kOmniboxNTPZPSRemote), "t3316728" /* variation_id */},
 };
 
 const FeatureEntry::FeatureParam kOmniboxUIMaxAutocompleteMatches3[] = {
