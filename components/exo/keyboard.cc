@@ -71,8 +71,10 @@ bool ConsumedByIme(Surface* focus, const ui::KeyEvent* event) {
   views::Widget* widget =
       views::Widget::GetTopLevelWidgetForNativeView(focus->window());
   ui::InputMethod* ime = widget ? widget->GetInputMethod() : nullptr;
-  if (!ime || ime->GetTextInputType() == ui::TEXT_INPUT_TYPE_NONE)
+  if (!ime || ime->GetTextInputType() == ui::TEXT_INPUT_TYPE_NONE ||
+      ime->GetTextInputType() == ui::TEXT_INPUT_TYPE_NULL) {
     return false;
+  }
 
   // Case 1:
   // When IME ate a key event but did not emit character insertion event yet
