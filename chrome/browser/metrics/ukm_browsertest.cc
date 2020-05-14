@@ -99,13 +99,9 @@ void ClearBrowsingData(Profile* profile) {
 }
 #endif  // !defined(OS_ANDROID)
 
-// TODO(crbug/1047474): Remove the if / endif around this when enabling the
-// demographics test on Android.
-#if !defined(OS_ANDROID)
 ukm::UkmService* GetUkmService() {
   return g_browser_process->GetMetricsServicesManager()->GetUkmService();
 }
-#endif  // !defined(OS_ANDROID)
 
 }  // namespace
 
@@ -597,11 +593,9 @@ IN_PROC_BROWSER_TEST_F(UkmBrowserTest, LogProtoData) {
 #endif  // !defined(OS_ANDROID)
 
 // TODO(crbug/1016118): Add the remaining test cases.
-// TODO(crbug/1047474): Enable the below test on Android.
 // Keep this test in sync with testUKMDemographicsReportingWithFeatureEnabled
 // and testUKMDemographicsReportingWithFeatureDisabled in
 // ios/chrome/browser/metrics/demographics_egtest.mm.
-#if !defined(OS_ANDROID)
 IN_PROC_BROWSER_TEST_P(UkmBrowserTestWithDemographics,
                        AddSyncedUserBirthYearAndGenderToProtoData) {
   ukm::UkmTestHelper ukm_test_helper(GetUkmService());
@@ -656,7 +650,6 @@ IN_PROC_BROWSER_TEST_P(UkmBrowserTestWithDemographics,
   harness->service()->GetUserSettings()->SetSyncRequested(false);
   ClosePlatformBrowser(browser);
 }
-#endif  // !defined(OS_ANDROID)
 
 #if defined(OS_CHROMEOS)
 // Cannot test for the enabled feature on Chrome OS because there are always
