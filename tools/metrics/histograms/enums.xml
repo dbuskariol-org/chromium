@@ -2788,6 +2788,8 @@ Unknown properties are collapsed to zero. -->
   <int value="7" label="App Management main view (Chrome app)"/>
   <int value="8" label="App Management main view (Web App)"/>
   <int value="9" label="OS Settings main page"/>
+  <int value="10" label="App Management main view (Plugin VM)"/>
+  <int value="11" label="DBus Service (Plugin VM)"/>
 </enum>
 
 <enum name="AppManagementUserAction">
@@ -2808,6 +2810,8 @@ Unknown properties are collapsed to zero. -->
   <int value="14" label="Contacts turned off"/>
   <int value="15" label="Storage turned on"/>
   <int value="16" label="Storage turned off"/>
+  <int value="17" label="Printing turned on"/>
+  <int value="18" label="Printing turned off"/>
 </enum>
 
 <enum name="AppPromoAction">
