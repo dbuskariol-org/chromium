@@ -779,8 +779,8 @@ bool TestRunnerBindings::IsCommandEnabled(const std::string& command) {
 void TestRunnerBindings::SetDomainRelaxationForbiddenForURLScheme(
     bool forbidden,
     const std::string& scheme) {
-  blink::SetDomainRelaxationForbidden(forbidden,
-                                      blink::WebString::FromUTF8(scheme));
+  blink::SetDomainRelaxationForbiddenForTest(
+      forbidden, blink::WebString::FromUTF8(scheme));
 }
 
 void TestRunnerBindings::SetDumpConsoleMessages(bool enabled) {
@@ -1760,7 +1760,7 @@ void TestRunner::Reset() {
 #if defined(OS_LINUX) || defined(OS_FUCHSIA)
   blink::WebFontRenderStyle::SetSubpixelPositioning(false);
 #endif
-  blink::ResetDomainRelaxation();
+  blink::ResetDomainRelaxationForTest();
 
   if (blink_test_runner_) {
     // Reset the default quota for each origin.
