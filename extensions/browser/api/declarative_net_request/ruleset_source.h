@@ -168,8 +168,8 @@ class RulesetSource {
   const ExtensionId& extension_id() const { return extension_id_; }
 
   // Whether the ruleset is enabled by default (as specified in the extension
-  // manifest).
-  bool enabled() const { return enabled_; }
+  // manifest for a static ruleset). Always true for a dynamic ruleset.
+  bool enabled_by_default() const { return enabled_by_default_; }
 
   // Indexes and persists the JSON ruleset. This is potentially unsafe since the
   // JSON rules file is parsed in-process. Note: This must be called on a
@@ -213,7 +213,7 @@ class RulesetSource {
   RulesetID id_;
   size_t rule_count_limit_;
   ExtensionId extension_id_;
-  bool enabled_;
+  bool enabled_by_default_;
 
   DISALLOW_COPY_AND_ASSIGN(RulesetSource);
 };

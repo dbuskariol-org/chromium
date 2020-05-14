@@ -17,6 +17,7 @@
 #include "extensions/browser/api/declarative_net_request/request_action.h"
 #include "extensions/browser/api/declarative_net_request/request_params.h"
 #include "extensions/browser/api/declarative_net_request/utils.h"
+#include "extensions/common/api/declarative_net_request/constants.h"
 
 namespace extensions {
 namespace declarative_net_request {
@@ -95,6 +96,18 @@ void CompositeMatcher::AddOrUpdateRuleset(
   matchers_.push_back(std::move(new_matcher));
 
   OnMatchersModified();
+}
+
+std::set<RulesetID> CompositeMatcher::ComputeStaticRulesetIDs() const {
+  std::set<RulesetID> result;
+  for (const std::unique_ptr<RulesetMatcher>& matcher : matchers_) {
+    if (matcher->id() == kDynamicRulesetID)
+      continue;
+
+    result.insert(matcher->id());
+  }
+
+  return result;
 }
 
 ActionInfo CompositeMatcher::GetBeforeRequestAction(

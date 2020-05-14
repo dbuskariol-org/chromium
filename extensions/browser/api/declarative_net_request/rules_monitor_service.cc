@@ -263,9 +263,16 @@ void RulesMonitorService::OnExtensionLoaded(
   {
     std::vector<RulesetSource> sources =
         RulesetSource::CreateStatic(*extension);
+
+    base::Optional<std::set<RulesetID>> prefs_enabled_rulesets =
+        prefs_->GetDNREnabledStaticRulesets(extension->id());
+
     bool ruleset_failed_to_load = false;
     for (auto& source : sources) {
-      if (!source.enabled())
+      bool enabled = prefs_enabled_rulesets
+                         ? base::Contains(*prefs_enabled_rulesets, source.id())
+                         : source.enabled_by_default();
+      if (!enabled)
         continue;
 
       if (!prefs_->GetDNRStaticRulesetChecksum(extension->id(), source.id(),
@@ -387,9 +394,7 @@ void RulesMonitorService::UpdateDynamicRulesInternal(
 
 void RulesMonitorService::OnInitialRulesetsLoaded(LoadRequestData load_data) {
   DCHECK(!load_data.rulesets.empty());
-  DCHECK(std::all_of(
-      load_data.rulesets.begin(), load_data.rulesets.end(),
-      [](const RulesetInfo& ruleset) { return ruleset.source().enabled(); }));
+
   // Perform pending dynamic rule updates.
   {
     auto it = pending_dynamic_rule_updates_.find(load_data.extension_id);
@@ -585,10 +590,10 @@ void RulesMonitorService::OnNewStaticRulesetsLoaded(
                         std::make_move_iterator(old_matchers.end()));
   }
 
-  // TODO(crbug.com/754526): IDs for the new set of enabled static rulesets
-  // should be persisted to prefs so that they are persisted across extension
-  // loads.
   matcher->SetMatchers(std::move(new_matchers));
+
+  prefs_->SetDNREnabledStaticRulesets(load_data.extension_id,
+                                      matcher->ComputeStaticRulesetIDs());
 
   AdjustExtraHeaderListenerCountIfNeeded(had_extra_headers_matcher);
 

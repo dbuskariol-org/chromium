@@ -7,6 +7,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <set>
 #include <vector>
 
 #include "base/macros.h"
@@ -62,6 +63,10 @@ class CompositeMatcher {
   // Adds the |new_matcher| to the list of matchers. If a matcher with the
   // corresponding ID is already present, updates the matcher.
   void AddOrUpdateRuleset(std::unique_ptr<RulesetMatcher> new_matcher);
+
+  // Computes and returns the set of static RulesetIDs corresponding to
+  // |matchers_|.
+  std::set<RulesetID> ComputeStaticRulesetIDs() const;
 
   // Returns a RequestAction for the network request specified by |params|, or
   // base::nullopt if there is no matching rule.

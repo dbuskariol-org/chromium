@@ -821,8 +821,7 @@ TEST_P(SingleRulesetTest, DynamicRulesetRace) {
   LoadAndExpectSuccess();
   ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
 
-  const std::string extension_id = extension()->id();
-
+  const ExtensionId extension_id = extension()->id();
   service()->DisableExtension(extension_id,
                               disable_reason::DISABLE_USER_ACTION);
   ruleset_waiter.WaitForExtensionsWithRulesetsCount(0);
@@ -1303,6 +1302,21 @@ TEST_P(MultipleRulesetsTest, UpdateAndGetEnabledRulesets_Success) {
   VerifyPublicRulesetIDs(*extension(),
                          {kId1, kId2, kId3, dnr_api::DYNAMIC_RULESET_ID});
   VerifyGetEnabledRulesetsFunction(*extension(), {kId1, kId2, kId3});
+
+  // Ensure the set of enabled rulesets persists across extension reloads.
+  const ExtensionId extension_id = extension()->id();
+  service()->DisableExtension(extension_id,
+                              disable_reason::DISABLE_USER_ACTION);
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(0);
+
+  service()->EnableExtension(extension_id);
+  ruleset_waiter.WaitForExtensionsWithRulesetsCount(1);
+  const Extension* extension =
+      registry()->GetExtensionById(extension_id, ExtensionRegistry::ENABLED);
+  ASSERT_TRUE(extension);
+  VerifyPublicRulesetIDs(*extension,
+                         {kId1, kId2, kId3, dnr_api::DYNAMIC_RULESET_ID});
+  VerifyGetEnabledRulesetsFunction(*extension, {kId1, kId2, kId3});
 }
 
 INSTANTIATE_TEST_SUITE_P(All,

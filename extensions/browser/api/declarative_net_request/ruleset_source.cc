@@ -329,7 +329,7 @@ RulesetSource RulesetSource::CreateDynamic(content::BrowserContext* context,
       dynamic_ruleset_directory.AppendASCII(kDynamicRulesJSONFilename),
       dynamic_ruleset_directory.AppendASCII(kDynamicIndexedRulesFilename),
       kDynamicRulesetID, dnr_api::MAX_NUMBER_OF_DYNAMIC_RULES, extension_id,
-      true /* enabled */);
+      true /* enabled_by_default */);
 }
 
 // static
@@ -347,7 +347,8 @@ std::unique_ptr<RulesetSource> RulesetSource::CreateTemporarySource(
   // Use WrapUnique since RulesetSource constructor is private.
   return base::WrapUnique(new RulesetSource(
       std::move(temporary_file_json), std::move(temporary_file_indexed), id,
-      rule_count_limit, std::move(extension_id), true /* enabled */));
+      rule_count_limit, std::move(extension_id),
+      true /* enabled_by_default */));
 }
 
 RulesetSource::~RulesetSource() = default;
@@ -356,7 +357,7 @@ RulesetSource& RulesetSource::operator=(RulesetSource&&) = default;
 
 RulesetSource RulesetSource::Clone() const {
   return RulesetSource(json_path_, indexed_path_, id_, rule_count_limit_,
-                       extension_id_, enabled_);
+                       extension_id_, enabled_by_default_);
 }
 
 IndexAndPersistJSONRulesetResult
@@ -498,13 +499,13 @@ RulesetSource::RulesetSource(base::FilePath json_path,
                              RulesetID id,
                              size_t rule_count_limit,
                              ExtensionId extension_id,
-                             bool enabled)
+                             bool enabled_by_default)
     : json_path_(std::move(json_path)),
       indexed_path_(std::move(indexed_path)),
       id_(id),
       rule_count_limit_(rule_count_limit),
       extension_id_(std::move(extension_id)),
-      enabled_(enabled) {}
+      enabled_by_default_(enabled_by_default) {}
 
 }  // namespace declarative_net_request
 }  // namespace extensions
