@@ -216,6 +216,16 @@
       'service_account': 'chromium-tester@chops-service-accounts.iam.gserviceaccount.com',
     },
   },
+  'dawn_end2end_gpu_test': {
+    '$mixin_append': {
+      'args': [
+        '--use-gpu-in-tests',
+        # Dawn test retries deliberately disabled to prevent flakiness.
+        '--test-launcher-retry-limit=0',
+        '--exclusive-device-type-preference=discrete,integrated',
+      ],
+    },
+  },
   'docker': {
     'swarming': {
       'dimensions': {
