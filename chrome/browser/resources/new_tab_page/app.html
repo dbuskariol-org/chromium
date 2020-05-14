@@ -49,6 +49,14 @@
     margin-bottom: 32px;
   }
 
+  ntp-realbox {
+    visibility: hidden;
+  }
+
+  ntp-realbox[shown] {
+    visibility: visible;
+  }
+
   ntp-most-visited[dark] {
     --icon-button-color-active: var(--google-grey-refresh-300);
     --icon-button-color: white;
@@ -217,7 +225,8 @@
       hidden$="[[realboxEnabled_]]">
   </ntp-fakebox>
   <ntp-realbox id="realbox" on-open-voice-search="onVoiceSearchClick_"
-      theme="[[theme_.searchBox]]" hidden$="[[!realboxEnabled_]]">
+      theme="[[theme_.searchBox]]" shown$="[[realboxShown_]]"
+      hidden$="[[!realboxEnabled_]]">
   </ntp-realbox>
   <ntp-most-visited id="mostVisited" dark$="[[theme_.isDark]]"
       use-white-add-icon$="[[theme_.shortcutUseWhiteAddIcon]]"
