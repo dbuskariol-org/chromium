@@ -22928,6 +22928,7 @@ Called by update_extension_histograms.py.-->
   <int value="1470" label="TERMINALPRIVATE_OPENOPTIONSPAGE"/>
   <int value="1471" label="DECLARATIVENETREQUEST_UPDATEENABLEDRULESETS"/>
   <int value="1472" label="DECLARATIVENETREQUEST_GETENABLEDRULESETS"/>
+  <int value="1473" label="TERMINALPRIVATE_OPENWINDOW"/>
 </enum>
 
 <enum name="ExtensionIconState">
