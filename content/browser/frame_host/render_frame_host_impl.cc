@@ -884,6 +884,7 @@ RenderFrameHostImpl::RenderFrameHostImpl(
       web_ui_type_(WebUI::kNoWebUI),
       has_selection_(false),
       is_audible_(false),
+      should_virtual_keyboard_overlay_content_(false),
       last_navigation_previews_state_(PREVIEWS_UNSPECIFIED),
       waiting_for_init_(renderer_initiated_creation),
       has_focused_editable_element_(false),
@@ -3886,6 +3887,65 @@ void RenderFrameHostImpl::SetNeedsOcclusionTracking(bool needs_tracking) {
   }
 
   proxy->GetAssociatedRemoteFrame()->SetNeedsOcclusionTracking(needs_tracking);
+}
+
+void RenderFrameHostImpl::SetVirtualKeyboardOverlayPolicy(
+    bool vk_overlays_content) {
+  should_virtual_keyboard_overlay_content_ = vk_overlays_content;
+}
+
+bool RenderFrameHostImpl::ShouldVirtualKeyboardOverlayContent() const {
+  RenderFrameHostImpl* root_frame_host =
+      frame_tree_->root()->current_frame_host();
+  return root_frame_host->should_virtual_keyboard_overlay_content_;
+}
+
+void RenderFrameHostImpl::NotifyVirtualKeyboardOverlayRect(
+    const gfx::Rect& keyboard_rect) {
+  DCHECK(ShouldVirtualKeyboardOverlayContent());
+
+  RenderFrameHostImpl* root_frame_host =
+      frame_tree_->root()->current_frame_host();
+  RenderWidgetHostViewBase* view = static_cast<RenderWidgetHostViewBase*>(
+      root_frame_host->render_view_host_->GetWidget()->GetView());
+  if (!view)
+    return;
+
+  gfx::PointF root_widget_origin(0.f, 0.f);
+  view->TransformPointToRootSurface(&root_widget_origin);
+
+  gfx::Rect root_widget_rect;
+  if (!keyboard_rect.IsEmpty()) {
+    // If the rect is non-empty, we need to transform it to be widget-relative
+    // window (DIP coordinates). The input is client coordinates for the root
+    // window.
+    // Transform the widget rect origin to root relative coords.
+    root_widget_rect = gfx::Rect(root_widget_origin.x(), root_widget_origin.y(),
+                                 view->GetViewBounds().width(),
+                                 view->GetViewBounds().height());
+
+    // Intersect with the keyboard rect and transform back to widget-relative
+    // coordinates, which will be sent to the renderer.
+    root_widget_rect.Intersect(keyboard_rect);
+    root_widget_rect.Offset(-root_widget_origin.x(), -root_widget_origin.y());
+  }
+
+  // Notify each SiteInstance a single time. Renderer will take care of ensuring
+  // the event is dispatched to all relevant listeners in the grouping of frames
+  // for the SiteInstance.
+  // TODO(snianu): Transform from the main frame's coordinates to each
+  // individual frame client coordinates so that these are more usable from
+  // within iframes.
+  std::set<SiteInstance*> notified_instances;
+  for (RenderFrameHostImpl* node = this; node; node = node->GetParent()) {
+    SiteInstance* site_instance = node->GetSiteInstance();
+    if (base::Contains(notified_instances, site_instance))
+      continue;
+
+    node->GetAssociatedLocalFrame()->NotifyVirtualKeyboardOverlayRect(
+        root_widget_rect);
+    notified_instances.insert(site_instance);
+  }
 }
 
 void RenderFrameHostImpl::LifecycleStateChanged(

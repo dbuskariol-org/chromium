@@ -46,6 +46,8 @@ void FakeLocalFrameHost::DocumentAvailableInMainFrame(
     bool uses_temporary_zoom_level) {}
 
 void FakeLocalFrameHost::SetNeedsOcclusionTracking(bool needs_tracking) {}
+void FakeLocalFrameHost::SetVirtualKeyboardOverlayPolicy(
+    bool vk_overlays_content) {}
 
 void FakeLocalFrameHost::LifecycleStateChanged(
     mojom::blink::FrameLifecycleState state) {}

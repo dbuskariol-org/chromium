@@ -1159,6 +1159,9 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // Returns true if the frame is embedded in a Portal.
   bool InsidePortal();
 
+  bool ShouldVirtualKeyboardOverlayContent() const;
+  void NotifyVirtualKeyboardOverlayRect(const gfx::Rect& keyboard_rect);
+
   blink::mojom::FrameVisibility visibility() const { return visibility_; }
 
   // A CommitCallbackInterceptor is used to modify parameters for or cancel a
@@ -1487,6 +1490,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
   void DidContainInsecureFormAction() override;
   void DocumentAvailableInMainFrame(bool uses_temporary_zoom_level) override;
   void SetNeedsOcclusionTracking(bool needs_tracking) override;
+  void SetVirtualKeyboardOverlayPolicy(bool vk_overlays_content) override;
   void LifecycleStateChanged(blink::mojom::FrameLifecycleState state) override;
   void EvictFromBackForwardCache() override;
   void VisibilityChanged(blink::mojom::FrameVisibility) override;
@@ -2597,6 +2601,12 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // signal. If false, all audio streams are currently silent (or there are no
   // audio streams).
   bool is_audible_;
+
+  // If true, then the Virtual keyboard rectangle that occludes the content is
+  // sent to the VirtualKeyboard API where it fires overlaygeometrychange JS
+  // event notifying the web authors that Virtual keyboard has occluded the
+  // content.
+  bool should_virtual_keyboard_overlay_content_;
 
   // Used for tracking the latest size of the RenderFrame.
   base::Optional<gfx::Size> frame_size_;
