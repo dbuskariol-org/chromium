@@ -551,6 +551,6 @@ Additional details:
     Application blocked by your administrator
   </message>
   <message name="IDS_CHROME_URLS_DISABLED_PAGE_MESSAGE" desc="A paragraph informing the user that the application is blocked.">
-    The application has been blocked by your administrator
+    This application has been blocked by your administrator
   </message>
 </grit-part>
