@@ -65,6 +65,14 @@ typedef NS_ENUM(NSInteger, ItemType) {
                            action:@selector(hidePageInfo)];
   self.navigationItem.rightBarButtonItem = dismissButton;
 
+  if (self.pageInfoSecurityDescription.isEmpty) {
+    [self addEmptyTableViewWithMessage:self.pageInfoSecurityDescription.message
+                                 image:nil];
+    self.tableView.alwaysBounceVertical = NO;
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    return;
+  }
+
   [self.tableView setAllowsSelection:NO];
 
   [self loadModel];

@@ -27,6 +27,7 @@ typedef NS_ENUM(NSUInteger, PageInfoSiteSecurityButtonAction) {
 @property(nonatomic, strong) UIImage* legacyImage;
 @property(nonatomic, copy) NSString* iconImageName;
 @property(nonatomic, assign) PageInfoSiteSecurityButtonAction buttonAction;
+@property(nonatomic, assign) BOOL isEmpty;
 
 @end
 
