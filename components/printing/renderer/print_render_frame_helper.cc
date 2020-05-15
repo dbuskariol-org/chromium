@@ -1852,8 +1852,7 @@ void PrintRenderFrameHelper::DidFinishPrinting(PrintingResult result) {
           LOG(ERROR) << "CreatePreviewDocument failed";
           preview_ui_->PrintPreviewFailed(cookie, ids.request_id);
         } else {
-          Send(new PrintHostMsg_PrintPreviewCancelled(routing_id(), cookie,
-                                                      ids));
+          preview_ui_->PrintPreviewCancelled(cookie, ids.request_id);
         }
       }
       print_preview_context_.Failed(notify_browser_of_print_failure_);

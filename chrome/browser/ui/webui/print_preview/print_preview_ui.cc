@@ -624,10 +624,6 @@ void PrintPreviewUI::OnInitiatorClosed() {
   }
 }
 
-void PrintPreviewUI::OnPrintPreviewCancelled(int request_id) {
-  handler_->OnPrintPreviewCancelled(request_id);
-}
-
 void PrintPreviewUI::OnPrintPreviewRequest(int request_id) {
   if (!initial_preview_start_time_.is_null()) {
     base::UmaHistogramTimes(
@@ -774,6 +770,13 @@ void PrintPreviewUI::PrintPreviewFailed(int32_t document_cookie,
                                         int32_t request_id) {
   StopWorker(document_cookie);
   OnPrintPreviewFailed(request_id);
+}
+
+void PrintPreviewUI::PrintPreviewCancelled(int32_t document_cookie,
+                                           int32_t request_id) {
+  // Always need to stop the worker.
+  StopWorker(document_cookie);
+  handler_->OnPrintPreviewCancelled(request_id);
 }
 
 // static
