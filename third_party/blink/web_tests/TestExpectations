@@ -5828,7 +5828,7 @@ crbug.com/1058073 [ Mac ] http/tests/devtools/service-workers/sw-navigate-userag
 crbug.com/1058137 virtual/threaded/http/tests/devtools/tracing/timeline-paint/timeline-paint.js [ Pass Failure ]
 
 # Ecosystem-Infra Sheriff 2020-03-04
-crbug.com/1058403 external/wpt/webaudio/the-audio-api/the-audioworklet-interface/suspended-context-messageport.https.html [ Failure ]
+crbug.com/1058403 external/wpt/webaudio/the-audio-api/the-audioworklet-interface/suspended-context-messageport.https.html [ Failure Crash ]
 
 # Ecosystem-Infra Sheriff 2020-04-15
 crbug.com/1070995 external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/blob-data.https.html [ Pass Failure Timeout ]
@@ -5902,9 +5902,9 @@ crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
 crbug.com/1079188 external/wpt/fetch/stale-while-revalidate/revalidate-not-blocked-by-csp.html [ Timeout ]
 
 # Web Audio active processing tests
-crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-audiobuffersourcenode-interface/active-processing.https.html [ Pass Failure ]
-crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-channelmergernode-interface/active-processing.https.html [ Pass Failure ]
-crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-convolvernode-interface/active-processing.https.html [ Pass Failure ]
+crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-audiobuffersourcenode-interface/active-processing.https.html [ Pass Failure Crash ]
+crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-channelmergernode-interface/active-processing.https.html [ Pass Failure Crash ]
+crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-convolvernode-interface/active-processing.https.html [ Pass Failure Crash ]
 
 # Sheriff 2020-04-22
 # Flaky test.
