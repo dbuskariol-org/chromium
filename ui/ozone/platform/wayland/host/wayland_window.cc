@@ -250,6 +250,12 @@ uint32_t WaylandWindow::DispatchEvent(const PlatformEvent& native_event) {
     auto* event_grabber =
         connection_->wayland_window_manager()->located_events_grabber();
     auto* root_parent_window = GetRootParentWindow();
+
+    // Wayland sends locations in DIP so they need to be translated to
+    // physical pixels.
+    event->AsLocatedEvent()->set_location_f(gfx::ScalePoint(
+        event->AsLocatedEvent()->location_f(), buffer_scale_, buffer_scale_));
+
     // We must reroute the events to the event grabber iff these windows belong
     // to the same root parent window. For example, there are 2 top level
     // Wayland windows. One of them (window_1) has a child menu window that is
