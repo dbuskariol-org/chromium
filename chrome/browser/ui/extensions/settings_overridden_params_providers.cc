@@ -4,7 +4,6 @@
 
 #include "chrome/browser/ui/extensions/settings_overridden_params_providers.h"
 
-#include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
 #include "chrome/browser/extensions/extension_web_ui.h"
 #include "chrome/browser/extensions/ntp_overridden_bubble_delegate.h"
@@ -33,17 +32,11 @@ GetNtpOverriddenParams(Profile* profile) {
       "Extensions.SettingsOverridden.GenericNtpOverriddenDialogResult";
 
   // TODO(devlin): Adjust these messages based on the previous NTP.
-  // TODO(devlin): Because of https://crbug.com/1080732, using the real strings
-  // here results in bot failures (they are greedily optimized out). Use fake
-  // strings for now, and switch these over when this is reached in a production
-  // codepath.
-  //
-  // This should be IDS_EXTENSION_NTP_OVERRIDDEN_DIALOG_TITLE_GENERIC.
-  base::string16 dialog_title =
-      base::ASCIIToUTF16("Did you mean to change this page?");
-  // This should be IDS_EXTENSION_NTP_OVERRIDDEN_DIALOG_BODY_GENERIC.
-  base::string16 dialog_message = base::UTF8ToUTF16(base::StringPrintf(
-      "This page was changed by the %s extension", extension->name().c_str()));
+  base::string16 dialog_title = l10n_util::GetStringUTF16(
+      IDS_EXTENSION_NTP_OVERRIDDEN_DIALOG_TITLE_GENERIC);
+  base::string16 dialog_message = l10n_util::GetStringFUTF16(
+      IDS_EXTENSION_NTP_OVERRIDDEN_DIALOG_BODY_GENERIC,
+      base::UTF8ToUTF16(extension->name().c_str()));
 
   return ExtensionSettingsOverriddenDialog::Params(
       extension->id(), preference_name, kHistogramName, std::move(dialog_title),
