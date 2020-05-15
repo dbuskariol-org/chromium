@@ -11,6 +11,7 @@
 #import "ios/chrome/browser/ui/page_info/page_info_site_security_description.h"
 #import "ios/chrome/browser/ui/page_info/page_info_site_security_mediator.h"
 #import "ios/chrome/browser/ui/page_info/page_info_view_controller.h"
+#import "ios/chrome/browser/ui/table_view/table_view_navigation_controller.h"
 #import "ios/chrome/browser/web_state_list/web_state_list.h"
 #include "ios/web/public/navigation/navigation_item.h"
 #include "ios/web/public/navigation/navigation_manager.h"
@@ -22,16 +23,16 @@
 
 @interface PageInfoCoordinator ()
 
+@property(nonatomic, strong)
+    TableViewNavigationController* navigationController;
 @property(nonatomic, strong) CommandDispatcher* dispatcher;
 @property(nonatomic, strong) PageInfoViewController* viewController;
-@property(nonatomic, strong) UINavigationController* navigationController;
 
 @end
 
 @implementation PageInfoCoordinator
 
 @synthesize presentationProvider = _presentationProvider;
-@synthesize navigationController = _navigationController;
 
 #pragma mark - ChromeCoordinator
 
@@ -53,12 +54,13 @@
 
   self.viewController = [[PageInfoViewController alloc]
       initWithSiteSecurityDescription:description];
+  self.navigationController =
+      [[TableViewNavigationController alloc] initWithTable:self.viewController];
+
   self.dispatcher = self.browser->GetCommandDispatcher();
   self.viewController.handler =
       HandlerForProtocol(self.dispatcher, BrowserCommands);
 
-  self.navigationController = [[UINavigationController alloc]
-      initWithRootViewController:self.viewController];
   [self.baseViewController presentViewController:self.navigationController
                                         animated:YES
                                       completion:nil];

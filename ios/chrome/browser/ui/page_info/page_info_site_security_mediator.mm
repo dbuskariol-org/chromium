@@ -76,7 +76,8 @@ NSString* BuildMessage(NSArray<NSString*>* messageComponents) {
       [[PageInfoSiteSecurityDescription alloc] init];
 
   if (offlinePage) {
-    dataHolder.title = l10n_util::GetNSString(IDS_IOS_PAGE_INFO_OFFLINE_TITLE);
+    dataHolder.siteURL =
+        l10n_util::GetNSString(IDS_IOS_PAGE_INFO_OFFLINE_TITLE);
     dataHolder.message = l10n_util::GetNSString(IDS_IOS_PAGE_INFO_OFFLINE_PAGE);
     dataHolder.legacyImage = [UIImage imageNamed:@"page_info_offline"];
     dataHolder.buttonAction = PageInfoSiteSecurityButtonActionReload;
@@ -84,7 +85,7 @@ NSString* BuildMessage(NSArray<NSString*>* messageComponents) {
   }
 
   if (URL.SchemeIs(kChromeUIScheme)) {
-    dataHolder.title = base::SysUTF8ToNSString(URL.spec());
+    dataHolder.siteURL = base::SysUTF8ToNSString(URL.spec());
     dataHolder.message = l10n_util::GetNSString(IDS_PAGE_INFO_INTERNAL_PAGE);
     dataHolder.legacyImage = nil;
     dataHolder.buttonAction = PageInfoSiteSecurityButtonActionNone;
@@ -92,7 +93,7 @@ NSString* BuildMessage(NSArray<NSString*>* messageComponents) {
   }
 
   // At this point, this is a web page.
-  dataHolder.title = base::SysUTF8ToNSString(URL.host());
+  dataHolder.siteURL = base::SysUTF8ToNSString(URL.host());
   dataHolder.status =
       l10n_util::GetNSString(IDS_IOS_PAGE_INFO_SECURITY_STATUS_NOT_SECURE);
   dataHolder.buttonAction = PageInfoSiteSecurityButtonActionShowHelp;

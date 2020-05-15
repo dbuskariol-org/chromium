@@ -56,6 +56,14 @@ typedef NS_ENUM(NSInteger, ItemType) {
   [super viewDidLoad];
 
   self.title = l10n_util::GetNSString(IDS_IOS_PAGE_INFO_SITE_INFORMATION);
+  self.navigationItem.prompt = self.pageInfoSecurityDescription.siteURL;
+  self.navigationController.navigationBar.prefersLargeTitles = NO;
+
+  UIBarButtonItem* dismissButton = [[UIBarButtonItem alloc]
+      initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                           target:self.handler
+                           action:@selector(hidePageInfo)];
+  self.navigationItem.rightBarButtonItem = dismissButton;
 
   [self.tableView setAllowsSelection:NO];
 

@@ -20,7 +20,7 @@ typedef NS_ENUM(NSUInteger, PageInfoSiteSecurityButtonAction) {
 // Config for the information displayed by the page info site security.
 @interface PageInfoSiteSecurityDescription : NSObject
 
-@property(nonatomic, copy) NSString* title;
+@property(nonatomic, copy) NSString* siteURL;
 @property(nonatomic, copy) NSString* status;
 @property(nonatomic, copy) NSString* message;
 // TODO(crbug.com/1038923): Remove this.

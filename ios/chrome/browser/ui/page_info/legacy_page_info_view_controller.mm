@@ -225,7 +225,7 @@ const CGFloat kButtonXOffset = kTextXPosition;
   }
 
     // Add the title.
-  offset += [self addHeadline:_model.title
+  offset += [self addHeadline:_model.siteURL
                    toSubviews:subviews
                       atPoint:CGPointMake(xPosition, offset)];
   offset += kHeadlineSpacing;
