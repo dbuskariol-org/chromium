@@ -3911,7 +3911,6 @@ crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadowdom-re
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadowdom-reprojection-2.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadowroot-of-insertionpoint.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/table-border.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/shadow-dom/v0/v0-added-after-v1-and-slotted.html [ Skip ]
 
 
 # == These fail with or without the WCv0 features disabled, and most/all already
