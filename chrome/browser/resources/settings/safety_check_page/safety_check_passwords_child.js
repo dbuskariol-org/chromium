@@ -4,31 +4,32 @@
 
 /**
  * @fileoverview
- * 'settings-safety-safe-browsing-element' is the settings page containing the
- * safety check element showing the Safe Browsing status.
+ * 'settings-safety-passwords-child' is the settings page containing the
+ * safety check child showing the password status.
  */
 import {assertNotReached} from 'chrome://resources/js/assert.m.js';
 import {I18nBehavior} from 'chrome://resources/js/i18n_behavior.m.js';
 import {WebUIListenerBehavior} from 'chrome://resources/js/web_ui_listener_behavior.m.js';
 import {html, Polymer} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 
+import {PasswordManagerImpl, PasswordManagerProxy} from '../autofill_page/password_manager_proxy.js';
 import {MetricsBrowserProxy, MetricsBrowserProxyImpl, SafetyCheckInteractions} from '../metrics_browser_proxy.js';
 import {routes} from '../route.js';
 import {Router} from '../router.m.js';
 
-import {SafetyCheckCallbackConstants, SafetyCheckSafeBrowsingStatus} from './safety_check_browser_proxy.js';
+import {SafetyCheckCallbackConstants, SafetyCheckPasswordsStatus} from './safety_check_browser_proxy.js';
 import {SafetyCheckIconStatus} from './safety_check_child.js';
 
 /**
  * @typedef {{
- *   newState: SafetyCheckSafeBrowsingStatus,
+ *   newState: SafetyCheckPasswordsStatus,
  *   displayString: string,
  * }}
  */
-let SafeBrowsingChangedEvent;
+let PasswordsChangedEvent;
 
 Polymer({
-  is: 'settings-safety-check-safe-browsing-element',
+  is: 'settings-safety-check-passwords-child',
 
   _template: html`{__html_template__}`,
 
@@ -39,20 +40,22 @@ Polymer({
 
   properties: {
     /**
-     * Current state of the safety check safe browsing element, received from
-     * the backend.
-     * @private {!SafetyCheckSafeBrowsingStatus}
+     * Current state of the safety check passwords child.
+     * @private {!SafetyCheckPasswordsStatus}
      */
     status_: {
       type: Number,
-      value: SafetyCheckSafeBrowsingStatus.CHECKING,
+      value: SafetyCheckPasswordsStatus.CHECKING,
     },
 
-    /** UI string to display for this child, received from the backend. */
+    /**
+     * UI string to display for this child, received from the backend.
+     * @private
+     */
     displayString_: String,
   },
 
-  /** ?MetricsBrowserProxy */
+  /** @private {?MetricsBrowserProxy} */
   metricsBrowserProxy_: null,
 
   /** @override */
@@ -61,17 +64,17 @@ Polymer({
 
     // Register for safety check status updates.
     this.addWebUIListener(
-        SafetyCheckCallbackConstants.SAFE_BROWSING_CHANGED,
-        this.onSafetyCheckSafeBrowsingChanged_.bind(this));
+        SafetyCheckCallbackConstants.PASSWORDS_CHANGED,
+        this.onSafetyCheckPasswordsChanged_.bind(this));
   },
 
   /**
-   * @param {!SafeBrowsingChangedEvent} event
+   * @param {!PasswordsChangedEvent} event
    * @private
    */
-  onSafetyCheckSafeBrowsingChanged_: function(event) {
-    this.displayString_ = event.displayString;
+  onSafetyCheckPasswordsChanged_: function(event) {
     this.status_ = event.newState;
+    this.displayString_ = event.displayString;
   },
 
   /**
@@ -80,17 +83,17 @@ Polymer({
    */
   getIconStatus_: function() {
     switch (this.status_) {
-      case SafetyCheckSafeBrowsingStatus.CHECKING:
+      case SafetyCheckPasswordsStatus.CHECKING:
         return SafetyCheckIconStatus.RUNNING;
-      case SafetyCheckSafeBrowsingStatus.ENABLED_STANDARD:
-      case SafetyCheckSafeBrowsingStatus.ENABLED_ENHANCED:
+      case SafetyCheckPasswordsStatus.SAFE:
         return SafetyCheckIconStatus.SAFE;
-      case SafetyCheckSafeBrowsingStatus.ENABLED:
-        // ENABLED is deprecated.
-        assertNotReached();
-      case SafetyCheckSafeBrowsingStatus.DISABLED:
-      case SafetyCheckSafeBrowsingStatus.DISABLED_BY_ADMIN:
-      case SafetyCheckSafeBrowsingStatus.DISABLED_BY_EXTENSION:
+      case SafetyCheckPasswordsStatus.COMPROMISED:
+        return SafetyCheckIconStatus.WARNING;
+      case SafetyCheckPasswordsStatus.OFFLINE:
+      case SafetyCheckPasswordsStatus.NO_PASSWORDS:
+      case SafetyCheckPasswordsStatus.SIGNED_OUT:
+      case SafetyCheckPasswordsStatus.QUOTA_LIMIT:
+      case SafetyCheckPasswordsStatus.ERROR:
         return SafetyCheckIconStatus.INFO;
       default:
         assertNotReached();
@@ -103,8 +106,8 @@ Polymer({
    */
   getButtonLabel_: function() {
     switch (this.status_) {
-      case SafetyCheckSafeBrowsingStatus.DISABLED:
-        return this.i18n('safetyCheckSafeBrowsingButton');
+      case SafetyCheckPasswordsStatus.COMPROMISED:
+        return this.i18n('safetyCheckReview');
       default:
         return null;
     }
@@ -114,25 +117,12 @@ Polymer({
   onButtonClick_: function() {
     // Log click both in action and histogram.
     this.metricsBrowserProxy_.recordSafetyCheckInteractionHistogram(
-        SafetyCheckInteractions.SAFETY_CHECK_SAFE_BROWSING_MANAGE);
+        SafetyCheckInteractions.SAFETY_CHECK_PASSWORDS_MANAGE);
     this.metricsBrowserProxy_.recordAction(
-        'Settings.SafetyCheck.ManageSafeBrowsing');
+        'Settings.SafetyCheck.ManagePasswords');
 
-    Router.getInstance().navigateTo(routes.SECURITY);
-  },
-
-  /**
-   * @private
-   * @return {?string}
-   */
-  getManagedIcon_: function() {
-    switch (this.status_) {
-      case SafetyCheckSafeBrowsingStatus.DISABLED_BY_ADMIN:
-        return 'cr20:domain';
-      case SafetyCheckSafeBrowsingStatus.DISABLED_BY_EXTENSION:
-        return 'cr:extension';
-      default:
-        return null;
-    }
+    Router.getInstance().navigateTo(routes.CHECK_PASSWORDS);
+    PasswordManagerImpl.getInstance().recordPasswordCheckReferrer(
+        PasswordManagerProxy.PasswordCheckReferrer.SAFETY_CHECK);
   },
 });

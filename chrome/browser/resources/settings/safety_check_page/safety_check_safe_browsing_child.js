@@ -4,30 +4,31 @@
 
 /**
  * @fileoverview
- * 'settings-safety-updates-element' is the settings page containing the safety
- * check element showing the browser's update status.
+ * 'settings-safety-safe-browsing-child' is the settings page containing the
+ * safety check child showing the Safe Browsing status.
  */
 import {assertNotReached} from 'chrome://resources/js/assert.m.js';
 import {I18nBehavior} from 'chrome://resources/js/i18n_behavior.m.js';
 import {WebUIListenerBehavior} from 'chrome://resources/js/web_ui_listener_behavior.m.js';
 import {html, Polymer} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 
-import {LifetimeBrowserProxy, LifetimeBrowserProxyImpl} from '../lifetime_browser_proxy.m.js';
 import {MetricsBrowserProxy, MetricsBrowserProxyImpl, SafetyCheckInteractions} from '../metrics_browser_proxy.js';
+import {routes} from '../route.js';
+import {Router} from '../router.m.js';
 
-import {SafetyCheckCallbackConstants, SafetyCheckUpdatesStatus} from './safety_check_browser_proxy.js';
+import {SafetyCheckCallbackConstants, SafetyCheckSafeBrowsingStatus} from './safety_check_browser_proxy.js';
 import {SafetyCheckIconStatus} from './safety_check_child.js';
 
 /**
  * @typedef {{
- *   newState: SafetyCheckUpdatesStatus,
+ *   newState: SafetyCheckSafeBrowsingStatus,
  *   displayString: string,
  * }}
  */
-let UpdatesChangedEvent;
+let SafeBrowsingChangedEvent;
 
 Polymer({
-  is: 'settings-safety-check-updates-element',
+  is: 'settings-safety-check-safe-browsing-child',
 
   _template: html`{__html_template__}`,
 
@@ -38,42 +39,41 @@ Polymer({
 
   properties: {
     /**
-     * Current state of the safety check updates element.
-     * @private {!SafetyCheckUpdatesStatus}
+     * Current state of the safety check safe browsing child.
+     * @private {!SafetyCheckSafeBrowsingStatus}
      */
     status_: {
       type: Number,
-      value: SafetyCheckUpdatesStatus.CHECKING,
+      value: SafetyCheckSafeBrowsingStatus.CHECKING,
     },
 
-    /** UI string to display for this child, received from the backend. */
+    /**
+     * UI string to display for this child, received from the backend.
+     * @private
+     */
     displayString_: String,
   },
 
-  /** @private {?LifetimeBrowserProxy} */
-  lifetimeBrowserProxy_: null,
-
-  /** ?MetricsBrowserProxy */
+  /** @private {?MetricsBrowserProxy} */
   metricsBrowserProxy_: null,
 
   /** @override */
   attached: function() {
-    this.lifetimeBrowserProxy_ = LifetimeBrowserProxyImpl.getInstance();
     this.metricsBrowserProxy_ = MetricsBrowserProxyImpl.getInstance();
 
     // Register for safety check status updates.
     this.addWebUIListener(
-        SafetyCheckCallbackConstants.UPDATES_CHANGED,
-        this.onSafetyCheckUpdatesChanged_.bind(this));
+        SafetyCheckCallbackConstants.SAFE_BROWSING_CHANGED,
+        this.onSafetyCheckSafeBrowsingChanged_.bind(this));
   },
 
   /**
-   * @param {!UpdatesChangedEvent} event
+   * @param {!SafeBrowsingChangedEvent} event
    * @private
    */
-  onSafetyCheckUpdatesChanged_: function(event) {
-    this.status_ = event.newState;
+  onSafetyCheckSafeBrowsingChanged_: function(event) {
     this.displayString_ = event.displayString;
+    this.status_ = event.newState;
   },
 
   /**
@@ -82,18 +82,18 @@ Polymer({
    */
   getIconStatus_: function() {
     switch (this.status_) {
-      case SafetyCheckUpdatesStatus.CHECKING:
-      case SafetyCheckUpdatesStatus.UPDATING:
+      case SafetyCheckSafeBrowsingStatus.CHECKING:
         return SafetyCheckIconStatus.RUNNING;
-      case SafetyCheckUpdatesStatus.UPDATED:
+      case SafetyCheckSafeBrowsingStatus.ENABLED_STANDARD:
+      case SafetyCheckSafeBrowsingStatus.ENABLED_ENHANCED:
         return SafetyCheckIconStatus.SAFE;
-      case SafetyCheckUpdatesStatus.RELAUNCH:
-      case SafetyCheckUpdatesStatus.DISABLED_BY_ADMIN:
-      case SafetyCheckUpdatesStatus.FAILED_OFFLINE:
-      case SafetyCheckUpdatesStatus.UNKNOWN:
+      case SafetyCheckSafeBrowsingStatus.ENABLED:
+        // ENABLED is deprecated.
+        assertNotReached();
+      case SafetyCheckSafeBrowsingStatus.DISABLED:
+      case SafetyCheckSafeBrowsingStatus.DISABLED_BY_ADMIN:
+      case SafetyCheckSafeBrowsingStatus.DISABLED_BY_EXTENSION:
         return SafetyCheckIconStatus.INFO;
-      case SafetyCheckUpdatesStatus.FAILED:
-        return SafetyCheckIconStatus.WARNING;
       default:
         assertNotReached();
     }
@@ -105,8 +105,8 @@ Polymer({
    */
   getButtonLabel_: function() {
     switch (this.status_) {
-      case SafetyCheckUpdatesStatus.RELAUNCH:
-        return this.i18n('aboutRelaunch');
+      case SafetyCheckSafeBrowsingStatus.DISABLED:
+        return this.i18n('safetyCheckSafeBrowsingButton');
       default:
         return null;
     }
@@ -116,11 +116,11 @@ Polymer({
   onButtonClick_: function() {
     // Log click both in action and histogram.
     this.metricsBrowserProxy_.recordSafetyCheckInteractionHistogram(
-        SafetyCheckInteractions.SAFETY_CHECK_UPDATES_RELAUNCH);
+        SafetyCheckInteractions.SAFETY_CHECK_SAFE_BROWSING_MANAGE);
     this.metricsBrowserProxy_.recordAction(
-        'Settings.SafetyCheck.RelaunchAfterUpdates');
+        'Settings.SafetyCheck.ManageSafeBrowsing');
 
-    this.lifetimeBrowserProxy_.relaunch();
+    Router.getInstance().navigateTo(routes.SECURITY);
   },
 
   /**
@@ -129,8 +129,10 @@ Polymer({
    */
   getManagedIcon_: function() {
     switch (this.status_) {
-      case SafetyCheckUpdatesStatus.DISABLED_BY_ADMIN:
+      case SafetyCheckSafeBrowsingStatus.DISABLED_BY_ADMIN:
         return 'cr20:domain';
+      case SafetyCheckSafeBrowsingStatus.DISABLED_BY_EXTENSION:
+        return 'cr:extension';
       default:
         return null;
     }

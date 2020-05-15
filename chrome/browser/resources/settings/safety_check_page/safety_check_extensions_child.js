@@ -4,8 +4,8 @@
 
 /**
  * @fileoverview
- * 'settings-safety-extensions-element' is the settings page containing the
- * safety check element showing the extension status.
+ * 'settings-safety-extensions-child' is the settings page containing the
+ * safety check child showing the extension status.
  */
 import {assertNotReached} from 'chrome://resources/js/assert.m.js';
 import {I18nBehavior} from 'chrome://resources/js/i18n_behavior.m.js';
@@ -27,7 +27,7 @@ import {SafetyCheckIconStatus} from './safety_check_child.js';
 let ExtensionssChangedEvent;
 
 Polymer({
-  is: 'settings-safety-check-extensions-element',
+  is: 'settings-safety-check-extensions-child',
 
   _template: html`{__html_template__}`,
 
@@ -38,7 +38,7 @@ Polymer({
 
   properties: {
     /**
-     * Current state of the safety check extensions element.
+     * Current state of the safety check extensions child.
      * @private {!SafetyCheckExtensionsStatus}
      */
     status_: {
@@ -46,11 +46,14 @@ Polymer({
       value: SafetyCheckExtensionsStatus.CHECKING,
     },
 
-    /** UI string to display for this child, received from the backend. */
+    /**
+     * UI string to display for this child, received from the backend.
+     * @private
+     */
     displayString_: String,
   },
 
-  /** ?MetricsBrowserProxy */
+  /** @private {?MetricsBrowserProxy} */
   metricsBrowserProxy_: null,
 
   /** @override */
