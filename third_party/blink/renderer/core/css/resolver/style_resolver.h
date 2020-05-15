@@ -270,7 +270,6 @@ class CORE_EXPORT StyleResolver final : public GarbageCollected<StyleResolver> {
                            const MatchResult& match_result,
                            bool apply_inherited_only,
                            NeedsApplyPass& needs_apply_pass);
-  void CascadeAndApplyForcedColors(StyleResolverState&, const MatchResult&);
 
   void CascadeAndApplyMatchedProperties(StyleResolverState&,
                                         StyleCascade& cascade);

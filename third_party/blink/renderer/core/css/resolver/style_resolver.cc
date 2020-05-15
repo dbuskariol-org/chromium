@@ -2178,62 +2178,10 @@ void StyleResolver::CascadeAndApplyMatchedProperties(StyleResolverState& state,
     cascade.Apply();
   }
 
-  CascadeAndApplyForcedColors(state, result);
-
   state.LoadPendingResources();
   MaybeAddToMatchedPropertiesCache(state, cache_success, result);
 
   DCHECK(!state.GetFontBuilder().FontDirty());
-}
-
-void StyleResolver::CascadeAndApplyForcedColors(StyleResolverState& state,
-                                                const MatchResult& result) {
-  if (!IsForcedColorsModeEnabled())
-    return;
-  if (state.Style()->ForcedColorAdjust() == EForcedColorAdjust::kNone)
-    return;
-
-  int bg_color_alpha = state.Style()->BackgroundColor().GetColor().Alpha();
-
-  STACK_UNINITIALIZED StyleCascade cascade(state);
-
-  const CSSValue* unset = cssvalue::CSSUnsetValue::Create();
-  auto* set =
-      MakeGarbageCollected<MutableCSSPropertyValueSet>(state.GetParserMode());
-  set->SetProperty(CSSPropertyID::kBorderBottomColor, *unset);
-  set->SetProperty(CSSPropertyID::kBorderLeftColor, *unset);
-  set->SetProperty(CSSPropertyID::kBorderRightColor, *unset);
-  set->SetProperty(CSSPropertyID::kBorderTopColor, *unset);
-  set->SetProperty(CSSPropertyID::kBoxShadow, *unset);
-  set->SetProperty(CSSPropertyID::kColor, *unset);
-  set->SetProperty(CSSPropertyID::kColumnRuleColor, *unset);
-  set->SetProperty(CSSPropertyID::kFill, *unset);
-  set->SetProperty(CSSPropertyID::kOutlineColor, *unset);
-  set->SetProperty(CSSPropertyID::kStroke, *unset);
-  set->SetProperty(CSSPropertyID::kTextDecorationColor, *unset);
-  set->SetProperty(CSSPropertyID::kTextShadow, *unset);
-  set->SetProperty(CSSPropertyID::kWebkitTapHighlightColor, *unset);
-  set->SetProperty(CSSPropertyID::kWebkitTextEmphasisColor, *unset);
-
-  cascade.MutableMatchResult().AddMatchedProperties(set);
-
-  for (const auto& matched_properties : result.UaRules()) {
-    cascade.MutableMatchResult().AddMatchedProperties(
-        matched_properties.properties,
-        matched_properties.types_.link_match_type,
-        static_cast<ValidPropertyFilter>(
-            matched_properties.types_.valid_property_filter));
-  }
-
-  CascadeFilter filter(CSSProperty::kIsAffectedByForcedColors, false);
-  cascade.Apply(filter);
-
-  Color bg_color_rbg = StyleColor::ColorFromKeyword(
-      state.Style()->InternalForcedBackgroundColorRgb(),
-      WebColorScheme::kLight);
-  Color bg_color(bg_color_rbg.Red(), bg_color_rbg.Green(), bg_color_rbg.Blue(),
-                 bg_color_alpha);
-  state.Style()->SetBackgroundColor(bg_color);
 }
 
 bool StyleResolver::HasAuthorBackground(const StyleResolverState& state) {

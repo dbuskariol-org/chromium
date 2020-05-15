@@ -1171,7 +1171,6 @@
       style_builder_template_args: {
         initial_color: "ComputedStyleInitialValues::InitialBackgroundColor",
       },
-      affected_by_forced_colors: true,
       valid_for_first_letter: true,
       valid_for_cue: true,
       is_background: true,
