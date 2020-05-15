@@ -530,8 +530,8 @@ void AddSyncControlsStrings(content::WebUIDataSource* html_source) {
 
   html_source->AddBoolean("splitSettingsSyncEnabled",
                           chromeos::features::IsSplitSettingsSyncEnabled());
-  html_source->AddBoolean("splitSyncConsent",
-                          chromeos::features::IsSplitSyncConsentEnabled());
+  html_source->AddBoolean("useBrowserSyncConsent",
+                          chromeos::features::ShouldUseBrowserSyncConsent());
   html_source->AddBoolean(
       "syncSetupFriendlySettings",
       base::FeatureList::IsEnabled(::features::kSyncSetupFriendlySettings));
@@ -677,7 +677,7 @@ void PeopleSection::AddLoadTimeData(content::WebUIDataSource* html_source) {
   html_source->AddBoolean("isAccountManagerEnabled",
                           chromeos::IsAccountManagerAvailable(profile()));
 
-  if (chromeos::features::IsSplitSyncConsentEnabled()) {
+  if (chromeos::features::ShouldUseBrowserSyncConsent()) {
     static constexpr webui::LocalizedString kTurnOffStrings[] = {
         {"syncDisconnect", IDS_SETTINGS_PEOPLE_SYNC_TURN_OFF},
         {"syncDisconnectTitle",
