@@ -19,6 +19,7 @@ import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.base.library_loader.LibraryLoader;
 import org.chromium.base.library_loader.LibraryProcessType;
+import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.UmaRecorderHolder;
 import org.chromium.base.task.PostTask;
 import org.chromium.base.task.TaskTraits;
@@ -95,17 +96,22 @@ public class WebViewApkApplication extends Application {
             try {
                 ComponentName devToolsLauncherActivity = new ComponentName(
                         context, "org.chromium.android_webview.devui.MonochromeLauncherActivity");
-                if (WebViewPackageHelper.isCurrentSystemWebViewImplementation(context)) {
-                    // Enable the component to show the launcher icon.
-                    context.getPackageManager().setComponentEnabledSetting(devToolsLauncherActivity,
-                            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                            PackageManager.DONT_KILL_APP);
-                } else {
-                    // Disable the component to hide the launcher icon.
-                    context.getPackageManager().setComponentEnabledSetting(devToolsLauncherActivity,
-                            PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-                            PackageManager.DONT_KILL_APP);
-                }
+                int oldIconState = context.getPackageManager().getComponentEnabledSetting(
+                        devToolsLauncherActivity);
+
+                // Enable the icon if this is the current WebView provider, otherwise set the icon
+                // back to default (disabled) state.
+                boolean shouldShowIcon =
+                        WebViewPackageHelper.isCurrentSystemWebViewImplementation(context);
+                int newIconState = shouldShowIcon ? PackageManager.COMPONENT_ENABLED_STATE_ENABLED
+                                                  : PackageManager.COMPONENT_ENABLED_STATE_DEFAULT;
+
+                if (oldIconState == newIconState) return;
+
+                context.getPackageManager().setComponentEnabledSetting(
+                        devToolsLauncherActivity, newIconState, PackageManager.DONT_KILL_APP);
+                RecordHistogram.recordBooleanHistogram(
+                        "Android.WebView.DevUi.MonochromeIconStateToggled", shouldShowIcon);
             } catch (IllegalArgumentException e) {
                 // If MonochromeLauncherActivity doesn't exist, Dynamically showing/hiding DevTools
                 // launcher icon is not enabled in this package; e.g when it is a stable channel.
