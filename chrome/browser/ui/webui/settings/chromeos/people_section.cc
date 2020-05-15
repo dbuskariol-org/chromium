@@ -242,7 +242,7 @@ void AddAccountManagerPageStrings(content::WebUIDataSource* html_source) {
   static constexpr webui::LocalizedString kLocalizedStrings[] = {
       {"accountManagerDescription", IDS_SETTINGS_ACCOUNT_MANAGER_DESCRIPTION},
       {"accountManagerChildDescription",
-       IDS_SETTINGS_ACCOUNT_MANAGER_CHILD_DESCRIPTION},
+       IDS_SETTINGS_ACCOUNT_MANAGER_CHILD_DESCRIPTION_2},
       {"accountListHeader", IDS_SETTINGS_ACCOUNT_MANAGER_LIST_HEADER},
       {"accountManagerPrimaryAccountTooltip",
        IDS_SETTINGS_ACCOUNT_MANAGER_PRIMARY_ACCOUNT_TOOLTIP},
