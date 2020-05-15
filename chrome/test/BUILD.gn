@@ -5752,6 +5752,7 @@ if (!is_android) {
       "../browser/browser_keyevents_browsertest.cc",
       "../browser/devtools/devtools_sanity_interactive_browsertest.cc",
       "../browser/extensions/api/extension_action/browser_action_interactive_test.cc",
+      "../browser/extensions/api/extension_action/page_action_interactive_test.cc",
       "../browser/extensions/api/notifications/notifications_apitest.cc",
       "../browser/extensions/api/omnibox/omnibox_api_interactive_test.cc",
       "../browser/extensions/api/tabs/tabs_interactive_test.cc",
