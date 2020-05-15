@@ -122,7 +122,7 @@
 #include "content/browser/webui/url_data_manager_backend.h"
 #include "content/browser/webui/web_ui_controller_factory_registry.h"
 #include "content/browser/webui/web_ui_url_loader_factory_internal.h"
-#include "content/browser/worker_host/dedicated_worker_host.h"
+#include "content/browser/worker_host/dedicated_worker_host_factory_impl.h"
 #include "content/browser/worker_host/shared_worker_service_impl.h"
 #include "content/common/associated_interfaces.mojom.h"
 #include "content/common/content_constants_internal.h"
@@ -7154,12 +7154,14 @@ void RenderFrameHostImpl::CreateDedicatedWorkerHostFactory(
 
   // When a dedicated worker is created from the frame script, the frame is both
   // the creator and the ancestor.
-  content::CreateDedicatedWorkerHostFactory(
-      worker_process_id,
-      /*creator_render_frame_host_id=*/GetGlobalFrameRoutingId(),
-      /*ancestor_render_frame_host_id=*/GetGlobalFrameRoutingId(),
-      last_committed_origin_, cross_origin_embedder_policy_,
-      std::move(coep_reporter), std::move(receiver));
+  mojo::MakeSelfOwnedReceiver(
+      std::make_unique<DedicatedWorkerHostFactoryImpl>(
+          worker_process_id,
+          /*creator_render_frame_host_id=*/GetGlobalFrameRoutingId(),
+          /*ancestor_render_frame_host_id=*/GetGlobalFrameRoutingId(),
+          last_committed_origin_, cross_origin_embedder_policy_,
+          std::move(coep_reporter)),
+      std::move(receiver));
 }
 
 void RenderFrameHostImpl::OnMediaInterfaceFactoryConnectionError() {
