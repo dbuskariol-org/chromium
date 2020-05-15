@@ -110,12 +110,9 @@ class OmniboxRowView::HeaderView : public views::View,
   // views::ButtonListener:
   void ButtonPressed(views::Button* sender, const ui::Event& event) override {
     DCHECK_EQ(sender, hide_button_);
-
-    if (!row_view_->pref_service_)
-      return;
-
-    omnibox::ToggleSuggestionGroupIdVisibility(row_view_->pref_service_,
-                                               suggestion_group_id_);
+    row_view_->popup_model_->TriggerSelectionAction(
+        OmniboxPopupModel::Selection(row_view_->line_,
+                                     OmniboxPopupModel::HEADER_BUTTON_FOCUSED));
     // The PrefChangeRegistrar will update the actual button toggle state.
   }
 
