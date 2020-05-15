@@ -76,11 +76,16 @@ void BrailleControllerImpl::TryLoadLibBrlApi() {
   DCHECK_CURRENTLY_ON(BrowserThread::IO);
   if (libbrlapi_loader_.loaded())
     return;
-  // These versions of libbrlapi work the same for the functions we
-  // are using.  (0.6.0 adds brlapi_writeWText).
+
+  // This list of api versions needs to contain the one used by the
+  // corresponding brltty used by Chrome OS for this version of Chrome. For
+  // example, in Chrome OS 84, we use brltty 6.1, which is using brlapi 0.8.
+  // The relevant header is checked into //third_party/libbrlapi/. Ensure to
+  // keep this list in descendning order. Note that we keep older versions so
+  // that tests will continue to work.
   static const char* const kSupportedVersions[] = {
-      "libbrlapi.so.0.5", "libbrlapi.so.0.6", "libbrlapi.so.0.7",
-      "libbrlapi.so.0.8"};
+      "libbrlapi.so.0.8", "libbrlapi.so.0.7", "libbrlapi.so.0.6",
+      "libbrlapi.so.0.5"};
   for (size_t i = 0; i < base::size(kSupportedVersions); ++i) {
     if (libbrlapi_loader_.Load(kSupportedVersions[i]))
       return;
