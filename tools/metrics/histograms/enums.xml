@@ -22976,6 +22976,8 @@ Called by update_extension_histograms.py.-->
   <int value="1471" label="DECLARATIVENETREQUEST_UPDATEENABLEDRULESETS"/>
   <int value="1472" label="DECLARATIVENETREQUEST_GETENABLEDRULESETS"/>
   <int value="1473" label="TERMINALPRIVATE_OPENWINDOW"/>
+  <int value="1474" label="AUTOTESTPRIVATE_SETPLUGINVMPOLICY"/>
+  <int value="1475" label="AUTOTESTPRIVATE_SHOWPLUGINVMINSTALLER"/>
 </enum>
 
 <enum name="ExtensionIconState">

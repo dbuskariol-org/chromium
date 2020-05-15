@@ -1968,6 +1968,48 @@ void AutotestPrivateInstallPluginVMFunction::OnInstallFinished(bool success) {
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+// AutotestPrivateSetPluginVMPolicyFunction
+///////////////////////////////////////////////////////////////////////////////
+
+AutotestPrivateSetPluginVMPolicyFunction::
+    ~AutotestPrivateSetPluginVMPolicyFunction() = default;
+
+ExtensionFunction::ResponseAction
+AutotestPrivateSetPluginVMPolicyFunction::Run() {
+  std::unique_ptr<api::autotest_private::SetPluginVMPolicy::Params> params(
+      api::autotest_private::SetPluginVMPolicy::Params::Create(*args_));
+  EXTENSION_FUNCTION_VALIDATE(params);
+  DVLOG(1) << "AutotestPrivateSetPluginVMPolicyFunction " << params->image_url
+           << ", " << params->image_hash << ", " << params->license_key;
+
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  plugin_vm::SetFakePluginVmPolicy(profile, params->image_url,
+                                   params->image_hash, params->license_key);
+
+  return RespondNow(NoArguments());
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// AutotestPrivateShowPluginVMInstallerFunction
+///////////////////////////////////////////////////////////////////////////////
+
+AutotestPrivateShowPluginVMInstallerFunction::
+    ~AutotestPrivateShowPluginVMInstallerFunction() = default;
+
+ExtensionFunction::ResponseAction
+AutotestPrivateShowPluginVMInstallerFunction::Run() {
+  DVLOG(1) << "AutotestPrivateShowPluginVMInstallerFunction";
+
+  Profile* profile = Profile::FromBrowserContext(browser_context());
+  plugin_vm::PluginVmInstallerFactory::GetForProfile(profile)
+      ->SetFreeDiskSpaceForTesting(
+          plugin_vm::PluginVmInstaller::kRecommendedFreeDiskSpace);
+  plugin_vm::ShowPluginVmInstallerView(profile);
+
+  return RespondNow(NoArguments());
+}
+
+///////////////////////////////////////////////////////////////////////////////
 // AutotestPrivateRegisterComponentFunction
 ///////////////////////////////////////////////////////////////////////////////
 
