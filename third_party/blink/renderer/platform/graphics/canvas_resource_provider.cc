@@ -1179,7 +1179,8 @@ CanvasResourceProvider::CanvasResourceProvider(
       filter_quality_(filter_quality),
       color_params_(color_params),
       is_origin_top_left_(is_origin_top_left),
-      snapshot_paint_image_id_(cc::PaintImage::GetNextId()) {
+      snapshot_paint_image_id_(cc::PaintImage::GetNextId()),
+      identifiability_paint_op_digest_(size_) {
   if (context_provider_wrapper_)
     context_provider_wrapper_->AddObserver(this);
 }
@@ -1312,6 +1313,9 @@ GrContext* CanvasResourceProvider::GetGrContext() const {
 sk_sp<cc::PaintRecord> CanvasResourceProvider::FlushCanvas() {
   if (!HasRecordedDrawOps())
     return nullptr;
+  // Get PaintOp count before finishRecordingAsPicture() adds more, as these
+  // additional ops don't correspond to canvas context operations.
+  const size_t initial_paint_ops = recorder_->num_paint_ops();
   sk_sp<cc::PaintRecord> last_recording = recorder_->finishRecordingAsPicture();
   RasterRecord(last_recording);
   needs_flush_ = false;
@@ -1319,6 +1323,12 @@ sk_sp<cc::PaintRecord> CanvasResourceProvider::FlushCanvas() {
       recorder_->beginRecording(Size().Width(), Size().Height());
   if (restore_clip_stack_callback_)
     restore_clip_stack_callback_.Run(canvas);
+  identifiability_paint_op_digest_.MaybeUpdateDigest(last_recording,
+                                                     initial_paint_ops);
+  // restore_clip_stack_callback_ also adds PaintOps -- these need to be skipped
+  // during identifiability digest calculation.
+  identifiability_paint_op_digest_.SetPrefixSkipCount(
+      recorder_->num_paint_ops());
   return last_recording;
 }
 
@@ -1429,6 +1439,11 @@ void CanvasResourceProvider::ClearRecycledResources() {
 
 void CanvasResourceProvider::OnDestroyResource() {
   --num_inflight_resources_;
+}
+
+uint64_t CanvasResourceProvider::GetIdentifiabilityDigest() {
+  FlushCanvas();
+  return identifiability_paint_op_digest_.digest();
 }
 
 scoped_refptr<CanvasResource> CanvasResourceProvider::NewOrRecycledResource() {

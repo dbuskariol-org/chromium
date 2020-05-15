@@ -9,6 +9,7 @@
 #include "cc/raster/playback_image_provider.h"
 #include "gpu/command_buffer/common/shared_image_usage.h"
 #include "third_party/blink/renderer/platform/graphics/canvas_resource.h"
+#include "third_party/blink/renderer/platform/graphics/identifiability_paint_op_digest.h"
 #include "third_party/blink/renderer/platform/graphics/image_orientation.h"
 #include "third_party/blink/renderer/platform/graphics/paint/paint_recorder.h"
 #include "third_party/skia/include/core/SkSurface.h"
@@ -246,6 +247,10 @@ class PLATFORM_EXPORT CanvasResourceProvider
 
   void OnDestroyResource();
 
+  // Returns the identifiability digest computed from the set of PaintOps
+  // flushed from FlushCanvas().
+  uint64_t GetIdentifiabilityDigest();
+
  protected:
   class CanvasImageProvider;
 
@@ -336,6 +341,10 @@ class PLATFORM_EXPORT CanvasResourceProvider
   size_t max_inflight_resources_ = 0;
 
   RestoreMatrixClipStackCb restore_clip_stack_callback_;
+
+  // For identifiability metrics -- PaintOps are serialized so that digests can
+  // be calculated using hashes of the serialized output.
+  IdentifiabilityPaintOpDigest identifiability_paint_op_digest_;
 
   base::WeakPtrFactory<CanvasResourceProvider> weak_ptr_factory_{this};
 
