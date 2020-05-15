@@ -1,3 +1,7 @@
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 load('//lib/builders.star', 'cpu', 'goma', 'os', 'xcode_cache')
 load('//lib/ci.star', 'ci')
 load('//project.star', 'settings')

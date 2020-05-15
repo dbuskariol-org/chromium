@@ -1,3 +1,7 @@
+# Copyright 2020 The Chromium Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style license that can be
+# found in the LICENSE file.
+
 # TODO(gbeaty) Update the watch to not include active branch heads
 # Declare a CQ group that watches all branch heads
 # We won't add any builders, but SUBMIT TO CQ fails on Gerrit if there is no CQ
