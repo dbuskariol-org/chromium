@@ -5620,21 +5620,20 @@ void RenderFrameHostImpl::CommitNavigation(
     blink::mojom::ServiceWorkerContainerInfoForClientPtr container_info,
     const base::UnguessableToken& devtools_navigation_token,
     std::unique_ptr<WebBundleHandle> web_bundle_handle) {
-  web_bundle_handle_ = std::move(web_bundle_handle);
-
   TRACE_EVENT2("navigation", "RenderFrameHostImpl::CommitNavigation",
                "frame_tree_node", frame_tree_node_->frame_tree_node_id(), "url",
                common_params->url.possibly_invalid_spec());
   DCHECK(!IsRendererDebugURL(common_params->url));
 
+  bool is_same_document =
+      NavigationTypeUtils::IsSameDocument(common_params->navigation_type);
   bool is_mhtml_iframe =
       navigation_request && navigation_request->IsForMhtmlSubframe();
 
   // A |response| and a |url_loader_client_endpoints| must always be provided,
   // except for edge cases, where another way to load the document exist.
   DCHECK((response_head && url_loader_client_endpoints) ||
-         common_params->url.SchemeIs(url::kDataScheme) ||
-         NavigationTypeUtils::IsSameDocument(common_params->navigation_type) ||
+         common_params->url.SchemeIs(url::kDataScheme) || is_same_document ||
          !IsURLHandledByNetworkStack(common_params->url) || is_mhtml_iframe);
 
   // All children of MHTML documents must be MHTML documents.
@@ -5697,6 +5696,13 @@ void RenderFrameHostImpl::CommitNavigation(
   const bool is_first_navigation = !has_committed_any_navigation_;
   has_committed_any_navigation_ = true;
 
+  // If this is NOT for same-document navigation, existing |web_bundle_handle_|
+  // should be reset to the new one. Otherwise the existing one should be kept
+  // around so that the subresource requests keep being served from the
+  // WebBundleURLLoaderFactory held by the handle.
+  if (!is_same_document)
+    web_bundle_handle_ = std::move(web_bundle_handle);
+
   UpdatePermissionsForNavigation(*common_params, *commit_params);
 
   // Get back to a clean state, in case we start a new navigation without
@@ -5716,8 +5722,6 @@ void RenderFrameHostImpl::CommitNavigation(
   network::mojom::URLResponseHeadPtr head =
       response_head ? std::move(response_head)
                     : network::mojom::URLResponseHead::New();
-  const bool is_same_document =
-      NavigationTypeUtils::IsSameDocument(common_params->navigation_type);
 
   // TODO(crbug.com/979296): Consider changing this code to copy an origin
   // instead of creating one from a URL which lacks opacity information.
@@ -7476,9 +7480,17 @@ RenderFrameHostImpl::CreateNavigationRequestForCommit(
         cross_origin_embedder_policy_.reporting_endpoint,
         cross_origin_embedder_policy_.report_only_reporting_endpoint);
   }
-  return NavigationRequest::CreateForCommit(frame_tree_node_, this, params,
-                                            std::move(coep_reporter),
-                                            is_same_document);
+  std::unique_ptr<WebBundleNavigationInfo> web_bundle_navigation_info;
+  if (is_same_document && web_bundle_handle_ &&
+      web_bundle_handle_->navigation_info()) {
+    // Need to set |web_bundle_navigation_info| of NavigationRequest. This
+    // will be passed to FrameNavigationEntry, and will be used for subsequent
+    // history navigations.
+    web_bundle_navigation_info = web_bundle_handle_->navigation_info()->Clone();
+  }
+  return NavigationRequest::CreateForCommit(
+      frame_tree_node_, this, params, std::move(coep_reporter),
+      is_same_document, std::move(web_bundle_navigation_info));
 }
 
 bool RenderFrameHostImpl::NavigationRequestWasIntendedForPendingEntry(

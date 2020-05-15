@@ -839,7 +839,8 @@ std::unique_ptr<NavigationRequest> NavigationRequest::CreateForCommit(
     RenderFrameHostImpl* render_frame_host,
     const FrameHostMsg_DidCommitProvisionalLoad_Params& params,
     std::unique_ptr<CrossOriginEmbedderPolicyReporter> coep_reporter,
-    bool is_same_document) {
+    bool is_same_document,
+    std::unique_ptr<WebBundleNavigationInfo> web_bundle_navigation_info) {
   // TODO(clamy): Improve the *NavigationParams and *CommitParams to avoid
   // copying so many parameters here.
   mojom::CommonNavigationParamsPtr common_params =
@@ -900,6 +901,8 @@ std::unique_ptr<NavigationRequest> NavigationRequest::CreateForCommit(
       nullptr /* navigation_ui_data */, mojo::NullAssociatedRemote(),
       mojo::NullRemote(), nullptr /* rfh_restored_from_back_forward_cache */));
 
+  navigation_request->web_bundle_navigation_info_ =
+      std::move(web_bundle_navigation_info);
   navigation_request->render_frame_host_ = render_frame_host;
   navigation_request->coep_reporter_ = std::move(coep_reporter);
   navigation_request->StartNavigation(true);
