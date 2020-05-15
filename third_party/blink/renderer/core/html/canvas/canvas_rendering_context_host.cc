@@ -109,11 +109,13 @@ void CanvasRenderingContextHost::CreateCanvasResourceProvider3D(
     AccelerationHint hint) {
   DCHECK(Is3d());
 
+  std::unique_ptr<CanvasResourceProvider> provider;
+  base::WeakPtr<CanvasResourceDispatcher> dispatcher =
+      GetOrCreateResourceDispatcher()
+          ? GetOrCreateResourceDispatcher()->GetWeakPtr()
+          : nullptr;
+
   uint8_t presentation_mode = CanvasResourceProvider::kDefaultPresentationMode;
-  if (RuntimeEnabledFeatures::WebGLImageChromiumEnabled()) {
-    presentation_mode |=
-        CanvasResourceProvider::kAllowImageChromiumPresentationMode;
-  }
   if (RenderingContext() && RenderingContext()->UsingSwapChain()) {
     DCHECK(LowLatencyEnabled());
     // Allow swap chain presentation only if 3d context is using a swap
@@ -121,33 +123,31 @@ void CanvasRenderingContextHost::CreateCanvasResourceProvider3D(
     presentation_mode |=
         CanvasResourceProvider::kAllowSwapChainPresentationMode;
   }
-  std::unique_ptr<CanvasResourceProvider> provider;
-  base::WeakPtr<CanvasResourceDispatcher> dispatcher =
-      GetOrCreateResourceDispatcher()
-          ? GetOrCreateResourceDispatcher()->GetWeakPtr()
-          : nullptr;
-  if (SharedGpuContext::IsGpuCompositingEnabled()) {
-    CanvasResourceProvider::ResourceUsage usage;
-    if (LowLatencyEnabled() && RenderingContext()) {
-      // Allow swap chain presentation only if 3d context is using a swap
-      // chain since we'll be importing it as a passthrough texture.
-      usage = CanvasResourceProvider::ResourceUsage::
-          kAcceleratedDirect3DResourceUsage;
-    } else {
-      usage = CanvasResourceProvider::ResourceUsage::
-          kAcceleratedCompositedResourceUsage;
+
+  if (SharedGpuContext::IsGpuCompositingEnabled() && LowLatencyEnabled()) {
+    if (RuntimeEnabledFeatures::WebGLImageChromiumEnabled()) {
+      presentation_mode |=
+          CanvasResourceProvider::kAllowImageChromiumPresentationMode;
     }
+
     provider = CanvasResourceProvider::Create(
-        Size(), usage, SharedGpuContext::ContextProviderWrapper(),
-        0 /* msaa_sample_count */, FilterQuality(), ColorParams(),
-        presentation_mode, std::move(dispatcher),
-        RenderingContext()->IsOriginTopLeft());
-  } else {
-    // Here it should try a SoftwareCompositedResourceUsage, but as
-    // SharedGpuCOntext::IsGpuCompositingEnabled() is false and that being true
-    // is a requirement  to try and create a SharedImageProvider if
-    // SoftwareCompositeResourceUsage is used, it will go straight ahead to a
-    // fallback SharedBitmap and then to a Bitmap provider
+        Size(),
+        CanvasResourceProvider::ResourceUsage::
+            kAcceleratedDirect3DResourceUsage,
+        SharedGpuContext::ContextProviderWrapper(), 0 /* msaa_sample_count */,
+        FilterQuality(), ColorParams(), presentation_mode,
+        std::move(dispatcher), RenderingContext()->IsOriginTopLeft());
+  } else if (SharedGpuContext::IsGpuCompositingEnabled()) {
+    uint32_t shared_image_usage_flags = gpu::SHARED_IMAGE_USAGE_DISPLAY;
+    if (RuntimeEnabledFeatures::WebGLImageChromiumEnabled()) {
+      shared_image_usage_flags |= gpu::SHARED_IMAGE_USAGE_SCANOUT;
+    }
+    provider = CanvasResourceProvider::CreateSharedImageProvider(
+        Size(), SharedGpuContext::ContextProviderWrapper(), FilterQuality(),
+        ColorParams(), RenderingContext()->IsOriginTopLeft(),
+        CanvasResourceProvider::RasterMode::kGPU, shared_image_usage_flags);
+  }
+  if (!provider) {
     provider = CanvasResourceProvider::CreateSharedBitmapProvider(
         Size(), SharedGpuContext::ContextProviderWrapper(), FilterQuality(),
         ColorParams(), std::move(dispatcher));

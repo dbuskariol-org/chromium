@@ -733,7 +733,6 @@ enum class CanvasResourceType {
 
 const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
     CanvasResourceProvider::ResourceUsage usage) {
-
   static const Vector<CanvasResourceType> kCompositedFallbackList({
       CanvasResourceType::kSharedImage,
       CanvasResourceType::kSharedBitmap,
@@ -787,14 +786,10 @@ const Vector<CanvasResourceType>& GetResourceTypeFallbackList(
         kSoftwareCompositedDirect2DResourceUsage:
     case CanvasResourceProvider::ResourceUsage::
         kSoftwareCompositedResourceUsage:
-      NOTREACHED();
-      return kEmptyList;
     case CanvasResourceProvider::ResourceUsage::
         kAcceleratedCompositedResourceUsage:
-      if (base::FeatureList::IsEnabled(blink::features::kDawn2dCanvas)) {
-        return kCompositedFallbackListWithDawn;
-      }
-      return kCompositedFallbackList;
+      NOTREACHED();
+      return kEmptyList;
     case CanvasResourceProvider::ResourceUsage::
         kAcceleratedDirect2DResourceUsage:
       return kAcceleratedDirect2DFallbackList;
@@ -824,6 +819,7 @@ std::unique_ptr<CanvasResourceProvider> CanvasResourceProvider::Create(
   DCHECK(usage != ResourceUsage::kAcceleratedResourceUsage);
   DCHECK(usage != ResourceUsage::kSoftwareCompositedDirect2DResourceUsage);
   DCHECK(usage != ResourceUsage::kSoftwareCompositedResourceUsage);
+  DCHECK(usage != ResourceUsage::kAcceleratedCompositedResourceUsage);
 
   std::unique_ptr<CanvasResourceProvider> provider;
 
@@ -1027,7 +1023,7 @@ CanvasResourceProvider::CreateSharedImageProvider(
   if (raster_mode == RasterMode::kCPU && !is_gpu_memory_buffer_image_allowed)
     return nullptr;
 
-  // If we cannot use overlay, we have to remove scanout flag flag.
+  // If we cannot use overlay, we have to remove the scanout flag.
   if (!is_gpu_memory_buffer_image_allowed ||
       !capabilities.texture_storage_image)
     shared_image_usage_flags &= ~gpu::SHARED_IMAGE_USAGE_SCANOUT;
@@ -1394,7 +1390,6 @@ scoped_refptr<CanvasResource> CanvasResourceProvider::CreateResource() {
 }
 
 cc::ImageDecodeCache* CanvasResourceProvider::ImageDecodeCacheRGBA8() {
-
   if (use_hardware_decode_cache()) {
     return context_provider_wrapper_->ContextProvider()->ImageDecodeCache(
         kN32_SkColorType);
@@ -1404,7 +1399,6 @@ cc::ImageDecodeCache* CanvasResourceProvider::ImageDecodeCacheRGBA8() {
 }
 
 cc::ImageDecodeCache* CanvasResourceProvider::ImageDecodeCacheF16() {
-
   if (use_hardware_decode_cache()) {
     return context_provider_wrapper_->ContextProvider()->ImageDecodeCache(
         kRGBA_F16_SkColorType);
