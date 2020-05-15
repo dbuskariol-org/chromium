@@ -12834,7 +12834,8 @@ static void TestFramePrinting(WebLocalFrameImpl* frame) {
   print_params.print_content_area.height = page_size.height;
   EXPECT_EQ(1, frame->PrintBegin(print_params, WebNode()));
   PaintRecorder recorder;
-  frame->PrintPagesForTesting(recorder.beginRecording(IntRect()), page_size);
+  frame->PrintPagesForTesting(recorder.beginRecording(IntRect()), page_size,
+                              page_size);
   frame->PrintEnd();
 }
 
