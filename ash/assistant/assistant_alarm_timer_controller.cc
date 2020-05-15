@@ -32,12 +32,15 @@ namespace ash {
 namespace {
 
 using assistant::util::AlarmTimerAction;
+using chromeos::assistant::mojom::AssistantNotification;
+using chromeos::assistant::mojom::AssistantNotificationButton;
+using chromeos::assistant::mojom::AssistantNotificationButtonPtr;
+using chromeos::assistant::mojom::AssistantNotificationPtr;
+using chromeos::assistant::mojom::AssistantNotificationType;
 
 // Grouping key and ID prefix for timer notifications.
 constexpr char kTimerNotificationGroupingKey[] = "assistant/timer";
 constexpr char kTimerNotificationIdPrefix[] = "assistant/timer";
-
-constexpr base::TimeDelta kOneMin = base::TimeDelta::FromMinutes(1);
 
 // Interval at which alarms/timers are ticked.
 constexpr base::TimeDelta kTickInterval = base::TimeDelta::FromSeconds(1);
@@ -48,6 +51,11 @@ constexpr base::TimeDelta kTickInterval = base::TimeDelta::FromSeconds(1);
 // method will always return the same notification ID given the same timer.
 std::string CreateTimerNotificationId(const AssistantTimer& timer) {
   return std::string(kTimerNotificationIdPrefix) + timer.id;
+}
+
+// Creates a notification title.
+std::string CreateTimerNotificationTitle() {
+  return l10n_util::GetStringUTF8(IDS_ASSISTANT_TIMER_NOTIFICATION_TITLE);
 }
 
 // Creates a notification message for the given |timer|.
@@ -105,59 +113,50 @@ std::string CreateTimerNotificationMessage(const AssistantTimer& timer) {
   return message;
 }
 
-// Creates a notification for the given |timer|.
-chromeos::assistant::mojom::AssistantNotificationPtr CreateTimerNotification(
+// Creates notification action URL for the given |timer|.
+GURL CreateTimerNotificationActionUrl(const AssistantTimer& timer) {
+  return assistant::util::CreateAlarmTimerDeepLink(
+             AlarmTimerAction::kRemoveAlarmOrTimer, timer.id)
+      .value();
+}
+
+// Creates notification buttons for the given |timer|.
+std::vector<AssistantNotificationButtonPtr> CreateTimerNotificationButtons(
     const AssistantTimer& timer) {
-  using chromeos::assistant::mojom::AssistantNotification;
-  using chromeos::assistant::mojom::AssistantNotificationButton;
-  using chromeos::assistant::mojom::AssistantNotificationPtr;
-  using chromeos::assistant::mojom::AssistantNotificationType;
+  std::vector<AssistantNotificationButtonPtr> buttons;
 
-  const std::string title =
-      l10n_util::GetStringUTF8(IDS_ASSISTANT_TIMER_NOTIFICATION_TITLE);
-  const std::string message = CreateTimerNotificationMessage(timer);
-
-  base::Optional<GURL> stop_alarm_timer_action_url =
+  // "STOP" button.
+  buttons.push_back(AssistantNotificationButton::New(
+      l10n_util::GetStringUTF8(IDS_ASSISTANT_TIMER_NOTIFICATION_STOP_BUTTON),
       assistant::util::CreateAlarmTimerDeepLink(
-          AlarmTimerAction::kRemoveAlarmOrTimer, timer.id);
+          AlarmTimerAction::kRemoveAlarmOrTimer, timer.id)
+          .value()));
 
-  base::Optional<GURL> add_time_to_timer_action_url =
+  // "ADD 1 MIN" button.
+  buttons.push_back(AssistantNotificationButton::New(
+      l10n_util::GetStringUTF8(
+          IDS_ASSISTANT_TIMER_NOTIFICATION_ADD_1_MIN_BUTTON),
       assistant::util::CreateAlarmTimerDeepLink(
-          AlarmTimerAction::kAddTimeToTimer, timer.id, kOneMin);
+          AlarmTimerAction::kAddTimeToTimer, timer.id,
+          base::TimeDelta::FromMinutes(1))
+          .value()));
 
+  return buttons;
+}
+
+// Creates a notification for the given |timer|.
+AssistantNotificationPtr CreateTimerNotification(const AssistantTimer& timer) {
   AssistantNotificationPtr notification = AssistantNotification::New();
   notification->type = AssistantNotificationType::kSystem;
-  notification->title = title;
-  notification->message = message;
+  notification->title = CreateTimerNotificationTitle();
+  notification->message = CreateTimerNotificationMessage(timer);
+  notification->action_url = CreateTimerNotificationActionUrl(timer);
+  notification->buttons = CreateTimerNotificationButtons(timer);
   notification->client_id = CreateTimerNotificationId(timer);
   notification->grouping_key = kTimerNotificationGroupingKey;
 
   // This notification should be able to wake up the display if it was off.
   notification->is_high_priority = true;
-
-  if (!stop_alarm_timer_action_url.has_value()) {
-    LOG(ERROR) << "Can't create stop alarm timer action URL";
-    return notification;
-  }
-
-  notification->action_url = stop_alarm_timer_action_url.value();
-
-  // "STOP" button.
-  notification->buttons.push_back(AssistantNotificationButton::New(
-      l10n_util::GetStringUTF8(IDS_ASSISTANT_TIMER_NOTIFICATION_STOP_BUTTON),
-      stop_alarm_timer_action_url.value()));
-
-  if (!add_time_to_timer_action_url.has_value()) {
-    LOG(ERROR) << "Can't create add time to timer action URL";
-    return notification;
-  }
-
-  // "ADD 1 MIN" button.
-  notification->buttons.push_back(
-      chromeos::assistant::mojom::AssistantNotificationButton::New(
-          l10n_util::GetStringUTF8(
-              IDS_ASSISTANT_TIMER_NOTIFICATION_ADD_1_MIN_BUTTON),
-          add_time_to_timer_action_url.value()));
 
   return notification;
 }
