@@ -14,3 +14,7 @@ settings = struct(
     # Switch this to None for branches
     tree_status_host = 'chromium-status.appspot.com/',
 )
+
+def master_only_exec(f):
+  if settings.is_master:
+    exec(f)
