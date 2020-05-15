@@ -1342,16 +1342,11 @@ void DrawImageRectOp::RasterWithFlags(const DrawImageRectOp* op,
     return;
   }
 
-  // TODO(enne): Probably PaintCanvas should just use the skia enum directly.
-  SkCanvas::SrcRectConstraint skconstraint =
-      static_cast<SkCanvas::SrcRectConstraint>(op->constraint);
-
   if (!params.image_provider) {
     SkRect adjusted_src = AdjustSrcRectForScale(op->src, op->scale_adjustment);
-    flags->DrawToSk(canvas, [op, adjusted_src, skconstraint](SkCanvas* c,
-                                                             const SkPaint& p) {
+    flags->DrawToSk(canvas, [op, adjusted_src](SkCanvas* c, const SkPaint& p) {
       c->drawImageRect(op->image.GetSkImage().get(), adjusted_src, op->dst, &p,
-                       skconstraint);
+                       op->constraint);
     });
     return;
   }
@@ -1381,12 +1376,12 @@ void DrawImageRectOp::RasterWithFlags(const DrawImageRectOp* op,
       op->src.makeOffset(decoded_image.src_rect_offset().width(),
                          decoded_image.src_rect_offset().height());
   adjusted_src = AdjustSrcRectForScale(adjusted_src, scale_adjustment);
-  flags->DrawToSk(canvas, [op, &decoded_image, adjusted_src, skconstraint](
-                              SkCanvas* c, const SkPaint& p) {
+  flags->DrawToSk(canvas, [op, &decoded_image, adjusted_src](SkCanvas* c,
+                                                             const SkPaint& p) {
     SkPaint paint_with_filter_quality(p);
     paint_with_filter_quality.setFilterQuality(decoded_image.filter_quality());
     c->drawImageRect(decoded_image.image().get(), adjusted_src, op->dst,
-                     &paint_with_filter_quality, skconstraint);
+                     &paint_with_filter_quality, op->constraint);
   });
 }
 
@@ -2313,7 +2308,7 @@ DrawImageRectOp::DrawImageRectOp(const PaintImage& image,
                                  const SkRect& src,
                                  const SkRect& dst,
                                  const PaintFlags* flags,
-                                 PaintCanvas::SrcRectConstraint constraint)
+                                 SkCanvas::SrcRectConstraint constraint)
     : PaintOpWithFlags(kType, flags ? *flags : PaintFlags()),
       image(image),
       src(src),

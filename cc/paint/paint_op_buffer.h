@@ -534,7 +534,7 @@ class CC_PAINT_EXPORT DrawImageRectOp final : public PaintOpWithFlags {
                   const SkRect& src,
                   const SkRect& dst,
                   const PaintFlags* flags,
-                  PaintCanvas::SrcRectConstraint constraint);
+                  SkCanvas::SrcRectConstraint constraint);
   ~DrawImageRectOp();
   static void RasterWithFlags(const DrawImageRectOp* op,
                               const PaintFlags* flags,
@@ -552,7 +552,7 @@ class CC_PAINT_EXPORT DrawImageRectOp final : public PaintOpWithFlags {
   PaintImage image;
   SkRect src;
   SkRect dst;
-  PaintCanvas::SrcRectConstraint constraint;
+  SkCanvas::SrcRectConstraint constraint;
 
  private:
   DrawImageRectOp();
