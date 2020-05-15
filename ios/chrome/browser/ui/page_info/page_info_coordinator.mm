@@ -6,6 +6,8 @@
 
 #include "ios/chrome/browser/main/browser.h"
 #import "ios/chrome/browser/reading_list/offline_page_tab_helper.h"
+#include "ios/chrome/browser/ui/commands/browser_commands.h"
+#import "ios/chrome/browser/ui/commands/command_dispatcher.h"
 #import "ios/chrome/browser/ui/page_info/page_info_site_security_description.h"
 #import "ios/chrome/browser/ui/page_info/page_info_site_security_mediator.h"
 #import "ios/chrome/browser/ui/page_info/page_info_view_controller.h"
@@ -34,12 +36,29 @@
 #pragma mark - ChromeCoordinator
 
 - (void)start {
-  self.viewController =
-      [[PageInfoViewController alloc] initWithStyle:UITableViewStylePlain];
+  self.dispatcher = self.browser->GetCommandDispatcher();
+
+  web::WebState* webState =
+      self.browser->GetWebStateList()->GetActiveWebState();
+  web::NavigationItem* navItem =
+      webState->GetNavigationManager()->GetVisibleItem();
+
+  bool offlinePage =
+      OfflinePageTabHelper::FromWebState(webState)->presenting_offline_page();
+
+  PageInfoSiteSecurityDescription* description =
+      [PageInfoSiteSecurityMediator configurationForURL:navItem->GetURL()
+                                              SSLStatus:navItem->GetSSL()
+                                            offlinePage:offlinePage];
+
+  self.viewController = [[PageInfoViewController alloc]
+      initWithSiteSecurityDescription:description];
+  self.dispatcher = self.browser->GetCommandDispatcher();
+  self.viewController.handler =
+      HandlerForProtocol(self.dispatcher, BrowserCommands);
 
   self.navigationController = [[UINavigationController alloc]
       initWithRootViewController:self.viewController];
-
   [self.baseViewController presentViewController:self.navigationController
                                         animated:YES
                                       completion:nil];
