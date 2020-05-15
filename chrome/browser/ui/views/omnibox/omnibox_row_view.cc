@@ -20,6 +20,7 @@
 #include "ui/views/controls/button/button.h"
 #include "ui/views/controls/button/image_button.h"
 #include "ui/views/controls/button/image_button_factory.h"
+#include "ui/views/controls/focus_ring.h"
 #include "ui/views/controls/highlight_path_generator.h"
 #include "ui/views/controls/label.h"
 #include "ui/views/layout/box_layout.h"
@@ -44,9 +45,17 @@ class OmniboxRowView::HeaderView : public views::View,
     header_text_->SetFontList(font);
     header_text_->SetEnabledColor(gfx::kGoogleGrey700);
 
-    // TODO(tommycli): Add a focus ring.
     hide_button_ = AddChildView(views::CreateVectorToggleImageButton(this));
     views::InstallCircleHighlightPathGenerator(hide_button_);
+
+    hide_button_focus_ring_ = views::FocusRing::Install(hide_button_);
+    hide_button_focus_ring_->SetHasFocusPredicate([&](View* view) {
+      return view->GetVisible() &&
+             row_view_->popup_model_->selection() ==
+                 OmniboxPopupModel::Selection(
+                     row_view_->line_,
+                     OmniboxPopupModel::HEADER_BUTTON_FOCUSED);
+    });
   }
 
   void SetHeader(int suggestion_group_id, const base::string16& header_text) {
@@ -129,6 +138,7 @@ class OmniboxRowView::HeaderView : public views::View,
     // The "toggled" button state corresponds with the group being hidden.
     hide_button_->SetImage(views::Button::STATE_NORMAL, arrow_up);
     hide_button_->SetToggledImage(views::Button::STATE_NORMAL, &arrow_down);
+    hide_button_focus_ring_->SchedulePaint();
 
     // It's a little hokey that we're stealing the logic for the background
     // color from OmniboxResultView. If we start doing this is more than just
@@ -146,6 +156,7 @@ class OmniboxRowView::HeaderView : public views::View,
 
   // The button used to toggle hiding suggestions with this header.
   views::ToggleImageButton* hide_button_;
+  std::unique_ptr<views::FocusRing> hide_button_focus_ring_;
 
   // The group ID associated with this header.
   int suggestion_group_id_ = 0;
