@@ -763,7 +763,7 @@ deps = {
     Var('chromium_git') + '/angle/angle.git' + '@' +  Var('angle_revision'),
 
   'src/third_party/dav1d/libdav1d':
-    Var('chromium_git') + '/external/github.com/videolan/dav1d.git' + '@' + '114e8f0ee53ba34d22452dc4bdc0e9ec263189c8',
+    Var('chromium_git') + '/external/github.com/videolan/dav1d.git' + '@' + 'b585f051c365bbada36bd066dd0a8a237fbf9dca',
 
   'src/third_party/dawn':
     Var('dawn_git') + '/dawn.git' + '@' +  Var('dawn_revision'),
