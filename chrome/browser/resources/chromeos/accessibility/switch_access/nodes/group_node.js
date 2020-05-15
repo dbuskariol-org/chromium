@@ -103,7 +103,7 @@ class GroupNode extends SAChildNode {
   isValidAndVisible() {
     for (const child of this.children_) {
       if (child.isValidAndVisible()) {
-        return true;
+        return !!this.location;
       }
     }
     return false;
