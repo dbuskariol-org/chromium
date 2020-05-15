@@ -4365,8 +4365,8 @@
           'gtest_tests': 'chromium_android_gtests',
         },
         'mixins': [
-          'hammerhead',
-          'kitkat',
+          'bullhead',
+          'marshmallow',
         ],
         'os_type': 'android',
       },
