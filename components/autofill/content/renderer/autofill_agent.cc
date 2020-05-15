@@ -99,34 +99,6 @@ namespace {
 // upon, instead of multiple in close succession (debounce time).
 size_t kWaitTimeForSelectOptionsChangesMs = 50;
 
-// Gets all the data list values (with corresponding label) for the given
-// element.
-void GetDataListSuggestions(const WebInputElement& element,
-                            std::vector<base::string16>* values,
-                            std::vector<base::string16>* labels) {
-  for (const auto& option : element.FilteredDataListOptions()) {
-    values->push_back(option.Value().Utf16());
-    if (option.Value() != option.Label())
-      labels->push_back(option.Label().Utf16());
-    else
-      labels->push_back(base::string16());
-  }
-}
-
-// Trim the vector before sending it to the browser process to ensure we
-// don't send too much data through the IPC.
-void TrimStringVectorForIPC(std::vector<base::string16>* strings) {
-  // Limit the size of the vector.
-  if (strings->size() > kMaxListSize)
-    strings->resize(kMaxListSize);
-
-  // Limit the size of the strings in the vector.
-  for (size_t i = 0; i < strings->size(); ++i) {
-    if ((*strings)[i].length() > kMaxDataLength)
-      (*strings)[i].resize(kMaxDataLength);
-  }
-}
-
 }  // namespace
 
 AutofillAgent::ShowSuggestionsOptions::ShowSuggestionsOptions()
@@ -877,13 +849,10 @@ void AutofillAgent::QueryAutofillSuggestions(
     return;
   }
 
-  const WebInputElement* input_element = ToWebInputElement(&element);
-  if (input_element) {
+  if (const WebInputElement* input_element = ToWebInputElement(&element)) {
     // Find the datalist values and send them to the browser process.
-    GetDataListSuggestions(*input_element, &field.datalist_values,
-                           &field.datalist_labels);
-    TrimStringVectorForIPC(&field.datalist_values);
-    TrimStringVectorForIPC(&field.datalist_labels);
+    form_util::GetDataListSuggestions(*input_element, &field.datalist_values,
+                                      &field.datalist_labels);
   }
 
   is_popup_possibly_visible_ = true;
