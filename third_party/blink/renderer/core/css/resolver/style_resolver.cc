@@ -1219,7 +1219,9 @@ scoped_refptr<ComputedStyle> StyleResolver::PseudoStyleForElement(
   return state.TakeStyle();
 }
 
-scoped_refptr<const ComputedStyle> StyleResolver::StyleForPage(int page_index) {
+scoped_refptr<const ComputedStyle> StyleResolver::StyleForPage(
+    int page_index,
+    const AtomicString& page_name) {
   scoped_refptr<const ComputedStyle> initial_style =
       InitialStyleForElement(GetDocument());
   if (!GetDocument().documentElement())
@@ -1238,7 +1240,7 @@ scoped_refptr<const ComputedStyle> StyleResolver::StyleForPage(int page_index) {
 
   STACK_UNINITIALIZED StyleCascade cascade(state);
 
-  PageRuleCollector collector(root_element_style, page_index,
+  PageRuleCollector collector(root_element_style, page_index, page_name,
                               cascade.MutableMatchResult());
 
   collector.MatchPageRules(
