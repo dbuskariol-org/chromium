@@ -94,7 +94,7 @@ class TEST_TYPES(object):
 # The perf data will be handled on a separated 'processor' VM.
 # This list will be removed or replace by an opt-out list.
 LIGHTWEIGHT_TESTERS = [
-    'android-pixel2-perf-fyi', 'linux-perf-fyi',
+    'linux-perf', 'android-pixel2-perf-fyi', 'linux-perf-fyi',
     'win-10_laptop_low_end-perf_HP-Candidate'
 ]
 
@@ -608,6 +608,10 @@ BUILDERS = {
             'synthetic_product_name':
             'MacBookPro11,5_x86-64-i7-4870HQ_AMD Radeon R8 M370X 4.0.20 [3.2.8]_Intel Haswell Iris Pro Graphics 5200 4.0.20 [3.2.8]_16384_APPLE SSD SM0512G',
         },
+    },
+    'linux-processor-perf': {
+        'platform': 'linux',
+        'perf_processor': True,
     },
 }
 
