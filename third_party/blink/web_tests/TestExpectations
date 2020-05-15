@@ -4826,6 +4826,10 @@ crbug.com/840659 external/wpt/webrtc/simulcast/h264.https.html [ Pass Failure ]
 # Mac doesn't support lowLatency/desynchronized Canvas Contexts.
 crbug.com/922218 [ Mac ] fast/canvas-api/canvas-lowlatency-getContext.html [ Failure ]
 
+# Awaiting V8 roll.
+crbug.com/v8/5416 http/tests/devtools/sources/debugger-ui/function-generator-details.js [ Pass Failure ]
+crbug.com/v8/5416 http/tests/devtools/console/console-format-es6.js [ Pass Failure ]
+
 # Sheriff 2019-01-14
 crbug.com/921583 http/tests/preload/meta-viewport-link-headers.html [ Failure Pass ]
 crbug.com/921151 [ Linux ] http/tests/security/mixedContent/insecure-iframe-with-hsts.https.html [ Failure Pass ]
