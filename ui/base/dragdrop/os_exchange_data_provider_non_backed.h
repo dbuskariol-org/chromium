@@ -2,29 +2,39 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_BASE_DRAGDROP_OS_EXCHANGE_DATA_PROVIDER_AURA_H_
-#define UI_BASE_DRAGDROP_OS_EXCHANGE_DATA_PROVIDER_AURA_H_
+#ifndef UI_BASE_DRAGDROP_OS_EXCHANGE_DATA_PROVIDER_NON_BACKED_H_
+#define UI_BASE_DRAGDROP_OS_EXCHANGE_DATA_PROVIDER_NON_BACKED_H_
 
 #include <map>
 
-#include "base/files/file_path.h"
-#include "base/macros.h"
 #include "base/pickle.h"
-#include "ui/base/dragdrop/os_exchange_data.h"
+#include "ui/base/dragdrop/file_info/file_info.h"
+#include "ui/base/dragdrop/os_exchange_data_provider.h"
+#include "ui/base/ui_base_export.h"
 #include "ui/gfx/geometry/vector2d.h"
 #include "ui/gfx/image/image_skia.h"
 #include "url/gurl.h"
+
+namespace base {
+class FilePath;
+}  // namespace base
 
 namespace ui {
 
 class ClipboardFormatType;
 
-// OSExchangeDataProvider implementation for aura on linux.
-class UI_BASE_EXPORT OSExchangeDataProviderAura
+// Simple OSExchangeDataProvider implementation for aura-based ports with no
+// actual platform integration. So data managed by this class is exchangeable
+// only among Chromium windows and is available only while it is alive.
+class UI_BASE_EXPORT OSExchangeDataProviderNonBacked
     : public OSExchangeDataProvider {
  public:
-  OSExchangeDataProviderAura();
-  ~OSExchangeDataProviderAura() override;
+  OSExchangeDataProviderNonBacked();
+  OSExchangeDataProviderNonBacked(const OSExchangeDataProviderNonBacked&) =
+      delete;
+  OSExchangeDataProviderNonBacked& operator=(
+      const OSExchangeDataProviderNonBacked&) = delete;
+  ~OSExchangeDataProviderNonBacked() override;
 
   // Overridden from OSExchangeDataProvider:
   std::unique_ptr<OSExchangeDataProvider> Clone() const override;
@@ -58,8 +68,6 @@ class UI_BASE_EXPORT OSExchangeDataProviderAura
   gfx::Vector2d GetDragImageOffset() const override;
 
  private:
-  typedef std::map<ClipboardFormatType, base::Pickle> PickleData;
-
   // Returns true if |formats_| contains a file format and the file name can be
   // parsed as a URL.
   bool GetFileURL(GURL* url) const;
@@ -68,9 +76,9 @@ class UI_BASE_EXPORT OSExchangeDataProviderAura
   // parsed as a URL.
   bool GetPlainTextURL(GURL* url) const;
 
-  // Actual formats that have been set. See comment above |known_formats_|
+  // Actual formats that have been set.
   // for details.
-  int formats_;
+  int formats_ = 0;
 
   // String contents.
   base::string16 string_;
@@ -83,7 +91,7 @@ class UI_BASE_EXPORT OSExchangeDataProviderAura
   std::vector<FileInfo> filenames_;
 
   // PICKLED_DATA contents.
-  PickleData pickle_data_;
+  std::map<ClipboardFormatType, base::Pickle> pickle_data_;
 
   // Drag image and offset data.
   gfx::ImageSkia drag_image_;
@@ -92,10 +100,8 @@ class UI_BASE_EXPORT OSExchangeDataProviderAura
   // For HTML format
   base::string16 html_;
   GURL base_url_;
-
-  DISALLOW_COPY_AND_ASSIGN(OSExchangeDataProviderAura);
 };
 
 }  // namespace ui
 
-#endif  // UI_BASE_DRAGDROP_OS_EXCHANGE_DATA_PROVIDER_AURA_H_
+#endif  // UI_BASE_DRAGDROP_OS_EXCHANGE_DATA_PROVIDER_NON_BACKED_H_
