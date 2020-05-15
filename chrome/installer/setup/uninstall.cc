@@ -848,7 +848,7 @@ InstallStatus UninstallProduct(const ModifyParams& modify_params,
   const InstallerState& installer_state = modify_params.installer_state;
   const base::FilePath& setup_exe = modify_params.setup_path;
 
-  const ProductState* product_state =
+  const ProductState* const product_state =
       original_state.GetProductState(installer_state.system_install());
   if (product_state != nullptr) {
     VLOG(1) << "version on the system: "
@@ -1017,10 +1017,6 @@ InstallStatus UninstallProduct(const ModifyParams& modify_params,
   // Notify the shell that associations have changed since Chrome was likely
   // unregistered.
   SHChangeNotify(SHCNE_ASSOCCHANGED, SHCNF_IDLIST, NULL, NULL);
-
-  // Get the state of the installed product (if any)
-  product_state =
-      original_state.GetProductState(installer_state.system_install());
 
   // Remove the event log provider registration as we are going to delete
   // the file which serves the resources anyways.
