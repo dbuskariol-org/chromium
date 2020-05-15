@@ -650,6 +650,10 @@
       'gn-builder-win': 'release_bot_x86_minimal_symbols',
     },
 
+    'official.chrome.continuous': {
+      'chromeos-amd64-generic-lacros-internal': 'chromeos_amd64-generic_lacros',
+    },
+
     'tryserver.blink': {
       # Most tryservers should have '_trybot' in their config names, but
       # 'release_trybot' includes 'dcheck_always_on', and the blink
@@ -1419,6 +1423,10 @@
 
     'chromeos_amd64-generic_dcheck_always_on': [
       'chromeos_amd64-generic', 'dcheck_always_on',
+    ],
+
+    'chromeos_amd64-generic_lacros': [
+      'amd64-generic', 'amd64-lacros', 'goma', 'official',
     ],
 
     'chromeos_amd64-generic_lacros_rel': [
