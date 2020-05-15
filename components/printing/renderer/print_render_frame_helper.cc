@@ -1858,8 +1858,7 @@ void PrintRenderFrameHelper::DidFinishPrinting(PrintingResult result) {
       print_preview_context_.Failed(notify_browser_of_print_failure_);
       break;
     case INVALID_SETTINGS:
-      Send(new PrintHostMsg_PrintPreviewInvalidPrinterSettings(routing_id(),
-                                                               cookie, ids));
+      preview_ui_->PrinterSettingsInvalid(cookie, ids.request_id);
       print_preview_context_.Failed(false);
       break;
 #endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)

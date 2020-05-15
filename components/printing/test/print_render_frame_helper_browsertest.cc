@@ -148,8 +148,7 @@ class DidPreviewPageListener : public IPC::Listener {
       : run_loop_(run_loop) {}
 
   bool OnMessageReceived(const IPC::Message& message) override {
-    if (message.type() == PrintHostMsg_MetafileReadyForPrinting::ID ||
-        message.type() == PrintHostMsg_PrintPreviewInvalidPrinterSettings::ID)
+    if (message.type() == PrintHostMsg_MetafileReadyForPrinting::ID)
       run_loop_->Quit();
     return false;
   }
@@ -173,6 +172,7 @@ class FakePrintPreviewUI : public mojom::PrintPreviewUI {
 
   bool preview_failed() const { return preview_failed_; }
   bool preview_cancelled() const { return preview_cancelled_; }
+  bool invalid_printer_setting() const { return invalid_printer_setting_; }
 
   // mojom::PrintPreviewUI:
   void SetOptionsFromDocument(const mojom::OptionsFromDocumentParamsPtr params,
@@ -187,6 +187,11 @@ class FakePrintPreviewUI : public mojom::PrintPreviewUI {
     preview_cancelled_ = true;
     RunQuitClosure();
   }
+  void PrinterSettingsInvalid(int32_t document_cookie,
+                              int32_t request_id) override {
+    invalid_printer_setting_ = true;
+    RunQuitClosure();
+  }
 
  private:
   void RunQuitClosure() {
@@ -197,7 +202,9 @@ class FakePrintPreviewUI : public mojom::PrintPreviewUI {
 
   bool preview_failed_ = false;
   bool preview_cancelled_ = false;
+  bool invalid_printer_setting_ = false;
   base::OnceClosure quit_closure_;
+
   mojo::AssociatedReceiver<mojom::PrintPreviewUI> receiver_{this};
 };
 #endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)
@@ -748,10 +755,7 @@ class MAYBE_PrintRenderFrameHelperPreviewTest
   }
 
   void VerifyPrintPreviewInvalidPrinterSettings(bool expect_invalid_settings) {
-    bool print_preview_invalid_printer_settings =
-        !!render_thread_->sink().GetUniqueMessageMatching(
-            PrintHostMsg_PrintPreviewInvalidPrinterSettings::ID);
-    EXPECT_EQ(expect_invalid_settings, print_preview_invalid_printer_settings);
+    EXPECT_EQ(expect_invalid_settings, preview_ui()->invalid_printer_setting());
   }
 
   // |page_number| is 0-based.

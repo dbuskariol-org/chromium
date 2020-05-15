@@ -725,10 +725,6 @@ void PrintPreviewUI::OnPrintPreviewFailed(int request_id) {
   handler_->OnPrintPreviewFailed(request_id);
 }
 
-void PrintPreviewUI::OnInvalidPrinterSettings(int request_id) {
-  handler_->OnInvalidPrinterSettings(request_id);
-}
-
 void PrintPreviewUI::OnHidePreviewDialog() {
   WebContents* preview_dialog = web_ui()->GetWebContents();
   BackgroundPrintingManager* background_printing_manager =
@@ -777,6 +773,12 @@ void PrintPreviewUI::PrintPreviewCancelled(int32_t document_cookie,
   // Always need to stop the worker.
   StopWorker(document_cookie);
   handler_->OnPrintPreviewCancelled(request_id);
+}
+
+void PrintPreviewUI::PrinterSettingsInvalid(int32_t document_cookie,
+                                            int32_t request_id) {
+  StopWorker(document_cookie);
+  handler_->OnInvalidPrinterSettings(request_id);
 }
 
 // static
