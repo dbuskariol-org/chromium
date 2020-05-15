@@ -13,6 +13,7 @@
 #include "components/omnibox/browser/omnibox_popup_model.h"
 #include "components/omnibox/browser/omnibox_prefs.h"
 #include "components/omnibox/browser/vector_icons.h"
+#include "components/prefs/pref_change_registrar.h"
 #include "components/prefs/pref_service.h"
 #include "ui/gfx/color_palette.h"
 #include "ui/gfx/image/image_skia_operations.h"
@@ -56,6 +57,15 @@ class OmniboxRowView::HeaderView : public views::View,
                      row_view_->line_,
                      OmniboxPopupModel::HEADER_BUTTON_FOCUSED);
     });
+
+    if (row_view_->pref_service_) {
+      pref_change_registrar_.Init(row_view_->pref_service_);
+      // Unretained is appropriate here. 'this' will outlive the registrar.
+      pref_change_registrar_.Add(
+          omnibox::kOmniboxHiddenGroupIds,
+          base::BindRepeating(&HeaderView::UpdateHideButtonToggleState,
+                              base::Unretained(this)));
+    }
   }
 
   void SetHeader(int suggestion_group_id, const base::string16& header_text) {
@@ -66,10 +76,8 @@ class OmniboxRowView::HeaderView : public views::View,
     // Moreover, it seems unusual to do case conversion in Views in general.
     header_text_->SetText(base::i18n::ToUpper(header_text));
 
-    if (row_view_->pref_service_) {
-      hide_button_->SetToggled(omnibox::IsSuggestionGroupIdHidden(
-          row_view_->pref_service_, suggestion_group_id_));
-    }
+    if (row_view_->pref_service_)
+      UpdateHideButtonToggleState();
   }
 
   // views::View:
@@ -108,8 +116,7 @@ class OmniboxRowView::HeaderView : public views::View,
 
     omnibox::ToggleSuggestionGroupIdVisibility(row_view_->pref_service_,
                                                suggestion_group_id_);
-    hide_button_->SetToggled(omnibox::IsSuggestionGroupIdHidden(
-        row_view_->pref_service_, suggestion_group_id_));
+    // The PrefChangeRegistrar will update the actual button toggle state.
   }
 
   // Updates the UI state for the new hover or selection state.
@@ -147,6 +154,13 @@ class OmniboxRowView::HeaderView : public views::View,
   }
 
  private:
+  // Updates the hide button's toggle state.
+  void UpdateHideButtonToggleState() {
+    DCHECK(row_view_->pref_service_);
+    hide_button_->SetToggled(omnibox::IsSuggestionGroupIdHidden(
+        row_view_->pref_service_, suggestion_group_id_));
+  }
+
   // Non-owning pointer our parent row view. We access a lot of private members
   // of our outer class. This lets us save quite a bit of state duplication.
   OmniboxRowView* const row_view_;
@@ -160,6 +174,10 @@ class OmniboxRowView::HeaderView : public views::View,
 
   // The group ID associated with this header.
   int suggestion_group_id_ = 0;
+
+  // A pref change registrar for toggling the toggle button's state. This is
+  // needed because the preference state can change through multiple UIs.
+  PrefChangeRegistrar pref_change_registrar_;
 };
 
 OmniboxRowView::OmniboxRowView(size_t line,
