@@ -111,7 +111,7 @@ class GroupNode extends SAChildNode {
 
   /** @override */
   performAction(action) {
-    if (action === SAConstants.MenuAction.SELECT) {
+    if (action === SwitchAccessMenuAction.SELECT) {
       NavigationManager.enterGroup();
       return SAConstants.ActionResponse.CLOSE_MENU;
     }
