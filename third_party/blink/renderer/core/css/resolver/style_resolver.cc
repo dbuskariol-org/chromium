@@ -2191,15 +2191,13 @@ void StyleResolver::CascadeAndApplyForcedColors(StyleResolverState& state,
   if (state.Style()->ForcedColorAdjust() == EForcedColorAdjust::kNone)
     return;
 
-  Color prev_bg_color = state.Style()->BackgroundColor().GetColor();
+  int bg_color_alpha = state.Style()->BackgroundColor().GetColor().Alpha();
 
   STACK_UNINITIALIZED StyleCascade cascade(state);
 
   const CSSValue* unset = cssvalue::CSSUnsetValue::Create();
-  const CSSValue* canvas = CSSIdentifierValue::Create(CSSValueID::kCanvas);
   auto* set =
       MakeGarbageCollected<MutableCSSPropertyValueSet>(state.GetParserMode());
-  set->SetProperty(CSSPropertyID::kBackgroundColor, *canvas);
   set->SetProperty(CSSPropertyID::kBorderBottomColor, *unset);
   set->SetProperty(CSSPropertyID::kBorderLeftColor, *unset);
   set->SetProperty(CSSPropertyID::kBorderRightColor, *unset);
@@ -2228,9 +2226,11 @@ void StyleResolver::CascadeAndApplyForcedColors(StyleResolverState& state,
   CascadeFilter filter(CSSProperty::kIsAffectedByForcedColors, false);
   cascade.Apply(filter);
 
-  Color current_bg_color = state.Style()->BackgroundColor().GetColor();
-  Color bg_color(current_bg_color.Red(), current_bg_color.Green(),
-                 current_bg_color.Blue(), prev_bg_color.Alpha());
+  Color bg_color_rbg = StyleColor::ColorFromKeyword(
+      state.Style()->InternalForcedBackgroundColorRgb(),
+      WebColorScheme::kLight);
+  Color bg_color(bg_color_rbg.Red(), bg_color_rbg.Green(), bg_color_rbg.Blue(),
+                 bg_color_alpha);
   state.Style()->SetBackgroundColor(bg_color);
 }
 
