@@ -1036,8 +1036,14 @@
   <message name="IDS_SETTINGS_CROSTINI_DISK_RESIZE_TITLE" desc="The title of the settings dialogue the user uses to resize the Crostini (AKA Linux (Beta)) Disk.">
     Resize Linux disk
   </message>
-  <message name="IDS_SETTINGS_CROSTINI_DISK_RESIZE_UNSUPPORTED" desc="The message diusplayed to the user when resizing their Crostini disk isn't supported, explaining a workaround.">
+  <message name="IDS_SETTINGS_CROSTINI_DISK_RESIZE_UNSUPPORTED" desc="The message displayed to the user when resizing their Crostini disk isn't supported, explaining a workaround.">
     Your container doesn't support being resized. To adjust the amount of space that is pre-allocated to Linux (Beta), back up and then restore into a new container.
+  </message>
+  <message name="IDS_SETTINGS_CROSTINI_DISK_RESIZE_RECOMMENDED" desc="The message shown indicating the recommended disk size in Gigabytes.">
+    At least <ph name="INSTALL_SIZE">$1<ex>5.0 GB</ex></ph>  of space is recommended for Linux.
+  </message>
+  <message name="IDS_SETTINGS_CROSTINI_DISK_RESIZE_RECOMMENDED_WARNING" desc="The message shown indicating the recommended disk size in Gigabytes, when disk space must be freed to make this possible.">
+    At least <ph name="INSTALL_SIZE">$1<ex>5.0 GB</ex></ph> of space is recommended for Linux. To increase free space, delete files from your device.
   </message>
   <message name="IDS_SETTINGS_CROSTINI_DISK_RESIZE_LOADING" desc="The message shown to the user while fetching the data needed to resize their disk.">
     Loading data, this may take up to a few seconds.

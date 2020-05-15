@@ -43,6 +43,7 @@ let CrostiniPortSetting;
  * @typedef {{succeeded: boolean,
  *            canResize: boolean,
  *            isUserChosenSize: boolean,
+ *            isLowSpaceAvailable: boolean,
  *            defaultIndex: number,
  *            ticks: !Array}}
  */

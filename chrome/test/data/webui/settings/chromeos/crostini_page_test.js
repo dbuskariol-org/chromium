@@ -607,6 +607,7 @@ suite('CrostiniPageTests', function() {
         succeeded: true,
         canResize: true,
         isUserChosenSize: true,
+        isLowSpaceAvailable: false,
         defaultIndex: 2,
         ticks: ticks
       };
@@ -615,6 +616,7 @@ suite('CrostiniPageTests', function() {
         succeeded: true,
         canResize: true,
         isUserChosenSize: false,
+        isLowSpaceAvailable: false,
         defaultIndex: 2,
         ticks: ticks
       };
@@ -674,6 +676,27 @@ suite('CrostiniPageTests', function() {
             subtext.innerText,
             loadTimeData.getString(
                 'crostiniDiskResizeDynamicallyAllocatedSubtext'));
+      });
+
+      test('ResizeRecommendationShownCorrectly', async function() {
+        await clickShowDiskResize(true);
+        const diskInfo = resizeableData;
+        await crostiniBrowserProxy.resolvePromise(
+            'getCrostiniDiskInfo', diskInfo);
+
+        assertTrue(isVisible(dialog.$$('#recommended-size')));
+        assertFalse(isVisible(dialog.$$('#recommended-size-warning')));
+      });
+
+      test('ResizeRecommendationWarningShownCorrectly', async function() {
+        await clickShowDiskResize(true);
+        const diskInfo = resizeableData;
+        diskInfo.isLowSpaceAvailable = true;
+        await crostiniBrowserProxy.resolvePromise(
+            'getCrostiniDiskInfo', diskInfo);
+
+        assertFalse(isVisible(dialog.$$('#recommended-size')));
+        assertTrue(isVisible(dialog.$$('#recommended-size-warning')));
       });
 
       test('MessageShownIfErrorAndCanRetry', async function() {
