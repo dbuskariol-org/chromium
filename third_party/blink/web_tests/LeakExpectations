@@ -68,10 +68,6 @@ crbug.com/733494 [ Linux ] media/autoplay/document-user-activation.html [ Pass F
 # Sheriff 2019-01-07
 crbug.com/919497 [ Linux ] virtual/threaded/http/tests/devtools/tracing/timeline-gpu-tasks.js [ Pass Failure ]
 
-# Sheriff 2019-02-19
-crbug.com/927454 [ Linux ] external/wpt/pointerevents/pointerevent_pointerleave_descendant_over.html [ Pass Failure ]
-crbug.com/927454 [ Linux ] external/wpt/pointerevents/pointerevent_lostpointercapture_is_first.html [ Pass Failure ]
-
 # Sheriff 2019-02-21
 crbug.com/934144 [ Linux ] http/tests/devtools/tracing/timeline-misc/timeline-flame-chart-automatically-size-window.js [ Pass Failure ]
 
