@@ -5617,7 +5617,7 @@ void RenderFrameHostImpl::CommitNavigation(
     base::Optional<SubresourceLoaderParams> subresource_loader_params,
     base::Optional<std::vector<mojom::TransferrableURLLoaderPtr>>
         subresource_overrides,
-    blink::mojom::ServiceWorkerProviderInfoForClientPtr provider_info,
+    blink::mojom::ServiceWorkerContainerInfoForClientPtr container_info,
     const base::UnguessableToken& devtools_navigation_token,
     std::unique_ptr<WebBundleHandle> web_bundle_handle) {
   web_bundle_handle_ = std::move(web_bundle_handle);
@@ -6109,7 +6109,7 @@ void RenderFrameHostImpl::CommitNavigation(
         std::move(url_loader_client_endpoints),
         std::move(subresource_loader_factories),
         std::move(subresource_overrides), std::move(controller),
-        std::move(provider_info), std::move(prefetch_loader_factory),
+        std::move(container_info), std::move(prefetch_loader_factory),
         devtools_navigation_token);
 
     // |remote_object| is an associated interface ptr, so calls can't be made on
@@ -8116,7 +8116,7 @@ void RenderFrameHostImpl::SendCommitNavigation(
     base::Optional<std::vector<::content::mojom::TransferrableURLLoaderPtr>>
         subresource_overrides,
     blink::mojom::ControllerServiceWorkerInfoPtr controller,
-    blink::mojom::ServiceWorkerProviderInfoForClientPtr provider_info,
+    blink::mojom::ServiceWorkerContainerInfoForClientPtr container_info,
     mojo::PendingRemote<network::mojom::URLLoaderFactory>
         prefetch_loader_factory,
     const base::UnguessableToken& devtools_navigation_token) {
@@ -8131,7 +8131,7 @@ void RenderFrameHostImpl::SendCommitNavigation(
         std::move(url_loader_client_endpoints),
         std::move(subresource_loader_factories),
         std::move(subresource_overrides), std::move(controller),
-        std::move(provider_info), std::move(prefetch_loader_factory),
+        std::move(container_info), std::move(prefetch_loader_factory),
         devtools_navigation_token,
         BuildCommitNavigationCallback(navigation_request));
   } else {
@@ -8142,7 +8142,7 @@ void RenderFrameHostImpl::SendCommitNavigation(
         std::move(url_loader_client_endpoints),
         std::move(subresource_loader_factories),
         std::move(subresource_overrides), std::move(controller),
-        std::move(provider_info), std::move(prefetch_loader_factory),
+        std::move(container_info), std::move(prefetch_loader_factory),
         devtools_navigation_token,
         mojom::FrameNavigationControl::CommitNavigationCallback());
   }

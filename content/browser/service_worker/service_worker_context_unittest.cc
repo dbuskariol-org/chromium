@@ -420,7 +420,7 @@ TEST_F(ServiceWorkerContextTest, NoControlleesObserver) {
       ServiceWorkerVersion::FetchHandlerExistence::EXISTS);
   version->SetStatus(ServiceWorkerVersion::ACTIVATED);
 
-  ServiceWorkerRemoteProviderEndpoint endpoint;
+  ServiceWorkerRemoteContainerEndpoint endpoint;
   base::WeakPtr<ServiceWorkerContainerHost> container_host =
       CreateContainerHostForWindow(helper_->mock_render_process_id(), true,
                                    context()->AsWeakPtr(), &endpoint);
@@ -977,7 +977,7 @@ TEST_F(ServiceWorkerContextTest, ContainerHostIterator) {
   const int kRenderProcessId2 = 2;
   const GURL kOrigin1 = GURL("https://www.example.com/");
   const GURL kOrigin2 = GURL("https://another-origin.example.net/");
-  std::vector<ServiceWorkerRemoteProviderEndpoint> remote_endpoints;
+  std::vector<ServiceWorkerRemoteContainerEndpoint> remote_endpoints;
 
   // Host1 : process_id=1, origin1.
   remote_endpoints.emplace_back();

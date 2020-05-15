@@ -2864,8 +2864,8 @@ void NavigationRequest::CommitNavigation() {
 
   CreateCoepReporter(render_frame_host_->GetProcess()->GetStoragePartition());
 
-  blink::mojom::ServiceWorkerProviderInfoForClientPtr
-      service_worker_provider_info;
+  blink::mojom::ServiceWorkerContainerInfoForClientPtr
+      service_worker_container_info;
   if (service_worker_handle_) {
     DCHECK(coep_reporter());
     mojo::PendingRemote<network::mojom::CrossOriginEmbedderPolicyReporter>
@@ -2877,7 +2877,7 @@ void NavigationRequest::CommitNavigation() {
         render_frame_host_->GetProcess()->GetID(),
         render_frame_host_->GetRoutingID(),
         render_frame_host_->cross_origin_embedder_policy(),
-        std::move(reporter_remote), &service_worker_provider_info);
+        std::move(reporter_remote), &service_worker_container_info);
   }
 
   if (web_bundle_handle_ && web_bundle_handle_->navigation_info()) {
@@ -2899,7 +2899,7 @@ void NavigationRequest::CommitNavigation() {
       std::move(response_head), std::move(response_body_),
       std::move(url_loader_client_endpoints_), is_view_source_,
       std::move(subresource_loader_params_), std::move(subresource_overrides_),
-      std::move(service_worker_provider_info), devtools_navigation_token_,
+      std::move(service_worker_container_info), devtools_navigation_token_,
       std::move(web_bundle_handle_));
 
   // Give SpareRenderProcessHostManager a heads-up about the most recently used

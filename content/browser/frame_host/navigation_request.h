@@ -1220,8 +1220,8 @@ class CONTENT_EXPORT NavigationRequest
   // The unique id to identify the NavigationHandle with.
   int64_t navigation_handle_id_ = 0;
 
-  // Manages the lifetime of a pre-created ServiceWorkerProviderHost until a
-  // corresponding provider is created in the renderer.
+  // Manages the lifetime of a pre-created ServiceWorkerContainerHost until a
+  // corresponding container is created in the renderer.
   std::unique_ptr<ServiceWorkerMainResourceHandle> service_worker_handle_;
 
   // Timer for detecting an unexpectedly long time to commit a navigation.

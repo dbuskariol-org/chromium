@@ -282,7 +282,7 @@ void DedicatedWorkerHost::DidStartScriptLoad(
   }
 
   client_->OnScriptLoadStarted(
-      service_worker_handle_->TakeProviderInfo(),
+      service_worker_handle_->TakeContainerInfo(),
       std::move(main_script_load_params),
       std::move(subresource_loader_factories),
       subresource_loader_updater_.BindNewPipeAndPassReceiver(),

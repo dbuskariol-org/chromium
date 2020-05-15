@@ -68,8 +68,8 @@ class MockDedicatedWorker
   }
 
   void OnScriptLoadStarted(
-      blink::mojom::ServiceWorkerProviderInfoForClientPtr
-          service_worker_provider_info,
+      blink::mojom::ServiceWorkerContainerInfoForClientPtr
+          service_worker_container_info,
       blink::mojom::WorkerMainScriptLoadParamsPtr main_script_load_params,
       std::unique_ptr<blink::PendingURLLoaderFactoryBundle>
           pending_subresource_loader_factory_bundle,
