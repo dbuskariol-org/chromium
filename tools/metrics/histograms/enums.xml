@@ -60389,12 +60389,18 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
 </enum>
 
 <enum name="SendTabToSelfAddEntryStatus">
+  <obsolete>
+    Removed 05/2020.
+  </obsolete>
   <int value="0" label="Success"/>
   <int value="1" label="Failure"/>
   <int value="2" label="Duplicate"/>
 </enum>
 
 <enum name="SendTabToSelfApplySyncChanges">
+  <obsolete>
+    Removed 05/2020.
+  </obsolete>
   <int value="0" label="Total number of EntityChanges."/>
   <int value="1" label="Number of EntityChanges that are deletions."/>
   <int value="2" label="Number of EntityChanges that are invaled."/>
@@ -60405,12 +60411,15 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
 </enum>
 
 <enum name="SendTabToSelfClickResult">
-  <int value="0" label="SendTabToSelf entry point is shown."/>
+  <int value="0" label="SendTabToSelf entry point is shown. (Obsolete)"/>
   <int value="1" label="SendTabToSelf target device is clicked."/>
-  <int value="2" label="SendTabToSelf device list is shown."/>
+  <int value="2" label="SendTabToSelf device list is shown. (Obsolete)"/>
 </enum>
 
 <enum name="SendTabToSelfNotification">
+  <obsolete>
+    Removed 05/2020.
+  </obsolete>
   <int value="0" label="Opened"/>
   <int value="1" label="Dismissed"/>
   <int value="2" label="Shown"/>
@@ -60423,6 +60432,9 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
 </enum>
 
 <enum name="SendTabToSelfNotifyLocalDevice">
+  <obsolete>
+    Removed 05/2020.
+  </obsolete>
   <int value="0" label="Local"/>
   <int value="1" label="Remote"/>
 </enum>
