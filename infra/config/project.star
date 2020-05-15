@@ -1,18 +1,16 @@
 settings = struct(
-    # Switch this to False for branches
-    is_master = True,
-    ref = 'refs/heads/master',
+    is_master = False,
+    ref = 'refs/branch-heads/4147',
     ci_bucket = 'ci',
-    ci_poller = 'master-gitiles-trigger',
+    ci_poller = 'chromium-trigger',
     main_console_name = 'main',
-    main_console_title = 'Chromium Main Console',
+    main_console_title = 'M84 Main Console',
     try_bucket = 'try',
     cq_group = 'cq',
-    cq_ref_regexp = 'refs/heads/.+',
+    cq_ref_regexp = 'refs/branch-heads/4147',
     main_list_view_name = 'try',
-    main_list_view_title = 'Chromium CQ console',
-    # Switch this to None for branches
-    tree_status_host = 'chromium-status.appspot.com/',
+    main_list_view_title = 'M84 CQ console',
+    tree_status_host = None,
 )
 
 def master_only_exec(f):
