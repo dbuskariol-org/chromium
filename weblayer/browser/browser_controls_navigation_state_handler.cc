@@ -81,14 +81,6 @@ void BrowserControlsNavigationStateHandler::DidChangeVisibleSecurityState() {
   UpdateState();
 }
 
-void BrowserControlsNavigationStateHandler::DidAttachInterstitialPage() {
-  UpdateState();
-}
-
-void BrowserControlsNavigationStateHandler::DidDetachInterstitialPage() {
-  UpdateState();
-}
-
 void BrowserControlsNavigationStateHandler::RenderProcessGone(
     base::TerminationStatus status) {
   UpdateState();
@@ -134,7 +126,6 @@ BrowserControlsNavigationStateHandler::CalculateCurrentState() {
   // AccessibilityUtil.isAccessibilityEnabled().
   if (force_show_during_load_ || web_contents()->IsFullscreen() ||
       web_contents()->IsFocusedElementEditable() ||
-      web_contents()->ShowingInterstitialPage() ||
       web_contents()->IsBeingDestroyed() || web_contents()->IsCrashed()) {
     return content::BROWSER_CONTROLS_STATE_SHOWN;
   }
