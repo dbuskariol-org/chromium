@@ -46,12 +46,12 @@ constexpr base::TimeDelta kTickInterval = base::TimeDelta::FromSeconds(1);
 
 // Creates a notification ID for the given |timer|. It is guaranteed that this
 // method will always return the same notification ID given the same timer.
-std::string CreateTimerNotificationId(const mojom::AssistantTimer& timer) {
+std::string CreateTimerNotificationId(const AssistantTimer& timer) {
   return std::string(kTimerNotificationIdPrefix) + timer.id;
 }
 
 // Creates a notification message for the given |timer|.
-std::string CreateTimerNotificationMessage(const mojom::AssistantTimer& timer) {
+std::string CreateTimerNotificationMessage(const AssistantTimer& timer) {
   // Method aliases to prevent line-wrapping below.
   const auto createHour = icu::MeasureUnit::createHour;
   const auto createMinute = icu::MeasureUnit::createMinute;
@@ -107,7 +107,7 @@ std::string CreateTimerNotificationMessage(const mojom::AssistantTimer& timer) {
 
 // Creates a notification for the given |timer|.
 chromeos::assistant::mojom::AssistantNotificationPtr CreateTimerNotification(
-    const mojom::AssistantTimer& timer) {
+    const AssistantTimer& timer) {
   using chromeos::assistant::mojom::AssistantNotification;
   using chromeos::assistant::mojom::AssistantNotificationButton;
   using chromeos::assistant::mojom::AssistantNotificationPtr;
@@ -164,48 +164,43 @@ chromeos::assistant::mojom::AssistantNotificationPtr CreateTimerNotification(
 
 }  // namespace
 
-// AssistantAlarmTimerController -----------------------------------------------
+// AssistantAlarmTimerControllerImpl ------------------------------------------
 
-AssistantAlarmTimerController::AssistantAlarmTimerController(
+AssistantAlarmTimerControllerImpl::AssistantAlarmTimerControllerImpl(
     AssistantControllerImpl* assistant_controller)
     : assistant_controller_(assistant_controller) {
   AddModelObserver(this);
   assistant_controller_observer_.Add(AssistantController::Get());
 }
 
-AssistantAlarmTimerController::~AssistantAlarmTimerController() {
+AssistantAlarmTimerControllerImpl::~AssistantAlarmTimerControllerImpl() {
   RemoveModelObserver(this);
 }
 
-void AssistantAlarmTimerController::BindReceiver(
-    mojo::PendingReceiver<mojom::AssistantAlarmTimerController> receiver) {
-  receiver_.Bind(std::move(receiver));
-}
-
-void AssistantAlarmTimerController::AddModelObserver(
+void AssistantAlarmTimerControllerImpl::AddModelObserver(
     AssistantAlarmTimerModelObserver* observer) {
   model_.AddObserver(observer);
 }
 
-void AssistantAlarmTimerController::RemoveModelObserver(
+void AssistantAlarmTimerControllerImpl::RemoveModelObserver(
     AssistantAlarmTimerModelObserver* observer) {
   model_.RemoveObserver(observer);
 }
 
-void AssistantAlarmTimerController::SetAssistant(
+void AssistantAlarmTimerControllerImpl::SetAssistant(
     chromeos::assistant::mojom::Assistant* assistant) {
   assistant_ = assistant;
 }
 
-void AssistantAlarmTimerController::OnAssistantControllerConstructed() {
+void AssistantAlarmTimerControllerImpl::OnAssistantControllerConstructed() {
   AssistantState::Get()->AddObserver(this);
 }
 
-void AssistantAlarmTimerController::OnAssistantControllerDestroying() {
+void AssistantAlarmTimerControllerImpl::OnAssistantControllerDestroying() {
   AssistantState::Get()->RemoveObserver(this);
 }
 
-void AssistantAlarmTimerController::OnDeepLinkReceived(
+void AssistantAlarmTimerControllerImpl::OnDeepLinkReceived(
     assistant::util::DeepLinkType type,
     const std::map<std::string, std::string>& params) {
   using assistant::util::DeepLinkParam;
@@ -232,7 +227,7 @@ void AssistantAlarmTimerController::OnDeepLinkReceived(
   PerformAlarmTimerAction(action.value(), alarm_timer_id.value(), duration);
 }
 
-void AssistantAlarmTimerController::OnAssistantStatusChanged(
+void AssistantAlarmTimerControllerImpl::OnAssistantStatusChanged(
     chromeos::assistant::AssistantStatus status) {
   // If LibAssistant is no longer running we need to clear our cache to
   // accurately reflect LibAssistant alarm/timer state.
@@ -240,8 +235,8 @@ void AssistantAlarmTimerController::OnAssistantStatusChanged(
     model_.RemoveAllTimers();
 }
 
-void AssistantAlarmTimerController::OnTimerStateChanged(
-    std::vector<mojom::AssistantTimerPtr> timers) {
+void AssistantAlarmTimerControllerImpl::OnTimerStateChanged(
+    std::vector<AssistantTimerPtr> timers) {
   if (timers.empty()) {
     model_.RemoveAllTimers();
     return;
@@ -262,8 +257,8 @@ void AssistantAlarmTimerController::OnTimerStateChanged(
     model_.AddOrUpdateTimer(std::move(new_or_updated_timer));
 }
 
-void AssistantAlarmTimerController::OnTimerAdded(
-    const mojom::AssistantTimer& timer) {
+void AssistantAlarmTimerControllerImpl::OnTimerAdded(
+    const AssistantTimer& timer) {
   // Schedule a repeating timer to tick the tracked timers.
   if (!ticker_.IsRunning()) {
     ticker_.Start(FROM_HERE, kTickInterval, &model_,
@@ -275,8 +270,8 @@ void AssistantAlarmTimerController::OnTimerAdded(
       CreateTimerNotification(timer));
 }
 
-void AssistantAlarmTimerController::OnTimerUpdated(
-    const mojom::AssistantTimer& timer) {
+void AssistantAlarmTimerControllerImpl::OnTimerUpdated(
+    const AssistantTimer& timer) {
   // When a |timer| is updated we need to update the corresponding notification
   // unless it has already been dismissed by the user.
   auto* notification_controller =
@@ -288,8 +283,8 @@ void AssistantAlarmTimerController::OnTimerUpdated(
   }
 }
 
-void AssistantAlarmTimerController::OnTimerRemoved(
-    const mojom::AssistantTimer& timer) {
+void AssistantAlarmTimerControllerImpl::OnTimerRemoved(
+    const AssistantTimer& timer) {
   // If our model is empty, we no longer need tick updates.
   if (model_.empty())
     ticker_.Stop();
@@ -299,7 +294,7 @@ void AssistantAlarmTimerController::OnTimerRemoved(
       CreateTimerNotificationId(timer), /*from_server=*/false);
 }
 
-void AssistantAlarmTimerController::OnAllTimersRemoved() {
+void AssistantAlarmTimerControllerImpl::OnAllTimersRemoved() {
   // We can stop our timer from ticking when all timers are removed.
   ticker_.Stop();
 
@@ -309,7 +304,7 @@ void AssistantAlarmTimerController::OnAllTimersRemoved() {
                                         /*from_server=*/false);
 }
 
-void AssistantAlarmTimerController::PerformAlarmTimerAction(
+void AssistantAlarmTimerControllerImpl::PerformAlarmTimerAction(
     const AlarmTimerAction& action,
     const std::string& alarm_timer_id,
     const base::Optional<base::TimeDelta>& duration) {
