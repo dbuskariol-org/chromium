@@ -114,7 +114,13 @@ void CanvasRenderingContextHost::CreateCanvasResourceProvider3D(
     presentation_mode |=
         CanvasResourceProvider::kAllowImageChromiumPresentationMode;
   }
-
+  if (RenderingContext() && RenderingContext()->UsingSwapChain()) {
+    DCHECK(LowLatencyEnabled());
+    // Allow swap chain presentation only if 3d context is using a swap
+    // chain since we'll be importing it as a passthrough texture.
+    presentation_mode |=
+        CanvasResourceProvider::kAllowSwapChainPresentationMode;
+  }
   std::unique_ptr<CanvasResourceProvider> provider;
   base::WeakPtr<CanvasResourceDispatcher> dispatcher =
       GetOrCreateResourceDispatcher()
@@ -122,14 +128,11 @@ void CanvasRenderingContextHost::CreateCanvasResourceProvider3D(
           : nullptr;
   if (SharedGpuContext::IsGpuCompositingEnabled()) {
     CanvasResourceProvider::ResourceUsage usage;
-    if (LowLatencyEnabled() && RenderingContext() &&
-        RenderingContext()->UsingSwapChain()) {
+    if (LowLatencyEnabled() && RenderingContext()) {
       // Allow swap chain presentation only if 3d context is using a swap
       // chain since we'll be importing it as a passthrough texture.
       usage = CanvasResourceProvider::ResourceUsage::
           kAcceleratedDirect3DResourceUsage;
-      presentation_mode |=
-          CanvasResourceProvider::kAllowSwapChainPresentationMode;
     } else {
       usage = CanvasResourceProvider::ResourceUsage::
           kAcceleratedCompositedResourceUsage;
@@ -185,19 +188,21 @@ void CanvasRenderingContextHost::CreateCanvasResourceProvider2D(
         CanvasResourceProvider::kAllowImageChromiumPresentationMode;
     composited_mode = true;
   }
+  if (base::FeatureList::IsEnabled(features::kLowLatencyCanvas2dSwapChain) &&
+      LowLatencyEnabled() && want_acceleration) {
+    presentation_mode |=
+        CanvasResourceProvider::kAllowSwapChainPresentationMode;
+  }
 
   bool try_swap_chain = false;
 
   CanvasResourceProvider::ResourceUsage usage;
   if (want_acceleration) {
-    if (LowLatencyEnabled() &&
-        base::FeatureList::IsEnabled(features::kLowLatencyCanvas2dSwapChain)) {
+    if (LowLatencyEnabled()) {
       // Allow swap chains only if the runtime feature is enabled and we're
       // in low latency mode too.
       usage = CanvasResourceProvider::ResourceUsage::
           kAcceleratedDirect2DResourceUsage;
-      presentation_mode |=
-          CanvasResourceProvider::kAllowSwapChainPresentationMode;
       try_swap_chain = true;
     } else {
       usage = CanvasResourceProvider::ResourceUsage::
