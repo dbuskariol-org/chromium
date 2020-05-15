@@ -105,6 +105,11 @@
         "specifiers": ["Mac10.14", "Release"],
         "is_try_builder": true
     },
+    "mac10.15-blink-rel": {
+        "port_name": "mac-mac10.15",
+        "specifiers": ["Mac10.15", "Release"],
+        "is_try_builder": true
+    },
     "win7-blink-rel": {
         "port_name": "win-win7",
         "specifiers": ["Win7", "Release"],
