@@ -780,6 +780,71 @@ void PeopleSection::AddHandlers(content::WebUI* web_ui) {
   }
 }
 
+void PeopleSection::RegisterHierarchy(HierarchyGenerator* generator) const {
+  generator->RegisterTopLevelSetting(mojom::Setting::kSetUpParentalControls);
+
+  // My accounts.
+  generator->RegisterTopLevelSubpage(mojom::Subpage::kMyAccounts);
+  static constexpr mojom::Setting kMyAccountsSettings[] = {
+      mojom::Setting::kAddAccount,
+      mojom::Setting::kRemoveAccount,
+  };
+  RegisterNestedSettingBulk(mojom::Subpage::kMyAccounts, kMyAccountsSettings,
+                            generator);
+
+  // Combined browser/OS sync (deprecated). Note that settings are not
+  // registered for these subpages since they'll be removed shortly.
+  generator->RegisterTopLevelSubpage(mojom::Subpage::kSyncDeprecated);
+  generator->RegisterNestedSubpage(mojom::Subpage::kSyncDeprecatedAdvanced,
+                                   mojom::Subpage::kSyncDeprecated);
+
+  // OS sync.
+  generator->RegisterTopLevelSubpage(mojom::Subpage::kSync);
+  generator->RegisterNestedSetting(mojom::Setting::kSyncOnOff,
+                                   mojom::Subpage::kSync);
+
+  // Security and sign-in.
+  generator->RegisterTopLevelSubpage(mojom::Subpage::kSecurityAndSignIn);
+  static constexpr mojom::Setting kSecurityAndSignInSettings[] = {
+      mojom::Setting::kLockScreen,
+      mojom::Setting::kChangeAuthPin,
+  };
+  RegisterNestedSettingBulk(mojom::Subpage::kSecurityAndSignIn,
+                            kSecurityAndSignInSettings, generator);
+
+  // Fingerprint.
+  generator->RegisterNestedSubpage(mojom::Subpage::kFingerprint,
+                                   mojom::Subpage::kSecurityAndSignIn);
+  static constexpr mojom::Setting kFingerprintSettings[] = {
+      mojom::Setting::kAddFingerprint,
+      mojom::Setting::kRemoveFingerprint,
+  };
+  RegisterNestedSettingBulk(mojom::Subpage::kFingerprint, kFingerprintSettings,
+                            generator);
+
+  // Manage other people.
+  generator->RegisterTopLevelSubpage(mojom::Subpage::kManageOtherPeople);
+  static constexpr mojom::Setting kManageOtherPeopleSettings[] = {
+      mojom::Setting::kGuestBrowsing,
+      mojom::Setting::kShowUsernamesAndPhotosAtSignIn,
+      mojom::Setting::kRestrictSignIn,
+      mojom::Setting::kAddToUserWhitelist,
+      mojom::Setting::kRemoveFromUserWhitelist,
+  };
+  RegisterNestedSettingBulk(mojom::Subpage::kManageOtherPeople,
+                            kManageOtherPeopleSettings, generator);
+
+  // Kerberos.
+  generator->RegisterTopLevelSubpage(mojom::Subpage::kKerberos);
+  static constexpr mojom::Setting kKerberosSettings[] = {
+      mojom::Setting::kAddKerberosTicket,
+      mojom::Setting::kRemoveKerberosTicket,
+      mojom::Setting::kSetActiveKerberosTicket,
+  };
+  RegisterNestedSettingBulk(mojom::Subpage::kKerberos, kKerberosSettings,
+                            generator);
+}
+
 void PeopleSection::OnStateChanged(syncer::SyncService* sync_service) {
   DCHECK(chromeos::features::IsSplitSettingsSyncEnabled());
   DCHECK_EQ(sync_service, sync_service_);
