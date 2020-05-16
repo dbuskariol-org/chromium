@@ -148,7 +148,6 @@ BrowserControlsNavigationStateHandler::CalculateCurrentState() {
       return content::BROWSER_CONTROLS_STATE_SHOWN;
 
     case security_state::NONE:
-    case security_state::EV_SECURE:
     case security_state::SECURE:
     case security_state::SECURE_WITH_POLICY_INSTALLED_CERT:
     case security_state::SECURITY_LEVEL_COUNT:
