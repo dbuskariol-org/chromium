@@ -34,6 +34,7 @@
 #include "ios/chrome/browser/crash_report/crash_report_helper.h"
 #import "ios/chrome/browser/first_run/first_run.h"
 #include "ios/chrome/browser/main/browser.h"
+#import "ios/chrome/browser/main/browser.h"
 #include "ios/chrome/browser/ntp/features.h"
 #import "ios/chrome/browser/ntp_snippets/content_suggestions_scheduler_notifications.h"
 #include "ios/chrome/browser/signin/identity_manager_factory.h"
@@ -397,12 +398,12 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
   [self.browserViewWrangler switchGlobalStateToMode:launchMode];
 
-  TabModel* tabModel;
+  Browser* browser;
   if (launchMode == ApplicationMode::INCOGNITO) {
-    tabModel = self.incognitoInterface.tabModel;
+    browser = self.incognitoInterface.browser;
     [self setCurrentInterfaceForMode:ApplicationMode::INCOGNITO];
   } else {
-    tabModel = self.mainInterface.tabModel;
+    browser = self.mainInterface.browser;
     [self setCurrentInterfaceForMode:ApplicationMode::NORMAL];
   }
 
@@ -434,7 +435,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
   // If this is first run, or if this web state list should have an NTP created
   // when it activates, then create that tab.
-  if (firstRun || [self shouldOpenNTPTabOnActivationOfTabModel:tabModel]) {
+  if (firstRun || [self shouldOpenNTPTabOnActivationOfBrowser:browser]) {
     OpenNewTabCommand* command = [OpenNewTabCommand
         commandWithIncognito:self.currentInterface.incognito];
     command.userInitiated = NO;
@@ -1246,15 +1247,16 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
                              WebStateList::kInvalidIndex;
 }
 
-- (BOOL)shouldOpenNTPTabOnActivationOfTabModel:(TabModel*)tabModel {
+- (BOOL)shouldOpenNTPTabOnActivationOfBrowser:(Browser*)browser {
   if (self.tabSwitcherIsActive) {
-    TabModel* mainTabModel = self.mainInterface.tabModel;
-    TabModel* otrTabModel = self.incognitoInterface.tabModel;
+    Browser* mainBrowser = self.mainInterface.browser;
+    Browser* otrBrowser = self.incognitoInterface.browser;
     // Only attempt to dismiss the tab switcher and open a new tab if:
     // - there are no tabs open in either tab model, and
     // - the tab switcher controller is not directly or indirectly presenting
     // another view controller.
-    if (![mainTabModel isEmpty] || ![otrTabModel isEmpty])
+    if (!(mainBrowser->GetWebStateList()->empty()) ||
+        !(otrBrowser->GetWebStateList()->empty()))
       return NO;
 
     // If the tabSwitcher is contained, check if the parent container is
@@ -1271,8 +1273,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
     return YES;
   }
-  return ![tabModel count] && [tabModel browserState] &&
-             ![tabModel browserState] -> IsOffTheRecord();
+  return browser->GetWebStateList()->empty() &&
+         !(browser->GetBrowserState()->IsOffTheRecord());
 }
 
 #pragma mark - SceneURLLoadingServiceDelegate
