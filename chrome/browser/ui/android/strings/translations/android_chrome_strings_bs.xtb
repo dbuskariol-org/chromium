@@ -2,7 +2,7 @@
 <!DOCTYPE translationbundle>
 <translationbundle lang="bs">
 <translation id="1028699632127661925">Slanje na uređaj <ph name="DEVICE_NAME" /></translation>
-<translation id="103269572468856066">Obrisati i podatke ovih web lokacija i apl.?</translation>
+<translation id="103269572468856066">Obrisati i podatke ovih web lokacija i aplikacija?</translation>
 <translation id="1036348656032585052">Isključi</translation>
 <translation id="1036727731225946849">Dodavanje stavke <ph name="WEBAPK_NAME" />...</translation>
 <translation id="1041308826830691739">S web lokacija</translation>
@@ -152,6 +152,7 @@ Dodirnite bilo koju riječ da je pretražite. Za fino podešavanje pretraživanj
 <translation id="218608176142494674">Dijeljenje</translation>
 <translation id="2227444325776770048">Nastavite kao <ph name="USER_FULL_NAME" /></translation>
 <translation id="2234876718134438132">Sinhronizacija i Googleove usluge</translation>
+<translation id="2239812875700136898">Kontrolirajte priče pomoću dugmeta Opcije za Discover</translation>
 <translation id="2259659629660284697">Izvoz lozinki…</translation>
 <translation id="2268044343513325586">Traži detaljnije</translation>
 <translation id="2286841657746966508">Adresa za naplatu</translation>

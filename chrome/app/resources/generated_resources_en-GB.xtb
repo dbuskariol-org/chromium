@@ -158,6 +158,7 @@
 <translation id="1197088940767939838">Orange</translation>
 <translation id="1197979282329025000">An error occurred while retrieving printer capabilities for printer <ph name="PRINTER_NAME" />. This printer could not be registered with <ph name="CLOUD_PRINT_NAME" />.</translation>
 <translation id="119944043368869598">Clear all</translation>
+<translation id="1199814941632954229">Certificates are being provisioned for these certificate profiles</translation>
 <translation id="1201402288615127009">Next</translation>
 <translation id="1202596434010270079">Kiosk app has been updated. Please remove the USB stick.</translation>
 <translation id="120368089816228251">Music note</translation>
@@ -796,6 +797,9 @@
 <translation id="1989112275319619282">Browse</translation>
 <translation id="1990512225220753005">Don't show shortcuts on this page</translation>
 <translation id="1992397118740194946">Not set</translation>
+<translation id="199340248656592341">Manage your accounts here. <ph name="LINK_BEGIN" />Learn more<ph name="LINK_END" />&lt;br&gt;&lt;br&gt;
+    Bookmarks, passwords and other browser data are synced with the primary account.&lt;br&gt;&lt;br&gt;
+    Adding a school account enables easy sign-in to websites and extensions as a student while still operating under parental controls.</translation>
 <translation id="1994173015038366702">Site URL</translation>
 <translation id="1995916364271252349">Controls what information sites can use and show (location, camera, pop-ups and more)</translation>
 <translation id="1997616988432401742">Your certificates</translation>
@@ -995,6 +999,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="2241634353105152135">Just once</translation>
 <translation id="2242687258748107519">File Info</translation>
 <translation id="2246549592927364792">Get image descriptions from Google?</translation>
+<translation id="2249111429176737533">Open as tabbed window</translation>
 <translation id="2249605167705922988">e.g. 1-5, 8, 11-13</translation>
 <translation id="2251218783371366160">Open with system viewer</translation>
 <translation id="225163402930830576">Refresh Networks</translation>
@@ -1189,6 +1194,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="2489918096470125693">Add &amp;Folder...</translation>
 <translation id="2490481887078769936">Removed '<ph name="FILE_NAME" />' from list</translation>
 <translation id="249113932447298600">Sorry, the device <ph name="DEVICE_LABEL" /> is not supported at this time.</translation>
+<translation id="2492461744635776704">Preparing certificate signing request</translation>
 <translation id="249303669840926644">Could not complete registration</translation>
 <translation id="2495777824269688114">Discover more features or get answers. Select '?' for help.</translation>
 <translation id="2496180316473517155">Browsing history</translation>
@@ -1300,6 +1306,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="2633212996805280240">Remove "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="263325223718984101"><ph name="PRODUCT_NAME" /> couldn't complete installation, but will continue to run from its disk image.</translation>
 <translation id="2633764681656412085">FIDO</translation>
+<translation id="2634199532920451708">Print history</translation>
 <translation id="2635094637295383009">Twitter</translation>
 <translation id="2635276683026132559">Signing</translation>
 <translation id="2636625531157955190">Chrome cannot access the image.</translation>
@@ -1482,6 +1489,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="2841013758207633010">Time</translation>
 <translation id="2841837950101800123">Provider</translation>
 <translation id="2844169650293029770">USB-C device (left side front port)</translation>
+<translation id="2844809857160214557">View and manage print jobs</translation>
 <translation id="2845382757467349449">Always Show Bookmarks Bar</translation>
 <translation id="284805635805850872">Remove harmful software?</translation>
 <translation id="284970761985428403"><ph name="ASCII_NAME" /> (<ph name="UNICODE_NAME" />)</translation>
@@ -1550,6 +1558,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="2932330436172705843"><ph name="PROFILE_DISPLAY_NAME" /> (Account for kids)</translation>
 <translation id="2932483646085333864">Sign out then sign in again to start sync</translation>
 <translation id="2932883381142163287">Report abuse</translation>
+<translation id="2933632078076743449">Last update</translation>
 <translation id="2936851848721175671">Backup &amp; restore</translation>
 <translation id="2938225289965773019">Open <ph name="PROTOCOL" /> links</translation>
 <translation id="2938845886082362843">View and delete sign-in data stored on your security key</translation>
@@ -1678,6 +1687,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="310671807099593501">Site is using Bluetooth</translation>
 <translation id="3115147772012638511">Waiting for cache...</translation>
 <translation id="3115580024857770654">Collapse all</translation>
+<translation id="3116968597797150452">Certificate profile</translation>
 <translation id="3117362587799608430">Dock isn't fully compatible</translation>
 <translation id="3118319026408854581"><ph name="PRODUCT_NAME" /> Help</translation>
 <translation id="3118654181216384296">Please try to start Linux again in a few moments.</translation>
@@ -1724,6 +1734,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3163201441334626963">Unknown product <ph name="PRODUCT_ID" /> from vendor <ph name="VENDOR_ID" /></translation>
 <translation id="3164329792803560526">Sharing this tab to <ph name="APP_NAME" /></translation>
 <translation id="3165390001037658081">Some operators might block this feature.</translation>
+<translation id="316652501498554287">G Suite for Education accounts</translation>
 <translation id="3169472444629675720">Discover</translation>
 <translation id="3170072451822350649">You may also skip signing in and <ph name="LINK_START" />browse as Guest<ph name="LINK_END" />.</translation>
 <translation id="3177909033752230686">Page language:</translation>
@@ -1890,6 +1901,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3405664148539009465">Customise fonts</translation>
 <translation id="3405763860805964263">...</translation>
 <translation id="3406605057700382950">&amp;Show bookmarks bar</translation>
+<translation id="340671561090997290">{NUM_EXTENSIONS,plural, =1{This extension may be dangerous}other{These extensions may be dangerous}}</translation>
 <translation id="3409785640040772790">Maps</translation>
 <translation id="3410832398355316179">All files and local data associated with this user will be permanently deleted once this user is removed. <ph name="USER_EMAIL" /> can still sign in later.</translation>
 <translation id="3412265149091626468">Jump to Selection</translation>
@@ -2065,6 +2077,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3616741288025931835">&amp;Clear Browsing Data...</translation>
 <translation id="3617891479562106823">Backgrounds are unavailable. Try again later.</translation>
 <translation id="3619115746895587757">Cappuccino</translation>
+<translation id="362333465072914957">Waiting for the CA to issue a certificate</translation>
 <translation id="3624567683873126087">Unlock device and sign in to Google Account</translation>
 <translation id="3625258641415618104">Screenshots disabled</translation>
 <translation id="3625481642044239431">Invalid file selected. Try again.</translation>
@@ -2244,6 +2257,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="381202950560906753">Add another</translation>
 <translation id="3812525830114410218">Bad certificate</translation>
 <translation id="3813296892522778813">Go to <ph name="BEGIN_LINK_CHROMIUM" />Google Chrome help<ph name="END_LINK_CHROMIUM" /> if you can't find what you're looking for</translation>
+<translation id="3814529970604306954">School account</translation>
 <translation id="3816118180265633665">Chrome colours</translation>
 <translation id="3817524650114746564">Open your computer's proxy settings</translation>
 <translation id="3817579325494460411">Not provided</translation>
@@ -2364,6 +2378,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3948507072814225786"><ph name="ORIGIN" /> can edit files in the following folders</translation>
 <translation id="3949790930165450333"><ph name="DEVICE_NAME" /> (<ph name="DEVICE_ID" />)</translation>
 <translation id="394984172568887996">Imported From IE</translation>
+<translation id="3949981384795585075">{NUM_APPS,plural, =1{This app may be dangerous}other{These apps may be dangerous}}</translation>
 <translation id="3950820424414687140">Sign in</translation>
 <translation id="3953834000574892725">My accounts</translation>
 <translation id="3954354850384043518">In progress</translation>
@@ -2589,6 +2604,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="426564820080660648">To check for updates, please use Ethernet, Wi-Fi or mobile data.</translation>
 <translation id="4266679478228765574">Removing folders will stop sharing but will not delete files.</translation>
 <translation id="4267455501101322486">To add an account for access to educational resources, ask a parent to give you permission</translation>
+<translation id="4267924571297947682">Ask a parent for permission</translation>
 <translation id="4267953847983678297">Automatically connect to mobile network</translation>
 <translation id="4268025649754414643">Key Encipherment</translation>
 <translation id="4270393598798225102">Version <ph name="NUMBER" /></translation>
@@ -2753,6 +2769,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="4508051413094283164">Open all in incognito window</translation>
 <translation id="4508265954913339219">Activation failed</translation>
 <translation id="4508765956121923607">View S&amp;ource</translation>
+<translation id="4510479820467554003">Parent account list</translation>
 <translation id="4510614391273086606">Linux files and apps are being restored to their backed up state.</translation>
 <translation id="451407183922382411">Powered by <ph name="COMPANY_NAME" /></translation>
 <translation id="4514610446763173167">Toggle video to play or pause</translation>
@@ -3006,6 +3023,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="4862642413395066333">Signing OCSP Responses</translation>
 <translation id="4863769717153320198">Looks like <ph name="WIDTH" /> x <ph name="HEIGHT" /> (Default)</translation>
 <translation id="4864369630010738180">Signing in...</translation>
+<translation id="4864805589453749318">Select the parent who is granting permission to add a school account.</translation>
 <translation id="486635084936119914">Open certain file types automatically after downloading</translation>
 <translation id="4869289251183233431">Your device is low on storage. At least <ph name="MINIMUM_SPACE" /> of free space is required to use <ph name="APP_NAME" />, and over <ph name="RECOMMENDED_SPACE" /> of free space is recommended. To increase free space, delete files from the device.</translation>
 <translation id="48704129375571883">Add additional features</translation>
@@ -3060,6 +3078,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="4918086044614829423">Accept</translation>
 <translation id="4918221908152712722">Install <ph name="APP_NAME" /> (no download required)</translation>
 <translation id="4920887663447894854">The following sites have been blocked from tracking your location on this page:</translation>
+<translation id="4921290200821452703">School account information for parents</translation>
 <translation id="49226369361073053">{0,plural, =0{Update device now}=1{Update device within 1 second}other{Update device within # seconds}}</translation>
 <translation id="492299503953721473">Remove Android apps</translation>
 <translation id="492363500327720082">Uninstalling <ph name="APP_NAME" />…</translation>
@@ -3214,6 +3233,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="5139112070765735680"><ph name="QUERY_NAME" />, <ph name="DEFAULT_SEARCH_ENGINE_NAME" /> search</translation>
 <translation id="5139823398361067371">Enter the PIN for your security key. If you don’t know the PIN, you’ll need to reset the security key.</translation>
 <translation id="5139955368427980650">&amp;Open</translation>
+<translation id="5141421572306659464">Primary account</translation>
 <translation id="5142793792982256885">Touchpad scroll speed</translation>
 <translation id="5142961317498132443">Authentication</translation>
 <translation id="5143374789336132547">The extension "<ph name="EXTENSION_NAME" />" has changed the page that is shown when you click the Home button.</translation>
@@ -3316,6 +3336,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="5269977353971873915">Print Failed</translation>
 <translation id="5275352920323889391">Dog</translation>
 <translation id="527605982717517565">Always allow JavaScript on <ph name="HOST" /></translation>
+<translation id="5278823018825269962">Status ID</translation>
 <translation id="5280174558369304332">Extensions to be removed:</translation>
 <translation id="5280243692621919988">Clear cookies and site data when you close all windows</translation>
 <translation id="5280426389926346830">Create Shortcut?</translation>
@@ -3830,6 +3851,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="59324397759951282">USB device from <ph name="MANUFACTURER_NAME" /></translation>
 <translation id="5932881020239635062">Serial</translation>
 <translation id="5933376509899483611">Time Zone</translation>
+<translation id="5935158534896975820">Preparing certificate signing request (waiting on server)</translation>
 <translation id="5935656526031444304">Manage Safe Browsing</translation>
 <translation id="5938002010494270685">Security upgrade available</translation>
 <translation id="5939518447894949180">Reset</translation>
@@ -4801,6 +4823,9 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="720110658997053098">Permanently keep this device in kiosk mode</translation>
 <translation id="7201118060536064622">'<ph name="DELETED_ITEM_NAME" />' deleted</translation>
 <translation id="7201420661433230412">View files</translation>
+<translation id="7203826966018112936">Adding a school account to a profile enables easy sign-in to websites and extensions as a student while operating under parental controls. It does not give a child access to bookmarks, passwords or other browser data synced with the school account.&lt;br&gt;&lt;br&gt;
+    If your child uses a Chromebook in school and you wish to mirror the school experience at home to ensure that your child has access to all necessary schoolwork, please sign out of this Family Link account and sign in to the school account from the Chrome OS accounts page (note: Family Link parental controls will not apply).&lt;br&gt;&lt;br&gt;
+    If your child does not use a Chromebook in school or if you prefer to manage your child’s experience at home using Family Link, please click the Next button below to add a school account to this profile.</translation>
 <translation id="7206693748120342859">Downloading <ph name="PLUGIN_NAME" />...</translation>
 <translation id="720715819012336933">{NUM_PAGES,plural, =1{Exit page}other{Exit pages}}</translation>
 <translation id="7207457272187520234">Send usage and diagnostic data. This device is currently automatically sending diagnostic, device and app usage data to Google. This will help system and app stability and other improvements. Some aggregate data will also help Google apps and partners, such as Android developers. This setting is enforced by the owner. If your additional Web &amp; App Activity setting is turned on, this data may be saved to your Google Account.</translation>
@@ -5095,6 +5120,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="7600965453749440009">Never translate <ph name="LANGUAGE" /></translation>
 <translation id="760197030861754408">Go to <ph name="LANDING_PAGE" /> to connect.</translation>
 <translation id="7602079150116086782">No tabs from other devices</translation>
+<translation id="7602173054665172958">Print management</translation>
 <translation id="7604942372593434070">Access your browsing activity</translation>
 <translation id="7605594153474022051">Sync isn't working</translation>
 <translation id="7606992457248886637">Authorities</translation>
@@ -5701,6 +5727,7 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="833986336429795709">To open this link, choose an app</translation>
 <translation id="8342861492835240085">Select a collection</translation>
 <translation id="834290227245955730">Invalid PIN. Retries left: <ph name="RETRIES" />.</translation>
+<translation id="8347227221149377169">Print jobs</translation>
 <translation id="8350789879725387295">Stylus tools in dock</translation>
 <translation id="8351316842353540018">Always show a11y options</translation>
 <translation id="8351419472474436977">This extension has taken control of your proxy settings, which means it can change, break or eavesdrop on anything that you do online. If you aren't sure why this change happened, you probably don't want it.</translation>
@@ -6299,6 +6326,7 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="9101691533782776290">Launch app</translation>
 <translation id="9102610709270966160">Enable Extension</translation>
 <translation id="9103868373786083162">Press to go back, context menu to see history</translation>
+<translation id="9108692355621501797">The <ph name="LINK_BEGIN" />G Suite for Education privacy notice<ph name="LINK_END" /> is meant to help G Suite for Education users and parents understand what data the product collects, why it is collected and what is done with it.</translation>
 <translation id="9108808586816295166">Secure DNS may not be available all the time</translation>
 <translation id="9109122242323516435">To free up space, delete files from device storage.</translation>
 <translation id="9109283579179481106">Connect to mobile network</translation>
