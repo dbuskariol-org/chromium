@@ -40,7 +40,6 @@
 #include "ios/chrome/browser/signin/identity_manager_factory.h"
 #import "ios/chrome/browser/snapshots/snapshot_tab_helper.h"
 #include "ios/chrome/browser/system_flags.h"
-#import "ios/chrome/browser/tabs/tab_model.h"
 #import "ios/chrome/browser/ui/authentication/signed_in_accounts_view_controller.h"
 #import "ios/chrome/browser/ui/authentication/signin/signin_coordinator.h"
 #import "ios/chrome/browser/ui/authentication/signin/signin_utils.h"
@@ -428,7 +427,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
   if (self.tabSwitcherIsActive) {
     DCHECK(!self.dismissingTabSwitcher);
-    [self beginDismissingTabSwitcherWithCurrentModel:self.mainInterface.tabModel
+    [self
+        beginDismissingTabSwitcherWithCurrentBrowser:self.mainInterface.browser
                                         focusOmnibox:NO];
     [self finishDismissingTabSwitcher];
   }
@@ -1071,8 +1071,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 - (void)tabSwitcher:(id<TabSwitcher>)tabSwitcher
     shouldFinishWithBrowser:(Browser*)browser
                focusOmnibox:(BOOL)focusOmnibox {
-  [self beginDismissingTabSwitcherWithCurrentModel:browser->GetTabModel()
-                                      focusOmnibox:focusOmnibox];
+  [self beginDismissingTabSwitcherWithCurrentBrowser:browser
+                                        focusOmnibox:focusOmnibox];
 }
 
 - (void)tabSwitcherDismissTransitionDidEnd:(id<TabSwitcher>)tabSwitcher {
@@ -1083,13 +1083,13 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 // model, switching which BVC is suspended if necessary, but not updating the
 // UI.  The omnibox will be focused after the tab switcher dismissal is
 // completed if |focusOmnibox| is YES.
-- (void)beginDismissingTabSwitcherWithCurrentModel:(TabModel*)tabModel
-                                      focusOmnibox:(BOOL)focusOmnibox {
-  DCHECK(tabModel == self.mainInterface.tabModel ||
-         tabModel == self.incognitoInterface.tabModel);
+- (void)beginDismissingTabSwitcherWithCurrentBrowser:(Browser*)browser
+                                        focusOmnibox:(BOOL)focusOmnibox {
+  DCHECK(browser == self.mainInterface.browser ||
+         browser == self.incognitoInterface.browser);
 
   self.dismissingTabSwitcher = YES;
-  ApplicationMode mode = (tabModel == self.mainInterface.tabModel)
+  ApplicationMode mode = (browser == self.mainInterface.browser)
                              ? ApplicationMode::NORMAL
                              : ApplicationMode::INCOGNITO;
   [self setCurrentInterfaceForMode:mode];
