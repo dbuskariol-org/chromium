@@ -1533,6 +1533,7 @@ if (!is_android) {
         if (!is_official_build) {
           deps += [
             "//chromeos/components/sample_system_web_app_ui:browser_tests_js",
+            "//chromeos/components/telemetry_extension_ui:browser_tests_js",
           ]
         }
       }
