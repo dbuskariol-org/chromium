@@ -239,15 +239,7 @@ vm_tools::concierge::StartArcVmRequest CreateStartArcVmRequest(
   disk_image->set_writable(false);
   disk_image->set_do_mount(true);
 
-  // Add /vendor as /dev/vdc.
-  // TODO(yusukes): Remove /dev/vdc once Android side stops using it.
-  disk_image = request.add_disks();
-  disk_image->set_path(file_system_status.vendor_image_path().value());
-  disk_image->set_image_type(vm_tools::concierge::DISK_IMAGE_AUTO);
-  disk_image->set_writable(false);
-  disk_image->set_do_mount(true);
-
-  // Add /run/imageloader/.../android_demo_apps.squash as /dev/vdd if needed.
+  // Add /run/imageloader/.../android_demo_apps.squash as /dev/vdc if needed.
   // TODO(b/144542975): Do this on upgrade instead.
   if (!demo_session_apps_path.empty()) {
     disk_image = request.add_disks();
