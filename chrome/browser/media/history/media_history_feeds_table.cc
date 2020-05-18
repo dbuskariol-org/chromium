@@ -605,4 +605,19 @@ bool MediaHistoryFeedsTable::ClearResetReason(const int64_t feed_id) {
   return statement.Run() && DB()->GetLastChangeCount() == 1;
 }
 
+std::string MediaHistoryFeedsTable::GetCookieNameFilter(const int64_t feed_id) {
+  DCHECK_LT(0, DB()->transaction_nesting());
+  if (!CanAccessDatabase())
+    return std::string();
+
+  sql::Statement statement(DB()->GetCachedStatement(
+      SQL_FROM_HERE, "SELECT cookie_name_filter FROM mediaFeed WHERE id = ?"));
+  statement.BindInt64(0, feed_id);
+
+  while (statement.Step())
+    return statement.ColumnString(0);
+
+  return std::string();
+}
+
 }  // namespace media_history

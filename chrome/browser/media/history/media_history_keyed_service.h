@@ -11,6 +11,7 @@
 #include "components/history/core/browser/history_service_observer.h"
 #include "components/keyed_service/core/keyed_service.h"
 #include "content/public/browser/media_player_watch_time.h"
+#include "net/cookies/cookie_change_dispatcher.h"
 #include "services/media_session/public/cpp/media_metadata.h"
 
 class Profile;
@@ -232,8 +233,15 @@ class MediaHistoryKeyedService : public KeyedService,
   // |include_subdomains| is true then this will reset any feeds on any
   // subdomain of |origin|.
   void ResetMediaFeed(const url::Origin& origin,
-                      media_feeds::mojom::ResetReason reason,
-                      const bool include_subdomains = false);
+                      media_feeds::mojom::ResetReason reason);
+
+  // Resets a Media Feed by deleting any items and resetting it to defaults. If
+  // |include_subdomains| is true then this will reset any feeds on any
+  // subdomain of |origin|.
+  void ResetMediaFeedDueToCookies(const url::Origin& origin,
+                                  const bool include_subdomains,
+                                  const std::string& name,
+                                  const net::CookieChangeCause& cause);
 
   // Resets any Media Feeds that were fetched between |start_time| and
   // |end_time|. This will delete any items and reset them to defaults. The

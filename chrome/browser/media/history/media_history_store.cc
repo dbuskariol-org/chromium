@@ -20,6 +20,7 @@
 #include "chrome/browser/media/history/media_history_session_images_table.h"
 #include "chrome/browser/media/history/media_history_session_table.h"
 #include "content/public/browser/media_player_watch_time.h"
+#include "net/cookies/cookie_change_dispatcher.h"
 #include "services/media_session/public/cpp/media_image.h"
 #include "services/media_session/public/cpp/media_position.h"
 #include "sql/recovery.h"
@@ -86,6 +87,14 @@ int MigrateFrom1To2(sql::Database* db, sql::MetaTable* meta_table) {
     return target_version;
   }
   return 1;
+}
+
+bool IsCauseFromExpiration(const net::CookieChangeCause& cause) {
+  return cause == net::CookieChangeCause::UNKNOWN_DELETION ||
+         cause == net::CookieChangeCause::EXPIRED ||
+         cause == net::CookieChangeCause::EXPIRED_OVERWRITE ||
+         cause == net::CookieChangeCause::EXPLICIT ||
+         cause == net::CookieChangeCause::EVICTED;
 }
 
 }  // namespace
@@ -957,8 +966,33 @@ void MediaHistoryStore::UpdateMediaFeedDisplayTime(const int64_t feed_id) {
 }
 
 void MediaHistoryStore::ResetMediaFeed(const url::Origin& origin,
-                                       media_feeds::mojom::ResetReason reason,
-                                       const bool include_subdomains) {
+                                       media_feeds::mojom::ResetReason reason) {
+  if (!CanAccessDatabase())
+    return;
+
+  if (!feeds_table_ || !feed_items_table_ || !feed_origins_table_)
+    return;
+
+  if (!DB()->BeginTransaction()) {
+    LOG(ERROR) << "Failed to begin the transaction.";
+    return;
+  }
+
+  // Get all the feeds with |origin| as an associated origin.
+  std::set<int64_t> feed_ids = feed_origins_table_->GetFeeds(origin, false);
+
+  if (ResetMediaFeedInternal(feed_ids, reason)) {
+    DB()->CommitTransaction();
+  } else {
+    DB()->RollbackTransaction();
+  }
+}
+
+void MediaHistoryStore::ResetMediaFeedDueToCookies(
+    const url::Origin& origin,
+    const bool include_subdomains,
+    const std::string& name,
+    const net::CookieChangeCause& cause) {
   if (!CanAccessDatabase())
     return;
 
@@ -974,7 +1008,24 @@ void MediaHistoryStore::ResetMediaFeed(const url::Origin& origin,
   std::set<int64_t> feed_ids =
       feed_origins_table_->GetFeeds(origin, include_subdomains);
 
-  if (ResetMediaFeedInternal(feed_ids, reason)) {
+  std::set<int64_t> feed_ids_to_reset;
+  for (auto feed_id : feed_ids) {
+    auto cookie_name_filter = feeds_table_->GetCookieNameFilter(feed_id);
+
+    // If the cookie name filter is empty then we only allow feeds to be reset
+    // if the cookie change was from expiration.
+    if (cookie_name_filter.empty() && IsCauseFromExpiration(cause))
+      feed_ids_to_reset.insert(feed_id);
+
+    // If we have a cookie name filter and the current cookie matches that name
+    // then we allow any type of cookie change to reset the feed because we
+    // can be more specific.
+    if (!cookie_name_filter.empty() && cookie_name_filter == name)
+      feed_ids_to_reset.insert(feed_id);
+  }
+
+  if (ResetMediaFeedInternal(feed_ids_to_reset,
+                             media_feeds::mojom::ResetReason::kCookies)) {
     DB()->CommitTransaction();
   } else {
     DB()->RollbackTransaction();

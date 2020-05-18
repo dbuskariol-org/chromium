@@ -94,6 +94,9 @@ class MediaHistoryFeedsTable : public MediaHistoryTableBase {
 
   // Clears the reset reason for a feed and returns a boolean if it was saved.
   bool ClearResetReason(const int64_t feed_id);
+
+  // Returns the cookie name filter for |feed_id| or an empty string.
+  std::string GetCookieNameFilter(const int64_t feed_id);
 };
 
 }  // namespace media_history
