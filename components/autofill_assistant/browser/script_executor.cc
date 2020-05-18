@@ -150,7 +150,9 @@ void ScriptExecutor::OnNavigationStateChanged() {
           std::move(on_expected_navigation_done_)
               .Run(!delegate_->HasNavigationError());
       }
-      break;
+      // Early return since current_action_data_ is no longer valid at this
+      // point.
+      return;
 
     case ExpectedNavigationStep::DONE:
       // nothing to do
@@ -771,6 +773,7 @@ void ScriptExecutor::OnProcessedAction(
   processed_action.set_direct_action(current_action_data_.direct_action);
   *processed_action.mutable_navigation_info() =
       current_action_data_.navigation_info;
+
   if (processed_action.status() != ProcessedActionStatusProto::ACTION_APPLIED) {
     if (delegate_->HasNavigationError()) {
       // Overwrite the original error, as the root cause is most likely a
