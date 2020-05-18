@@ -87,7 +87,7 @@ class ChromeVariationsClient : public variations::VariationsClient {
 
   ~ChromeVariationsClient() override = default;
 
-  bool IsIncognito() const override {
+  bool IsOffTheRecord() const override {
     return browser_context_->IsOffTheRecord();
   }
 
