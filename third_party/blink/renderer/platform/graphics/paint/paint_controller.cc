@@ -27,9 +27,12 @@ PaintController::PaintController(Usage usage)
 }
 
 PaintController::~PaintController() {
-  // New display items should be committed before PaintController is destroyed,
-  // except for transient paint controllers.
-  DCHECK(usage_ == kTransient || new_display_item_list_.IsEmpty());
+  if (usage_ == kMultiplePaints) {
+    // New display items should have been committed.
+    DCHECK(new_display_item_list_.IsEmpty());
+    // And the committed_ flag should have been cleared by FinishCycle().
+    DCHECK(!committed_);
+  }
 }
 
 // For micro benchmarks of record time.
@@ -277,6 +280,9 @@ void PaintController::DidAppendItem(DisplayItem& display_item) {
   if (usage_ == kTransient)
     return;
 
+  if (!display_item.IsMovedFromCachedSubsequence())
+    display_item.Client().SetIsInPaintControllerBeforeFinishCycle(true);
+
 #if DCHECK_IS_ON()
   if (display_item.IsCacheable()) {
     auto index = FindMatchingItemFromIndex(display_item.GetId(),
@@ -328,6 +334,12 @@ DisplayItem& PaintController::MoveItemFromCurrentListToNewList(
 }
 
 void PaintController::DidAppendChunk() {
+  if (usage_ == kMultiplePaints &&
+      !new_paint_chunks_.LastChunk().is_moved_from_cached_subsequence) {
+    new_paint_chunks_.LastChunk()
+        .id.client.SetIsInPaintControllerBeforeFinishCycle(true);
+  }
+
 #if DCHECK_IS_ON()
   if (new_paint_chunks_.LastChunk().is_cacheable) {
     AddToIndicesByClientMap(new_paint_chunks_.LastChunk().id.client,
@@ -621,6 +633,7 @@ void PaintController::FinishCycle() {
         client.ClearPartialInvalidationVisualRect();
         if (client.IsCacheable())
           client.Validate();
+        client.SetIsInPaintControllerBeforeFinishCycle(false);
       }
       for (const auto& chunk : current_paint_artifact_->PaintChunks()) {
         const auto& client = chunk.id.client;
@@ -633,6 +646,7 @@ void PaintController::FinishCycle() {
         }
         if (client.IsCacheable())
           client.Validate();
+        client.SetIsInPaintControllerBeforeFinishCycle(false);
       }
     }
 
