@@ -711,6 +711,10 @@ message ElementReferenceProto {
   // trying to get the pseudo_type, if any was set.
   optional string inner_text_pattern = 4;
 
+  // If true, the |inner_text_pattern| will be checked case sensitively.
+  // Default is case insensitive.
+  optional bool inner_text_pattern_case_sensitive = 7;
+
   // If non-empty, only take into accounts the elements matched by selector
   // whose value matches the given JavaScript regex. This does a search,
   // not a full match. Add ^ and $ as necessary.
@@ -718,6 +722,10 @@ message ElementReferenceProto {
   // This is used to filter the elements matching the last selector, before
   // trying to get the pseudo_type, if any was set.
   optional string value_pattern = 6;
+
+  // If true, the |value_pattern| will be checked case sensitively. Default is
+  // case insensitive.
+  optional bool value_pattern_case_sensitive = 8;
 
   // Specifies whether the matched element(s) must be visible.
   //
