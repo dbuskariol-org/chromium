@@ -693,7 +693,7 @@
   {
     "name": "crostini-use-buster-image",
     "owners": [ "davidmunro@google.com", "benwells" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 86
   },
   {
     "name": "crostini-username",
@@ -703,7 +703,7 @@
   {
     "name": "crostini-webui-upgrader",
     "owners": [ "nverne", "davidmunro@google.com", "benwells" ],
-    "expiry_milestone": 84
+    "expiry_milestone": 86
   },
   {
     "name": "cryptauth-v2-device-activity-status",
