@@ -73,31 +73,33 @@ guestMessagePipe.registerHandler(Message.OVERWRITE_FILE, async (message) => {
 
 guestMessagePipe.registerHandler(Message.DELETE_FILE, async (message) => {
   const deleteMsg = /** @type{DeleteFileMessage} */ (message);
-  assertFileAndDirectoryMutable(deleteMsg.token, 'Delete');
+  const {file, directory} =
+      assertFileAndDirectoryMutable(deleteMsg.token, 'Delete');
 
   if (!(await isCurrentHandleInCurrentDirectory())) {
     return {deleteResult: DeleteResult.FILE_MOVED};
   }
 
   // Get the name from the file reference. Handles file renames.
-  const currentFilename = (await currentlyWritableFile.handle.getFile()).name;
+  const currentFilename = (await file.handle.getFile()).name;
 
-  await currentDirectoryHandle.removeEntry(currentFilename);
+  await directory.removeEntry(currentFilename);
   return {deleteResult: DeleteResult.SUCCESS};
 });
 
 /** Handler to rename the currently focused file. */
 guestMessagePipe.registerHandler(Message.RENAME_FILE, async (message) => {
   const renameMsg = /** @type{RenameFileMessage} */ (message);
-  assertFileAndDirectoryMutable(renameMsg.token, 'Rename');
+  const {file, directory} =
+      assertFileAndDirectoryMutable(renameMsg.token, 'Rename');
 
   if (await filenameExistsInCurrentDirectory(renameMsg.newFilename)) {
     return {renameResult: RenameResult.FILE_EXISTS};
   }
 
-  const originalFile = await currentlyWritableFile.handle.getFile();
-  const renamedFileHandle = await currentDirectoryHandle.getFile(
-      renameMsg.newFilename, {create: true});
+  const originalFile = await file.handle.getFile();
+  const renamedFileHandle =
+      await directory.getFile(renameMsg.newFilename, {create: true});
   // Copy file data over to the new file.
   const writer = await renamedFileHandle.createWritable();
   // TODO(b/153021155): Use originalFile.stream().
@@ -110,12 +112,12 @@ guestMessagePipe.registerHandler(Message.RENAME_FILE, async (message) => {
   // success, we first check the `currentlyWritableFile.handle` is the same as
   // the handle for the file with that filename in the `currentDirectoryHandle`.
   if (await isCurrentHandleInCurrentDirectory()) {
-    await currentDirectoryHandle.removeEntry(originalFile.name);
+    await directory.removeEntry(originalFile.name);
   }
 
   // Reload current file so it is in an editable state, this is done before
   // removing the old file so the relaunch starts sooner.
-  await launchWithDirectory(currentDirectoryHandle, renamedFileHandle);
+  await launchWithDirectory(directory, renamedFileHandle);
 
   return {renameResult: RenameResult.SUCCESS};
 });
@@ -155,7 +157,9 @@ guestMessagePipe.registerHandler(Message.SAVE_COPY, async (message) => {
   }
 
   const {handle} = await getFileFromHandle(fileSystemHandle);
-  if (await handle.isSameEntry(currentlyWritableFile.handle)) {
+  // Note there may be no currently writable file (e.g. save from clipboard).
+  if (currentlyWritableFile &&
+      await handle.isSameEntry(currentlyWritableFile.handle)) {
     return 'attemptedCurrentlyWritableFileOverwrite';
   }
 
@@ -274,6 +278,7 @@ async function sendSnapshotToGuest(snapshot) {
  * the file to be mutated is incorrect.
  * @param {number} editFileToken
  * @param {string} operation
+ * @return {{file: !FileDescriptor, directory: !FileSystemDirectoryHandle}}
  */
 function assertFileAndDirectoryMutable(editFileToken, operation) {
   if (!currentlyWritableFile || editFileToken !== fileToken) {
@@ -283,6 +288,7 @@ function assertFileAndDirectoryMutable(editFileToken, operation) {
   if (!currentDirectoryHandle) {
     throw new Error(`${operation} failed. File without launch directory.`);
   }
+  return {file: currentlyWritableFile, directory: currentDirectoryHandle};
 }
 
 /**
@@ -291,6 +297,9 @@ function assertFileAndDirectoryMutable(editFileToken, operation) {
  * @return {!Promise<!boolean>}
  */
 async function isCurrentHandleInCurrentDirectory() {
+  if (!currentlyWritableFile) {
+    return false;
+  }
   // Get the name from the file reference. Handles file renames.
   const currentFilename = (await currentlyWritableFile.handle.getFile()).name;
   const fileHandle = await getFileHandleFromCurrentDirectory(currentFilename);
@@ -316,6 +325,9 @@ async function filenameExistsInCurrentDirectory(filename) {
  */
 async function getFileHandleFromCurrentDirectory(
     filename, suppressError = false) {
+  if (!currentDirectoryHandle) {
+    return null;
+  }
   try {
     return (await currentDirectoryHandle.getFile(filename, {create: false}));
   } catch (/** @type {Object} */ e) {
@@ -376,7 +388,7 @@ function isFileRelated(focusFile, siblingFile) {
  * @param {?File} focusFile
  */
 async function setCurrentDirectory(directory, focusFile) {
-  if (!focusFile) {
+  if (!focusFile || !focusFile.name) {
     return;
   }
   currentFiles.length = 0;
@@ -399,7 +411,8 @@ async function setCurrentDirectory(directory, focusFile) {
       currentFiles.push({token: -1, file: entry.file, handle: entry.handle});
     }
   }
-  entryIndex = currentFiles.findIndex(i => i.file.name === focusFile.name);
+  const name = focusFile.name;
+  entryIndex = currentFiles.findIndex(i => !!i.file && i.file.name === name);
   currentDirectoryHandle = directory;
 }
 
@@ -407,7 +420,7 @@ async function setCurrentDirectory(directory, focusFile) {
  * Launch the media app with the files in the provided directory, using `handle`
  * as the initial launch entry.
  * @param {!FileSystemDirectoryHandle} directory
- * @param {?FileSystemHandle} handle
+ * @param {!FileSystemHandle} handle
  */
 async function launchWithDirectory(directory, handle) {
   let asFile;
@@ -444,18 +457,23 @@ async function advance(direction) {
 // Wait for 'load' (and not DOMContentLoaded) to ensure the subframe has been
 // loaded and is ready to respond to postMessage.
 window.addEventListener('load', () => {
+  if (!window.launchQueue) {
+    console.error('FileHandling API missing.');
+    return;
+  }
   window.launchQueue.setConsumer(params => {
     if (!params || !params.files || params.files.length < 2) {
       console.error('Invalid launch (missing files): ', params);
       return;
     }
 
-    if (!params.files[0].isDirectory) {
+    if (!assertCast(params.files[0]).isDirectory) {
       console.error('Invalid launch: files[0] is not a directory: ', params);
       return;
     }
     const directory =
         /** @type{!FileSystemDirectoryHandle} */ (params.files[0]);
-    launchWithDirectory(directory, params.files[1]);
+    const focusEntry = assertCast(params.files[1]);
+    launchWithDirectory(directory, focusEntry);
   });
 });
