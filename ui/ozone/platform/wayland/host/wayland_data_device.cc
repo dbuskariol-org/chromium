@@ -203,9 +203,8 @@ void WaylandDataDevice::OnMotion(void* data,
 
   gfx::PointF point(wl_fixed_to_double(x), wl_fixed_to_double(y));
   int client_operation = self->window_->OnDragMotion(
-      point, time,
-      GetPossibleActions(self->drag_offer_->source_actions(),
-                         self->drag_offer_->dnd_action()));
+      point, GetPossibleActions(self->drag_offer_->source_actions(),
+                                self->drag_offer_->dnd_action()));
   self->SetOperation(client_operation);
 }
 
