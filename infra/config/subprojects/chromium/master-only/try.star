@@ -297,6 +297,11 @@ try_.chromium_dawn_builder(
 )
 
 try_.chromium_dawn_builder(
+    name = 'dawn-try-win10-x86-rel',
+    os = os.WINDOWS_ANY,
+)
+
+try_.chromium_dawn_builder(
     name = 'dawn-try-win10-x64-asan-rel',
     os = os.WINDOWS_ANY,
 )
