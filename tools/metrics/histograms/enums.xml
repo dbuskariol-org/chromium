@@ -1408,6 +1408,9 @@ Unknown properties are collapsed to zero. -->
   <int value="25" label="N_MR1"/>
   <int value="26" label="O"/>
   <int value="27" label="O_MR1"/>
+  <int value="28" label="P"/>
+  <int value="29" label="Q"/>
+  <int value="30" label="R"/>
 </enum>
 
 <enum name="AndroidArmFpu">
