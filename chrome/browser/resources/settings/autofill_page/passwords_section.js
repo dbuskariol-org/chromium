@@ -687,26 +687,6 @@ Polymer({
 
   /**
    * @private
-   * @param {!PasswordManagerProxy.ExceptionEntry} item This row's item.
-   * @return {string}
-   */
-  getStorageText_(item) {
-    // TODO(crbug.com/1049141): Add proper translated strings once we have them.
-    return item.fromAccountStore ? 'Account' : 'Local';
-  },
-
-  /**
-   * @private
-   * @param {!PasswordManagerProxy.ExceptionEntry} item This row's item.
-   * @return {string}
-   */
-  getStorageIcon_(item) {
-    // TODO(crbug.com/1049141): Add the proper icons once we know them.
-    return item.fromAccountStore ? 'cr:sync' : 'cr:computer';
-  },
-
-  /**
-   * @private
    * @param {!MultiStorePasswordUiEntryWithPassword} item The deleted item.
    * @return {string}
    */
