@@ -3820,15 +3820,6 @@ crbug.com/789139 http/tests/devtools/sources/debugger/live-edit-no-reveal.js [ F
 # ====== Begin web-components-v0-disabled virtual suite tests ======
 
 # Ignore these - they are tests of the disabled features. Eventually remove these.
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/callback-context.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/crash-without-dom-wrapper.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/created-callback.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/document-register-on-create-callback.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/imports-custom-element-abort.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/registration-context-delete-during-attribute-changed.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/registration-context-delete-during-callback-recursion.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/registration-context-delete-during-upgrade.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/registration-context-sharing.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/access-document-of-detached-stylesheetlist-crash.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/content-after-style.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/content-element-in-media-element.html [ Skip ]
@@ -3867,7 +3858,6 @@ crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadow-inser
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/style-sharing-with-content-and-host.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/svg-style-in-shadow-tree.xhtml [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/text-node-in-shadow.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/custom/lifecycle-created-parser-only.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/content-element-fallback-display-none-dynamic.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/content-element-outside-shadow-style.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/content-element-select-namespace.html [ Skip ]
