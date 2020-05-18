@@ -349,6 +349,7 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
                 if (tab == null) return;
 
                 refreshSelectedTab(tab);
+                mToolbar.onTabOrModelChanged();
             }
 
             @Override
