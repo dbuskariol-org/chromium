@@ -65924,12 +65924,29 @@ would be helpful to identify which type is being sent.
   <int value="11" label="Evicted due to OS terminating the renderer."/>
 </enum>
 
+<enum name="TabStripReasonToShow">
+  <summary>The reason why conditional tab strip is showing.</summary>
+  <int value="0" label="TabSwitched"/>
+  <int value="1" label="NewTab"/>
+  <int value="2" label="LongPress"/>
+</enum>
+
 <enum name="TabStripState">
   <int value="0" label="Initial state"/>
   <int value="1" label="Tab is active, shown foreground."/>
   <int value="2" label="Tab is inactive, in background."/>
   <int value="3" label="Tab is detached from tab-strip."/>
   <int value="4" label="Tab is closed."/>
+</enum>
+
+<enum name="TabStripUserStatus">
+  <summary>
+    The user status of conditional tab strip in a feature-specific session.
+  </summary>
+  <int value="0" label="NonUser"/>
+  <int value="1" label="TabStripNotShown"/>
+  <int value="2" label="TabStripShown"/>
+  <int value="3" label="TabStripShownAndDismissed"/>
 </enum>
 
 <enum name="TabSwitchedToForegroundLaunchedWithURL">
