@@ -56021,6 +56021,20 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="4" label="Required but not shown - grace exceeded"/>
 </enum>
 
+<enum name="QueryTilesGroupStatus">
+  <int value="0" label="Success"/>
+  <int value="1" label="Uninitialized"/>
+  <int value="2" label="FailureDbOperation"/>
+  <int value="3" label="NoTiles"/>
+</enum>
+
+<enum name="QueryTilesRequestStatus">
+  <int value="0" label="Init"/>
+  <int value="1" label="Success"/>
+  <int value="2" label="Failure"/>
+  <int value="3" label="Suspend"/>
+</enum>
+
 <enum name="QueryWebAndAppActivityState">
   <obsolete>
     Removed March 2020.
