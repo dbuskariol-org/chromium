@@ -136,13 +136,16 @@ class DEVICE_BLUETOOTH_EXPORT BluetoothRemoteGattCharacteristic
   virtual void ReadRemoteCharacteristic(ValueCallback callback,
                                         ErrorCallback error_callback) = 0;
 
+  // DEPRECATED: Use WriteRemoteCharacteristic instead. This method remains
+  // for backward compatibility.
   // Sends a write request to a remote characteristic with the value |value|.
   // |callback| is called to signal success and |error_callback| for failures.
   // This method only applies to remote characteristics and will fail for those
   // that are locally hosted.
-  virtual void WriteRemoteCharacteristic(const std::vector<uint8_t>& value,
-                                         base::OnceClosure callback,
-                                         ErrorCallback error_callback) = 0;
+  virtual void DeprecatedWriteRemoteCharacteristic(
+      const std::vector<uint8_t>& value,
+      base::OnceClosure callback,
+      ErrorCallback error_callback) = 0;
 
 #if defined(OS_CHROMEOS)
   // Sends a prepare write request to a remote characteristic with the value

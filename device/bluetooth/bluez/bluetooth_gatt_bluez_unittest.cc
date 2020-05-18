@@ -986,7 +986,7 @@ TEST_F(BluetoothGattBlueZTest, GattDescriptorAddedAndRemoved) {
   EXPECT_EQ(descriptor->GetIdentifier(), observer.last_gatt_descriptor_id());
 }
 
-TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue) {
+TEST_F(BluetoothGattBlueZTest, DeprecatedGattCharacteristicValue) {
   fake_bluetooth_device_client_->CreateDevice(
       dbus::ObjectPath(bluez::FakeBluetoothAdapterClient::kAdapterPath),
       dbus::ObjectPath(bluez::FakeBluetoothDeviceClient::kLowEnergyPath));
@@ -1026,7 +1026,7 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue) {
           .value(),
       characteristic->GetIdentifier());
   EXPECT_EQ(kHeartRateMeasurementUUID, characteristic->GetUUID());
-  characteristic->WriteRemoteCharacteristic(
+  characteristic->DeprecatedWriteRemoteCharacteristic(
       write_value,
       base::BindOnce(&BluetoothGattBlueZTest::SuccessCallback,
                      base::Unretained(this)),
@@ -1049,7 +1049,7 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue) {
           .value(),
       characteristic->GetIdentifier());
   EXPECT_EQ(kBodySensorLocationUUID, characteristic->GetUUID());
-  characteristic->WriteRemoteCharacteristic(
+  characteristic->DeprecatedWriteRemoteCharacteristic(
       write_value,
       base::BindOnce(&BluetoothGattBlueZTest::SuccessCallback,
                      base::Unretained(this)),
@@ -1076,7 +1076,7 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue) {
           .value(),
       characteristic->GetIdentifier());
   EXPECT_EQ(kHeartRateControlPointUUID, characteristic->GetUUID());
-  characteristic->WriteRemoteCharacteristic(
+  characteristic->DeprecatedWriteRemoteCharacteristic(
       write_value,
       base::BindOnce(&BluetoothGattBlueZTest::SuccessCallback,
                      base::Unretained(this)),
@@ -1094,7 +1094,7 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue) {
   std::vector<uint8_t> invalid_write_length;
   invalid_write_length.push_back(0x01);
   invalid_write_length.push_back(0x00);
-  characteristic->WriteRemoteCharacteristic(
+  characteristic->DeprecatedWriteRemoteCharacteristic(
       invalid_write_length,
       base::BindOnce(&BluetoothGattBlueZTest::SuccessCallback,
                      base::Unretained(this)),
@@ -1108,7 +1108,7 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue) {
 
   std::vector<uint8_t> invalid_write_value;
   invalid_write_value.push_back(0x02);
-  characteristic->WriteRemoteCharacteristic(
+  characteristic->DeprecatedWriteRemoteCharacteristic(
       invalid_write_value,
       base::BindOnce(&BluetoothGattBlueZTest::SuccessCallback,
                      base::Unretained(this)),
@@ -1258,7 +1258,8 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Read_Read) {
 
 // Test a write request issued from the success callback of another write
 // request.
-TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Write_Write) {
+TEST_F(BluetoothGattBlueZTest,
+       GattCharacteristicValue_Nested_DeprecatedWrite_DeprecatedWrite) {
   fake_bluetooth_device_client_->CreateDevice(
       dbus::ObjectPath(bluez::FakeBluetoothAdapterClient::kAdapterPath),
       dbus::ObjectPath(bluez::FakeBluetoothDeviceClient::kLowEnergyPath));
@@ -1287,13 +1288,13 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Write_Write) {
                                      .value());
 
   std::vector<uint8_t> write_value = {0x01};
-  characteristic->WriteRemoteCharacteristic(
+  characteristic->DeprecatedWriteRemoteCharacteristic(
       write_value, base::BindLambdaForTesting([&] {
         SuccessCallback();
         EXPECT_EQ(1, success_callback_count_);
         EXPECT_EQ(0, error_callback_count_);
 
-        characteristic->WriteRemoteCharacteristic(
+        characteristic->DeprecatedWriteRemoteCharacteristic(
             write_value,
             base::BindOnce(&BluetoothGattBlueZTest::SuccessCallback,
                            base::Unretained(this)),
@@ -1307,7 +1308,8 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Write_Write) {
 }
 
 // Test a write request issued from the success callback of a read request.
-TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Read_Write) {
+TEST_F(BluetoothGattBlueZTest,
+       GattCharacteristicValue_Nested_Read_DeprecatedWrite) {
   fake_bluetooth_device_client_->CreateDevice(
       dbus::ObjectPath(bluez::FakeBluetoothAdapterClient::kAdapterPath),
       dbus::ObjectPath(bluez::FakeBluetoothDeviceClient::kLowEnergyPath));
@@ -1348,7 +1350,7 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Read_Write) {
                 ->GetHeartRateControlPointPath()
                 .value());
 
-        characteristic->WriteRemoteCharacteristic(
+        characteristic->DeprecatedWriteRemoteCharacteristic(
             std::vector<uint8_t>({0x01}),
             base::BindOnce(&BluetoothGattBlueZTest::SuccessCallback,
                            base::Unretained(this)),
@@ -1362,7 +1364,8 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Read_Write) {
 }
 
 // Test a read request issued from the success callback of a write request.
-TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Write_Read) {
+TEST_F(BluetoothGattBlueZTest,
+       GattCharacteristicValue_Nested_DeprecatedWrite_Read) {
   fake_bluetooth_device_client_->CreateDevice(
       dbus::ObjectPath(bluez::FakeBluetoothAdapterClient::kAdapterPath),
       dbus::ObjectPath(bluez::FakeBluetoothDeviceClient::kLowEnergyPath));
@@ -1390,7 +1393,7 @@ TEST_F(BluetoothGattBlueZTest, GattCharacteristicValue_Nested_Write_Read) {
                                      ->GetHeartRateControlPointPath()
                                      .value());
 
-  characteristic->WriteRemoteCharacteristic(
+  characteristic->DeprecatedWriteRemoteCharacteristic(
       std::vector<uint8_t>({0x01}), base::BindLambdaForTesting([&] {
         SuccessCallback();
         EXPECT_EQ(1, success_callback_count_);

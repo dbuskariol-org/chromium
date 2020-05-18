@@ -201,10 +201,10 @@ void BluetoothRemoteGattCharacteristicWinrt::ReadRemoteCharacteristic(
       std::move(callback), std::move(error_callback));
 }
 
-void BluetoothRemoteGattCharacteristicWinrt::WriteRemoteCharacteristic(
-    const std::vector<uint8_t>& value,
-    base::OnceClosure callback,
-    ErrorCallback error_callback) {
+void BluetoothRemoteGattCharacteristicWinrt::
+    DeprecatedWriteRemoteCharacteristic(const std::vector<uint8_t>& value,
+                                        base::OnceClosure callback,
+                                        ErrorCallback error_callback) {
   if (!(GetProperties() & PROPERTY_WRITE) &&
       !(GetProperties() & PROPERTY_WRITE_WITHOUT_RESPONSE)) {
     base::ThreadTaskRunnerHandle::Get()->PostTask(

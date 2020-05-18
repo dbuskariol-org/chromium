@@ -138,7 +138,7 @@ void FakeRemoteGattCharacteristic::ReadRemoteCharacteristic(
                      std::move(error_callback)));
 }
 
-void FakeRemoteGattCharacteristic::WriteRemoteCharacteristic(
+void FakeRemoteGattCharacteristic::DeprecatedWriteRemoteCharacteristic(
     const std::vector<uint8_t>& value,
     base::OnceClosure callback,
     ErrorCallback error_callback) {

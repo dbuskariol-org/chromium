@@ -152,7 +152,7 @@ void BluetoothRemoteGattCharacteristicMac::ReadRemoteCharacteristic(
   [GetCBPeripheral() readValueForCharacteristic:cb_characteristic_];
 }
 
-void BluetoothRemoteGattCharacteristicMac::WriteRemoteCharacteristic(
+void BluetoothRemoteGattCharacteristicMac::DeprecatedWriteRemoteCharacteristic(
     const std::vector<uint8_t>& value,
     base::OnceClosure callback,
     ErrorCallback error_callback) {

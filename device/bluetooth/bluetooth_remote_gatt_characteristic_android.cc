@@ -150,10 +150,10 @@ void BluetoothRemoteGattCharacteristicAndroid::ReadRemoteCharacteristic(
   read_error_callback_ = std::move(error_callback);
 }
 
-void BluetoothRemoteGattCharacteristicAndroid::WriteRemoteCharacteristic(
-    const std::vector<uint8_t>& value,
-    base::OnceClosure callback,
-    ErrorCallback error_callback) {
+void BluetoothRemoteGattCharacteristicAndroid::
+    DeprecatedWriteRemoteCharacteristic(const std::vector<uint8_t>& value,
+                                        base::OnceClosure callback,
+                                        ErrorCallback error_callback) {
   if (read_pending_ || write_pending_) {
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,

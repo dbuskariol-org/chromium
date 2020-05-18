@@ -141,7 +141,7 @@ void BluetoothRemoteGattCharacteristicCast::ReadRemoteCharacteristic(
       std::move(error_callback)));
 }
 
-void BluetoothRemoteGattCharacteristicCast::WriteRemoteCharacteristic(
+void BluetoothRemoteGattCharacteristicCast::DeprecatedWriteRemoteCharacteristic(
     const std::vector<uint8_t>& value,
     base::OnceClosure callback,
     ErrorCallback error_callback) {

@@ -157,7 +157,7 @@ void BluetoothRemoteGattCharacteristicWin::ReadRemoteCharacteristic(
                  weak_ptr_factory_.GetWeakPtr()));
 }
 
-void BluetoothRemoteGattCharacteristicWin::WriteRemoteCharacteristic(
+void BluetoothRemoteGattCharacteristicWin::DeprecatedWriteRemoteCharacteristic(
     const std::vector<uint8_t>& value,
     base::OnceClosure callback,
     ErrorCallback error_callback) {

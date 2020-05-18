@@ -47,9 +47,10 @@ class BluetoothRemoteGattCharacteristicCast
   BluetoothRemoteGattService* GetService() const override;
   void ReadRemoteCharacteristic(ValueCallback callback,
                                 ErrorCallback error_callback) override;
-  void WriteRemoteCharacteristic(const std::vector<uint8_t>& value,
-                                 base::OnceClosure callback,
-                                 ErrorCallback error_callback) override;
+  void DeprecatedWriteRemoteCharacteristic(
+      const std::vector<uint8_t>& value,
+      base::OnceClosure callback,
+      ErrorCallback error_callback) override;
 
   // Called by BluetoothAdapterCast to set the value when a new notification
   // comes in.

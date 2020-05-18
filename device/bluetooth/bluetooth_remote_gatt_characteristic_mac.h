@@ -43,9 +43,10 @@ class DEVICE_BLUETOOTH_EXPORT BluetoothRemoteGattCharacteristicMac
   bool IsNotifying() const override;
   void ReadRemoteCharacteristic(ValueCallback callback,
                                 ErrorCallback error_callback) override;
-  void WriteRemoteCharacteristic(const std::vector<uint8_t>& value,
-                                 base::OnceClosure callback,
-                                 ErrorCallback error_callback) override;
+  void DeprecatedWriteRemoteCharacteristic(
+      const std::vector<uint8_t>& value,
+      base::OnceClosure callback,
+      ErrorCallback error_callback) override;
   bool WriteWithoutResponse(base::span<const uint8_t> value) override;
 
  protected:

@@ -171,10 +171,10 @@ void BluetoothRemoteGattCharacteristicBlueZ::ReadRemoteCharacteristic(
                          std::move(error_callback)));
 }
 
-void BluetoothRemoteGattCharacteristicBlueZ::WriteRemoteCharacteristic(
-    const std::vector<uint8_t>& value,
-    base::OnceClosure callback,
-    ErrorCallback error_callback) {
+void BluetoothRemoteGattCharacteristicBlueZ::
+    DeprecatedWriteRemoteCharacteristic(const std::vector<uint8_t>& value,
+                                        base::OnceClosure callback,
+                                        ErrorCallback error_callback) {
   DVLOG(1) << "Sending GATT characteristic write request to characteristic: "
            << GetIdentifier() << ", UUID: " << GetUUID().canonical_value()
            << ", with value: " << value << ".";
