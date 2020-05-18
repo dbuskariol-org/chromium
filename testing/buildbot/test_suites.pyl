@@ -2759,39 +2759,27 @@
       'cronet_test': {},
     },
 
-    'ios_eg2_tests': {
-      'ios_chrome_bookmarks_eg2tests_module': {},
+    'ios_eg2_cq_tests': {
       'ios_chrome_integration_eg2tests_module': {
-        'swarming': {
-          'shards': 2,
-        },
-      },
-      'ios_chrome_settings_eg2tests_module': {},
-      'ios_chrome_signin_eg2tests_module': {},
-      'ios_chrome_smoke_eg2tests_module': {},
-      'ios_chrome_ui_eg2tests_module': {
-        'swarming': {
-          'shards': 2,
-        },
-      },
-      'ios_chrome_web_eg2tests_module': {},
-      'ios_showcase_eg2tests_module': {},
-      'ios_web_shell_eg2tests_module': {},
-    },
-
-    'ios_eg_cq_tests': {
-      'ios_chrome_integration_egtests': {
         'swarming': {
           'shards': 3,
         }
       },
-      'ios_chrome_signin_egtests': {},
-      'ios_chrome_ui_egtests': {
+      'ios_chrome_signin_eg2tests_module': {},
+      'ios_chrome_ui_eg2tests_module': {
         'swarming': {
           'shards': 5,
         }
       },
-      'ios_web_shell_egtests': {},
+      'ios_web_shell_eg2tests_module': {},
+    },
+
+    'ios_eg2_tests': {
+      'ios_chrome_bookmarks_eg2tests_module': {},
+      'ios_chrome_settings_eg2tests_module': {},
+      'ios_chrome_smoke_eg2tests_module': {},
+      'ios_chrome_web_eg2tests_module': {},
+      'ios_showcase_eg2tests_module': {},
     },
 
     'ios_eg_tests': {
@@ -4925,12 +4913,15 @@
           'SIM_IPAD_6_GEN_12_4',
         ]
       },
-      'ios_eg_cq_tests': {
+      'ios_eg2_cq_tests': {
         'variants': [
+          'SIM_IPHONE_7_13_4',
           'SIM_IPHONE_X_13_4',
           'SIM_IPAD_PRO_13_4',
+          'SIM_IPAD_6_GEN_13_4',
           'SIM_IPHONE_X_12_4',
           'SIM_IPAD_PRO_12_4',
+          'SIM_IPAD_6_GEN_12_4',
         ]
       },
       'ios_eg_tests': {
@@ -4966,12 +4957,13 @@
           'SIM_IPAD_6_GEN_12_4',
         ]
       },
-      'ios_eg_cq_tests': {
+      'ios_eg2_cq_tests': {
         'variants': [
           'SIM_IPHONE_X_13_4',
           'SIM_IPAD_AIR_2_13_4',
           'SIM_IPHONE_X_12_4',
           'SIM_IPAD_PRO_12_4',
+          'SIM_IPAD_6_GEN_12_4',
         ]
       },
       'ios_eg_tests': {
@@ -5019,6 +5011,14 @@
           'SIM_IPHONE_X_13_4',
         ],
       },
+      'ios_eg2_cq_tests': {
+        'variants': [
+          'SIM_IPAD_AIR_2_12_4',
+          'SIM_IPAD_AIR_2_13_4',
+          'SIM_IPHONE_X_12_4',
+          'SIM_IPHONE_X_13_4',
+        ],
+      },
       'ios_eg2_tests': {
         'variants': [
           'SIM_IPAD_AIR_2_12_4',
@@ -5056,7 +5056,7 @@
           'SIM_IPHONE_X_13_4',
         ]
       },
-      'ios_eg_cq_tests': {
+      'ios_eg2_cq_tests': {
         'variants': [
           'SIM_IPAD_AIR_2_12_4',
           'SIM_IPHONE_7_13_4',
@@ -5090,7 +5090,7 @@
           'SIM_IPHONE_6S_13_4',
         ]
       },
-      'ios_eg_cq_tests': {
+      'ios_eg2_cq_tests': {
         'variants': [
           'SIM_IPHONE_6S_12_4',
           'SIM_IPHONE_6S_13_4',
@@ -5113,7 +5113,7 @@
           'SIM_IPAD_AIR_2_13_4',
         ]
       },
-      'ios_eg_cq_tests': {
+      'ios_eg2_cq_tests': {
         'variants': [
           'SIM_IPHONE_X_13_4',
           'SIM_IPAD_AIR_2_13_4',
