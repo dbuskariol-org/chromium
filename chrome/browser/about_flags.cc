@@ -5616,6 +5616,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kConversionMeasurementDebugModeDescription, kOsAll,
      SINGLE_VALUE_TYPE(switches::kConversionsDebugMode)},
 
+    {"client-storage-access-context-auditing",
+     flag_descriptions::kClientStorageAccessContextAuditingName,
+     flag_descriptions::kClientStorageAccessContextAuditingDescription,
+     kOsDesktop,
+     FEATURE_VALUE_TYPE(features::kClientStorageAccessContextAuditing)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

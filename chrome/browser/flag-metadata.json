@@ -521,6 +521,12 @@
     "expiry_milestone": 76
   },
   {
+    "name": "client-storage-access-context-auditing",
+    "owners": ["sauski", "msramek",
+      "chrome-friendly-settings@google.com"],
+    "expiry_milestone": 88
+  },
+  {
     "name": "collections-card-presentation-style",
     "owners": [ "sczs" ],
     "expiry_milestone": 80
