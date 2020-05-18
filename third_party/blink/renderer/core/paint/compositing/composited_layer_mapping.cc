@@ -404,22 +404,16 @@ bool CompositedLayerMapping::UpdateGraphicsLayerConfiguration(
   if (UpdateSquashingLayers(!squashed_layers_.IsEmpty()))
     layer_config_changed = true;
 
-  if (layer_config_changed)
-    UpdateInternalHierarchy();
-
-  // A mask layer is not part of the hierarchy proper, it's an auxiliary layer
-  // that's plugged into another GraphicsLayer that is part of the hierarchy.
-  // It has no parent or child GraphicsLayer. For that reason, we process it
-  // here, after the hierarchy has been updated.
   bool has_mask =
       CSSMaskPainter::MaskBoundingBox(GetLayoutObject(), PhysicalOffset())
           .has_value();
   bool has_clip_path =
       ClipPathClipper::LocalClipPathBoundingBox(GetLayoutObject()).has_value();
-  if (UpdateMaskLayer(has_mask || has_clip_path)) {
-    graphics_layer_->SetMaskLayer(mask_layer_.get());
+  if (UpdateMaskLayer(has_mask || has_clip_path))
     layer_config_changed = true;
-  }
+
+  if (layer_config_changed)
+    UpdateInternalHierarchy();
 
   UpdateBackgroundColor();
 
@@ -941,6 +935,9 @@ void CompositedLayerMapping::UpdateInternalHierarchy() {
   // Now add the DecorationOutlineLayer as a subtree to GraphicsLayer
   if (decoration_outline_layer_)
     graphics_layer_->AddChild(decoration_outline_layer_.get());
+
+  if (mask_layer_)
+    graphics_layer_->AddChild(mask_layer_.get());
 
   // The squashing containment layer, if it exists, becomes a no-op parent.
   if (squashing_layer_) {
@@ -1611,6 +1608,7 @@ void CompositedLayerMapping::SetSublayers(
       };
   add_layer_needing_reattachment(overflow_controls_host_layer_.get());
   add_layer_needing_reattachment(decoration_outline_layer_.get());
+  add_layer_needing_reattachment(mask_layer_.get());
 
   parent->SetChildren(sublayers);
 
