@@ -1264,6 +1264,12 @@
     'fuchsia_gtests': {
       'accessibility_unittests': {},
       'angle_unittests': {},
+      'aura_unittests': {
+        'args': [
+          # http://crbug.com/865172
+          '--child-arg=--ozone-platform=headless',
+        ],
+      },
       'base_unittests': {},
       'base_util_unittests': {},
       'blink_common_unittests': {},
@@ -1303,6 +1309,7 @@
       'gpu_unittests': {},
       'http_service_tests': {},
       'ipc_tests': {},
+      'latency_unittests': {},
       'media_blink_unittests': {},
       'media_unittests': {},
       'mojo_unittests': {
@@ -1310,6 +1317,7 @@
           '--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.mojo_unittests.filter',
         ],
       },
+      'native_theme_unittests': {},
       'net_unittests': {
         'swarming': {
           'shards': 4,
@@ -1340,6 +1348,7 @@
       'url_unittests': {},
       'viz_unittests': {
         'args': [
+          # http://crbug.com/865172
           '--child-arg=--ozone-platform=headless',
         ],
       },
