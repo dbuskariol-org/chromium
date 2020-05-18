@@ -27402,6 +27402,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3301" label="PopupGestureTapExceedsOwnerWindowBounds"/>
   <int value="3302" label="PopupMouseDownExceedsOwnerWindowBounds"/>
   <int value="3303" label="PopupMouseWheelExceedsOwnerWindowBounds"/>
+  <int value="3304" label="V8VarRedeclaredCatchBinding"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
