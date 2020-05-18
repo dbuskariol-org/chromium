@@ -5067,8 +5067,8 @@ crbug.com/963141 [ Mac ] media/video-aspect-ratio.html [ Pass Failure ]
 # Sheriff 2019-05-16
 crbug.com/963141 [ Linux ] media/video-object-fit.html [ Pass Failure ]
 
-# Sheriff 2019-05-20
-crbug.com/965389 [ Mac ] media/track/track-cue-rendering-position-auto.html [ Pass Failure ]
+# Sheriff 2020-05-18
+crbug.com/965389 media/track/track-cue-rendering-position-auto.html [ Pass Failure ]
 
 # Flaky test on all platforms.
 crbug.com/979323 media/track/track-cue-rendering-position-auto-rtl.html [ Pass Failure ]
