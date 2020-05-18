@@ -471,9 +471,7 @@
       'telemetry_perf_unittests': {
         'args': [
           '--browser=cros-chrome',
-          # By default, CrOS VMs' ssh servers listen on local port 9222.
-          '--remote=127.0.0.1',
-          '--remote-ssh-port=9222',
+          '$$MAGIC_SUBSTITUTION_ChromeOSTelemetryRemote',
           '--xvfb',
         ],
         'swarming': {
@@ -485,9 +483,7 @@
         'args': [
           '--jobs=1',
           '--browser=cros-chrome',
-          # By default, CrOS VMs' ssh servers listen on local port 9222.
-          '--remote=127.0.0.1',
-          '--remote-ssh-port=9222',
+          '$$MAGIC_SUBSTITUTION_ChromeOSTelemetryRemote',
         ],
         'swarming': {
           'idempotent': False,  # https://crbug.com/549140
@@ -500,8 +496,7 @@
       'telemetry_perf_unittests': {
         'args': [
           '--browser=cros-chrome',
-          # The magic hostname that resolves to a CrOS device in the test lab.
-          '--remote=variable_chromeos_device_hostname',
+          '$$MAGIC_SUBSTITUTION_ChromeOSTelemetryRemote',
           '--xvfb',
         ],
         'swarming': {
@@ -512,8 +507,7 @@
       'telemetry_unittests': {
         'args': [
           '--browser=cros-chrome',
-          # The magic hostname that resolves to a CrOS device in the test lab.
-          '--remote=variable_chromeos_device_hostname',
+          '$$MAGIC_SUBSTITUTION_ChromeOSTelemetryRemote',
           '--jobs=1',
         ],
         'swarming': {
@@ -2600,12 +2594,7 @@
     'gpu_webgl_conformance_telemetry_tests': {
       'webgl_conformance': {
         'chromeos_args': [
-          # If we're testing on CrOS, assume we're running on VMs. So point
-          # telemetry to the default SSH port of the VM. Note that this won't
-          # work for hardware tests.
-          # TODO(bpastene): Make this work for hardware tests.
-          '--remote=127.0.0.1',
-          '--remote-ssh-port=9222',
+          '$$MAGIC_SUBSTITUTION_ChromeOSTelemetryRemote',
         ],
         'args': [
           # On dual-GPU devices we want the high-performance GPU to be active
@@ -2628,12 +2617,7 @@
       'webgl_conformance_validating': {
         'telemetry_test_name': 'webgl_conformance',
         'chromeos_args': [
-          # If we're testing on CrOS, assume we're running on VMs. So point
-          # telemetry to the default SSH port of the VM. Note that this won't
-          # work for hardware tests.
-          # TODO(bpastene): Make this work for hardware tests.
-          '--remote=127.0.0.1',
-          '--remote-ssh-port=9222',
+          '$$MAGIC_SUBSTITUTION_ChromeOSTelemetryRemote',
         ],
         'args': [
           # On dual-GPU devices we want the high-performance GPU to be active
