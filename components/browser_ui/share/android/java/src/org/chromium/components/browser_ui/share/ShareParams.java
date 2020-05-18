@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.share;
+package org.chromium.components.browser_ui.share;
 
+import android.content.ComponentName;
 import android.net.Uri;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import org.chromium.chrome.browser.share.ShareHelper.TargetChosenCallback;
 import org.chromium.components.dom_distiller.core.DomDistillerUrlUtils;
 import org.chromium.ui.base.WindowAndroid;
 
@@ -20,15 +20,6 @@ import java.util.ArrayList;
  * A container object for passing share parameters to {@link ShareHelper}.
  */
 public class ShareParams {
-    /**
-     * Whether it should share directly with the activity that was most recently used to share.
-     * If false, the share selection will be saved.
-     */
-    private final boolean mShareDirectly;
-
-    /** Whether to save the chosen activity for future direct sharing. */
-    private final boolean mSaveLastUsed;
-
     /** The window that triggered the share action. */
     private final WindowAndroid mWindow;
 
@@ -59,12 +50,10 @@ public class ShareParams {
      */
     private TargetChosenCallback mCallback;
 
-    private ShareParams(boolean shareDirectly, boolean saveLastUsed, WindowAndroid window,
-            String title, String text, @Nullable String fileContentType,
-            @Nullable ArrayList<Uri> fileUris, @Nullable Uri offlineUri,
-            @Nullable Uri screenshotUri, @Nullable TargetChosenCallback callback) {
-        mShareDirectly = shareDirectly;
-        mSaveLastUsed = saveLastUsed;
+    private ShareParams(WindowAndroid window, String title, String text,
+            @Nullable String fileContentType, @Nullable ArrayList<Uri> fileUris,
+            @Nullable Uri offlineUri, @Nullable Uri screenshotUri,
+            @Nullable TargetChosenCallback callback) {
         mWindow = window;
         mTitle = title;
         mText = text;
@@ -73,21 +62,6 @@ public class ShareParams {
         mOfflineUri = offlineUri;
         mScreenshotUri = screenshotUri;
         mCallback = callback;
-    }
-
-    /**
-     * @return Whether it should share directly with the activity that was most recently used to
-     * share.
-     */
-    public boolean shareDirectly() {
-        return mShareDirectly;
-    }
-
-    /**
-     * @return Whether to save the chosen activity for future direct sharing.
-     */
-    public boolean saveLastUsed() {
-        return mSaveLastUsed;
     }
 
     /**
@@ -151,6 +125,13 @@ public class ShareParams {
         return mCallback;
     }
 
+    /**
+     * @param callback To be called when user makes a choice.
+     */
+    public void setCallback(@Nullable TargetChosenCallback callback) {
+        mCallback = callback;
+    }
+
     /** The builder for {@link ShareParams} objects. */
     public static class Builder {
         private boolean mShareDirectly;
@@ -176,23 +157,6 @@ public class ShareParams {
          */
         public Builder setText(@NonNull String text) {
             mText = text;
-            return this;
-        }
-
-        /**
-         * Sets whether it should share directly with the activity that was most recently used to
-         * share.
-         */
-        public Builder setShareDirectly(boolean shareDirectly) {
-            mShareDirectly = shareDirectly;
-            return this;
-        }
-
-        /**
-         * Sets whether to save the chosen activity for future direct sharing.
-         */
-        public Builder setSaveLastUsed(boolean saveLastUsed) {
-            mSaveLastUsed = saveLastUsed;
             return this;
         }
 
@@ -247,8 +211,27 @@ public class ShareParams {
                     mText = mUrl;
                 }
             }
-            return new ShareParams(mShareDirectly, mSaveLastUsed, mWindow, mTitle, mText,
-                    mFileContentType, mFileUris, mOfflineUri, mScreenshotUri, mCallback);
+            return new ShareParams(mWindow, mTitle, mText, mFileContentType, mFileUris, mOfflineUri,
+                    mScreenshotUri, mCallback);
         }
+    }
+
+    /**
+     * Callback interface for when a target is chosen.
+     */
+    public static interface TargetChosenCallback {
+        /**
+         * Called when the user chooses a target in the share dialog.
+         *
+         * Note that if the user cancels the share dialog, this callback is never called.
+         */
+        public void onTargetChosen(ComponentName chosenComponent);
+
+        /**
+         * Called when the user cancels the share dialog.
+         *
+         * Guaranteed that either this, or onTargetChosen (but not both) will be called, eventually.
+         */
+        public void onCancel();
     }
 }

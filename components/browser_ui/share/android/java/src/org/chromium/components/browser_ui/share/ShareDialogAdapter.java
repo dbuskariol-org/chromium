@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.share;
+package org.chromium.components.browser_ui.share;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -13,8 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.chromium.chrome.R;
 
 import java.util.List;
 

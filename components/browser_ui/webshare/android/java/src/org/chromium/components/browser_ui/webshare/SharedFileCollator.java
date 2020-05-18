@@ -2,16 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.webshare;
+package org.chromium.components.browser_ui.webshare;
 
 import org.chromium.base.Callback;
 import org.chromium.base.task.PostTask;
-import org.chromium.chrome.browser.ChromeActivity;
-import org.chromium.chrome.browser.share.ShareParams;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.mojo.system.MojoResult;
-import org.chromium.webshare.mojom.ShareError;
-import org.chromium.webshare.mojom.ShareService;
 import org.chromium.webshare.mojom.SharedFile;
 
 /**
@@ -20,9 +16,8 @@ import org.chromium.webshare.mojom.SharedFile;
 public class SharedFileCollator implements Callback<Integer> {
     private static final String WILDCARD = "*/*";
 
-    private final ShareParams mParams;
     private int mPending;
-    private ShareService.ShareResponse mCallback;
+    private Callback<Boolean> mCallback;
 
     /**
      * Constructs a SharedFileCollator.
@@ -30,9 +25,8 @@ public class SharedFileCollator implements Callback<Integer> {
      * @param params the share request to issue if blobs are successfully received.
      * @param callback the callback to call if any blob is not successfully received.
      */
-    public SharedFileCollator(ShareParams params, ShareService.ShareResponse callback) {
-        mParams = params;
-        mPending = params.getFileUris().size();
+    public SharedFileCollator(int pendingFileCount, Callback<Boolean> callback) {
+        mPending = pendingFileCount;
         mCallback = callback;
 
         assert mPending > 0;
@@ -49,18 +43,11 @@ public class SharedFileCollator implements Callback<Integer> {
 
         if (result == MojoResult.OK && --mPending > 0) return;
 
-        final ShareService.ShareResponse callback = mCallback;
+        final Callback<Boolean> callback = mCallback;
         mCallback = null;
 
-        PostTask.postTask(UiThreadTaskTraits.DEFAULT, () -> {
-            if (result == MojoResult.OK) {
-                ChromeActivity<?> activity =
-                        (ChromeActivity<?>) mParams.getWindow().getActivity().get();
-                activity.getShareDelegateSupplier().get().share(mParams);
-            } else {
-                callback.call(ShareError.INTERNAL_ERROR);
-            }
-        });
+        PostTask.postTask(
+                UiThreadTaskTraits.DEFAULT, () -> { callback.onResult(result == MojoResult.OK); });
     }
 
     /**

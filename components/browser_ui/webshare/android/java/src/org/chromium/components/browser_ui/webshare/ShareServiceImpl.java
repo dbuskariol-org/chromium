@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.webshare;
+package org.chromium.components.browser_ui.webshare;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -19,10 +19,8 @@ import org.chromium.base.task.AsyncTask;
 import org.chromium.base.task.PostTask;
 import org.chromium.base.task.TaskRunner;
 import org.chromium.base.task.TaskTraits;
-import org.chromium.chrome.browser.ChromeActivity;
-import org.chromium.chrome.browser.share.ShareHelper;
-import org.chromium.chrome.browser.share.ShareImageFileUtils;
-import org.chromium.chrome.browser.share.ShareParams;
+import org.chromium.components.browser_ui.share.ShareImageFileUtils;
+import org.chromium.components.browser_ui.share.ShareParams;
 import org.chromium.content_public.browser.WebContents;
 import org.chromium.mojo.system.MojoException;
 import org.chromium.ui.base.WindowAndroid;
@@ -44,6 +42,7 @@ import java.util.Set;
  */
 public class ShareServiceImpl implements ShareService {
     private final WindowAndroid mWindow;
+    private final WebShareDelegate mDelegate;
 
     private static final String TAG = "share";
 
@@ -142,8 +141,23 @@ public class ShareServiceImpl implements ShareService {
     private static final TaskRunner TASK_RUNNER =
             PostTask.createSequencedTaskRunner(TaskTraits.USER_BLOCKING);
 
-    public ShareServiceImpl(@Nullable WebContents webContents) {
+    /** Delegate class that provides embedder-specific functionality. */
+    public interface WebShareDelegate {
+        /**
+         * @return true if sharing is currently possible.
+         */
+        public boolean canShare();
+
+        /**
+         * Overridden by the embedder to execute the share.
+         * @param params the share data.
+         */
+        public void share(ShareParams params);
+    }
+
+    public ShareServiceImpl(@Nullable WebContents webContents, WebShareDelegate delegate) {
         mWindow = webContents.getTopLevelNativeWindow();
+        mDelegate = delegate;
     }
 
     @Override
@@ -155,28 +169,28 @@ public class ShareServiceImpl implements ShareService {
     @Override
     public void share(String title, String text, Url url, final SharedFile[] files,
             final ShareResponse callback) {
-        RecordHistogram.recordEnumeratedHistogram("WebShare.ApiCount", WEBSHARE_METHOD_SHARE,
-                WEBSHARE_METHOD_COUNT);
+        RecordHistogram.recordEnumeratedHistogram(
+                "WebShare.ApiCount", WEBSHARE_METHOD_SHARE, WEBSHARE_METHOD_COUNT);
 
-        if (mWindow.getActivity().get() == null) {
+        if (!mDelegate.canShare()) {
             RecordHistogram.recordEnumeratedHistogram("WebShare.ShareOutcome",
                     WEBSHARE_OUTCOME_UNKNOWN_FAILURE, WEBSHARE_OUTCOME_COUNT);
             callback.call(ShareError.INTERNAL_ERROR);
             return;
         }
 
-        ShareHelper.TargetChosenCallback innerCallback = new ShareHelper.TargetChosenCallback() {
+        ShareParams.TargetChosenCallback innerCallback = new ShareParams.TargetChosenCallback() {
             @Override
             public void onTargetChosen(ComponentName chosenComponent) {
-                RecordHistogram.recordEnumeratedHistogram("WebShare.ShareOutcome",
-                        WEBSHARE_OUTCOME_SUCCESS, WEBSHARE_OUTCOME_COUNT);
+                RecordHistogram.recordEnumeratedHistogram(
+                        "WebShare.ShareOutcome", WEBSHARE_OUTCOME_SUCCESS, WEBSHARE_OUTCOME_COUNT);
                 callback.call(ShareError.OK);
             }
 
             @Override
             public void onCancel() {
-                RecordHistogram.recordEnumeratedHistogram("WebShare.ShareOutcome",
-                        WEBSHARE_OUTCOME_CANCELED, WEBSHARE_OUTCOME_COUNT);
+                RecordHistogram.recordEnumeratedHistogram(
+                        "WebShare.ShareOutcome", WEBSHARE_OUTCOME_CANCELED, WEBSHARE_OUTCOME_COUNT);
                 callback.call(ShareError.CANCELED);
             }
         };
@@ -184,10 +198,8 @@ public class ShareServiceImpl implements ShareService {
         final ShareParams.Builder paramsBuilder = new ShareParams.Builder(mWindow, title, url.url)
                                                           .setText(text)
                                                           .setCallback(innerCallback);
-
         if (files == null || files.length == 0) {
-            ChromeActivity<?> activity = (ChromeActivity<?>) mWindow.getActivity().get();
-            activity.getShareDelegateSupplier().get().share(paramsBuilder.build());
+            mDelegate.share(paramsBuilder.build());
             return;
         }
 
@@ -240,8 +252,13 @@ public class ShareServiceImpl implements ShareService {
 
                 paramsBuilder.setFileContentType(SharedFileCollator.commonMimeType(files));
                 paramsBuilder.setFileUris(fileUris);
-                SharedFileCollator collator =
-                        new SharedFileCollator(paramsBuilder.build(), callback);
+                SharedFileCollator collator = new SharedFileCollator(files.length, success -> {
+                    if (success) {
+                        mDelegate.share(paramsBuilder.build());
+                    } else {
+                        callback.call(ShareError.INTERNAL_ERROR);
+                    }
+                });
 
                 for (int index = 0; index < files.length; ++index) {
                     blobReceivers.get(index).start(files[index].blob.blob, collator);

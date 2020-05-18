@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.share;
+package org.chromium.components.browser_ui.share;
 
 import android.annotation.TargetApi;
 import android.app.DownloadManager;
@@ -190,7 +190,9 @@ public class ShareImageFileUtils {
      * to other function to be called while on a background thread. Should be used on a background
      * thread.
      */
-    private interface FilePathProvider { String getPath(); }
+    private interface FilePathProvider {
+        String getPath();
+    }
 
     /**
      * Saves image to the given file.
