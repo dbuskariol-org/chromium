@@ -1595,6 +1595,13 @@ class CONTENT_EXPORT RenderFrameHostImpl
   // - Ignore any OnUnloadACK sent by the renderer process.
   void DoNotDeleteForTesting();
 
+  // This method will unset the flag |do_not_delete_for_testing_| to resume
+  // deletion on the RenderFrameHost. Deletion will only be triggered if
+  // RenderFrameHostImpl::OnDetach() is called for the RenderFrameHost. This is
+  // a counterpart for DoNotDeleteForTesting() which sets the flag
+  // |do_not_delete_for_testing_|.
+  void ResumeDeletionForTesting();
+
   // Document-associated data. This is cleared whenever a new document is hosted
   // by this RenderFrameHost. Please refer to the description at
   // content/public/browser/render_document_host_user_data.h for more details.

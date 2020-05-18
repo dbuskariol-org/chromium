@@ -2570,6 +2570,11 @@ void RenderFrameHostImpl::OnDetach() {
     return;
   }
 
+  // Ignore FrameHostMsg_Detach IPC message, if the RenderFrameHost should be
+  // left in pending deletion state.
+  if (do_not_delete_for_testing_)
+    return;
+
   if (IsPendingDeletion()) {
     // The frame is pending deletion. FrameHostMsg_Detach is used to confirm
     // its unload handlers ran. Note that it is possible for a frame to already
@@ -3547,6 +3552,10 @@ bool RenderFrameHostImpl::IsBeforeUnloadHangMonitorDisabledForTesting() {
 
 void RenderFrameHostImpl::DoNotDeleteForTesting() {
   do_not_delete_for_testing_ = true;
+}
+
+void RenderFrameHostImpl::ResumeDeletionForTesting() {
+  do_not_delete_for_testing_ = false;
 }
 
 bool RenderFrameHostImpl::IsFeatureEnabled(

@@ -260,11 +260,8 @@ IN_PROC_BROWSER_TEST_F(RenderDocumentHostUserDataTest, SpeculativeRFHDeleted) {
   RenderFrameHostImpl* rfh_a = web_contents()->GetMainFrame();
   RenderFrameHostImpl* rfh_b = rfh_a->child_at(0)->current_frame_host();
 
-  // RFH B has an unload handler.
-  auto detach_filter_b = base::MakeRefCounted<DropMessageFilter>(
-      FrameMsgStart, FrameHostMsg_Detach::ID);
-  rfh_b->GetProcess()->AddFilter(detach_filter_b.get());
-  EXPECT_TRUE(ExecJs(rfh_b, "onunload=function(){}"));
+  // Leave rfh_b in pending deletion state.
+  LeaveInPendingDeletionState(rfh_b);
 
   // 2) Navigation from B to C. The server is slow to respond.
   TestNavigationManager navigation_observer(web_contents(), url_c);
@@ -329,7 +326,6 @@ IN_PROC_BROWSER_TEST_F(RenderDocumentHostUserDataTest,
                        CheckInPendingDeletionState) {
   ASSERT_TRUE(embedded_test_server()->Start());
   IsolateAllSitesForTesting(base::CommandLine::ForCurrentProcess());
-  std::string onunload_script = "window.onunload = function(){ while(1); }";
   GURL url_ab(embedded_test_server()->GetURL(
       "a.com", "/cross_site_iframe_factory.html?a(b)"));
   GURL url_c(embedded_test_server()->GetURL("c.com", "/title1.html"));
@@ -339,13 +335,9 @@ IN_PROC_BROWSER_TEST_F(RenderDocumentHostUserDataTest,
   RenderFrameHostImpl* rfh_a = top_frame_host();
   RenderFrameHostImpl* rfh_b = rfh_a->child_at(0)->current_frame_host();
 
-  // 2) Act as if there is a slow unload handler on rfh_a and rfh_b.
+  // 2) Leave both rfh_a and rfh_b in pending deletion state.
   LeaveInPendingDeletionState(rfh_a);
-  rfh_b->SetSubframeUnloadTimeoutForTesting(base::TimeDelta::FromSeconds(30));
-  auto detach_filter = base::MakeRefCounted<DropMessageFilter>(
-      FrameMsgStart, FrameHostMsg_Detach::ID);
-  rfh_b->GetProcess()->AddFilter(detach_filter.get());
-  EXPECT_TRUE(ExecuteScript(rfh_b->frame_tree_node(), onunload_script));
+  LeaveInPendingDeletionState(rfh_b);
 
   // 3) Create RDHUD object for both rfh_a and rfh_b before running unload
   // handlers.
