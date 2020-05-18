@@ -56028,6 +56028,15 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="3" label="NoTiles"/>
 </enum>
 
+<enum name="QueryTilesImageLoadingEvent">
+  <int value="0" label="Start in full browser mode"/>
+  <int value="1" label="Success in full browser mode"/>
+  <int value="2" label="Failure in full browser mode"/>
+  <int value="3" label="Start in reduced mode"/>
+  <int value="4" label="Success in reduced mode"/>
+  <int value="5" label="Failure in reduced mode"/>
+</enum>
+
 <enum name="QueryTilesRequestStatus">
   <int value="0" label="Init"/>
   <int value="1" label="Success"/>
