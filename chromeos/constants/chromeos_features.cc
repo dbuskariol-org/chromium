@@ -239,7 +239,7 @@ const base::Feature kLacrosSupport{"LacrosSupport",
                                    base::FEATURE_DISABLED_BY_DEFAULT};
 
 // ChromeOS Media App. https://crbug.com/996088.
-const base::Feature kMediaApp{"MediaApp", base::FEATURE_ENABLED_BY_DEFAULT};
+const base::Feature kMediaApp{"MediaApp", base::FEATURE_DISABLED_BY_DEFAULT};
 
 // Enable or disable native typing for rule-based input methods.
 const base::Feature kNativeRuleBasedTyping{"NativeRuleBasedTyping",
