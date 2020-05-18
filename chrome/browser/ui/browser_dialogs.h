@@ -15,7 +15,9 @@
 #include "base/strings/string16.h"
 #include "build/build_config.h"
 #include "chrome/browser/ui/bookmarks/bookmark_editor.h"
+#include "chrome/common/buildflags.h"
 #include "content/public/browser/content_browser_client.h"
+#include "extensions/buildflags/buildflags.h"
 #include "third_party/skia/include/core/SkColor.h"
 #include "ui/gfx/native_widget_types.h"
 
@@ -318,6 +320,23 @@ void ShowExtensionInstallBlockedDialog(
     const gfx::ImageSkia& icon,
     content::WebContents* web_contents,
     base::OnceClosure done_callback);
+
+#if BUILDFLAG(ENABLE_SUPERVISED_USERS) && BUILDFLAG(ENABLE_EXTENSIONS)
+// The type of action that the ExtensionInstalledBlockedByParentDialog
+// is being shown in reaction to.
+enum class ExtensionInstalledBlockedByParentDialogAction {
+  kAdd,     // The user attempted to add the extension.
+  kEnable,  // The user attempted to enable the extension.
+};
+
+// Displays a dialog to notify the user that the extension installation is
+// blocked by a parent
+void ShowExtensionInstallBlockedByParentDialog(
+    ExtensionInstalledBlockedByParentDialogAction action,
+    const extensions::Extension* extension,
+    content::WebContents* web_contents,
+    base::OnceClosure done_callback);
+#endif  // BUILDFLAG(ENABLE_SUPERVISED_USERS) && BUILDFLAG(ENABLE_EXTENSIONS)
 
 // Returns a OnceClosure that client code can call to close the device chooser.
 // This OnceClosure references the actual dialog as a WeakPtr, so it's safe to
