@@ -5068,10 +5068,10 @@ crbug.com/963141 [ Mac ] media/video-aspect-ratio.html [ Pass Failure ]
 crbug.com/963141 [ Linux ] media/video-object-fit.html [ Pass Failure ]
 
 # Sheriff 2020-05-18
-crbug.com/965389 media/track/track-cue-rendering-position-auto.html [ Pass Failure ]
+crbug.com/988248 media/track/track-cue-rendering-position-auto.html [ Pass Failure ]
 
 # Flaky test on all platforms.
-crbug.com/979323 media/track/track-cue-rendering-position-auto-rtl.html [ Pass Failure ]
+crbug.com/988248 media/track/track-cue-rendering-position-auto-rtl.html [ Pass Failure ]
 
 # Failing because of revert of If931c1faff528a87d8a78808f30225ebe2377072.
 crbug.com/966345 external/wpt/webvtt/rendering/cues-with-video/processing-model/2_tracks.html [ Failure ]
@@ -5228,12 +5228,12 @@ crbug.com/994692 [ Linux ] compositing/reflections/nested-reflection-anchor-poin
 crbug.com/994692 [ Win ] compositing/reflections/nested-reflection-anchor-point.html [ Pass Failure ]
 
 # Video flakily not being being rendered on Mac
-crbug.com/979298 [ Mac ] media/controls/captions-menu-always-visible.html [ Pass Failure ]
-crbug.com/979298 [ Mac ] media/controls/overflow-menu-always-visible.html [ Pass Failure ]
-crbug.com/979298 [ Mac ] media/controls/volumechange-muted-attribute.html [ Pass Failure ]
+crbug.com/988248 media/controls/captions-menu-always-visible.html [ Pass Failure ]
+crbug.com/988248 [ Mac ] media/controls/overflow-menu-always-visible.html [ Pass Failure ]
+crbug.com/988248 [ Mac ] media/controls/volumechange-muted-attribute.html [ Pass Failure ]
 crbug.com/988248 [ Mac ] media/video-persistence.html [ Pass Failure ]
 crbug.com/988248 [ Linux ] media/video-persistence.html [ Pass Failure ]
-crbug.com/979298 [ Mac ] media/video-zoom.html [ Pass Failure ]
+crbug.com/988248 [ Mac ] media/video-zoom.html [ Pass Failure ]
 
 crbug.com/996219 [ Win ] virtual/text-antialias/emoji-vertical-origin-visual.html [ Failure ]
 
