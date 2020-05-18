@@ -4906,10 +4906,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEnableSyncTrustedVaultDescription, kOsAll,
      FEATURE_VALUE_TYPE(switches::kSyncSupportTrustedVaultPassphrase)},
 
-    {"enable-sync-uss-nigori", flag_descriptions::kEnableSyncUSSNigoriName,
-     flag_descriptions::kEnableSyncUSSNigoriDescription, kOsAll,
-     FEATURE_VALUE_TYPE(switches::kSyncUSSNigori)},
-
 #if defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
     {"global-media-controls", flag_descriptions::kGlobalMediaControlsName,
      flag_descriptions::kGlobalMediaControlsDescription,
