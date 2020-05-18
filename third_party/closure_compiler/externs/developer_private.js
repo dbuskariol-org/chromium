@@ -11,9 +11,7 @@
 
 /** @fileoverview Externs generated from namespace: developerPrivate */
 
-/**
- * @const
- */
+/** @const */
 chrome.developerPrivate = {};
 
 /**
