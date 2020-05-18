@@ -3733,6 +3733,12 @@
     "expiry_milestone": 88
   },
   {
+    "name": "safety-check-ios",
+    "owners": [ "andzaytsev", "harrisonsean", "msramek",
+      "chrome-friendly-settings@google.com"],
+    "expiry_milestone": 88
+  },
+  {
     "name": "safety-tips",
     "owners": [ "jdeblasio", "estark", "meacer" ],
     "expiry_milestone": 84
