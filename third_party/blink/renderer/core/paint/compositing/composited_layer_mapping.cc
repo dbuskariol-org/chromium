@@ -939,7 +939,7 @@ void CompositedLayerMapping::UpdateInternalHierarchy() {
     overflow_controls_host_layer_->AddChild(layer_for_scroll_corner_.get());
 
   // Now add the DecorationOutlineLayer as a subtree to GraphicsLayer
-  if (decoration_outline_layer_.get())
+  if (decoration_outline_layer_)
     graphics_layer_->AddChild(decoration_outline_layer_.get());
 
   // The squashing containment layer, if it exists, becomes a no-op parent.
@@ -1179,16 +1179,15 @@ enum ApplyToGraphicsLayersModeFlags {
       (1 << 5),  // layers between m_graphicsLayer and children
   kApplyToNonScrollingContentLayers = (1 << 6),
   kApplyToScrollingContentLayers = (1 << 7),
-  kApplyToDecorationOutlineLayer = (1 << 8),
   kApplyToAllGraphicsLayers =
       (kApplyToSquashingLayer | kApplyToScrollbarLayers | kApplyToMaskLayers |
        kApplyToLayersAffectedByPreserve3D | kApplyToContentLayers |
-       kApplyToScrollingContentLayers | kApplyToDecorationOutlineLayer)
+       kApplyToScrollingContentLayers)
 };
 typedef unsigned ApplyToGraphicsLayersMode;
 
 // Flags to layers mapping matrix:
-//                  bit 0 1 2 3 4 5 6 7 8
+//                  bit 0 1 2 3 4 5 6 7
 // ChildTransform       *         *
 // Main                 *       *   *
 // Clipping             *         *
@@ -1200,7 +1199,7 @@ typedef unsigned ApplyToGraphicsLayersMode;
 // HorizontalScrollbar      *
 // VerticalScrollbar        *
 // ScrollCorner             *
-// DecorationOutline                *   *
+// DecorationOutline            *   *
 template <typename Func>
 static void ApplyToGraphicsLayers(const CompositedLayerMapping* mapping,
                                   const Func& f,
@@ -1244,7 +1243,7 @@ static void ApplyToGraphicsLayers(const CompositedLayerMapping* mapping,
   if ((mode & kApplyToScrollbarLayers) && mapping->LayerForScrollCorner())
     f(mapping->LayerForScrollCorner());
 
-  if (((mode & kApplyToDecorationOutlineLayer) ||
+  if (((mode & kApplyToContentLayers) ||
        (mode & kApplyToNonScrollingContentLayers)) &&
       mapping->DecorationOutlineLayer())
     f(mapping->DecorationOutlineLayer());
@@ -1600,21 +1599,23 @@ GraphicsLayer* CompositedLayerMapping::ParentForSublayers() const {
 
 void CompositedLayerMapping::SetSublayers(
     const GraphicsLayerVector& sublayers) {
-  GraphicsLayer* overflow_controls_container =
-      overflow_controls_host_layer_.get();
   GraphicsLayer* parent = ParentForSublayers();
-  bool needs_overflow_controls_reattached =
-      overflow_controls_container &&
-      overflow_controls_container->Parent() == parent;
+
+  // Some layers are managed by CompositedLayerMapping under |parent| need to
+  // be reattached after SetChildren() below which will clobber all children.
+  GraphicsLayerVector layers_needing_reattachment;
+  auto add_layer_needing_reattachment =
+      [parent, &layers_needing_reattachment](GraphicsLayer* layer) {
+        if (layer && layer->Parent() == parent)
+          layers_needing_reattachment.push_back(layer);
+      };
+  add_layer_needing_reattachment(overflow_controls_host_layer_.get());
+  add_layer_needing_reattachment(decoration_outline_layer_.get());
 
   parent->SetChildren(sublayers);
 
-  // If we have scrollbars, but are not using composited scrolling, then
-  // parentForSublayers may return m_graphicsLayer.  In that case, the above
-  // call to setChildren has clobbered the overflow controls host layer, so we
-  // need to reattach it.
-  if (needs_overflow_controls_reattached)
-    parent->AddChild(overflow_controls_container);
+  for (GraphicsLayer* layer : layers_needing_reattachment)
+    parent->AddChild(layer);
 }
 
 GraphicsLayer* CompositedLayerMapping::ChildForSuperlayers() const {
