@@ -9846,8 +9846,7 @@
           'caption': '''Camera''',
         },
       ],
-      'supported_on': ['chrome_os:83-'],
-      'future': True,
+      'supported_on': ['chrome_os:84-'],
       'features': {
         'can_be_recommended': False,
         'dynamic_refresh': True,
