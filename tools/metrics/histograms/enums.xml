@@ -61398,6 +61398,25 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="1" label="Failure"/>
 </enum>
 
+<enum name="ShortcutsMenuRegistrationWinResult">
+  <summary>
+    Result of registering app icon shortcuts menu for PWA on Windows
+  </summary>
+  <int value="0" label="Success"/>
+  <int value="1" label="Failed to write ico files to disk"/>
+  <int value="2" label="Failed to BeginUpdate"/>
+  <int value="3" label="Failed to AddTasks"/>
+  <int value="4" label="Failed to CommitUpdate"/>
+</enum>
+
+<enum name="ShortcutsMenuUnregistrationWinResult">
+  <summary>
+    Result of registering app icon shortcuts menu for PWA on Windows
+  </summary>
+  <int value="0" label="Success"/>
+  <int value="1" label="Failed to DeleteJumpList"/>
+</enum>
+
 <enum name="ShortReportReason">
   <int value="1" label="No create time"/>
   <int value="2" label="Not full"/>
