@@ -7946,10 +7946,13 @@ bool RenderFrameHostImpl::DidCommitNavigationInternal(
     last_committed_cross_document_navigation_id_ =
         navigation_request->GetNavigationId();
 
-    if (IsCurrent()) {
+    if (IsCurrent() && !committed_speculative_rfh_before_navigation_commit_) {
       // Clear all the user data associated with the non speculative
       // RenderFrameHost when the navigation is a cross-document navigation not
-      // served from the back-forward cache.
+      // served from the back-forward cache. Make sure the data doesn't get
+      // cleared for the cases when the RenderFrameHost commits before the
+      // navigation commits. This happens when the current RenderFrameHost
+      // crashes before navigating to a new URL.
       document_associated_data_.ClearAllUserData();
     }
 
@@ -7988,6 +7991,9 @@ bool RenderFrameHostImpl::DidCommitNavigationInternal(
   frame_tree_node()->navigator()->DidNavigate(this, *params,
                                               std::move(navigation_request),
                                               is_same_document_navigation);
+
+  // Reset back the state to false after navigation commits.
+  committed_speculative_rfh_before_navigation_commit_ = false;
 
   if (IsBackForwardCacheEnabled()) {
     // Store the Commit params so they can be reused if the page is ever
