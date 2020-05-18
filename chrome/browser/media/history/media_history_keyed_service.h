@@ -128,6 +128,10 @@ class MediaHistoryKeyedService : public KeyedService,
 
     // Information about the currently logged in user.
     media_feeds::mojom::UserIdentifierPtr user_identifier;
+
+    // If set then changes to the cookie name provided on the feed origin or any
+    // associated origin will trigger the feed to be reset.
+    std::string cookie_name_filter;
   };
   // Replaces the media items in |result.feed_id|. This will delete any old feed
   // items and store the new ones in |result.items|. This will also update the

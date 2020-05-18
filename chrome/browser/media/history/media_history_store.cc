@@ -29,7 +29,7 @@
 
 namespace {
 
-constexpr int kCurrentVersionNumber = 1;
+constexpr int kCurrentVersionNumber = 2;
 constexpr int kCompatibleVersionNumber = 1;
 
 constexpr base::FilePath::CharType kMediaHistoryDatabaseName[] =
@@ -66,6 +66,26 @@ base::FilePath GetDBPath(Profile* profile) {
   if (profile->AsTestingProfile())
     return base::FilePath();
   return profile->GetPath().Append(kMediaHistoryDatabaseName);
+}
+
+int MigrateFrom1To2(sql::Database* db, sql::MetaTable* meta_table) {
+  // Version 2 adds a new column to mediaFeed.
+  const int target_version = 2;
+
+  // The mediaFeed table might not exist if the feature is disabled.
+  if (!db->DoesTableExist("mediaFeed")) {
+    meta_table->SetVersionNumber(target_version);
+    return target_version;
+  }
+
+  static const char k1To2Sql[] =
+      "ALTER TABLE mediaFeed ADD COLUMN cookie_name_filter TEXT;";
+  sql::Transaction transaction(db);
+  if (transaction.Begin() && db->Execute(k1To2Sql) && transaction.Commit()) {
+    meta_table->SetVersionNumber(target_version);
+    return target_version;
+  }
+  return 1;
 }
 
 }  // namespace
@@ -319,11 +339,17 @@ sql::InitStatus MediaHistoryStore::CreateOrUpgradeIfNeeded() {
     return sql::INIT_TOO_NEW;
   }
 
-  LOG_IF(WARNING, cur_version < GetCurrentVersion())
-      << "Media history database version " << cur_version
-      << " is too old to handle.";
+  // Versions 0 and below are unexpected.
+  if (cur_version <= 0)
+    return sql::INIT_FAILURE;
 
-  return sql::INIT_OK;
+  // NOTE: Insert schema upgrade scripts here when required.
+  if (cur_version == 1)
+    cur_version = MigrateFrom1To2(db_.get(), meta_table_.get());
+
+  if (cur_version == kCurrentVersionNumber)
+    return sql::INIT_OK;
+  return sql::INIT_FAILURE;
 }
 
 sql::InitStatus MediaHistoryStore::InitializeTables() {
@@ -751,8 +777,8 @@ void MediaHistoryStore::StoreMediaFeedFetchResultInternal(
   if (!feeds_table_->UpdateFeedFromFetch(
           result.feed_id, result.status, result.was_fetched_from_cache,
           result.items.size(), item_play_next_count, item_content_types,
-          result.logos, user_identifier, result.display_name,
-          item_safe_count)) {
+          result.logos, user_identifier, result.display_name, item_safe_count,
+          result.cookie_name_filter)) {
     DB()->RollbackTransaction();
     return;
   }
