@@ -18,7 +18,7 @@ import {html, Polymer} from 'chrome://resources/polymer/v3_0/polymer/polymer_bun
 
 import {loadTimeData} from '../i18n_setup.js';
 
-import {PasswordManagerProxy} from './password_manager_proxy.js';
+import {MultiStorePasswordUiEntryWithPassword} from './multi_store_password_ui_entry.js';
 import {ShowPasswordBehavior} from './show_password_behavior.js';
 
 Polymer({
@@ -54,27 +54,27 @@ Polymer({
 
   /**
    * @private
-   * @param {!PasswordManagerProxy.UiEntryWithPassword} item This row's item.
+   * @param {!MultiStorePasswordUiEntryWithPassword} item This row's item.
    * @return {string}
    */
   getStorageText_(item) {
-    // TODO(crbug.com/1049141): Add proper translated strings once we have them.
-    return item.entry.fromAccountStore ? 'Account' : 'Local';
+    // TODO(crbug.com/1049141): Remove this.
+    return item.entry.isPresentInAccount() ? 'Account' : 'Local';
   },
 
   /**
    * @private
-   * @param {!PasswordManagerProxy.UiEntryWithPassword} item This row's item.
+   * @param {!MultiStorePasswordUiEntryWithPassword} item This row's item.
    * @return {string}
    */
   getStorageIcon_(item) {
-    // TODO(crbug.com/1049141): Add the proper icons once we know them.
-    return item.entry.fromAccountStore ? 'cr:sync' : 'cr:computer';
+    // TODO(crbug.com/1049141): Remove the icons.
+    return item.entry.isPresentInAccount() ? 'cr:sync' : 'cr:computer';
   },
 
   /**
    * Get the aria label for the More Actions button on this row.
-   * @param {!PasswordManagerProxy.UiEntryWithPassword} item This row's item.
+   * @param {!MultiStorePasswordUiEntryWithPassword} item This row's item.
    * @private
    */
   getMoreActionsLabel_(item) {
