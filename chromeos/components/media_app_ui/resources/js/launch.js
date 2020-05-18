@@ -6,11 +6,13 @@
  * Wrapper around a file handle that allows the privileged context to arbitrate
  * read and write access as well as file navigation. `token` uniquely identifies
  * the file, `file` temporarily holds the object passed over postMessage, and
- * `handle` allows it to be reopened upon navigation.
+ * `handle` allows it to be reopened upon navigation. If an error occurred on
+ * the last attempt to open `handle`, `lastError` holds the error name.
  * @typedef {{
  *     token: number,
  *     file: ?File,
  *     handle: !FileSystemFileHandle,
+ *     lastError: (string|undefined),
  * }}
  */
 let FileDescriptor;
@@ -189,6 +191,20 @@ async function loadSingleFile(fileHandle) {
 }
 
 /**
+ * Warns if a given exception is "uncommon". That is, one that the guest might
+ * not provide UX for and should be dumped to console to give additional
+ * context.
+ * @param {!DOMException} e
+ * @param {string} fileName
+ */
+function warnIfUncommon(e, fileName) {
+  if (e.name === 'NotFoundError' || e.name === 'NotAllowedError') {
+    return;
+  }
+  console.warn(`Unexpected ${e.name} on ${fileName}: ${e.message}`);
+}
+
+/**
  * If `fd.file` is null, re-opens the file handle in `fd`.
  * @param {!FileDescriptor} fd
  */
@@ -196,23 +212,19 @@ async function refreshFile(fd) {
   if (fd.file) {
     return;
   }
+  fd.lastError = '';
   try {
     fd.file = (await getFileFromHandle(fd.handle)).file;
-  } catch (/** @type{DOMException} */ e) {
+  } catch (/** @type{!DOMException} */ e) {
+    fd.lastError = e.name;
     // A failure here is only a problem for the "current" file (and that needs
     // to be handled in the unprivileged context), so ignore known errors.
-    // TODO(b/156049174): Pin down the UX for this case and implement something
-    // similar in the mock app to test it.
-    if (e.name === 'NotFoundError') {
-      return;
-    }
-    console.error(fd.handle.name, e.message);
-    throw new Error(`${e.message} (${e.name})`);
+    warnIfUncommon(e, fd.handle.name);
   }
 }
 
 /**
- * Loads the current file list into the guest.
+ * Loads the current file list into the guest, enabling writes.
  * @return {!Promise<undefined>}
  */
 async function sendFilesToGuest() {
@@ -223,26 +235,35 @@ async function sendFilesToGuest() {
   }
   currentlyWritableFile = currentFiles[entryIndex];
   currentlyWritableFile.token = ++fileToken;
+  return sendSnapshotToGuest([...currentFiles]);  // Shallow copy.
+}
 
+/**
+ * Loads the provided file list into the guest without making any file writable.
+ * @param {!Array<!FileDescriptor>} snapshot
+ * @return {!Promise<undefined>}
+ */
+async function sendSnapshotToGuest(snapshot) {
   // On first launch, files are opened to determine navigation candidates. Don't
   // reopen in that case. Otherwise, attempt to reopen here. Some files may be
   // assigned null, e.g., if they have been moved to a different folder.
-  await Promise.all(currentFiles.map(refreshFile));
+  await Promise.all(snapshot.map(refreshFile));
 
   /** @type {!LoadFilesMessage} */
   const loadFilesMessage = {
     writableFileIndex: entryIndex,
     // Handle can't be passed through a message pipe.
-    files: currentFiles.map(fd => ({
-                              token: fd.token,
-                              file: fd.file,
-                              name: fd.handle.name,
-                            }))
+    files: snapshot.map(fd => ({
+                          token: fd.token,
+                          file: fd.file,
+                          name: fd.handle.name,
+                          error: fd.lastError,
+                        }))
   };
   // Clear handles to the open files in the privileged context so they are
   // refreshed on a navigation request. The refcount to the File will be alive
   // in the postMessage object until the guest takes its own reference.
-  for (const fd of currentFiles) {
+  for (const fd of snapshot) {
     fd.file = null;
   }
   await guestMessagePipe.sendMessage(Message.LOAD_FILES, loadFilesMessage);
@@ -306,16 +327,20 @@ async function getFileHandleFromCurrentDirectory(
 }
 
 /**
- * Gets a file from a handle received via the fileHandling API.
+ * Gets a file from a handle received via the fileHandling API. Only handles
+ * expected to be files should be passed to this function. Throws a DOMException
+ * if opening the file fails - usually because the handle is stale.
  * @param {?FileSystemHandle} fileSystemHandle
- * @return {Promise<?{file: !File, handle: !FileSystemFileHandle}>}
+ * @return {!Promise<!{file: !File, handle: !FileSystemFileHandle}>}
  */
 async function getFileFromHandle(fileSystemHandle) {
   if (!fileSystemHandle || !fileSystemHandle.isFile) {
-    return null;
+    // Invent our own exception for this corner case. It might happen if a file
+    // is deleted and replaced with a directory with the same name.
+    throw new DOMException('Not a file.', 'NotAFile');
   }
   const handle = /** @type {!FileSystemFileHandle} */ (fileSystemHandle);
-  const file = await handle.getFile();
+  const file = await handle.getFile();  // Note: throws DOMException.
   return {file, handle};
 }
 
@@ -356,14 +381,22 @@ async function setCurrentDirectory(directory, focusFile) {
   }
   currentFiles.length = 0;
   for await (const /** !FileSystemHandle */ handle of directory.getEntries()) {
-    const asFile = await getFileFromHandle(handle);
-    if (!asFile) {
+    if (!handle.isFile) {
       continue;
+    }
+    let entry = null;
+    try {
+      entry = await getFileFromHandle(handle);
+    } catch (/** @type{!DOMException} */ e) {
+      // Ignore exceptions thrown trying to open "other" files in the folder,
+      // and skip adding that file to `currentFiles`.
+      // Note the focusFile is passed in as `File`, so should be openable.
+      warnIfUncommon(e, handle.name);
     }
 
     // Only allow traversal of related file types.
-    if (isFileRelated(focusFile, asFile.file)) {
-      currentFiles.push({token: -1, file: asFile.file, handle: asFile.handle});
+    if (entry && isFileRelated(focusFile, entry.file)) {
+      currentFiles.push({token: -1, file: entry.file, handle: entry.handle});
     }
   }
   entryIndex = currentFiles.findIndex(i => i.file.name === focusFile.name);
@@ -371,12 +404,20 @@ async function setCurrentDirectory(directory, focusFile) {
 }
 
 /**
- * Launch the media app with the files in the provided directory.
+ * Launch the media app with the files in the provided directory, using `handle`
+ * as the initial launch entry.
  * @param {!FileSystemDirectoryHandle} directory
- * @param {?FileSystemHandle} initialFileEntry
+ * @param {?FileSystemHandle} handle
  */
-async function launchWithDirectory(directory, initialFileEntry) {
-  const asFile = await getFileFromHandle(initialFileEntry);
+async function launchWithDirectory(directory, handle) {
+  let asFile;
+  try {
+    asFile = await getFileFromHandle(handle);
+  } catch (/** @type{!DOMException} */ e) {
+    console.warn(`${handle.name}: ${e.message}`);
+    sendSnapshotToGuest([{token: -1, file: null, handle, error: e.name}]);
+    return;
+  }
   await setCurrentDirectory(directory, asFile.file);
 
   // Load currentFiles into the guest.
