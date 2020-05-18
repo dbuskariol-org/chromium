@@ -843,7 +843,7 @@ IN_PROC_BROWSER_TEST_F(IsolatedPrerenderBrowserTest,
       1);
   VerifyUKMAfterSRP(
       eligible_link_2,
-      ukm::builders::PrefetchProxy_AfterSRPClick::kPrefetchEligibleCountName,
+      ukm::builders::PrefetchProxy_AfterSRPClick::kSRPPrefetchEligibleCountName,
       3);
   // 0 is the value of |PrefetchStatus::kPrefetchUsedNoProbe|. The enum is not
   // used here intentionally because its value should never change.
@@ -918,7 +918,7 @@ IN_PROC_BROWSER_TEST_F(
       0);
   VerifyUKMAfterSRP(
       prefetch_404_url,
-      ukm::builders::PrefetchProxy_AfterSRPClick::kPrefetchEligibleCountName,
+      ukm::builders::PrefetchProxy_AfterSRPClick::kSRPPrefetchEligibleCountName,
       1);
   // 12 is the value of |PrefetchStatus::kPrefetchFailedNon2XX|. The enum is not
   // used here intentionally because its value should never change.
@@ -994,7 +994,7 @@ IN_PROC_BROWSER_TEST_F(
       base::nullopt);
   VerifyUKMAfterSRP(
       link_not_on_srp,
-      ukm::builders::PrefetchProxy_AfterSRPClick::kPrefetchEligibleCountName,
+      ukm::builders::PrefetchProxy_AfterSRPClick::kSRPPrefetchEligibleCountName,
       1);
   // 15 is the value of |PrefetchStatus::kNavigatedToLinkNotOnSRP|. The enum is
   // not used here intentionally because its value should never change.
@@ -1058,7 +1058,7 @@ IN_PROC_BROWSER_TEST_F(
       0);
   VerifyUKMAfterSRP(
       ineligible_link,
-      ukm::builders::PrefetchProxy_AfterSRPClick::kPrefetchEligibleCountName,
+      ukm::builders::PrefetchProxy_AfterSRPClick::kSRPPrefetchEligibleCountName,
       0);
   // 7 is the value of |PrefetchStatus::kPrefetchNotEligibleSchemeIsNotHttps|.
   // The enum is not used here intentionally because its value should never
@@ -1138,7 +1138,7 @@ IN_PROC_BROWSER_TEST_F(
       1);
   VerifyUKMAfterSRP(
       eligible_link_2,
-      ukm::builders::PrefetchProxy_AfterSRPClick::kPrefetchEligibleCountName,
+      ukm::builders::PrefetchProxy_AfterSRPClick::kSRPPrefetchEligibleCountName,
       2);
   // 3 is the value of |PrefetchStatus::kPrefetchNotStarted|. The enum is not
   // used here intentionally because its value should never change.

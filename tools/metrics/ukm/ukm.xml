@@ -9113,12 +9113,6 @@ be describing additional metrics about the same event.
       SRP link.
     </summary>
   </metric>
-  <metric name="PrefetchEligibleCount">
-    <summary>
-      The number of links from the SRP page (the previous page load) that were
-      eligible for prefetch. Always set when this event is recorded.
-    </summary>
-  </metric>
   <metric name="ProbeLatencyMs">
     <summary>
       How long the network probe blocked commit in milliseconds. Recorded only
@@ -9131,6 +9125,12 @@ be describing additional metrics about the same event.
       prefetch the resource. The prefetched url is always the committed URL of
       the page. See |IsolatedPrerenderTabHelper.PrefetchStatus| for a mapping of
       enum values and their meanings.
+    </summary>
+  </metric>
+  <metric name="SRPPrefetchEligibleCount">
+    <summary>
+      The number of links from the SRP page (the previous page load) that were
+      eligible for prefetch. Always set when this event is recorded.
     </summary>
   </metric>
 </event>
