@@ -113,7 +113,7 @@ public class SectionHeaderView extends LinearLayout implements View.OnClickListe
                                       .setAnchorView(mMenuView)
                                       .setCircleHighlight(true)
                                       .setShouldHighlight(true)
-                                      .setDismissOnTouch(true)
+                                      .setDismissOnTouch(false)
                                       .setInsetRect(new Rect(0, 0, 0, 0))
                                       .setAutoDismissTimeout(10 * 1000)
                                       .build());
