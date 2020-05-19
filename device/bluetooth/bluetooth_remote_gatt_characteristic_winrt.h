@@ -47,6 +47,10 @@ class DEVICE_BLUETOOTH_EXPORT BluetoothRemoteGattCharacteristicWinrt
   BluetoothRemoteGattService* GetService() const override;
   void ReadRemoteCharacteristic(ValueCallback callback,
                                 ErrorCallback error_callback) override;
+  void WriteRemoteCharacteristic(const std::vector<uint8_t>& value,
+                                 WriteType write_type,
+                                 base::OnceClosure callback,
+                                 ErrorCallback error_callback) override;
   void DeprecatedWriteRemoteCharacteristic(
       const std::vector<uint8_t>& value,
       base::OnceClosure callback,
