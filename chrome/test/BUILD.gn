@@ -2509,6 +2509,7 @@ if (!is_android) {
           "../browser/ui/ash/assistant/assistant_test_mixin.cc",
           "../browser/ui/ash/assistant/assistant_test_mixin.h",
           "../browser/ui/ash/assistant/assistant_timers_browsertest.cc",
+          "../browser/ui/ash/assistant/assistant_web_view_impl_browsertest.cc",
           "../browser/ui/ash/assistant/test/fake_s3_server.cc",
           "../browser/ui/ash/assistant/test/fake_s3_server.h",
         ]
