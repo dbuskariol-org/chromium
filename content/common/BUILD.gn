@@ -40,6 +40,8 @@ source_set("common") {
 
   sources = [
     "all_messages.h",
+    "android/cpu_time_metrics.cc",
+    "android/cpu_time_metrics.h",
     "android/gin_java_bridge_errors.cc",
     "android/gin_java_bridge_errors.h",
     "android/gin_java_bridge_value.cc",
