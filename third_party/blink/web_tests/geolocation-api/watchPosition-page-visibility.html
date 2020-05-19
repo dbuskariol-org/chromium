@@ -78,7 +78,7 @@ navigator.geolocation.watchPosition(function(p) {
                 // This should not be received.
                 updatePosition();
                 // Wait for it to not be received, then continue.
-                roundTripToBrowserThen(showPageAndUpdatePosition);
+                roundTripToBrowser().then(showPageAndUpdatePosition);
             });
             break;
         }
