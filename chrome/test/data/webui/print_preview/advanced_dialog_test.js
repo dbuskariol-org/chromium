@@ -57,7 +57,6 @@ suite(advanced_dialog_test.suiteName, function() {
     const model = document.createElement('print-preview-model');
     document.body.appendChild(model);
     model.set('settings.vendorItems.available', true);
-
     dialog = /** @type {!PrintPreviewAdvancedSettingsDialogElement} */ (
         document.createElement('print-preview-advanced-settings-dialog'));
 
@@ -77,6 +76,7 @@ suite(advanced_dialog_test.suiteName, function() {
     dialog.destination = destination;
 
     document.body.appendChild(dialog);
+
     flush();
   }
 

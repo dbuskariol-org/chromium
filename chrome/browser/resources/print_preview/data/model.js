@@ -950,7 +950,7 @@ Polymer({
 
     if (this.settings.vendorItems.available) {
       const vendorSettings = {};
-      for (const item of /** @type {!Array<VendorCapability>} */ (
+      for (const item of /** @type {!Array<!VendorCapability>} */ (
                caps.vendor_capability)) {
         let defaultValue = null;
         if (item.type === 'SELECT' && item.select_cap &&

@@ -85,7 +85,7 @@ export function getCddTemplate(printerId, opt_printerName) {
               custom_display_name: 'Letter',
             },
             {
-              name: 'CUSTOM_SQUARE',
+              name: 'CUSTOM',
               width_microns: 215900,
               height_microns: 215900,
               custom_display_name: 'CUSTOM_SQUARE',

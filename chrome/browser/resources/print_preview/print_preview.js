@@ -6,7 +6,7 @@ import './ui/app.js';
 
 export {CloudPrintInterface, CloudPrintInterfaceEventType} from './cloud_print_interface.js';
 export {CloudPrintInterfaceImpl} from './cloud_print_interface_impl.js';
-export {ColorMode, createDestinationKey, Destination, DestinationCertificateStatus, DestinationConnectionStatus, DestinationOrigin, DestinationType, makeRecentDestination} from './data/destination.js';
+export {ColorMode, createDestinationKey, Destination, DestinationCertificateStatus, DestinationConnectionStatus, DestinationOrigin, DestinationType, makeRecentDestination, RecentDestination} from './data/destination.js';
 export {PrinterType} from './data/destination_match.js';
 // <if expr="chromeos">
 export {ColorModeRestriction, DuplexModeRestriction, PinModeRestriction} from './data/destination_policies.js';

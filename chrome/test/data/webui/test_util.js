@@ -5,6 +5,7 @@
 // clang-format off
 // #import {afterNextRender, beforeNextRender, flush} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 // #import {assertEquals} from './chai_assert.js';
+// #import {NativeEventTarget as EventTarget} from 'chrome://resources/js/cr/event_target.m.js';
 // clang-format on
 
 cr.define('test_util', function() {
@@ -43,7 +44,7 @@ cr.define('test_util', function() {
   /**
    * Converts an event occurrence to a promise.
    * @param {string} eventType
-   * @param {!HTMLElement} target
+   * @param {Element|EventTarget} target
    * @return {!Promise} A promise firing once the event occurs.
    */
   /* #export */ function eventToPromise(eventType, target) {

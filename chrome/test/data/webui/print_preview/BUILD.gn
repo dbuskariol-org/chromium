@@ -19,7 +19,8 @@ js_type_check("closure_compile") {
     #":advanced_item_test",
     #":button_strip_interactive_test",
     #":button_strip_test",
-    #":cloud_print_interface_stub",
+    ":cloud_print_interface_stub",
+
     #":color_settings_test",
     #":copies_settings_test",
     #":custom_margins_test",
@@ -31,7 +32,8 @@ js_type_check("closure_compile") {
     #":destination_search_test",
     #":destination_select_test_cros",
     #":destination_select_test",
-    #":destination_settings_test",
+    ":destination_settings_test",
+
     #":destination_store_test",
     #":dpi_settings_test",
     #":duplex_settings_test",
@@ -45,7 +47,8 @@ js_type_check("closure_compile") {
     #":model_settings_availability_test",
     #":model_settings_policy_test",
     #":model_test",
-    #":native_layer_stub",
+    ":native_layer_stub",
+
     #":number_settings_section_interactive_test",
     #":number_settings_section_test",
     #":other_options_settings_test",
@@ -92,4 +95,36 @@ js_library("print_preview_test_utils") {
     "//ui/webui/resources/js:load_time_data.m",
     "//ui/webui/resources/js:web_ui_listener_behavior.m",
   ]
+}
+
+js_library("native_layer_stub") {
+  deps = [
+    ":print_preview_test_utils",
+    "..:test_browser_proxy.m",
+    "//chrome/browser/resources/print_preview:print_preview",
+    "//ui/webui/resources/js:assert.m",
+    "//ui/webui/resources/js:cr.m",
+    "//ui/webui/resources/js:promise_resolver.m",
+  ]
+}
+
+js_library("cloud_print_interface_stub") {
+  deps = [
+    ":print_preview_test_utils",
+    "..:test_browser_proxy.m",
+    "//chrome/browser/resources/print_preview:print_preview",
+  ]
+}
+
+js_library("destination_settings_test") {
+  deps = [
+    ":cloud_print_interface_stub",
+    ":native_layer_stub",
+    "..:chai_assert",
+    "..:test_util.m",
+    "//chrome/browser/resources/print_preview:print_preview",
+    "//ui/webui/resources/js:assert.m",
+    "//ui/webui/resources/js:cr.m",
+  ]
+  externs_list = [ "$externs_path/mocha-2.5.js" ]
 }

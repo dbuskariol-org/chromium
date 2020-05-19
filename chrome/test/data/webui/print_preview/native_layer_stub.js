@@ -2,12 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import {Destination, NativeLayer, PrinterType} from 'chrome://print/print_preview.js';
+import {CapabilitiesResponse, Destination, LocalDestinationInfo, NativeInitialSettings, NativeLayer, PageLayoutInfo, PrinterSetupResponse, PrinterType, ProvisionalDestinationInfo} from 'chrome://print/print_preview.js';
 import {assert} from 'chrome://resources/js/assert.m.js';
 import {webUIListenerCallback} from 'chrome://resources/js/cr.m.js';
 import {PromiseResolver} from 'chrome://resources/js/promise_resolver.m.js';
-import {getCddTemplate, getPdfPrinter} from 'chrome://test/print_preview/print_preview_test_utils.js';
-import {TestBrowserProxy} from 'chrome://test/test_browser_proxy.m.js';
+
+import {TestBrowserProxy} from '../test_browser_proxy.m.js';
+
+import {getCddTemplate, getPdfPrinter} from './print_preview_test_utils.js';
 
 /**
  * Test version of the native layer.
@@ -31,7 +33,7 @@ export class NativeLayerStub extends TestBrowserProxy {
     ]);
 
     /**
-     * @private {!NativeInitialSettings} The initial settings
+     * @private {?NativeInitialSettings} The initial settings
      *     to be used for the response to a |getInitialSettings| call.
      */
     this.initialSettings_ = null;
@@ -53,14 +55,14 @@ export class NativeLayerStub extends TestBrowserProxy {
 
     /**
      * @private {!Map<string,
-     *                !Promise<!CapabilitiesResponse>}
+     *                !Promise<!CapabilitiesResponse>>}
      *     A map from destination IDs to the responses to be sent when
      *     |getPrinterCapabilities| is called for the ID.
      */
     this.localDestinationCapabilities_ = new Map();
 
     /**
-     * @private {!PrinterSetupResponse} The response to be sent
+     * @private {?PrinterSetupResponse} The response to be sent
      *     on a |setupPrinter| call.
      */
     this.setupPrinterResponse_ = null;
@@ -105,7 +107,7 @@ export class NativeLayerStub extends TestBrowserProxy {
   /** @override */
   getInitialSettings() {
     this.methodCalled('getInitialSettings');
-    return Promise.resolve(this.initialSettings_);
+    return Promise.resolve(assert(this.initialSettings_));
   }
 
   /** @override */
@@ -159,12 +161,6 @@ export class NativeLayerStub extends TestBrowserProxy {
   }
 
   /** @override */
-  getPrivetPrinters() {
-    this.methodCalled('getPrivetPrinters');
-    return Promise.resolve(true);
-  }
-
-  /** @override */
   getPrinterCapabilities(printerId, type) {
     this.methodCalled(
         'getPrinterCapabilities',
@@ -206,8 +202,8 @@ export class NativeLayerStub extends TestBrowserProxy {
   setupPrinter(printerId) {
     this.methodCalled('setupPrinter', printerId);
     return this.shouldRejectPrinterSetup_ ?
-        Promise.reject(this.setupPrinterResponse_) :
-        Promise.resolve(this.setupPrinterResponse_);
+        Promise.reject(assert(this.setupPrinterResponse_)) :
+        Promise.resolve(assert(this.setupPrinterResponse_));
   }
 
   /** @override */
@@ -219,9 +215,6 @@ export class NativeLayerStub extends TestBrowserProxy {
   showSystemDialog() {
     this.methodCalled('showSystemDialog');
   }
-
-  /** @override */
-  recordAction() {}
 
   /** @override */
   recordInHistogram() {}
@@ -242,6 +235,18 @@ export class NativeLayerStub extends TestBrowserProxy {
       webUIListenerCallback('user-accounts-updated', accounts);
     }
   }
+
+  /** @override */
+  getAccessToken() {}
+
+  /** @override */
+  grantExtensionPrinterAccess() {}
+
+  /** @override */
+  cancelPendingPrintRequest() {}
+
+  /** @override */
+  openSettingsPrintPage() {}
 
   /**
    * @param {!Array<string>} accounts The accounts to send when signIn is
@@ -287,7 +292,7 @@ export class NativeLayerStub extends TestBrowserProxy {
   /**
    * @param {!CapabilitiesResponse} response The
    *     response to send for the destination whose ID is in the response.
-   * @param {?boolean} opt_reject Whether to reject the callback for this
+   * @param {boolean=} opt_reject Whether to reject the callback for this
    *     destination. Defaults to false (will resolve callback) if not
    *     provided.
    */
@@ -298,7 +303,7 @@ export class NativeLayerStub extends TestBrowserProxy {
   }
 
   /**
-   * @param {!PrinterSetupResponse} The response to send when
+   * @param {!PrinterSetupResponse} response The response to send when
    *     |setupPrinter| is called.
    * @param {?boolean} opt_reject Whether printSetup requests should be
    *     rejected. Defaults to false (will resolve callback) if not provided.
@@ -309,7 +314,7 @@ export class NativeLayerStub extends TestBrowserProxy {
   }
 
   /**
-   * @param {string} bad_id The printer ID that should cause an
+   * @param {string} id The printer ID that should cause an
    *     SETTINGS_INVALID error in response to a preview request. Models a
    *     bad printer driver.
    */
