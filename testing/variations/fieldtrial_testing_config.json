@@ -2868,10 +2868,6 @@
     "ImprovedCookieControls": [
         {
             "platforms": [
-                "chromeos",
-                "linux",
-                "mac",
-                "windows",
                 "android"
             ],
             "experiments": [
@@ -4195,8 +4191,10 @@
             ],
             "experiments": [
                 {
-                    "name": "WithEnhancedExperiment",
+                    "name": "WithEnhancedExperiment_20200519",
                     "enable_features": [
+                        "ImprovedCookieControls",
+                        "ImprovedCookieControlsForThirdPartyCookieBlocking",
                         "PasswordCheck",
                         "PrivacySettingsRedesign",
                         "SafeBrowsingEnhancedProtection",
