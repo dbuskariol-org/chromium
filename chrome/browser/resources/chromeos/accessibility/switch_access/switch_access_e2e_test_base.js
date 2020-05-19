@@ -114,6 +114,27 @@ SwitchAccessE2ETest.prototype = {
   },
 
   /**
+   * @param {function(): boolean} predicate The condition under which the
+   *     callback should be fired.
+   * @param {function()} callback
+   */
+  waitForPredicate(predicate, callback) {
+    if (predicate()) {
+      callback();
+      return;
+    }
+    const listener = () => {
+      if (predicate()) {
+        NavigationManager.desktopNode.removeEventListener(
+            'childrenChanged', listener, false /* capture */);
+        callback();
+      }
+    };
+    NavigationManager.desktopNode.addEventListener(
+        'childrenChanged', listener, false /* capture */);
+  },
+
+  /**
    * From chromevox_next_e2e_test_base.js
    * Gets the desktop from the automation API and Launches a new tab with
    * the given document, and runs |callback| with the desktop when a load
