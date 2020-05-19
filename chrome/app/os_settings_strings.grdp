@@ -1101,10 +1101,10 @@
     Ports
   </message>
   <message name="IDS_SETTINGS_CROSTINI_MIC_TITLE" desc="Title for sharing mic with Crostini.">
-    Allow Linux apps to access the microphone
+    Allow Linux to access your microphone
   </message>
   <message name="IDS_SETTINGS_CROSTINI_MIC_DIALOG_LABEL" desc="Dialog label for sharing mic with Crostini.">
-    The change made to the microphone access requires Linux to restart. Shut down Linux to proceed.
+    The change in microphone setting requires Linux to shut down. Shut down Linux to proceed.
   </message>
   <message name="IDS_SETTINGS_CROSTINI_MIC_DIALOG_SHUTDOWN_BUTTON" desc="Label for the shutdown button in the Crostini mic sharing dialog.">
     Shut down
