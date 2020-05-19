@@ -63,6 +63,22 @@ public class MainActivity extends FragmentActivity {
                 "Android.WebView.DevUi.MenuSelection", selectedMenuItem, MenuChoice.COUNT);
     }
 
+    // These values are persisted to logs. Entries should not be renumbered and
+    // numeric values should never be reused.
+    @IntDef({FragmentNavigation.HOME_FRAGMENT, FragmentNavigation.CRASHES_LIST_FRAGMENT,
+            FragmentNavigation.FLAGS_FRAGMENT})
+    private @interface FragmentNavigation {
+        int HOME_FRAGMENT = 0;
+        int CRASHES_LIST_FRAGMENT = 1;
+        int FLAGS_FRAGMENT = 2;
+        int COUNT = 3;
+    }
+
+    private static void logFragmentNavigation(@FragmentNavigation int selectedFragment) {
+        RecordHistogram.recordEnumeratedHistogram("Android.WebView.DevUi.FragmentNavigation",
+                selectedFragment, FragmentNavigation.COUNT);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,12 +132,15 @@ public class MainActivity extends FragmentActivity {
                 chosenFragmentId = FRAGMENT_ID_HOME;
                 // Fall through.
             case FRAGMENT_ID_HOME:
+                logFragmentNavigation(FragmentNavigation.HOME_FRAGMENT);
                 fragment = new HomeFragment();
                 break;
             case FRAGMENT_ID_CRASHES:
+                logFragmentNavigation(FragmentNavigation.CRASHES_LIST_FRAGMENT);
                 fragment = new CrashesListFragment();
                 break;
             case FRAGMENT_ID_FLAGS:
+                logFragmentNavigation(FragmentNavigation.FLAGS_FRAGMENT);
                 fragment = new FlagsFragment();
                 break;
         }

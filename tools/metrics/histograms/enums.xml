@@ -1943,6 +1943,12 @@ Unknown properties are collapsed to zero. -->
   </int>
 </enum>
 
+<enum name="AndroidWebViewDevUiFragments">
+  <int value="0" label="HOME_FRAGMENT"/>
+  <int value="1" label="CRASHES_LIST_FRAGMENT"/>
+  <int value="2" label="FLAGS_FRAGMENT"/>
+</enum>
+
 <enum name="AndroidWebViewDevUiMenu">
   <int value="0" label="Switch WebView provider"/>
   <int value="1" label="Report a bug"/>
