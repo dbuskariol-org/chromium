@@ -370,8 +370,9 @@ void CrostiniSection::AddLoadTimeData(content::WebUIDataSource* html_source) {
        IDS_SETTINGS_CROSTINI_DISK_RESIZE_CONFIRMATION_DIALOG_BUTTON},
       {"crostiniDiskResizeDone", IDS_SETTINGS_CROSTINI_DISK_RESIZE_DONE},
       {"crostiniMicTitle", IDS_SETTINGS_CROSTINI_MIC_TITLE},
-      {"crostiniMicDialogTitle", IDS_SETTINGS_CROSTINI_MIC_DIALOG_TITLE},
       {"crostiniMicDialogLabel", IDS_SETTINGS_CROSTINI_MIC_DIALOG_LABEL},
+      {"crostiniMicDialogShutdownButton",
+       IDS_SETTINGS_CROSTINI_MIC_DIALOG_SHUTDOWN_BUTTON},
   };
   AddLocalizedStringsBulk(html_source, kLocalizedStrings);
 

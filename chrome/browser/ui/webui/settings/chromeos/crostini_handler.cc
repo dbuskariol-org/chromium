@@ -165,6 +165,18 @@ void CrostiniHandler::RegisterMessages() {
       "checkCrostiniIsRunning",
       base::BindRepeating(&CrostiniHandler::HandleCheckCrostiniIsRunning,
                           weak_ptr_factory_.GetWeakPtr()));
+  web_ui()->RegisterMessageCallback(
+      "shutdownCrostini",
+      base::BindRepeating(&CrostiniHandler::HandleShutdownCrostini,
+                          weak_ptr_factory_.GetWeakPtr()));
+  web_ui()->RegisterMessageCallback(
+      "setCrostiniMicSharingEnabled",
+      base::BindRepeating(&CrostiniHandler::HandleSetCrostiniMicSharingEnabled,
+                          weak_ptr_factory_.GetWeakPtr()));
+  web_ui()->RegisterMessageCallback(
+      "getCrostiniMicSharingEnabled",
+      base::BindRepeating(&CrostiniHandler::HandleGetCrostiniMicSharingEnabled,
+                          weak_ptr_factory_.GetWeakPtr()));
 }
 
 void CrostiniHandler::OnJavascriptAllowed() {
@@ -173,6 +185,7 @@ void CrostiniHandler::OnJavascriptAllowed() {
   crostini_manager->AddCrostiniContainerPropertiesObserver(this);
   crostini_manager->AddContainerStartedObserver(this);
   crostini_manager->AddContainerShutdownObserver(this);
+  crostini_manager->AddCrostiniMicSharingEnabledObserver(this);
   if (chromeos::CrosUsbDetector::Get()) {
     chromeos::CrosUsbDetector::Get()->AddUsbDeviceObserver(this);
   }
@@ -186,6 +199,7 @@ void CrostiniHandler::OnJavascriptDisallowed() {
   crostini_manager->RemoveCrostiniContainerPropertiesObserver(this);
   crostini_manager->RemoveContainerStartedObserver(this);
   crostini_manager->RemoveContainerShutdownObserver(this);
+  crostini_manager->RemoveCrostiniMicSharingEnabledObserver(this);
   if (chromeos::CrosUsbDetector::Get()) {
     chromeos::CrosUsbDetector::Get()->RemoveUsbDeviceObserver(this);
   }
@@ -657,8 +671,8 @@ void CrostiniHandler::HandleCheckCrostiniMicSharingStatus(
   bool proposed_value = args->GetList()[1].GetBool();
   bool requiresRestart =
       crostini::IsCrostiniRunning(profile_) &&
-      profile_->GetPrefs()->GetBoolean(
-          crostini::prefs::kCrostiniMicSharingAtLastLaunch) != proposed_value;
+      crostini::CrostiniManager::GetForProfile(profile_)
+              ->crostini_mic_sharing_enabled() != proposed_value;
 
   ResolveJavascriptCallback(base::Value(std::move(callback_id)),
                             base::Value(requiresRestart));
@@ -696,6 +710,41 @@ void CrostiniHandler::OnContainerStarted(
 void CrostiniHandler::OnContainerShutdown(
     const crostini::ContainerId& container_id) {
   FireWebUIListener("crostini-status-changed", base::Value(false));
+}
+
+void CrostiniHandler::HandleShutdownCrostini(const base::ListValue* args) {
+  CHECK_EQ(0U, args->GetList().size());
+
+  const std::string vm_name = "termina";
+
+  crostini::CrostiniManager::GetForProfile(profile_)->StopVm(
+      std::move(vm_name), std::move(base::DoNothing()));
+}
+
+void CrostiniHandler::OnCrostiniMicSharingEnabledChanged(bool enabled) {
+  FireWebUIListener("crostini-mic-sharing-enabled-changed",
+                    base::Value(enabled));
+}
+
+void CrostiniHandler::HandleSetCrostiniMicSharingEnabled(
+    const base::ListValue* args) {
+  CHECK_EQ(1U, args->GetList().size());
+  bool enabled = args->GetList()[0].GetBool();
+
+  crostini::CrostiniManager::GetForProfile(profile_)
+      ->SetCrostiniMicSharingEnabled(enabled);
+}
+
+void CrostiniHandler::HandleGetCrostiniMicSharingEnabled(
+    const base::ListValue* args) {
+  CHECK_EQ(1U, args->GetList().size());
+
+  std::string callback_id = args->GetList()[0].GetString();
+
+  ResolveJavascriptCallback(
+      base::Value(callback_id),
+      base::Value(crostini::CrostiniManager::GetForProfile(profile_)
+                      ->crostini_mic_sharing_enabled()));
 }
 
 }  // namespace settings

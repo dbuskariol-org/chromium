@@ -1094,13 +1094,13 @@
     Ports
   </message>
   <message name="IDS_SETTINGS_CROSTINI_MIC_TITLE" desc="Title for sharing mic with Crostini.">
-    Give access to microphone
-  </message>
-  <message name="IDS_SETTINGS_CROSTINI_MIC_DIALOG_TITLE" desc="Dialog title for sharing mic with Crostini.">
-    Linux restart required
+    Allow Linux apps to access the microphone
   </message>
   <message name="IDS_SETTINGS_CROSTINI_MIC_DIALOG_LABEL" desc="Dialog label for sharing mic with Crostini.">
-    Changes to microphone will take effect when Linux is next restarted.
+    The change made to the microphone access requires Linux to restart. Shut down Linux to proceed.
+  </message>
+  <message name="IDS_SETTINGS_CROSTINI_MIC_DIALOG_SHUTDOWN_BUTTON" desc="Label for the shutdown button in the Crostini mic sharing dialog.">
+    Shut down
   </message>
 
   <!-- Android apps page (OS settings) -->
