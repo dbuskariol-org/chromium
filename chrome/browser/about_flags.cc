@@ -4621,12 +4621,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kStrictOriginIsolationDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kStrictOriginIsolation)},
 
-    {"autofill-no-local-save-on-unmask-success",
-     flag_descriptions::kAutofillNoLocalSaveOnUnmaskSuccessName,
-     flag_descriptions::kAutofillNoLocalSaveOnUnmaskSuccessDescription, kOsAll,
-     FEATURE_VALUE_TYPE(
-         autofill::features::kAutofillNoLocalSaveOnUnmaskSuccess)},
-
 #if defined(OS_ANDROID)
     {"enable-logging-js-console-messages",
      flag_descriptions::kLogJsConsoleMessagesName,
