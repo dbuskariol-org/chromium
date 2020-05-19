@@ -18447,9 +18447,18 @@
               'type': 'object',
               'properties': {
                 'day': { '$ref': 'WeekDay' },
-                'start_time': { '$ref': 'Time' },
-                'end_time': { '$ref': 'Time' },
-                'charge_start_time': { '$ref': 'Time' }
+                'start_time': {
+                  'description': '''Time when the device will start running from the battery, interpreted in the device's local time zone.''',
+                  '$ref': 'Time'
+                },
+                'end_time': {
+                  'description': '''Time when the device will run from alternating current, interpreted in the device's local time zone.''',
+                  '$ref': 'Time'
+                },
+                'charge_start_time': {
+                  'description': '''Time when the device will use alternating current to charge battery, interpreted in the device's local time zone.''',
+                  '$ref': 'Time'
+                }
               }
             }
           }
