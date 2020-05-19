@@ -766,7 +766,7 @@ void OnQuicTransportHandshakeFailed(
                    .SetText(text)
                    .SetTimestamp(base::Time::Now().ToDoubleT() * 1000.0)
                    .Build();
-  DispatchToAgents(ftn, &protocol::LogHandler::EntryAdded, std::move(entry));
+  DispatchToAgents(ftn, &protocol::LogHandler::EntryAdded, entry.get());
 }
 
 }  // namespace devtools_instrumentation
