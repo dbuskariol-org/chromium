@@ -6571,6 +6571,8 @@ if (!is_fuchsia && !is_android) {
       "//testing/perf",
     ]
 
+    data_deps = [ "//chrome:packed_resources" ]
+
     if (is_mac) {
       # Dictionary sync is disabled on Mac.
       sources -= [ "../browser/sync/test/integration/performance/dictionary_sync_perf_test.cc" ]
