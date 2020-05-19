@@ -67,6 +67,7 @@ source_set("chromeos") {
     "//ash/public/cpp",
     "//ash/public/mojom",
     "//ash/system/message_center/arc",
+    "//base/util/timer",
     "//build:branding_buildflags",
     "//chrome/app:command_ids",
     "//chrome/app/vector_icons",
