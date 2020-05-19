@@ -227,7 +227,6 @@ class CONTENT_EXPORT RenderFrameProxy : public IPC::Listener,
   // IPC handlers
   void OnDeleteProxy();
   void OnCompositorFrameSwapped(const IPC::Message& message);
-  void OnUpdateOpener(int opener_routing_id);
   void OnDidUpdateName(const std::string& name, const std::string& unique_name);
   void OnEnforceInsecureRequestPolicy(
       blink::mojom::InsecureRequestPolicy policy);

@@ -376,9 +376,10 @@ void RenderFrameProxyHost::UpdateOpener() {
         GetSiteInstance(), frame_tree_node_);
   }
 
-  int opener_routing_id =
-      frame_tree_node_->render_manager()->GetOpenerRoutingID(GetSiteInstance());
-  Send(new FrameMsg_UpdateOpener(GetRoutingID(), opener_routing_id));
+  auto opener_frame_token =
+      frame_tree_node_->render_manager()->GetOpenerFrameToken(
+          GetSiteInstance());
+  GetAssociatedRemoteFrame()->UpdateOpener(opener_frame_token);
 }
 
 void RenderFrameProxyHost::SetFocusedFrame() {

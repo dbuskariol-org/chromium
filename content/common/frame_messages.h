@@ -484,11 +484,6 @@ IPC_MESSAGE_ROUTED2(FrameMsg_CustomContextMenuAction,
                     content::CustomContextMenuContext /* custom_context */,
                     unsigned /* action */)
 
-// Requests that the RenderFrame or RenderFrameProxy updates its opener to the
-// specified frame.  The routing ID may be MSG_ROUTING_NONE if the opener was
-// disowned.
-IPC_MESSAGE_ROUTED1(FrameMsg_UpdateOpener, int /* opener_routing_id */)
-
 // Requests that the RenderFrame send back a response after waiting for the
 // commit, activation and frame swap of the current DOM tree in blink.
 IPC_MESSAGE_ROUTED1(FrameMsg_VisualStateRequest, uint64_t /* id */)

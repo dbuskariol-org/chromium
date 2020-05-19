@@ -586,7 +586,7 @@ void RemoteFrame::IntrinsicSizingInfoOfChildChanged(
 
 // Update the proxy's SecurityContext with new sandbox flags or feature policy
 // that were set during navigation. Unlike changes to the FrameOwner, which are
-// handled by RenderFrameProxy::OnDidUpdateFramePolicy, these changes should be
+// handled by RemoteFrame::DidUpdateFramePolicy, these changes should be
 // considered effective immediately.
 //
 // These flags / policy are needed on the remote frame's SecurityContext to
@@ -628,6 +628,16 @@ void RemoteFrame::DidUpdateFramePolicy(const FramePolicy& frame_policy) {
   // policy for frames with a remote owner.
   SECURITY_CHECK(IsA<RemoteFrameOwner>(Owner()));
   To<RemoteFrameOwner>(Owner())->SetFramePolicy(frame_policy);
+}
+
+void RemoteFrame::UpdateOpener(
+    const base::Optional<base::UnguessableToken>& opener_frame_token) {
+  if (auto* web_frame = WebFrame::FromFrame(this)) {
+    auto* opener_frame = LocalFrame::ResolveFrame(
+        opener_frame_token.value_or(base::UnguessableToken()));
+    auto* opener_web_frame = WebFrame::FromFrame(opener_frame);
+    web_frame->SetOpener(opener_web_frame);
+  }
 }
 
 IntSize RemoteFrame::GetMainFrameViewportSize() const {
