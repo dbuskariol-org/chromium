@@ -102,9 +102,9 @@ suite('NewTabPageAppTest', () => {
         (await backgroundManager.whenCalled('setBackgroundColor')).value);
     assertStyle(
         $$(app, '#content'), '--ntp-theme-shortcut-background-color',
-        'rgba(0, 255, 0, 255)');
+        'rgba(0, 255, 0, 1)');
     assertStyle(
-        $$(app, '#content'), '--ntp-theme-text-color', 'rgba(0, 0, 255, 255)');
+        $$(app, '#content'), '--ntp-theme-text-color', 'rgba(0, 0, 255, 1)');
     assertEquals(1, backgroundManager.getCallCount('setShowBackgroundImage'));
     assertFalse(await backgroundManager.whenCalled('setShowBackgroundImage'));
     assertStyle($$(app, '#backgroundImageAttribution'), 'display', 'none');
@@ -205,7 +205,7 @@ suite('NewTabPageAppTest', () => {
 
     // Assert.
     assertTrue($$(app, '#logo').singleColored);
-    assertStyle($$(app, '#logo'), '--ntp-logo-color', 'rgba(255, 0, 0, 255)');
+    assertStyle($$(app, '#logo'), '--ntp-logo-color', 'rgba(255, 0, 0, 1)');
   });
 
   test('preview background image', async () => {
