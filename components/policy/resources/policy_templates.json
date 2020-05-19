@@ -15973,7 +15973,7 @@
       'supported_on': ['chrome_os:70-'],
       'features': {
         'dynamic_refresh': True,
-        'per_profile': True,
+        'per_profile': False,
       },
       'example_value': False,
       'id': 481,
@@ -16014,7 +16014,7 @@
       'supported_on': ['chrome_os:74-'],
       'features': {
         'dynamic_refresh': True,
-        'per_profile': True,
+        'per_profile': False,
       },
       'example_value': False,
       'id': 523,
@@ -16031,7 +16031,7 @@
       'future': True,
       'features': {
         'dynamic_refresh': True,
-        'per_profile': True,
+        'per_profile': False,
       },
       'example_value': False,
       'id': 576,
@@ -16063,7 +16063,7 @@
       'future': True,
       'features': {
         'dynamic_refresh': True,
-        'per_profile': True,
+        'per_profile': False,
       },
       'example_value': {
         "url": "https://example.com/ansibleplaybook",
@@ -16151,7 +16151,6 @@
       'supported_on': ['chrome_os:84-'],
       'features': {
         'dynamic_refresh': True,
-        'per_profile': False,
       },
       'example_value': 1,
       'id': 695,
