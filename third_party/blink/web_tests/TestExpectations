@@ -5919,3 +5919,6 @@ crbug.com/1071915 fast/hidpi/image-srcset-png-canvas.html [ Pass Failure ]
 # Sheriff 2020-05-18
 crbug.com/1084256 [ Linux ] http/tests/misc/insert-iframe-into-xml-document-before-xsl-transform.html [ Pass Failure ]
 crbug.com/1084276 [ Mac ] http/tests/security/offscreencanvas-placeholder-read-blocked-no-crossorigin.html [ Pass Failure ]
+
+# Sheriff 2020-05-19
+crbug.com/1084448 [ Win ] compositing/overflow/overflow-compositing-descendant.html [ Pass Failure ]
