@@ -48,9 +48,6 @@ import org.chromium.chrome.browser.tabmodel.TabModelObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 import org.chromium.chrome.browser.tabmodel.TabModelSelectorObserver;
 import org.chromium.chrome.browser.ui.favicon.FaviconHelper;
-import org.chromium.chrome.browser.widget.ScrimView;
-import org.chromium.chrome.browser.widget.ScrimView.EmptyScrimObserver;
-import org.chromium.chrome.browser.widget.ScrimView.ScrimParams;
 import org.chromium.components.autofill.Completable;
 import org.chromium.components.autofill.EditableOption;
 import org.chromium.components.embedder_support.util.UrlConstants;
@@ -1393,21 +1390,12 @@ public class PaymentRequestImpl
     public void onPaymentHandlerUiClosed() {
         mPaymentUisShowStateReconciler.onBottomSheetClosed();
         mPaymentHandlerUi = null;
-        ChromeActivity activity = ChromeActivity.fromWebContents(mWebContents);
-        if (activity != null) activity.getScrim().hideScrim(true);
     }
 
     @Override
     public void onPaymentHandlerUiShown() {
         assert mPaymentHandlerUi != null;
         mPaymentUisShowStateReconciler.onBottomSheetShown();
-        // Using an empty scrim observer is to avoid the dismissal of the bottom-sheet on tapping.
-        ScrimParams params = ChromeActivity.fromWebContents(mWebContents)
-                                     .getBottomSheetController()
-                                     .createScrimParams(new EmptyScrimObserver());
-        ScrimView scrim = ChromeActivity.fromWebContents(mWebContents).getScrim();
-        scrim.showScrim(params);
-        scrim.setViewAlpha(0);
     }
 
     @Override
