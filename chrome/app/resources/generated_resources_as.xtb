@@ -3224,7 +3224,6 @@
 <translation id="5158983316805876233">সকলো প্ৰ'ডাক্টৰ বাবে একেই প্ৰ'ক্সি ব্যৱহাৰ কৰক</translation>
 <translation id="5160857336552977725">আপোনাৰ <ph name="DEVICE_TYPE" />ত ছাইন ইন কৰক</translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" />ৰ ম্যাদ উকলাৰ বাবে অৱৰোধ কৰা হৈছে</translation>
-<translation id="5169131225159279624">যোগ কৰি থকা হৈছে</translation>
 <translation id="5170568018924773124">ফ’ল্ডাৰত দেখুৱাওক</translation>
 <translation id="5171045022955879922">সন্ধান কৰক বা URL টাইপ কৰক</translation>
 <translation id="5171343362375269016">ছোৱাইপ কৰা মেম’ৰী</translation>
@@ -3276,7 +3275,6 @@
 <translation id="5235565664420173924">উন্নত সমাযোজন</translation>
 <translation id="5235750401727657667">আপুনি এটা নতুন টেব খুলোঁতে দেখা পোৱা পৃষ্ঠাটো সলনি কৰক</translation>
 <translation id="5238278114306905396">"<ph name="EXTENSION_NAME" />" এপ্‌টো স্বয়ংক্ৰিয়ভাৱে আঁতৰোৱা হ’ল।</translation>
-<translation id="5238435043462632060">আপোনাৰ অভিভাৱকে Chromeৰ বাবে "ছাইট, এপ্ আৰু এক্সটেনশ্বনসমূহৰ বাবে অনুমতি" অফ কৰিছে। এইটো <ph name="EXTENSION_TYPE_PARAMETER" /> <ph name="ACTION_PARAMETER" />ৰ অনুমতি নাই।</translation>
 <translation id="5241128660650683457">আপুনি চোৱা ৱেবছাইটত আপোনাৰ সকলো ডেটা পঢ়ক</translation>
 <translation id="5242724311594467048">"<ph name="EXTENSION_NAME" />" সক্ষম কৰিবনে?</translation>
 <translation id="5243522832766285132">অলপ সময়ৰ পাছত পুনৰ চেষ্টা কৰক</translation>
@@ -3942,7 +3940,6 @@
 <translation id="6085886413119427067">এটা সুৰক্ষিত সংযোগৰ জৰিয়তে কেনেকৈ ৱেবছাইটসমূহৰ সৈতে সংযোগ কৰিব লাগে সেয়া নির্ধাৰণ কৰে</translation>
 <translation id="6086846494333236931">আপোনাৰ প্ৰশাসকে ইনষ্টল কৰিছে</translation>
 <translation id="6087960857463881712">অনন্য মুখমণ্ডল</translation>
-<translation id="6088036808197002565"><ph name="EXTENSION_TYPE_PARAMETER" /> <ph name="ACTION_PARAMETER" /> কার্যটো অক্ষম কৰা হ'ল</translation>
 <translation id="6091761513005122595">শ্বেয়াৰ সফলভাৱে মাউণ্ট কৰা হ’ল।</translation>
 <translation id="6093888419484831006">আপডে'ট বাতিল কৰি থকা হৈছে...</translation>
 <translation id="6095984072944024315">−</translation>

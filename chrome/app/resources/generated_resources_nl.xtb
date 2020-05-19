@@ -3232,7 +3232,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="5158983316805876233">Dezelfde proxy gebruiken voor alle protocollen</translation>
 <translation id="5160857336552977725">Log in bij je <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> is geblokkeerd omdat deze is verouderd</translation>
-<translation id="5169131225159279624">Toevoegen</translation>
 <translation id="5170568018924773124">Weergeven in map</translation>
 <translation id="5171045022955879922">Zoek of typ een URL</translation>
 <translation id="5171343362375269016">Wisselgeheugen</translation>
@@ -3284,7 +3283,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">De pagina vervangen die wordt weergegeven wanneer je een nieuw tabblad opent</translation>
 <translation id="5238278114306905396">De app '<ph name="EXTENSION_NAME" />' is automatisch verwijderd.</translation>
-<translation id="5238435043462632060">Je ouder heeft 'Rechten voor sites, apps en extensies' uitgeschakeld voor Chrome. <ph name="ACTION_PARAMETER" /> is niet toegestaan voor deze <ph name="EXTENSION_TYPE_PARAMETER" />.</translation>
 <translation id="5241128660650683457">Al je gegevens lezen voor de websites die je bezoekt</translation>
 <translation id="5242724311594467048">'<ph name="EXTENSION_NAME" />' inschakelen?</translation>
 <translation id="5243522832766285132">Probeer het over enige tijd opnieuw</translation>
@@ -3953,7 +3951,6 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="6085886413119427067">Bepaalt hoe verbinding wordt gemaakt met websites via een beveiligde verbinding</translation>
 <translation id="6086846494333236931">Geïnstalleerd door je beheerder</translation>
 <translation id="6087960857463881712">Geweldig gezicht</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> is uitgeschakeld voor <ph name="EXTENSION_TYPE_PARAMETER" /></translation>
 <translation id="6091761513005122595">Fileshare geactiveerd.</translation>
 <translation id="6093888419484831006">Update annuleren...</translation>
 <translation id="6095984072944024315">−</translation>

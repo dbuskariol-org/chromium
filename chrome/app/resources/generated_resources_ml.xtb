@@ -1663,7 +1663,7 @@
 <translation id="3088052000289932193">സൈറ്റ് MIDI ഉപയോഗിക്കുന്നു</translation>
 <translation id="3088128611727407543">ആപ്പ് പ്രൊഫൈൽ തയ്യാറാക്കുന്നു...</translation>
 <translation id="3088325635286126843">&amp;പേരുമാറ്റുക...</translation>
-<translation id="3089064280130434511">നിങ്ങളുടെ വിൻഡോ തുറന്ന് സ്ക്രീനിൽ വെയ്ക്കുന്നതിൽ നിന്ന് സൈറ്റുകളെ ബ്ലോക്ക് ചെയ്യുക</translation>
+<translation id="3089064280130434511">നിങ്ങളുടെ സ്ക്രീനുകളിൽ വിൻഡോ തുറന്ന് വയ്ക്കുന്നതിൽ നിന്ന് സൈറ്റുകളെ ബ്ലോക്ക് ചെയ്യുക</translation>
 <translation id="3089137131053189723">തിരയൽ മായ്ച്ചു</translation>
 <translation id="3090819949319990166"><ph name="TEMP_CRX_FILE" /> എന്നതിലേക്ക് ബാഹ്യ crx ഫയൽ പകർത്താനാവില്ല.</translation>
 <translation id="3090871774332213558">"<ph name="DEVICE_NAME" />" ജോടിയാക്കി</translation>
@@ -2972,7 +2972,7 @@
 <translation id="4824958205181053313">സമന്വയം റദ്ദാക്കണോ?</translation>
 <translation id="4827675678516992122">കണക്റ്റ് ചെയ്യാനായില്ല</translation>
 <translation id="4829768588131278040">പിൻ നമ്പർ സജ്ജമാക്കുക</translation>
-<translation id="4830121310592638841">സൈറ്റിന് നിങ്ങളുടെ വിൻഡോ തുറന്ന് സ്ക്രീനിൽ വെയ്ക്കണമെന്നുള്ളപ്പോൾ ചോദിക്കുക</translation>
+<translation id="4830121310592638841">ഒരു സൈറ്റിന് നിങ്ങളുടെ സ്ക്രീനുകളിൽ വിൻഡോകൾ തുറന്ന് വയ്ക്കണമെന്നുള്ളപ്പോൾ ചോദിക്കുക</translation>
 <translation id="4830502475412647084">OS അപ്‌ഡേറ്റ് ഇൻസ്‌റ്റാൾ ചെയ്യുന്നു</translation>
 <translation id="4830573902900904548"><ph name="NETWORK_NAME" /> ഉപയോഗിച്ച് നിങ്ങളുടെ <ph name="DEVICE_TYPE" /> ഇന്റർനെറ്റിൽ കണ‌ക്റ്റ് ചെയ്യാനാകുന്നില്ല. മറ്റൊരു നെറ്റ്‌വർക്ക് തിരഞ്ഞെടുക്കുക. <ph name="LEARN_MORE_LINK_START" />കൂടുതലറിയുക<ph name="LEARN_MORE_LINK_END" /></translation>
 <translation id="4833236810053292670">Chromebook-ൽ എന്തൊക്കെയാണ് പുതിയ കാര്യങ്ങളെന്ന് കാണുക</translation>
@@ -3228,7 +3228,6 @@
 <translation id="5158983316805876233">എല്ലാ പ്രോട്ടോക്കോളുകള്‍ക്കും ഒരേ പ്രോക്സി ഉപയോഗിക്കുക</translation>
 <translation id="5160857336552977725">നിങ്ങളുടെ <ph name="DEVICE_TYPE" /> എന്നതിൽ സൈൻ ഇൻ ചെയ്യുക</translation>
 <translation id="5166596762332123936">കാലഹരണപ്പെട്ടതിനാൽ, <ph name="PLUGIN_NAME" /> ബ്ലോക്ക് ചെയ്യപ്പെട്ടു</translation>
-<translation id="5169131225159279624">ചേർക്കൽ</translation>
 <translation id="5170568018924773124">ഫോള്‍ഡറില്‍ കാണിക്കുക</translation>
 <translation id="5171045022955879922">തിരയുക അല്ലെങ്കിൽ URL ടൈപ്പ് ചെയ്യുക</translation>
 <translation id="5171343362375269016">സ്വാപ്പുചെയ്‌ത മെമ്മറി</translation>
@@ -3280,7 +3279,6 @@
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">പുതിയ ടാബ് തുറക്കുമ്പോൾ കാണിക്കേണ്ട പേജ് മാറ്റുക</translation>
 <translation id="5238278114306905396">"<ph name="EXTENSION_NAME" />" ആപ്പ് സ്വയമേവ നീക്കംചെയ്‌തു.</translation>
-<translation id="5238435043462632060">നിങ്ങളുടെ രക്ഷിതാവ് Chrome-നുള്ള "സൈറ്റുകൾക്കും ആപ്പുകൾക്കും വിപുലീകരണങ്ങൾക്കുമുള്ള അനുമതികൾ" ഓഫാക്കി. ഈ <ph name="EXTENSION_TYPE_PARAMETER" /> <ph name="ACTION_PARAMETER" />അനുവദനീയമല്ല.</translation>
 <translation id="5241128660650683457">നിങ്ങൾ സന്ദർശിക്കുന്ന വെബ്‌സൈറ്റുകളിലെ എല്ലാ വിവരവും വായിക്കുക</translation>
 <translation id="5242724311594467048">"<ph name="EXTENSION_NAME" />" പ്രവർത്തനക്ഷമമാക്കണോ?</translation>
 <translation id="5243522832766285132">അൽപ്പസമയത്തിനുള്ളിൽ വീണ്ടും ശ്രമിക്കുക.</translation>
@@ -3950,7 +3948,6 @@
 <translation id="6085886413119427067">സുരക്ഷിത കണക്ഷനിലൂടെ വെബ്‌സൈറ്റുകളിലേക്ക് എങ്ങനെ കണക്റ്റ് ചെയ്യാമെന്ന് നിർണ്ണയിക്കുന്നു</translation>
 <translation id="6086846494333236931">നിങ്ങളുടെ അഡ്‌മിനിസ്‌ട്രേറ്റർ ഇൻസ്റ്റാൾ ചെയ്‌തു</translation>
 <translation id="6087960857463881712">മനോഹരമായ മുഖം</translation>
-<translation id="6088036808197002565"><ph name="EXTENSION_TYPE_PARAMETER" /> <ph name="ACTION_PARAMETER" /> പ്രവർത്തനരഹിതമാക്കി</translation>
 <translation id="6091761513005122595">പങ്കിടൽ വിജയകരമായി മൗണ്ട് ചെയ്തു.</translation>
 <translation id="6093888419484831006">അപ്‌ഡേറ്റ് റദ്ദാക്കുന്നു...</translation>
 <translation id="6095984072944024315">−</translation>

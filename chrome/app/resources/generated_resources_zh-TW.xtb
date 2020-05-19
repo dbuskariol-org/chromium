@@ -3230,7 +3230,6 @@
 <translation id="5158983316805876233">對所有通訊協定使用相同的 Proxy</translation>
 <translation id="5160857336552977725">登入您的 <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936">「<ph name="PLUGIN_NAME" />」因版本過舊而遭封鎖</translation>
-<translation id="5169131225159279624">新增</translation>
 <translation id="5170568018924773124">在資料夾中顯示</translation>
 <translation id="5171045022955879922">搜尋或輸入網址</translation>
 <translation id="5171343362375269016">交換的記憶體</translation>
@@ -3282,7 +3281,6 @@
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">取代新分頁開啟時顯示的網頁</translation>
 <translation id="5238278114306905396">「<ph name="EXTENSION_NAME" />」應用程式已自動移除。</translation>
-<translation id="5238435043462632060">貴家長已停用 Chrome 的「網站、應用程式和擴充功能的權限」設定，因此你無法<ph name="ACTION_PARAMETER" />這個<ph name="EXTENSION_TYPE_PARAMETER" />。</translation>
 <translation id="5241128660650683457">讀取你在造訪的網站上產生的所有資料</translation>
 <translation id="5242724311594467048">啟用「<ph name="EXTENSION_NAME" />」？</translation>
 <translation id="5243522832766285132">請稍後再試</translation>
@@ -3951,7 +3949,6 @@
 <translation id="6085886413119427067">判斷如何透過安全連線連上網站</translation>
 <translation id="6086846494333236931">由您的管理員安裝</translation>
 <translation id="6087960857463881712">好看的臉蛋</translation>
-<translation id="6088036808197002565">已停用<ph name="ACTION_PARAMETER" /><ph name="EXTENSION_TYPE_PARAMETER" />的功能</translation>
 <translation id="6091761513005122595">已成功共用掛接的裝置。</translation>
 <translation id="6093888419484831006">正在取消更新...</translation>
 <translation id="6095984072944024315">−</translation>

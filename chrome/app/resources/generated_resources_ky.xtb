@@ -3232,7 +3232,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="5158983316805876233">Протоколдордун баары үчүн бир эле прокси колдонулсун</translation>
 <translation id="5160857336552977725"><ph name="DEVICE_TYPE" /> түзмөгүңүзгө кириңиз</translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> эскирип калгандыктан, бөгөттөлдү</translation>
-<translation id="5169131225159279624">Кошуу</translation>
 <translation id="5170568018924773124">Куржунда көрсөтүү</translation>
 <translation id="5171045022955879922">URL издеңиз же териңиз</translation>
 <translation id="5171343362375269016">Жүктөлгөн эстутум</translation>
@@ -3284,7 +3283,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Жаңы өтмөк ачылганда, учурдагы барактын ордуна ал көрүнсүн</translation>
 <translation id="5238278114306905396">"<ph name="EXTENSION_NAME" />" колдонмосу автоматтык түрдө өчүрүлдү.</translation>
-<translation id="5238435043462632060">Ата-энеңиз Chrome үчүн "Сайттарга, колдонмолорго жана кеңейтүүлөргө уруксаттарды" өчүрүп койгон. Бул <ph name="EXTENSION_TYPE_PARAMETER" /> кеңейтүүсүн <ph name="ACTION_PARAMETER" /> мүмкүн эмес.</translation>
 <translation id="5241128660650683457">Каралган вебсайттарыңыздагы бардык дайын-даректериңизди окуңуз</translation>
 <translation id="5242724311594467048">"<ph name="EXTENSION_NAME" />" иштетилсинби?</translation>
 <translation id="5243522832766285132">Бир аздан кийин кайталап көрүңүз</translation>
@@ -3953,7 +3951,6 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="6085886413119427067">Вебсайттарга кантип коопсуз туташуу керек экенин аныктайт</translation>
 <translation id="6086846494333236931">Администраторуңуз орноткон</translation>
 <translation id="6087960857463881712">Сүйкүмдүү бет</translation>
-<translation id="6088036808197002565"><ph name="EXTENSION_TYPE_PARAMETER" /> кеңейтүүсүн <ph name="ACTION_PARAMETER" /> мүмкүнчүлүгү өчүрүлдү</translation>
 <translation id="6091761513005122595">Түзмөк ийгиликтүү кошулду.</translation>
 <translation id="6093888419484831006">Жаңыртууну жокко чыгаруу…</translation>
 <translation id="6095984072944024315">−</translation>
@@ -5501,7 +5498,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="8084114998886531721">Сакталган сырсөз</translation>
 <translation id="8086015605808120405"><ph name="PRINTER_NAME" /> конфигурацияланууда ...</translation>
 <translation id="8086442853986205778"><ph name="PRINTER_NAME" /> түзмөгүн жөндөө</translation>
-<translation id="80866457114322936">{NUM_FILES,plural, =1{Бул файл шифрленген. Анын ээсинен файлдын шифрин чечмелөөнү сураныңыз.}other{Бул файлдардын айрымдары шифрленген. Алардын ээсинен файлдардын шифрин чечмелөөнү сураныңыз.}}</translation>
+<translation id="80866457114322936">{NUM_FILES,plural, =1{Бул файл шифрленген. Файлдын шифрин чечмелөөнү анын ээсинен сураныңыз.}other{Бул файлдардын айрымдары шифрленген. Алардын ээсинен файлдардын шифрин чечмелөөнү сураныңыз.}}</translation>
 <translation id="808894953321890993">Сызсөздү өзгөртүү</translation>
 <translation id="8090234456044969073">Көп каралган вебсайттарыңыздын тизмесин окуңуз</translation>
 <translation id="8093359998839330381"><ph name="PLUGIN_NAME" /> жооп бербей жатат</translation>
@@ -5526,7 +5523,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="8117752106453549166">Linux'ту администраторуңуз жөндөп жатат. Конфигурация бир нече мүнөткө созулушу мүмкүн.</translation>
 <translation id="8118362518458010043">Chrome өчүрүп койду. Бул кеңейтүү кооптуу болушу мүмкүн.</translation>
 <translation id="8118488170956489476"><ph name="BEGIN_LINK" />Серепчиңиз<ph name="END_LINK" /> уюмуңуз тарабынан башкарылат</translation>
-<translation id="8118515372935001629">Диспледи жаңыртуу ылдамдыгы</translation>
+<translation id="8118515372935001629">Дисплейди жаңыртуу ылдамдыгы</translation>
 <translation id="8118860139461251237">Жүктөлүп алынгандарды башкаруу</translation>
 <translation id="811942868379260654"><ph name="RECENT_PERMISSIONS_CHANGE_SENTENCE_START" />, <ph name="RECENT_PERMISSIONS_CHANGE_1" />, <ph name="RECENT_PERMISSIONS_CHANGE_2" /> жана башкалар</translation>
 <translation id="8123590694679414600">Дайындар купуя сөз айкашы менен

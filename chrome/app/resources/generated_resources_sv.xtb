@@ -3232,7 +3232,6 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="5158983316805876233">Använd samma proxy för alla protokoll</translation>
 <translation id="5160857336552977725">Logga in på din <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> har blockerats eftersom det är inaktuellt</translation>
-<translation id="5169131225159279624">Lägger till</translation>
 <translation id="5170568018924773124">Visa i mapp</translation>
 <translation id="5171045022955879922">Sök eller ange webbadress</translation>
 <translation id="5171343362375269016">Bytt minne</translation>
@@ -3284,7 +3283,6 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Ersätt den aktuella sidan när du öppnar en ny flik</translation>
 <translation id="5238278114306905396">Appen <ph name="EXTENSION_NAME" /> togs bort automatiskt.</translation>
-<translation id="5238435043462632060">Din förälder har inaktiverat Behörigheter för webbplatser, appar och tillägg för Chrome. <ph name="ACTION_PARAMETER" /> detta<ph name="EXTENSION_TYPE_PARAMETER" /> är inte tillåtet.</translation>
 <translation id="5241128660650683457">Läsa all din data på webbplatserna som du besöker</translation>
 <translation id="5242724311594467048">Vill du aktivera <ph name="EXTENSION_NAME" />?</translation>
 <translation id="5243522832766285132">Försök igen om en liten stund</translation>
@@ -3953,7 +3951,6 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="6085886413119427067">Styr hur du ansluter till webbplatser via en säker anslutning</translation>
 <translation id="6086846494333236931">Har installerats av administratören</translation>
 <translation id="6087960857463881712">Entusiastiskt ansikte</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> har inaktiverats</translation>
 <translation id="6091761513005122595">Den delade resursen har monterats.</translation>
 <translation id="6093888419484831006">Avbryter uppdatering ...</translation>
 <translation id="6095984072944024315">−</translation>

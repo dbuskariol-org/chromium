@@ -1399,7 +1399,7 @@
 <translation id="274290345632688601">កំពុងស្ដារ​កម្មវិធី និងឯកសារ Linux</translation>
 <translation id="2743387203779672305">ចម្លងទៅផ្ទាំងឃ្លីបបត</translation>
 <translation id="2745080116229976798">Microsoft Qualified Subordination</translation>
-<translation id="2747266560080989517">ឯកសារនេះមានខ្លឹមសាររសើប ឬគ្រោះថ្នាក់។ សូមស្នើឱ្យម្ចាស់ឯកសារ​នេះកែខ្លឹមសារ។</translation>
+<translation id="2747266560080989517">ឯកសារនេះមានខ្លឹមសាររសើប ឬគ្រោះថ្នាក់។ សូមស្នើឱ្យម្ចាស់ឯកសារ​នេះធ្វើការកែប្រែ។</translation>
 <translation id="2748061034695037846"><ph name="DOMAIN" /> ត្រូវបានផ្អាក</translation>
 <translation id="2749756011735116528">ចូលទៅ <ph name="PRODUCT_NAME" /></translation>
 <translation id="2749881179542288782">ពិនិត្យវេយ្យាករណ៍ជាមួយការប្រកប</translation>
@@ -1666,7 +1666,7 @@
 <translation id="3088052000289932193">គេហទំព័រ​កំពុង​ប្រើប្រាស់ MIDI</translation>
 <translation id="3088128611727407543">កំពុង​រៀបចំ​កម្រងព័ត៌មាន​កម្មវិធី...</translation>
 <translation id="3088325635286126843">ប្តូរឈ្មោះ...</translation>
-<translation id="3089064280130434511">ទប់ស្កាត់គេហទំព័រមិនឱ្យបើក ឬដាក់វិនដូនៅលើអេក្រង់របស់អ្នក</translation>
+<translation id="3089064280130434511">ទប់ស្កាត់គេហទំព័រមិនឱ្យបើក និងដាក់វិនដូនៅលើអេក្រង់របស់អ្នក</translation>
 <translation id="3089137131053189723">បានសម្អាត​ការស្វែងរក</translation>
 <translation id="3090819949319990166">មិនអាចចម្លងឯកសារ crx ខាងក្រៅទៅ <ph name="TEMP_CRX_FILE" /> ទេ។</translation>
 <translation id="3090871774332213558">"<ph name="DEVICE_NAME" />" ត្រូវបានភ្ជាប់</translation>
@@ -3232,7 +3232,6 @@
 <translation id="5158983316805876233">ប្រើប្រូកស៊ីដូចគ្នាសម្រាប់ប្រូតូកូលទាំងអស់</translation>
 <translation id="5160857336552977725">ចូលទៅ <ph name="DEVICE_TYPE" /> របស់អ្នក</translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> ត្រូវ​បាន​ទប់ស្កាត់ ដោយសារ​វា​ហួស​សម័យ​ហើយ</translation>
-<translation id="5169131225159279624">ការបញ្ចូល</translation>
 <translation id="5170568018924773124">បង្ហាញនៅក្នុងថតឯកសារ</translation>
 <translation id="5171045022955879922">ស្វែងរក ឬវាយបញ្ចូល URL</translation>
 <translation id="5171343362375269016">មេម៉ូរីដែលបានប្តូរ</translation>
@@ -3284,7 +3283,6 @@
 <translation id="5235565664420173924">កម្មវិធី Better Together</translation>
 <translation id="5235750401727657667">ជំនួសទំព័រ​ដែលអ្នកឃើញ នៅពេលបើកផ្ទាំងថ្មី</translation>
 <translation id="5238278114306905396">កម្មវិធី "<ph name="EXTENSION_NAME" />" ត្រូវបានដកចេញដោយស្វ័យប្រវត្តិ។</translation>
-<translation id="5238435043462632060">មាតាបិតា​របស់អ្នក​បានបិទ "ការអនុញ្ញាត​ឱ្យចូលប្រើ​គេហទំព័រ កម្មវិធី និង​កម្មវិធី​បន្ថែម" សម្រាប់ Chrome។ <ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> នេះមិនត្រូវបាន​អនុញ្ញាតទេ។</translation>
 <translation id="5241128660650683457">អានទិន្នន័យរបស់អ្នកទាំងអស់នៅលើគេហទំព័រដែលអ្នកបានទៅកាន់។</translation>
 <translation id="5242724311594467048">បើកដំណើរការ "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="5243522832766285132">សូម​ព្យាយាម​ម្ដង​ទៀត​នៅ​ពេល​បន្តិច​ទៀត</translation>
@@ -3954,7 +3952,6 @@
 <translation id="6085886413119427067">កំណត់របៀបភ្ជាប់​គេហទំព័រ​តាមរយៈការតភ្ជាប់ដែលមានសុវត្ថិភាព</translation>
 <translation id="6086846494333236931">បានដំឡើងដោយអ្នកគ្រប់គ្រងរបស់អ្នក</translation>
 <translation id="6087960857463881712">មុខដ៏ស្រស់ស្អាត</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> ត្រូវបាន​បិទ</translation>
 <translation id="6091761513005122595">បានភ្ជាប់​ការចែករំលែក​ដោយ​ជោគជ័យ​ហើយ។</translation>
 <translation id="6093888419484831006">កំពុងបដិសេធការធ្វើបច្ចុប្បន្នភាព...</translation>
 <translation id="6095984072944024315">−</translation>
@@ -4356,7 +4353,7 @@
 <translation id="662080504995468778">នៅដដែល</translation>
 <translation id="6621715389962683284">មិនអាច​បង្កើត​ការតភ្ជាប់​បណ្តាញ​បានទេ។</translation>
 <translation id="6622980291894852883">បន្តការរារាំងរូបភាព</translation>
-<translation id="6624535038674360844"><ph name="FILE_NAME" /> មានខ្លឹមសាររសើប ឬគ្រោះថ្នាក់។ សូមស្នើឱ្យម្ចាស់ឯកសារ​នេះកែខ្លឹមសារ។</translation>
+<translation id="6624535038674360844"><ph name="FILE_NAME" /> មានខ្លឹមសាររសើប ឬគ្រោះថ្នាក់។ សូមស្នើឱ្យម្ចាស់ឯកសារ​នេះធ្វើការកែប្រែ។</translation>
 <translation id="6624687053722465643">ភាពផ្អែម</translation>
 <translation id="6628328486509726751">បានទាញឡើង <ph name="WEBRTC_LOG_UPLOAD_TIME" /></translation>
 <translation id="6630752851777525409"><ph name="EXTENSION_NAME" /> ចង់ចូលប្រើវិញ្ញាបនបត្រជាអចិន្ត្រៃយ៍ដើម្បីផ្ទៀងផ្ទាត់ដោយខ្លួនវាផ្ទាល់ជំនួសឲ្យអ្នក។</translation>

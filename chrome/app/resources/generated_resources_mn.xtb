@@ -3226,7 +3226,6 @@
 <translation id="5158983316805876233">Бүх протоколуудад ижил прокси ашигла</translation>
 <translation id="5160857336552977725">Өөрийн <ph name="DEVICE_TYPE" /> руу нэвтэрч орно уу</translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> хуучирсан тул үүнийг блоклосон байна</translation>
-<translation id="5169131225159279624">Нэмж байна</translation>
 <translation id="5170568018924773124">Хавтсанд харуул</translation>
 <translation id="5171045022955879922">Хайх эсвэл холбоосыг бичиж оруул</translation>
 <translation id="5171343362375269016">Солилцсон санах ой</translation>
@@ -3278,7 +3277,6 @@
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Шинэ чихтэй хуудас нээхдээ харж буй хуудсаар орлуулах</translation>
 <translation id="5238278114306905396">"<ph name="EXTENSION_NAME" />" аппликейшнийг автоматаар устгасан байна.</translation>
-<translation id="5238435043462632060">Таны эцэг эх Chrome-н "Сайтууд, аппууд болон өргөтгөлүүдийн зөвшөөрөл"-ийг унтраасан. Энэ <ph name="EXTENSION_TYPE_PARAMETER" />-г <ph name="ACTION_PARAMETER" />-г зөвшөөрөхгүй.</translation>
 <translation id="5241128660650683457">Өөрийн ордог вэб сайт дээрх бүх мэдээллийг уншина уу</translation>
 <translation id="5242724311594467048">"<ph name="EXTENSION_NAME" />-ыг идэвхжүүлэх үү"?</translation>
 <translation id="5243522832766285132">Хэдэн хормын дараа дахин оролдоно уу</translation>
@@ -3947,7 +3945,6 @@
 <translation id="6085886413119427067">Вэб сайтуудтай аюулгүй холболтоор хэрхэн холбогдохыг шийддэг</translation>
 <translation id="6086846494333236931">Таны админ суулгасан</translation>
 <translation id="6087960857463881712">Гайхалтай нүүр</translation>
-<translation id="6088036808197002565"><ph name="EXTENSION_TYPE_PARAMETER" /> <ph name="ACTION_PARAMETER" />-г идэвхгүй болгосон</translation>
 <translation id="6091761513005122595">Хуваалцлыг амжилттай салгасан.</translation>
 <translation id="6093888419484831006">Шинэчлэлтийг устгаж байна...</translation>
 <translation id="6095984072944024315">-</translation>

@@ -3227,7 +3227,6 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="5158983316805876233">Bruk samme proxy-tjener for alle protokoller</translation>
 <translation id="5160857336552977725">Logg på <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936">Programtillegget <ph name="PLUGIN_NAME" /> ble blokkert fordi det er utdatert</translation>
-<translation id="5169131225159279624">Legger til</translation>
 <translation id="5170568018924773124">Vis i mappen</translation>
 <translation id="5171045022955879922">Søk, eller skriv inn en nettadresse</translation>
 <translation id="5171343362375269016">Virtuelt minne</translation>
@@ -3279,7 +3278,6 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="5235565664420173924">Bedre sammen</translation>
 <translation id="5235750401727657667">Erstatt siden du ser når du åpner nye faner</translation>
 <translation id="5238278114306905396">Programmet «<ph name="EXTENSION_NAME" />» ble automatisk fjernet.</translation>
-<translation id="5238435043462632060">Forelderen din har slått av «Tillatelser for nettsteder, apper og utvidelser» for Chrome. <ph name="ACTION_PARAMETER" /> denne <ph name="EXTENSION_TYPE_PARAMETER" /> tillates ikke.</translation>
 <translation id="5241128660650683457">Les alle dataene på nettstedene du besøker</translation>
 <translation id="5242724311594467048">Vil du slå på «<ph name="EXTENSION_NAME" />»?</translation>
 <translation id="5243522832766285132">Prøv på nytt om en liten stund</translation>
@@ -3948,7 +3946,6 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="6085886413119427067">Avgjør hvordan en sikker forbindelse brukes til å koble til nettsteder</translation>
 <translation id="6086846494333236931">Installert av administratoren din</translation>
 <translation id="6087960857463881712">Fantastisk-fjes</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> er deaktivert</translation>
 <translation id="6091761513005122595">Delingen er aktivert.</translation>
 <translation id="6093888419484831006">Avbryter oppdatering …</translation>
 <translation id="6095984072944024315">−</translation>

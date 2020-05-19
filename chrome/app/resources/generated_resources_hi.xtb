@@ -419,7 +419,7 @@
 <translation id="152629053603783244">Linux को रीस्टार्ट करें</translation>
 <translation id="1526335046150927198">टचपैड से स्क्रोल करने की रफ़्तार बढ़ाने की सुविधा चालू करें</translation>
 <translation id="1526560967942511387">शीर्षक रहित दस्तावेज़</translation>
-<translation id="1527336312600375509">मॉनीटर की रीफ़्रेश दर</translation>
+<translation id="1527336312600375509">मॉनिटर की रीफ़्रेश दर</translation>
 <translation id="1529891865407786369">पावर स्रोत</translation>
 <translation id="1530838837447122178">माउस और टचपैड डिवाइस सेटिंग खोलें</translation>
 <translation id="1531004739673299060">ऐप्लिकेशन विंडो</translation>
@@ -3231,7 +3231,6 @@
 <translation id="5158983316805876233">सभी प्रोटोकॉल के लिए एक ही प्रॉक्सी का उपयोग करें</translation>
 <translation id="5160857336552977725">अपने <ph name="DEVICE_TYPE" /> में साइन इन करें</translation>
 <translation id="5166596762332123936">पुराना होने के कारण <ph name="PLUGIN_NAME" /> को रोक दिया गया था</translation>
-<translation id="5169131225159279624">जोड़ने की सुविधा</translation>
 <translation id="5170568018924773124">फ़ोल्डर में दिखाएं</translation>
 <translation id="5171045022955879922">URL खोजें या टाइप करें</translation>
 <translation id="5171343362375269016">स्वैप की गई मेमोरी</translation>
@@ -3283,7 +3282,6 @@
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">नया टैब खोलते समय दिखाई देने वाला पेज बदलें</translation>
 <translation id="5238278114306905396">"<ph name="EXTENSION_NAME" />" ऐप्लिकेशन को अपने आप हटा दिया गया था.</translation>
-<translation id="5238435043462632060">आपके अभिभावक ने Chrome के लिए, "साइट, ऐप्लिकेशन, और एक्सटेंशन के लिए अनुमतियां" को बंद कर दिया है. इस <ph name="EXTENSION_TYPE_PARAMETER" /> को <ph name="ACTION_PARAMETER" /> करना मना है.</translation>
 <translation id="5241128660650683457">जिन वेबसाइट पर आप जाते हैं, उन पर मौजूद अपना सारा डेटा पढ़ें</translation>
 <translation id="5242724311594467048">"<ph name="EXTENSION_NAME" />" को चालू करें?</translation>
 <translation id="5243522832766285132">कृपया कुछ देर बाद कोशिश करें</translation>
@@ -3952,7 +3950,6 @@
 <translation id="6085886413119427067">वेबसाइटों से सुरक्षित कनेक्शन की मदद से जुड़ने का तरीका तय करें</translation>
 <translation id="6086846494333236931">आपके नियंत्रक द्वारा इंस्‍टॉल किया गया</translation>
 <translation id="6087960857463881712">बढ़िया चेहरा</translation>
-<translation id="6088036808197002565"><ph name="EXTENSION_TYPE_PARAMETER" /> को <ph name="ACTION_PARAMETER" /> बंद है</translation>
 <translation id="6091761513005122595">शेयर माउंट करना सफल रहा.</translation>
 <translation id="6093888419484831006">अपडेट रद्द किया जा रहा है...</translation>
 <translation id="6095984072944024315">−</translation>

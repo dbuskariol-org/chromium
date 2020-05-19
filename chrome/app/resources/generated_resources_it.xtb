@@ -1111,7 +1111,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="2391419135980381625">Carattere standard</translation>
 <translation id="2392163307141705938">Hai raggiunto il tempo massimo impostato dal genitore per <ph name="IDS_SHORT_PRODUCT_NAME" />.</translation>
 <translation id="2392369802118427583">Attiva</translation>
-<translation id="2393136602862631930">Configurare <ph name="APP_NAME" /> sul Chromebook</translation>
+<translation id="2393136602862631930">Configura <ph name="APP_NAME" /> sul Chromebook</translation>
 <translation id="2394566832561516196">Le impostazioni verranno cancellate al prossimo aggiornamento della pagina.</translation>
 <translation id="2395616325548404795">Il dispositivo <ph name="DEVICE_TYPE" /> è stato registrato correttamente per la gestione aziendale, ma l'invio delle relative informazioni su asset e posizione non è riuscito. Inserisci manualmente queste informazioni nella Console di amministrazione del dispositivo.</translation>
 <translation id="2396387085693598316">Il tuo amministratore ha bloccato "<ph name="EXTENSION_NAME" />"</translation>
@@ -3231,7 +3231,6 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="5158983316805876233">Usa lo stesso proxy per tutti i protocolli</translation>
 <translation id="5160857336552977725">Accedi al tuo dispositivo <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936">Il plug-in <ph name="PLUGIN_NAME" /> è stato bloccato perché non è aggiornato</translation>
-<translation id="5169131225159279624">L'aggiunta</translation>
 <translation id="5170568018924773124">Mostra nella cartella</translation>
 <translation id="5171045022955879922">Cerca o digita un URL</translation>
 <translation id="5171343362375269016">Memoria sostituita</translation>
@@ -3283,7 +3282,6 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Sostituzione della pagina visualizzata quando viene aperta una nuova scheda</translation>
 <translation id="5238278114306905396">L'applicazione "<ph name="EXTENSION_NAME" />" è stata rimossa automaticamente.</translation>
-<translation id="5238435043462632060">Uno dei tuoi genitori ha disattivato "Autorizzazioni per siti, app ed estensioni" per Chrome. <ph name="ACTION_PARAMETER" /> di questa <ph name="EXTENSION_TYPE_PARAMETER" /> non è consentita.</translation>
 <translation id="5241128660650683457">Lettura di tutti i dati sui siti web visitati</translation>
 <translation id="5242724311594467048">Attivare "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="5243522832766285132">Riprova tra qualche istante</translation>
@@ -3952,7 +3950,6 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="6085886413119427067">Consente di stabilire come connettersi ai siti web tramite una connessione sicura</translation>
 <translation id="6086846494333236931">Installata dall'amministratore</translation>
 <translation id="6087960857463881712">Faccina splendente</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> dell'<ph name="EXTENSION_TYPE_PARAMETER" /> è stata disattivata</translation>
 <translation id="6091761513005122595">Condivisione montata correttamente.</translation>
 <translation id="6093888419484831006">Annullamento aggiornamento...</translation>
 <translation id="6095984072944024315">–</translation>

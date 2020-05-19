@@ -3231,7 +3231,6 @@
 <translation id="5158983316805876233">Да се използва един и същ прокси сървър за всички протоколи</translation>
 <translation id="5160857336552977725">Влезте в своя <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936">Приставката <ph name="PLUGIN_NAME" /> бе блокирана, защото не е актуална</translation>
-<translation id="5169131225159279624">Добавянето</translation>
 <translation id="5170568018924773124">Показване в папката</translation>
 <translation id="5171045022955879922">Търсете или въведете URL адрес</translation>
 <translation id="5171343362375269016">Резервна памет</translation>
@@ -3283,7 +3282,6 @@
 <translation id="5235565664420173924">По-добре заедно</translation>
 <translation id="5235750401727657667">Замяна на страницата, която виждате, при отваряне на нов раздел</translation>
 <translation id="5238278114306905396">Приложението <ph name="EXTENSION_NAME" /> бе премахнато автоматично.</translation>
-<translation id="5238435043462632060">Някой от родителите ви е изключил разрешенията за сайтове, приложения и разширения за Chrome. <ph name="ACTION_PARAMETER" /> на това <ph name="EXTENSION_TYPE_PARAMETER" /> не е позволено.</translation>
 <translation id="5241128660650683457">Четене на всичките ви данни от посещаваните от вас уебсайтове</translation>
 <translation id="5242724311594467048">Да се активира ли <ph name="EXTENSION_NAME" />?</translation>
 <translation id="5243522832766285132">Моля, опитайте отново след малко</translation>
@@ -3953,7 +3951,6 @@
 <translation id="6085886413119427067">Определя начин за свързване с уебсайтовете през сигурна връзка</translation>
 <translation id="6086846494333236931">Инсталирано от администратора ви</translation>
 <translation id="6087960857463881712">Страхотно лице</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> на <ph name="EXTENSION_TYPE_PARAMETER" /> е деактивирано</translation>
 <translation id="6091761513005122595">Дялът е свързан успешно.</translation>
 <translation id="6093888419484831006">Актуализирането се анулира...</translation>
 <translation id="6095984072944024315">−</translation>

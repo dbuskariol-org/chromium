@@ -1640,7 +1640,7 @@
 <translation id="3046910703532196514">Вэб-старонка поўнасцю</translation>
 <translation id="304747341537320566">Модулі маўлення</translation>
 <translation id="3047644958362961983">Гэтыя звесткі дапамагаюць нам зразумець вашу праблему з Памочнікам. Яны захоўваюцца да 90 дзён, доступ да іх маюць толькі адпаведныя інжынеры-распрацоўшчыкі і спецыялісты па працы з водгукамі.</translation>
-<translation id="3051250416341590778">Памер дысплэя</translation>
+<translation id="3051250416341590778">Памер элементаў дысплэя</translation>
 <translation id="3053013834507634016">Выкарыстанне ключа сертыфіката</translation>
 <translation id="3053273573829329829">Уключыць PIN-код карыстальніка</translation>
 <translation id="3055590424724986000">З дапамогай выбранага вамі пастаўшчыка</translation>
@@ -3231,7 +3231,6 @@
 <translation id="5158983316805876233">Выкарыстоўваць аднолькавы проксі-сервер для ўсіх пратаколаў</translation>
 <translation id="5160857336552977725">Уваход у <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936">Убудова "<ph name="PLUGIN_NAME" />" заблакіравана, бо яна састарэла.</translation>
-<translation id="5169131225159279624">Дадаванне</translation>
 <translation id="5170568018924773124">Паказаць у папцы</translation>
 <translation id="5171045022955879922">Знайдзіце або ўвядзіце URL-адрас</translation>
 <translation id="5171343362375269016">Памяць падпампоўвання</translation>
@@ -3283,7 +3282,6 @@
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Замяніць старонку, якую вы бачыце пры адкрыцці новай укладкі</translation>
 <translation id="5238278114306905396">Праграма "<ph name="EXTENSION_NAME" />" была аўтаматычна выдалена.</translation>
-<translation id="5238435043462632060">Вашы бацькі выключылі "Дазволы для сайтаў, праграм і пашырэнняў" для Chrome. <ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> забаронена.</translation>
 <translation id="5241128660650683457">Чытаць усе даныя з вэб-сайтаў, якія вы наведваеце</translation>
 <translation id="5242724311594467048">Уключыць пашырэнне "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="5243522832766285132">Паўтарыце спробу праз некалькі секунд</translation>
@@ -3951,7 +3949,6 @@
 <translation id="6085886413119427067">Вызначае, як устанаўліваць бяспечнае падключэнне да вэб-сайтаў</translation>
 <translation id="6086846494333236931">Усталявана вашым адміністратарам</translation>
 <translation id="6087960857463881712">Захапленне</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> выключана</translation>
 <translation id="6091761513005122595">Абагулены рэсурс падключаны.</translation>
 <translation id="6093888419484831006">Ідзе скасаванне абнаўлення...</translation>
 <translation id="6095984072944024315">−</translation>
@@ -5339,7 +5336,7 @@
 <translation id="7885253890047913815">Нядаўнія аб'екты прызначэння</translation>
 <translation id="7887334752153342268">Дубліраваць</translation>
 <translation id="7887864092952184874">Мыш Bluetooth спалучана</translation>
-<translation id="7889565820482017512">Памер дысплэя</translation>
+<translation id="7889565820482017512">Памер элементаў дысплэя</translation>
 <translation id="7892963120252479610">Сайт <ph name="ORIGIN" /> зможа праглядаць усе файлы ў папцы <ph name="FOLDERNAME" />, пакуль вы не закрыеце ўкладку</translation>
 <translation id="7893008570150657497">Доступ да фота, музыкі і іншых файлаў мультымедыя на камп'ютары</translation>
 <translation id="7893153962594818789">Bluetooth выключаны на гэтай прыладзе <ph name="DEVICE_TYPE" />. Увядзіце пароль і ўключыце Bluetooth.</translation>

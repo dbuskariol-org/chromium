@@ -152,7 +152,7 @@
 <translation id="218608176142494674">공유</translation>
 <translation id="2227444325776770048"><ph name="USER_FULL_NAME" />(으)로 계속</translation>
 <translation id="2234876718134438132">동기화 및 Google 서비스</translation>
-<translation id="2239812875700136898">디스커버의 뉴스를 관리하는 옵션으로 이동하는 버튼</translation>
+<translation id="2239812875700136898">디스커버 버튼 옵션으로 새 탭 페이지에 표시될 뉴스를 관리하세요</translation>
 <translation id="2259659629660284697">비밀번호 내보내기...</translation>
 <translation id="2268044343513325586">상세검색</translation>
 <translation id="2286841657746966508">결제주소</translation>
@@ -466,6 +466,7 @@
 <translation id="488187801263602086">파일 이름 변경</translation>
 <translation id="4882831918239250449">검색, 광고 등을 맞춤설정하는 데 인터넷 방문 기록이 사용되는 방식 관리</translation>
 <translation id="4885273946141277891">지원되지 않는 Chrome 인스턴스 수입니다.</translation>
+<translation id="4908869848243824489">Google 디스커버</translation>
 <translation id="4910889077668685004">결제 앱</translation>
 <translation id="4913161338056004800">통계 재설정</translation>
 <translation id="4913169188695071480">새로고침 중지</translation>
@@ -699,9 +700,10 @@
 <translation id="6820686453637990663">CVC</translation>
 <translation id="6831043979455480757">번역</translation>
 <translation id="6845325883481699275">Chrome 보안 강화 개선에 참여하기</translation>
-<translation id="6846298663435243399">로드 중...</translation>
+<translation id="6846298663435243399">로드 중…</translation>
 <translation id="6850409657436465440">아직 다운로드 중</translation>
 <translation id="6850830437481525139">탭 <ph name="TAB_COUNT" />개를 닫았습니다.</translation>
+<translation id="685850645784703949">Google 디스커버 - 사용 중지됨</translation>
 <translation id="6864459304226931083">이미지 다운로드</translation>
 <translation id="6865313869410766144">양식 데이터 자동 완성</translation>
 <translation id="6884306546558072722">오프라인에서 계속 탐색</translation>

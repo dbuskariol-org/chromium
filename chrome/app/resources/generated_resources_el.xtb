@@ -3232,7 +3232,6 @@
 <translation id="5158983316805876233">Χρησιμοποιήστε τον ίδιο διακομιστή μεσολάβησης για όλα τα πρωτόκολλα</translation>
 <translation id="5160857336552977725">Συνδεθείτε στη συσκευή σας <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936">Η προσθήκη <ph name="PLUGIN_NAME" /> αποκλείστηκε επειδή δεν είναι ενημερωμένη</translation>
-<translation id="5169131225159279624">Προσθήκη</translation>
 <translation id="5170568018924773124">Εμφάνιση στο φάκελο</translation>
 <translation id="5171045022955879922">Αναζήτηση ή πληκτρολόγηση διεύθυνσης URL</translation>
 <translation id="5171343362375269016">Μνήμη ανταλλαγής</translation>
@@ -3284,7 +3283,6 @@
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Αντικατάσταση της σελίδας που βλέπετε κατά το άνοιγμα νέας καρτέλας</translation>
 <translation id="5238278114306905396">Έχει γίνει αυτόματη κατάργηση της εφαρμογής "<ph name="EXTENSION_NAME" />".</translation>
-<translation id="5238435043462632060">Ο γονέας σου απενεργοποίησε την επιλογή "Άδειες για ιστοτόπους, εφαρμογές και επεκτάσεις" για το Chrome. Η <ph name="ACTION_PARAMETER" /> αυτής της <ph name="EXTENSION_TYPE_PARAMETER" /> δεν επιτρέπεται.</translation>
 <translation id="5241128660650683457">Ανάγνωση όλων των δεδομένων των ιστοτόπων που επισκέπτεστε</translation>
 <translation id="5242724311594467048">Ενεργοποίηση "<ph name="EXTENSION_NAME" />";</translation>
 <translation id="5243522832766285132">Δοκιμάστε ξανά σε λίγο</translation>
@@ -3954,7 +3952,6 @@
 <translation id="6085886413119427067">Καθορίζει τον τρόπο σύνδεσης σε ιστοτόπους μέσω μιας ασφαλούς σύνδεσης.</translation>
 <translation id="6086846494333236931">Εγκαταστάθηκε από το διαχειριστή σας</translation>
 <translation id="6087960857463881712">Καταπληκτικό πρόσωπο</translation>
-<translation id="6088036808197002565">Η <ph name="ACTION_PARAMETER" /> της <ph name="EXTENSION_TYPE_PARAMETER" /> έχει απενεργοποιηθεί.</translation>
 <translation id="6091761513005122595">Το σύστημα κοινοποίησης προσαρτήθηκε επιτυχώς.</translation>
 <translation id="6093888419484831006">Ακύρωση ενημέρωσης...</translation>
 <translation id="6095984072944024315">−</translation>

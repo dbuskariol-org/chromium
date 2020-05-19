@@ -3231,7 +3231,6 @@
 <translation id="5158983316805876233">იმავე პროქსის გამოყენება ყველა პროტოკოლისთვის</translation>
 <translation id="5160857336552977725">შედით თქვენს <ph name="DEVICE_TYPE" />-ში</translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> დაიბლოკა, რადგან ის მოძველებულია</translation>
-<translation id="5169131225159279624">დამატება</translation>
 <translation id="5170568018924773124">საქაღალდეში ჩვენება</translation>
 <translation id="5171045022955879922">მოძებნეთ ან აკრიფეთ URL</translation>
 <translation id="5171343362375269016">გადატუმბული მეხსიერება</translation>
@@ -3283,7 +3282,6 @@
 <translation id="5235565664420173924">ერთად უკეთესია</translation>
 <translation id="5235750401727657667">თქვენთვის ხილული გვერდის ჩანაცვლება ახალი ჩანართის გახსნისას</translation>
 <translation id="5238278114306905396">პროგრამა „<ph name="EXTENSION_NAME" />“ ავტომატურად წაიშალა.</translation>
-<translation id="5238435043462632060">თქვენმა მშობელმა გამორთო „ნებართვები საიტებისთვის, აპებისა და გაფართოებებისთვის“ Chrome-ისთვის. <ph name="ACTION_PARAMETER" /> დაუშვებელია (<ph name="EXTENSION_TYPE_PARAMETER" />).</translation>
 <translation id="5241128660650683457">წაიკითხეთ თქვენი მთლიანი მონაცემები მონახულებულ ვებსაიტებზე</translation>
 <translation id="5242724311594467048">ჩავრთოთ "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="5243522832766285132">გთხოვთ, სცადოთ რამდენიმე წუთში</translation>
@@ -3952,7 +3950,6 @@
 <translation id="6085886413119427067">განსაზღვრავს დაცული კავშირით ვებსაიტებთან დაკავშირების ხერხს</translation>
 <translation id="6086846494333236931">დაინსტალირებულია თქვენი ადმინისტრატორის მიერ</translation>
 <translation id="6087960857463881712">არაჩვეულებრივი სახე</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> გათიშულია (<ph name="EXTENSION_TYPE_PARAMETER" />)</translation>
 <translation id="6091761513005122595">გაზიარება მიერთებულია წარმატებით.</translation>
 <translation id="6093888419484831006">განახლების გაუქმება…</translation>
 <translation id="6095984072944024315">−</translation>

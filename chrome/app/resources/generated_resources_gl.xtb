@@ -2327,7 +2327,7 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="3909791450649380159">Cor&amp;tar</translation>
 <translation id="3911824782900911339">Páxina da pestana nova</translation>
 <translation id="3915280005470252504">Busca por voz</translation>
-<translation id="3916233823027929090">Xa se realizaron as comprobacións de seguranza</translation>
+<translation id="3916233823027929090">Realizáronse comprobacións de seguranza</translation>
 <translation id="3916445069167113093">Este tipo de ficheiro pode danar o teu ordenador. Queres descargar <ph name="FILE_NAME" /> igualmente?</translation>
 <translation id="3918972485393593704">Informar dos detalles a Google</translation>
 <translation id="3919145445993746351">Para dispoñer das túas extensións en todos os ordenadores, activa a sincronización</translation>
@@ -3231,7 +3231,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="5158983316805876233">Utilizar o mesmo proxy para todos os protocolos</translation>
 <translation id="5160857336552977725">Inicia sesión no teu <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936">Bloqueouse o complemento <ph name="PLUGIN_NAME" /> porque non está actualizado</translation>
-<translation id="5169131225159279624">Engadir</translation>
 <translation id="5170568018924773124">Mostrar no cartafol</translation>
 <translation id="5171045022955879922">Buscar ou escribir o URL</translation>
 <translation id="5171343362375269016">Memoria cambiada</translation>
@@ -3283,7 +3282,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Substituír a páxina que ves ao abrir unha nova pestana</translation>
 <translation id="5238278114306905396">A aplicación "<ph name="EXTENSION_NAME" />" eliminouse automaticamente.</translation>
-<translation id="5238435043462632060">O teu pai ou nai desactivou para Chrome Permisos para sitios, aplicacións e extensións. <ph name="ACTION_PARAMETER" /> esta <ph name="EXTENSION_TYPE_PARAMETER" /> non está permitido.</translation>
 <translation id="5241128660650683457">Ler todos os teus datos dos sitios web que visitas</translation>
 <translation id="5242724311594467048">Queres activar <ph name="EXTENSION_NAME" />?</translation>
 <translation id="5243522832766285132">Téntao de novo nuns minutos</translation>
@@ -3952,7 +3950,6 @@ Instala a aplicación Family Link no teu dispositivo e poderás xestionar a conf
 <translation id="6085886413119427067">Determina como conectarse a sitios web mediante una conexión segura</translation>
 <translation id="6086846494333236931">Extensión instalada polo administrador</translation>
 <translation id="6087960857463881712">Cara de sorpresa</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> desactivouse</translation>
 <translation id="6091761513005122595">A localización compartida montouse correctamente.</translation>
 <translation id="6093888419484831006">Cancelando a actualización...</translation>
 <translation id="6095984072944024315">−</translation>

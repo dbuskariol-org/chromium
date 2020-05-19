@@ -493,7 +493,7 @@
 <translation id="161460670679785907">Ezin da hauteman telefonoa</translation>
 <translation id="1616206807336925449">Luzapen honek ez du baimen berezirik behar.</translation>
 <translation id="1616298854599875024">Ezin izan da inportatu "<ph name="IMPORT_NAME" />" luzapena, ez baita partekatutako modulua</translation>
-<translation id="1617765145568323981">{NUM_FILES,plural, =0{Datuak zure erakundeko segurtasun-gidalerroekin egiaztatzen...}=1{Fitxategia zure erakundeko segurtasun-gidalerroekin egiaztatzen...}other{Fitxategiak zure erakundeko segurtasun-gidalerroekin egiaztatzen...}}</translation>
+<translation id="1617765145568323981">{NUM_FILES,plural, =0{Datuak zure erakundeko segurtasun-gidalerroekin egiaztatzen…}=1{Fitxategia zure erakundeko segurtasun-gidalerroekin egiaztatzen…}other{Fitxategiak zure erakundeko segurtasun-gidalerroekin egiaztatzen…}}</translation>
 <translation id="1618268899808219593">&amp;Laguntza-zentroa</translation>
 <translation id="1620307519959413822">Pasahitza ez da zuzena. Saiatu berriro, edo sakatu "Pasahitza ahaztu zaizu?" eta berrezarri pasahitza.</translation>
 <translation id="1620510694547887537">Kamera</translation>
@@ -3232,7 +3232,6 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="5158983316805876233">Erabili proxy bera protokolo guztietan</translation>
 <translation id="5160857336552977725">Hasi saioa <ph name="DEVICE_TYPE" /> gailuan</translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> blokeatu egin da zaharkituta dagoelako</translation>
-<translation id="5169131225159279624">Gehitzeko aukera</translation>
 <translation id="5170568018924773124">Erakutsi karpetan</translation>
 <translation id="5171045022955879922">Bilatu edo idatzi URLa</translation>
 <translation id="5171343362375269016">Trukatutako memoria</translation>
@@ -3284,7 +3283,6 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Aldatu fitxa berriak irekitzean erakusten den orria</translation>
 <translation id="5238278114306905396">"<ph name="EXTENSION_NAME" />" aplikazioa automatikoki kendu da.</translation>
-<translation id="5238435043462632060">Zure gurasoak desaktibatu egin ditu Chrome-ren "Webguneen, aplikazioen eta luzapenen baimenak". Ez da onartzen <ph name="EXTENSION_TYPE_PARAMETER" /> <ph name="ACTION_PARAMETER" />.</translation>
 <translation id="5241128660650683457">Irakurri bisitatzen dituzun webguneetan dituzun datu guztiak</translation>
 <translation id="5242724311594467048">"<ph name="EXTENSION_NAME" />" gaitu nahi duzu?</translation>
 <translation id="5243522832766285132">Saiatu berriro minutu gutxi batzuk barru</translation>
@@ -3953,7 +3951,6 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="6085886413119427067">Webguneetara konexio seguru baten bidez nola konektatu zehazten du</translation>
 <translation id="6086846494333236931">Administratzaileak instalatu du</translation>
 <translation id="6087960857463881712">Aurpegi zoragarria</translation>
-<translation id="6088036808197002565">Desgaitu egin da <ph name="EXTENSION_TYPE_PARAMETER" /> <ph name="ACTION_PARAMETER" /></translation>
 <translation id="6091761513005122595">Muntatu da fitxategiak partekatzeko biltegia.</translation>
 <translation id="6093888419484831006">Eguneratzea bertan behera uzten…</translation>
 <translation id="6095984072944024315">−</translation>
@@ -6300,7 +6297,7 @@ Gorde gakoen fitxategia leku seguru batean. Zure luzapenaren bertsio berriak sor
 <translation id="9103868373786083162">Sakatu itzultzeko, laster-menua historia ikusteko</translation>
 <translation id="9108808586816295166">Baliteke DNS segurua beti erabilgarri ez egotea</translation>
 <translation id="9109122242323516435">Tokia egiteko, ezabatu gailuko memorian dauden fitxategiak.</translation>
-<translation id="9109283579179481106">Konektatu sare mugikorrera</translation>
+<translation id="9109283579179481106">Konektatu sare mugikor batera</translation>
 <translation id="9111102763498581341">Desblokeatu</translation>
 <translation id="9111395131601239814"><ph name="NETWORKDEVICE" />: <ph name="STATUS" /></translation>
 <translation id="9112748030372401671">Aldatu horma-papera</translation>

@@ -3232,7 +3232,6 @@
 <translation id="5158983316805876233">Використовувати один проксі-сервер для всіх протоколів</translation>
 <translation id="5160857336552977725">Увійдіть в обліковий запис на пристрої <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936">Плагін <ph name="PLUGIN_NAME" /> заблоковано, оскільки він застарів</translation>
-<translation id="5169131225159279624">Додавання</translation>
 <translation id="5170568018924773124">Показати в папці</translation>
 <translation id="5171045022955879922">Знайдіть або введіть URL-адресу</translation>
 <translation id="5171343362375269016">Замінена пам’ять</translation>
@@ -3284,7 +3283,6 @@
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Відкривати нову вкладку на місці поточної сторінки</translation>
 <translation id="5238278114306905396">Програму "<ph name="EXTENSION_NAME" />" автоматично вилучено.</translation>
-<translation id="5238435043462632060">Хтось із твоїх батьків вимкнув "Дозволи для сайтів, додатків і розширень" у Chrome. <ph name="ACTION_PARAMETER" /> цього <ph name="EXTENSION_TYPE_PARAMETER" /> заборонене.</translation>
 <translation id="5241128660650683457">Переглядати всі ваші дані на веб-сайтах, які ви відвідуєте</translation>
 <translation id="5242724311594467048">Увімкнути розширення "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="5243522832766285132">Повторіть спробу через кілька хвилин</translation>
@@ -3953,7 +3951,6 @@
 <translation id="6085886413119427067">Визначає, як безпечно підключатися до веб-сайтів</translation>
 <translation id="6086846494333236931">Установив адміністратор</translation>
 <translation id="6087960857463881712">Гарне обличчя</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> вимкнено</translation>
 <translation id="6091761513005122595">Спільний доступ надано.</translation>
 <translation id="6093888419484831006">Скасування оновлення...</translation>
 <translation id="6095984072944024315">–</translation>

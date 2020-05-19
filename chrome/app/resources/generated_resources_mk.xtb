@@ -1928,7 +1928,7 @@
 <translation id="3445047461171030979">Брзи одговори од „Помошникот на Google“</translation>
 <translation id="3445925074670675829">USB-Ц уред</translation>
 <translation id="344630545793878684">Читајте ги вашите податоци на голем број веб-локации</translation>
-<translation id="3446650212859500694">Датотекава содржи чувствителени содржини</translation>
+<translation id="3446650212859500694">Датотекава содржи чувствителни содржини</translation>
 <translation id="3448086340637592206">Дополнителни услови на Google Chrome и Chrome OS</translation>
 <translation id="3448492834076427715">Ажурирајте ја сметката</translation>
 <translation id="3449393517661170867">Нов прозорец со картички</translation>
@@ -3232,7 +3232,6 @@
 <translation id="5158983316805876233">Користи ист прокси за сите протоколи</translation>
 <translation id="5160857336552977725">Најавете се на <ph name="DEVICE_TYPE" /></translation>
 <translation id="5166596762332123936"><ph name="PLUGIN_NAME" /> е блокиран затоа што е застарен</translation>
-<translation id="5169131225159279624">Додавање</translation>
 <translation id="5170568018924773124">Прикажи во папка</translation>
 <translation id="5171045022955879922">Барај или впиши URL</translation>
 <translation id="5171343362375269016">Заменета меморија</translation>
@@ -3284,7 +3283,6 @@
 <translation id="5235565664420173924">Better Together</translation>
 <translation id="5235750401727657667">Заменете ја страницата што ја гледате при отворање нова картичка</translation>
 <translation id="5238278114306905396">Апликацијата „<ph name="EXTENSION_NAME" />“ е автоматски отстранета.</translation>
-<translation id="5238435043462632060">Родителот ги исклучил „Дозволите за сајтови, апликации и екстензии“ за Chrome. <ph name="ACTION_PARAMETER" /> на оваа <ph name="EXTENSION_TYPE_PARAMETER" /> не е дозволено.</translation>
 <translation id="5241128660650683457">Читајте ги сите ваши податоци на веб-локациите што ги посетувате</translation>
 <translation id="5242724311594467048">Да се овозможи „<ph name="EXTENSION_NAME" />“?</translation>
 <translation id="5243522832766285132">Обидете се повторно наскоро</translation>
@@ -3953,7 +3951,6 @@
 <translation id="6085886413119427067">Определува како да се поврзуваат веб-сајтовите преку безбедна врска</translation>
 <translation id="6086846494333236931">Инсталирано од вашиот администратор</translation>
 <translation id="6087960857463881712">Прекрасно лице</translation>
-<translation id="6088036808197002565"><ph name="ACTION_PARAMETER" /> <ph name="EXTENSION_TYPE_PARAMETER" /> е оневозможено</translation>
 <translation id="6091761513005122595">Споделувањето е успешно монтирано.</translation>
 <translation id="6093888419484831006">Се откажува ажурирањето...</translation>
 <translation id="6095984072944024315">−</translation>
@@ -5889,7 +5886,7 @@
 <translation id="8609465669617005112">Премести нагоре</translation>
 <translation id="8610103157987623234">Погрешен формат. Обидете се повторно</translation>
 <translation id="8613164732773110792">Само мали букви, цифри, долни црти и црти</translation>
-<translation id="8613786722548417558"><ph name="FILE_NAME" /> е премногу голема за безбедносна проверка. Може да отворате датотеки до 50 MB.</translation>
+<translation id="8613786722548417558"><ph name="FILE_NAME" /> е преголема за безбедносна проверка. Може да отворате датотеки до 50 MB.</translation>
 <translation id="8615618338313291042">Инкогнито апликација: <ph name="APP_NAME" /></translation>
 <translation id="8619803522055190423">Со сенка</translation>
 <translation id="8619892228487928601"><ph name="CERTIFICATE_NAME" />: <ph name="ERROR" /></translation>
@@ -6197,7 +6194,7 @@
 <translation id="89720367119469899">Escape</translation>
 <translation id="8972513834460200407">Проверете кај мрежниот администратор за да се осигурите дека заштитниот ѕид не ги блокира преземањата од серверите на Google.</translation>
 <translation id="8973557916016709913">Отстрани ниво на зумирање</translation>
-<translation id="8973596347849323817">Уредот може да го приспособите да одговара на вашите потреби. Овие карактеристики за пристапност може да ги смените подоцна во „Поставки“.</translation>
+<translation id="8973596347849323817">Уредот може да го приспособите да одговара на вашите потреби. Овие функции за пристапност може да ги смените подоцна во „Поставки“.</translation>
 <translation id="897414447285476047">Целната датотека не е целосна поради проблем со врската.</translation>
 <translation id="897525204902889653">Услуга за карантин</translation>
 <translation id="8975562453115131273">{NUM_OTHER_TABS,plural, =0{„<ph name="TAB_TITLE" />“}=1{„<ph name="TAB_TITLE" />“ и уште 1 картичка}one{„<ph name="TAB_TITLE" />“ и уште # картичка}other{„<ph name="TAB_TITLE" />“ и уште # картички}}</translation>
