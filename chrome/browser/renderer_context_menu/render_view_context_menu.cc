@@ -990,6 +990,11 @@ void RenderViewContextMenu::RecordUsedItem(int id) {
     } else if (doc_url.GetOrigin() == chrome::kChromeSearchMostVisitedUrl) {
       base::RecordAction(
           base::UserMetricsAction("MostVisited_ClickedFromContextMenu"));
+    } else if (doc_url.GetOrigin() == GURL(chrome::kChromeUINewTabPageURL) ||
+               doc_url.GetOrigin() ==
+                   GURL(chrome::kChromeUIUntrustedNewTabPageUrl)) {
+      base::RecordAction(base::UserMetricsAction(
+          "NewTabPage.LinkOpenedFromContextMenu.WebUI"));
     }
   }
 
