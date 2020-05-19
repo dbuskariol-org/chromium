@@ -5922,3 +5922,6 @@ crbug.com/1084276 [ Mac ] http/tests/security/offscreencanvas-placeholder-read-b
 
 # Sheriff 2020-05-19
 crbug.com/1084448 [ Win ] compositing/overflow/overflow-compositing-descendant.html [ Pass Failure ]
+
+# Disabled for landing DevTools change
+crbug.com/1079233 http/tests/devtools/sources/debugger-ui/sourcemap-src-not-loaded.js [ Pass Failure ]
