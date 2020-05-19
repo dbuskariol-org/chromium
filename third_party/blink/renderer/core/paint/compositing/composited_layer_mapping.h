@@ -122,9 +122,15 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   GraphicsLayer* ParentForSublayers() const;
   void SetSublayers(const GraphicsLayerVector&);
 
-  GraphicsLayer* SquashingLayer() const { return squashing_layer_.get(); }
-  const IntSize& SquashingLayerOffsetFromLayoutObject() const {
-    return squashing_layer_offset_from_layout_object_;
+  // Returns the GraphicsLayer that |layer| is squashed into, which may be
+  // NonScrollingSquashingLayer or ScrollingContentsLayer.
+  GraphicsLayer* SquashingLayer(const PaintLayer& squashed_layer) const;
+
+  GraphicsLayer* NonScrollingSquashingLayer() const {
+    return non_scrolling_squashing_layer_.get();
+  }
+  const IntSize& NonScrollingSquashingLayerOffsetFromLayoutObject() const {
+    return non_scrolling_squashing_layer_offset_from_layout_object_;
   }
 
   void SetAllLayersNeedDisplay();
@@ -140,18 +146,26 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
 
   void PositionOverflowControlsLayers();
 
+  bool MayBeSquashedIntoScrollingContents(const PaintLayer& layer) const {
+    return layer.AncestorScrollingLayer() == &owning_layer_;
+  }
+
   // Returns true if the assignment actually changed the assigned squashing
   // layer.
-  bool UpdateSquashingLayerAssignment(PaintLayer* squashed_layer,
-                                      wtf_size_t next_squashed_layer_index);
-  void RemoveLayerFromSquashingGraphicsLayer(const PaintLayer*);
+  bool UpdateSquashingLayerAssignment(
+      PaintLayer& squashed_layer,
+      wtf_size_t next_non_scrolling_squashed_layer_index,
+      wtf_size_t next_squashed_layer_in_scrolling_contents_index);
+  void RemoveLayerFromSquashingGraphicsLayer(const PaintLayer&);
 #if DCHECK_IS_ON()
-  bool VerifyLayerInSquashingVector(const PaintLayer*);
+  void AssertInSquashedLayersVector(const PaintLayer&) const;
 #endif
 
   void FinishAccumulatingSquashingLayers(
-      wtf_size_t next_squashed_layer_index,
+      wtf_size_t new_non_scrolling_squashed_layer_count,
+      wtf_size_t new_squashed_layer_in_scrolling_contents_count,
       Vector<PaintLayer*>& layers_needing_paint_invalidation);
+
   void UpdateElementId();
 
   // GraphicsLayerClient interface
@@ -232,9 +246,9 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
 
   // If there is a squashed layer painting into this CLM that is an ancestor of
   // the given LayoutObject, return it. Otherwise return nullptr.
-  const GraphicsLayerPaintInfo* ContainingSquashedLayer(
+  const GraphicsLayerPaintInfo* ContainingSquashedLayerInSquashingLayer(
       const LayoutObject*,
-      unsigned max_squashed_layer_index);
+      unsigned max_squashed_layer_index) const;
 
   // Returns whether an adjustment happend.
   bool AdjustForCompositedScrolling(const GraphicsLayer*,
@@ -304,7 +318,8 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   void UpdateForegroundLayerGeometry();
   void UpdateDecorationOutlineLayerGeometry(
       const IntSize& relative_compositing_bounds_size);
-  void UpdateScrollingContentsLayerGeometry();
+  void UpdateScrollingContentsLayerGeometry(
+      Vector<PaintLayer*>& layers_needing_paint_invalidation);
 
   void CreatePrimaryGraphicsLayer();
 
@@ -376,14 +391,26 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   // contains this squashed layer's clipping ancestor.  The clip rect is
   // returned in the coordinate space of the given squashed layer.  If there is
   // no such containing layer, returns the infinite rect.
-  static void LocalClipRectForSquashedLayer(
+  static void UpdateLocalClipRectForSquashedLayer(
       const PaintLayer& reference_layer,
       const Vector<GraphicsLayerPaintInfo>& layers,
       GraphicsLayerPaintInfo&);
 
   // Clear the groupedMapping entry on the layer at the given index, only if
   // that layer does not appear earlier in the set of layers for this object.
-  bool InvalidateLayerIfNoPrecedingEntry(wtf_size_t);
+  bool InvalidateSquashedLayerIfNoPrecedingEntry(
+      Vector<GraphicsLayerPaintInfo>& squashed_layers,
+      wtf_size_t layer_to_clear);
+
+  void FinishAccumulatingSquashingLayersInternal(
+      Vector<GraphicsLayerPaintInfo>& squashed_layers,
+      wtf_size_t new_squashed_layer_count,
+      Vector<PaintLayer*>& layers_needing_paint_invalidation);
+  bool UpdateSquashingLayerAssignmentInternal(
+      Vector<GraphicsLayerPaintInfo>& squashed_layers,
+      PaintLayer& squashed_layer,
+      wtf_size_t next_squashed_layer_index);
+  void RemoveSquashedLayers(Vector<GraphicsLayerPaintInfo>& squashed_layers);
 
   void SetContentsNeedDisplay();
 
@@ -400,7 +427,7 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   //      | + layer_for_scroll_corner_ [OPTIONAL]
   //      + decoration_outline_layer_ [OPTIONAL]
   //      + mask_layer_ [ OPTIONAL ]
-  //      + squashing_layer_ [ OPTIONAL ]
+  //      + non_scrolling_squashing_layer_ [ OPTIONAL ]
   //
   // The overflow controls may need to be repositioned in the graphics layer
   // tree by the RLC to ensure that they stack above scrolling content.
@@ -448,17 +475,25 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   // DecorationLayer which paints outline.
   std::unique_ptr<GraphicsLayer> decoration_outline_layer_;
 
-  // Only used if any squashed layers exist, this is the backing that squashed
-  // layers paint into.
-  std::unique_ptr<GraphicsLayer> squashing_layer_;
-  Vector<GraphicsLayerPaintInfo> squashed_layers_;
-  IntSize squashing_layer_offset_from_layout_object_;
+  // Only used when |non_scrolling_squashed_layers_| is not empty. This is
+  // the backing that |non_scrolling_squashed_layers_| paint into.
+  std::unique_ptr<GraphicsLayer> non_scrolling_squashing_layer_;
+  IntSize non_scrolling_squashing_layer_offset_from_layout_object_;
+
+  // Layers that are squashed into |non_scrolling_squashing_layer_|.
+  Vector<GraphicsLayerPaintInfo> non_scrolling_squashed_layers_;
+
+  // Layers that are squashed into |scrolling_contents_layer_|. This is used
+  // when |owning_layer_| is scrollable but is not a stacking context, and
+  // there are scrolling stacked children that can be squashed into the
+  // scrolling contents without breaking stacking order. We don't need a special
+  // layer like |non_scrolling_squashing_layer_| because these squashed layers
+  // are always contained by |scrolling_contents_layer_|.
+  Vector<GraphicsLayerPaintInfo> squashed_layers_in_scrolling_contents_;
 
   PhysicalRect composited_bounds_;
 
   unsigned pending_update_scope_ : 2;
-
-  unsigned scrolling_contents_are_empty_ : 1;
 
   bool draws_background_onto_content_layer_;
 
