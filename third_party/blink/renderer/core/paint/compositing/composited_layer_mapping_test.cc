@@ -1157,7 +1157,7 @@ TEST_F(CompositedLayerMappingTest,
   // contents layer we don't have a scrolling contents layer to paint into in
   // this case.
   const auto* mapping = container->Layer()->GetCompositedLayerMapping();
-  EXPECT_FALSE(mapping->HasScrollingLayer());
+  EXPECT_FALSE(mapping->ScrollingContentsLayer());
   EXPECT_EQ(kBackgroundPaintInGraphicsLayer,
             container->GetBackgroundPaintLocation());
 }
@@ -1490,9 +1490,9 @@ TEST_F(CompositedLayerMappingTest, ScrollingLayerBackgroundColor) {
 
 TEST_F(CompositedLayerMappingTest, ScrollLayerSizingSubpixelAccumulation) {
   // This test verifies that when subpixel accumulation causes snapping it
-  // applies to both the scrolling and scrolling contents layers. Verify that
-  // the mapping doesn't have any vertical scrolling introduced as a result of
-  // the snapping behavior. https://crbug.com/801381.
+  // applies to the scrolling contents layer. Verify that the mapping doesn't
+  // have any vertical scrolling introduced as a result of the snapping
+  // behavior. https://crbug.com/801381.
   GetDocument().GetFrame()->GetSettings()->SetPreferCompositingToLCDTextEnabled(
       true);
 
@@ -1525,10 +1525,9 @@ TEST_F(CompositedLayerMappingTest, ScrollLayerSizingSubpixelAccumulation) {
                       ->Layer()
                       ->GetCompositedLayerMapping();
   ASSERT_TRUE(mapping);
-  ASSERT_TRUE(mapping->ScrollingLayer());
   ASSERT_TRUE(mapping->ScrollingContentsLayer());
-  EXPECT_EQ(mapping->ScrollingLayer()->Size().height(),
-            mapping->ScrollingContentsLayer()->Size().height());
+  EXPECT_EQ(gfx::Size(200, 200), mapping->MainGraphicsLayer()->Size());
+  EXPECT_EQ(gfx::Size(1000, 200), mapping->ScrollingContentsLayer()->Size());
 }
 
 TEST_F(CompositedLayerMappingTest, SquashingScrollInterestRect) {

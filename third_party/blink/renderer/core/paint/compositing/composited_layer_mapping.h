@@ -113,8 +113,6 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
     return decoration_outline_layer_.get();
   }
 
-  bool HasScrollingLayer() const { return scrolling_layer_.get(); }
-  GraphicsLayer* ScrollingLayer() const { return scrolling_layer_.get(); }
   GraphicsLayer* ScrollingContentsLayer() const {
     return scrolling_contents_layer_.get();
   }
@@ -122,19 +120,14 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   GraphicsLayer* MaskLayer() const { return mask_layer_.get(); }
 
   GraphicsLayer* ParentForSublayers() const;
-  GraphicsLayer* ChildForSuperlayers() const;
   void SetSublayers(const GraphicsLayerVector&);
 
-  GraphicsLayer* SquashingContainmentLayer() const {
-    return squashing_containment_layer_.get();
-  }
   GraphicsLayer* SquashingLayer() const { return squashing_layer_.get(); }
   const IntSize& SquashingLayerOffsetFromLayoutObject() const {
     return squashing_layer_offset_from_layout_object_;
   }
 
-  void SetSquashingContentsNeedDisplay();
-  void SetContentsNeedDisplay();
+  void SetAllLayersNeedDisplay();
 
   // Let all DrawsContent GraphicsLayers check raster invalidations after
   // a no-change paint.
@@ -206,9 +199,6 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   // so that it can be inserted as a sibling to this CLM without changing
   // position.
   GraphicsLayer* DetachLayerForOverflowControls();
-
-  // We may similarly need to reattach the layer for outlines and decorations.
-  GraphicsLayer* DetachLayerForDecorationOutline();
 
   void SetBlendMode(BlendMode);
 
@@ -314,7 +304,7 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   void UpdateForegroundLayerGeometry();
   void UpdateDecorationOutlineLayerGeometry(
       const IntSize& relative_compositing_bounds_size);
-  void UpdateScrollingLayerGeometry();
+  void UpdateScrollingContentsLayerGeometry();
 
   void CreatePrimaryGraphicsLayer();
 
@@ -343,7 +333,7 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   bool RequiresHorizontalScrollbarLayer() const;
   bool RequiresVerticalScrollbarLayer() const;
   bool RequiresScrollCornerLayer() const;
-  bool UpdateScrollingLayers(bool scrolling_layers);
+  bool UpdateScrollingContentsLayer(bool needs_scrolling_contents_layer);
   bool UpdateSquashingLayers(bool needs_squashing_layers);
   void UpdateDrawsContentAndPaintsHitTest();
   void UpdateCompositedBounds();
@@ -395,29 +385,40 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   // that layer does not appear earlier in the set of layers for this object.
   bool InvalidateLayerIfNoPrecedingEntry(wtf_size_t);
 
+  void SetContentsNeedDisplay();
+
   PaintLayer& owning_layer_;
 
   // The hierarchy of layers that is maintained by the CompositedLayerMapping
   // looks like this:
   //
   //    + graphics_layer_
-  //      + (scrolling_layer_ + scrolling_contents_layer_) [OPTIONAL]
-  //      | + overflow_controls_host_layer_ [OPTIONAL]
-  //      |   + layer_for_vertical_scrollbar_ [OPTIONAL]
-  //      |   + layer_for_horizontal_scrollbar_ [OPTIONAL]
-  //      |   + layer_for_scroll_corner_ [OPTIONAL]
+  //      + contents layers (or contents layers under scrolling_contents_layer_)
+  //      + overflow_controls_host_layer_ [OPTIONAL]
+  //      | + layer_for_vertical_scrollbar_ [OPTIONAL]
+  //      | + layer_for_horizontal_scrollbar_ [OPTIONAL]
+  //      | + layer_for_scroll_corner_ [OPTIONAL]
   //      + decoration_outline_layer_ [OPTIONAL]
   //      + mask_layer_ [ OPTIONAL ]
+  //      + squashing_layer_ [ OPTIONAL ]
+  //
   // The overflow controls may need to be repositioned in the graphics layer
   // tree by the RLC to ensure that they stack above scrolling content.
+  //
+  // Contents layers are directly under |graphics_layer_|, or under
+  // |scrolling_contents_layer_| when the layer is using composited scrolling.
+  // If owning_layer_ is a stacking context, contents layers include:
+  //   - negative z-index children
+  //   - foreground_layer_
+  //   - normal flow and positive z-index children
+  // If owning_layer_ is not a stacking context, contents layers are normal
+  // flow children.
 
   std::unique_ptr<GraphicsLayer> graphics_layer_;
 
   // Only used if the layer is using composited scrolling.
-  std::unique_ptr<GraphicsLayer> scrolling_layer_;
-
-  // Only used if the layer is using composited scrolling.
   std::unique_ptr<GraphicsLayer> scrolling_contents_layer_;
+  IntSize previous_scroll_container_size_;
 
   // Only used if we have a mask.
   std::unique_ptr<GraphicsLayer> mask_layer_;
@@ -446,20 +447,6 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
 
   // DecorationLayer which paints outline.
   std::unique_ptr<GraphicsLayer> decoration_outline_layer_;
-
-  // A squashing CLM has the following structure:
-  // squashing_containment_layer_
-  //   + graphics_layer_
-  //   + squashing_layer_
-  //
-  // Stacking children of a squashed layer receive graphics layers that are
-  // parented to the composited ancestor of the squashed layer (i.e. nearest
-  // enclosing composited layer that is not
-  // squashed).
-
-  // Only used if any squashed layers exist, this contains the squashed layers
-  // as siblings to the rest of the GraphicsLayer tree chunk.
-  std::unique_ptr<GraphicsLayer> squashing_containment_layer_;
 
   // Only used if any squashed layers exist, this is the backing that squashed
   // layers paint into.
