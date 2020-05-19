@@ -710,12 +710,6 @@ void RenderFrameProxy::UpdateRemoteViewportIntersection(
                                                    intersection_state));
 }
 
-void RenderFrameProxy::AdvanceFocus(blink::mojom::FocusType type,
-                                    blink::WebLocalFrame* source) {
-  int source_routing_id = RenderFrameImpl::FromWebFrame(source)->GetRoutingID();
-  Send(new FrameHostMsg_AdvanceFocus(routing_id_, type, source_routing_id));
-}
-
 base::UnguessableToken RenderFrameProxy::GetDevToolsFrameToken() {
   return devtools_frame_token_;
 }

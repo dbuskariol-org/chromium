@@ -704,7 +704,7 @@ void RemoteFrame::SetCcLayer(cc::Layer* cc_layer,
 
 void RemoteFrame::AdvanceFocus(mojom::blink::FocusType type,
                                LocalFrame* source) {
-  Client()->AdvanceFocus(type, source);
+  GetRemoteFrameHostRemote().AdvanceFocus(type, source->GetFrameToken());
 }
 
 void RemoteFrame::DetachChildren() {
