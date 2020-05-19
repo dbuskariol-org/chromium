@@ -1462,7 +1462,6 @@ crbug.com/1053725 [ Mac ] fast/forms/textarea/textarea-metrics.html [ Skip ]
 
 
 crbug.com/1035582 [ Mac10.10 ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-hover-focused-unselected.html [ Skip ]
-crbug.com/1035582 [ Mac ] virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-multiple-appearance-basic.html [ Skip ]
 
 # Bug in FormControlsRefresh <select multiple> tap behavior:
 crbug.com/1045672 fast/forms/select/listbox-tap.html [ Failure ]
@@ -5922,8 +5921,6 @@ crbug.com/1084276 [ Mac ] http/tests/security/offscreencanvas-placeholder-read-b
 
 # Sheriff 2020-05-19
 crbug.com/1084448 [ Win ] compositing/overflow/overflow-compositing-descendant.html [ Pass Failure ]
-crbug.com/1084502 fast/forms/select/listbox-appearance-basic.html [ Pass Failure ]
-crbug.com/1084502 [ Mac ] virtual/controls-refresh/color-scheme/select/select-multiple-appearance-basic.html [ Pass Failure ]
 
 # Disabled for landing DevTools change
 crbug.com/1011811 http/tests/devtools/network/network-xhr-data-received-async-response-type-blob.js [ Pass Failure ]
