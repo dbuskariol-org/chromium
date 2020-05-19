@@ -1902,7 +1902,7 @@
   {
     "name": "enable-play-store-search",
     "owners": [ "jennyz", "kaznacheev" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 85
   },
   {
     "name" : "enable-pointer-lock-options",
