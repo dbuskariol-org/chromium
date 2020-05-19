@@ -222,13 +222,17 @@ if (${exception_state}.HadException())
 // step 4.6.2. If S is not one of the enumeration's values, then return
 //   undefined.
 const auto arg1_value_maybe_enum = {enum_type}::Create(arg1_value_string);
-if (!arg1_value_maybe_enum)
+if (!arg1_value_maybe_enum) {{
+  bindings::ReportInvalidEnumSetToAttribute(
+      ${isolate}, arg1_value_string, "{enum_type_name}", ${exception_state});
   return;  // Return undefined.
+}}
 const auto ${arg1_value} = arg1_value_maybe_enum.value();
 """
-            text = _format(
-                pattern,
-                enum_type=blink_class_name(real_type.type_definition_object))
+            text = _format(pattern,
+                           enum_type=blink_class_name(
+                               real_type.type_definition_object),
+                           enum_type_name=real_type.identifier)
             code_node.register_code_symbol(SymbolNode("arg1_value", text))
             return
 
