@@ -20537,6 +20537,7 @@
       'example_value': True,
       'id': 683,
       'supported_on': ['chrome.*:81-84', 'chrome_os:81-84', 'android:81-84', 'webview_android:81-84'],
+      'deprecated': True,
       'features': {
         'dynamic_refresh': False,
         'per_profile': True,
