@@ -1946,9 +1946,11 @@ AutotestPrivateInstallPluginVMFunction::Run() {
                                    params->image_hash, params->license_key);
 
   plugin_vm::ShowPluginVmInstallerView(profile);
-  PluginVmInstallerView::GetActiveViewForTesting()
-      ->SetFinishedCallbackForTesting(base::BindOnce(
-          &AutotestPrivateInstallPluginVMFunction::OnInstallFinished, this));
+  auto* view = PluginVmInstallerView::GetActiveViewForTesting();
+  view->SetFinishedCallbackForTesting(base::BindOnce(
+      &AutotestPrivateInstallPluginVMFunction::OnInstallFinished, this));
+  // Start the installation.
+  view->AcceptDialog();
 
   return RespondLater();
 }
