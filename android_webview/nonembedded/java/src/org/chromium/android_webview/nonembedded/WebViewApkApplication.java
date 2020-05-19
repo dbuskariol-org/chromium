@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 
 import org.chromium.android_webview.AwLocaleConfig;
 import org.chromium.android_webview.common.CommandLineUtil;
+import org.chromium.android_webview.common.metrics.AwNonembeddedUmaRecorder;
 import org.chromium.android_webview.devui.util.WebViewPackageHelper;
 import org.chromium.base.ContextUtils;
 import org.chromium.base.PathUtils;
@@ -18,6 +19,7 @@ import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.base.library_loader.LibraryLoader;
 import org.chromium.base.library_loader.LibraryProcessType;
+import org.chromium.base.metrics.UmaRecorderHolder;
 import org.chromium.base.task.PostTask;
 import org.chromium.base.task.TaskTraits;
 import org.chromium.components.embedder_support.application.FontPreloadingWorkaround;
@@ -64,6 +66,9 @@ public class WebViewApkApplication extends Application {
         if (isWebViewProcess()) {
             PathUtils.setPrivateDataDirectorySuffix("webview", "WebView");
             CommandLineUtil.initCommandLine();
+            // disable using a native recorder in this process because native lib isn't loaded.
+            UmaRecorderHolder.setAllowNativeUmaRecorder(false);
+            UmaRecorderHolder.setNonNativeDelegate(new AwNonembeddedUmaRecorder());
         }
     }
 
@@ -117,6 +122,8 @@ public class WebViewApkApplication extends Application {
             if (LibraryLoader.getInstance().isInitialized()) {
                 return true;
             }
+            // Should not call LibraryLoader.initialize() since this will reset UmaRecorder
+            // delegate.
             LibraryLoader.getInstance().setLibraryProcessType(LibraryProcessType.PROCESS_WEBVIEW);
             LibraryLoader.getInstance().loadNow();
         } catch (Throwable unused) {
