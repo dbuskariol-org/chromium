@@ -23,6 +23,7 @@ namespace {
 // TODO(dstaessens): Add video_encoder_test_usage.md
 constexpr const char* usage_msg =
     "usage: video_encode_accelerator_tests\n"
+    "           [--codec=<codec>]\n"
     "           [-v=<level>] [--vmodule=<config>] [--gtest_help] [--help]\n"
     "           [<video path>] [<video metadata path>]\n";
 
@@ -35,6 +36,8 @@ constexpr const char* help_msg =
     "containing the video's metadata, such as frame checksums. By default\n"
     "<video path>.json will be used.\n"
     "\nThe following arguments are supported:\n"
+    "  --codec              codec profile to encode, \"h264 (baseline)\",\n"
+    "                       \"h264main, \"h264high\", \"vp8\" and \"vp9\"\n"
     "   -v                  enable verbose mode, e.g. -v=2.\n"
     "  --vmodule            enable verbose mode for the specified module,\n"
     "                       e.g. --vmodule=*media/gpu*=2.\n\n"
@@ -77,6 +80,7 @@ class VideoEncoderTest : public ::testing::Test {
 TEST_F(VideoEncoderTest, FlushAtEndOfStream) {
   VideoEncoderClientConfig config = VideoEncoderClientConfig();
   config.framerate = g_env->Video()->FrameRate();
+  config.output_profile = g_env->Profile();
   auto encoder = CreateVideoEncoder(g_env->Video(), config);
 
   encoder->Encode();
@@ -111,6 +115,7 @@ int main(int argc, char** argv) {
                          : base::FilePath(media::test::kDefaultTestVideoPath);
   base::FilePath video_metadata_path =
       (args.size() >= 2) ? base::FilePath(args[1]) : base::FilePath();
+  std::string codec = "h264";
 
   // Parse command line arguments.
   base::CommandLine::SwitchMap switches = cmd_line->GetSwitches();
@@ -121,9 +126,13 @@ int main(int argc, char** argv) {
       continue;
     }
 
-    std::cout << "unknown option: --" << it->first << "\n"
-              << media::test::usage_msg;
-    return EXIT_FAILURE;
+    if (it->first == "codec") {
+      codec = it->second;
+    } else {
+      std::cout << "unknown option: --" << it->first << "\n"
+                << media::test::usage_msg;
+      return EXIT_FAILURE;
+    }
   }
 
   testing::InitGoogleTest(&argc, argv);
@@ -131,7 +140,7 @@ int main(int argc, char** argv) {
   // Set up our test environment.
   media::test::VideoEncoderTestEnvironment* test_environment =
       media::test::VideoEncoderTestEnvironment::Create(
-          video_path, video_metadata_path, base::FilePath());
+          video_path, video_metadata_path, base::FilePath(), codec);
   if (!test_environment)
     return EXIT_FAILURE;
 
