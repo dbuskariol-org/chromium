@@ -5069,6 +5069,7 @@ crbug.com/963141 media/video-object-fit-change.html [ Pass Failure ]
 crbug.com/963141 [ Mac ] media/controls/video-overlay-cast-light-rendering.html [ Pass Failure ]
 crbug.com/963141 [ Win ] media/controls/video-overlay-cast-light-rendering.html [ Pass Failure ]
 crbug.com/963141 [ Mac ] media/video-aspect-ratio.html [ Pass Failure ]
+crbug.com/963141 [ Win ] media/video-aspect-ratio.html [ Pass Failure ]
 
 # Sheriff 2019-05-16
 crbug.com/963141 [ Linux ] media/video-object-fit.html [ Pass Failure ]
