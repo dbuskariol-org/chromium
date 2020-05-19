@@ -75,7 +75,7 @@ suite(destination_settings_test.suiteName, function() {
     nativeLayer = new NativeLayerStub();
     NativeLayerImpl.instance_ = nativeLayer;
     localDestinations = [];
-    destinations = getDestinations(nativeLayer, localDestinations);
+    destinations = getDestinations(localDestinations);
     nativeLayer.setLocalDestinations(localDestinations);
     cloudPrintInterface = new CloudPrintInterfaceStub();
     CloudPrintInterfaceImpl.instance_ = cloudPrintInterface;
@@ -299,13 +299,14 @@ suite(destination_settings_test.suiteName, function() {
       function() {
         recentDestinations = destinations.slice(0, 3).map(
             destination => makeRecentDestination(destination));
+        const missing = localDestinations.splice(1, 1)[0];
+        nativeLayer.setLocalDestinations(localDestinations);
         nativeLayer.setLocalDestinationCapabilities(
             {
-              printer: localDestinations[1],
+              printer: missing,
               capabilities: null,
             },
             true);
-        nativeLayer.setLocalDestinations(localDestinations.splice(1, 1));
         const whenCapabilitiesDone = nativeLayer.waitForMultipleCapabilities(3);
 
         initialize();

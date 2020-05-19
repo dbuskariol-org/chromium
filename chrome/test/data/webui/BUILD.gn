@@ -333,6 +333,7 @@ group("closure_compile") {
   deps = [
     ":closure_compile_local",
     "cr_elements:closure_compile",
+    "print_preview:closure_compile",
     "settings:closure_compile",
     "tab_strip:closure_compile",
 

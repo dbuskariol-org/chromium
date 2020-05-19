@@ -59,8 +59,8 @@ cr.define('test_util', function() {
    * Data-binds two Polymer properties using the property-changed events and
    * set/notifyPath API. Useful for testing components which would normally be
    * used together.
-   * @param {!HTMLElement} el1
-   * @param {!HTMLElement} el2
+   * @param {!Element} el1
+   * @param {!Element} el2
    * @param {string} property
    */
   /* #export */ function fakeDataBind(el1, el2, property) {

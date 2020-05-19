@@ -6,7 +6,7 @@ import {Destination, NativeLayer, PrinterType} from 'chrome://print/print_previe
 import {assert} from 'chrome://resources/js/assert.m.js';
 import {webUIListenerCallback} from 'chrome://resources/js/cr.m.js';
 import {PromiseResolver} from 'chrome://resources/js/promise_resolver.m.js';
-import {getPdfPrinter} from 'chrome://test/print_preview/print_preview_test_utils.js';
+import {getCddTemplate, getPdfPrinter} from 'chrome://test/print_preview/print_preview_test_utils.js';
 import {TestBrowserProxy} from 'chrome://test/test_browser_proxy.m.js';
 
 /**
@@ -177,10 +177,7 @@ export class NativeLayerStub extends TestBrowserProxy {
       }
     }
     if (printerId === Destination.GooglePromotedId.SAVE_AS_PDF) {
-      return Promise.resolve({
-        deviceName: 'Save as PDF',
-        capabilities: getPdfPrinter(),
-      });
+      return Promise.resolve(getPdfPrinter());
     }
     if (type !== PrinterType.LOCAL_PRINTER) {
       return Promise.reject();
@@ -268,6 +265,14 @@ export class NativeLayerStub extends TestBrowserProxy {
    */
   setLocalDestinations(localDestinations) {
     this.localDestinationInfos_ = localDestinations;
+    this.localDestinationCapabilities_ = new Map();
+    this.localDestinationInfos_.forEach(info => {
+      this.setLocalDestinationCapabilities({
+        printer: info,
+        capabilities:
+            getCddTemplate(info.deviceName, info.printerName).capabilities,
+      });
+    });
   }
 
   /**
