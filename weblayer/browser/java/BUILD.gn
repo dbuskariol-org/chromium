@@ -9,12 +9,14 @@ import("//weblayer/variables.gni")
 
 android_resources("weblayer_resources") {
   sources = [
+    "res/layout/site_settings_layout.xml",
     "res/layout/weblayer_url_bar.xml",
     "res/values/dimens.xml",
   ]
   custom_package = "org.chromium.weblayer_private"
   deps = [
     ":weblayer_strings_grd",
+    "//components/browser_ui/site_settings/android:java_resources",
     "//components/browser_ui/strings/android:browser_ui_strings_grd",
     "//components/browser_ui/styles/android:java_resources",
     "//components/page_info/android:java_resources",
@@ -93,6 +95,7 @@ android_library("java") {
     "org/chromium/weblayer_private/WebLayerImpl.java",
     "org/chromium/weblayer_private/WebLayerNotificationBuilder.java",
     "org/chromium/weblayer_private/WebLayerNotificationChannels.java",
+    "org/chromium/weblayer_private/WebLayerSiteSettingsClient.java",
     "org/chromium/weblayer_private/WebLayerTabModalPresenter.java",
     "org/chromium/weblayer_private/WebViewCompatibilityHelperImpl.java",
     "org/chromium/weblayer_private/metrics/MetricsServiceClient.java",
@@ -111,6 +114,7 @@ android_library("java") {
     "//components/browser_ui/modaldialog/android:java",
     "//components/browser_ui/notifications/android:java",
     "//components/browser_ui/settings/android:java",
+    "//components/browser_ui/site_settings/android:java",
     "//components/browser_ui/styles/android:java",
     "//components/browser_ui/styles/android:java_resources",
     "//components/browser_ui/util/android:java",
