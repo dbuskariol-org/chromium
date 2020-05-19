@@ -8,6 +8,7 @@
 #include "base/files/file_path.h"
 #include "media/base/test_data_util.h"
 #include "media/gpu/test/video.h"
+#include "media/gpu/test/video_encoder/decoder_buffer_validator.h"
 #include "media/gpu/test/video_encoder/video_encoder.h"
 #include "media/gpu/test/video_encoder/video_encoder_client.h"
 #include "media/gpu/test/video_encoder/video_encoder_test_environment.h"
@@ -58,7 +59,28 @@ class VideoEncoderTest : public ::testing::Test {
       VideoEncoderClientConfig config = VideoEncoderClientConfig()) {
     LOG_ASSERT(video);
 
-    auto video_encoder = VideoEncoder::Create(config);
+    std::vector<std::unique_ptr<BitstreamProcessor>> bitstream_processors;
+    const gfx::Rect visible_rect(video->Resolution());
+    switch (VideoCodecProfileToVideoCodec(config.output_profile)) {
+      case kCodecH264:
+        bitstream_processors.emplace_back(
+            new H264Validator(config.output_profile, visible_rect));
+        break;
+      case kCodecVP8:
+        bitstream_processors.emplace_back(new VP8Validator(visible_rect));
+        break;
+      case kCodecVP9:
+        bitstream_processors.emplace_back(
+            new VP9Validator(config.output_profile, visible_rect));
+        break;
+      default:
+        LOG(ERROR) << "Unsupported profile: "
+                   << GetProfileName(config.output_profile);
+        break;
+    }
+
+    auto video_encoder =
+        VideoEncoder::Create(config, std::move(bitstream_processors));
 
     LOG_ASSERT(video_encoder);
     LOG_ASSERT(video_encoder->Initialize(video));
