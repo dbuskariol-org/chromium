@@ -175,12 +175,6 @@ extern const char kEmbedderBlockRestoreUrlDescription[];
 extern const char kEnableAutofillCacheServerCardInfoName[];
 extern const char kEnableAutofillCacheServerCardInfoDescription[];
 
-// Title and description for the flag to control if credit card upload can
-// display an expiration date fix flow.
-extern const char kEnableAutofillCreditCardUploadEditableExpirationDateName[];
-extern const char
-    kEnableAutofillCreditCardUploadEditableExpirationDateDescription[];
-
 // Title and description for the flag to enable the clipboard provider to
 // suggest searchihng for copied images.
 extern const char kEnableClipboardProviderImageSuggestionsName[];

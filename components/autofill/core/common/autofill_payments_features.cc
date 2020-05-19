@@ -117,9 +117,6 @@ const base::Feature kAutofillUpstream{"AutofillUpstream",
 const base::Feature kAutofillUpstreamAllowAllEmailDomains{
     "AutofillUpstreamAllowAllEmailDomains", base::FEATURE_DISABLED_BY_DEFAULT};
 
-const base::Feature kAutofillUpstreamEditableExpirationDate{
-    "AutofillUpstreamEditableExpirationDate", base::FEATURE_ENABLED_BY_DEFAULT};
-
 bool ShouldShowImprovedUserConsentForCreditCardSave() {
 #if defined(OS_WIN) || defined(OS_MACOSX) || \
     (defined(OS_LINUX) && !defined(OS_CHROMEOS))

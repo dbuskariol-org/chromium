@@ -206,13 +206,6 @@ const char kEnableAutofillCacheServerCardInfoDescription[] =
     "If enabled, when a server card is unmasked, its info will be cached until "
     "page navigation to simplify consecutive fills on the same page.";
 
-const char kEnableAutofillCreditCardUploadEditableExpirationDateName[] =
-    "Make expiration date editable in dialog during credit card upload";
-const char kEnableAutofillCreditCardUploadEditableExpirationDateDescription[] =
-    "If enabled, if a credit card's expiration date was not detected when "
-    "offering card upload to Google Payments, the offer-to-save dialog "
-    "displays an expiration date selector.";
-
 const char kEnableClipboardProviderImageSuggestionsName[] =
     "Enable copied image provider";
 const char kEnableClipboardProviderImageSuggestionsDescription[] =

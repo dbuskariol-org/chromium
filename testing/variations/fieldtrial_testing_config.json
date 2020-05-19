@@ -879,27 +879,6 @@
             ]
         }
     ],
-    "AutofillUpstreamEditableExpirationDate": [
-        {
-            "platforms": [
-                "android",
-                "android_weblayer",
-                "chromeos",
-                "ios",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "AutofillUpstreamEditableExpirationDate"
-                    ]
-                }
-            ]
-        }
-    ],
     "AutofillUseImprovedLabelDisambiguation": [
         {
             "platforms": [

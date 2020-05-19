@@ -467,14 +467,6 @@ const flags_ui::FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kCollectionsCardPresentationStyleName,
      flag_descriptions::kCollectionsCardPresentationStyleDescription,
      flags_ui::kOsIos, FEATURE_VALUE_TYPE(kCollectionsCardPresentationStyle)},
-    {"enable-autofill-credit-card-upload-editable-expiration-date",
-     flag_descriptions::
-         kEnableAutofillCreditCardUploadEditableExpirationDateName,
-     flag_descriptions::
-         kEnableAutofillCreditCardUploadEditableExpirationDateDescription,
-     flags_ui::kOsIos,
-     FEATURE_VALUE_TYPE(
-         autofill::features::kAutofillUpstreamEditableExpirationDate)},
     {"credit-card-scanner", flag_descriptions::kCreditCardScannerName,
      flag_descriptions::kCreditCardScannerDescription, flags_ui::kOsIos,
      FEATURE_VALUE_TYPE(kCreditCardScanner)},

@@ -518,13 +518,6 @@ const char kEnableAutofillCreditCardAuthenticationDescription[] =
     "authenticator (if available) to verify card ownership when retrieving "
     "credit cards from Google Payments.";
 
-const char kEnableAutofillCreditCardUploadEditableExpirationDateName[] =
-    "Make expiration date editable in dialog during credit card upload";
-const char kEnableAutofillCreditCardUploadEditableExpirationDateDescription[] =
-    "If enabled, if a credit card's expiration date was not detected when "
-    "offering card upload to Google Payments, the offer-to-save dialog "
-    "displays an expiration date selector.";
-
 const char kEnableAutofillCreditCardUploadFeedbackName[] =
     "Enable feedback for credit card upload flow";
 const char kEnableAutofillCreditCardUploadFeedbackDescription[] =
