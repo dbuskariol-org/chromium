@@ -1919,6 +1919,13 @@ Unknown properties are collapsed to zero. -->
   </int>
 </enum>
 
+<enum name="AndroidWebViewDevUiMenu">
+  <int value="0" label="Switch WebView provider"/>
+  <int value="1" label="Report a bug"/>
+  <int value="2" label="Check for updates"/>
+  <int value="3" label="Refresh the crash list"/>
+</enum>
+
 <enum name="AndroidWebViewProxySchemeFilterType">
   <int value="0" label="HTTP"/>
   <int value="1" label="HTTPS"/>
