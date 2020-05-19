@@ -42737,7 +42737,7 @@ from previous Chrome versions.
   <int value="20" label="Can't paint scrolling background"/>
   <int value="21" label="Has clip related property"/>
   <int value="22" label="Has box shadow from non-root layer (obsolete)"/>
-  <int value="23" label="Is not stacking context"/>
+  <int value="23" label="Is not stacking context (obsolete)"/>
   <int value="24" label="Blocking wheel event handler region"/>
   <int value="25" label="Blocking touch event handler region"/>
 </enum>
