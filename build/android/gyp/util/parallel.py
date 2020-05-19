@@ -1,22 +1,22 @@
-# Copyright 2017 The Chromium Authors. All rights reserved.
+# Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""Helpers related to multiprocessing."""
+"""Helpers related to multiprocessing.
+
+Based on: //tools/binary_size/libsupersize/parallel.py
+"""
 
 import atexit
-import builtins
-import itertools
 import logging
 import multiprocessing
-import multiprocessing.dummy
 import os
 import sys
 import threading
 import traceback
 
-DISABLE_ASYNC = os.environ.get('SUPERSIZE_DISABLE_ASYNC') == '1'
+DISABLE_ASYNC = os.environ.get('DISABLE_ASYNC') == '1'
 if DISABLE_ASYNC:
-  logging.debug('Running in synchronous mode.')
+  logging.warning('Running in synchronous mode.')
 
 _all_pools = None
 _is_child_process = False
@@ -53,7 +53,7 @@ class _ExceptionWrapper(object):
 
   def MaybeThrow(self):
     if self.exception_type:
-      raise getattr(builtins,
+      raise getattr(__builtins__,
                     self.exception_type)('Originally caused by: ' + self.msg)
 
 
@@ -72,7 +72,7 @@ class _FuncWrapper(object):
       # Only keep the exception type for builtin exception types or else risk
       # further marshalling exceptions.
       exception_type = None
-      if type(e).__name__ in dir(builtins):
+      if hasattr(__builtins__, type(e).__name__):
         exception_type = type(e).__name__
       # multiprocessing is supposed to catch and return exceptions automatically
       # but it doesn't seem to work properly :(.
@@ -86,21 +86,17 @@ class _WrappedResult(object):
 
   * Unregisters associated pool _all_pools.
   * Raises exception caught by _FuncWrapper.
-  * Allows for custom unmarshalling of return value.
   """
 
-  def __init__(self, result, pool=None, decode_func=None):
+  def __init__(self, result, pool=None):
     self._result = result
     self._pool = pool
-    self._decode_func = decode_func
 
   def get(self):
     self.wait()
     value = self._result.get()
     _CheckForException(value)
-    if not self._decode_func or not self._result.successful():
-      return value
-    return self._decode_func(value)
+    return value
 
   def wait(self):
     self._result.wait()
@@ -137,8 +133,9 @@ def _TerminatePools():
   for i, pool in enumerate(_all_pools):
     # Without calling terminate() on a separate thread, the call can block
     # forever.
-    thread = threading.Thread(
-        name='Pool-Terminate-{}'.format(i), target=close_pool, args=(pool, ))
+    thread = threading.Thread(name='Pool-Terminate-{}'.format(i),
+                              target=close_pool,
+                              args=(pool, ))
     thread.daemon = True
     thread.start()
 
@@ -172,7 +169,7 @@ def _MakeProcessPool(job_params, **job_kwargs):
   return ret
 
 
-def ForkAndCall(func, args, decode_func=None):
+def ForkAndCall(func, args):
   """Runs |func| in a fork'ed process.
 
   Returns:
@@ -185,7 +182,7 @@ def ForkAndCall(func, args, decode_func=None):
     pool = _MakeProcessPool([args])  # Omit |kwargs|.
     result = pool.apply_async(_FuncWrapper(func), (0, ))
     pool.close()
-  return _WrappedResult(result, pool=pool, decode_func=decode_func)
+  return _WrappedResult(result, pool=pool)
 
 
 def BulkForkAndCall(func, arg_tuples, **kwargs):
@@ -194,7 +191,7 @@ def BulkForkAndCall(func, arg_tuples, **kwargs):
   Args:
     kwargs: Common keyword arguments to be passed to |func|.
 
-  Yields the return values as they come in.
+  Yields the return values in order.
   """
   arg_tuples = list(arg_tuples)
   if not arg_tuples:
@@ -208,72 +205,10 @@ def BulkForkAndCall(func, arg_tuples, **kwargs):
   pool = _MakeProcessPool(arg_tuples, **kwargs)
   wrapped_func = _FuncWrapper(func)
   try:
-    for result in pool.imap_unordered(wrapped_func, range(len(arg_tuples))):
+    for result in pool.imap(wrapped_func, xrange(len(arg_tuples))):
       _CheckForException(result)
       yield result
   finally:
     pool.close()
     pool.join()
     _all_pools.remove(pool)
-
-
-def CallOnThread(func, *args, **kwargs):
-  """Calls |func| on a new thread and returns a promise for its return value."""
-  if DISABLE_ASYNC:
-    return _ImmediateResult(func(*args, **kwargs))
-  pool = multiprocessing.dummy.Pool(1)
-  result = pool.apply_async(func, args=args, kwds=kwargs)
-  pool.close()
-  return result
-
-
-def EncodeDictOfLists(d, key_transform=None, value_transform=None):
-  """Serializes a dict where values are lists of strings.
-
-  Does not support '' as keys, nor [''] as values.
-  """
-  assert '' not in d
-  assert [''] not in iter(d.values())
-  keys = iter(d)
-  if key_transform:
-    keys = (key_transform(k) for k in keys)
-  keys = '\x01'.join(keys)
-  if value_transform:
-    values = '\x01'.join(
-        '\x02'.join(value_transform(y) for y in x) for x in d.values())
-  else:
-    values = '\x01'.join('\x02'.join(x) for x in d.values())
-  return keys, values
-
-
-def JoinEncodedDictOfLists(encoded_values):
-  assert isinstance(encoded_values, list), 'Does not work with generators'
-  return ('\x01'.join(x[0] for x in encoded_values if x[0]),
-          '\x01'.join(x[1] for x in encoded_values if x[1]))
-
-
-def DecodeDictOfLists(encoded_keys_and_values,
-                      key_transform=None,
-                      value_transform=None):
-  """Deserializes a dict where values are lists of strings."""
-  encoded_keys, encoded_values = encoded_keys_and_values
-  if not encoded_keys:
-    return {}
-  keys = encoded_keys.split('\x01')
-  if key_transform:
-    keys = (key_transform(k) for k in keys)
-  encoded_lists = encoded_values.split('\x01')
-  ret = {}
-  for key, encoded_list in zip(keys, encoded_lists):
-    if not encoded_list:
-      values = []
-    else:
-      values = encoded_list.split('\x02')
-      if value_transform:
-        for i in range(len(values)):
-          values[i] = value_transform(values[i])
-    ret[key] = values
-  return ret
-
-
-EMPTY_ENCODED_DICT = EncodeDictOfLists({})
