@@ -152,7 +152,6 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/bookmarkswidget/BookmarkWidgetProvider.java",
   "java/src/org/chromium/chrome/browser/bookmarkswidget/BookmarkWidgetProxy.java",
   "java/src/org/chromium/chrome/browser/bookmarkswidget/BookmarkWidgetService.java",
-  "java/src/org/chromium/chrome/browser/browserservices/BrowserServicesActivityTabController.java",
   "java/src/org/chromium/chrome/browser/browserservices/BrowserServicesIntentDataProvider.java",
   "java/src/org/chromium/chrome/browser/browserservices/BrowserServicesMetrics.java",
   "java/src/org/chromium/chrome/browser/browserservices/BrowserServicesStore.java",
