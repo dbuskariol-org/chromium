@@ -4192,6 +4192,9 @@
             "experiments": [
                 {
                     "name": "WithEnhancedExperiment_20200519",
+                    "params": {
+                        "DefaultInIncognito": "true"
+                    },
                     "enable_features": [
                         "ImprovedCookieControls",
                         "ImprovedCookieControlsForThirdPartyCookieBlocking",
