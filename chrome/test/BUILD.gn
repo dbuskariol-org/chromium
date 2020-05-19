@@ -1270,6 +1270,7 @@ if (!is_android) {
       "../browser/ui/extensions/extension_message_bubble_browsertest.cc",
       "../browser/ui/extensions/extension_message_bubble_browsertest.h",
       "../browser/ui/extensions/hosted_app_browsertest.cc",
+      "../browser/ui/extensions/settings_overridden_params_providers_browsertest.cc",
       "../browser/ui/find_bar/find_bar_controller_browsertest.cc",
       "../browser/ui/find_bar/find_bar_host_browsertest.cc",
       "../browser/ui/find_bar/find_bar_platform_helper_mac_browsertest.mm",
