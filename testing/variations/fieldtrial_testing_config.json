@@ -7162,6 +7162,21 @@
             ]
         }
     ],
+    "iOSQRCodeGenerator": [
+        {
+            "platforms": [
+                "ios"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "QRCodeGeneration"
+                    ]
+                }
+            ]
+        }
+    ],
     "libvpx_for_vp8": [
         {
             "platforms": [
