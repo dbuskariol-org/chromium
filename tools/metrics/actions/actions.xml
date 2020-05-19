@@ -23152,6 +23152,39 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="SupervisedUsers_Extensions_ExtensionInstallDialog_AskedParent">
+  <owner>tobyhuang@chromium.org</owner>
+  <owner>agawronska@chromium.org</owner>
+  <owner>danan@chromium.org</owner>
+  <owner>cros-families@google.com</owner>
+  <description>
+    Emitted when a supervised user clicks &quot;Ask a parent&quot; on the
+    Extension Install Dialog.
+  </description>
+</action>
+
+<action name="SupervisedUsers_Extensions_ExtensionInstallDialog_ChildCanceled">
+  <owner>tobyhuang@chromium.org</owner>
+  <owner>agawronska@chromium.org</owner>
+  <owner>danan@chromium.org</owner>
+  <owner>cros-families@google.com</owner>
+  <description>
+    Emitted when a supervised user clicks &quot;Cancel&quot; on the Extension
+    Install Dialog.
+  </description>
+</action>
+
+<action name="SupervisedUsers_Extensions_ExtensionInstallDialog_Opened">
+  <owner>tobyhuang@chromium.org</owner>
+  <owner>agawronska@chromium.org</owner>
+  <owner>danan@chromium.org</owner>
+  <owner>cros-families@google.com</owner>
+  <description>
+    Emitted when a supervised user tries to install an extension from the Chrome
+    Web Store and opens the Extension Install Dialog.
+  </description>
+</action>
+
 <action name="SupervisedUsers_Extensions_NewExtensionApprovalGranted">
   <obsolete>Renamed to SupervisedUsers_Extensions_ApprovalGranted.</obsolete>
   <owner>tobyhuang@chromium.org</owner>
@@ -23175,6 +23208,39 @@ should be able to be added at any place in this file.
   <description>
     Emitted when the supervised user approves a new version of an existing
     extension.
+  </description>
+</action>
+
+<action name="SupervisedUsers_Extensions_ParentPermissionDialog_Opened">
+  <owner>tobyhuang@chromium.org</owner>
+  <owner>agawronska@chromium.org</owner>
+  <owner>danan@chromium.org</owner>
+  <owner>cros-families@google.com</owner>
+  <description>
+    Emitted when a supervised user tries to enable an extension that requires
+    parent approval, and opens the Parent Permission Dialog.
+  </description>
+</action>
+
+<action name="SupervisedUsers_Extensions_ParentPermissionDialog_ParentApproved">
+  <owner>tobyhuang@chromium.org</owner>
+  <owner>agawronska@chromium.org</owner>
+  <owner>danan@chromium.org</owner>
+  <owner>cros-families@google.com</owner>
+  <description>
+    Emitted when a parent successfully types their password and approves the
+    extension on the Parent Permission Dialog.
+  </description>
+</action>
+
+<action name="SupervisedUsers_Extensions_ParentPermissionDialog_ParentCanceled">
+  <owner>tobyhuang@chromium.org</owner>
+  <owner>agawronska@chromium.org</owner>
+  <owner>danan@chromium.org</owner>
+  <owner>cros-families@google.com</owner>
+  <description>
+    Emitted when a parent cancels the Parent Permission Dialog, denying the
+    supervised user's attempt to enable an extension.
   </description>
 </action>
 

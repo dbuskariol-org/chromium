@@ -1051,11 +1051,13 @@ TEST_F(ManagementApiSupervisedUserTest, SetEnabled_AfterIncreasedPermissions) {
   EXPECT_TRUE(registry()->enabled_extensions().Contains(extension_id));
 
   // Should see 1 kApprovalGranted UMA metric.
-  histogram_tester.ExpectUniqueSample("SupervisedUsers.Extensions2",
-                                      SupervisedUserExtensionsMetricsRecorder::
-                                          UmaExtensionState::kApprovalGranted,
-                                      1);
-  histogram_tester.ExpectTotalCount("SupervisedUsers.Extensions2", 1);
+  histogram_tester.ExpectUniqueSample(
+      SupervisedUserExtensionsMetricsRecorder::kExtensionsHistogramName,
+      SupervisedUserExtensionsMetricsRecorder::UmaExtensionState::
+          kApprovalGranted,
+      1);
+  histogram_tester.ExpectTotalCount(
+      SupervisedUserExtensionsMetricsRecorder::kExtensionsHistogramName, 1);
 
   ExtensionPrefs* prefs = ExtensionPrefs::Get(profile());
   std::unique_ptr<const PermissionSet> known_perms =
@@ -1099,11 +1101,12 @@ TEST_F(ManagementApiSupervisedUserTest, SetEnabled_AfterIncreasedPermissions) {
 
   // Should see 1 kPermissionsIncreaseGranted UMA metric.
   histogram_tester.ExpectBucketCount(
-      "SupervisedUsers.Extensions2",
+      SupervisedUserExtensionsMetricsRecorder::kExtensionsHistogramName,
       SupervisedUserExtensionsMetricsRecorder::UmaExtensionState::
           kPermissionsIncreaseGranted,
       1);
-  histogram_tester.ExpectTotalCount("SupervisedUsers.Extensions2", 2);
+  histogram_tester.ExpectTotalCount(
+      SupervisedUserExtensionsMetricsRecorder::kExtensionsHistogramName, 2);
 }
 
 // Tests that supervised users can't approve permission updates by themselves
@@ -1133,11 +1136,13 @@ TEST_F(ManagementApiSupervisedUserTest,
   EXPECT_TRUE(registry()->enabled_extensions().Contains(extension_id));
 
   // There should be 1 kApprovalGranted UMA metric.
-  histogram_tester.ExpectUniqueSample("SupervisedUsers.Extensions2",
-                                      SupervisedUserExtensionsMetricsRecorder::
-                                          UmaExtensionState::kApprovalGranted,
-                                      1);
-  histogram_tester.ExpectTotalCount("SupervisedUsers.Extensions2", 1);
+  histogram_tester.ExpectUniqueSample(
+      SupervisedUserExtensionsMetricsRecorder::kExtensionsHistogramName,
+      SupervisedUserExtensionsMetricsRecorder::UmaExtensionState::
+          kApprovalGranted,
+      1);
+  histogram_tester.ExpectTotalCount(
+      SupervisedUserExtensionsMetricsRecorder::kExtensionsHistogramName, 1);
 
   ExtensionPrefs* prefs = ExtensionPrefs::Get(profile());
   std::unique_ptr<const PermissionSet> known_perms =
@@ -1182,7 +1187,8 @@ TEST_F(ManagementApiSupervisedUserTest,
   EXPECT_EQ(0, supervised_user_delegate_->show_dialog_count());
 
   // There should be no new UMA metrics.
-  histogram_tester.ExpectTotalCount("SupervisedUsers.Extensions2", 1);
+  histogram_tester.ExpectTotalCount(
+      SupervisedUserExtensionsMetricsRecorder::kExtensionsHistogramName, 1);
 }
 
 // Tests that if an extension still requires parental consent, the supervised
