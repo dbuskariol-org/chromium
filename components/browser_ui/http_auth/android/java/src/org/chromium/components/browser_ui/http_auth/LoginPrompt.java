@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.login;
+package org.chromium.components.browser_ui.http_auth;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
-import org.chromium.chrome.R;
 import org.chromium.ui.UiUtils;
 
 /**
@@ -23,17 +22,34 @@ import org.chromium.ui.UiUtils;
  *
  * This borrows liberally from android.browser.HttpAuthenticationDialog.
  */
-public class LoginPrompt implements ChromeHttpAuthHandler.AutofillObserver {
+public class LoginPrompt {
     private final Context mContext;
-    private final ChromeHttpAuthHandler mAuthHandler;
+    private final String mMessageBody;
+    private final Observer mObserver;
 
     private AlertDialog mDialog;
     private EditText mUsernameView;
     private EditText mPasswordView;
 
-    public LoginPrompt(Context context, ChromeHttpAuthHandler authHandler) {
+    /**
+     * This is a public interface that provides the result of the prompt.
+     */
+    public static interface Observer {
+        /**
+         * Cancel the authorization request.
+         */
+        public void cancel();
+
+        /**
+         * Proceed with the authorization with the given credentials.
+         */
+        public void proceed(String username, String password);
+    }
+
+    public LoginPrompt(Context context, String messageBody, Observer observer) {
         mContext = context;
-        mAuthHandler = authHandler;
+        mMessageBody = messageBody;
+        mObserver = observer;
         createDialog();
     }
 
@@ -50,7 +66,7 @@ public class LoginPrompt implements ChromeHttpAuthHandler.AutofillObserver {
         });
 
         TextView explanationView = (TextView) v.findViewById(R.id.explanation);
-        explanationView.setText(mAuthHandler.getMessageBody());
+        explanationView.setText(mMessageBody);
 
         mDialog =
                 new UiUtils
@@ -59,11 +75,11 @@ public class LoginPrompt implements ChromeHttpAuthHandler.AutofillObserver {
                         .setView(v)
                         .setPositiveButton(R.string.login_dialog_ok_button_label,
                                 (DialogInterface.OnClickListener) (dialog, whichButton)
-                                        -> mAuthHandler.proceed(getUsername(), getPassword()))
+                                        -> mObserver.proceed(getUsername(), getPassword()))
                         .setNegativeButton(R.string.cancel,
                                 (DialogInterface.OnClickListener) (dialog,
-                                        whichButton) -> mAuthHandler.cancel())
-                        .setOnCancelListener(dialog -> mAuthHandler.cancel())
+                                        whichButton) -> mObserver.cancel())
+                        .setOnCancelListener(dialog -> mObserver.cancel())
                         .create();
         mDialog.getDelegate().setHandleNativeActionModesEnabled(false);
 
@@ -99,7 +115,6 @@ public class LoginPrompt implements ChromeHttpAuthHandler.AutofillObserver {
         return mPasswordView.getText().toString();
     }
 
-    @Override
     public void onAutofillDataAvailable(String username, String password) {
         mUsernameView.setText(username);
         mPasswordView.setText(password);
