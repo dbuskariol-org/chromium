@@ -1082,10 +1082,6 @@
       name: "MediaQueryNavigationControls",
     },
     {
-      name: "MediaQueryShape",
-      status: "experimental",
-    },
-    {
       name: "MediaSession",
       status: "stable",
     },
