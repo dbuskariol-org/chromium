@@ -1919,6 +1919,30 @@ Unknown properties are collapsed to zero. -->
   </int>
 </enum>
 
+<enum name="AndroidWebViewCrashCollectionState">
+  <int value="0" label="ENABLED_BY_COMMANDLINE">
+    Enabled by commandline. This doesn't check later cases (ex. user consent).
+  </int>
+  <int value="1" label="ENABLED_BY_FLAG_UI">
+    Enabled by the Flag UI, but not by CommandLine file. This doesn't check
+    later cases (ex. user consent).
+  </int>
+  <int value="2" label="ENABLED_BY_USER_CONSENT">
+    Enabled by user consent (not by commandline flags).
+  </int>
+  <int value="3" label="DISABLED_BY_USER_CONSENT">
+    Disabled because we're missing user consent. We were able to present the
+    user with an Intent to the settings app.
+  </int>
+  <int value="4" label="DISABLED_BY_USER_CONSENT_CANNOT_FIND_SETTINGS">
+    Disabled because we're missing user consent. We could not direct the user to
+    the settings app.
+  </int>
+  <int value="5" label="DISABLED_CANNOT_USE_GMS">
+    Disabled because we cannot use GMS APIs.
+  </int>
+</enum>
+
 <enum name="AndroidWebViewDevUiMenu">
   <int value="0" label="Switch WebView provider"/>
   <int value="1" label="Report a bug"/>
