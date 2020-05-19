@@ -1241,6 +1241,16 @@
     },
 
     'fuchsia_gpu_telemetry_tests': {
+      'context_lost': {
+        'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
+      },
+      'depth_capture': {
+        'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
+      },
+      'gpu_process': {
+        'name': 'gpu_process_launch_tests',
+        'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
+      },
       'hardware_accelerated_feature': {
         'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
       },
