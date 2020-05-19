@@ -178,14 +178,13 @@ public class CrashesListFragment extends DevUiBaseFragment {
             CrashInfo crashInfo = (CrashInfo) getGroup(groupPosition);
 
             ImageView packageIcon = view.findViewById(R.id.crash_package_icon);
-            String packageName;
-            if (crashInfo.packageName == null) {
+            String packageName = crashInfo.getCrashKey(CrashInfo.APP_PACKAGE_NAME_KEY);
+            if (packageName == null) {
                 // This can happen if crash log file where we keep crash info is cleared but other
                 // log files like upload logs still exist.
                 packageName = "unknown app";
                 packageIcon.setImageResource(android.R.drawable.sym_def_app_icon);
             } else {
-                packageName = crashInfo.packageName;
                 try {
                     Drawable icon = mContext.getPackageManager().getApplicationIcon(packageName);
                     packageIcon.setImageDrawable(icon);
@@ -352,16 +351,16 @@ public class CrashesListFragment extends DevUiBaseFragment {
     // It adds the upload id at the end of the template and populates the Application package
     // name field.
     private Uri getReportUri(CrashInfo crashInfo) {
-        String appPackage = "";
+        String appPackage = crashInfo.getCrashKeyOrDefault(CrashInfo.APP_PACKAGE_NAME_KEY, "");
         String appVersion = "";
-        if (crashInfo.packageName != null) {
+        if (!appPackage.isEmpty()) {
             try {
                 PackageManager pm = mContext.getPackageManager();
-                PackageInfo packageInfo = pm.getPackageInfo(crashInfo.packageName, 0);
-                appPackage = crashInfo.packageName;
+                PackageInfo packageInfo = pm.getPackageInfo(appPackage, 0);
                 appVersion = String.format(
                         Locale.US, "%s/%s", packageInfo.versionName, packageInfo.versionCode);
             } catch (PackageManager.NameNotFoundException e) {
+                // Can happen if the app is deleted after the crash happened.
             }
         }
 
