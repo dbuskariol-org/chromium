@@ -288,6 +288,8 @@ base::Value CrostiniDiskInfoToValue(
   disk_value.SetBoolKey("succeeded", true);
   disk_value.SetBoolKey("canResize", disk_info->can_resize);
   disk_value.SetBoolKey("isUserChosenSize", disk_info->is_user_chosen_size);
+  disk_value.SetBoolKey("isLowSpaceAvailable",
+                        disk_info->is_low_space_available);
   disk_value.SetIntKey("defaultIndex", disk_info->default_index);
   base::Value ticks(base::Value::Type::LIST);
   for (const auto& tick : disk_info->ticks) {
