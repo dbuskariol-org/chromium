@@ -1419,17 +1419,6 @@ void RenderFrameHostImpl::GetCanonicalUrlForSharing(
   }
 }
 
-mojo::Remote<blink::mojom::PauseSubresourceLoadingHandle>
-RenderFrameHostImpl::PauseSubresourceLoading() {
-  DCHECK(frame_);
-  mojo::Remote<blink::mojom::PauseSubresourceLoadingHandle>
-      pause_subresource_loading_handle;
-  GetRemoteInterfaces()->GetInterface(
-      pause_subresource_loading_handle.BindNewPipeAndPassReceiver());
-
-  return pause_subresource_loading_handle;
-}
-
 void RenderFrameHostImpl::ExecuteMediaPlayerActionAtLocation(
     const gfx::Point& location,
     const blink::mojom::MediaPlayerAction& action) {
