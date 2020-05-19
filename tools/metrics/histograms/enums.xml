@@ -69536,6 +69536,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRPresentationResult">
+  <obsolete>
+    As of 5/18/2020 this enum is no longer in code.
+  </obsolete>
   <int value="0" label="Requested"/>
   <int value="1" label="Success"/>
   <int value="2" label="SuccessAlreadyPresenting"/>
