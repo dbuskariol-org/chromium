@@ -95,7 +95,8 @@ MatchedPropertiesCache::MatchedPropertiesCache() = default;
 
 MatchedPropertiesCache::Key::Key(const MatchResult& result)
     : Key(result,
-          result.IsCacheable() ? ComputeMatchedPropertiesHash(result) : 0) {}
+          result.IsCacheable() ? ComputeMatchedPropertiesHash(result)
+                               : HashTraits<unsigned>::EmptyValue()) {}
 
 MatchedPropertiesCache::Key::Key(const MatchResult& result, unsigned hash)
     : result_(result), hash_(hash) {}
@@ -104,7 +105,6 @@ const CachedMatchedProperties* MatchedPropertiesCache::Find(
     const Key& key,
     const StyleResolverState& style_resolver_state) {
   DCHECK(key.IsValid());
-  DCHECK(key.hash_);
   Cache::iterator it = cache_.find(key.hash_);
   if (it == cache_.end())
     return nullptr;
@@ -151,7 +151,6 @@ void MatchedPropertiesCache::Add(const Key& key,
                                  const ComputedStyle& parent_style,
                                  const HashSet<CSSPropertyName>& dependencies) {
   DCHECK(key.IsValid());
-  DCHECK(key.hash_);
   Cache::AddResult add_result = cache_.insert(key.hash_, nullptr);
   if (add_result.is_new_entry || !add_result.stored_value->value) {
     add_result.stored_value->value =

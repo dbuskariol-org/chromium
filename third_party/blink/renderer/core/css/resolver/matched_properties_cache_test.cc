@@ -22,7 +22,6 @@ class MatchedPropertiesCacheTestKey {
  public:
   explicit MatchedPropertiesCacheTestKey(String block_text, unsigned hash)
       : key_(ParseBlock(block_text), hash) {
-    DCHECK(key_.IsValid());
   }
 
   const MatchedPropertiesCache::Key& InnerKey() const { return key_; }
@@ -92,6 +91,25 @@ class MatchedPropertiesCacheTest : public PageTestBase,
     return StyleResolver::InitialStyleForElement(GetDocument());
   }
 };
+
+TEST_F(MatchedPropertiesCacheTest, AllowedKeyValues) {
+  unsigned empty = HashTraits<unsigned>::EmptyValue();
+  unsigned deleted = std::numeric_limits<unsigned>::max();
+
+  ASSERT_EQ(0u, HashTraits<unsigned>::EmptyValue());
+  ASSERT_TRUE(HashTraits<unsigned>::IsDeletedValue(deleted));
+
+  EXPECT_FALSE(TestKey("left:0", empty).InnerKey().IsValid());
+  EXPECT_TRUE(TestKey("left:0", empty + 1).InnerKey().IsValid());
+  EXPECT_TRUE(TestKey("left:0", deleted - 1).InnerKey().IsValid());
+  EXPECT_FALSE(TestKey("left:0", deleted).InnerKey().IsValid());
+}
+
+TEST_F(MatchedPropertiesCacheTest, InvalidKeyForUncacheableMatchResult) {
+  MatchResult result;
+  result.SetIsCacheable(false);
+  EXPECT_FALSE(MatchedPropertiesCache::Key(result).IsValid());
+}
 
 TEST_F(MatchedPropertiesCacheTest, Miss) {
   TestCache cache(GetDocument());
