@@ -83,4 +83,18 @@ content::GetServiceSandboxType<proxy_resolver::mojom::ProxyResolverFactory>() {
 }
 #endif  // defined(OS_WIN)
 
+// quarantine::mojom::Quarantine
+#if defined(OS_WIN)
+namespace quarantine {
+namespace mojom {
+class Quarantine;
+}
+}  // namespace quarantine
+template <>
+inline content::SandboxType
+content::GetServiceSandboxType<quarantine::mojom::Quarantine>() {
+  return content::SandboxType::kNoSandbox;
+}
+#endif  // defined(OS_WIN)
+
 #endif  // CHROME_BROWSER_SERVICE_SANDBOX_TYPE_H_
