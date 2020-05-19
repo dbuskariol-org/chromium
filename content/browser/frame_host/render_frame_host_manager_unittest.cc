@@ -2184,12 +2184,12 @@ TEST_P(RenderFrameHostManagerTest, CreateOpenerProxiesWithCycleOnOpenerChain) {
   EXPECT_TRUE(tab2_proxy);
 
   // Verify that the proxies' openers point to each other.
-  int tab1_opener_routing_id =
-      tab1_manager->GetOpenerRoutingID(rfh2->GetSiteInstance());
-  int tab2_opener_routing_id =
-      tab2_manager->GetOpenerRoutingID(rfh2->GetSiteInstance());
-  EXPECT_EQ(tab2_proxy->GetRoutingID(), tab1_opener_routing_id);
-  EXPECT_EQ(tab1_proxy->GetRoutingID(), tab2_opener_routing_id);
+  auto tab1_opener_frame_token =
+      tab1_manager->GetOpenerFrameToken(rfh2->GetSiteInstance());
+  auto tab2_opener_frame_token =
+      tab2_manager->GetOpenerFrameToken(rfh2->GetSiteInstance());
+  EXPECT_EQ(tab2_proxy->GetFrameToken(), tab1_opener_frame_token);
+  EXPECT_EQ(tab1_proxy->GetFrameToken(), tab2_opener_frame_token);
 
   // Setting tab2_proxy's opener required an extra IPC message to be set, since
   // the opener's frame token wasn't available when tab2_proxy was created.
@@ -2234,9 +2234,9 @@ TEST_P(RenderFrameHostManagerTest, CreateOpenerProxiesWhenOpenerPointsToSelf) {
   EXPECT_TRUE(opener_proxy);
 
   // Verify that the proxy's opener points to itself.
-  int opener_routing_id =
-      opener_manager->GetOpenerRoutingID(rfh2->GetSiteInstance());
-  EXPECT_EQ(opener_proxy->GetRoutingID(), opener_routing_id);
+  auto opener_frame_token =
+      opener_manager->GetOpenerFrameToken(rfh2->GetSiteInstance());
+  EXPECT_EQ(opener_proxy->GetFrameToken(), opener_frame_token);
 
   // Setting the opener in opener_proxy required an extra IPC message, since
   // the opener's frame_token wasn't available when opener_proxy was created.
