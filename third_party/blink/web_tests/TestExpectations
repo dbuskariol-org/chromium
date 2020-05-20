@@ -5891,6 +5891,7 @@ crbug.com/1084276 [ Mac ] http/tests/security/offscreencanvas-placeholder-read-b
 
 # Sheriff 2020-05-19
 crbug.com/1084509 [ Win ] fast/forms/select/listbox-appearance-basic.html [ Pass Failure ]
+crbug.com/1084509 [ Win ] fast/forms/select/select-disabled-appearance.html [ Pass Failure ]
 
 # Disabled for landing DevTools change
 crbug.com/1011811 http/tests/devtools/network/network-xhr-data-received-async-response-type-blob.js [ Pass Failure ]
