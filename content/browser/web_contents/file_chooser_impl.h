@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_FRAME_HOST_FILE_CHOOSER_IMPL_H_
-#define CONTENT_BROWSER_FRAME_HOST_FILE_CHOOSER_IMPL_H_
+#ifndef CONTENT_BROWSER_WEB_CONTENTS_FILE_CHOOSER_IMPL_H_
+#define CONTENT_BROWSER_WEB_CONTENTS_FILE_CHOOSER_IMPL_H_
 
 #include "base/callback_helpers.h"
 #include "content/common/content_export.h"
@@ -18,12 +18,11 @@ class RenderFrameHostImpl;
 // An implementation of blink::mojom::FileChooser and FileSelectListener
 // associated to RenderFrameHost.
 class CONTENT_EXPORT FileChooserImpl : public blink::mojom::FileChooser,
-                                       public content::WebContentsObserver {
+                                       public WebContentsObserver {
   using FileChooserResult = blink::mojom::FileChooserResult;
 
  public:
-  class CONTENT_EXPORT FileSelectListenerImpl
-      : public content::FileSelectListener {
+  class CONTENT_EXPORT FileSelectListenerImpl : public FileSelectListener {
    public:
     explicit FileSelectListenerImpl(FileChooserImpl* owner) : owner_(owner) {}
     ~FileSelectListenerImpl() override;
@@ -54,8 +53,8 @@ class CONTENT_EXPORT FileChooserImpl : public blink::mojom::FileChooser,
 
   static void Create(RenderFrameHostImpl* render_frame_host,
                      mojo::PendingReceiver<blink::mojom::FileChooser> receiver);
-
-  explicit FileChooserImpl(RenderFrameHostImpl* render_frame_host);
+  static mojo::Remote<blink::mojom::FileChooser> CreateBoundForTesting(
+      RenderFrameHostImpl* render_frame_host);
 
   ~FileChooserImpl() override;
 
@@ -67,23 +66,22 @@ class CONTENT_EXPORT FileChooserImpl : public blink::mojom::FileChooser,
 
   void ResetListenerImpl();
 
-  // content::WebContentsObserver overrides:
+  // blink::mojom::FileChooser overrides:
 
   void OpenFileChooser(blink::mojom::FileChooserParamsPtr params,
                        OpenFileChooserCallback callback) override;
-
   void EnumerateChosenDirectory(
       const base::FilePath& directory_path,
       EnumerateChosenDirectoryCallback callback) override;
 
  private:
-  // content::WebContentsObserver overrides:
+  explicit FileChooserImpl(RenderFrameHostImpl* render_frame_host);
+
+  // WebContentsObserver overrides:
 
   void RenderFrameHostChanged(RenderFrameHost* old_host,
                               RenderFrameHost* new_host) override;
-
   void RenderFrameDeleted(RenderFrameHost* render_frame_host) override;
-
   void WebContentsDestroyed() override;
 
   RenderFrameHostImpl* render_frame_host_;
@@ -93,4 +91,4 @@ class CONTENT_EXPORT FileChooserImpl : public blink::mojom::FileChooser,
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_FRAME_HOST_FILE_CHOOSER_IMPL_H_
+#endif  // CONTENT_BROWSER_WEB_CONTENTS_FILE_CHOOSER_IMPL_H_

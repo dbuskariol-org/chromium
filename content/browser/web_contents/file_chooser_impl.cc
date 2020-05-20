@@ -2,11 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/frame_host/file_chooser_impl.h"
+#include "content/browser/web_contents/file_chooser_impl.h"
 
+#include "base/memory/ptr_util.h"
 #include "content/browser/child_process_security_policy_impl.h"
 #include "content/browser/frame_host/render_frame_host_delegate.h"
 #include "content/browser/frame_host/render_frame_host_impl.h"
+#include "content/browser/web_contents/web_contents_impl.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/storage_partition.h"
 #include "content/public/browser/web_contents.h"
@@ -75,8 +77,16 @@ void FileChooserImpl::Create(
     RenderFrameHostImpl* render_frame_host,
     mojo::PendingReceiver<blink::mojom::FileChooser> receiver) {
   mojo::MakeSelfOwnedReceiver(
-      std::make_unique<FileChooserImpl>(render_frame_host),
+      base::WrapUnique(new FileChooserImpl(render_frame_host)),
       std::move(receiver));
+}
+
+// static
+mojo::Remote<blink::mojom::FileChooser> FileChooserImpl::CreateBoundForTesting(
+    RenderFrameHostImpl* render_frame_host) {
+  mojo::Remote<blink::mojom::FileChooser> chooser;
+  Create(render_frame_host, chooser.BindNewPipeAndPassReceiver());
+  return chooser;
 }
 
 FileChooserImpl::FileChooserImpl(RenderFrameHostImpl* render_frame_host)
@@ -107,8 +117,8 @@ void FileChooserImpl::OpenFileChooser(blink::mojom::FileChooserParamsPtr params,
     listener->FileSelectionCanceled();
     return;
   }
-  render_frame_host_->delegate()->RunFileChooser(render_frame_host_,
-                                                 std::move(listener), *params);
+  static_cast<WebContentsImpl*>(web_contents())
+      ->RunFileChooser(render_frame_host_, std::move(listener), *params);
 }
 
 void FileChooserImpl::EnumerateChosenDirectory(
@@ -124,8 +134,9 @@ void FileChooserImpl::EnumerateChosenDirectory(
   auto* policy = ChildProcessSecurityPolicyImpl::GetInstance();
   if (policy->CanReadFile(render_frame_host_->GetProcess()->GetID(),
                           directory_path)) {
-    render_frame_host_->delegate()->EnumerateDirectory(
-        render_frame_host_, std::move(listener), directory_path);
+    static_cast<WebContentsImpl*>(web_contents())
+        ->EnumerateDirectory(render_frame_host_, std::move(listener),
+                             directory_path);
   } else {
     listener->FileSelectionCanceled();
   }
