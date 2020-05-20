@@ -67493,6 +67493,14 @@ Full version information for the fingerprint enum values:
   <int value="10" label="Rejected by filter"/>
 </enum>
 
+<enum name="UkmEventNameHash">
+<!-- Placeholder enum. The values are UKM event name hashes truncated to 31
+     bits. -->
+
+<!-- TODO(jwd@chromium.org): Automatically populate this enum from ukm.xml. -->
+
+</enum>
+
 <enum name="UkmResetReason">
   <int value="0" label="OnUkmAllowedStateChanged"/>
   <int value="1" label="UpdatePermissions"/>
