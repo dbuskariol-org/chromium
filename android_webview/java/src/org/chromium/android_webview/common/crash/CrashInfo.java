@@ -70,6 +70,10 @@ public class CrashInfo {
     // Should match the crash keys used in minidump reports see for example of some keys:
     // {@link android_webview/common/crash_reporter/crash_keys.cc}
     public static final String APP_PACKAGE_NAME_KEY = "app-package-name";
+    public static final String APP_PACKAGE_VERSION_CODE_KEY = "app-package-version-code";
+    public static final String WEBVIEW_VERSION_KEY = "ver";
+    public static final String WEBVIEW_CHANNEL_KEY = "channel";
+    public static final String ANDROID_SDK_INT_KEY = "android-sdk-int";
 
     /**
      * {@code localId} should always has a non-null value because it used to join crash info from
