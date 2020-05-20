@@ -5100,6 +5100,7 @@ void RenderFrameHostImpl::HandleAXEvents(
     dst_update->root_id = src_update.root_id;
     dst_update->node_id_to_clear = src_update.node_id_to_clear;
     dst_update->event_from = src_update.event_from;
+    dst_update->event_intents = src_update.event_intents;
     dst_update->nodes.resize(src_update.nodes.size());
     for (size_t j = 0; j < src_update.nodes.size(); ++j) {
       AXContentNodeDataToAXNodeData(src_update.nodes[j], &dst_update->nodes[j]);
