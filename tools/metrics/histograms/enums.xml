@@ -53542,6 +53542,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="21" label="DLC_NEED_REBOOT"/>
   <int value="22" label="DLC_NEED_SPACE"/>
   <int value="23" label="INSUFFICIENT_DISK_SPACE"/>
+  <int value="24" label="INVALID_LICENSE"/>
 </enum>
 
 <enum name="PluginVmSetupResult">
@@ -53561,6 +53562,8 @@ Called by update_net_trust_anchors.py.-->
   <int value="12" label="User cancelled setup during disk space check"/>
   <int value="13" label="Error, see PluginVm.SetupFailureReason"/>
   <int value="14" label="User cancelled without starting installation"/>
+  <int value="15"
+      label="User cancelled setup while validating Plugin VM license"/>
 </enum>
 
 <enum name="PNaClOptionsOptLevelEnum">
