@@ -354,6 +354,13 @@ class ChromeLauncherControllerTest
     extension_system->ready().Post(FROM_HERE, run_loop.QuitClosure());
     run_loop.Run();
 
+    // Many pinned app tests assume OS sync is enabled.
+    if (chromeos::features::IsSplitSettingsSyncEnabled()) {
+      syncer::SyncService* sync_service =
+          ProfileSyncServiceFactory::GetForProfile(profile());
+      sync_service->GetUserSettings()->SetOsSyncFeatureEnabled(true);
+    }
+
     app_list_syncable_service_ =
         app_list::AppListSyncableServiceFactory::GetForProfile(profile());
     StartAppSyncService(app_list_syncable_service_->GetAllSyncDataForTesting());
