@@ -97,10 +97,10 @@ void LoginDisplayHostMojo::OnDialogDestroyed(
   }
 }
 
-void LoginDisplayHostMojo::SetUsers(const user_manager::UserList& users) {
-  users_ = users;
+void LoginDisplayHostMojo::SetUserCount(int user_count) {
+  user_count_ = user_count;
   if (GetOobeUI())
-    GetOobeUI()->SetLoginUserCount(users_.size());
+    GetOobeUI()->SetLoginUserCount(user_count_);
 }
 
 void LoginDisplayHostMojo::ShowPasswordChangedDialog(bool show_password_error,
@@ -274,7 +274,7 @@ void LoginDisplayHostMojo::HideOobeDialog() {
 
   // The dialog can not be hidden if there are no users on the login screen.
   // Reload it instead.
-  if (!login_display_->IsSigninInProgress() && users_.empty()) {
+  if (!login_display_->IsSigninInProgress() && user_count_ == 0) {
     GetOobeUI()->GetView<GaiaScreenHandler>()->ShowGaiaAsync(EmptyAccountId());
     return;
   }
@@ -287,10 +287,6 @@ void LoginDisplayHostMojo::HideOobeDialog() {
 void LoginDisplayHostMojo::UpdateOobeDialogState(ash::OobeDialogState state) {
   if (dialog_)
     dialog_->SetState(state);
-}
-
-const user_manager::UserList LoginDisplayHostMojo::GetUsers() {
-  return users_;
 }
 
 void LoginDisplayHostMojo::ShowFeedback() {
