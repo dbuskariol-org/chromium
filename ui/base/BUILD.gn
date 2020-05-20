@@ -209,6 +209,8 @@ jumbo_component("base") {
       "win/accessibility_misc_utils.cc",
       "win/accessibility_misc_utils.h",
       "win/atl_module.h",
+      "win/event_creation_utils.cc",
+      "win/event_creation_utils.h",
       "win/foreground_helper.cc",
       "win/foreground_helper.h",
       "win/hidden_window.cc",
