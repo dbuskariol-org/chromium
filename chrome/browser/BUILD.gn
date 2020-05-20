@@ -3233,6 +3233,8 @@ static_library("browser") {
       "enterprise/connectors/connectors_prefs.h",
       "enterprise/connectors/enterprise_connectors_policy_handler.cc",
       "enterprise/connectors/enterprise_connectors_policy_handler.h",
+      "enterprise/connectors/reporting_service_settings.cc",
+      "enterprise/connectors/reporting_service_settings.h",
       "enterprise/reporting/browser_report_generator.cc",
       "enterprise/reporting/browser_report_generator.h",
       "enterprise/reporting/extension_info.cc",
