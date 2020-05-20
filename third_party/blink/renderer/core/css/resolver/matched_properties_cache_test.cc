@@ -92,6 +92,35 @@ class MatchedPropertiesCacheTest : public PageTestBase,
   }
 };
 
+TEST_F(MatchedPropertiesCacheTest, ClearEntry) {
+  MatchResult result;
+  result.AddMatchedProperties(
+      css_test_helpers::ParseDeclarationBlock("top:inherit"));
+
+  auto style = CreateStyle();
+  auto parent = CreateStyle();
+
+  HashSet<CSSPropertyName> dependencies;
+  dependencies.insert(CSSPropertyName(CSSPropertyID::kTop));
+
+  auto* entry = MakeGarbageCollected<CachedMatchedProperties>();
+  entry->Set(*style, *parent, result.GetMatchedProperties(), dependencies);
+
+  EXPECT_TRUE(entry->computed_style);
+  EXPECT_TRUE(entry->parent_computed_style);
+  EXPECT_FALSE(entry->matched_properties.IsEmpty());
+  EXPECT_FALSE(entry->matched_properties_types.IsEmpty());
+  EXPECT_FALSE(entry->dependencies.IsEmpty());
+
+  entry->Clear();
+
+  EXPECT_FALSE(entry->computed_style);
+  EXPECT_FALSE(entry->parent_computed_style);
+  EXPECT_TRUE(entry->matched_properties.IsEmpty());
+  EXPECT_TRUE(entry->matched_properties_types.IsEmpty());
+  EXPECT_TRUE(entry->dependencies.IsEmpty());
+}
+
 TEST_F(MatchedPropertiesCacheTest, AllowedKeyValues) {
   unsigned empty = HashTraits<unsigned>::EmptyValue();
   unsigned deleted = std::numeric_limits<unsigned>::max();

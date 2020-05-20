@@ -36,7 +36,7 @@ namespace blink {
 class ComputedStyle;
 class StyleResolverState;
 
-class CachedMatchedProperties final
+class CORE_EXPORT CachedMatchedProperties final
     : public GarbageCollected<CachedMatchedProperties> {
  public:
   // Caches data of MatchedProperties. See |MatchedPropertiesCache::Cache| for

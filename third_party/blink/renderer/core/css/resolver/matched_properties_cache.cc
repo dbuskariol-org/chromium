@@ -69,6 +69,7 @@ void CachedMatchedProperties::Set(
 
 void CachedMatchedProperties::Clear() {
   matched_properties.clear();
+  matched_properties_types.clear();
   computed_style = nullptr;
   parent_computed_style = nullptr;
   dependencies.clear();
