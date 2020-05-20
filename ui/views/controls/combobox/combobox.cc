@@ -161,7 +161,7 @@ class Combobox::ComboboxMenuModel : public ui::MenuModel {
   base::string16 GetLabelAt(int index) const override {
     // Inserting the Unicode formatting characters if necessary so that the
     // text is displayed correctly in right-to-left UIs.
-    base::string16 text = model_->GetItemAt(index);
+    base::string16 text = model_->GetDropDownTextAt(index);
     base::i18n::AdjustStringForLocaleDirection(&text);
     return text;
   }
@@ -190,7 +190,7 @@ class Combobox::ComboboxMenuModel : public ui::MenuModel {
   int GetGroupIdAt(int index) const override { return -1; }
 
   ui::ImageModel GetIconAt(int index) const override {
-    return model_->GetIconAt(index);
+    return model_->GetDropDownIconAt(index);
   }
 
   ui::ButtonMenuItemModel* GetButtonMenuItemAt(int index) const override {
@@ -664,10 +664,9 @@ gfx::Size Combobox::GetContentSize() const {
       continue;
 
     if (size_to_largest_label_ || i == selected_index_) {
-      int item_width =
-          gfx::GetStringWidth(menu_model_->GetLabelAt(i), font_list);
-      if (!menu_model_->GetIconAt(i).IsEmpty()) {
-        gfx::Image icon = menu_model_->GetIconAt(i).GetImage();
+      int item_width = gfx::GetStringWidth(model()->GetItemAt(i), font_list);
+      if (!model()->GetIconAt(i).IsEmpty()) {
+        gfx::Image icon = model()->GetIconAt(i).GetImage();
         item_width += icon.Width() + LayoutProvider::Get()->GetDistanceMetric(
                                          DISTANCE_RELATED_LABEL_HORIZONTAL);
         height = std::max(height, icon.Height());
