@@ -505,4 +505,23 @@ TEST_F(MatchedPropertiesCacheTest, DirectionNotCacheableWithoutFeature) {
   EXPECT_FALSE(MatchedPropertiesCache::IsCacheable(state));
 }
 
+TEST_F(MatchedPropertiesCacheTest, EnsuredInDisplayNone) {
+  TestCache cache(GetDocument());
+
+  auto style = CreateStyle();
+  auto parent = CreateStyle();
+  auto ensured_parent = CreateStyle();
+  ensured_parent->SetIsEnsuredInDisplayNone();
+
+  TestKey key1("display:block", 1);
+
+  cache.Add(key1, *style, *parent);
+  EXPECT_TRUE(cache.Find(key1, *style, *parent));
+  EXPECT_TRUE(cache.Find(key1, *style, *ensured_parent));
+
+  cache.Add(key1, *style, *ensured_parent);
+  EXPECT_FALSE(cache.Find(key1, *style, *parent));
+  EXPECT_TRUE(cache.Find(key1, *style, *ensured_parent));
+}
+
 }  // namespace blink
