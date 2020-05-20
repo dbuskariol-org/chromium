@@ -79,9 +79,7 @@
 #include "chrome/browser/policy/chrome_browser_policy_connector.h"
 #include "chrome/browser/policy/policy_test_utils.h"
 #include "chrome/browser/policy/profile_policy_connector.h"
-#include "chrome/browser/prefs/session_startup_pref.h"
 #include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/resource_coordinator/tab_load_tracker_test_support.h"
 #include "chrome/browser/search/search.h"
 #include "chrome/browser/search_engines/template_url_service_factory.h"
 #include "chrome/browser/task_manager/task_manager_interface.h"
@@ -89,7 +87,6 @@
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_commands.h"
 #include "chrome/browser/ui/browser_list.h"
-#include "chrome/browser/ui/browser_tabstrip.h"
 #include "chrome/browser/ui/browser_window.h"
 #include "chrome/browser/ui/location_bar/location_bar.h"
 #include "chrome/browser/ui/search/instant_test_utils.h"
@@ -104,7 +101,6 @@
 #include "chrome/common/net/safe_search_util.h"
 #include "chrome/common/pref_names.h"
 #include "chrome/common/url_constants.h"
-#include "chrome/common/webui_url_constants.h"
 #include "chrome/grit/generated_resources.h"
 #include "chrome/grit/locale_settings.h"
 #include "chrome/test/base/in_process_browser_test.h"
@@ -157,7 +153,6 @@
 #include "content/public/browser/notification_registrar.h"
 #include "content/public/browser/notification_service.h"
 #include "content/public/browser/notification_source.h"
-#include "content/public/browser/notification_types.h"
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_process_host.h"
 #include "content/public/browser/render_widget_host.h"
@@ -310,40 +305,6 @@ void CheckCanOpenURL(Browser* browser, const std::string& spec) {
     blocked_page_title = base::UTF8ToUTF16(url.spec());
   }
   EXPECT_NE(blocked_page_title, contents->GetTitle());
-}
-
-// Verifies that access to the given url |spec| is blocked.
-void CheckURLIsBlockedInWebContents(content::WebContents* web_contents,
-                                    const GURL& url) {
-  EXPECT_EQ(url, web_contents->GetURL());
-
-  base::string16 blocked_page_title;
-  if (url.has_host()) {
-    blocked_page_title = base::UTF8ToUTF16(url.host());
-  } else {
-    // Local file paths show the full URL.
-    blocked_page_title = base::UTF8ToUTF16(url.spec());
-  }
-  EXPECT_EQ(blocked_page_title, web_contents->GetTitle());
-
-  // Verify that the expected error page is being displayed.
-  bool result = false;
-  EXPECT_TRUE(content::ExecuteScriptAndExtractBool(
-      web_contents,
-      "var textContent = document.body.textContent;"
-      "var hasError = textContent.indexOf('ERR_BLOCKED_BY_ADMINISTRATOR') >= 0;"
-      "domAutomationController.send(hasError);",
-      &result));
-  EXPECT_TRUE(result);
-}
-
-// Verifies that access to the given url |spec| is blocked.
-void CheckURLIsBlocked(Browser* browser, const std::string& spec) {
-  GURL url(spec);
-  ui_test_utils::NavigateToURL(browser, url);
-  content::WebContents* contents =
-      browser->tab_strip_model()->GetActiveWebContents();
-  CheckURLIsBlockedInWebContents(contents, url);
 }
 
 // Downloads a file named |file| and expects it to be saved to |dir|, which
@@ -2191,167 +2152,6 @@ IN_PROC_BROWSER_TEST_F(PolicyTest,
 
 #endif  // defined(OS_CHROMEOS)
 
-namespace {
-
-constexpr const char* kRestoredURLs[] = {
-    "http://aaa.com/empty.html", "http://bbb.com/empty.html",
-};
-
-bool IsNonSwitchArgument(const base::CommandLine::StringType& s) {
-  return s.empty() || s[0] != '-';
-}
-
-}  // namespace
-
-// Similar to PolicyTest but allows setting policies before the browser is
-// created. Each test parameter is a method that sets up the early policies
-// and stores the expected startup URLs in |expected_urls_|.
-class RestoreOnStartupPolicyTest
-    : public PolicyTest,
-      public testing::WithParamInterface<
-          void (RestoreOnStartupPolicyTest::*)(void)> {
- public:
-  RestoreOnStartupPolicyTest() = default;
-  virtual ~RestoreOnStartupPolicyTest() = default;
-
-#if defined(OS_CHROMEOS)
-  void SetUpCommandLine(base::CommandLine* command_line) override {
-    // TODO(nkostylev): Investigate if we can remove this switch.
-    command_line->AppendSwitch(switches::kCreateBrowserOnStartupForTests);
-    PolicyTest::SetUpCommandLine(command_line);
-  }
-#endif
-
-  void SetUpInProcessBrowserTestFixture() override {
-    PolicyTest::SetUpInProcessBrowserTestFixture();
-    // Set early policies now, before the browser is created.
-    (this->*(GetParam()))();
-
-    // Remove the non-switch arguments, so that session restore kicks in for
-    // these tests.
-    base::CommandLine* command_line = base::CommandLine::ForCurrentProcess();
-    base::CommandLine::StringVector argv = command_line->argv();
-    base::EraseIf(argv, IsNonSwitchArgument);
-    command_line->InitFromArgv(argv);
-    ASSERT_TRUE(std::equal(argv.begin(), argv.end(),
-                           command_line->argv().begin()));
-  }
-
-  void ListOfURLs() {
-    // Verifies that policy can set the startup pages to a list of URLs.
-    base::ListValue urls;
-    for (size_t i = 0; i < base::size(kRestoredURLs); ++i) {
-      urls.AppendString(kRestoredURLs[i]);
-      expected_urls_.push_back(GURL(kRestoredURLs[i]));
-    }
-    PolicyMap policies;
-    policies.Set(
-        key::kRestoreOnStartup, POLICY_LEVEL_MANDATORY, POLICY_SCOPE_USER,
-        POLICY_SOURCE_CLOUD,
-        base::WrapUnique(new base::Value(SessionStartupPref::kPrefValueURLs)),
-        nullptr);
-    policies.Set(key::kRestoreOnStartupURLs, POLICY_LEVEL_MANDATORY,
-                 POLICY_SCOPE_USER, POLICY_SOURCE_CLOUD, urls.CreateDeepCopy(),
-                 nullptr);
-    provider_.UpdateChromePolicy(policies);
-  }
-
-  void NTP() {
-    // Verifies that policy can set the startup page to the NTP.
-    PolicyMap policies;
-    policies.Set(
-        key::kRestoreOnStartup, POLICY_LEVEL_MANDATORY, POLICY_SCOPE_USER,
-        POLICY_SOURCE_CLOUD,
-        base::WrapUnique(new base::Value(SessionStartupPref::kPrefValueNewTab)),
-        nullptr);
-    provider_.UpdateChromePolicy(policies);
-    expected_urls_.push_back(GURL(chrome::kChromeUINewTabURL));
-  }
-
-  void Last() {
-    // Verifies that policy can set the startup pages to the last session.
-    PolicyMap policies;
-    policies.Set(
-        key::kRestoreOnStartup, POLICY_LEVEL_MANDATORY, POLICY_SCOPE_USER,
-        POLICY_SOURCE_CLOUD,
-        base::WrapUnique(new base::Value(SessionStartupPref::kPrefValueLast)),
-        nullptr);
-    provider_.UpdateChromePolicy(policies);
-    // This should restore the tabs opened at PRE_RunTest below.
-    for (size_t i = 0; i < base::size(kRestoredURLs); ++i)
-      expected_urls_.push_back(GURL(kRestoredURLs[i]));
-  }
-
-  void Blocked() {
-    // Verifies that URLs are blocked during session restore.
-    PolicyMap policies;
-    policies.Set(
-        key::kRestoreOnStartup, POLICY_LEVEL_MANDATORY, POLICY_SCOPE_USER,
-        POLICY_SOURCE_CLOUD,
-        std::make_unique<base::Value>(SessionStartupPref::kPrefValueLast),
-        nullptr);
-    auto urls = std::make_unique<base::Value>(base::Value::Type::LIST);
-    for (const auto* url_string : kRestoredURLs)
-      urls->Append(url_string);
-    policies.Set(key::kURLBlacklist, POLICY_LEVEL_MANDATORY, POLICY_SCOPE_USER,
-                 POLICY_SOURCE_CLOUD, std::move(urls), nullptr);
-    provider_.UpdateChromePolicy(policies);
-    // This should restore the tabs opened at PRE_RunTest below, yet all should
-    // be blocked.
-    blocked_ = true;
-    for (size_t i = 0; i < base::size(kRestoredURLs); ++i)
-      expected_urls_.emplace_back(kRestoredURLs[i]);
-  }
-
-  // URLs that are expected to be loaded.
-  std::vector<GURL> expected_urls_;
-
-  // True if the loaded URLs should be blocked by policy.
-  bool blocked_ = false;
-};
-
-IN_PROC_BROWSER_TEST_P(RestoreOnStartupPolicyTest, PRE_RunTest) {
-  // Do not show Welcome Page.
-  browser()->profile()->GetPrefs()->SetBoolean(prefs::kHasSeenWelcomePage,
-                                               true);
-
-  // Open some tabs to verify if they are restored after the browser restarts.
-  // Most policy settings override this, except kPrefValueLast which enforces
-  // a restore.
-  ui_test_utils::NavigateToURL(browser(), GURL(kRestoredURLs[0]));
-  for (size_t i = 1; i < base::size(kRestoredURLs); ++i) {
-    content::WindowedNotificationObserver observer(
-        content::NOTIFICATION_LOAD_STOP,
-        content::NotificationService::AllSources());
-    chrome::AddSelectedTabWithURL(browser(), GURL(kRestoredURLs[i]),
-                                  ui::PAGE_TRANSITION_LINK);
-    observer.Wait();
-  }
-}
-
-IN_PROC_BROWSER_TEST_P(RestoreOnStartupPolicyTest, RunTest) {
-  TabStripModel* model = browser()->tab_strip_model();
-  int size = static_cast<int>(expected_urls_.size());
-  EXPECT_EQ(size, model->count());
-  resource_coordinator::WaitForTransitionToLoaded(model);
-  for (int i = 0; i < size && i < model->count(); ++i) {
-    content::WebContents* web_contents = model->GetWebContentsAt(i);
-    if (blocked_)
-      CheckURLIsBlockedInWebContents(web_contents, expected_urls_[i]);
-    else if (expected_urls_[i] == GURL(chrome::kChromeUINewTabURL))
-      EXPECT_TRUE(search::IsInstantNTP(web_contents));
-    else
-      EXPECT_EQ(expected_urls_[i], web_contents->GetURL());
-  }
-}
-
-INSTANTIATE_TEST_SUITE_P(
-    RestoreOnStartupPolicyTestInstance,
-    RestoreOnStartupPolicyTest,
-    testing::Values(&RestoreOnStartupPolicyTest::ListOfURLs,
-                    &RestoreOnStartupPolicyTest::NTP,
-                    &RestoreOnStartupPolicyTest::Last,
-                    &RestoreOnStartupPolicyTest::Blocked));
 
 // Similar to PolicyTest but sets a couple of policies before the browser is
 // started.
