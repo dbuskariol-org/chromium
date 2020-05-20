@@ -608,6 +608,7 @@ bool RenderWidgetHostImpl::OnMessageReceived(const IPC::Message &msg) {
     IPC_MESSAGE_HANDLER(WidgetHostMsg_UpdateScreenRects_ACK,
                         OnUpdateScreenRectsAck)
     IPC_MESSAGE_HANDLER(WidgetHostMsg_RequestSetBounds, OnRequestSetBounds)
+    IPC_MESSAGE_HANDLER(WidgetHostMsg_SetTooltipText, OnSetTooltipText)
     IPC_MESSAGE_HANDLER(WidgetHostMsg_TextInputStateChanged,
                         OnTextInputStateChanged)
     IPC_MESSAGE_HANDLER(WidgetHostMsg_SelectionBoundsChanged,
@@ -2222,7 +2223,7 @@ void RenderWidgetHostImpl::OnClose() {
   }
 }
 
-void RenderWidgetHostImpl::SetToolTipText(
+void RenderWidgetHostImpl::OnSetTooltipText(
     const base::string16& tooltip_text,
     base::i18n::TextDirection text_direction_hint) {
   if (!GetView())

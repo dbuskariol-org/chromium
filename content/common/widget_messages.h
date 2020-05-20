@@ -185,6 +185,11 @@ IPC_MESSAGE_ROUTED1(WidgetHostMsg_SelectionBoundsChanged,
 // throttle these messages.
 IPC_MESSAGE_ROUTED0(WidgetHostMsg_UpdateScreenRects_ACK)
 
+// Send the tooltip text for the current mouse position to the browser.
+IPC_MESSAGE_ROUTED2(WidgetHostMsg_SetTooltipText,
+                    base::string16 /* tooltip text string */,
+                    base::i18n::TextDirection /* text direction hint */)
+
 // Notifies the browser if the text input state has changed. Primarily useful
 // for IME as they need to know of all changes to update their interpretation
 // of the characters that have been input.

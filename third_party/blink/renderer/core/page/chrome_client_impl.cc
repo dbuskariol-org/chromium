@@ -569,16 +569,16 @@ void ChromeClientImpl::ShowMouseOverURL(const HitTestResult& result) {
 void ChromeClientImpl::SetToolTip(LocalFrame& frame,
                                   const String& tooltip_text,
                                   TextDirection dir) {
-  WebFrameWidgetBase* widget =
-      WebLocalFrameImpl::FromFrame(frame)->LocalRootFrameWidget();
+  WebLocalFrameImpl* web_frame = WebLocalFrameImpl::FromFrame(frame);
   if (!tooltip_text.IsEmpty()) {
-    widget->SetToolTipText(tooltip_text, dir);
+    web_frame->LocalRootFrameWidget()->Client()->SetToolTipText(
+        tooltip_text, ToBaseTextDirection(dir));
     did_request_non_empty_tool_tip_ = true;
   } else if (did_request_non_empty_tool_tip_) {
-    // WebFrameWidgetBase::SetToolTipText will send a Mojo message via
-    // mojom::blink::WidgetHost. We'd like to reduce the number of
-    // SetToolTipText calls.
-    widget->SetToolTipText(tooltip_text, dir);
+    // WebWidgetClient::setToolTipText will send an IPC message.  We'd like to
+    // reduce the number of setToolTipText calls.
+    web_frame->LocalRootFrameWidget()->Client()->SetToolTipText(
+        tooltip_text, ToBaseTextDirection(dir));
     did_request_non_empty_tool_tip_ = false;
   }
 }

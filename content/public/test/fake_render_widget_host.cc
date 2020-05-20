@@ -46,10 +46,6 @@ void FakeRenderWidgetHost::IntrinsicSizingInfoChanged(
 
 void FakeRenderWidgetHost::SetCursor(const ui::Cursor& cursor) {}
 
-void FakeRenderWidgetHost::SetToolTipText(
-    const base::string16& tooltip_text,
-    base::i18n::TextDirection text_direction_hint) {}
-
 void FakeRenderWidgetHost::AutoscrollStart(const gfx::PointF& position) {}
 
 void FakeRenderWidgetHost::AutoscrollFling(const gfx::Vector2dF& position) {}
