@@ -3536,6 +3536,7 @@ crbug.com/964181 external/wpt/css/css-text/word-break/word-break-break-all-inlin
 
 # Sheriff 2019-08-19:
 crbug.com/626703 [ Debug ] external/wpt/html/cross-origin-embedder-policy/require-corp.https.html [ Pass Failure ]
+crbug.com/626703 [ Debug ] external/wpt/html/cross-origin-embedder-policy/reporting-navigation.https.html [ Pass Failure ]
 
 # Failure due to on-going off-thread paint worklet project.
 crbug.com/957457 virtual/off-main-thread-css-paint/external/wpt/css/css-paint-api/invalid-image-pending-script.https.html [ Crash ]
