@@ -117,6 +117,7 @@ const char* const kKnownSettings[] = {
     kReportDeviceBootMode,
     kReportDeviceCrashReportInfo,
     kReportDeviceCpuInfo,
+    kReportDeviceFanInfo,
     kReportDeviceHardwareStatus,
     kReportDeviceLocation,
     kReportDevicePowerStatus,
@@ -611,6 +612,10 @@ void DecodeReportingPolicies(const em::ChromeDeviceSettingsProto& policy,
     if (reporting_policy.has_report_bluetooth_info()) {
       new_values_cache->SetBoolean(kReportDeviceBluetoothInfo,
                                    reporting_policy.report_bluetooth_info());
+    }
+    if (reporting_policy.has_report_fan_info()) {
+      new_values_cache->SetBoolean(kReportDeviceFanInfo,
+                                   reporting_policy.report_fan_info());
     }
   }
 }

@@ -1312,6 +1312,8 @@ DeviceStatusCollector::DeviceStatusCollector(
       chromeos::kReportDeviceCrashReportInfo, callback);
   bluetooth_info_subscription_ = cros_settings_->AddSettingsObserver(
       chromeos::kReportDeviceBluetoothInfo, callback);
+  fan_info_subscription_ = cros_settings_->AddSettingsObserver(
+      chromeos::kReportDeviceFanInfo, callback);
   stats_reporting_pref_subscription_ = cros_settings_->AddSettingsObserver(
       chromeos::kStatsReportingPref, callback);
 
@@ -1460,6 +1462,10 @@ void DeviceStatusCollector::UpdateReportingSettings() {
   if (!cros_settings_->GetBoolean(chromeos::kReportDeviceBluetoothInfo,
                                   &report_bluetooth_info_)) {
     report_bluetooth_info_ = false;
+  }
+  if (!cros_settings_->GetBoolean(chromeos::kReportDeviceFanInfo,
+                                  &report_fan_info_)) {
+    report_fan_info_ = false;
   }
   if (!cros_settings_->GetBoolean(chromeos::kStatsReportingPref,
                                   &stat_reporting_pref_)) {
@@ -1739,7 +1745,6 @@ void DeviceStatusCollector::FetchCrosHealthdData(
   switch (mode) {
     case CrosHealthdCollectionMode::kFull: {
       categories_to_probe.push_back(ProbeCategoryEnum::kCachedVpdData);
-      categories_to_probe.push_back(ProbeCategoryEnum::kFan);
 
       if (report_storage_status_) {
         categories_to_probe.push_back(
@@ -1755,6 +1760,8 @@ void DeviceStatusCollector::FetchCrosHealthdData(
         categories_to_probe.push_back(ProbeCategoryEnum::kMemory);
       if (report_backlight_info_)
         categories_to_probe.push_back(ProbeCategoryEnum::kBacklight);
+      if (report_fan_info_)
+        categories_to_probe.push_back(ProbeCategoryEnum::kFan);
       if (report_bluetooth_info_)
         categories_to_probe.push_back(ProbeCategoryEnum::kBluetooth);
 
@@ -1789,7 +1796,7 @@ void DeviceStatusCollector::OnProbeDataFetched(
 bool DeviceStatusCollector::ShouldFetchCrosHealthdData() const {
   return report_power_status_ || report_storage_status_ || report_cpu_info_ ||
          report_timezone_info_ || report_memory_info_ ||
-         report_backlight_info_ || report_bluetooth_info_;
+         report_backlight_info_ || report_fan_info_ || report_bluetooth_info_;
 }
 
 void DeviceStatusCollector::ReportingUsersChanged() {

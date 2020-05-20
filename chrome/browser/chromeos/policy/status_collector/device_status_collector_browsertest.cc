@@ -3019,6 +3019,8 @@ TEST_F(DeviceStatusCollectorTest, TestCrosHealthdInfo) {
   scoped_testing_cros_settings_.device_settings()->SetBoolean(
       chromeos::kReportDeviceStorageStatus, false);
   scoped_testing_cros_settings_.device_settings()->SetBoolean(
+      chromeos::kReportDeviceFanInfo, false);
+  scoped_testing_cros_settings_.device_settings()->SetBoolean(
       chromeos::kReportDeviceBluetoothInfo, false);
   GetStatus();
   ASSERT_EQ(device_status_.cpu_info_size(), 0);
@@ -3044,6 +3046,8 @@ TEST_F(DeviceStatusCollectorTest, TestCrosHealthdInfo) {
       chromeos::kReportDeviceStorageStatus, true);
   scoped_testing_cros_settings_.device_settings()->SetBoolean(
       chromeos::kReportDeviceTimezoneInfo, true);
+  scoped_testing_cros_settings_.device_settings()->SetBoolean(
+      chromeos::kReportDeviceFanInfo, true);
   scoped_testing_cros_settings_.device_settings()->SetBoolean(
       chromeos::kReportDeviceBluetoothInfo, true);
   GetStatus();

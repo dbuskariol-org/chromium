@@ -113,6 +113,7 @@ COMPONENT_EXPORT(CHROMEOS_SETTINGS) extern const char kReportUploadFrequency[];
 COMPONENT_EXPORT(CHROMEOS_SETTINGS) extern const char kReportDeviceAppInfo[];
 COMPONENT_EXPORT(CHROMEOS_SETTINGS)
 extern const char kReportDeviceBluetoothInfo[];
+COMPONENT_EXPORT(CHROMEOS_SETTINGS) extern const char kReportDeviceFanInfo[];
 
 COMPONENT_EXPORT(CHROMEOS_SETTINGS) extern const char kHeartbeatEnabled[];
 COMPONENT_EXPORT(CHROMEOS_SETTINGS) extern const char kHeartbeatFrequency[];

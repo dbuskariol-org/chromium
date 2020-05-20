@@ -647,6 +647,7 @@ void OwnerSettingsServiceChromeOS::UpdateDeviceSettings(
     //   kReportDeviceBoardStatus
     //   kReportDeviceBootMode
     //   kReportDeviceCpuInfo
+    //   kReportDeviceFanInfo
     //   kReportDeviceHardwareStatus
     //   kReportDeviceLocation
     //   kReportDeviceMemoryInfo
