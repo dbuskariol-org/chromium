@@ -56697,6 +56697,25 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="5" label="NOTIFY_FACTORY_OF_SESSION_CLOSED"/>
 </enum>
 
+<enum name="QuicTransportClientConnectState">
+  <int value="0" label="CONNECT_STATE_NONE"/>
+  <int value="1" label="CONNECT_STATE_INIT"/>
+  <int value="2" label="CONNECT_STATE_CHECK_PROXY"/>
+  <int value="3" label="CONNECT_STATE_CHECK_PROXY_COMPLETE"/>
+  <int value="4" label="CONNECT_STATE_RESOLVE_HOST"/>
+  <int value="5" label="CONNECT_STATE_RESOLVE_HOST_COMPLETE"/>
+  <int value="6" label="CONNECT_STATE_CONNECT"/>
+  <int value="7" label="CONNECT_STATE_CONFIRM_CONNECTION"/>
+</enum>
+
+<enum name="QuicTransportClientState">
+  <int value="0" label="NEW"/>
+  <int value="1" label="CONNECTING"/>
+  <int value="2" label="CONNECTED"/>
+  <int value="3" label="CLOSED"/>
+  <int value="4" label="FAILED"/>
+</enum>
+
 <enum name="QuicTransportErrorCodes">
   <int value="0" label="NO_ERROR"/>
   <int value="1" label="INTERNAL_ERROR"/>
