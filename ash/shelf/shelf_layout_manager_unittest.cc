@@ -58,7 +58,6 @@
 #include "ash/shelf/test/shelf_layout_manager_test_base.h"
 #include "ash/shelf/test/widget_animation_waiter.h"
 #include "ash/shell.h"
-#include "ash/shell_state.h"
 #include "ash/system/status_area_widget.h"
 #include "ash/system/status_area_widget_test_helper.h"
 #include "ash/system/unified/unified_system_tray.h"
@@ -3556,8 +3555,7 @@ TEST_F(ShelfLayoutManagerTest, VerifyAutoHideBehaviorOnMultipleDisplays) {
   // Set focus on the secondary display.
   aura::Window* secondary_root_window =
       Shell::GetRootWindowForDisplayId(GetSecondaryDisplay().id());
-  Shell::Get()->shell_state()->SetRootWindowForNewWindows(
-      secondary_root_window);
+  Shell::SetRootWindowForNewWindows(secondary_root_window);
 
   // Show the system tray on the secondary display.
   Shell::Get()->accelerator_controller()->PerformActionIfEnabled(
