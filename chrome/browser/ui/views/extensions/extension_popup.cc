@@ -129,6 +129,10 @@ void ExtensionPopup::OnExtensionUnloaded(
     const extensions::Extension* extension,
     extensions::UnloadedExtensionReason reason) {
   if (extension->id() == host_->extension_id()) {
+    // To ensure |extension_view_| cannot receive any messages that cause it to
+    // try to access the host during Widget closure, destroy it immediately.
+    RemoveChildViewT(extension_view_);
+
     host_.reset();
     GetWidget()->Close();
   }
@@ -195,7 +199,7 @@ ExtensionPopup::ExtensionPopup(
   SetLayoutManager(std::make_unique<views::FillLayout>());
 
   extension_view_ =
-      AddChildView(static_cast<ExtensionViewViews*>(host_.get()->view()));
+      AddChildView(std::make_unique<ExtensionViewViews>(host_.get()));
   extension_view_->set_container(this);
 
   // See comments in OnWidgetActivationChanged().

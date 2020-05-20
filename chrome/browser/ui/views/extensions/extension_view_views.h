@@ -63,7 +63,6 @@ class ExtensionViewViews : public views::WebView,
   void PreferredSizeChanged() override;
   void OnWebContentsAttached() override;
 
-  // Note that host_ owns view
   extensions::ExtensionViewHost* host_;
 
   // What we should set the preferred width to once the ExtensionViewViews has

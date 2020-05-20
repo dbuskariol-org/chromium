@@ -99,8 +99,6 @@ ExtensionViewHost::ExtensionViewHost(const Extension* extension,
         host_contents()->GetRenderViewHost()->GetRoutingID(),
         zoom_map->GetDefaultZoomLevel());
   }
-
-  view_ = CreateExtensionView(this);
 }
 
 ExtensionViewHost::~ExtensionViewHost() {

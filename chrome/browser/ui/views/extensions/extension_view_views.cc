@@ -28,6 +28,7 @@
 ExtensionViewViews::ExtensionViewViews(extensions::ExtensionViewHost* host)
     : views::WebView(host->browser() ? host->browser()->profile() : nullptr),
       host_(host) {
+  host_->set_view(this);
   SetWebContents(host_->web_contents());
   if (host->extension_host_type() == extensions::VIEW_TYPE_EXTENSION_POPUP) {
     EnableSizingFromWebContents(
@@ -119,17 +120,3 @@ void ExtensionViewViews::OnWebContentsAttached() {
   host_->CreateRenderViewSoon();
   SetVisible(false);
 }
-
-namespace extensions {
-
-// static
-std::unique_ptr<ExtensionView> ExtensionViewHost::CreateExtensionView(
-    ExtensionViewHost* host) {
-  auto view = std::make_unique<ExtensionViewViews>(host);
-  // We own |view_|, so don't auto delete when it's removed from the view
-  // hierarchy.
-  view->set_owned_by_client();
-  return std::move(view);
-}
-
-}  // namespace extensions

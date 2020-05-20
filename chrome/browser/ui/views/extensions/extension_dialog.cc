@@ -123,7 +123,7 @@ const views::Widget* ExtensionDialog::GetWidget() const {
 
 views::View* ExtensionDialog::GetContentsView() {
   if (!extension_view_) {
-    extension_view_ = static_cast<ExtensionViewViews*>(host_->view());
+    extension_view_ = new ExtensionViewViews(host_.get());  // Owned by caller.
 
     // Show a white background while the extension loads.  This is prettier than
     // flashing a black unfilled window frame.

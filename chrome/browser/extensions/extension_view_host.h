@@ -45,7 +45,9 @@ class ExtensionViewHost
   ~ExtensionViewHost() override;
 
   Browser* browser() { return browser_; }
-  ExtensionView* view() { return view_.get(); }
+
+  void set_view(ExtensionView* view) { view_ = view; }
+  ExtensionView* view() { return view_; }
 
   void SetAssociatedWebContents(content::WebContents* web_contents);
 
@@ -111,10 +113,6 @@ class ExtensionViewHost
                const content::NotificationDetails& details) override;
 
  private:
-  // Implemented per-platform. Create the platform-specific ExtensionView.
-  static std::unique_ptr<ExtensionView> CreateExtensionView(
-      ExtensionViewHost* host);
-
   // Returns whether the provided event is a raw escape keypress in a
   // VIEW_TYPE_EXTENSION_POPUP.
   bool IsEscapeInPopup(const content::NativeWebKeyboardEvent& event) const;
@@ -123,7 +121,7 @@ class ExtensionViewHost
   Browser* browser_;
 
   // View that shows the rendered content in the UI.
-  std::unique_ptr<ExtensionView> view_;
+  ExtensionView* view_;
 
   // The relevant WebContents associated with this ExtensionViewHost, if any.
   content::WebContents* associated_web_contents_ = nullptr;
