@@ -138,6 +138,25 @@ cr.define('cr.ui.login.debug', function() {
       id: 'device-disabled',
       kind: ScreenKind.ERROR,
       suffix: 'E',
+      states: [
+        {
+          // No enrollment domain specified
+          id: 'no-domain',
+          trigger: (screen) => {
+            screen.setSerialNumberAndEnrollmentDomain('123456789', '');
+            screen.setMessage('Some custom message provided by org admin.');
+          }
+        },
+        {
+          // Enrollment domain was specified
+          id: 'has-domain',
+          trigger: (screen) => {
+            screen.setSerialNumberAndEnrollmentDomain(
+                '123456789', 'example.com');
+            screen.setMessage('Please return this device to the techstop.');
+          }
+        },
+      ]
     },
     {
       id: 'oauth-enrollment',
