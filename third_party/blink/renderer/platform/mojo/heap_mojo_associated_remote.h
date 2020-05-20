@@ -88,7 +88,6 @@ class HeapMojoAssociatedRemote {
 
    public:
     explicit Wrapper(ContextLifecycleNotifier* notifier) {
-      DCHECK(notifier);
       SetContextLifecycleNotifier(notifier);
     }
     Wrapper(const Wrapper&) = delete;
