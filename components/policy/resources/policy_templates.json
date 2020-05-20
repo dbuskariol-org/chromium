@@ -20704,12 +20704,12 @@
         {
           'name': 'Full',
           'value': 0,
-          'caption': '''available''',
+          'caption': '''Full''',
         },
         {
           'name': 'Fast',
           'value': 1,
-          'caption': '''disabled''',
+          'caption': '''Fast''',
         },
       ],
       'supported_on': ['chrome.win:84-'],
