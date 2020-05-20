@@ -64,8 +64,8 @@ class ASH_EXPORT AmbientPhotoController : public AmbientBackendModelObserver {
  private:
   friend class AmbientAshTestBase;
 
-  void RefreshImage();
   void ScheduleRefreshImage();
+
   void GetScreenUpdateInfo();
 
   void GetNextImage();
