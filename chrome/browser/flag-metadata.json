@@ -3091,6 +3091,11 @@
     "expiry_milestone": 86
   },
   {
+    "name": "ntp-one-google-bar-modal-overlays",
+    "owners": ["aee", "mahmadi", "tiborg"],
+    "expiry_milestone": 86
+  },
+  {
     "name": "ntp-realbox",
     "owners": ["aee", "mahmadi", "tiborg"],
     "expiry_milestone": 85

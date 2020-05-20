@@ -3669,6 +3669,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kNtpIframeOneGoogleBarDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(ntp_features::kIframeOneGoogleBar)},
 
+    {"ntp-one-google-bar-modal-overlays",
+     flag_descriptions::kNtpOneGoogleBarModalOverlaysName,
+     flag_descriptions::kNtpOneGoogleBarModalOverlaysDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(ntp_features::kOneGoogleBarModalOverlays)},
+
     {"ntp-realbox", flag_descriptions::kNtpRealboxName,
      flag_descriptions::kNtpRealboxDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(ntp_features::kRealbox)},

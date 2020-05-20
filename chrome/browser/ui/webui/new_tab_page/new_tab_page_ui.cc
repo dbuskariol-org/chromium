@@ -78,6 +78,9 @@ content::WebUIDataSource* CreateNewTabPageUiHtmlSource(Profile* profile) {
   source->AddBoolean(
       "iframeOneGoogleBarEnabled",
       base::FeatureList::IsEnabled(ntp_features::kIframeOneGoogleBar));
+  source->AddBoolean(
+      "oneGoogleBarModalOverlaysEnabled",
+      base::FeatureList::IsEnabled(ntp_features::kOneGoogleBarModalOverlays));
 
   static constexpr webui::LocalizedString kStrings[] = {
       {"doneButton", IDS_DONE},
