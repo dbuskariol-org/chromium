@@ -98,9 +98,17 @@ void LoginDisplayHostMojo::OnDialogDestroyed(
 }
 
 void LoginDisplayHostMojo::SetUserCount(int user_count) {
+  const bool was_zero_users = (user_count_ == 0);
   user_count_ = user_count;
   if (GetOobeUI())
     GetOobeUI()->SetLoginUserCount(user_count_);
+
+  // Hide Gaia dialog in case empty list of users switched to a non-empty one.
+  // And if the dialog shows login screen.
+  if (was_zero_users && user_count_ != 0 && dialog_ && dialog_->IsVisible() &&
+      (!wizard_controller_ || wizard_controller_->login_screen_started())) {
+    HideOobeDialog();
+  }
 }
 
 void LoginDisplayHostMojo::ShowPasswordChangedDialog(bool show_password_error,
