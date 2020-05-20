@@ -1000,7 +1000,7 @@ void PDFiumEngine::SetFormSelectedText(FPDF_FORMHANDLE form_handle,
     return;
 
   base::string16 selected_form_text16;
-  PDFiumAPIStringBufferSizeInBytesAdapter<base::string16> string_adapter(
+  PDFiumAPIStringBufferSizeInBytesAdapter string_adapter(
       &selected_form_text16, form_sel_text_len, false);
   string_adapter.Close(FORM_GetSelectedText(
       form_handle, page, string_adapter.GetData(), form_sel_text_len));
@@ -2147,7 +2147,7 @@ pp::VarDictionary PDFiumEngine::TraverseBookmarks(FPDF_BOOKMARK bookmark,
   base::string16 title;
   unsigned long buffer_size = FPDFBookmark_GetTitle(bookmark, nullptr, 0);
   if (buffer_size > 0) {
-    PDFiumAPIStringBufferSizeInBytesAdapter<base::string16> api_string_adapter(
+    PDFiumAPIStringBufferSizeInBytesAdapter api_string_adapter(
         &title, buffer_size, true);
     api_string_adapter.Close(FPDFBookmark_GetTitle(
         bookmark, api_string_adapter.GetData(), buffer_size));
@@ -3802,7 +3802,7 @@ std::string PDFiumEngine::GetMetadataByField(FPDF_BYTESTRING field) const {
     return std::string();
 
   base::string16 value;
-  PDFiumAPIStringBufferSizeInBytesAdapter<base::string16> string_adapter(
+  PDFiumAPIStringBufferSizeInBytesAdapter string_adapter(
       &value, size, /*check_expected_size=*/false);
   string_adapter.Close(
       FPDF_GetMetaText(doc(), field, string_adapter.GetData(), size));

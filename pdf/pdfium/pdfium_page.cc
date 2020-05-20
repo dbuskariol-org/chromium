@@ -195,7 +195,7 @@ std::string GetFormFieldProperty(GetFormFieldPropertyFunction function) {
   base::string16 data;
   size_t buffer_size = function.Run(nullptr, 0);
   if (buffer_size > 0) {
-    PDFiumAPIStringBufferSizeInBytesAdapter<base::string16> api_string_adapter(
+    PDFiumAPIStringBufferSizeInBytesAdapter api_string_adapter(
         &data, buffer_size, true);
     api_string_adapter.Close(function.Run(
         reinterpret_cast<unsigned short*>(api_string_adapter.GetData()),
@@ -1157,8 +1157,8 @@ void PDFiumPage::PopulateImageAltTextForStructElement(
           FPDF_StructElement_GetAltText(current_element, nullptr, 0);
       if (buffer_size > 0) {
         base::string16 alt_text;
-        PDFiumAPIStringBufferSizeInBytesAdapter<base::string16>
-            api_string_adapter(&alt_text, buffer_size, true);
+        PDFiumAPIStringBufferSizeInBytesAdapter api_string_adapter(
+            &alt_text, buffer_size, true);
         api_string_adapter.Close(FPDF_StructElement_GetAltText(
             current_element, api_string_adapter.GetData(), buffer_size));
         images_[it->second].alt_text = base::UTF16ToUTF8(alt_text);
