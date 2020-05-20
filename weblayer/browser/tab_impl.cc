@@ -260,10 +260,7 @@ TabImpl::TabImpl(ProfileImpl* profile,
   find_in_page::FindTabHelper::CreateForWebContents(web_contents_.get());
   GetFindTabHelper()->AddObserver(this);
 
-  // TODO(crbug.com/1072334): Resolve incorporation of translate in incognito
-  // mode.
-  if (!web_contents_->GetBrowserContext()->IsOffTheRecord())
-    TranslateClientImpl::CreateForWebContents(web_contents_.get());
+  TranslateClientImpl::CreateForWebContents(web_contents_.get());
 
   sessions::SessionTabHelper::CreateForWebContents(
       web_contents_.get(),
