@@ -156,6 +156,7 @@ TEST(UriTest, SetPortFromString) {
 
   EXPECT_FALSE(uri2.SetPort("65536"));
   EXPECT_FALSE(uri2.SetPort("-2"));
+  EXPECT_FALSE(uri2.SetPort("+2"));
   EXPECT_FALSE(uri2.SetPort(" 2133"));
   EXPECT_FALSE(uri2.SetPort("0x123"));
 }
@@ -327,6 +328,15 @@ TEST(UriTest, ParserErrorEmptyParameterNameInQuery) {
   EXPECT_EQ(pe1.status, Uri::ParserStatus::kEmptyParameterNameInQuery);
   EXPECT_EQ(pe1.parsed_chars, 0u);
   EXPECT_EQ(pe1.parsed_strings, 2u);
+}
+
+// Port number cannot have non-digit characters.
+TEST(UriTest, ParserErrorInvalidPortNumber) {
+  Uri uri("http://my.weird.port.number:+123");
+  const Uri::ParserError pe = uri.GetLastParsingError();
+  EXPECT_EQ(pe.status, Uri::ParserStatus::kInvalidPortNumber);
+  EXPECT_EQ(pe.parsed_chars, 28u);
+  EXPECT_EQ(pe.parsed_strings, 0u);
 }
 
 // Path cannot have empty segments.
