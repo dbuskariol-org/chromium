@@ -1816,7 +1816,7 @@ void AutofillManager::FillOrPreviewDataModelForm(
     // A field with a specific type is only allowed to be filled a limited
     // number of times given by |TypeValueFormFillingLimit(field_type)|.
     const auto field_type = cached_field->Type().GetStorableType();
-    if (++type_filling_count[field_type] >
+    if (type_filling_count[field_type] >=
         TypeValueFormFillingLimit(field_type)) {
       buffer << Tr{} << field_number
              << "Skipped: field-type filling-limit reached";
@@ -1849,6 +1849,10 @@ void AutofillManager::FillOrPreviewDataModelForm(
 
     bool has_value_after = !result.fields[i].value.empty();
     bool is_autofilled_after = result.fields[i].is_autofilled;
+
+    // If the field was actually filled, increment the filling counter.
+    if (is_autofilled_after)
+      type_filling_count[field_type]++;
 
     buffer << Tr{} << field_number
            << base::StringPrintf(
