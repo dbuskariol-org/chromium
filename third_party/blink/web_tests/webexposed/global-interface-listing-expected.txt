@@ -8831,8 +8831,9 @@ interface VideoTrackList : EventTarget
     setter onremovetrack
 interface VideoTrackReader
     attribute @@toStringTag
-    getter readable
     method constructor
+    method start
+    method stop
 interface VideoTrackWriter
     attribute @@toStringTag
     getter track
