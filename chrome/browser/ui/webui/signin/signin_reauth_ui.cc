@@ -22,6 +22,7 @@
 #include "google_apis/gaia/core_account_id.h"
 #include "ui/base/webui/web_ui_util.h"
 #include "ui/gfx/image/image.h"
+#include "ui/resources/grit/webui_resources.h"
 
 namespace {
 
@@ -55,7 +56,35 @@ SigninReauthUI::SigninReauthUI(content::WebUI* web_ui)
       content::WebUIDataSource::Create(chrome::kChromeUISigninReauthHost);
   source->UseStringsJs();
   source->EnableReplaceI18nInJS();
+  source->SetDefaultResource(IDR_SIGNIN_REAUTH_HTML);
+  source->AddResourcePath("signin_reauth_app.js", IDR_SIGNIN_REAUTH_APP_JS);
+  source->AddResourcePath("signin_reauth_browser_proxy.js",
+                          IDR_SIGNIN_REAUTH_BROWSER_PROXY_JS);
+  source->AddResourcePath("signin_shared_css.js", IDR_SIGNIN_SHARED_CSS_JS);
   source->AddString("accountImageUrl", GetAccountImageURL(profile));
+
+  // Resources for testing.
+  source->OverrideContentSecurityPolicyScriptSrc(
+      "script-src chrome://resources chrome://test 'self';");
+  source->AddResourcePath("test_loader.js", IDR_WEBUI_JS_TEST_LOADER);
+  source->AddResourcePath("test_loader.html", IDR_WEBUI_HTML_TEST_LOADER);
+
+  // Resources for the account passwords reauth.
+  source->AddResourcePath(
+      "images/signin_reauth_illustration.svg",
+      IDR_SIGNIN_REAUTH_IMAGES_ACCOUNT_PASSWORDS_REAUTH_ILLUSTRATION_SVG);
+  source->AddResourcePath(
+      "images/signin_reauth_illustration_dark.svg",
+      IDR_SIGNIN_REAUTH_IMAGES_ACCOUNT_PASSWORDS_REAUTH_ILLUSTRATION_DARK_SVG);
+  source->AddLocalizedString("signinReauthTitle",
+                             IDS_ACCOUNT_PASSWORDS_REAUTH_TITLE);
+  source->AddLocalizedString("signinReauthDesc",
+                             IDS_ACCOUNT_PASSWORDS_REAUTH_DESC);
+  source->AddLocalizedString("signinReauthConfirmLabel",
+                             IDS_ACCOUNT_PASSWORDS_REAUTH_CONFIRM_BUTTON_LABEL);
+  source->AddLocalizedString("signinReauthCloseLabel",
+                             IDS_ACCOUNT_PASSWORDS_REAUTH_CLOSE_BUTTON_LABEL);
+
   content::WebUIDataSource::Add(profile, source);
 }
 
