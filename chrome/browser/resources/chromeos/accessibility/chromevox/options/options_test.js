@@ -5,7 +5,6 @@
 // Include test fixture.
 GEN_INCLUDE([
   '../testing/chromevox_next_e2e_test_base.js',
-  '//chrome/browser/resources/chromeos/accessibility/chromevox/testing/assert_additions.js',
   '//chrome/browser/resources/chromeos/accessibility/chromevox/testing/mock_feedback.js'
 ]);
 
