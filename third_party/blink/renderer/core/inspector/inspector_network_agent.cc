@@ -497,6 +497,10 @@ static std::unique_ptr<protocol::Network::ResourceTiming> BuildObjectForTiming(
       .setSslEnd(timing.CalculateMillisecondDelta(timing.SslEnd()))
       .setWorkerStart(timing.CalculateMillisecondDelta(timing.WorkerStart()))
       .setWorkerReady(timing.CalculateMillisecondDelta(timing.WorkerReady()))
+      .setWorkerFetchStart(
+          timing.CalculateMillisecondDelta(timing.WorkerFetchStart()))
+      .setWorkerRespondWithSettled(
+          timing.CalculateMillisecondDelta(timing.WorkerRespondWithSettled()))
       .setSendStart(timing.CalculateMillisecondDelta(timing.SendStart()))
       .setSendEnd(timing.CalculateMillisecondDelta(timing.SendEnd()))
       .setReceiveHeadersEnd(
