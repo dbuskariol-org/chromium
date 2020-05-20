@@ -143,7 +143,8 @@ mojom::SearchResultPtr SearchHandler::ResultToSearchResult(
 
 std::string SearchHandler::GetModifiedUrl(const SearchConcept& concept,
                                           mojom::Section section) const {
-  return sections_->GetSection(section)->ModifySearchResultUrl(concept);
+  return sections_->GetSection(section)->ModifySearchResultUrl(
+      concept.type, concept.id, concept.url_path_with_parameters);
 }
 
 }  // namespace settings

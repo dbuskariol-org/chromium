@@ -21,9 +21,11 @@ int FakeOsSettingsSection::GetSectionNameMessageId() const {
 }
 
 std::string FakeOsSettingsSection::ModifySearchResultUrl(
-    const SearchConcept& concept) const {
+    mojom::SearchResultType type,
+    OsSettingsIdentifier id,
+    const std::string& url_to_modify) const {
   std::stringstream ss;
-  ss << section_ << "::" << concept.url_path_with_parameters;
+  ss << section_ << "::" << url_to_modify;
   return ss.str();
 }
 

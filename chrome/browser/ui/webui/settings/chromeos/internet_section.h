@@ -39,7 +39,9 @@ class InternetSection
   int GetSectionNameMessageId() const override;
   void RegisterHierarchy(HierarchyGenerator* generator) const override;
   std::string ModifySearchResultUrl(
-      const SearchConcept& concept) const override;
+      mojom::SearchResultType type,
+      OsSettingsIdentifier id,
+      const std::string& url_to_modify) const override;
 
   // network_config::mojom::CrosNetworkConfigObserver:
   void OnActiveNetworksChanged(

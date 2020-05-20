@@ -420,18 +420,19 @@ bool IsConnected(network_config::mojom::ConnectionStateType connection_state) {
              network_config::mojom::ConnectionStateType::kConnected;
 }
 
-bool IsPartOfDetailsSubpage(const SearchConcept& concept,
+bool IsPartOfDetailsSubpage(mojom::SearchResultType type,
+                            OsSettingsIdentifier id,
                             mojom::Subpage details_subpage) {
-  switch (concept.type) {
+  switch (type) {
     case mojom::SearchResultType::kSection:
       // Applies to a section, not a details subpage.
       return false;
 
     case mojom::SearchResultType::kSubpage:
-      return concept.id.subpage == details_subpage;
+      return id.subpage == details_subpage;
 
     case mojom::SearchResultType::kSetting: {
-      const mojom::Setting& setting = concept.id.setting;
+      const mojom::Setting& setting = id.setting;
       switch (details_subpage) {
         case mojom::Subpage::kEthernetDetails:
           return base::Contains(GetEthernetDetailsSettings(), setting);
@@ -446,10 +447,9 @@ bool IsPartOfDetailsSubpage(const SearchConcept& concept,
   }
 }
 
-std::string GetDetailsSubpageUrl(const SearchConcept& concept,
+std::string GetDetailsSubpageUrl(const std::string& url_to_modify,
                                  const std::string& guid) {
-  return base::StringPrintf("%s?guid=%s", concept.url_path_with_parameters,
-                            guid.c_str());
+  return base::StringPrintf("%s?guid=%s", url_to_modify.c_str(), guid.c_str());
 }
 
 }  // namespace
@@ -698,24 +698,26 @@ void InternetSection::RegisterHierarchy(HierarchyGenerator* generator) const {
 }
 
 std::string InternetSection::ModifySearchResultUrl(
-    const SearchConcept& concept) const {
-  if (IsPartOfDetailsSubpage(concept, mojom::Subpage::kEthernetDetails))
-    return GetDetailsSubpageUrl(concept, *connected_ethernet_guid_);
+    mojom::SearchResultType type,
+    OsSettingsIdentifier id,
+    const std::string& url_to_modify) const {
+  if (IsPartOfDetailsSubpage(type, id, mojom::Subpage::kEthernetDetails))
+    return GetDetailsSubpageUrl(url_to_modify, *connected_ethernet_guid_);
 
-  if (IsPartOfDetailsSubpage(concept, mojom::Subpage::kWifiDetails))
-    return GetDetailsSubpageUrl(concept, *connected_wifi_guid_);
+  if (IsPartOfDetailsSubpage(type, id, mojom::Subpage::kWifiDetails))
+    return GetDetailsSubpageUrl(url_to_modify, *connected_wifi_guid_);
 
-  if (IsPartOfDetailsSubpage(concept, mojom::Subpage::kCellularDetails))
-    return GetDetailsSubpageUrl(concept, *connected_cellular_guid_);
+  if (IsPartOfDetailsSubpage(type, id, mojom::Subpage::kCellularDetails))
+    return GetDetailsSubpageUrl(url_to_modify, *connected_cellular_guid_);
 
-  if (IsPartOfDetailsSubpage(concept, mojom::Subpage::kTetherDetails))
-    return GetDetailsSubpageUrl(concept, *connected_tether_guid_);
+  if (IsPartOfDetailsSubpage(type, id, mojom::Subpage::kTetherDetails))
+    return GetDetailsSubpageUrl(url_to_modify, *connected_tether_guid_);
 
-  if (IsPartOfDetailsSubpage(concept, mojom::Subpage::kVpnDetails))
-    return GetDetailsSubpageUrl(concept, *connected_vpn_guid_);
+  if (IsPartOfDetailsSubpage(type, id, mojom::Subpage::kVpnDetails))
+    return GetDetailsSubpageUrl(url_to_modify, *connected_vpn_guid_);
 
   // URL does not need to be modified; use default implementation.
-  return OsSettingsSection::ModifySearchResultUrl(concept);
+  return OsSettingsSection::ModifySearchResultUrl(type, id, url_to_modify);
 }
 
 void InternetSection::OnDeviceStateListChanged() {

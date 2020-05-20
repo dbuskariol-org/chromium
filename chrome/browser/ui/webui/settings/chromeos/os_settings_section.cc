@@ -7,7 +7,6 @@
 #include "base/check.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/system/sys_info.h"
-#include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 
 namespace chromeos {
 namespace settings {
@@ -40,9 +39,11 @@ OsSettingsSection::OsSettingsSection(Profile* profile,
 OsSettingsSection::OsSettingsSection() = default;
 
 std::string OsSettingsSection::ModifySearchResultUrl(
-    const SearchConcept& concept) const {
+    mojom::SearchResultType type,
+    OsSettingsIdentifier id,
+    const std::string& url_to_modify) const {
   // Default case for static URLs which do not need to be modified.
-  return concept.url_path_with_parameters;
+  return url_to_modify;
 }
 
 }  // namespace settings

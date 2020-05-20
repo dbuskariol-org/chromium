@@ -32,7 +32,9 @@ class FakeOsSettingsSection : public OsSettingsSection {
   // the URL is "networkDetails" and the section is mojom::Section::kNetwork,
   // the returned URL is "Section::kNetwork::networkDetails".
   std::string ModifySearchResultUrl(
-      const SearchConcept& concept) const override;
+      mojom::SearchResultType type,
+      OsSettingsIdentifier id,
+      const std::string& url_to_modify) const override;
 
  private:
   const mojom::Section section_;
