@@ -25,6 +25,8 @@ class ASH_PUBLIC_EXPORT QuickAnswersController {
   QuickAnswersController();
   virtual ~QuickAnswersController();
 
+  // Get the instance of |QuickAnswersController|. It is only available when
+  // quick answers rich UI is enabled.
   static QuickAnswersController* Get();
 
   // Passes in a client instance for the controller to use.

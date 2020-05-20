@@ -78,7 +78,8 @@ QuickAnswersMenuObserver::QuickAnswersMenuObserver(
             .get(),
         assistant_state, /*delegate=*/this);
     quick_answers_controller_ = ash::QuickAnswersController::Get();
-    DCHECK(quick_answers_controller_);
+    if (!quick_answers_controller_)
+      return;
     quick_answers_controller_->SetClient(std::make_unique<QuickAnswersClient>(
         content::BrowserContext::GetDefaultStoragePartition(browser_context)
             ->GetURLLoaderFactoryForBrowserProcess()
@@ -150,6 +151,8 @@ void QuickAnswersMenuObserver::OnContextMenuShown(
 
 void QuickAnswersMenuObserver::OnContextMenuViewBoundsChanged(
     const gfx::Rect& bounds_in_screen) {
+  if (!quick_answers_controller_)
+    return;
   quick_answers_controller_->UpdateQuickAnswersAnchorBounds(bounds_in_screen);
 }
 
