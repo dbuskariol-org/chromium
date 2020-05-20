@@ -248,6 +248,12 @@ bool IsAddressForm(FieldTypeGroup field_type_group) {
 void LogAutofillTypePredictionsAvailable(
     LogManager* log_manager,
     const std::vector<FormStructure*>& forms) {
+  if (VLOG_IS_ON(1)) {
+    VLOG(1) << "Parsed forms:";
+    for (FormStructure* form : forms)
+      VLOG(1) << *form;
+  }
+
   if (!log_manager || !log_manager->IsLoggingActive())
     return;
 
