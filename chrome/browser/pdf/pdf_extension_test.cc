@@ -647,9 +647,9 @@ IN_PROC_BROWSER_TEST_F(PDFPluginDisabledTest, EmbedPdfPlaceholderWithCSP) {
 
   // Fake a click on the <embed>, then press Enter to trigger the download.
   gfx::Point point_in_pdf(100, 100);
-  content::SimulateRoutedMouseClickAt(
-      GetActiveWebContents(), kDefaultKeyModifier,
-      blink::WebMouseEvent::Button::kLeft, point_in_pdf);
+  content::SimulateMouseClickAt(GetActiveWebContents(), kDefaultKeyModifier,
+                                blink::WebMouseEvent::Button::kLeft,
+                                point_in_pdf);
   content::SimulateKeyPress(GetActiveWebContents(), ui::DomKey::ENTER,
                             ui::DomCode::ENTER, ui::VKEY_RETURN, false, false,
                             false, false);
@@ -2148,14 +2148,14 @@ IN_PROC_BROWSER_TEST_F(PDFExtensionHitTestTest, DISABLED_MouseLeave) {
       "});"));
 
   // Inject some MouseMoves to invoke a MouseLeave in the PDF.
-  content::SimulateRoutedMouseEvent(embedder_contents,
-                                    blink::WebInputEvent::Type::kMouseMove,
-                                    point_in_parent);
-  content::SimulateRoutedMouseEvent(
+  content::SimulateMouseEvent(embedder_contents,
+                              blink::WebInputEvent::Type::kMouseMove,
+                              point_in_parent);
+  content::SimulateMouseEvent(
       embedder_contents, blink::WebInputEvent::Type::kMouseMove, point_in_pdf);
-  content::SimulateRoutedMouseEvent(embedder_contents,
-                                    blink::WebInputEvent::Type::kMouseMove,
-                                    point_in_parent);
+  content::SimulateMouseEvent(embedder_contents,
+                              blink::WebInputEvent::Type::kMouseMove,
+                              point_in_parent);
 
   // Verify MouseEnter, MouseLeave received.
   int leave_count = 0;
@@ -2200,9 +2200,9 @@ IN_PROC_BROWSER_TEST_F(PDFExtensionHitTestTest, ContextMenuCoordinates) {
 
   ContextMenuWaiter menu_observer;
   // Send mouse right-click to activate context menu.
-  content::SimulateRoutedMouseClickAt(embedder_contents, kDefaultKeyModifier,
-                                      blink::WebMouseEvent::Button::kRight,
-                                      root_context_menu_position);
+  content::SimulateMouseClickAt(embedder_contents, kDefaultKeyModifier,
+                                blink::WebMouseEvent::Button::kRight,
+                                root_context_menu_position);
 
   // We expect the context menu, invoked via the RenderFrameHost, to be using
   // root view coordinates.
