@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_BASE_CLIPBOARD_CLIPBOARD_AURA_H_
-#define UI_BASE_CLIPBOARD_CLIPBOARD_AURA_H_
+#ifndef UI_BASE_CLIPBOARD_CLIPBOARD_NON_BACKED_H_
+#define UI_BASE_CLIPBOARD_CLIPBOARD_NON_BACKED_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -13,13 +13,19 @@
 
 namespace ui {
 
-class AuraClipboard;
+class ClipboardInternal;
 
-class ClipboardAura : public Clipboard {
+// In-memory clipboard implementation not backed by an underlying platform.
+// This clipboard can be used where there's no need to sync the clipboard with
+// an underlying platform, and can substitute platform clipboards like
+// ClipboardWin on Windows or ClipboardMac on MacOS. As this isn't backed by an
+// underlying platform, the clipboard data isn't persisted after an instance
+// goes away.
+class ClipboardNonBacked : public Clipboard {
  private:
   friend class Clipboard;
-  ClipboardAura();
-  ~ClipboardAura() override;
+  ClipboardNonBacked();
+  ~ClipboardNonBacked() override;
 
   // Clipboard overrides:
   void OnPreShutdown() override;
@@ -70,11 +76,11 @@ class ClipboardAura : public Clipboard {
                  const char* data_data,
                  size_t data_len) override;
 
-  const std::unique_ptr<AuraClipboard> clipboard_internal_;
+  const std::unique_ptr<ClipboardInternal> clipboard_internal_;
 
-  DISALLOW_COPY_AND_ASSIGN(ClipboardAura);
+  DISALLOW_COPY_AND_ASSIGN(ClipboardNonBacked);
 };
 
 }  // namespace ui
 
-#endif  // UI_BASE_CLIPBOARD_CLIPBOARD_AURA_H_
+#endif  // UI_BASE_CLIPBOARD_CLIPBOARD_NON_BACKED_H_
