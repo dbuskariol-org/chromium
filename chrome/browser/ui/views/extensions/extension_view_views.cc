@@ -16,7 +16,6 @@
 #include "content/public/browser/render_widget_host.h"
 #include "content/public/browser/render_widget_host_view.h"
 #include "content/public/browser/web_contents.h"
-#include "extensions/browser/extension_host.h"
 #include "extensions/common/view_type.h"
 #include "ui/events/event.h"
 #include "ui/views/controls/native/native_view_host.h"
@@ -26,9 +25,9 @@
 #include "ui/base/cursor/cursor.h"
 #endif
 
-ExtensionViewViews::ExtensionViewViews(extensions::ExtensionHost* host,
-                                       Profile* profile)
-    : views::WebView(profile), host_(host), container_(nullptr) {
+ExtensionViewViews::ExtensionViewViews(extensions::ExtensionViewHost* host)
+    : views::WebView(host->browser() ? host->browser()->profile() : nullptr),
+      host_(host) {
   SetWebContents(host_->web_contents());
   if (host->extension_host_type() == extensions::VIEW_TYPE_EXTENSION_POPUP) {
     EnableSizingFromWebContents(
@@ -107,9 +106,7 @@ gfx::NativeCursor ExtensionViewViews::GetCursor(const ui::MouseEvent& event) {
 }
 
 gfx::Size ExtensionViewViews::GetMinimumSize() const {
-  // If the minimum size has never been set, returns the preferred size (same
-  // behavior as views::View).
-  return (minimum_size_ == gfx::Size()) ? GetPreferredSize() : minimum_size_;
+  return minimum_size_.value_or(GetPreferredSize());
 }
 
 void ExtensionViewViews::PreferredSizeChanged() {
@@ -127,9 +124,8 @@ namespace extensions {
 
 // static
 std::unique_ptr<ExtensionView> ExtensionViewHost::CreateExtensionView(
-    ExtensionViewHost* host,
-    Profile* profile) {
-  auto view = std::make_unique<ExtensionViewViews>(host, profile);
+    ExtensionViewHost* host) {
+  auto view = std::make_unique<ExtensionViewViews>(host);
   // We own |view_|, so don't auto delete when it's removed from the view
   // hierarchy.
   view->set_owned_by_client();
