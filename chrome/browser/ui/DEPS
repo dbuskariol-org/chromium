@@ -5,7 +5,6 @@ include_rules = [
   "+components/country_codes",
   "+components/page_load_metrics/browser",
   "+components/safety_check",
-  "+mash/public/mojom",
   "+services/content/public",
   "+services/device/public/mojom",
 ]
