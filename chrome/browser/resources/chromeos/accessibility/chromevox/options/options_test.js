@@ -51,7 +51,7 @@ ChromeVoxOptionsTest = class extends ChromeVoxNextE2ETest {
   }
 };
 
-TEST_F('ChromeVoxOptionsTest', 'DISABLED_NumberReadingStyleSelect', function() {
+TEST_F('ChromeVoxOptionsTest', 'NumberReadingStyleSelect', function() {
   this.runOnOptionsPage((mockFeedback, evt) => {
     const numberStyleSelect = evt.target.find({
       role: chrome.automation.RoleType.POP_UP_BUTTON,
