@@ -1809,10 +1809,6 @@
       implied_by: ["ExperimentalProductivityFeatures"]
     },
     {
-      name: "UserActivationAPI",
-      status: "stable",
-    },
-    {
       name: "UserActivationPostMessageTransfer",
     },
     {
