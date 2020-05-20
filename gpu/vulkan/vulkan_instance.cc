@@ -60,8 +60,6 @@ VulkanWarningCallback(VkDebugReportFlagsEXT flags,
 }
 #endif  // DCHECK_IS_ON()
 
-constexpr uint32_t kRequiredApiVersion = VK_MAKE_VERSION(1, 1, 0);
-
 }  // namespace
 
 VulkanInstance::VulkanInstance() = default;
@@ -81,19 +79,19 @@ bool VulkanInstance::Initialize(
   if (!vulkan_function_pointers->BindUnassociatedFunctionPointers())
     return false;
 
-  VkResult result = vkEnumerateInstanceVersion(&vulkan_info_.api_version);
-  if (result != VK_SUCCESS) {
-    DLOG(ERROR) << "vkEnumerateInstanceVersion() failed: " << result;
-    return false;
-  }
+  if (vulkan_function_pointers->vkEnumerateInstanceVersionFn)
+    vkEnumerateInstanceVersion(&vulkan_info_.api_version);
 
-  if (vulkan_info_.api_version < kRequiredApiVersion)
+  if (vulkan_info_.api_version < VK_MAKE_VERSION(1, 1, 0))
     return false;
 
   gpu::crash_keys::vulkan_api_version.Set(
       VkVersionToString(vulkan_info_.api_version));
 
-  vulkan_info_.used_api_version = kRequiredApiVersion;
+  // Use Vulkan 1.1 if it's available.
+  vulkan_info_.used_api_version = VK_MAKE_VERSION(1, 1, 0);
+
+  VkResult result = VK_SUCCESS;
 
   VkApplicationInfo app_info = {};
   app_info.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
