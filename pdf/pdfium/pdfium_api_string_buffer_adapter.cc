@@ -6,12 +6,12 @@
 
 #include <stddef.h>
 
-#include <string>
-
 #include "base/check_op.h"
 #include "base/strings/string_util.h"
 
 namespace chrome_pdf {
+
+namespace internal {
 
 template <class StringType>
 PDFiumAPIStringBufferAdapter<StringType>::PDFiumAPIStringBufferAdapter(
@@ -74,5 +74,7 @@ void PDFiumAPIStringBufferSizeInBytesAdapter::Close(size_t actual_size) {
 // explicit instantiations
 template class PDFiumAPIStringBufferAdapter<std::string>;
 template class PDFiumAPIStringBufferAdapter<base::string16>;
+
+}  // namespace internal
 
 }  // namespace chrome_pdf
