@@ -106,6 +106,8 @@ class PolicyTest : public InProcessBrowserTest {
       content::WebContents* tab,
       security_interstitials::SecurityInterstitialCommand command);
 
+  void FlushBlacklistPolicy();
+
   MockConfigurationPolicyProvider provider_;
 };
 

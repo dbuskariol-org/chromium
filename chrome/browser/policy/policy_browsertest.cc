@@ -75,7 +75,6 @@
 #include "chrome/browser/interstitials/security_interstitial_page_test_utils.h"
 #include "chrome/browser/media/webrtc/webrtc_event_log_manager.h"
 #include "chrome/browser/net/prediction_options.h"
-#include "chrome/browser/net/system_network_context_manager.h"
 #include "chrome/browser/policy/chrome_browser_policy_connector.h"
 #include "chrome/browser/policy/policy_test_utils.h"
 #include "chrome/browser/policy/profile_policy_connector.h"
@@ -133,7 +132,6 @@
 #include "components/search_engines/template_url.h"
 #include "components/search_engines/template_url_service.h"
 #include "components/security_interstitials/content/security_interstitial_page.h"
-#include "components/security_interstitials/content/security_interstitial_tab_helper.h"
 #include "components/signin/public/identity_manager/account_info.h"
 #include "components/strings/grit/components_strings.h"
 #include "components/unified_consent/pref_names.h"
@@ -162,7 +160,6 @@
 #include "content/public/common/content_features.h"
 #include "content/public/common/content_paths.h"
 #include "content/public/common/content_switches.h"
-#include "content/public/common/network_service_util.h"
 #include "content/public/common/url_constants.h"
 #include "content/public/common/web_preferences.h"
 #include "content/public/test/browser_test.h"
@@ -184,10 +181,8 @@
 #include "extensions/common/switches.h"
 #include "media/media_buildflags.h"
 #include "mojo/public/cpp/bindings/remote.h"
-#include "net/base/hash_value.h"
 #include "net/base/net_errors.h"
 #include "net/base/url_util.h"
-#include "net/cert/x509_util.h"
 #include "net/dns/mock_host_resolver.h"
 #include "net/test/embedded_test_server/embedded_test_server.h"
 #include "net/test/embedded_test_server/http_request.h"
@@ -364,14 +359,6 @@ bool IsWebGLEnabled(content::WebContents* contents) {
 bool IsNetworkPredictionEnabled(PrefService* prefs) {
   return chrome_browser_net::CanPrefetchAndPrerenderUI(prefs) ==
       chrome_browser_net::NetworkPredictionStatus::ENABLED;
-}
-
-void FlushBlacklistPolicy() {
-  // Updates of the URLBlacklist are done on IO, after building the blacklist
-  // on the blocking pool, which is initiated from IO.
-  content::RunAllPendingInMessageLoop(BrowserThread::IO);
-  content::RunAllTasksUntilIdle();
-  content::RunAllPendingInMessageLoop(BrowserThread::IO);
 }
 
 bool ContainsVisibleElement(content::WebContents* contents,
@@ -2303,134 +2290,6 @@ IN_PROC_BROWSER_TEST_F(PolicyWebStoreIconHiddenTest, NTPWebStoreIconHidden) {
   // Applying the policy before the browser started, the web store icon should
   // now be hidden.
   EXPECT_FALSE(ContainsWebstoreTile(iframe));
-}
-
-class CertificateTransparencyPolicyTest : public PolicyTest {
- public:
-  CertificateTransparencyPolicyTest() : PolicyTest() {
-    SystemNetworkContextManager::SetEnableCertificateTransparencyForTesting(
-        true);
-  }
-
-  ~CertificateTransparencyPolicyTest() override {
-    SystemNetworkContextManager::SetEnableCertificateTransparencyForTesting(
-        base::nullopt);
-  }
-};
-
-IN_PROC_BROWSER_TEST_F(CertificateTransparencyPolicyTest,
-                       CertificateTransparencyEnforcementDisabledForUrls) {
-  net::EmbeddedTestServer https_server_ok(net::EmbeddedTestServer::TYPE_HTTPS);
-  https_server_ok.SetSSLConfig(net::EmbeddedTestServer::CERT_OK);
-  https_server_ok.ServeFilesFromSourceDirectory("chrome/test/data");
-  ASSERT_TRUE(https_server_ok.Start());
-
-  // Require CT for all hosts (in the absence of policy).
-  SetRequireCTForTesting(true);
-
-  ui_test_utils::NavigateToURL(browser(), https_server_ok.GetURL("/"));
-
-  // The page should initially be blocked.
-  content::WebContents* tab =
-      browser()->tab_strip_model()->GetActiveWebContents();
-  WaitForInterstitial(tab);
-
-  EXPECT_TRUE(chrome_browser_interstitials::IsInterstitialDisplayingText(
-      tab->GetMainFrame(), "proceed-link"));
-  EXPECT_NE(base::UTF8ToUTF16("OK"),
-            browser()->tab_strip_model()->GetActiveWebContents()->GetTitle());
-
-  // Now exempt the URL from being blocked by setting policy.
-  std::unique_ptr<base::ListValue> disabled_urls =
-      std::make_unique<base::ListValue>();
-  disabled_urls->AppendString(https_server_ok.host_port_pair().HostForURL());
-
-  PolicyMap policies;
-  policies.Set(key::kCertificateTransparencyEnforcementDisabledForUrls,
-               POLICY_LEVEL_MANDATORY, POLICY_SCOPE_USER, POLICY_SOURCE_CLOUD,
-               std::move(disabled_urls), nullptr);
-  UpdateProviderPolicy(policies);
-  FlushBlacklistPolicy();
-
-  ui_test_utils::NavigateToURL(browser(),
-                               https_server_ok.GetURL("/simple.html"));
-
-  // There should be no interstitial after the page loads.
-  EXPECT_FALSE(IsShowingInterstitial(tab));
-  EXPECT_EQ(base::UTF8ToUTF16("OK"),
-            browser()->tab_strip_model()->GetActiveWebContents()->GetTitle());
-
-  // Now ensure that this setting still works after a network process crash.
-  if (!content::IsOutOfProcessNetworkService())
-    return;
-
-  ui_test_utils::NavigateToURL(browser(),
-                               https_server_ok.GetURL("/title1.html"));
-
-  SimulateNetworkServiceCrash();
-  SetRequireCTForTesting(true);
-
-  ui_test_utils::NavigateToURL(browser(),
-                               https_server_ok.GetURL("/simple.html"));
-
-  // There should be no interstitial after the page loads.
-  EXPECT_FALSE(IsShowingInterstitial(tab));
-  EXPECT_EQ(base::UTF8ToUTF16("OK"),
-            browser()->tab_strip_model()->GetActiveWebContents()->GetTitle());
-}
-
-IN_PROC_BROWSER_TEST_F(CertificateTransparencyPolicyTest,
-                       CertificateTransparencyEnforcementDisabledForCas) {
-  net::EmbeddedTestServer https_server_ok(net::EmbeddedTestServer::TYPE_HTTPS);
-  https_server_ok.SetSSLConfig(net::EmbeddedTestServer::CERT_OK);
-  https_server_ok.ServeFilesFromSourceDirectory("chrome/test/data");
-  ASSERT_TRUE(https_server_ok.Start());
-
-  // Require CT for all hosts (in the absence of policy).
-  SetRequireCTForTesting(true);
-
-  ui_test_utils::NavigateToURL(browser(), https_server_ok.GetURL("/"));
-
-  content::WebContents* web_contents =
-      browser()->tab_strip_model()->GetActiveWebContents();
-
-  // The page should initially be blocked.
-  content::RenderFrameHost* main_frame;
-  security_interstitials::SecurityInterstitialTabHelper* helper =
-      security_interstitials::SecurityInterstitialTabHelper::FromWebContents(
-          web_contents);
-  ASSERT_TRUE(helper);
-  ASSERT_TRUE(
-      helper->GetBlockingPageForCurrentlyCommittedNavigationForTesting());
-  main_frame = web_contents->GetMainFrame();
-  ASSERT_TRUE(content::WaitForRenderFrameReady(main_frame));
-  EXPECT_TRUE(chrome_browser_interstitials::IsInterstitialDisplayingText(
-      main_frame, "proceed-link"));
-
-  EXPECT_NE(base::UTF8ToUTF16("OK"),
-            browser()->tab_strip_model()->GetActiveWebContents()->GetTitle());
-
-  // Now exempt the leaf SPKI from being blocked by setting policy.
-  net::HashValue leaf_hash;
-  ASSERT_TRUE(net::x509_util::CalculateSha256SpkiHash(
-      https_server_ok.GetCertificate()->cert_buffer(), &leaf_hash));
-  std::unique_ptr<base::ListValue> disabled_spkis =
-      std::make_unique<base::ListValue>();
-  disabled_spkis->AppendString(leaf_hash.ToString());
-
-  PolicyMap policies;
-  policies.Set(key::kCertificateTransparencyEnforcementDisabledForCas,
-               POLICY_LEVEL_MANDATORY, POLICY_SCOPE_USER, POLICY_SOURCE_CLOUD,
-               std::move(disabled_spkis), nullptr);
-  UpdateProviderPolicy(policies);
-  FlushBlacklistPolicy();
-
-  ui_test_utils::NavigateToURL(browser(),
-                               https_server_ok.GetURL("/simple.html"));
-
-  // Check we are no longer in the interstitial.
-  EXPECT_EQ(base::UTF8ToUTF16("OK"),
-            browser()->tab_strip_model()->GetActiveWebContents()->GetTitle());
 }
 
 // Test that when SSL error overriding is allowed by policy (default), the

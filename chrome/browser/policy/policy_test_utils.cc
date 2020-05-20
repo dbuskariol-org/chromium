@@ -385,4 +385,12 @@ void PolicyTest::SendInterstitialCommand(
   return;
 }
 
+void PolicyTest::FlushBlacklistPolicy() {
+  // Updates of the URLBlacklist are done on IO, after building the blacklist
+  // on the blocking pool, which is initiated from IO.
+  content::RunAllPendingInMessageLoop(BrowserThread::IO);
+  content::RunAllTasksUntilIdle();
+  content::RunAllPendingInMessageLoop(BrowserThread::IO);
+}
+
 }  // namespace policy
