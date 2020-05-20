@@ -379,6 +379,16 @@ const std::vector<SearchConcept>& GetDlcSearchConcepts() {
        {.subpage = mojom::Subpage::kDlc},
        {IDS_OS_SETTINGS_TAG_DOWNLOADED_CONTENT_ALT1,
         SearchConcept::kAltTagEnd}},
+      {IDS_OS_SETTINGS_TAG_REMOVE_DOWNLOADED_CONTENT,
+       mojom::kDlcSubpagePath,
+       mojom::SearchResultIcon::kHardDrive,
+       mojom::SearchResultDefaultRank::kLow,
+       mojom::SearchResultType::kSetting,
+       {.setting = mojom::Setting::kRemoveDlc},
+       {IDS_OS_SETTINGS_TAG_REMOVE_DOWNLOADED_CONTENT_ALT1,
+        IDS_OS_SETTINGS_TAG_REMOVE_DOWNLOADED_CONTENT_ALT2,
+        IDS_OS_SETTINGS_TAG_REMOVE_DOWNLOADED_CONTENT_ALT3,
+        SearchConcept::kAltTagEnd}},
   });
   return *tags;
 }
@@ -897,6 +907,8 @@ void DeviceSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterNestedSubpage(IDS_SETTINGS_DLC_SUBPAGE_TITLE,
                                    mojom::Subpage::kDlc,
                                    mojom::Subpage::kStorage);
+  generator->RegisterNestedSetting(mojom::Setting::kRemoveDlc,
+                                   mojom::Subpage::kDlc);
 
   // Power.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_POWER_TITLE,
