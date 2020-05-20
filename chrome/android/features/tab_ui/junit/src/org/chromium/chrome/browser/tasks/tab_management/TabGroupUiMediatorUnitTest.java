@@ -335,7 +335,7 @@ public class TabGroupUiMediatorUnitTest {
 
     @After
     public void tearDown() {
-        ConditionalTabStripUtils.setFeatureStatus(FeatureStatus.DEFAULT);
+        ConditionalTabStripUtils.setFeatureStatusForTesting(FeatureStatus.DEFAULT);
     }
 
     /*********************** Tab group related tests *************************/
@@ -1153,7 +1153,7 @@ public class TabGroupUiMediatorUnitTest {
     public void onResumeWithNative_featureEnabled_CTS() {
         initAndAssertProperties(mTab1);
 
-        ConditionalTabStripUtils.setFeatureStatus(FeatureStatus.ACTIVATED);
+        ConditionalTabStripUtils.setFeatureStatusForTesting(FeatureStatus.ACTIVATED);
         mPauseResumeWithNativeObserverArgumentCaptor.getValue().onResumeWithNative();
 
         verifyResetStrip(true, mAllTabsList);
@@ -1164,7 +1164,7 @@ public class TabGroupUiMediatorUnitTest {
     public void onResumeWithNative_featureDisabled_CTS() {
         initAndAssertProperties(mTab1);
 
-        ConditionalTabStripUtils.setFeatureStatus(FeatureStatus.FORBIDDEN);
+        ConditionalTabStripUtils.setFeatureStatusForTesting(FeatureStatus.FORBIDDEN);
         mPauseResumeWithNativeObserverArgumentCaptor.getValue().onResumeWithNative();
 
         verifyResetStrip(false, null);
@@ -1175,7 +1175,7 @@ public class TabGroupUiMediatorUnitTest {
     public void onResumeWithNative_featureExpired_CTS() {
         initAndAssertProperties(mTab1);
 
-        ConditionalTabStripUtils.setFeatureStatus(FeatureStatus.DEFAULT);
+        ConditionalTabStripUtils.setFeatureStatusForTesting(FeatureStatus.DEFAULT);
         mPauseResumeWithNativeObserverArgumentCaptor.getValue().onResumeWithNative();
 
         verifyResetStrip(false, null);
@@ -1217,18 +1217,6 @@ public class TabGroupUiMediatorUnitTest {
 
         verify(mSnackbarManager).dismissSnackbars(eq(mTabGroupUiMediator));
         verifyResetStrip(true, mAllTabsList);
-    }
-
-    @Test
-    @Features.EnableFeatures(ChromeFeatureList.CONDITIONAL_TAB_STRIP_ANDROID)
-    public void testUndoSnackbar_action() {
-        initAndAssertProperties(mTab1);
-        assertThat(ConditionalTabStripUtils.getFeatureStatus(), equalTo(FeatureStatus.DEFAULT));
-
-        mTabGroupUiMediator.onAction(mock(Object.class));
-
-        verifyResetStrip(true, mAllTabsList);
-        assertThat(ConditionalTabStripUtils.getFeatureStatus(), equalTo(FeatureStatus.ACTIVATED));
     }
 
     /*********************** Class common tests *************************/

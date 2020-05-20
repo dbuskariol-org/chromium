@@ -976,8 +976,7 @@ public class ChromeTabbedActivity
             setInitialOverviewState();
         }
 
-        if (TabUiFeatureUtilities.isConditionalTabStripEnabled()
-                || ConditionalTabStripUtils.getOptOutIndicator()) {
+        if (TabUiFeatureUtilities.isConditionalTabStripEnabled()) {
             ConditionalTabStripUtils.updateFeatureExpiration(
                     mInactivityTracker.getLastBackgroundedTimeMs());
         }
