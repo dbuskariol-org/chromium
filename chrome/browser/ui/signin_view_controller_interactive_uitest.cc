@@ -65,7 +65,7 @@ IN_PROC_BROWSER_TEST_F(SignInViewControllerBrowserTest, Accelerators) {
 IN_PROC_BROWSER_TEST_F(SignInViewControllerBrowserTest, AbortOngoingReauth) {
   base::MockCallback<base::OnceCallback<void(signin::ReauthResult)>>
       reauth_callback;
-  signin::MakePrimaryAccountAvailable(GetIdentityManager(), "alice@gmail.com");
+  signin::MakeAccountAvailable(GetIdentityManager(), "alice@gmail.com");
   std::unique_ptr<SigninViewController::ReauthAbortHandle> abort_handle =
       browser()->signin_view_controller()->ShowReauthPrompt(
           GetIdentityManager()->GetPrimaryAccountId(), reauth_callback.Get());
