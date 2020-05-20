@@ -63,8 +63,19 @@ void CachedMatchedProperties::Set(
 
   DCHECK(RuntimeEnabledFeatures::MPCDependenciesEnabled() ||
          dependencies.IsEmpty());
-  for (const CSSPropertyName& name : dependencies)
-    this->dependencies.push_back(name);
+  if (dependencies.size()) {
+    // Plus one for g_null_atom.
+    this->dependencies =
+        std::make_unique<AtomicString[]>(dependencies.size() + 1);
+
+    size_t index = 0;
+    for (const CSSPropertyName& name : dependencies) {
+      DCHECK_LT(index, dependencies.size());
+      this->dependencies[index++] = name.ToAtomicString();
+    }
+    DCHECK_EQ(index, dependencies.size());
+    this->dependencies[index] = g_null_atom;
+  }
 }
 
 void CachedMatchedProperties::Clear() {
@@ -72,7 +83,7 @@ void CachedMatchedProperties::Clear() {
   matched_properties_types.clear();
   computed_style = nullptr;
   parent_computed_style = nullptr;
-  dependencies.clear();
+  dependencies.reset();
 }
 
 bool CachedMatchedProperties::DependenciesEqual(
@@ -80,8 +91,9 @@ bool CachedMatchedProperties::DependenciesEqual(
   if (!state.ParentStyle())
     return false;
 
-  for (const CSSPropertyName& name : dependencies) {
-    CSSPropertyRef ref(name, state.GetDocument());
+  for (const AtomicString* name = dependencies.get(); name && !name->IsNull();
+       name++) {
+    CSSPropertyRef ref(*name, state.GetDocument());
     DCHECK(ref.IsValid());
     if (!ref.GetProperty().ComputedValuesEqual(*parent_computed_style,
                                                *state.ParentStyle())) {
