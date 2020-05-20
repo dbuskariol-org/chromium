@@ -407,10 +407,9 @@ std::unique_ptr<WindowResizer> CreateWindowResizer(
       // TODO(afakhry): Maybe use switchable containers?
       (desks_util::IsDeskContainer(parent) ||
        parent->id() == kShellWindowId_AlwaysOnTopContainer)) {
-    window_resizer.reset(WorkspaceWindowResizer::Create(
-        window_state, std::vector<aura::Window*>()));
+    window_resizer = WorkspaceWindowResizer::Create(window_state, {});
   } else {
-    window_resizer.reset(DefaultWindowResizer::Create(window_state));
+    window_resizer = DefaultWindowResizer::Create(window_state);
   }
   return std::make_unique<DragWindowResizer>(std::move(window_resizer),
                                              window_state);
@@ -485,10 +484,11 @@ WorkspaceWindowResizer::~WorkspaceWindowResizer() {
 }
 
 // static
-WorkspaceWindowResizer* WorkspaceWindowResizer::Create(
+std::unique_ptr<WorkspaceWindowResizer> WorkspaceWindowResizer::Create(
     WindowState* window_state,
     const std::vector<aura::Window*>& attached_windows) {
-  return new WorkspaceWindowResizer(window_state, attached_windows);
+  return base::WrapUnique(
+      new WorkspaceWindowResizer(window_state, attached_windows));
 }
 
 void WorkspaceWindowResizer::Drag(const gfx::PointF& location_in_parent,
