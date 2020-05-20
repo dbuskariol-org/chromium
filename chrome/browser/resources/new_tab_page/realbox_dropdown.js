@@ -257,6 +257,20 @@ class RealboxDropdownElement extends PolymerElement {
     }
   }
 
+  /**
+   * @param {!Event} e
+   * @private
+   */
+  onToggleButtonKeydown_(e) {
+    if (e.key !== 'Enter' && e.key !== ' ') {
+      return;
+    }
+
+    // Simulate a click so that it gets handled by |onToggleButtonClick_|.
+    e.target.click();
+    e.preventDefault();  // Prevents default browser action.
+  }
+
   //============================================================================
   // Helpers
   //============================================================================
