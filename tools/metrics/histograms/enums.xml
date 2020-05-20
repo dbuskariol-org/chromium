@@ -64959,10 +64959,11 @@ would be helpful to identify which type is being sent.
 
 <enum name="SupervisedUserExtensionEnablement">
   <summary>
-    Tracks supervised user actions to enable or disable approved extensions.
+    Tracks supervised user actions to enable or disable extensions.
   </summary>
   <int value="0" label="Enabled"/>
   <int value="1" label="Disabled"/>
+  <int value="2" label="Enable attempt failed"/>
 </enum>
 
 <enum name="SupervisedUserExtensionInstallDialog">

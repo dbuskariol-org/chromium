@@ -23238,6 +23238,17 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="SupervisedUsers_Extensions_FailedToEnable">
+  <owner>tobyhuang@chromium.org</owner>
+  <owner>agawronska@chromium.org</owner>
+  <owner>danan@chromium.org</owner>
+  <owner>cros-families@google.com</owner>
+  <description>
+    Emmitted when a supervised user tries to enable a force-disabled extension
+    and fails.
+  </description>
+</action>
+
 <action name="SupervisedUsers_Extensions_NewExtensionApprovalGranted">
   <obsolete>Renamed to SupervisedUsers_Extensions_ApprovalGranted.</obsolete>
   <owner>tobyhuang@chromium.org</owner>
