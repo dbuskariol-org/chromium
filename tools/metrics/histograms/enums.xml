@@ -20310,6 +20310,7 @@ Called by update_document_policy_enum.py.-->
   <int value="707" label="AutoOpenAllowedForURLs"/>
   <int value="708" label="ReportDeviceBluetoothInfo"/>
   <int value="709" label="ReportDeviceFanInfo"/>
+  <int value="710" label="ReportDeviceVpdInfo"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">

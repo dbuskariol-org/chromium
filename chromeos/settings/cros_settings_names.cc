@@ -194,6 +194,10 @@ const char kReportDeviceBluetoothInfo[] =
 // included in status reports to the device management server.
 const char kReportDeviceFanInfo[] = "cros.device_status.report_device_fan_info";
 
+// A boolean pref that determines whether the device's VPD information should be
+// included in status reports to the device management server.
+const char kReportDeviceVpdInfo[] = "cros.device_status.report_device_vpd_info";
+
 // Determines whether heartbeats should be sent to the policy service via
 // the GCM channel.
 const char kHeartbeatEnabled[] = "cros.device_status.heartbeat_enabled";
