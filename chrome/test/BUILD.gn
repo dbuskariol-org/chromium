@@ -1055,6 +1055,7 @@ if (!is_android) {
       "../browser/policy/restore_on_startup_policy_browsertest.cc",
       "../browser/policy/safe_browsing_policy_browsertest.cc",
       "../browser/policy/site_isolation_policy_browsertest.cc",
+      "../browser/policy/url_blacklist_policy_browsertest.cc",
       "../browser/portal/portal_browsertest.cc",
       "../browser/predictors/loading_predictor_browsertest.cc",
       "../browser/prefetch/prefetch_browsertest.cc",
