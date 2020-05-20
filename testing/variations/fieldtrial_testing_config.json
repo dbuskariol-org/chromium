@@ -1202,20 +1202,19 @@
             ]
         }
     ],
-    "CacheStorageSequence": [
+    "CacheStorageSequenceChromeOS": [
         {
             "platforms": [
-                "windows",
-                "mac",
-                "chromeos",
-                "linux",
-                "android",
-                "android_weblayer"
+                "chromeos"
             ],
             "experiments": [
                 {
-                    "name": "Enabled1",
+                    "name": "Enabled12_v1",
+                    "params": {
+                        "min": "12"
+                    },
                     "enable_features": [
+                        "BrowserThreadPoolAdjustment",
                         "CacheStorageSequence"
                     ]
                 }
