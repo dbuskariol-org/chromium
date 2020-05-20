@@ -240,8 +240,6 @@ public class CustomTabActivityNavigationController implements StartStopWithNativ
      * @return Whether or not the tab was sent over successfully.
      */
     public boolean openCurrentUrlInBrowser(boolean forceReparenting) {
-        assert mIntentDataProvider.getWebappExtras() == null;
-
         Tab tab = mTabProvider.getTab();
         if (tab == null) return false;
 
