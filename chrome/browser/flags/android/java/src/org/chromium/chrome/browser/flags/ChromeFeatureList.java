@@ -419,6 +419,7 @@ public abstract class ChromeFeatureList {
             "WebPaymentsMethodSectionOrderV2";
     public static final String WEB_PAYMENTS_MINIMAL_UI = "WebPaymentsMinimalUI";
     public static final String WEB_PAYMENTS_MODIFIERS = "WebPaymentsModifiers";
+    public static final String WEB_PAYMENTS_APP_STORE_BILLING_DEBUG = "AppStoreBillingDebug";
     public static final String WEB_PAYMENTS_REDACT_SHIPPING_ADDRESS =
             "WebPaymentsRedactShippingAddress";
     public static final String WEB_PAYMENTS_RETURN_GOOGLE_PAY_IN_BASIC_CARD =
