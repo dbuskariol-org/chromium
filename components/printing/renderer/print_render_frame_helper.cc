@@ -42,6 +42,7 @@
 #include "net/base/escape.h"
 #include "printing/buildflags/buildflags.h"
 #include "printing/metafile_skia.h"
+#include "printing/mojom/print.mojom.h"
 #include "printing/printing_features.h"
 #include "printing/units.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_registry.h"
@@ -240,7 +241,7 @@ double FitPrintParamsToPage(const PrintMsg_Print_Params& page_params,
 void CalculatePageLayoutFromPrintParams(
     const PrintMsg_Print_Params& params,
     double scale_factor,
-    PageSizeMargins* page_layout_in_points) {
+    mojom::PageSizeMargins* page_layout_in_points) {
   bool fit_to_page = IsWebPrintScalingOptionFitToPage(params);
   int dpi = GetDPI(params);
   int content_width = params.content_size.width();
@@ -654,7 +655,7 @@ void PrintRenderFrameHelper::PrintHeaderAndFooter(
     int total_pages,
     const blink::WebLocalFrame& source_frame,
     float webkit_scale_factor,
-    const PageSizeMargins& page_layout,
+    const mojom::PageSizeMargins& page_layout,
     const PrintMsg_Print_Params& params) {
   cc::PaintCanvasAutoRestore auto_restore(canvas, true);
   canvas->scale(1 / webkit_scale_factor, 1 / webkit_scale_factor);
@@ -1395,7 +1396,7 @@ void PrintRenderFrameHelper::PrintNodeUnderContextMenu() {
 }
 
 void PrintRenderFrameHelper::GetPageSizeAndContentAreaFromPageLayout(
-    const PageSizeMargins& page_layout_in_points,
+    const mojom::PageSizeMargins& page_layout_in_points,
     gfx::Size* page_size,
     gfx::Rect* content_area) {
   *page_size = gfx::Size(
@@ -1482,7 +1483,7 @@ PrintRenderFrameHelper::CreatePreviewDocument() {
     return CREATE_FAIL;
   }
 
-  PageSizeMargins default_page_layout;
+  mojom::PageSizeMargins default_page_layout;
   double scale_factor = GetScaleFactor(print_params.scale_factor,
                                        !print_preview_context_.IsModifiable());
 
@@ -1990,7 +1991,7 @@ void PrintRenderFrameHelper::ComputePageLayoutInPointsForCss(
     const PrintMsg_Print_Params& page_params,
     bool ignore_css_margins,
     double* scale_factor,
-    PageSizeMargins* page_layout_in_points) {
+    mojom::PageSizeMargins* page_layout_in_points) {
   double input_scale_factor = *scale_factor;
   PrintMsg_Print_Params params = CalculatePrintParamsForCss(
       frame, page_index, page_params, ignore_css_margins,
@@ -2231,7 +2232,7 @@ void PrintRenderFrameHelper::PrintPageInternal(
   // scaling back. Windows uses |page_size_in_dpi| for the actual page size
   // so requires an accurate value.
   gfx::Size original_page_size = params.page_size;
-  PageSizeMargins page_layout_in_points;
+  mojom::PageSizeMargins page_layout_in_points;
   ComputePageLayoutInPointsForCss(frame, page_number, params,
                                   ignore_css_margins_, &css_scale_factor,
                                   &page_layout_in_points);
