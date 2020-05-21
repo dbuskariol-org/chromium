@@ -3462,15 +3462,12 @@ int RenderFrameHostImpl::GetEnabledBindings() {
 
 void RenderFrameHostImpl::SetWebUIProperty(const std::string& name,
                                            const std::string& value) {
-  // WebUI allows to register SetProperties only for the main frame.
-  if (GetParent())
-    return;
   // This is a sanity check before telling the renderer to enable the property.
   // It could lie and send the corresponding IPC messages anyway, but we will
   // not act on them if enabled_bindings_ doesn't agree. If we get here without
   // WebUI bindings, terminate the renderer process.
   if (enabled_bindings_ & BINDINGS_POLICY_WEB_UI)
-    web_ui_->SetProperty(name, value);
+    Send(new FrameMsg_SetWebUIProperty(routing_id_, name, value));
   else
     ReceivedBadMessage(GetProcess(), bad_message::RVH_WEB_UI_BINDINGS_MISMATCH);
 }
@@ -6253,7 +6250,7 @@ bool RenderFrameHostImpl::CreateWebUI(const GURL& dest_url,
     return false;
   }
 
-  web_ui_ = delegate_->CreateWebUIForRenderFrameHost(dest_url, this);
+  web_ui_ = delegate_->CreateWebUIForRenderFrameHost(dest_url);
   if (!web_ui_)
     return false;
 
