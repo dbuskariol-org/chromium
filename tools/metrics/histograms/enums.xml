@@ -29265,6 +29265,7 @@ Called by update_feature_policy_enum.py.-->
   <int value="0" label="Presented Frame"/>
   <int value="1" label="Missed Deadline Frame"/>
   <int value="2" label="Dropped Frame"/>
+  <int value="3" label="Compositor Only Frame"/>
 </enum>
 
 <enum name="FrameSiteInstanceProcessRelationship">
