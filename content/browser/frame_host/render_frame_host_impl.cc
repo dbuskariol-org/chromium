@@ -3408,6 +3408,10 @@ void RenderFrameHostImpl::SendInterventionReport(const std::string& id,
   GetAssociatedLocalFrame()->SendInterventionReport(id, message);
 }
 
+WebUI* RenderFrameHostImpl::GetWebUI() {
+  return web_ui();
+}
+
 void RenderFrameHostImpl::AllowBindings(int bindings_flags) {
   // Never grant any bindings to browser plugin guests.
   if (GetProcess()->IsForGuestsOnly()) {
