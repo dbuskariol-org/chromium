@@ -80,3 +80,7 @@ crbug.com/958524 http/tests/inspector-protocol/network/xhr-post-replay-cors.js [
 # Added by https://chromium-review.googlesource.com/c/chromium/src/+/2054468 and
 # Blink CORS does not support.
 crbug.com/941297 http/tests/inspector-protocol/network/xhr-cors-preflight-redirect-failure.js [ Timeout ]
+
+# Added by https://chromium-review.googlesource.com/c/chromium/src/+/2178572 and
+# Blink CORS does not support.
+crbug.com/911952 external/wpt/client-hints/accept-ch-stickiness/cross-origin-subresource-redirect-with-fp-delegation.https.html [ Skip ]
