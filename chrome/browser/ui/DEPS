@@ -10,6 +10,9 @@ include_rules = [
 ]
 
 specific_include_rules = {
+  "application_launch_browsertest\.cc": [
+    "+ash/shell.h",
+  ],
   "browser_finder_chromeos_browsertest\.cc": [
     "+ash/wm/desks/desk.h",
     "+ash/wm/desks/desks_controller.h",

@@ -114,7 +114,8 @@ void AppServiceContextMenu::ExecuteCommand(int command_id, int event_flags) {
 
     case ash::SETTINGS:
       if (app_id() == crostini::GetTerminalId())
-        crostini::LaunchTerminalSettings(profile());
+        crostini::LaunchTerminalSettings(profile(),
+                                         controller()->GetAppListDisplayId());
       break;
 
     case ash::APP_CONTEXT_MENU_NEW_WINDOW:

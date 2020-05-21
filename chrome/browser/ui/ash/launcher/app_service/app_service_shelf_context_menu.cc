@@ -188,7 +188,7 @@ void AppServiceShelfContextMenu::ExecuteCommand(int command_id,
 
     case ash::SETTINGS:
       if (item().id.app_id == crostini::GetTerminalId())
-        crostini::LaunchTerminalSettings(controller()->profile());
+        crostini::LaunchTerminalSettings(controller()->profile(), display_id());
       return;
 
     default:
