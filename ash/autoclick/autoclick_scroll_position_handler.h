@@ -7,54 +7,43 @@
 
 #include <memory>
 
-#include "base/location.h"
-#include "base/time/time.h"
-#include "base/timer/timer.h"
-#include "ui/gfx/animation/animation_delegate.h"
+#include "base/macros.h"
 #include "ui/gfx/animation/linear_animation.h"
-#include "ui/gfx/native_widget_types.h"
-
-namespace gfx {
-class Point;
-}  // namespace gfx
-
-namespace views {
-class Widget;
-}  // namespace views
+#include "ui/gfx/geometry/point.h"
+#include "ui/views/widget/widget.h"
 
 namespace ash {
+
+class AutoclickScrollPositionView;
 
 // AutoclickScrollPositionHandler displays the position at which the next scroll
 // event will occur, giving users a sense of which part of the screen will
 // receive scroll events. It will display at full opacity for a short time, then
 // partially fade out to keep from blocking content.
-class AutoclickScrollPositionHandler : public gfx::AnimationDelegate {
+class AutoclickScrollPositionHandler : public gfx::LinearAnimation {
  public:
-  explicit AutoclickScrollPositionHandler(
-      std::unique_ptr<views::Widget> widget);
-  AutoclickScrollPositionHandler(const AutoclickScrollPositionHandler&) =
-      delete;
-  AutoclickScrollPositionHandler& operator=(
-      const AutoclickScrollPositionHandler&) = delete;
+  AutoclickScrollPositionHandler(const gfx::Point& center_point_in_screen,
+                                 views::Widget* widget);
   ~AutoclickScrollPositionHandler() override;
 
-  gfx::NativeView GetNativeView();
-
-  void SetScrollPointCenterInScreen(const gfx::Point& scroll_point_center);
+  void SetCenter(const gfx::Point& center_point_in_screen,
+                 views::Widget* widget);
 
  private:
-  static constexpr auto kOpaqueTime = base::TimeDelta::FromMilliseconds(500);
-  static constexpr auto kFadeTime = base::TimeDelta::FromMilliseconds(500);
+  enum AnimationState {
+    kWait,
+    kFade,
+    kDone,
+  };
 
-  // gfx::AnimationDelegate:
-  void AnimationProgressed(const gfx::Animation* animation) override;
+  // Overridden from gfx::LinearAnimation.
+  void AnimateToState(double state) override;
+  void AnimationStopped() override;
 
-  std::unique_ptr<views::Widget> widget_;
-  base::DelayTimer timer_{FROM_HERE, kOpaqueTime,
-                          static_cast<gfx::Animation*>(&animation_),
-                          &gfx::Animation::Start};
-  gfx::LinearAnimation animation_{
-      kFadeTime, gfx::LinearAnimation::kDefaultFrameRate, this};
+  std::unique_ptr<AutoclickScrollPositionView> view_;
+  AnimationState animation_state_ = kDone;
+
+  DISALLOW_COPY_AND_ASSIGN(AutoclickScrollPositionHandler);
 };
 
 }  // namespace ash
