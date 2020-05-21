@@ -83,7 +83,6 @@ import org.chromium.chrome.test.util.browser.Features.EnableFeatures;
 import org.chromium.content_public.browser.test.util.CriteriaHelper;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 import org.chromium.content_public.browser.test.util.TouchCommon;
-import org.chromium.net.test.EmbeddedTestServer;
 import org.chromium.ui.test.util.UiRestriction;
 
 import java.io.IOException;
@@ -124,7 +123,6 @@ public class StartSurfaceTest {
     public TestRule mProcessor = new Features.InstrumentationProcessor();
 
     private final boolean mImmediateReturn;
-    private String mUrl;
 
     public StartSurfaceTest(boolean useInstantStart, boolean immediateReturn) {
         CachedFeatureFlags.setForTesting(ChromeFeatureList.INSTANT_START, useInstantStart);
@@ -150,11 +148,6 @@ public class StartSurfaceTest {
 
     @Before
     public void setUp() throws IOException {
-        EmbeddedTestServer testServer =
-                EmbeddedTestServer.createAndStartServer(InstrumentationRegistry.getContext());
-
-        mUrl = testServer.getURL("/chrome/test/data/android/navigate/simple.html");
-
         // Scrolling tests need more tabs.
         String scrollMode = StartSurfaceConfiguration.START_SURFACE_OMNIBOX_SCROLL_MODE.getValue();
         int expectedTabs = scrollMode.isEmpty() ? 1 : 16;
@@ -617,7 +610,7 @@ public class StartSurfaceTest {
 
         OverviewModeBehaviorWatcher hideWatcher =
                 TabUiTestHelper.createOverviewHideWatcher(mActivityTestRule.getActivity());
-        onView(withId(R.id.search_box_text)).perform(replaceText(mUrl));
+        onView(withId(R.id.search_box_text)).perform(replaceText("about:blank"));
         onView(withId(R.id.url_bar)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
         hideWatcher.waitForBehavior();
         assertThat(
@@ -650,7 +643,8 @@ public class StartSurfaceTest {
 
         OverviewModeBehaviorWatcher hideWatcher =
                 TabUiTestHelper.createOverviewHideWatcher(mActivityTestRule.getActivity());
-        onView(allOf(withId(R.id.search_box_text), isDisplayed())).perform(replaceText(mUrl));
+        onView(allOf(withId(R.id.search_box_text), isDisplayed()))
+                .perform(replaceText("about:blank"));
         onView(withId(R.id.url_bar)).perform(pressKey(KeyEvent.KEYCODE_ENTER));
         hideWatcher.waitForBehavior();
         assertThat(
