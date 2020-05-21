@@ -2869,7 +2869,22 @@
       },
     },
 
-    #1
+    'linux_chromeos_oobe_specific_tests': {
+      # TODO(crbug.com/1071693): Merge this suite back in to the main
+      # browser_tests when the tests no longer fail on MSAN.
+      'oobe_only_browser_tests': {
+        'name': 'oobe_only_browser_tests',
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/chromeos.msan.browser_tests.oobe_positive.filter',
+        ],
+        'experiment_percentage': 100,
+        'test': 'browser_tests',
+        'swarming': {
+          'shards': 20,
+        },
+      },
+    },
+
     'linux_chromeos_specific_gtests': {
       # Chrome OS only.
       'app_list_unittests': {},
@@ -4823,6 +4838,19 @@
       'chromium_gtests_for_devices_with_graphical_output',
       'chromium_gtests_for_linux_and_chromeos_only',
       'chromium_gtests_for_win_and_linux_only',
+      'linux_chromeos_specific_gtests',
+      'linux_flavor_specific_chromium_gtests',
+      'non_android_chromium_gtests',
+      'storage_service_gtests',
+    ],
+
+    'linux_chromeos_gtests_oobe': [
+      'aura_gtests',
+      'chromium_gtests',
+      'chromium_gtests_for_devices_with_graphical_output',
+      'chromium_gtests_for_linux_and_chromeos_only',
+      'chromium_gtests_for_win_and_linux_only',
+      'linux_chromeos_oobe_specific_tests',
       'linux_chromeos_specific_gtests',
       'linux_flavor_specific_chromium_gtests',
       'non_android_chromium_gtests',
