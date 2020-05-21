@@ -3401,6 +3401,8 @@ static_library("browser") {
       "metrics/tab_stats_tracker_delegate.h",
       "metrics/tab_stats_tracker_delegate_win.cc",
       "metrics/tab_stats_tracker_win.cc",
+      "nearby_sharing/fast_initiation_manager.cc",
+      "nearby_sharing/fast_initiation_manager.h",
       "nearby_sharing/nearby_sharing_prefs.cc",
       "nearby_sharing/nearby_sharing_prefs.h",
       "nearby_sharing/nearby_sharing_service.h",
