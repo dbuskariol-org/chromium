@@ -31,10 +31,7 @@ class ASH_EXPORT AmbientBackendModel {
   void RemoveObserver(AmbientBackendModelObserver* observer);
 
   void SetTopics(const std::vector<AmbientModeTopic>& topics);
-  const std::vector<AmbientModeTopic>& topics() { return topics_; }
-
-  // Return a topic to download the image.
-  const AmbientModeTopic& GetNextTopic();
+  const std::vector<AmbientModeTopic>& topics() const { return topics_; }
 
   // Prefetch one more image for ShowNextImage animations.
   bool ShouldFetchImmediately() const;
@@ -79,9 +76,6 @@ class ASH_EXPORT AmbientBackendModel {
   // Local cache of downloaded images for photo transition animation.
   gfx::ImageSkia current_image_;
   gfx::ImageSkia next_image_;
-
-  // The index of a topic to download.
-  size_t topic_index_ = 0;
 
   // The index of currently shown image.
   int current_image_index_ = 0;

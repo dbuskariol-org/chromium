@@ -25,8 +25,28 @@ namespace ash {
 
 using AmbientPhotoControllerTest = AmbientAshTestBase;
 
+// Test that topics are downloaded when starting screen update.
+TEST_F(AmbientPhotoControllerTest, ShouldStartToDownloadTopics) {
+  auto topics = photo_controller()->ambient_backend_model()->topics();
+  EXPECT_TRUE(topics.empty());
+
+  // Start to refresh images.
+  photo_controller()->StartScreenUpdate();
+  topics = photo_controller()->ambient_backend_model()->topics();
+  EXPECT_TRUE(topics.empty());
+
+  task_environment()->FastForwardBy(kPhotoRefreshInterval);
+  topics = photo_controller()->ambient_backend_model()->topics();
+  EXPECT_FALSE(topics.empty());
+
+  // Stop to refresh images.
+  photo_controller()->StopScreenUpdate();
+  topics = photo_controller()->ambient_backend_model()->topics();
+  EXPECT_TRUE(topics.empty());
+}
+
 // Test that image is downloaded when starting screen update.
-TEST_F(AmbientPhotoControllerTest, ShouldStartScreenUpdateSuccessfully) {
+TEST_F(AmbientPhotoControllerTest, ShouldStartToDownloadImages) {
   auto image = photo_controller()->ambient_backend_model()->GetCurrentImage();
   EXPECT_TRUE(image.isNull());
 

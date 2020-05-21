@@ -68,6 +68,9 @@ class ASH_EXPORT AmbientPhotoController : public AmbientBackendModelObserver {
 
   void GetScreenUpdateInfo();
 
+  // Return a topic to download the image.
+  const AmbientModeTopic& GetNextTopic();
+
   void GetNextImage();
 
   void OnScreenUpdateInfoFetched(const ash::ScreenUpdate& screen_update);
@@ -85,6 +88,9 @@ class ASH_EXPORT AmbientPhotoController : public AmbientBackendModelObserver {
   AmbientBackendModel ambient_backend_model_;
 
   base::OneShotTimer photo_refresh_timer_;
+
+  // The index of a topic to download.
+  size_t topic_index_ = 0;
 
   ScopedObserver<AmbientBackendModel, AmbientBackendModelObserver>
       ambient_backedn_model_observer_{this};

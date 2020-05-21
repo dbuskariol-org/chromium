@@ -27,20 +27,7 @@ void AmbientBackendModel::RemoveObserver(
 void AmbientBackendModel::SetTopics(
     const std::vector<AmbientModeTopic>& topics) {
   topics_ = topics;
-  topic_index_ = 0;
-
   NotifyTopicsChanged();
-}
-
-const AmbientModeTopic& AmbientBackendModel::GetNextTopic() {
-  DCHECK(!topics_.empty());
-
-  const auto& topic = topics_[topic_index_];
-  ++topic_index_;
-  if (topic_index_ == topics_.size())
-    topic_index_ = 0;
-
-  return topic;
 }
 
 bool AmbientBackendModel::ShouldFetchImmediately() const {
@@ -74,7 +61,6 @@ void AmbientBackendModel::SetPhotoRefreshInterval(base::TimeDelta interval) {
 
 void AmbientBackendModel::Clear() {
   topics_.clear();
-  topic_index_ = 0;
   current_image_ = gfx::ImageSkia();
   next_image_ = gfx::ImageSkia();
 }
