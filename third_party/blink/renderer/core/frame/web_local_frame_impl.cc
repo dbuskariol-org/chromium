@@ -2565,8 +2565,7 @@ void WebLocalFrameImpl::BindDevToolsAgent(
 }
 
 void WebLocalFrameImpl::SetLifecycleState(mojom::FrameLifecycleState state) {
-  DCHECK(GetFrame());
-  GetFrame()->SetLifecycleState(state);
+  // TODO(altimin): Remove this.
 }
 
 void WebLocalFrameImpl::WasHidden() {
