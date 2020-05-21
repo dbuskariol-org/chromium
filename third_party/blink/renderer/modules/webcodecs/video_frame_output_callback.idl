@@ -5,4 +5,4 @@
 // https://github.com/WICG/web-codecs
 
 [RuntimeEnabled=WebCodecs]
-callback VideoDecoderOutputCallback = void(VideoFrame output);
+callback VideoFrameOutputCallback = void(VideoFrame output);
