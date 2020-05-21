@@ -28,6 +28,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assume.assumeTrue;
 
 import static org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil.TAB_SWITCHER_ON_RETURN_MS;
 import static org.chromium.chrome.features.start_surface.InstantStartTest.createThumbnailBitmapAndWriteToFile;
@@ -772,10 +773,9 @@ public class StartSurfaceTest {
         "/hide_switch_when_no_incognito_tabs/true/omnibox_scroll_mode/top"})
     public void testScroll_OmniboxOnly_Top() {
         // clang-format on
-        if (!mImmediateReturn) {
-            // TODO(crbug.com/1082664): Make it work with NoReturn.
-            return;
-        }
+        // TODO(crbug.com/1082664): Make it work with NoReturn.
+        assumeTrue(mImmediateReturn);
+
         onViewWaiting(allOf(withId(R.id.primary_tasks_surface_view), isDisplayed()));
 
         onView(withId(R.id.search_box)).check(matches(isDisplayed()));
@@ -796,10 +796,9 @@ public class StartSurfaceTest {
         "/hide_switch_when_no_incognito_tabs/true/omnibox_scroll_mode/quick"})
     public void testScroll_OmniboxOnly_Quick() {
         // clang-format on
-        if (!mImmediateReturn) {
-            // TODO(crbug.com/1082664): Make it work with NoReturn.
-            return;
-        }
+        // TODO(crbug.com/1082664): Make it work with NoReturn.
+        assumeTrue(mImmediateReturn);
+
         onViewWaiting(allOf(withId(R.id.primary_tasks_surface_view), isDisplayed()));
 
         onView(withId(R.id.search_box)).check(matches(isDisplayed()));
@@ -820,10 +819,9 @@ public class StartSurfaceTest {
         "/hide_switch_when_no_incognito_tabs/true/omnibox_scroll_mode/pinned"})
     public void testScroll_OmniboxOnly_Pinned() {
         // clang-format on
-        if (!mImmediateReturn) {
-            // TODO(crbug.com/1082664): Make it work with NoReturn.
-            return;
-        }
+        // TODO(crbug.com/1082664): Make it work with NoReturn.
+        assumeTrue(mImmediateReturn);
+
         onViewWaiting(allOf(withId(R.id.primary_tasks_surface_view), isDisplayed()));
 
         onView(withId(R.id.search_box)).check(matches(isDisplayed()));
