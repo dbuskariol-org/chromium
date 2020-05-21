@@ -49,11 +49,11 @@ class WorkerWatcher : public content::DedicatedWorkerService::Observer,
   void TearDown();
 
   // content::DedicatedWorkerService::Observer:
-  void OnWorkerStarted(
+  void OnWorkerCreated(
       content::DedicatedWorkerId dedicated_worker_id,
       int worker_process_id,
       content::GlobalFrameRoutingId ancestor_render_frame_host_id) override;
-  void OnBeforeWorkerTerminated(
+  void OnBeforeWorkerDestroyed(
       content::DedicatedWorkerId dedicated_worker_id,
       content::GlobalFrameRoutingId ancestor_render_frame_host_id) override;
   void OnFinalResponseURLDetermined(

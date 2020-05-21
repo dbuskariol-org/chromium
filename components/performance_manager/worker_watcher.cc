@@ -129,7 +129,7 @@ void WorkerWatcher::TearDown() {
   service_worker_context_observer_.RemoveAll();
 }
 
-void WorkerWatcher::OnWorkerStarted(
+void WorkerWatcher::OnWorkerCreated(
     content::DedicatedWorkerId dedicated_worker_id,
     int worker_process_id,
     content::GlobalFrameRoutingId ancestor_render_frame_host_id) {
@@ -147,7 +147,7 @@ void WorkerWatcher::OnWorkerStarted(
                  ancestor_render_frame_host_id);
 }
 
-void WorkerWatcher::OnBeforeWorkerTerminated(
+void WorkerWatcher::OnBeforeWorkerDestroyed(
     content::DedicatedWorkerId dedicated_worker_id,
     content::GlobalFrameRoutingId ancestor_render_frame_host_id) {
   auto it = dedicated_worker_nodes_.find(dedicated_worker_id);

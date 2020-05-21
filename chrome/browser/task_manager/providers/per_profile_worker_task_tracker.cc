@@ -58,7 +58,7 @@ PerProfileWorkerTaskTracker::~PerProfileWorkerTaskTracker() {
     worker_task_provider_->OnWorkerTaskRemoved(kv.second.get());
 }
 
-void PerProfileWorkerTaskTracker::OnWorkerStarted(
+void PerProfileWorkerTaskTracker::OnWorkerCreated(
     content::DedicatedWorkerId dedicated_worker_id,
     int worker_process_id,
     content::GlobalFrameRoutingId ancestor_render_frame_host_id) {
@@ -66,7 +66,7 @@ void PerProfileWorkerTaskTracker::OnWorkerStarted(
                    worker_process_id, &dedicated_worker_tasks_);
 }
 
-void PerProfileWorkerTaskTracker::OnBeforeWorkerTerminated(
+void PerProfileWorkerTaskTracker::OnBeforeWorkerDestroyed(
     content::DedicatedWorkerId dedicated_worker_id,
     content::GlobalFrameRoutingId ancestor_render_frame_host_id) {
   DeleteWorkerTask(dedicated_worker_id, &dedicated_worker_tasks_);
