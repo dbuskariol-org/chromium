@@ -434,7 +434,7 @@ jumbo_component("base") {
     ":ui_data_pack",
     "//base",
     "//skia",
-    "//ui/base/cursor",
+    "//ui/base/cursor:cursor_base",
     "//ui/base/cursor/mojom:cursor_type",
     "//ui/gfx",
     "//ui/gfx/geometry",
