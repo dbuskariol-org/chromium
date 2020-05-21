@@ -690,19 +690,6 @@ class WebLocalFrame : public WebFrame {
   virtual bool CapturePaintPreview(const WebRect& bounds,
                                    cc::PaintCanvas* canvas) = 0;
 
-  // Text Zoom -----------------------------------------------------------
-
-  // Scales the text in the frame by a factor of text_zoom_factor.
-  virtual void SetLocalRootTextZoomFactor(float text_zoom_factor) = 0;
-  // Returns the current text zoom factor, where 1.0 is the normal size, > 1.0
-  // is scaled up and < 1.0 is scaled down.
-  virtual float LocalRootTextZoomFactor() = 0;
-
-  // FrameOverlay ----------------------------------------------------------
-
-  // Overlay this frame with a solid color. Only valid for the main frame.
-  virtual void SetMainFrameOverlayColor(SkColor) = 0;
-
   // Focus --------------------------------------------------------------
 
   // Returns whether the keyboard should be suppressed for the currently focused
@@ -738,12 +725,6 @@ class WebLocalFrame : public WebFrame {
   virtual bool ConsumeTransientUserActivation(
       UserActivationUpdateSource update_source =
           UserActivationUpdateSource::kRenderer) = 0;
-
-  // DevTools -----------------------------------------------------------------
-
-  // Instructs devtools to pause loading of the frame as soon as it's shown
-  // until explicit command from the devtools client.
-  virtual void WaitForDebuggerWhenShown() = 0;
 
   // Testing ------------------------------------------------------------------
 

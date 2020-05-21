@@ -1615,16 +1615,6 @@ bool WebLocalFrameImpl::CapturePaintPreview(const WebRect& bounds,
   return success;
 }
 
-void WebLocalFrameImpl::SetLocalRootTextZoomFactor(float text_zoom_factor) {
-  DCHECK(GetFrame()->IsLocalRoot());
-  GetFrame()->SetTextZoomFactor(text_zoom_factor);
-}
-
-float WebLocalFrameImpl::LocalRootTextZoomFactor() {
-  DCHECK(GetFrame()->IsLocalRoot());
-  return GetFrame()->TextZoomFactor();
-}
-
 PageSizeType WebLocalFrameImpl::GetPageSizeType(int page_index) {
   return GetFrame()->GetDocument()->StyleForPage(page_index)->GetPageSizeType();
 }
@@ -2442,10 +2432,6 @@ static String CreateMarkupInRect(LocalFrame* frame,
     return CreateMarkup(start_position, end_position, create_markup_options);
   }
   return CreateMarkup(end_position, start_position, create_markup_options);
-}
-
-void WebLocalFrameImpl::SetMainFrameOverlayColor(SkColor color) {
-  GetFrame()->SetMainFrameColorOverlay(color);
 }
 
 bool WebLocalFrameImpl::ShouldSuppressKeyboardForFocusedElement() {

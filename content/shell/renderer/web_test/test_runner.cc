@@ -59,6 +59,7 @@
 #include "third_party/blink/public/web/web_document.h"
 #include "third_party/blink/public/web/web_document_loader.h"
 #include "third_party/blink/public/web/web_frame.h"
+#include "third_party/blink/public/web/web_frame_widget.h"
 #include "third_party/blink/public/web/web_input_element.h"
 #include "third_party/blink/public/web/web_local_frame.h"
 #include "third_party/blink/public/web/web_manifest_manager.h"
@@ -1643,14 +1644,15 @@ void TestRunnerBindings::AddWebPageOverlay() {
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
   if (!frame_->IsMainFrame())
     return;
-  frame_->GetWebFrame()->SetMainFrameOverlayColor(SK_ColorCYAN);
+  frame_->GetLocalRootWebFrameWidget()->SetMainFrameOverlayColor(SK_ColorCYAN);
 }
 
 void TestRunnerBindings::RemoveWebPageOverlay() {
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
   if (!frame_->IsMainFrame())
     return;
-  frame_->GetWebFrame()->SetMainFrameOverlayColor(SK_ColorTRANSPARENT);
+  frame_->GetLocalRootWebFrameWidget()->SetMainFrameOverlayColor(
+      SK_ColorTRANSPARENT);
 }
 
 void TestRunnerBindings::UpdateAllLifecyclePhasesAndComposite() {
@@ -1782,8 +1784,8 @@ void TestRunnerBindings::TextZoomIn() {
   // TODO(danakj): This should be an async call through the browser process, but
   // note this is an AndroidWebView feature which is not part of the content (or
   // content_shell) APIs.
-  GetWebFrame()->SetLocalRootTextZoomFactor(
-      GetWebFrame()->LocalRootTextZoomFactor() * 1.2f);
+  blink::WebFrameWidget* widget = frame_->GetLocalRootWebFrameWidget();
+  widget->SetTextZoomFactor(widget->TextZoomFactor() * 1.2f);
 }
 
 void TestRunnerBindings::TextZoomOut() {
@@ -1796,8 +1798,8 @@ void TestRunnerBindings::TextZoomOut() {
   // TODO(danakj): This should be an async call through the browser process, but
   // note this is an AndroidWebView feature which is not part of the content (or
   // content_shell) APIs.
-  GetWebFrame()->SetLocalRootTextZoomFactor(
-      GetWebFrame()->LocalRootTextZoomFactor() / 1.2f);
+  blink::WebFrameWidget* widget = frame_->GetLocalRootWebFrameWidget();
+  widget->SetTextZoomFactor(widget->TextZoomFactor() / 1.2f);
 }
 
 void TestRunnerBindings::ZoomPageIn() {
@@ -2030,6 +2032,9 @@ void TestRunner::ResetWebView(WebViewTestProxy* web_view_test_proxy) {
 }
 
 void TestRunner::ResetWebWidget(WebWidgetTestProxy* web_widget_test_proxy) {
+  blink::WebFrameWidget* web_widget =
+      web_widget_test_proxy->GetWebFrameWidget();
+
   web_widget_test_proxy->SetDeviceScaleFactorForTesting(0);
 
   // These things are only modified/valid for the main frame's widget.
@@ -2037,16 +2042,15 @@ void TestRunner::ResetWebWidget(WebWidgetTestProxy* web_widget_test_proxy) {
     web_widget_test_proxy->ResetZoomLevelForTesting();
     web_widget_test_proxy->DisableAutoResizeForTesting(gfx::Size());
     web_widget_test_proxy->UseSynchronousResizeModeForTesting(false);
+
+    web_widget->SetMainFrameOverlayColor(SK_ColorTRANSPARENT);
+    web_widget->SetTextZoomFactor(1);
   }
 }
 
 void TestRunner::ResetWebFrame(WebFrameTestProxy* web_frame_test_proxy) {
   blink::WebLocalFrame* web_frame = web_frame_test_proxy->GetWebFrame();
 
-  if (web_frame_test_proxy->IsMainFrame()) {
-    web_frame->SetMainFrameOverlayColor(SK_ColorTRANSPARENT);
-    web_frame->SetLocalRootTextZoomFactor(1);
-  }
   web_frame->EnableViewSourceMode(false);
 }
 

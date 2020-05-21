@@ -161,6 +161,10 @@ WebViewTestProxy* WebWidgetTestProxy::GetWebViewTestProxy() {
   }
 }
 
+blink::WebFrameWidget* WebWidgetTestProxy::GetWebFrameWidget() {
+  return static_cast<blink::WebFrameWidget*>(GetWebWidget());
+}
+
 void WebWidgetTestProxy::Reset() {
   event_sender_.Reset();
   ClearEditCommands();
