@@ -7,8 +7,7 @@
 
 #include "chrome/installer/setup/install_worker.h"
 
-#include "base/win/atl.h"
-
+#include <atlsecurity.h>
 #include <oaidl.h>
 #include <sddl.h>
 #include <shlobj.h>
