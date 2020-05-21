@@ -86,7 +86,7 @@ class FakePaymentRequestDelegate : public PaymentRequestDelegate {
 
   const std::string& GetApplicationLocale() const override { return locale_; }
 
-  bool IsIncognito() const override { return false; }
+  bool IsOffTheRecord() const override { return false; }
 
   const GURL& GetLastCommittedURL() const override {
     return last_committed_url_;

@@ -96,7 +96,7 @@ PaymentRequest::PaymentRequest(
           render_frame_host->GetLastCommittedURL())),
       frame_security_origin_(render_frame_host->GetLastCommittedOrigin()),
       observer_for_testing_(observer_for_testing),
-      journey_logger_(delegate_->IsIncognito(),
+      journey_logger_(delegate_->IsOffTheRecord(),
                       ukm::GetSourceIdForWebContentsDocument(web_contents)) {
   receiver_.Bind(std::move(receiver));
   // OnConnectionTerminated will be called when the Mojo pipe is closed. This
@@ -774,8 +774,8 @@ void PaymentRequest::HideIfNecessary() {
   display_handle_.reset();
 }
 
-bool PaymentRequest::IsIncognito() const {
-  return delegate_->IsIncognito();
+bool PaymentRequest::IsOffTheRecord() const {
+  return delegate_->IsOffTheRecord();
 }
 
 void PaymentRequest::OnPaymentHandlerOpenWindowCalled() {
