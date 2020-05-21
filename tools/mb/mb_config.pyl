@@ -1887,7 +1887,7 @@
     ],
 
     'ios_clang_device_tot': [
-      'clang_tot', 'ios_device', 'release',
+      'clang_tot', 'ios_device', 'release', 'ios_chromium_cert'
     ],
 
     'ios_cronet': [
@@ -2584,6 +2584,11 @@
 
     'ios': {
       'gn_args': 'target_os="ios"',
+    },
+
+    'ios_chromium_cert': {
+      # defaults to "Apple Development" under ios_sdk.gni
+      'gn_args': 'ios_code_signing_identity_description=\"iPhone Developer\"',
     },
 
     'ios_deployment_target_9_0': {
