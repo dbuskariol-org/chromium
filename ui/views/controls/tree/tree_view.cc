@@ -968,7 +968,8 @@ void TreeView::PopulateAccessibilityData(InternalNode* node,
     gfx::Rect node_bounds = GetBackgroundBoundsForNode(node);
     data->relative_bounds.bounds = gfx::RectF(node_bounds);
   } else {
-    data->AddState(ax::mojom::State::kInvisible);
+    data->AddState(node != &root_ || root_shown_ ? ax::mojom::State::kInvisible
+                                                 : ax::mojom::State::kIgnored);
   }
 }
 

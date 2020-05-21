@@ -8,6 +8,8 @@
 #include <utility>
 
 #include "base/memory/ptr_util.h"
+#include "ui/accessibility/ax_enums.mojom.h"
+#include "ui/accessibility/ax_node_data.h"
 #include "ui/gfx/canvas.h"
 #include "ui/views/controls/focusable_border.h"
 #include "ui/views/controls/highlight_path_generator.h"
@@ -153,6 +155,12 @@ void FocusRing::OnPaint(gfx::Canvas* canvas) {
   } else if (path.isRRect(&rbounds)) {
     canvas->sk_canvas()->drawRRect(RingRectFromPathRect(rbounds), paint);
   }
+}
+
+void FocusRing::GetAccessibleNodeData(ui::AXNodeData* node_data) {
+  // Mark the focus ring in the accessibility tree as invisible so that it will
+  // not be accessed by assistive technologies.
+  node_data->AddState(ax::mojom::State::kInvisible);
 }
 
 void FocusRing::OnViewFocused(View* view) {

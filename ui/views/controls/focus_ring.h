@@ -77,6 +77,7 @@ class VIEWS_EXPORT FocusRing : public View, public ViewObserver {
   void ViewHierarchyChanged(
       const ViewHierarchyChangedDetails& details) override;
   void OnPaint(gfx::Canvas* canvas) override;
+  void GetAccessibleNodeData(ui::AXNodeData* node_data) override;
 
   // ViewObserver:
   void OnViewFocused(View* view) override;
