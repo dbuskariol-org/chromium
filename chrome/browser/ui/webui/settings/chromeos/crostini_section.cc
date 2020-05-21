@@ -457,7 +457,10 @@ void CrostiniSection::RegisterHierarchy(HierarchyGenerator* generator) const {
 
   // Crostini details.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_CROSTINI_LABEL,
-                                     mojom::Subpage::kCrostiniDetails);
+                                     mojom::Subpage::kCrostiniDetails,
+                                     mojom::SearchResultIcon::kPenguin,
+                                     mojom::SearchResultDefaultRank::kMedium,
+                                     mojom::kCrostiniDetailsSubpagePath);
   static constexpr mojom::Setting kCrostiniDetailsSettings[] = {
       mojom::Setting::kCrostiniContainerUpgrade,
       mojom::Setting::kCrostiniDiskResize,
@@ -468,20 +471,28 @@ void CrostiniSection::RegisterHierarchy(HierarchyGenerator* generator) const {
                             kCrostiniDetailsSettings, generator);
 
   // Manage shared folders.
-  generator->RegisterNestedSubpage(IDS_SETTINGS_CROSTINI_SHARED_PATHS,
-                                   mojom::Subpage::kCrostiniManageSharedFolders,
-                                   mojom::Subpage::kCrostiniDetails);
+  generator->RegisterNestedSubpage(
+      IDS_SETTINGS_CROSTINI_SHARED_PATHS,
+      mojom::Subpage::kCrostiniManageSharedFolders,
+      mojom::Subpage::kCrostiniDetails, mojom::SearchResultIcon::kPenguin,
+      mojom::SearchResultDefaultRank::kMedium,
+      mojom::kCrostiniManageSharedFoldersSubpagePath);
 
   // USB preferences.
   generator->RegisterNestedSubpage(
       IDS_SETTINGS_CROSTINI_SHARED_USB_DEVICES_LABEL,
-      mojom::Subpage::kCrostiniUsbPreferences,
-      mojom::Subpage::kCrostiniDetails);
+      mojom::Subpage::kCrostiniUsbPreferences, mojom::Subpage::kCrostiniDetails,
+      mojom::SearchResultIcon::kPenguin,
+      mojom::SearchResultDefaultRank::kMedium,
+      mojom::kCrostiniUsbPreferencesSubpagePath);
 
   // Backup and restore.
   generator->RegisterNestedSubpage(IDS_SETTINGS_CROSTINI_EXPORT_IMPORT_TITLE,
                                    mojom::Subpage::kCrostiniBackupAndRestore,
-                                   mojom::Subpage::kCrostiniDetails);
+                                   mojom::Subpage::kCrostiniDetails,
+                                   mojom::SearchResultIcon::kPenguin,
+                                   mojom::SearchResultDefaultRank::kMedium,
+                                   mojom::kCrostiniBackupAndRestoreSubpagePath);
   static constexpr mojom::Setting kCrostiniBackupAndRestoreSettings[] = {
       mojom::Setting::kBackupLinuxAppsAndFiles,
       mojom::Setting::kRestoreLinuxAppsAndFiles,
@@ -490,16 +501,22 @@ void CrostiniSection::RegisterHierarchy(HierarchyGenerator* generator) const {
                             kCrostiniBackupAndRestoreSettings, generator);
 
   // Develop Android apps.
-  generator->RegisterNestedSubpage(IDS_SETTINGS_CROSTINI_ARC_ADB_TITLE,
-                                   mojom::Subpage::kCrostiniDevelopAndroidApps,
-                                   mojom::Subpage::kCrostiniDetails);
+  generator->RegisterNestedSubpage(
+      IDS_SETTINGS_CROSTINI_ARC_ADB_TITLE,
+      mojom::Subpage::kCrostiniDevelopAndroidApps,
+      mojom::Subpage::kCrostiniDetails, mojom::SearchResultIcon::kPenguin,
+      mojom::SearchResultDefaultRank::kMedium,
+      mojom::kCrostiniDevelopAndroidAppsSubpagePath);
   generator->RegisterNestedSetting(mojom::Setting::kCrostiniAdbDebugging,
                                    mojom::Subpage::kCrostiniDevelopAndroidApps);
 
   // Port forwarding.
   generator->RegisterNestedSubpage(IDS_SETTINGS_CROSTINI_PORT_FORWARDING,
                                    mojom::Subpage::kCrostiniPortForwarding,
-                                   mojom::Subpage::kCrostiniDetails);
+                                   mojom::Subpage::kCrostiniDetails,
+                                   mojom::SearchResultIcon::kPenguin,
+                                   mojom::SearchResultDefaultRank::kMedium,
+                                   mojom::kCrostiniPortForwardingSubpagePath);
 }
 
 bool CrostiniSection::IsCrostiniAllowed() {

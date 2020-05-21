@@ -24,8 +24,15 @@ std::string FakeOsSettingsSection::ModifySearchResultUrl(
     mojom::SearchResultType type,
     OsSettingsIdentifier id,
     const std::string& url_to_modify) const {
+  return ModifySearchResultUrl(section_, url_to_modify);
+}
+
+// static
+std::string FakeOsSettingsSection::ModifySearchResultUrl(
+    mojom::Section section,
+    const std::string& url_to_modify) {
   std::stringstream ss;
-  ss << section_ << "::" << url_to_modify;
+  ss << section << "::" << url_to_modify;
   return ss.str();
 }
 

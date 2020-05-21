@@ -36,6 +36,10 @@ class FakeOsSettingsSection : public OsSettingsSection {
       OsSettingsIdentifier id,
       const std::string& url_to_modify) const override;
 
+  // Static function used to implement the function above.
+  static std::string ModifySearchResultUrl(mojom::Section section,
+                                           const std::string& url_to_modify);
+
  private:
   const mojom::Section section_;
 };

@@ -227,19 +227,29 @@ int AppsSection::GetSectionNameMessageId() const {
 void AppsSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // Manage apps.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_APPS_LINK_TEXT,
-                                     mojom::Subpage::kAppManagement);
+                                     mojom::Subpage::kAppManagement,
+                                     mojom::SearchResultIcon::kAppsGrid,
+                                     mojom::SearchResultDefaultRank::kMedium,
+                                     mojom::kAppManagementSubpagePath);
   // Note: The subpage name in the UI is updated dynamically based on the app
   // being shown, but we use a generic "App details" string here.
-  generator->RegisterNestedSubpage(IDS_SETTINGS_APP_DETAILS_TITLE,
-                                   mojom::Subpage::kAppDetails,
-                                   mojom::Subpage::kAppManagement);
+  generator->RegisterNestedSubpage(
+      IDS_SETTINGS_APP_DETAILS_TITLE, mojom::Subpage::kAppDetails,
+      mojom::Subpage::kAppManagement, mojom::SearchResultIcon::kAppsGrid,
+      mojom::SearchResultDefaultRank::kMedium, mojom::kAppDetailsSubpagePath);
   generator->RegisterNestedSubpage(IDS_SETTINGS_APPS_PLUGIN_VM_SHARED_PATHS,
                                    mojom::Subpage::kPluginVmSharedPaths,
-                                   mojom::Subpage::kAppManagement);
+                                   mojom::Subpage::kAppManagement,
+                                   mojom::SearchResultIcon::kAppsGrid,
+                                   mojom::SearchResultDefaultRank::kMedium,
+                                   mojom::kPluginVmSharedPathsSubpagePath);
 
   // Google Play Store.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_ANDROID_APPS_LABEL,
-                                     mojom::Subpage::kGooglePlayStore);
+                                     mojom::Subpage::kGooglePlayStore,
+                                     mojom::SearchResultIcon::kGooglePlay,
+                                     mojom::SearchResultDefaultRank::kMedium,
+                                     mojom::kGooglePlayStoreSubpagePath);
   static constexpr mojom::Setting kGooglePlayStoreSettings[] = {
       mojom::Setting::kManageAndroidPreferences,
       mojom::Setting::kRemovePlayStore,

@@ -12,6 +12,7 @@
 #include "base/strings/string16.h"
 #include "chrome/browser/ui/webui/settings/chromeos/constants/routes.mojom.h"
 #include "chrome/browser/ui/webui/settings/chromeos/constants/setting.mojom.h"
+#include "chrome/browser/ui/webui/settings/chromeos/search/search.mojom.h"
 #include "chrome/browser/ui/webui/settings/chromeos/search/search_concept.h"
 
 class Profile;
@@ -56,13 +57,21 @@ class OsSettingsSection {
     virtual ~HierarchyGenerator() = default;
 
     // Registers a subpage whose parent is this section.
-    virtual void RegisterTopLevelSubpage(int name_message_id,
-                                         mojom::Subpage subpage) = 0;
+    virtual void RegisterTopLevelSubpage(
+        int name_message_id,
+        mojom::Subpage subpage,
+        mojom::SearchResultIcon icon,
+        mojom::SearchResultDefaultRank default_rank,
+        const std::string& url_path_with_parameters) = 0;
 
     // Registers a subpage whose paernt is another subpage in this section.
-    virtual void RegisterNestedSubpage(int name_message_id,
-                                       mojom::Subpage subpage,
-                                       mojom::Subpage parent_subpage) = 0;
+    virtual void RegisterNestedSubpage(
+        int name_message_id,
+        mojom::Subpage subpage,
+        mojom::Subpage parent_subpage,
+        mojom::SearchResultIcon icon,
+        mojom::SearchResultDefaultRank default_rank,
+        const std::string& url_path_with_parameters) = 0;
 
     // Registers a setting embedded directly in the section (i.e., not within a
     // subpage). This functions is for primary locations (see above).

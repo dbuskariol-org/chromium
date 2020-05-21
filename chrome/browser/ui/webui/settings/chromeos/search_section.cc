@@ -257,8 +257,10 @@ void SearchSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kPreferredSearchEngine);
 
   // Assistant.
-  generator->RegisterTopLevelSubpage(IDS_SETTINGS_GOOGLE_ASSISTANT,
-                                     mojom::Subpage::kAssistant);
+  generator->RegisterTopLevelSubpage(
+      IDS_SETTINGS_GOOGLE_ASSISTANT, mojom::Subpage::kAssistant,
+      mojom::SearchResultIcon::kAssistant,
+      mojom::SearchResultDefaultRank::kMedium, mojom::kAssistantSubpagePath);
   static constexpr mojom::Setting kAssistantSettings[] = {
       mojom::Setting::kAssistantOnOff,
       mojom::Setting::kAssistantRelatedInfo,

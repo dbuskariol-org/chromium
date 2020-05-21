@@ -171,7 +171,10 @@ int BluetoothSection::GetSectionNameMessageId() const {
 
 void BluetoothSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_BLUETOOTH,
-                                     mojom::Subpage::kBluetoothDevices);
+                                     mojom::Subpage::kBluetoothDevices,
+                                     mojom::SearchResultIcon::kBluetooth,
+                                     mojom::SearchResultDefaultRank::kMedium,
+                                     mojom::kBluetoothDevicesSubpagePath);
   static constexpr mojom::Setting kBluetoothDevicesSettings[] = {
       mojom::Setting::kBluetoothOnOff,
       mojom::Setting::kBluetoothConnectToDevice,

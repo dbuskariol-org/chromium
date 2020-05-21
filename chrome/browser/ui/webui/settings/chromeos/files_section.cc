@@ -110,8 +110,10 @@ void FilesSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kGoogleDriveConnection);
 
   // Network file shares.
-  generator->RegisterTopLevelSubpage(IDS_SETTINGS_DOWNLOADS_SMB_SHARES,
-                                     mojom::Subpage::kNetworkFileShares);
+  generator->RegisterTopLevelSubpage(
+      IDS_SETTINGS_DOWNLOADS_SMB_SHARES, mojom::Subpage::kNetworkFileShares,
+      mojom::SearchResultIcon::kFolder, mojom::SearchResultDefaultRank::kMedium,
+      mojom::kNetworkFileSharesSubpagePath);
 }
 
 }  // namespace settings

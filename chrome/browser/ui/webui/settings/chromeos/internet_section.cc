@@ -638,28 +638,36 @@ int InternetSection::GetSectionNameMessageId() const {
 void InternetSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // Ethernet details.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_INTERNET_ETHERNET_DETAILS,
-                                     mojom::Subpage::kEthernetDetails);
+                                     mojom::Subpage::kEthernetDetails,
+                                     mojom::SearchResultIcon::kEthernet,
+                                     mojom::SearchResultDefaultRank::kMedium,
+                                     mojom::kEthernetDetailsSubpagePath);
   RegisterNestedSettingBulk(mojom::Subpage::kEthernetDetails,
                             GetEthernetDetailsSettings(), generator);
 
   // Wi-Fi networks.
-  generator->RegisterTopLevelSubpage(IDS_SETTINGS_INTERNET_WIFI_NETWORKS,
-                                     mojom::Subpage::kWifiNetworks);
+  generator->RegisterTopLevelSubpage(
+      IDS_SETTINGS_INTERNET_WIFI_NETWORKS, mojom::Subpage::kWifiNetworks,
+      mojom::SearchResultIcon::kWifi, mojom::SearchResultDefaultRank::kMedium,
+      mojom::kWifiNetworksSubpagePath);
   generator->RegisterNestedSetting(mojom::Setting::kWifiOnOff,
                                    mojom::Subpage::kWifiNetworks);
   generator->RegisterTopLevelAltSetting(mojom::Setting::kWifiOnOff);
 
   // Wi-Fi details.
-  generator->RegisterNestedSubpage(IDS_SETTINGS_INTERNET_WIFI_DETAILS,
-                                   mojom::Subpage::kWifiDetails,
-                                   mojom::Subpage::kWifiNetworks);
+  generator->RegisterNestedSubpage(
+      IDS_SETTINGS_INTERNET_WIFI_DETAILS, mojom::Subpage::kWifiDetails,
+      mojom::Subpage::kWifiNetworks, mojom::SearchResultIcon::kWifi,
+      mojom::SearchResultDefaultRank::kMedium, mojom::kWifiDetailsSubpagePath);
   RegisterNestedSettingBulk(mojom::Subpage::kWifiDetails,
                             GetWifiDetailsSettings(), generator);
 
   // Known networks.
-  generator->RegisterNestedSubpage(IDS_SETTINGS_INTERNET_KNOWN_NETWORKS,
-                                   mojom::Subpage::kKnownNetworks,
-                                   mojom::Subpage::kWifiNetworks);
+  generator->RegisterNestedSubpage(
+      IDS_SETTINGS_INTERNET_KNOWN_NETWORKS, mojom::Subpage::kKnownNetworks,
+      mojom::Subpage::kWifiNetworks, mojom::SearchResultIcon::kWifi,
+      mojom::SearchResultDefaultRank::kMedium,
+      mojom::kKnownNetworksSubpagePath);
   generator->RegisterNestedAltSetting(mojom::Setting::kPreferWifiNetwork,
                                       mojom::Subpage::kKnownNetworks);
   generator->RegisterNestedAltSetting(mojom::Setting::kForgetWifiNetwork,
@@ -669,7 +677,10 @@ void InternetSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // available which lists both Cellular and Instant Tethering networks. If
   // Instant Tethering is not available, there is no mobile data subpage.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_INTERNET_MOBILE_DATA_NETWORKS,
-                                     mojom::Subpage::kMobileDataNetworks);
+                                     mojom::Subpage::kMobileDataNetworks,
+                                     mojom::SearchResultIcon::kCellular,
+                                     mojom::SearchResultDefaultRank::kMedium,
+                                     mojom::kMobileDataNetworksSubpagePath);
   generator->RegisterNestedSetting(mojom::Setting::kMobileOnOff,
                                    mojom::Subpage::kMobileDataNetworks);
   generator->RegisterTopLevelAltSetting(mojom::Setting::kMobileOnOff);
@@ -678,9 +689,11 @@ void InternetSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // data subpage. However, note that if Instant Tethering is not available,
   // clicking on "Mobile data" at the Network section navigates users directly
   // to the cellular details page and skips over the mobile data subpage.
-  generator->RegisterNestedSubpage(IDS_SETTINGS_INTERNET_CELLULAR_DETAILS,
-                                   mojom::Subpage::kCellularDetails,
-                                   mojom::Subpage::kMobileDataNetworks);
+  generator->RegisterNestedSubpage(
+      IDS_SETTINGS_INTERNET_CELLULAR_DETAILS, mojom::Subpage::kCellularDetails,
+      mojom::Subpage::kMobileDataNetworks, mojom::SearchResultIcon::kCellular,
+      mojom::SearchResultDefaultRank::kMedium,
+      mojom::kCellularDetailsSubpagePath);
   RegisterNestedSettingBulk(mojom::Subpage::kCellularDetails,
                             GetCellularDetailsSettings(), generator);
 
@@ -688,13 +701,18 @@ void InternetSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // in the network section.
   generator->RegisterNestedSubpage(
       IDS_SETTINGS_INTERNET_INSTANT_TETHERING_DETAILS,
-      mojom::Subpage::kTetherDetails, mojom::Subpage::kMobileDataNetworks);
+      mojom::Subpage::kTetherDetails, mojom::Subpage::kMobileDataNetworks,
+      mojom::SearchResultIcon::kInstantTethering,
+      mojom::SearchResultDefaultRank::kMedium,
+      mojom::kTetherDetailsSubpagePath);
   generator->RegisterNestedSetting(mojom::Setting::kInstantTetheringOnOff,
                                    mojom::Subpage::kMobileDataNetworks);
 
   // VPN.
-  generator->RegisterTopLevelSubpage(IDS_SETTINGS_INTERNET_VPN_DETAILS,
-                                     mojom::Subpage::kVpnDetails);
+  generator->RegisterTopLevelSubpage(
+      IDS_SETTINGS_INTERNET_VPN_DETAILS, mojom::Subpage::kVpnDetails,
+      mojom::SearchResultIcon::kWifi, mojom::SearchResultDefaultRank::kMedium,
+      mojom::kVpnDetailsSubpagePath);
 }
 
 std::string InternetSection::ModifySearchResultUrl(

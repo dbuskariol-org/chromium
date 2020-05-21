@@ -521,7 +521,9 @@ void AccessibilitySection::RegisterHierarchy(
   // Manage accessibility.
   generator->RegisterTopLevelSubpage(
       IDS_SETTINGS_ACCESSIBILITY_MANAGE_ACCESSIBILITY_FEATURES,
-      mojom::Subpage::kManageAccessibility);
+      mojom::Subpage::kManageAccessibility, mojom::SearchResultIcon::kA11y,
+      mojom::SearchResultDefaultRank::kMedium,
+      mojom::kManageAccessibilitySubpagePath);
   static constexpr mojom::Setting kManageAccessibilitySettings[] = {
       mojom::Setting::kChromeVox,
       mojom::Setting::kSelectToSpeak,
@@ -546,8 +548,10 @@ void AccessibilitySection::RegisterHierarchy(
                             kManageAccessibilitySettings, generator);
 
   // Text-to-Speech.
-  generator->RegisterTopLevelSubpage(IDS_SETTINGS_MANAGE_TTS_SETTINGS,
-                                     mojom::Subpage::kTextToSpeech);
+  generator->RegisterTopLevelSubpage(
+      IDS_SETTINGS_MANAGE_TTS_SETTINGS, mojom::Subpage::kTextToSpeech,
+      mojom::SearchResultIcon::kA11y, mojom::SearchResultDefaultRank::kMedium,
+      mojom::kTextToSpeechSubpagePath);
   static constexpr mojom::Setting kTextToSpeechSettings[] = {
       mojom::Setting::kTextToSpeechRate,    mojom::Setting::kTextToSpeechPitch,
       mojom::Setting::kTextToSpeechVolume,  mojom::Setting::kTextToSpeechVoice,
@@ -558,7 +562,10 @@ void AccessibilitySection::RegisterHierarchy(
 
   // Switch access.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_MANAGE_SWITCH_ACCESS_SETTINGS,
-                                     mojom::Subpage::kSwitchAccessOptions);
+                                     mojom::Subpage::kSwitchAccessOptions,
+                                     mojom::SearchResultIcon::kA11y,
+                                     mojom::SearchResultDefaultRank::kMedium,
+                                     mojom::kSwitchAccessOptionsSubpagePath);
   static constexpr mojom::Setting kSwitchAccessSettings[] = {
       mojom::Setting::kSwitchActionAssignment,
       mojom::Setting::kSwitchActionAutoScan,
@@ -568,8 +575,10 @@ void AccessibilitySection::RegisterHierarchy(
                             kSwitchAccessSettings, generator);
 
   // Captions.
-  generator->RegisterTopLevelSubpage(IDS_SETTINGS_CAPTIONS,
-                                     mojom::Subpage::kCaptions);
+  generator->RegisterTopLevelSubpage(
+      IDS_SETTINGS_CAPTIONS, mojom::Subpage::kCaptions,
+      mojom::SearchResultIcon::kA11y, mojom::SearchResultDefaultRank::kMedium,
+      mojom::kCaptionsSubpagePath);
 }
 
 void AccessibilitySection::UpdateSearchTags() {
