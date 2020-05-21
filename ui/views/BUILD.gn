@@ -526,6 +526,7 @@ jumbo_component("views") {
 
   if (is_linux && !is_chromeos) {
     sources -= [ "window/window_button_order_provider.cc" ]
+    public_deps += [ "//ui/base/cursor" ]
     deps += [
       "//ui/base/ime/linux",
       "//ui/shell_dialogs",
@@ -750,7 +751,10 @@ jumbo_component("views") {
         "widget/desktop_aura/desktop_screen_position_client.cc",
         "widget/desktop_aura/desktop_window_tree_host.cc",
       ]
-      public_deps += [ "//ui/base/cursor/mojom:cursor_type" ]
+      public_deps += [
+        "//ui/base/cursor",
+        "//ui/base/cursor/mojom:cursor_type",
+      ]
       if (use_x11) {
         public_deps += [
           "//ui/base/x",

@@ -2307,7 +2307,10 @@ static_library("browser") {
     ]
     sources +=
         [ "component_updater/recovery_improved_component_installer_win.cc" ]
-    deps += [ "//chrome/elevation_service:elevation_service_idl" ]
+    deps += [
+      "//chrome/elevation_service:elevation_service_idl",
+      "//ui/base/cursor",
+    ]
   }
 
   if (is_posix || is_fuchsia) {

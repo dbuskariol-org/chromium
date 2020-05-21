@@ -79,6 +79,7 @@ source_set("exo") {
     "//skia",
     "//third_party/blink/public/common",
     "//ui/aura",
+    "//ui/base/cursor",
     "//ui/base/ime",
     "//ui/compositor",
     "//ui/compositor_extra",

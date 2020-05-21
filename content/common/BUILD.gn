@@ -351,7 +351,9 @@ source_set("common") {
     sources -= [ "cursors/webcursor_ozone.cc" ]
   }
 
-  if (!use_aura) {
+  if (use_aura) {
+    deps += [ "//ui/base/cursor" ]
+  } else {
     sources -= [ "cursors/webcursor_aura.cc" ]
   }
 
