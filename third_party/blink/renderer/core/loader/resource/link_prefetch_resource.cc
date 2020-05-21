@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/core/loader/resource/link_fetch_resource.h"
+#include "third_party/blink/renderer/core/loader/resource/link_prefetch_resource.h"
 
 #include "third_party/blink/public/mojom/loader/request_context_frame_type.mojom-blink.h"
 #include "third_party/blink/renderer/platform/loader/fetch/fetch_parameters.h"
@@ -10,24 +10,24 @@
 
 namespace blink {
 
-Resource* LinkFetchResource::Fetch(FetchParameters& params,
-                                   ResourceFetcher* fetcher) {
-  return fetcher->RequestResource(params, LinkResourceFactory(), nullptr);
+Resource* LinkPrefetchResource::Fetch(FetchParameters& params,
+                                      ResourceFetcher* fetcher) {
+  return fetcher->RequestResource(params, Factory(), nullptr);
 }
 
-LinkFetchResource::LinkFetchResource(const ResourceRequest& request,
-                                     const ResourceLoaderOptions& options)
+LinkPrefetchResource::LinkPrefetchResource(const ResourceRequest& request,
+                                           const ResourceLoaderOptions& options)
     : Resource(request, ResourceType::kLinkPrefetch, options) {}
 
-LinkFetchResource::~LinkFetchResource() = default;
+LinkPrefetchResource::~LinkPrefetchResource() = default;
 
-LinkFetchResource::LinkResourceFactory::LinkResourceFactory()
+LinkPrefetchResource::Factory::Factory()
     : NonTextResourceFactory(ResourceType::kLinkPrefetch) {}
 
-Resource* LinkFetchResource::LinkResourceFactory::Create(
+Resource* LinkPrefetchResource::Factory::Create(
     const ResourceRequest& request,
     const ResourceLoaderOptions& options) const {
-  return MakeGarbageCollected<LinkFetchResource>(request, options);
+  return MakeGarbageCollected<LinkPrefetchResource>(request, options);
 }
 
 }  // namespace blink
