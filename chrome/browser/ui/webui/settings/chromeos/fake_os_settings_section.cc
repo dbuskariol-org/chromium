@@ -20,6 +20,18 @@ int FakeOsSettingsSection::GetSectionNameMessageId() const {
   return IDS_INTERNAL_APP_SETTINGS;
 }
 
+mojom::Section FakeOsSettingsSection::GetSection() const {
+  return section_;
+}
+
+mojom::SearchResultIcon FakeOsSettingsSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kWifi;
+}
+
+std::string FakeOsSettingsSection::GetSectionPath() const {
+  return std::string();
+}
+
 std::string FakeOsSettingsSection::ModifySearchResultUrl(
     mojom::SearchResultType type,
     OsSettingsIdentifier id,

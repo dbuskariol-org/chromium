@@ -253,6 +253,18 @@ int SearchSection::GetSectionNameMessageId() const {
                               : IDS_SETTINGS_SEARCH;
 }
 
+mojom::Section SearchSection::GetSection() const {
+  return mojom::Section::kSearchAndAssistant;
+}
+
+mojom::SearchResultIcon SearchSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kMagnifyingGlass;
+}
+
+std::string SearchSection::GetSectionPath() const {
+  return mojom::kSearchAndAssistantSectionPath;
+}
+
 void SearchSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kPreferredSearchEngine);
 

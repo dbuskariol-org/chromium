@@ -635,6 +635,18 @@ int InternetSection::GetSectionNameMessageId() const {
   return IDS_SETTINGS_INTERNET;
 }
 
+mojom::Section InternetSection::GetSection() const {
+  return mojom::Section::kNetwork;
+}
+
+mojom::SearchResultIcon InternetSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kWifi;
+}
+
+std::string InternetSection::GetSectionPath() const {
+  return mojom::kNetworkSectionPath;
+}
+
 void InternetSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // Ethernet details.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_INTERNET_ETHERNET_DETAILS,

@@ -844,6 +844,18 @@ int DeviceSection::GetSectionNameMessageId() const {
   return IDS_SETTINGS_DEVICE_TITLE;
 }
 
+mojom::Section DeviceSection::GetSection() const {
+  return mojom::Section::kDevice;
+}
+
+mojom::SearchResultIcon DeviceSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kLaptop;
+}
+
+std::string DeviceSection::GetSectionPath() const {
+  return mojom::kDeviceSectionPath;
+}
+
 void DeviceSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // Pointers.
   generator->RegisterTopLevelSubpage(

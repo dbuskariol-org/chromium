@@ -167,7 +167,23 @@ void MainSection::AddHandlers(content::WebUI* web_ui) {
 }
 
 int MainSection::GetSectionNameMessageId() const {
-  return IDS_INTERNAL_APP_SETTINGS;
+  NOTIMPLEMENTED();
+  return 0;
+}
+
+mojom::Section MainSection::GetSection() const {
+  NOTIMPLEMENTED();
+  return mojom::Section::kMinValue;
+}
+
+mojom::SearchResultIcon MainSection::GetSectionIcon() const {
+  NOTIMPLEMENTED();
+  return mojom::SearchResultIcon::kMinValue;
+}
+
+std::string MainSection::GetSectionPath() const {
+  NOTIMPLEMENTED();
+  return std::string();
 }
 
 void MainSection::RegisterHierarchy(HierarchyGenerator* generator) const {

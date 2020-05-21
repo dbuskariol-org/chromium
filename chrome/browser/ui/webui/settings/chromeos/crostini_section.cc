@@ -452,6 +452,18 @@ int CrostiniSection::GetSectionNameMessageId() const {
   return IDS_SETTINGS_CROSTINI_TITLE;
 }
 
+mojom::Section CrostiniSection::GetSection() const {
+  return mojom::Section::kCrostini;
+}
+
+mojom::SearchResultIcon CrostiniSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kPenguin;
+}
+
+std::string CrostiniSection::GetSectionPath() const {
+  return mojom::kCrostiniSectionPath;
+}
+
 void CrostiniSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kSetUpCrostini);
 

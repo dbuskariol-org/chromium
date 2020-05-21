@@ -169,6 +169,18 @@ int BluetoothSection::GetSectionNameMessageId() const {
   return IDS_SETTINGS_BLUETOOTH;
 }
 
+mojom::Section BluetoothSection::GetSection() const {
+  return mojom::Section::kBluetooth;
+}
+
+mojom::SearchResultIcon BluetoothSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kBluetooth;
+}
+
+std::string BluetoothSection::GetSectionPath() const {
+  return mojom::kBluetoothSectionPath;
+}
+
 void BluetoothSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_BLUETOOTH,
                                      mojom::Subpage::kBluetoothDevices,

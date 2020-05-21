@@ -788,6 +788,18 @@ int PeopleSection::GetSectionNameMessageId() const {
   return IDS_OS_SETTINGS_PEOPLE;
 }
 
+mojom::Section PeopleSection::GetSection() const {
+  return mojom::Section::kPeople;
+}
+
+mojom::SearchResultIcon PeopleSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kAvatar;
+}
+
+std::string PeopleSection::GetSectionPath() const {
+  return mojom::kPeopleSectionPath;
+}
+
 void PeopleSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kSetUpParentalControls);
 

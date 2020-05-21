@@ -186,6 +186,13 @@ Hierarchy::Hierarchy() = default;
 
 Hierarchy::~Hierarchy() = default;
 
+mojom::SearchResultPtr Hierarchy::GenerateSectionSearchResult(
+    mojom::Section section,
+    double relevance_score) const {
+  return sections_->GetSection(section)->GenerateSectionSearchResult(
+      relevance_score);
+}
+
 const Hierarchy::SubpageMetadata& Hierarchy::GetSubpageMetadata(
     mojom::Subpage subpage) const {
   const auto it = subpage_map_.find(subpage);

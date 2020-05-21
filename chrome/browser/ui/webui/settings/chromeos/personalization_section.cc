@@ -201,6 +201,18 @@ int PersonalizationSection::GetSectionNameMessageId() const {
   return IDS_OS_SETTINGS_PERSONALIZATION;
 }
 
+mojom::Section PersonalizationSection::GetSection() const {
+  return mojom::Section::kPersonalization;
+}
+
+mojom::SearchResultIcon PersonalizationSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kPaintbrush;
+}
+
+std::string PersonalizationSection::GetSectionPath() const {
+  return mojom::kPersonalizationSectionPath;
+}
+
 void PersonalizationSection::RegisterHierarchy(
     HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kOpenWallpaper);

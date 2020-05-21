@@ -109,6 +109,15 @@ class OsSettingsSection {
   // Provides the message ID for the name of this section.
   virtual int GetSectionNameMessageId() const = 0;
 
+  // Provides the Section enum for this section.
+  virtual mojom::Section GetSection() const = 0;
+
+  // Provides the icon for this section.
+  virtual mojom::SearchResultIcon GetSectionIcon() const = 0;
+
+  // Provides the path for this section.
+  virtual std::string GetSectionPath() const = 0;
+
   // Registers the subpages and/or settings which reside in this section.
   virtual void RegisterHierarchy(HierarchyGenerator* generator) const = 0;
 
@@ -121,6 +130,12 @@ class OsSettingsSection {
       mojom::SearchResultType type,
       OsSettingsIdentifier id,
       const std::string& url_to_modify) const;
+
+  // Generates a search result corresponding to this section. |relevance_score|
+  // must be passed by the client, since this result is being created manually
+  // instead of via query matching.
+  mojom::SearchResultPtr GenerateSectionSearchResult(
+      double relevance_score) const;
 
  protected:
   static base::string16 GetHelpUrlWithBoard(const std::string& original_url);

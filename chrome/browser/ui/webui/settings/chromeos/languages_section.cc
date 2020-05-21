@@ -165,6 +165,18 @@ int LanguagesSection::GetSectionNameMessageId() const {
   return IDS_OS_SETTINGS_LANGUAGES_AND_INPUT_PAGE_TITLE;
 }
 
+mojom::Section LanguagesSection::GetSection() const {
+  return mojom::Section::kLanguagesAndInput;
+}
+
+mojom::SearchResultIcon LanguagesSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kGlobe;
+}
+
+std::string LanguagesSection::GetSectionPath() const {
+  return mojom::kLanguagesAndInputSectionPath;
+}
+
 void LanguagesSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // Languages and input details.
   generator->RegisterTopLevelSubpage(

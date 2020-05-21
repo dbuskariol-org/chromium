@@ -514,6 +514,18 @@ int AccessibilitySection::GetSectionNameMessageId() const {
   return IDS_SETTINGS_ACCESSIBILITY;
 }
 
+mojom::Section AccessibilitySection::GetSection() const {
+  return mojom::Section::kAccessibility;
+}
+
+mojom::SearchResultIcon AccessibilitySection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kA11y;
+}
+
+std::string AccessibilitySection::GetSectionPath() const {
+  return mojom::kAccessibilitySectionPath;
+}
+
 void AccessibilitySection::RegisterHierarchy(
     HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kA11yQuickSettings);

@@ -250,6 +250,18 @@ int PrintingSection::GetSectionNameMessageId() const {
   return IDS_SETTINGS_PRINTING;
 }
 
+mojom::Section PrintingSection::GetSection() const {
+  return mojom::Section::kPrinting;
+}
+
+mojom::SearchResultIcon PrintingSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kPrinter;
+}
+
+std::string PrintingSection::GetSectionPath() const {
+  return mojom::kPrintingSectionPath;
+}
+
 void PrintingSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kPrintJobs);
 

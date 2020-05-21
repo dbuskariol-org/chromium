@@ -224,6 +224,18 @@ int AppsSection::GetSectionNameMessageId() const {
   return IDS_SETTINGS_APPS_TITLE;
 }
 
+mojom::Section AppsSection::GetSection() const {
+  return mojom::Section::kApps;
+}
+
+mojom::SearchResultIcon AppsSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kAppsGrid;
+}
+
+std::string AppsSection::GetSectionPath() const {
+  return mojom::kAppsSectionPath;
+}
+
 void AppsSection::RegisterHierarchy(HierarchyGenerator* generator) const {
   // Manage apps.
   generator->RegisterTopLevelSubpage(IDS_SETTINGS_APPS_LINK_TEXT,

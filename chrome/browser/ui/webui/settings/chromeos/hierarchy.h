@@ -104,6 +104,13 @@ class Hierarchy {
     std::vector<SettingLocation> alternates;
   };
 
+  // Generates a search result corresponding to |section|. |relevance_score|
+  // must be passed by the client, since this result is being created manually
+  // instead of via query matching.
+  mojom::SearchResultPtr GenerateSectionSearchResult(
+      mojom::Section section,
+      double relevance_score) const;
+
   const SubpageMetadata& GetSubpageMetadata(mojom::Subpage subpage) const;
   const SettingMetadata& GetSettingMetadata(mojom::Setting setting) const;
 

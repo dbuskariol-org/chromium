@@ -231,6 +231,18 @@ int MultiDeviceSection::GetSectionNameMessageId() const {
   return IDS_SETTINGS_MULTIDEVICE;
 }
 
+mojom::Section MultiDeviceSection::GetSection() const {
+  return mojom::Section::kMultiDevice;
+}
+
+mojom::SearchResultIcon MultiDeviceSection::GetSectionIcon() const {
+  return mojom::SearchResultIcon::kPhone;
+}
+
+std::string MultiDeviceSection::GetSectionPath() const {
+  return mojom::kMultiDeviceSectionPath;
+}
+
 void MultiDeviceSection::RegisterHierarchy(
     HierarchyGenerator* generator) const {
   generator->RegisterTopLevelSetting(mojom::Setting::kSetUpMultiDevice);
