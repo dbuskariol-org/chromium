@@ -1124,7 +1124,7 @@ bool GpuProcessHost::LaunchGpuProcess() {
 
     // Pass the current device info to the info-collection GPU process for
     // crash key logging.
-    const gpu::GPUInfo::GPUDevice& device_info = GetGPUInfo().active_gpu();
+    const gpu::GPUInfo::GPUDevice device_info = GetGPUInfo().active_gpu();
     cmd_line->AppendSwitchASCII(
         switches::kGpuVendorId,
         base::StringPrintf("%u", device_info.vendor_id));
@@ -1139,9 +1139,6 @@ bool GpuProcessHost::LaunchGpuProcess() {
                                 base::StringPrintf("%u", device_info.revision));
 #endif
     if (device_info.driver_version.length()) {
-      std::string version_str = device_info.driver_version;
-      base::debug::Alias(&version_str);
-
       cmd_line->AppendSwitchASCII(switches::kGpuDriverVersion,
                                   device_info.driver_version);
     }
