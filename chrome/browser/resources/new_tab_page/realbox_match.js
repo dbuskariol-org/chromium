@@ -149,7 +149,7 @@ class RealboxMatchElement extends PolymerElement {
        */
       separatorText_: {
         type: String,
-        value: () => loadTimeData.getString('realboxSeparator'),
+        computed: `computeSeparatorText_(match)`,
       },
     };
   }
@@ -378,6 +378,16 @@ class RealboxMatchElement extends PolymerElement {
   computeRemoveButtonIsVisible_() {
     return this.match && this.match.supportsDeletion &&
         loadTimeData.getBoolean('suggestionTransparencyEnabled');
+  }
+
+  /**
+   * @return {string}
+   * @private
+   */
+  computeSeparatorText_() {
+    return this.match && decodeString16(this.match.description) ?
+        loadTimeData.getString('realboxSeparator') :
+        '';
   }
 
   /**
