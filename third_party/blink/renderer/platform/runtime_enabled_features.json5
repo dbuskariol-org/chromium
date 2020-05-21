@@ -622,6 +622,10 @@
       status: "experimental",
     },
     {
+      name: "DigitalGoods",
+      status: "experimental",
+    },
+    {
       name: "DisableHardwareNoiseSuppression",
       origin_trial_feature_name: "DisableHardwareNoiseSuppression",
       status: "experimental",
