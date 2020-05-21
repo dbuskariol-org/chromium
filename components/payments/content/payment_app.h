@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PAYMENTS_CORE_PAYMENT_APP_H_
-#define COMPONENTS_PAYMENTS_CORE_PAYMENT_APP_H_
+#ifndef COMPONENTS_PAYMENTS_CONTENT_PAYMENT_APP_H_
+#define COMPONENTS_PAYMENTS_CONTENT_PAYMENT_APP_H_
 
 #include <set>
 #include <string>
@@ -16,6 +16,7 @@
 #include "components/autofill/core/browser/data_model/credit_card.h"
 #include "components/payments/core/payer_data.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
+#include "third_party/blink/public/mojom/payments/payment_request.mojom.h"
 #include "ui/gfx/image/image_skia.h"
 
 namespace payments {
@@ -125,6 +126,16 @@ class PaymentApp {
   // has selected inside of the payment app.
   virtual bool IsWaitingForPaymentDetailsUpdate() const;
 
+  // Notifies the payment app of the updated details, such as updated total, in
+  // response to the change of any of the following: payment method, shipping
+  // address, or shipping option.
+  virtual void UpdateWith(const mojom::PaymentDetailsPtr& details) {}
+
+  // Notifies the payment app that the merchant did not handle the payment
+  // method, shipping option, or shipping address change events, so the payment
+  // details are unchanged.
+  virtual void OnPaymentDetailsNotUpdated() {}
+
  protected:
   PaymentApp(int icon_resource_id, Type type);
 
@@ -141,4 +152,4 @@ class PaymentApp {
 
 }  // namespace payments
 
-#endif  // COMPONENTS_PAYMENTS_CORE_PAYMENT_APP_H_
+#endif  // COMPONENTS_PAYMENTS_CONTENT_PAYMENT_APP_H_

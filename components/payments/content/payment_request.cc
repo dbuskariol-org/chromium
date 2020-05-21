@@ -14,7 +14,7 @@
 #include "base/strings/string_util.h"
 #include "components/payments/content/can_make_payment_query_factory.h"
 #include "components/payments/content/content_payment_request_delegate.h"
-#include "components/payments/content/payment_details_converter.h"
+#include "components/payments/content/payment_app.h"
 #include "components/payments/content/payment_request_converter.h"
 #include "components/payments/content/payment_request_web_contents_manager.h"
 #include "components/payments/core/can_make_payment_query.h"
@@ -23,7 +23,6 @@
 #include "components/payments/core/features.h"
 #include "components/payments/core/method_strings.h"
 #include "components/payments/core/native_error_strings.h"
-#include "components/payments/core/payment_app.h"
 #include "components/payments/core/payment_details.h"
 #include "components/payments/core/payment_details_validation.h"
 #include "components/payments/core/payment_prefs.h"
@@ -344,11 +343,7 @@ void PaymentRequest::UpdateWith(mojom::PaymentDetailsPtr details) {
 
   if (state()->selected_app() && state()->IsPaymentAppInvoked() &&
       state()->selected_app()->IsWaitingForPaymentDetailsUpdate()) {
-    payment_handler_host_.UpdateWith(
-        PaymentDetailsConverter::ConvertToPaymentRequestDetailsUpdate(
-            details, state()->selected_app()->HandlesShippingAddress(),
-            base::BindRepeating(&PaymentApp::IsValidForPaymentMethodIdentifier,
-                                state()->selected_app()->AsWeakPtr())));
+    state()->selected_app()->UpdateWith(details);
   }
 
   bool is_resolving_promise_passed_into_show_method = !spec_->IsInitialized();
@@ -388,7 +383,7 @@ void PaymentRequest::OnPaymentDetailsNotUpdated() {
 
   if (state()->IsPaymentAppInvoked() && state()->selected_app() &&
       state()->selected_app()->IsWaitingForPaymentDetailsUpdate()) {
-    payment_handler_host_.OnPaymentDetailsNotUpdated();
+    state()->selected_app()->OnPaymentDetailsNotUpdated();
   }
 }
 

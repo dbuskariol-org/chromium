@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/payments/core/payment_app.h"
+#include "components/payments/content/payment_app.h"
 
 #include <algorithm>
 
 #include "components/autofill/core/common/autofill_clock.h"
-#include "components/payments/core/autofill_payment_app.h"
+#include "components/payments/content/autofill_payment_app.h"
 #include "components/payments/core/features.h"
 #include "components/payments/core/payments_experimental_features.h"
 

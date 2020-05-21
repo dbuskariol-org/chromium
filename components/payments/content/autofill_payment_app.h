@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PAYMENTS_CORE_AUTOFILL_PAYMENT_APP_H_
-#define COMPONENTS_PAYMENTS_CORE_AUTOFILL_PAYMENT_APP_H_
+#ifndef COMPONENTS_PAYMENTS_CONTENT_AUTOFILL_PAYMENT_APP_H_
+#define COMPONENTS_PAYMENTS_CONTENT_AUTOFILL_PAYMENT_APP_H_
 
 #include <set>
 #include <string>
@@ -16,7 +16,7 @@
 #include "components/autofill/core/browser/data_model/autofill_profile.h"
 #include "components/autofill/core/browser/data_model/credit_card.h"
 #include "components/autofill/core/browser/payments/full_card_request.h"
-#include "components/payments/core/payment_app.h"
+#include "components/payments/content/payment_app.h"
 
 namespace payments {
 
@@ -116,4 +116,4 @@ class AutofillPaymentApp
 
 }  // namespace payments
 
-#endif  // COMPONENTS_PAYMENTS_CORE_AUTOFILL_PAYMENT_APP_H_
+#endif  // COMPONENTS_PAYMENTS_CONTENT_AUTOFILL_PAYMENT_APP_H_
