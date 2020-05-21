@@ -167,6 +167,7 @@ dependencies {
 
     // Need to avoid having support_android = true set on dependencies.
     testCompile "org.robolectric:robolectric:4.3.1"
+    testCompile "org.robolectric:android-all:10-robolectric-5803371"
 }
 
 task setUpRepository(type: BuildConfigGenerator) {

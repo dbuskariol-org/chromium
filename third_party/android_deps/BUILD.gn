@@ -1401,6 +1401,16 @@ java_prebuilt("org_ow2_asm_asm_util_java") {
 }
 
 # This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
+java_prebuilt("org_robolectric_android_all_java") {
+  jar_path =
+      "libs/org_robolectric_android_all/android-all-10-robolectric-5803371.jar"
+  output_name = "org_robolectric_android_all"
+  enable_bytecode_rewriter = false
+  testonly = true
+  bypass_platform_checks = true
+}
+
+# This is generated, do not edit. Update BuildConfigGenerator.groovy instead.
 java_prebuilt("org_robolectric_robolectric_java") {
   jar_path = "libs/org_robolectric_robolectric/robolectric-4.3.1.jar"
   output_name = "org_robolectric_robolectric"

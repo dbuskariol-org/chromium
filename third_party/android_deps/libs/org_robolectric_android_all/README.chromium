@@ -1,0 +1,13 @@
+Name: Google Android android-all Library
+Short Name: android-all
+URL: http://source.android.com/
+Version: 10-robolectric-5803371
+License: Apache 2.0
+License File: NOT_SHIPPED
+Security Critical: no
+
+Description:
+A library jar that provides APIs for Applications written for the Google Android Platform.
+
+Local Modifications:
+No modifications.
