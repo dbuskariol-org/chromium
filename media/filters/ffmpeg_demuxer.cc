@@ -1075,9 +1075,12 @@ void FFmpegDemuxer::SeekInternal(base::TimeDelta time,
   // Additionally, to workaround limitations in how we expose seekable ranges to
   // Blink (http://crbug.com/137275), we also want to clamp seeks before the
   // start time to the start time.
-  base::TimeDelta seek_time = start_time_ < base::TimeDelta()
-                                  ? time + start_time_
-                                  : time < start_time_ ? start_time_ : time;
+  base::TimeDelta seek_time;
+  if (start_time_ < base::TimeDelta()) {
+    seek_time = time + start_time_;
+  } else {
+    seek_time = std::max(start_time_, time);
+  }
 
   // When seeking in an opus stream we need to ensure we deliver enough data to
   // satisfy the seek preroll; otherwise the audio at the actual seek time will
@@ -1437,7 +1440,7 @@ void FFmpegDemuxer::OnFindStreamInfoDone(int result) {
 
     // Note: This value is used for seeking, so we must take the true value and
     // not the one possibly clamped to zero below.
-    if (start_time < start_time_)
+    if (start_time != kNoTimestamp && start_time < start_time_)
       start_time_ = start_time;
 
     const bool is_opus_or_vorbis =
