@@ -78,7 +78,7 @@ void PerProfileWorkerTaskTracker::OnFinalResponseURLDetermined(
   SetWorkerTaskScriptUrl(dedicated_worker_id, url, &dedicated_worker_tasks_);
 }
 
-void PerProfileWorkerTaskTracker::OnWorkerStarted(
+void PerProfileWorkerTaskTracker::OnWorkerCreated(
     content::SharedWorkerId shared_worker_id,
     int worker_process_id,
     const base::UnguessableToken& dev_tools_token) {
@@ -86,7 +86,7 @@ void PerProfileWorkerTaskTracker::OnWorkerStarted(
                    worker_process_id, &shared_worker_tasks_);
 }
 
-void PerProfileWorkerTaskTracker::OnBeforeWorkerTerminated(
+void PerProfileWorkerTaskTracker::OnBeforeWorkerDestroyed(
     content::SharedWorkerId shared_worker_id) {
   DeleteWorkerTask(shared_worker_id, &shared_worker_tasks_);
 }

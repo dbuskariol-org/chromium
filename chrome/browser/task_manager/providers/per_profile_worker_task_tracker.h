@@ -54,10 +54,10 @@ class PerProfileWorkerTaskTracker
       const GURL& url) override;
 
   // content::SharedWorkerService::Observer:
-  void OnWorkerStarted(content::SharedWorkerId shared_worker_id,
+  void OnWorkerCreated(content::SharedWorkerId shared_worker_id,
                        int worker_process_id,
                        const base::UnguessableToken& dev_tools_token) override;
-  void OnBeforeWorkerTerminated(
+  void OnBeforeWorkerDestroyed(
       content::SharedWorkerId shared_worker_id) override;
   void OnFinalResponseURLDetermined(content::SharedWorkerId shared_worker_id,
                                     const GURL& url) override;

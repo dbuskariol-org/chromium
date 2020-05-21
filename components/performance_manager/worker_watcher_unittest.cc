@@ -140,8 +140,8 @@ void TestDedicatedWorkerService::StopDedicatedWorker(
 
 // TestSharedWorkerService -----------------------------------------------------
 
-// A test SharedWorkerService that allows to simulate a worker starting and
-// stopping and adding clients to running workers.
+// A test SharedWorkerService that allows to simulate creating and destroying
+// shared workers and adding clients to existing workers.
 class TestSharedWorkerService : public content::SharedWorkerService {
  public:
   TestSharedWorkerService();
@@ -155,11 +155,11 @@ class TestSharedWorkerService : public content::SharedWorkerService {
                        const std::string& name,
                        const url::Origin& constructor_origin) override;
 
-  // Starts a new shared worker and returns its ID.
-  content::SharedWorkerId StartSharedWorker(int worker_process_id);
+  // Creates a new shared worker and returns its ID.
+  content::SharedWorkerId CreateSharedWorker(int worker_process_id);
 
-  // Stops a running shared worker.
-  void StopSharedWorker(content::SharedWorkerId shared_worker_id);
+  // Destroys a running shared worker.
+  void DestroySharedWorker(content::SharedWorkerId shared_worker_id);
 
   // Adds a new frame client to an existing worker.
   void AddFrameClientToWorker(
@@ -211,7 +211,7 @@ bool TestSharedWorkerService::TerminateWorker(
   return false;
 }
 
-content::SharedWorkerId TestSharedWorkerService::StartSharedWorker(
+content::SharedWorkerId TestSharedWorkerService::CreateSharedWorker(
     int worker_process_id) {
   // Create a new DedicatedWorkerId for the worker and add it to the map.
   content::SharedWorkerId shared_worker_id =
@@ -224,24 +224,24 @@ content::SharedWorkerId TestSharedWorkerService::StartSharedWorker(
 
   // Notify observers.
   for (auto& observer : observer_list_) {
-    observer.OnWorkerStarted(shared_worker_id, worker_process_id,
+    observer.OnWorkerCreated(shared_worker_id, worker_process_id,
                              base::UnguessableToken::Create());
   }
 
   return shared_worker_id;
 }
 
-void TestSharedWorkerService::StopSharedWorker(
+void TestSharedWorkerService::DestroySharedWorker(
     content::SharedWorkerId shared_worker_id) {
   auto it = shared_worker_client_frames_.find(shared_worker_id);
   DCHECK(it != shared_worker_client_frames_.end());
 
-  // A stopping worker should have no clients.
+  // The worker should no longer have any clients.
   DCHECK(it->second.empty());
 
-  // Notify observers that the worker is terminating.
+  // Notify observers that the worker is being destroyed.
   for (auto& observer : observer_list_)
-    observer.OnBeforeWorkerTerminated(shared_worker_id);
+    observer.OnBeforeWorkerDestroyed(shared_worker_id);
 
   // Remove the worker ID from the map.
   shared_worker_client_frames_.erase(it);
@@ -746,7 +746,7 @@ TEST_F(WorkerWatcherTest, SimpleSharedWorker) {
 
   // Create the worker.
   content::SharedWorkerId shared_worker_id =
-      shared_worker_service()->StartSharedWorker(render_process_id);
+      shared_worker_service()->CreateSharedWorker(render_process_id);
 
   // Connect the frame to the worker.
   shared_worker_service()->AddFrameClientToWorker(shared_worker_id,
@@ -767,7 +767,7 @@ TEST_F(WorkerWatcherTest, SimpleSharedWorker) {
   // Disconnect and clean up the worker.
   shared_worker_service()->RemoveFrameClientFromWorker(shared_worker_id,
                                                        render_frame_host_id);
-  shared_worker_service()->StopSharedWorker(shared_worker_id);
+  shared_worker_service()->DestroySharedWorker(shared_worker_id);
 }
 
 // This test creates one service worker with one client frame.
@@ -819,7 +819,7 @@ TEST_F(WorkerWatcherTest, SharedWorkerCrossProcessClient) {
   // Create the worker in a different process.
   int worker_process_id = process_node_source()->CreateProcessNode();
   content::SharedWorkerId shared_worker_id =
-      shared_worker_service()->StartSharedWorker(worker_process_id);
+      shared_worker_service()->CreateSharedWorker(worker_process_id);
 
   // Connect the frame to the worker.
   shared_worker_service()->AddFrameClientToWorker(shared_worker_id,
@@ -843,7 +843,7 @@ TEST_F(WorkerWatcherTest, SharedWorkerCrossProcessClient) {
   // Disconnect and clean up the worker.
   shared_worker_service()->RemoveFrameClientFromWorker(shared_worker_id,
                                                        render_frame_host_id);
-  shared_worker_service()->StopSharedWorker(shared_worker_id);
+  shared_worker_service()->DestroySharedWorker(shared_worker_id);
 }
 
 TEST_F(WorkerWatcherTest, OneSharedWorkerTwoClients) {
@@ -851,7 +851,7 @@ TEST_F(WorkerWatcherTest, OneSharedWorkerTwoClients) {
 
   // Create the worker.
   content::SharedWorkerId shared_worker_id =
-      shared_worker_service()->StartSharedWorker(render_process_id);
+      shared_worker_service()->CreateSharedWorker(render_process_id);
 
   // Create 2 client frame nodes and connect them to the worker.
   content::GlobalFrameRoutingId render_frame_host_id_1 =
@@ -890,7 +890,7 @@ TEST_F(WorkerWatcherTest, OneSharedWorkerTwoClients) {
                                                        render_frame_host_id_1);
   shared_worker_service()->RemoveFrameClientFromWorker(shared_worker_id,
                                                        render_frame_host_id_2);
-  shared_worker_service()->StopSharedWorker(shared_worker_id);
+  shared_worker_service()->DestroySharedWorker(shared_worker_id);
 }
 
 TEST_F(WorkerWatcherTest, OneClientTwoSharedWorkers) {
@@ -904,12 +904,12 @@ TEST_F(WorkerWatcherTest, OneClientTwoSharedWorkers) {
 
   // Create the 2 workers and connect them to the frame.
   content::SharedWorkerId shared_worker_id_1 =
-      shared_worker_service()->StartSharedWorker(render_process_id);
+      shared_worker_service()->CreateSharedWorker(render_process_id);
   shared_worker_service()->AddFrameClientToWorker(shared_worker_id_1,
                                                   render_frame_host_id);
 
   content::SharedWorkerId shared_worker_id_2 =
-      shared_worker_service()->StartSharedWorker(render_process_id);
+      shared_worker_service()->CreateSharedWorker(render_process_id);
   shared_worker_service()->AddFrameClientToWorker(shared_worker_id_2,
                                                   render_frame_host_id);
 
@@ -935,11 +935,11 @@ TEST_F(WorkerWatcherTest, OneClientTwoSharedWorkers) {
   // Disconnect and clean up the workers.
   shared_worker_service()->RemoveFrameClientFromWorker(shared_worker_id_1,
                                                        render_frame_host_id);
-  shared_worker_service()->StopSharedWorker(shared_worker_id_1);
+  shared_worker_service()->DestroySharedWorker(shared_worker_id_1);
 
   shared_worker_service()->RemoveFrameClientFromWorker(shared_worker_id_2,
                                                        render_frame_host_id);
-  shared_worker_service()->StopSharedWorker(shared_worker_id_2);
+  shared_worker_service()->DestroySharedWorker(shared_worker_id_2);
 }
 
 TEST_F(WorkerWatcherTest, FrameDestroyed) {
@@ -956,7 +956,7 @@ TEST_F(WorkerWatcherTest, FrameDestroyed) {
       dedicated_worker_service()->StartDedicatedWorker(render_process_id,
                                                        render_frame_host_id);
   content::SharedWorkerId shared_worker_id =
-      shared_worker_service()->StartSharedWorker(render_process_id);
+      shared_worker_service()->CreateSharedWorker(render_process_id);
   int64_t service_worker_version_id =
       service_worker_context()->StartServiceWorker(render_process_id);
 
@@ -1005,7 +1005,7 @@ TEST_F(WorkerWatcherTest, FrameDestroyed) {
   service_worker_context()->StopServiceWorker(service_worker_version_id);
   shared_worker_service()->RemoveFrameClientFromWorker(shared_worker_id,
                                                        render_frame_host_id);
-  shared_worker_service()->StopSharedWorker(shared_worker_id);
+  shared_worker_service()->DestroySharedWorker(shared_worker_id);
   dedicated_worker_service()->StopDedicatedWorker(dedicated_worker_id);
 }
 
