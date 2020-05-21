@@ -3813,17 +3813,6 @@ deps = {
       'dep_type': 'cipd',
   },
 
-  'src/third_party/android_deps/libs/org_robolectric_android_all': {
-      'packages': [
-          {
-              'package': 'chromium/third_party/android_deps/libs/org_robolectric_android_all',
-              'version': 'version:10-robolectric-5803371-cr0',
-          },
-      ],
-      'condition': 'checkout_android',
-      'dep_type': 'cipd',
-  },
-
   'src/third_party/android_deps/libs/org_robolectric_annotations': {
       'packages': [
           {

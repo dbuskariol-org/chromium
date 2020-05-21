@@ -204,7 +204,6 @@
     "libs/org_plumelib_plume_util",
     "libs/org_plumelib_reflection_util",
     "libs/org_plumelib_require_javadoc",
-    "libs/org_robolectric_android_all",
     "libs/org_robolectric_annotations",
     "libs/org_robolectric_junit",
     "libs/org_robolectric_pluginapi",

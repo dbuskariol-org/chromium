@@ -231,9 +231,6 @@ class ChromiumDepGraph {
             licenseUrl: "https://raw.githubusercontent.com/plume-lib/require-javadoc/master/LICENSE"),
         'org_plumelib_reflection_util': new PropertyOverride(
             licenseUrl: "https://raw.githubusercontent.com/plume-lib/reflection-util/master/LICENSE"),
-        'org_robolectric_android_all': new  PropertyOverride(
-            licenseUrl: "https://www.apache.org/licenses/LICENSE-2.0.txt",
-            licenseName: "Apache 2.0"),
         'org_robolectric_annotations': new PropertyOverride(
             licensePath: "licenses/Codehaus_License-2009.txt",
             licenseName: "MIT"),
