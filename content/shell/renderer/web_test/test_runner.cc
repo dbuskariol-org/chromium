@@ -22,6 +22,7 @@
 #include "cc/paint/paint_canvas.h"
 #include "content/public/common/isolated_world_ids.h"
 #include "content/public/common/use_zoom_for_dsf_policy.h"
+#include "content/public/renderer/render_frame_observer.h"
 #include "content/renderer/render_thread_impl.h"
 #include "content/shell/common/web_test/web_test_constants.h"
 #include "content/shell/common/web_test/web_test_string_util.h"
@@ -138,7 +139,7 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
  public:
   static gin::WrapperInfo kWrapperInfo;
 
-  static void Install(base::WeakPtr<TestRunner> test_runner,
+  static void Install(TestRunner* test_runner,
                       TestRunnerForSpecificView* view_test_runner,
                       WebFrameTestProxy* frame,
                       SpellCheckClient* spell_check,
@@ -163,13 +164,28 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
                       std::vector<v8::Local<v8::Value>> args = {});
 
  private:
-  explicit TestRunnerBindings(base::WeakPtr<TestRunner> test_runner,
+  // Watches for the RenderFrame that the TestRunnerBindings is attached to
+  // being destroyed.
+  class TestRunnerBindingsRenderFrameObserver : public RenderFrameObserver {
+   public:
+    TestRunnerBindingsRenderFrameObserver(TestRunnerBindings* bindings,
+                                          RenderFrame* frame)
+        : RenderFrameObserver(frame), bindings_(bindings) {}
+
+    // RenderFrameObserver implementation.
+    void OnDestruct() override { bindings_->OnFrameDestroyed(); }
+
+   private:
+    TestRunnerBindings* const bindings_;
+  };
+
+  explicit TestRunnerBindings(TestRunner* test_runner,
                               TestRunnerForSpecificView* view_test_runner,
                               WebFrameTestProxy* frame,
                               SpellCheckClient* spell_check);
   ~TestRunnerBindings() override;
 
-  // gin::Wrappable:
+  // gin::Wrappable overrides.
   gin::ObjectTemplateBuilder GetObjectTemplateBuilder(
       v8::Isolate* isolate) override;
 
@@ -340,7 +356,21 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
 
   blink::WebLocalFrame* GetWebFrame() { return frame_->GetWebFrame(); }
 
-  base::WeakPtr<TestRunner> runner_;
+  // Hears about the RenderFrame in |frame_| being destroyed. The
+  // TestRunningBindings should not do anything thereafter.
+  void OnFrameDestroyed() {
+    invalid_ = true;
+    weak_ptr_factory_.InvalidateWeakPtrs();
+  }
+
+  // Observer for the |frame_| the TestRunningBindings is bound to.
+  TestRunnerBindingsRenderFrameObserver frame_observer_;
+
+  // Becomes true when the underlying frame is destroyed. Then the class should
+  // stop doing anything.
+  bool invalid_ = false;
+
+  TestRunner* runner_;
   TestRunnerForSpecificView* const view_runner_;
   WebFrameTestProxy* const frame_;
   SpellCheckClient* const spell_check_;
@@ -355,7 +385,7 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
 gin::WrapperInfo TestRunnerBindings::kWrapperInfo = {gin::kEmbedderNativeGin};
 
 // static
-void TestRunnerBindings::Install(base::WeakPtr<TestRunner> test_runner,
+void TestRunnerBindings::Install(TestRunner* test_runner,
                                  TestRunnerForSpecificView* view_test_runner,
                                  WebFrameTestProxy* frame,
                                  SpellCheckClient* spell_check,
@@ -369,8 +399,8 @@ void TestRunnerBindings::Install(base::WeakPtr<TestRunner> test_runner,
 
   v8::Context::Scope context_scope(context);
 
-  TestRunnerBindings* wrapped = new TestRunnerBindings(
-      std::move(test_runner), view_test_runner, frame, spell_check);
+  TestRunnerBindings* wrapped =
+      new TestRunnerBindings(test_runner, view_test_runner, frame, spell_check);
   gin::Handle<TestRunnerBindings> bindings =
       gin::CreateHandle(isolate, wrapped);
   CHECK(!bindings.IsEmpty());
@@ -432,11 +462,12 @@ void TestRunnerBindings::Install(base::WeakPtr<TestRunner> test_runner,
   }
 }
 
-TestRunnerBindings::TestRunnerBindings(base::WeakPtr<TestRunner> runner,
+TestRunnerBindings::TestRunnerBindings(TestRunner* runner,
                                        TestRunnerForSpecificView* view_runner,
                                        WebFrameTestProxy* frame,
                                        SpellCheckClient* spell_check)
-    : runner_(runner),
+    : frame_observer_(this, frame),
+      runner_(runner),
       view_runner_(view_runner),
       frame_(frame),
       spell_check_(spell_check) {}
@@ -769,74 +800,85 @@ void TestRunnerBindings::InvokeV8Callback(
 }
 
 void TestRunnerBindings::LogToStderr(const std::string& output) {
+  if (invalid_)
+    return;
   TRACE_EVENT1("shell", "TestRunner::LogToStderr", "output", output);
   LOG(ERROR) << output;
 }
 
 void TestRunnerBindings::NotifyDone() {
-  if (runner_)
-    runner_->NotifyDone();
+  if (invalid_)
+    return;
+  runner_->NotifyDone();
 }
 
 void TestRunnerBindings::WaitUntilDone() {
-  if (runner_)
-    runner_->WaitUntilDone();
+  if (invalid_)
+    return;
+  runner_->WaitUntilDone();
 }
 
 void TestRunnerBindings::QueueBackNavigation(int how_far_back) {
-  if (runner_)
-    runner_->QueueBackNavigation(how_far_back);
+  if (invalid_)
+    return;
+  runner_->QueueBackNavigation(how_far_back);
 }
 
 void TestRunnerBindings::QueueForwardNavigation(int how_far_forward) {
-  if (runner_)
-    runner_->QueueForwardNavigation(how_far_forward);
+  if (invalid_)
+    return;
+  runner_->QueueForwardNavigation(how_far_forward);
 }
 
 void TestRunnerBindings::QueueReload() {
-  if (runner_)
-    runner_->QueueReload();
+  if (invalid_)
+    return;
+  runner_->QueueReload();
 }
 
 void TestRunnerBindings::QueueLoadingScript(const std::string& script) {
-  if (runner_)
-    runner_->QueueLoadingScript(script);
+  if (invalid_)
+    return;
+  runner_->QueueLoadingScript(script);
 }
 
 void TestRunnerBindings::QueueNonLoadingScript(const std::string& script) {
-  if (runner_)
-    runner_->QueueNonLoadingScript(script);
+  if (invalid_)
+    return;
+  runner_->QueueNonLoadingScript(script);
 }
 
 void TestRunnerBindings::QueueLoad(gin::Arguments* args) {
-  if (runner_) {
-    std::string url;
-    std::string target;
-    args->GetNext(&url);
-    args->GetNext(&target);
-    runner_->QueueLoad(url, target);
-  }
+  if (invalid_)
+    return;
+  std::string url;
+  std::string target;
+  args->GetNext(&url);
+  args->GetNext(&target);
+  runner_->QueueLoad(url, target);
 }
 
 void TestRunnerBindings::SetCustomPolicyDelegate(gin::Arguments* args) {
-  if (runner_)
-    runner_->SetCustomPolicyDelegate(args);
+  if (invalid_)
+    return;
+  runner_->SetCustomPolicyDelegate(args);
 }
 
 void TestRunnerBindings::WaitForPolicyDelegate() {
-  if (runner_)
-    runner_->WaitForPolicyDelegate();
+  if (invalid_)
+    return;
+  runner_->WaitForPolicyDelegate();
 }
 
 int TestRunnerBindings::WindowCount() {
-  if (runner_)
-    return runner_->WindowCount();
-  return 0;
+  if (invalid_)
+    return 0;
+  return runner_->WindowCount();
 }
 
 void TestRunnerBindings::SetCloseRemainingWindowsWhenComplete(
     gin::Arguments* args) {
-  if (!runner_)
+  if (invalid_)
     return;
 
   // In the original implementation, nothing happens if the argument is
@@ -848,11 +890,16 @@ void TestRunnerBindings::SetCloseRemainingWindowsWhenComplete(
 
 void TestRunnerBindings::SetTabKeyCyclesThroughElements(
     bool tab_key_cycles_through_elements) {
+  if (invalid_)
+    return;
   blink::WebView* web_view = GetWebFrame()->View();
   web_view->SetTabKeyCyclesThroughElements(tab_key_cycles_through_elements);
 }
 
 void TestRunnerBindings::ExecCommand(gin::Arguments* args) {
+  if (invalid_)
+    return;
+
   std::string command;
   args->GetNext(&command);
 
@@ -870,33 +917,44 @@ void TestRunnerBindings::ExecCommand(gin::Arguments* args) {
 }
 
 void TestRunnerBindings::TriggerTestInspectorIssue(gin::Arguments* args) {
+  if (invalid_)
+    return;
   GetWebFrame()->AddInspectorIssue(
       blink::mojom::InspectorIssueCode::kSameSiteCookieIssue);
 }
 
 bool TestRunnerBindings::IsCommandEnabled(const std::string& command) {
+  if (invalid_)
+    return false;
   return GetWebFrame()->IsCommandEnabled(blink::WebString::FromUTF8(command));
 }
 
 void TestRunnerBindings::SetDomainRelaxationForbiddenForURLScheme(
     bool forbidden,
     const std::string& scheme) {
+  if (invalid_)
+    return;
   blink::SetDomainRelaxationForbiddenForTest(
       forbidden, blink::WebString::FromUTF8(scheme));
 }
 
 void TestRunnerBindings::SetDumpConsoleMessages(bool enabled) {
-  if (runner_)
-    runner_->SetDumpConsoleMessages(enabled);
+  if (invalid_)
+    return;
+  runner_->SetDumpConsoleMessages(enabled);
 }
 
 void TestRunnerBindings::SetDumpJavaScriptDialogs(bool enabled) {
-  if (runner_)
-    runner_->SetDumpJavaScriptDialogs(enabled);
+  if (invalid_)
+    return;
+  runner_->SetDumpJavaScriptDialogs(enabled);
 }
 
 void TestRunnerBindings::SetEffectiveConnectionType(
     const std::string& connection_type) {
+  if (invalid_)
+    return;
+
   blink::WebEffectiveConnectionType web_type =
       blink::WebEffectiveConnectionType::kTypeUnknown;
   if (connection_type == "TypeUnknown")
@@ -919,27 +977,34 @@ void TestRunnerBindings::SetEffectiveConnectionType(
 }
 
 base::FilePath::StringType TestRunnerBindings::GetWritableDirectory() {
-  if (!runner_)
+  if (invalid_)
     return {};
   return runner_->GetWritableDirectory().value();
 }
 
 void TestRunnerBindings::SetFilePathForMockFileDialog(
     const base::FilePath::StringType& path) {
-  if (runner_)
-    runner_->SetFilePathForMockFileDialog(base::FilePath(path));
+  if (invalid_)
+    return;
+  runner_->SetFilePathForMockFileDialog(base::FilePath(path));
 }
 
 void TestRunnerBindings::SetMockSpellCheckerEnabled(bool enabled) {
+  if (invalid_)
+    return;
   spell_check_->SetEnabled(enabled);
 }
 
 void TestRunnerBindings::SetSpellCheckResolvedCallback(
     v8::Local<v8::Function> callback) {
+  if (invalid_)
+    return;
   spell_check_->SetSpellCheckResolvedCallback(callback);
 }
 
 void TestRunnerBindings::RemoveSpellCheckResolvedCallback() {
+  if (invalid_)
+    return;
   spell_check_->RemoveSpellCheckResolvedCallback();
 }
 
@@ -947,8 +1012,8 @@ v8::Local<v8::Value>
 TestRunnerBindings::EvaluateScriptInIsolatedWorldAndReturnValue(
     int world_id,
     const std::string& script) {
-  if (world_id <= 0 || world_id >= (1 << 29))
-    return v8::Local<v8::Value>();
+  if (invalid_ || world_id <= 0 || world_id >= (1 << 29))
+    return {};
 
   blink::WebScriptSource source = blink::WebString::FromUTF8(script);
   return GetWebFrame()->ExecuteScriptInIsolatedWorldAndReturnValue(world_id,
@@ -958,7 +1023,7 @@ TestRunnerBindings::EvaluateScriptInIsolatedWorldAndReturnValue(
 void TestRunnerBindings::EvaluateScriptInIsolatedWorld(
     int world_id,
     const std::string& script) {
-  if (world_id <= 0 || world_id >= (1 << 29))
+  if (invalid_ || world_id <= 0 || world_id >= (1 << 29))
     return;
 
   blink::WebScriptSource source = blink::WebString::FromUTF8(script);
@@ -969,6 +1034,9 @@ void TestRunnerBindings::SetIsolatedWorldInfo(
     int world_id,
     v8::Local<v8::Value> security_origin,
     v8::Local<v8::Value> content_security_policy) {
+  if (invalid_)
+    return;
+
   if (world_id <= content::ISOLATED_WORLD_ID_GLOBAL ||
       world_id >= blink::IsolatedWorldId::kEmbedderWorldIdLimit) {
     return;
@@ -1010,21 +1078,24 @@ void TestRunnerBindings::AddOriginAccessAllowListEntry(
     const std::string& destination_protocol,
     const std::string& destination_host,
     bool allow_destination_subdomains) {
-  if (runner_) {
-    // Non-standard schemes should be added to the scheme registeries to use
-    // for the origin access whitelisting.
-    GURL url(source_origin);
-    DCHECK(url.is_valid());
-    DCHECK(url.has_scheme());
-    DCHECK(url.has_host());
+  if (invalid_)
+    return;
 
-    runner_->AddOriginAccessAllowListEntry(source_origin, destination_protocol,
-                                           destination_host,
-                                           allow_destination_subdomains);
-  }
+  // Non-standard schemes should be added to the scheme registeries to use
+  // for the origin access whitelisting.
+  GURL url(source_origin);
+  DCHECK(url.is_valid());
+  DCHECK(url.has_scheme());
+  DCHECK(url.has_host());
+
+  runner_->AddOriginAccessAllowListEntry(source_origin, destination_protocol,
+                                         destination_host,
+                                         allow_destination_subdomains);
 }
 
 void TestRunnerBindings::InsertStyleSheet(const std::string& source_code) {
+  if (invalid_)
+    return;
   GetWebFrame()->GetDocument().InsertStyleSheet(
       blink::WebString::FromUTF8(source_code));
 }
@@ -1032,6 +1103,9 @@ void TestRunnerBindings::InsertStyleSheet(const std::string& source_code) {
 bool TestRunnerBindings::FindString(
     const std::string& search_text,
     const std::vector<std::string>& options_array) {
+  if (invalid_)
+    return false;
+
   bool match_case = true;
   bool forward = true;
   bool find_next = true;
@@ -1054,26 +1128,37 @@ bool TestRunnerBindings::FindString(
 }
 
 std::string TestRunnerBindings::SelectionAsMarkup() {
+  if (invalid_)
+    return {};
   return GetWebFrame()->SelectionAsMarkup().Utf8();
 }
 
 void TestRunnerBindings::SetTextSubpixelPositioning(bool value) {
-  if (runner_)
-    runner_->SetTextSubpixelPositioning(value);
+  if (invalid_)
+    return;
+  runner_->SetTextSubpixelPositioning(value);
 }
 
 void TestRunnerBindings::SetTrustTokenKeyCommitments(
     const std::string& raw_commitments,
     v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
+
   runner_->blink_test_runner_->SetTrustTokenKeyCommitments(
       raw_commitments, WrapV8Closure(std::move(v8_callback)));
 }
 
 void TestRunnerBindings::SetMainWindowHidden(bool hidden) {
+  if (invalid_)
+    return;
   runner_->blink_test_runner_->SetMainWindowHidden(hidden);
 }
 
 void TestRunnerBindings::SetTextDirection(const std::string& direction_name) {
+  if (invalid_)
+    return;
+
   // Map a direction name to a base::i18n::TextDirection value.
   base::i18n::TextDirection direction;
   if (direction_name == "auto")
@@ -1089,14 +1174,17 @@ void TestRunnerBindings::SetTextDirection(const std::string& direction_name) {
 }
 
 void TestRunnerBindings::UseUnfortunateSynchronousResizeMode() {
-  if (runner_)
-    runner_->UseUnfortunateSynchronousResizeMode();
+  if (invalid_)
+    return;
+  runner_->UseUnfortunateSynchronousResizeMode();
 }
 
 void TestRunnerBindings::EnableAutoResizeMode(int min_width,
                                               int min_height,
                                               int max_width,
                                               int max_height) {
+  if (invalid_)
+    return;
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
   if (!frame_->IsMainFrame())
     return;
@@ -1111,6 +1199,8 @@ void TestRunnerBindings::EnableAutoResizeMode(int min_width,
 }
 
 void TestRunnerBindings::DisableAutoResizeMode(int new_width, int new_height) {
+  if (invalid_)
+    return;
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
   if (!frame_->IsMainFrame())
     return;
@@ -1129,50 +1219,65 @@ void TestRunnerBindings::DisableAutoResizeMode(int new_width, int new_height) {
 
 void TestRunnerBindings::SetMockScreenOrientation(
     const std::string& orientation) {
-  if (!runner_)
+  if (invalid_)
     return;
-
   runner_->SetMockScreenOrientation(orientation);
 }
 
 void TestRunnerBindings::DisableMockScreenOrientation() {
-  if (runner_)
-    runner_->DisableMockScreenOrientation();
+  if (invalid_)
+    return;
+  runner_->DisableMockScreenOrientation();
 }
 
 void TestRunnerBindings::SetDisallowedSubresourcePathSuffixes(
     const std::vector<std::string>& suffixes,
     bool block_subresources) {
-  if (runner_)
-    runner_->SetDisallowedSubresourcePathSuffixes(suffixes, block_subresources);
+  if (invalid_)
+    return;
+  runner_->SetDisallowedSubresourcePathSuffixes(suffixes, block_subresources);
 }
 
 void TestRunnerBindings::DidAcquirePointerLock() {
+  if (invalid_)
+    return;
   view_runner_->DidAcquirePointerLock();
 }
 
 void TestRunnerBindings::DidNotAcquirePointerLock() {
+  if (invalid_)
+    return;
   view_runner_->DidNotAcquirePointerLock();
 }
 
 void TestRunnerBindings::DidLosePointerLock() {
+  if (invalid_)
+    return;
   view_runner_->DidLosePointerLock();
 }
 
 void TestRunnerBindings::SetPointerLockWillFailSynchronously() {
+  if (invalid_)
+    return;
   view_runner_->SetPointerLockWillFailSynchronously();
 }
 
 void TestRunnerBindings::SetPointerLockWillRespondAsynchronously() {
+  if (invalid_)
+    return;
   view_runner_->SetPointerLockWillRespondAsynchronously();
 }
 
 void TestRunnerBindings::SetPopupBlockingEnabled(bool block_popups) {
-  if (runner_)
-    runner_->SetPopupBlockingEnabled(block_popups);
+  if (invalid_)
+    return;
+  runner_->SetPopupBlockingEnabled(block_popups);
 }
 
 void TestRunnerBindings::SetJavaScriptCanAccessClipboard(bool can_access) {
+  if (invalid_)
+    return;
+
   // WebPreferences aren't propagated between frame tree fragments, so only
   // allow this in the main frame.
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
@@ -1184,6 +1289,9 @@ void TestRunnerBindings::SetJavaScriptCanAccessClipboard(bool can_access) {
 }
 
 void TestRunnerBindings::SetAllowFileAccessFromFileURLs(bool allow) {
+  if (invalid_)
+    return;
+
   // WebPreferences aren't propagated between frame tree fragments, so only
   // allow this in the main frame.
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
@@ -1195,6 +1303,9 @@ void TestRunnerBindings::SetAllowFileAccessFromFileURLs(bool allow) {
 }
 
 void TestRunnerBindings::OverridePreference(gin::Arguments* args) {
+  if (invalid_)
+    return;
+
   if (args->Length() != 2) {
     args->ThrowTypeError("overridePreference expects 2 arguments");
     return;
@@ -1251,13 +1362,15 @@ void TestRunnerBindings::OverridePreference(gin::Arguments* args) {
 
 void TestRunnerBindings::SetAcceptLanguages(
     const std::string& accept_languages) {
-  if (!runner_)
+  if (invalid_)
     return;
-
   runner_->SetAcceptLanguages(accept_languages);
 }
 
 void TestRunnerBindings::SetPluginsEnabled(bool enabled) {
+  if (invalid_)
+    return;
+
   // WebPreferences aren't propagated between frame tree fragments, so only
   // allow this in the main frame.
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
@@ -1269,200 +1382,240 @@ void TestRunnerBindings::SetPluginsEnabled(bool enabled) {
 }
 
 void TestRunnerBindings::DumpEditingCallbacks() {
-  if (runner_)
-    runner_->DumpEditingCallbacks();
+  if (invalid_)
+    return;
+  runner_->DumpEditingCallbacks();
 }
 
 void TestRunnerBindings::DumpAsMarkup() {
-  if (runner_)
-    runner_->DumpAsMarkup();
+  if (invalid_)
+    return;
+  runner_->DumpAsMarkup();
 }
 
 void TestRunnerBindings::DumpAsText() {
-  if (runner_)
-    runner_->DumpAsText();
+  if (invalid_)
+    return;
+  runner_->DumpAsText();
 }
 
 void TestRunnerBindings::DumpAsTextWithPixelResults() {
-  if (runner_)
-    runner_->DumpAsTextWithPixelResults();
+  if (invalid_)
+    return;
+  runner_->DumpAsTextWithPixelResults();
 }
 
 void TestRunnerBindings::DumpAsLayout() {
-  if (runner_)
-    runner_->DumpAsLayout();
+  if (invalid_)
+    return;
+  runner_->DumpAsLayout();
 }
 
 void TestRunnerBindings::DumpAsLayoutWithPixelResults() {
-  if (runner_)
-    runner_->DumpAsLayoutWithPixelResults();
+  if (invalid_)
+    return;
+  runner_->DumpAsLayoutWithPixelResults();
 }
 
 void TestRunnerBindings::DumpChildFrames() {
-  if (runner_)
-    runner_->DumpChildFrames();
+  if (invalid_)
+    return;
+  runner_->DumpChildFrames();
 }
 
 void TestRunnerBindings::DumpIconChanges() {
-  if (runner_)
-    runner_->DumpIconChanges();
+  if (invalid_)
+    return;
+  runner_->DumpIconChanges();
 }
 
 void TestRunnerBindings::SetAudioData(const gin::ArrayBufferView& view) {
-  if (runner_)
-    runner_->SetAudioData(view);
+  if (invalid_)
+    return;
+  runner_->SetAudioData(view);
 }
 
 void TestRunnerBindings::DumpFrameLoadCallbacks() {
-  if (runner_)
-    runner_->DumpFrameLoadCallbacks();
+  if (invalid_)
+    return;
+  runner_->DumpFrameLoadCallbacks();
 }
 
 void TestRunnerBindings::DumpPingLoaderCallbacks() {
-  if (runner_)
-    runner_->DumpPingLoaderCallbacks();
+  if (invalid_)
+    return;
+  runner_->DumpPingLoaderCallbacks();
 }
 
 void TestRunnerBindings::DumpUserGestureInFrameLoadCallbacks() {
-  if (runner_)
-    runner_->DumpUserGestureInFrameLoadCallbacks();
+  if (invalid_)
+    return;
+  runner_->DumpUserGestureInFrameLoadCallbacks();
 }
 
 void TestRunnerBindings::DumpTitleChanges() {
-  if (runner_)
-    runner_->DumpTitleChanges();
+  if (invalid_)
+    return;
+  runner_->DumpTitleChanges();
 }
 
 void TestRunnerBindings::DumpCreateView() {
-  if (runner_)
-    runner_->DumpCreateView();
+  if (invalid_)
+    return;
+  runner_->DumpCreateView();
 }
 
 void TestRunnerBindings::SetCanOpenWindows() {
-  if (runner_)
-    runner_->SetCanOpenWindows();
+  if (invalid_)
+    return;
+  runner_->SetCanOpenWindows();
 }
 
 void TestRunnerBindings::SetImagesAllowed(bool allowed) {
-  if (runner_)
-    runner_->SetImagesAllowed(allowed);
+  if (invalid_)
+    return;
+  runner_->SetImagesAllowed(allowed);
 }
 
 void TestRunnerBindings::SetScriptsAllowed(bool allowed) {
-  if (runner_)
-    runner_->SetScriptsAllowed(allowed);
+  if (invalid_)
+    return;
+  runner_->SetScriptsAllowed(allowed);
 }
 
 void TestRunnerBindings::SetStorageAllowed(bool allowed) {
-  if (runner_)
-    runner_->SetStorageAllowed(allowed);
+  if (invalid_)
+    return;
+  runner_->SetStorageAllowed(allowed);
 }
 
 void TestRunnerBindings::SetPluginsAllowed(bool allowed) {
-  if (runner_)
-    runner_->SetPluginsAllowed(allowed);
+  if (invalid_)
+    return;
+  runner_->SetPluginsAllowed(allowed);
 }
 
 void TestRunnerBindings::SetAllowRunningOfInsecureContent(bool allowed) {
-  if (runner_)
-    runner_->SetAllowRunningOfInsecureContent(allowed);
+  if (invalid_)
+    return;
+  runner_->SetAllowRunningOfInsecureContent(allowed);
 }
 
 void TestRunnerBindings::DumpPermissionClientCallbacks() {
-  if (runner_)
-    runner_->DumpPermissionClientCallbacks();
+  if (invalid_)
+    return;
+  runner_->DumpPermissionClientCallbacks();
 }
 
 void TestRunnerBindings::DumpBackForwardList() {
-  if (runner_)
-    runner_->DumpBackForwardList();
+  if (invalid_)
+    return;
+  runner_->DumpBackForwardList();
 }
 
 void TestRunnerBindings::DumpSelectionRect() {
-  if (runner_)
-    runner_->DumpSelectionRect();
+  if (invalid_)
+    return;
+  runner_->DumpSelectionRect();
 }
 
 void TestRunnerBindings::SetPrinting() {
-  if (runner_)
-    runner_->SetPrinting();
+  if (invalid_)
+    return;
+  runner_->SetPrinting();
 }
 
 void TestRunnerBindings::SetPrintingForFrame(const std::string& frame_name) {
-  if (runner_)
-    runner_->SetPrintingForFrame(frame_name);
+  if (invalid_)
+    return;
+  runner_->SetPrintingForFrame(frame_name);
 }
 
 void TestRunnerBindings::ClearPrinting() {
-  if (runner_)
-    runner_->ClearPrinting();
+  if (invalid_)
+    return;
+  runner_->ClearPrinting();
 }
 
 void TestRunnerBindings::ClearTrustTokenState(
     v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
   runner_->blink_test_runner_->ClearTrustTokenState(
       WrapV8Closure(std::move(v8_callback)));
 }
 
 void TestRunnerBindings::SetShouldGeneratePixelResults(bool value) {
-  if (runner_)
-    runner_->SetShouldGeneratePixelResults(value);
+  if (invalid_)
+    return;
+  runner_->SetShouldGeneratePixelResults(value);
 }
 
 void TestRunnerBindings::SetShouldStayOnPageAfterHandlingBeforeUnload(
     bool value) {
-  if (runner_)
-    runner_->SetShouldStayOnPageAfterHandlingBeforeUnload(value);
+  if (invalid_)
+    return;
+  runner_->SetShouldStayOnPageAfterHandlingBeforeUnload(value);
 }
 
 void TestRunnerBindings::SetWillSendRequestClearHeader(
     const std::string& header) {
-  if (runner_)
-    runner_->SetWillSendRequestClearHeader(header);
+  if (invalid_)
+    return;
+  runner_->SetWillSendRequestClearHeader(header);
 }
 
 void TestRunnerBindings::SetWillSendRequestClearReferrer() {
-  if (runner_)
-    runner_->SetWillSendRequestClearReferrer();
+  if (invalid_)
+    return;
+  runner_->SetWillSendRequestClearReferrer();
 }
 
 void TestRunnerBindings::WaitUntilExternalURLLoad() {
-  if (runner_)
-    runner_->WaitUntilExternalURLLoad();
+  if (invalid_)
+    return;
+  runner_->WaitUntilExternalURLLoad();
 }
 
 void TestRunnerBindings::DumpDragImage() {
-  if (runner_)
-    runner_->DumpDragImage();
+  if (invalid_)
+    return;
+  runner_->DumpDragImage();
 }
 
 void TestRunnerBindings::DumpNavigationPolicy() {
-  if (runner_)
-    runner_->DumpNavigationPolicy();
+  if (invalid_)
+    return;
+  runner_->DumpNavigationPolicy();
 }
 
 bool TestRunnerBindings::IsChooserShown() {
-  if (runner_)
-    return runner_->IsChooserShown();
-  return false;
+  if (invalid_)
+    return false;
+  return runner_->IsChooserShown();
 }
 
 void TestRunnerBindings::ClearAllDatabases() {
-  if (runner_)
-    runner_->ClearAllDatabases();
+  if (invalid_)
+    return;
+  runner_->ClearAllDatabases();
 }
 
 void TestRunnerBindings::SetDatabaseQuota(int quota) {
-  if (runner_)
-    runner_->SetDatabaseQuota(quota);
+  if (invalid_)
+    return;
+  runner_->SetDatabaseQuota(quota);
 }
 
 void TestRunnerBindings::SetBlockThirdPartyCookies(bool block) {
-  if (runner_)
-    runner_->SetBlockThirdPartyCookies(block);
+  if (invalid_)
+    return;
+  runner_->SetBlockThirdPartyCookies(block);
 }
 
 void TestRunnerBindings::SimulateBrowserWindowFocus(bool value) {
+  if (invalid_)
+    return;
   // This simulates the browser focusing or unfocusing the window,
   // but does so only for this renderer process. Other frame tree
   // fragments in other processes do not hear about the change. To
@@ -1480,12 +1633,17 @@ void TestRunnerBindings::SimulateBrowserWindowFocus(bool value) {
 }
 
 std::string TestRunnerBindings::PathToLocalResource(const std::string& path) {
+  if (invalid_)
+    return {};
   return RewriteFileURLToLocalResource(path).GetString().Utf8();
 }
 
 void TestRunnerBindings::SetBackingScaleFactor(
     double value,
     v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
+
   // Limit backing scale factor to something low - 15x. Without
   // this limit, arbitrarily large values can be used, which can lead to
   // crashes and other problems. Examples of problems:
@@ -1511,6 +1669,9 @@ void TestRunnerBindings::SetBackingScaleFactor(
 
 void TestRunnerBindings::SetColorProfile(const std::string& name,
                                          v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
+
   WebWidgetTestProxy* widget = frame_->GetLocalRootWebWidgetTestProxy();
 
   gfx::ColorSpace color_space;
@@ -1531,11 +1692,15 @@ void TestRunnerBindings::SetColorProfile(const std::string& name,
 void TestRunnerBindings::SetBluetoothFakeAdapter(
     const std::string& adapter_name,
     v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
   runner_->blink_test_runner_->SetBluetoothFakeAdapter(
       adapter_name, WrapV8Closure(std::move(v8_callback)));
 }
 
 void TestRunnerBindings::SetBluetoothManualChooser(bool enable) {
+  if (invalid_)
+    return;
   runner_->blink_test_runner_->SetBluetoothManualChooser(enable);
 }
 
@@ -1566,6 +1731,8 @@ static void GetBluetoothManualChooserEventsReply(
 
 void TestRunnerBindings::GetBluetoothManualChooserEvents(
     v8::Local<v8::Function> callback) {
+  if (invalid_)
+    return;
   return runner_->blink_test_runner_->GetBluetoothManualChooserEvents(
       base::BindOnce(&GetBluetoothManualChooserEventsReply,
                      weak_ptr_factory_.GetWeakPtr(), GetWebFrame(),
@@ -1575,18 +1742,22 @@ void TestRunnerBindings::GetBluetoothManualChooserEvents(
 void TestRunnerBindings::SendBluetoothManualChooserEvent(
     const std::string& event,
     const std::string& argument) {
+  if (invalid_)
+    return;
   runner_->blink_test_runner_->SendBluetoothManualChooserEvent(event, argument);
 }
 
 void TestRunnerBindings::SetPOSIXLocale(const std::string& locale) {
-  if (runner_)
-    runner_->SetPOSIXLocale(locale);
+  if (invalid_)
+    return;
+  runner_->SetPOSIXLocale(locale);
 }
 
 void TestRunnerBindings::SimulateWebNotificationClick(gin::Arguments* args) {
-  DCHECK_GE(args->Length(), 1);
-  if (!runner_)
+  if (invalid_)
     return;
+
+  DCHECK_GE(args->Length(), 1);
 
   std::string title;
   base::Optional<int> action_index;
@@ -1624,23 +1795,27 @@ void TestRunnerBindings::SimulateWebNotificationClick(gin::Arguments* args) {
 
 void TestRunnerBindings::SimulateWebNotificationClose(const std::string& title,
                                                       bool by_user) {
-  if (!runner_)
+  if (invalid_)
     return;
   runner_->SimulateWebNotificationClose(title, by_user);
 }
 
 void TestRunnerBindings::SimulateWebContentIndexDelete(const std::string& id) {
-  if (!runner_)
+  if (invalid_)
     return;
   runner_->SimulateWebContentIndexDelete(id);
 }
 
 void TestRunnerBindings::SetHighlightAds() {
   blink::WebView* web_view = GetWebFrame()->View();
+  if (invalid_)
+    return;
   web_view->GetSettings()->SetHighlightAds(true);
 }
 
 void TestRunnerBindings::AddWebPageOverlay() {
+  if (invalid_)
+    return;
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
   if (!frame_->IsMainFrame())
     return;
@@ -1648,6 +1823,8 @@ void TestRunnerBindings::AddWebPageOverlay() {
 }
 
 void TestRunnerBindings::RemoveWebPageOverlay() {
+  if (invalid_)
+    return;
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
   if (!frame_->IsMainFrame())
     return;
@@ -1656,19 +1833,22 @@ void TestRunnerBindings::RemoveWebPageOverlay() {
 }
 
 void TestRunnerBindings::UpdateAllLifecyclePhasesAndComposite() {
+  if (invalid_)
+    return;
   frame_->GetLocalRootWebWidgetTestProxy()->SynchronouslyComposite(
       /*raster=*/true);
 }
 
 void TestRunnerBindings::UpdateAllLifecyclePhasesAndCompositeThen(
     v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
   UpdateAllLifecyclePhasesAndComposite();
-
   WrapV8Closure(std::move(v8_callback)).Run();
 }
 
 void TestRunnerBindings::SetAnimationRequiresRaster(bool do_raster) {
-  if (!runner_)
+  if (invalid_)
     return;
   runner_->SetAnimationRequiresRaster(do_raster);
 }
@@ -1680,6 +1860,8 @@ static void GetManifestReply(BoundV8Callback callback,
 }
 
 void TestRunnerBindings::GetManifestThen(v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
   blink::WebManifestManager::RequestManifestForTesting(
       GetWebFrame(),
       base::BindOnce(GetManifestReply, WrapV8Callback(std::move(v8_callback))));
@@ -1687,15 +1869,17 @@ void TestRunnerBindings::GetManifestThen(v8::Local<v8::Function> v8_callback) {
 
 void TestRunnerBindings::CapturePixelsAsyncThen(
     v8::Local<v8::Function> callback) {
+  if (invalid_)
+    return;
   view_runner_->CapturePixelsAsyncThen(callback);
 }
 
 static void ProxyToRunJSCallbackWithBitmap(
-    base::WeakPtr<TestRunner> test_runner,
+    base::WeakPtr<TestRunnerBindings> test_runner,
     TestRunnerForSpecificView* view_runner,
     v8::UniquePersistent<v8::Function> callback,
     const SkBitmap& snapshot) {
-  if (!test_runner)
+  if (!test_runner)  // Guards the validity of |view_runner|.
     return;
   // TODO(danakj): Move this method over to TestRunner or TestRunnerBindings
   // and drop this ProxyTo function.
@@ -1706,28 +1890,31 @@ void TestRunnerBindings::CopyImageAtAndCapturePixelsAsyncThen(
     int x,
     int y,
     v8::Local<v8::Function> callback) {
+  if (invalid_)
+    return;
+
   auto blink_callback = v8::UniquePersistent<v8::Function>(
       blink::MainThreadIsolate(), std::move(callback));
   CopyImageAtAndCapturePixels(
       frame_, x, y,
-      base::BindOnce(&ProxyToRunJSCallbackWithBitmap, runner_, view_runner_,
+      base::BindOnce(&ProxyToRunJSCallbackWithBitmap,
+                     weak_ptr_factory_.GetWeakPtr(), view_runner_,
                      std::move(blink_callback)));
 }
 
 void TestRunnerBindings::SetCustomTextOutput(const std::string& output) {
-  if (runner_)
-    runner_->SetCustomTextOutput(output);
+  if (invalid_)
+    return;
+  runner_->SetCustomTextOutput(output);
 }
 
 void TestRunnerBindings::SetPermission(const std::string& name,
                                        const std::string& value,
                                        const std::string& origin,
                                        const std::string& embedding_origin) {
-  if (!runner_)
+  if (invalid_)
     return;
-
-  return runner_->SetPermission(name, value, GURL(origin),
-                                GURL(embedding_origin));
+  runner_->SetPermission(name, value, GURL(origin), GURL(embedding_origin));
 }
 
 static void DispatchBeforeInstallPromptEventReply(BoundV8Callback callback,
@@ -1742,6 +1929,8 @@ static void DispatchBeforeInstallPromptEventReply(BoundV8Callback callback,
 void TestRunnerBindings::DispatchBeforeInstallPromptEvent(
     const std::vector<std::string>& event_platforms,
     v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
   app_banner_service_ = std::make_unique<AppBannerService>();
   frame_->BindLocalInterface(blink::mojom::AppBannerController::Name_,
                              app_banner_service_->controller()
@@ -1755,6 +1944,8 @@ void TestRunnerBindings::DispatchBeforeInstallPromptEvent(
 
 void TestRunnerBindings::ResolveBeforeInstallPromptPromise(
     const std::string& platform) {
+  if (invalid_)
+    return;
   if (app_banner_service_) {
     app_banner_service_->ResolvePromise(platform);
     app_banner_service_.reset();
@@ -1762,6 +1953,8 @@ void TestRunnerBindings::ResolveBeforeInstallPromptPromise(
 }
 
 void TestRunnerBindings::RunIdleTasks(v8::Local<v8::Function> v8_callback) {
+  if (invalid_)
+    return;
   blink::scheduler::WebThreadScheduler* scheduler =
       content::RenderThreadImpl::current()->GetWebMainThreadScheduler();
   blink::scheduler::RunIdleTasksForTesting(
@@ -1769,12 +1962,15 @@ void TestRunnerBindings::RunIdleTasks(v8::Local<v8::Function> v8_callback) {
 }
 
 std::string TestRunnerBindings::PlatformName() {
-  if (runner_)
-    return runner_->platform_name_;
-  return std::string();
+  if (invalid_)
+    return {};
+  return runner_->platform_name_;
 }
 
 void TestRunnerBindings::TextZoomIn() {
+  if (invalid_)
+    return;
+
   // This may only be run from the main frame, as the user modifies this at the
   // top level.
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
@@ -1789,6 +1985,9 @@ void TestRunnerBindings::TextZoomIn() {
 }
 
 void TestRunnerBindings::TextZoomOut() {
+  if (invalid_)
+    return;
+
   // This may only be run from the main frame, as the user modifies this at the
   // top level.
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
@@ -1803,6 +2002,9 @@ void TestRunnerBindings::TextZoomOut() {
 }
 
 void TestRunnerBindings::ZoomPageIn() {
+  if (invalid_)
+    return;
+
   // This may only be run from the main frame, as the user modifies this at the
   // top level.
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
@@ -1819,6 +2021,9 @@ void TestRunnerBindings::ZoomPageIn() {
 }
 
 void TestRunnerBindings::ZoomPageOut() {
+  if (invalid_)
+    return;
+
   // This may only be run from the main frame, as the user modifies this at the
   // top level.
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
@@ -1835,6 +2040,9 @@ void TestRunnerBindings::ZoomPageOut() {
 }
 
 void TestRunnerBindings::SetPageZoomFactor(double zoom_factor) {
+  if (invalid_)
+    return;
+
   // This may only be run from the main frame, as the user modifies this at the
   // top level.
   // Early out instead of CHECK() to avoid poking the fuzzer bear.
@@ -1850,29 +2058,36 @@ void TestRunnerBindings::SetPageZoomFactor(double zoom_factor) {
 }
 
 std::string TestRunnerBindings::TooltipText() {
-  RenderFrameImpl* main_frame = static_cast<RenderFrameImpl*>(
-      frame_->GetRenderView()->GetMainRenderFrame());
-  blink::WebString tooltip_text = main_frame->GetLocalRootRenderWidget()
+  if (invalid_)
+    return {};
+
+  blink::WebString tooltip_text = frame_->GetLocalRootRenderWidget()
                                       ->GetWebWidget()
                                       ->GetLastToolTipTextForTesting();
   return tooltip_text.Utf8();
 }
 
 int TestRunnerBindings::WebHistoryItemCount() {
-  if (runner_)
-    return runner_->web_history_item_count_;
-  return false;
+  if (invalid_)
+    return 0;
+  return runner_->web_history_item_count_;
 }
 
 void TestRunnerBindings::ForceNextWebGLContextCreationToFail() {
+  if (invalid_)
+    return;
   blink::ForceNextWebGLContextCreationToFailForTest();
 }
 
 void TestRunnerBindings::FocusDevtoolsSecondaryWindow() {
+  if (invalid_)
+    return;
   runner_->blink_test_runner_->FocusDevtoolsSecondaryWindow();
 }
 
 void TestRunnerBindings::ForceNextDrawingBufferCreationToFail() {
+  if (invalid_)
+    return;
   blink::ForceNextDrawingBufferCreationToFailForTest();
 }
 
@@ -1958,8 +2173,7 @@ void TestRunner::Install(WebFrameTestProxy* frame,
                          TestRunnerForSpecificView* view_test_runner) {
   // In WPT, only reftests generate pixel results.
   TestRunnerBindings::Install(
-      weak_factory_.GetWeakPtr(), view_test_runner, frame, spell_check,
-      IsWebPlatformTestsMode(),
+      this, view_test_runner, frame, spell_check, IsWebPlatformTestsMode(),
       IsFramePartOfMainTestWindow(frame->GetWebFrame()));
   mock_screen_orientation_client_.OverrideAssociatedInterfaceProviderForFrame(
       frame->GetWebFrame());
