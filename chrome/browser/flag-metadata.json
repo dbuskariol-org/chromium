@@ -953,6 +953,11 @@
     "expiry_milestone": 80
   },
   {
+    "name": "discover-feed-ntp-ios",
+    "owners": [ "adamta", "sczs" ],
+    "expiry_milestone": 89
+  },
+  {
     "name": "display-change-modal",
     "owners": [ "baileyberro", "zentaro" ],
     "expiry_milestone": 85
