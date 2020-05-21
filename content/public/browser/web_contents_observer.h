@@ -80,8 +80,10 @@ class CONTENT_EXPORT WebContentsObserver : public IPC::Listener {
   // Frames and Views ----------------------------------------------------------
 
   // Called when a RenderFrame for |render_frame_host| is created in the
-  // renderer process. Use |RenderFrameDeleted| to listen for when this
-  // RenderFrame goes away.
+  // renderer process. This function is called before starting to load the
+  // document. Messages sent to the renderer from this function are guaranteed
+  // to arrive before any calls to RenderFrameObserver::DidClearWindowObject().
+  // Use |RenderFrameDeleted| to listen for when this RenderFrame goes away.
   virtual void RenderFrameCreated(RenderFrameHost* render_frame_host) {}
 
   // Called when a RenderFrame for |render_frame_host| is deleted or the
