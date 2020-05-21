@@ -64,6 +64,8 @@ std::unique_ptr<FocusRing> FocusRing::Install(View* parent) {
   return ring;
 }
 
+FocusRing::~FocusRing() = default;
+
 void FocusRing::SetPathGenerator(
     std::unique_ptr<HighlightPathGenerator> generator) {
   path_generator_ = std::move(generator);
@@ -104,12 +106,12 @@ void FocusRing::ViewHierarchyChanged(
 
   if (details.is_add) {
     // Need to start observing the parent.
-    details.parent->AddObserver(this);
-  } else {
+    view_observer_.Add(details.parent);
+  } else if (view_observer_.IsObserving(details.parent)) {
     // This view is being removed from its parent. It needs to remove itself
     // from its parent's observer list. Otherwise, since its |parent_| will
     // become a nullptr, it won't be able to do so in its destructor.
-    details.parent->RemoveObserver(this);
+    view_observer_.Remove(details.parent);
   }
   RefreshLayer();
 }
@@ -174,11 +176,6 @@ void FocusRing::OnViewBlurred(View* view) {
 FocusRing::FocusRing() {
   // Don't allow the view to process events.
   set_can_process_events_within_subtree(false);
-}
-
-FocusRing::~FocusRing() {
-  if (parent())
-    parent()->RemoveObserver(this);
 }
 
 void FocusRing::RefreshLayer() {
