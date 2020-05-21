@@ -934,7 +934,7 @@ IN_PROC_BROWSER_TEST_F(DiceBrowserTest, MAYBE_EnableSyncBeforeToken) {
             dice_request_header_);
 
   ui_test_utils::UrlLoadObserver ntp_url_observer(
-      GURL(chrome::kChromeUINewTabURL),
+      GURL(chrome::kChromeSearchLocalNtpUrl),
       content::NotificationService::AllSources());
 
   WaitForSigninSucceeded();
