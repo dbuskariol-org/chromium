@@ -8276,6 +8276,37 @@ be describing additional metrics about the same event.
   </summary>
 </event>
 
+<event name="PageLoad.Internal" singular="True">
+  <owner>npm@chromium.org</owner>
+  <owner>speed-metrics-dev@chromium.org</owner>
+  <summary>
+    Debugging metrics for the PageLoad event that do not require the same amount
+    of sampling.
+  </summary>
+  <metric name="PaintTiming.LargestContentfulPaint.ContentType"
+      enum="LargestContentType">
+    <summary>
+      Records whether the page's largest contentful paint, whose timestamp is
+      measured by PageLoad.PaintTiming.NavigationToLargestContentfulPaint, comes
+      from text or image. This value is sampled and not on the PageLoad event,
+      so it is not always recorded whenever
+      PageLoad.PaintTiming.NavigationToLargestContentfulPaint is recorded.
+    </summary>
+  </metric>
+  <metric name="PaintTiming.LargestContentfulPaint.TerminationState"
+      enum="LargestContentfulPaint.TerminationState">
+    <summary>
+      Records the state of the largest contentful paint algorithm at the time in
+      which the browser attempts to record
+      PageLoad.PaintTiming.NavigationToLargestContentfulPaint. This state
+      depends on whether there was a largest contentful paint candidate or not
+      and the foreground state of the page. This value is sampled and not on the
+      PageLoad event, so it is not always recorded whenever the browser attempts
+      to record PageLoad.PaintTiming.NavigationToLargestContentfulPaint.
+    </summary>
+  </metric>
+</event>
+
 <event name="PageLoad.ServiceWorkerControlled" singular="True">
   <owner>bmcquade@chromium.org</owner>
   <owner>falken@chromium.org</owner>
