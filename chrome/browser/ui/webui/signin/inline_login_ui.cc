@@ -91,8 +91,9 @@ void AddEduStrings(content::WebUIDataSource* source,
   source->AddLocalizedString("parentInfoResourcesAvailabilityText",
                              IDS_EDU_LOGIN_INFO_RESOURCES_AVAILABILITY);
   source->AddLocalizedString("coexistenceTitle",
-                             IDS_EDU_LOGIN_COEXISTENCE_TITLE);
-  source->AddLocalizedString("coexistenceBody", IDS_EDU_LOGIN_COEXISTENCE_BODY);
+                             IDS_EDU_LOGIN_INFO_COEXISTENCE_TITLE);
+  source->AddLocalizedString("coexistenceBody",
+                             IDS_EDU_LOGIN_INFO_COEXISTENCE_BODY);
 }
 #endif  // defined(OS_CHROMEOS)
 
