@@ -1220,8 +1220,9 @@ void PrintRenderFrameHelper::PrintForSystemDialog() {
 void PrintRenderFrameHelper::SetPrintPreviewUI(
     mojo::PendingAssociatedRemote<mojom::PrintPreviewUI> preview) {
   preview_ui_.Bind(std::move(preview));
-  preview_ui_.set_disconnect_handler(base::BindOnce(
-      &PrintRenderFrameHelper::OnPreviewDisconnect, base::Unretained(this)));
+  preview_ui_.set_disconnect_handler(
+      base::BindOnce(&PrintRenderFrameHelper::OnPreviewDisconnect,
+                     weak_ptr_factory_.GetWeakPtr()));
 }
 
 void PrintRenderFrameHelper::InitiatePrintPreview(
@@ -1289,7 +1290,7 @@ void PrintRenderFrameHelper::PrintPreview(base::Value settings) {
   if (print_pages_params_->params.is_first_request &&
       !print_preview_context_.IsModifiable()) {
     mojom::OptionsFromDocumentParamsPtr options = SetOptionsFromPdfDocument();
-    if (options) {
+    if (options && preview_ui_) {
       preview_ui_->SetOptionsFromDocument(
           std::move(options), print_pages_params_->params.preview_request_id);
     }
@@ -1852,15 +1853,18 @@ void PrintRenderFrameHelper::DidFinishPrinting(PrintingResult result) {
       if (!is_print_ready_metafile_sent_) {
         if (notify_browser_of_print_failure_) {
           LOG(ERROR) << "CreatePreviewDocument failed";
-          preview_ui_->PrintPreviewFailed(cookie, ids.request_id);
+          if (preview_ui_)
+            preview_ui_->PrintPreviewFailed(cookie, ids.request_id);
         } else {
-          preview_ui_->PrintPreviewCancelled(cookie, ids.request_id);
+          if (preview_ui_)
+            preview_ui_->PrintPreviewCancelled(cookie, ids.request_id);
         }
       }
       print_preview_context_.Failed(notify_browser_of_print_failure_);
       break;
     case INVALID_SETTINGS:
-      preview_ui_->PrinterSettingsInvalid(cookie, ids.request_id);
+      if (preview_ui_)
+        preview_ui_->PrinterSettingsInvalid(cookie, ids.request_id);
       print_preview_context_.Failed(false);
       break;
 #endif  // BUILDFLAG(ENABLE_PRINT_PREVIEW)
