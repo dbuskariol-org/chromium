@@ -4253,6 +4253,12 @@
           'isolated_scripts': 'ios_simulator_full_configs_test'
         },
       },
+      'ios-simulator-noncq': {
+        'additional_compile_targets': [
+          'all'
+        ],
+        'test_suites': {},
+      },
     },
   },
   {

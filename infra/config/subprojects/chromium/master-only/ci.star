@@ -2780,7 +2780,6 @@ ci.mac_ios_builder(
         category = 'ios|default',
         short_name = 'dev',
     ),
-    executable = 'recipe:chromium',
     # We don't have necessary capacity to run this configuration in CQ, but it
     # is part of the main waterfall
     main_console_view = 'main',
