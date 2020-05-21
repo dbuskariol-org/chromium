@@ -1,6 +1,6 @@
 {
   "app_url": "https://www.chromestatus.com/features",
-  "create_shortcuts": "schmerg",
+  "hide_from_user": "schmerg",
   "launch_container": "tab",
   "user_type": ["unmanaged"]
 }
