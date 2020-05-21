@@ -105,7 +105,20 @@ TEST_F(NetworkHealthTest, NetworkStateDisabled) {
   ValidateState(network_health::mojom::NetworkState::kDisabled);
 }
 
-// TODO(crbug/1081488): implement test for kEnabling and kProhibited state.
+// TODO(crbug/1081488): implement test for kEnabling state.
+
+TEST_F(NetworkHealthTest, NetworkStateProhibited) {
+  cros_network_config_test_helper_.network_state_helper()
+      .manager_test()
+      ->AddTechnology(shill::kTypeWifi, true);
+  cros_network_config_test_helper_.network_state_helper()
+      .device_test()
+      ->AddDevice(kWifiDevicePath, shill::kTypeWifi, kWifiName);
+  cros_network_config_test_helper_.network_state_helper()
+      .manager_test()
+      ->SetTechnologyProhibited(shill::kTypeWifi, true);
+  ValidateState(network_health::mojom::NetworkState::kProhibited);
+}
 
 TEST_F(NetworkHealthTest, NetworkStateNotConnected) {
   cros_network_config_test_helper_.network_state_helper()
