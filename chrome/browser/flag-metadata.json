@@ -1122,7 +1122,7 @@
   {
     "name": "enable-app-grid-ghost",
     "owners": [ "mmourgos" ],
-    "expiry_milestone": 82
+    "expiry_milestone": 88
   },
   {
     "name": "enable-app-list-search-autocomplete",
