@@ -45,6 +45,7 @@
 #include "gin/object_template_builder.h"
 #include "gin/wrappable.h"
 #include "services/network/public/mojom/cors.mojom.h"
+#include "third_party/blink/public/common/page/page_zoom.h"
 #include "third_party/blink/public/mojom/app_banner/app_banner.mojom.h"
 #include "third_party/blink/public/platform/scheduler/test/renderer_scheduler_test_support.h"
 #include "third_party/blink/public/platform/web_data.h"
@@ -138,7 +139,7 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
 
   static void Install(base::WeakPtr<TestRunner> test_runner,
                       TestRunnerForSpecificView* view_test_runner,
-                      RenderFrame* frame,
+                      WebFrameTestProxy* frame,
                       SpellCheckClient* spell_check,
                       bool is_wpt_reftest,
                       bool is_frame_part_of_main_test_window);
@@ -163,7 +164,7 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
  private:
   explicit TestRunnerBindings(base::WeakPtr<TestRunner> test_runner,
                               TestRunnerForSpecificView* view_test_runner,
-                              RenderFrame* frame,
+                              WebFrameTestProxy* frame,
                               SpellCheckClient* spell_check);
   ~TestRunnerBindings() override;
 
@@ -322,6 +323,11 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
   std::string PathToLocalResource(const std::string& path);
   std::string PlatformName();
   std::string SelectionAsMarkup();
+  void TextZoomIn();
+  void TextZoomOut();
+  void ZoomPageIn();
+  void ZoomPageOut();
+  void SetPageZoomFactor(double factor);
   std::string TooltipText();
 
   int WebHistoryItemCount();
@@ -335,7 +341,7 @@ class TestRunnerBindings : public gin::Wrappable<TestRunnerBindings> {
 
   base::WeakPtr<TestRunner> runner_;
   TestRunnerForSpecificView* const view_runner_;
-  RenderFrame* const frame_;
+  WebFrameTestProxy* const frame_;
   SpellCheckClient* const spell_check_;
   TestPreferences prefs_;
   std::unique_ptr<AppBannerService> app_banner_service_;
@@ -350,7 +356,7 @@ gin::WrapperInfo TestRunnerBindings::kWrapperInfo = {gin::kEmbedderNativeGin};
 // static
 void TestRunnerBindings::Install(base::WeakPtr<TestRunner> test_runner,
                                  TestRunnerForSpecificView* view_test_runner,
-                                 RenderFrame* frame,
+                                 WebFrameTestProxy* frame,
                                  SpellCheckClient* spell_check,
                                  bool is_wpt_test,
                                  bool is_frame_part_of_main_test_window) {
@@ -427,7 +433,7 @@ void TestRunnerBindings::Install(base::WeakPtr<TestRunner> test_runner,
 
 TestRunnerBindings::TestRunnerBindings(base::WeakPtr<TestRunner> runner,
                                        TestRunnerForSpecificView* view_runner,
-                                       RenderFrame* frame,
+                                       WebFrameTestProxy* frame,
                                        SpellCheckClient* spell_check)
     : runner_(runner),
       view_runner_(view_runner),
@@ -686,6 +692,11 @@ gin::ObjectTemplateBuilder TestRunnerBindings::GetObjectTemplateBuilder(
                  &TestRunnerBindings::SimulateWebNotificationClose)
       .SetMethod("simulateWebContentIndexDelete",
                  &TestRunnerBindings::SimulateWebContentIndexDelete)
+      .SetMethod("textZoomIn", &TestRunnerBindings::TextZoomIn)
+      .SetMethod("textZoomOut", &TestRunnerBindings::TextZoomOut)
+      .SetMethod("zoomPageIn", &TestRunnerBindings::ZoomPageIn)
+      .SetMethod("zoomPageOut", &TestRunnerBindings::ZoomPageOut)
+      .SetMethod("setPageZoomFactor", &TestRunnerBindings::SetPageZoomFactor)
       .SetProperty("tooltipText", &TestRunnerBindings::TooltipText)
       .SetMethod("useUnfortunateSynchronousResizeMode",
                  &TestRunnerBindings::UseUnfortunateSynchronousResizeMode)
@@ -1085,12 +1096,13 @@ void TestRunnerBindings::EnableAutoResizeMode(int min_width,
                                               int min_height,
                                               int max_width,
                                               int max_height) {
-  CHECK(frame_->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
   if (max_width <= 0 || max_height <= 0)
     return;
 
-  auto* frame_impl = static_cast<RenderFrameImpl*>(frame_);
-  RenderWidget* widget = frame_impl->GetLocalRootRenderWidget();
+  RenderWidget* widget = frame_->GetLocalRootRenderWidget();
 
   blink::WebSize min_size(min_width, min_height);
   blink::WebSize max_size(max_width, max_height);
@@ -1098,12 +1110,13 @@ void TestRunnerBindings::EnableAutoResizeMode(int min_width,
 }
 
 void TestRunnerBindings::DisableAutoResizeMode(int new_width, int new_height) {
-  CHECK(frame_->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
   if (new_width <= 0 || new_height <= 0)
     return;
 
-  auto* frame_impl = static_cast<RenderFrameImpl*>(frame_);
-  RenderWidget* widget = frame_impl->GetLocalRootRenderWidget();
+  RenderWidget* widget = frame_->GetLocalRootRenderWidget();
 
   blink::WebSize new_size(new_width, new_height);
   widget->DisableAutoResizeForTesting(new_size);
@@ -1161,7 +1174,9 @@ void TestRunnerBindings::SetPopupBlockingEnabled(bool block_popups) {
 void TestRunnerBindings::SetJavaScriptCanAccessClipboard(bool can_access) {
   // WebPreferences aren't propagated between frame tree fragments, so only
   // allow this in the main frame.
-  CHECK(frame_->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
 
   prefs_.java_script_can_access_clipboard = can_access;
   runner_->OnTestPreferencesChanged(prefs_, frame_);
@@ -1170,7 +1185,9 @@ void TestRunnerBindings::SetJavaScriptCanAccessClipboard(bool can_access) {
 void TestRunnerBindings::SetAllowFileAccessFromFileURLs(bool allow) {
   // WebPreferences aren't propagated between frame tree fragments, so only
   // allow this in the main frame.
-  CHECK(frame_->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
 
   prefs_.allow_file_access_from_file_urls = allow;
   runner_->OnTestPreferencesChanged(prefs_, frame_);
@@ -1242,7 +1259,9 @@ void TestRunnerBindings::SetAcceptLanguages(
 void TestRunnerBindings::SetPluginsEnabled(bool enabled) {
   // WebPreferences aren't propagated between frame tree fragments, so only
   // allow this in the main frame.
-  CHECK(frame_->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
 
   prefs_.plugins_enabled = enabled;
   runner_->OnTestPreferencesChanged(prefs_, frame_);
@@ -1453,7 +1472,9 @@ void TestRunnerBindings::SimulateBrowserWindowFocus(bool value) {
   // browser does, because actually moving focus causes different test
   // results in tests such as editing/selection/4975120.html with the
   // inner frame not getting its caret back.
-  DCHECK(frame_->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
   runner_->FocusWindow(frame_, value);
 }
 
@@ -1473,8 +1494,7 @@ void TestRunnerBindings::SetBackingScaleFactor(
   // https://crbug.com/900271
   double limited_value = fmin(15, value);
 
-  auto* frame_proxy = static_cast<WebFrameTestProxy*>(frame_);
-  WebWidgetTestProxy* widget = frame_proxy->GetLocalRootWebWidgetTestProxy();
+  WebWidgetTestProxy* widget = frame_->GetLocalRootWebWidgetTestProxy();
   widget->SetDeviceScaleFactorForTesting(limited_value);
 
   v8::Isolate* isolate = blink::MainThreadIsolate();
@@ -1490,8 +1510,7 @@ void TestRunnerBindings::SetBackingScaleFactor(
 
 void TestRunnerBindings::SetColorProfile(const std::string& name,
                                          v8::Local<v8::Function> v8_callback) {
-  auto* frame_proxy = static_cast<WebFrameTestProxy*>(frame_);
-  WebWidgetTestProxy* widget = frame_proxy->GetLocalRootWebWidgetTestProxy();
+  WebWidgetTestProxy* widget = frame_->GetLocalRootWebWidgetTestProxy();
 
   gfx::ColorSpace color_space;
   if (name == "genericRGB") {
@@ -1521,7 +1540,7 @@ void TestRunnerBindings::SetBluetoothManualChooser(bool enable) {
 
 static void GetBluetoothManualChooserEventsReply(
     base::WeakPtr<TestRunnerBindings> test_runner,
-    RenderFrame* frame,
+    blink::WebLocalFrame* frame,
     BoundV8Callback callback,
     const std::vector<std::string>& events) {
   if (!test_runner)  // This guards the validity of the |frame|.
@@ -1531,8 +1550,7 @@ static void GetBluetoothManualChooserEventsReply(
   v8::HandleScope handle_scope(isolate);
 
   // gin::TryConvertToV8() requires a v8::Context.
-  v8::Local<v8::Context> context =
-      frame->GetWebFrame()->MainWorldScriptContext();
+  v8::Local<v8::Context> context = frame->MainWorldScriptContext();
   CHECK(!context.IsEmpty());
   v8::Context::Scope context_scope(context);
 
@@ -1549,7 +1567,7 @@ void TestRunnerBindings::GetBluetoothManualChooserEvents(
     v8::Local<v8::Function> callback) {
   return runner_->blink_test_runner_->GetBluetoothManualChooserEvents(
       base::BindOnce(&GetBluetoothManualChooserEventsReply,
-                     weak_ptr_factory_.GetWeakPtr(), frame_,
+                     weak_ptr_factory_.GetWeakPtr(), GetWebFrame(),
                      WrapV8Callback(std::move(callback))));
 }
 
@@ -1622,18 +1640,21 @@ void TestRunnerBindings::SetHighlightAds() {
 }
 
 void TestRunnerBindings::AddWebPageOverlay() {
-  DCHECK(frame_->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
   frame_->GetWebFrame()->SetMainFrameOverlayColor(SK_ColorCYAN);
 }
 
 void TestRunnerBindings::RemoveWebPageOverlay() {
-  DCHECK(frame_->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
   frame_->GetWebFrame()->SetMainFrameOverlayColor(SK_ColorTRANSPARENT);
 }
 
 void TestRunnerBindings::UpdateAllLifecyclePhasesAndComposite() {
-  auto* frame_proxy = static_cast<WebFrameTestProxy*>(frame_);
-  frame_proxy->GetLocalRootWebWidgetTestProxy()->SynchronouslyComposite(
+  frame_->GetLocalRootWebWidgetTestProxy()->SynchronouslyComposite(
       /*raster=*/true);
 }
 
@@ -1751,8 +1772,83 @@ std::string TestRunnerBindings::PlatformName() {
   return std::string();
 }
 
+void TestRunnerBindings::TextZoomIn() {
+  // This may only be run from the main frame, as the user modifies this at the
+  // top level.
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
+
+  // TODO(danakj): This should be an async call through the browser process, but
+  // note this is an AndroidWebView feature which is not part of the content (or
+  // content_shell) APIs.
+  GetWebFrame()->SetLocalRootTextZoomFactor(
+      GetWebFrame()->LocalRootTextZoomFactor() * 1.2f);
+}
+
+void TestRunnerBindings::TextZoomOut() {
+  // This may only be run from the main frame, as the user modifies this at the
+  // top level.
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
+
+  // TODO(danakj): This should be an async call through the browser process, but
+  // note this is an AndroidWebView feature which is not part of the content (or
+  // content_shell) APIs.
+  GetWebFrame()->SetLocalRootTextZoomFactor(
+      GetWebFrame()->LocalRootTextZoomFactor() / 1.2f);
+}
+
+void TestRunnerBindings::ZoomPageIn() {
+  // This may only be run from the main frame, as the user modifies this at the
+  // top level.
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
+
+  blink::WebView* web_view = GetWebFrame()->View();
+  // TODO(danakj): This should be an async call through the browser process.
+  // JS can wait for `matchMedia("screen and (min-resolution: 2dppx)").matches`
+  // for the operation to complete, if it can tell which number to use in
+  // min-resolution.
+  frame_->GetLocalRootRenderWidget()->SetZoomLevelForTesting(
+      web_view->ZoomLevel() + 1);
+}
+
+void TestRunnerBindings::ZoomPageOut() {
+  // This may only be run from the main frame, as the user modifies this at the
+  // top level.
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
+
+  blink::WebView* web_view = GetWebFrame()->View();
+  // TODO(danakj): This should be an async call through the browser process.
+  // JS can wait for `matchMedia("screen and (min-resolution: 2dppx)").matches`
+  // for the operation to complete, if it can tell which number to use in
+  // min-resolution.
+  frame_->GetLocalRootRenderWidget()->SetZoomLevelForTesting(
+      web_view->ZoomLevel() - 1);
+}
+
+void TestRunnerBindings::SetPageZoomFactor(double zoom_factor) {
+  // This may only be run from the main frame, as the user modifies this at the
+  // top level.
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!frame_->IsMainFrame())
+    return;
+
+  // TODO(danakj): This should be an async call through the browser process.
+  // JS can wait for `matchMedia("screen and (min-resolution: 2dppx)").matches`
+  // for the operation to complete, if it can tell which number to use in
+  // min-resolution.
+  frame_->GetLocalRootRenderWidget()->SetZoomLevelForTesting(
+      blink::PageZoomFactorToZoomLevel(zoom_factor));
+}
+
 std::string TestRunnerBindings::TooltipText() {
-  auto* main_frame = static_cast<RenderFrameImpl*>(
+  RenderFrameImpl* main_frame = static_cast<RenderFrameImpl*>(
       frame_->GetRenderView()->GetMainRenderFrame());
   blink::WebString tooltip_text = main_frame->GetLocalRootRenderWidget()
                                       ->GetWebWidget()
@@ -1855,7 +1951,7 @@ TestRunner::TestRunner(TestInterfaces* interfaces)
 
 TestRunner::~TestRunner() = default;
 
-void TestRunner::Install(RenderFrame* frame,
+void TestRunner::Install(WebFrameTestProxy* frame,
                          SpellCheckClient* spell_check,
                          TestRunnerForSpecificView* view_test_runner) {
   // In WPT, only reftests generate pixel results.
@@ -1933,11 +2029,23 @@ void TestRunner::ResetWebView(WebViewTestProxy* web_view_test_proxy) {
   web_view->GetSettings()->SetHighlightAds(false);
 }
 
+void TestRunner::ResetWebWidget(WebWidgetTestProxy* web_widget_test_proxy) {
+  web_widget_test_proxy->SetDeviceScaleFactorForTesting(0);
+
+  // These things are only modified/valid for the main frame's widget.
+  if (web_widget_test_proxy->delegate()) {
+    web_widget_test_proxy->ResetZoomLevelForTesting();
+    web_widget_test_proxy->DisableAutoResizeForTesting(gfx::Size());
+    web_widget_test_proxy->UseSynchronousResizeModeForTesting(false);
+  }
+}
+
 void TestRunner::ResetWebFrame(WebFrameTestProxy* web_frame_test_proxy) {
   blink::WebLocalFrame* web_frame = web_frame_test_proxy->GetWebFrame();
 
   if (web_frame_test_proxy->IsMainFrame()) {
     web_frame->SetMainFrameOverlayColor(SK_ColorTRANSPARENT);
+    web_frame->SetLocalRootTextZoomFactor(1);
   }
   web_frame->EnableViewSourceMode(false);
 }
@@ -2779,7 +2887,9 @@ void TestRunner::SetBlockThirdPartyCookies(bool block) {
 }
 
 void TestRunner::FocusWindow(RenderFrame* main_frame, bool focus) {
-  DCHECK(main_frame->IsMainFrame());
+  // Early out instead of CHECK() to avoid poking the fuzzer bear.
+  if (!main_frame->IsMainFrame())
+    return;
 
   auto* frame_proxy = static_cast<WebFrameTestProxy*>(main_frame);
   RenderWidget* widget = frame_proxy->GetLocalRootRenderWidget();

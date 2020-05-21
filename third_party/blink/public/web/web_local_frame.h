@@ -690,6 +690,14 @@ class WebLocalFrame : public WebFrame {
   virtual bool CapturePaintPreview(const WebRect& bounds,
                                    cc::PaintCanvas* canvas) = 0;
 
+  // Text Zoom -----------------------------------------------------------
+
+  // Scales the text in the frame by a factor of text_zoom_factor.
+  virtual void SetLocalRootTextZoomFactor(float text_zoom_factor) = 0;
+  // Returns the current text zoom factor, where 1.0 is the normal size, > 1.0
+  // is scaled up and < 1.0 is scaled down.
+  virtual float LocalRootTextZoomFactor() = 0;
+
   // FrameOverlay ----------------------------------------------------------
 
   // Overlay this frame with a solid color. Only valid for the main frame.

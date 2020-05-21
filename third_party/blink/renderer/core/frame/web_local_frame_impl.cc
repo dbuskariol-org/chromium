@@ -1615,6 +1615,16 @@ bool WebLocalFrameImpl::CapturePaintPreview(const WebRect& bounds,
   return success;
 }
 
+void WebLocalFrameImpl::SetLocalRootTextZoomFactor(float text_zoom_factor) {
+  DCHECK(GetFrame()->IsLocalRoot());
+  GetFrame()->SetTextZoomFactor(text_zoom_factor);
+}
+
+float WebLocalFrameImpl::LocalRootTextZoomFactor() {
+  DCHECK(GetFrame()->IsLocalRoot());
+  return GetFrame()->TextZoomFactor();
+}
+
 PageSizeType WebLocalFrameImpl::GetPageSizeType(int page_index) {
   return GetFrame()->GetDocument()->StyleForPage(page_index)->GetPageSizeType();
 }

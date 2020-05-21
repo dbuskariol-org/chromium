@@ -307,7 +307,7 @@ void AwRenderFrameExt::OnSetTextZoomFactor(float zoom_factor) {
 
   // Hide selection and autofill popups.
   webview->CancelPagePopup();
-  webview->SetTextZoomFactor(zoom_factor);
+  render_frame()->GetWebFrame()->SetLocalRootTextZoomFactor(zoom_factor);
 }
 
 void AwRenderFrameExt::OnResetScrollAndScaleState() {

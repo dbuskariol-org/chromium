@@ -164,13 +164,8 @@ WebViewTestProxy* WebWidgetTestProxy::GetWebViewTestProxy() {
 void WebWidgetTestProxy::Reset() {
   event_sender_.Reset();
   ClearEditCommands();
-  UseSynchronousResizeModeForTesting(false);
-  SetDeviceScaleFactorForTesting(0);
 
-  // These things are only modified/valid for the main frame's widget.
-  if (delegate()) {
-    DisableAutoResizeForTesting(gfx::Size());
-  }
+  GetTestRunner()->ResetWebWidget(this);
 }
 
 void WebWidgetTestProxy::Install(blink::WebLocalFrame* frame) {
