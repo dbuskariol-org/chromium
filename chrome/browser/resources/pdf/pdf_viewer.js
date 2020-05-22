@@ -1291,6 +1291,9 @@ export class PDFViewer {
           type: 'touchSelectionOccurred',
         });
         return;
+      case 'documentFocusChanged':
+        // TODO(crbug.com/1069370): Draw a focus rect around plugin.
+        return;
     }
     assertNotReached('Unknown message type received: ' + data.type);
   }
