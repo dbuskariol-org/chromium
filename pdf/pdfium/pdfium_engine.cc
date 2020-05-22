@@ -2707,7 +2707,8 @@ void PDFiumEngine::LoadForm() {
                                     kFormHighlightColor);
     FPDF_SetFormFieldHighlightAlpha(form(), kFormHighlightAlpha);
 
-    if (base::FeatureList::IsEnabled(features::kTabAcrossPDFAnnotations)) {
+    if (base::FeatureList::IsEnabled(features::kTabAcrossPDFAnnotations) &&
+        !client_->IsPrintPreview()) {
       static constexpr FPDF_ANNOTATION_SUBTYPE kFocusableAnnotSubtypes[] = {
           FPDF_ANNOT_LINK, FPDF_ANNOT_HIGHLIGHT, FPDF_ANNOT_WIDGET};
       FPDF_BOOL ret = FPDFAnnot_SetFocusableSubtypes(
