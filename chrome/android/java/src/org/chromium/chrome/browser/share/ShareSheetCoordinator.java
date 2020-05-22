@@ -81,7 +81,9 @@ class ShareSheetCoordinator {
         }
         models.add(chromeProvidedSharingOptionsProvider.createCopyLinkPropertyModel());
         models.add(chromeProvidedSharingOptionsProvider.createSendTabToSelfPropertyModel());
-        models.add(chromeProvidedSharingOptionsProvider.createQrCodePropertyModel());
+        if (ChromeFeatureList.isEnabled(ChromeFeatureList.CHROME_SHARE_QRCODE)) {
+            models.add(chromeProvidedSharingOptionsProvider.createQrCodePropertyModel());
+        }
         if (mPrefServiceBridge.getBoolean(Pref.PRINTING_ENABLED)) {
             models.add(chromeProvidedSharingOptionsProvider.createPrintingPropertyModel());
         }
