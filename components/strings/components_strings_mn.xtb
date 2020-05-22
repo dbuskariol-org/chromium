@@ -879,6 +879,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows сүлжээний оношилгоог ажиллуулж байна<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Тохиргоог дахин ачаалах</translation>
 <translation id="4728558894243024398">Платформ</translation>
+<translation id="4731638775147756694">Энэ аппликэйшнийг таны администратор хориглосон байна</translation>
 <translation id="4731967714531604179">Prc2 (Дугтуй)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> таны төхөөрөмжийн байршлыг ашиглах хүсэлтэй байна</translation>
 <translation id="4736825316280949806">Chromium-г дахин эхлүүлэх</translation>
@@ -1247,6 +1248,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> хавчуургууд</translation>
 <translation id="6264485186158353794">Аюулгүй байдалд буцах</translation>
 <translation id="6266934640124581640">Цайвар номин ногоон</translation>
+<translation id="6272383483618007430">Google Шинэчлэл</translation>
 <translation id="6276112860590028508">Таны унших жагсаалтын хуудас энд харагдана</translation>
 <translation id="627746635834430766">Дараагийн удаа төлбөрөө хурдан төлөхийн тулд Google Бүртгэлдээ карт болон тооцооны хаягаа хадгална уу.</translation>
 <translation id="6279516281132775660">Chrome нь дараах мэдээллийг <ph name="BEGIN_EMPHASIS" />хадгалахгүй<ph name="END_EMPHASIS" />:
@@ -1601,7 +1603,6 @@
 <translation id="7763386264682878361">Төлбөрийн тодорхойлогч файлыг задлан шинжлэгч</translation>
 <translation id="7764225426217299476">Хаяг нэмэх</translation>
 <translation id="7766518757692125295">Хормой</translation>
-<translation id="7767271804335921384">Таны администратор аппликэйшнийг блоклосон</translation>
 <translation id="7770259615151589601">Сонгосон-Урт</translation>
 <translation id="7773005668374414287">Нүүрээр нь дээш харуулж, хуудасны дарааллын дагуу</translation>
 <translation id="777702478322588152">Дүүрэг</translation>

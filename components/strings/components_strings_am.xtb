@@ -873,6 +873,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />የWindows አውታረ መረብ መመርመሪያን በማሄድ ላይ<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">መምሪያዎችን ዳግም ጫን</translation>
 <translation id="4728558894243024398">መድረክ</translation>
+<translation id="4731638775147756694">ይህ መተግበሪያ በእርስዎ አስተዳዳሪ ታግዷል</translation>
 <translation id="4731967714531604179">Prc2 (የደብዳቤ ፖስታ)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> የመሣሪያዎን አካባቢ መጠቀም ይፈልጋል</translation>
 <translation id="4736825316280949806">Chromiumን ዳግም ያስጀምሩት</translation>
@@ -1239,6 +1240,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> እልባቶች</translation>
 <translation id="6264485186158353794">ወደ አስተማማኝ ተመለስ</translation>
 <translation id="6266934640124581640">ፈዘዝ ያለ ውሃ አረንጓዴ ሰማያዊ</translation>
+<translation id="6272383483618007430">የGoogle ዝማኔ</translation>
 <translation id="6276112860590028508">ከእርስዎ የንባብ ዝርዝር የመጡ ገጾች እዚህ ይታያሉ</translation>
 <translation id="627746635834430766">በሚቀጥለው ጊዜ በበለጠ ፍጥነት ለመክፈል ካርድዎን እና የማስከፈያ አድራሻዎን በGoogle መለያዎ ላይ ያስቀምጡ።</translation>
 <translation id="6279516281132775660">Chrome የሚከተለውን መረጃ <ph name="BEGIN_EMPHASIS" />አያስቀምጥም<ph name="END_EMPHASIS" />፦
@@ -1593,7 +1595,6 @@
 <translation id="7763386264682878361">የክፍያ ዝርዝር ሰነድ ተንታኝ</translation>
 <translation id="7764225426217299476">አድራሻ አክል</translation>
 <translation id="7766518757692125295">ቀሚስ</translation>
-<translation id="7767271804335921384">መተግበሪያው በእርስዎ አስተዳዳሪ ታግዷል</translation>
 <translation id="7770259615151589601">የተሰየመ-ረጅም</translation>
 <translation id="7773005668374414287">ተመሳሳይ ቅደም-ተከተል ፊቱ ወደ ላይ</translation>
 <translation id="777702478322588152">መስተዳድር</translation>

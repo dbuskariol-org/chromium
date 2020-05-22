@@ -871,6 +871,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows-ის ქსელის დიაგნოსტიკის ხელსაწყოს გაშვება<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">წესების ხელახლა ჩატვირთვა</translation>
 <translation id="4728558894243024398">პლატფორმა</translation>
+<translation id="4731638775147756694">ეს აპლიკაცია დაბლოკილია თქვენი ადმინისტრატორის მიერ</translation>
 <translation id="4731967714531604179">Prc2 (კონვერტი)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> ითხოვს მოწყობილობის მდებარეობის გამოყენების ნებართვას</translation>
 <translation id="4736825316280949806">Chromium-ის გადატვირთვა</translation>
@@ -1237,6 +1238,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> სანიშნე</translation>
 <translation id="6264485186158353794">უსაფრთხოებაზე დაბრუნება</translation>
 <translation id="6266934640124581640">ღია ზურმუხტისფერი</translation>
+<translation id="6272383483618007430">Google განახლება</translation>
 <translation id="6276112860590028508">აქ გამოჩნდება გვერდები თქვენი საკითხავი სიიდან</translation>
 <translation id="627746635834430766">შემდგომი გადახდების დასაჩქარებლად შეგიძლიათ შეინახოთ თქვენი ბარათის მონაცემები და ბილინგის მისამართი თქვენს Google ანგარიშში.</translation>
 <translation id="6279516281132775660">Chrome-ის მიერ <ph name="BEGIN_EMPHASIS" />არ შეინახება<ph name="END_EMPHASIS" /> შემდეგი ინფორმაცია:
@@ -1591,7 +1593,6 @@
 <translation id="7763386264682878361">გადახდის აღწერის ფაილის სინტაქსიკური ანალიზის პროგრამა</translation>
 <translation id="7764225426217299476">მისამართის დამატება</translation>
 <translation id="7766518757692125295">საფარველი</translation>
-<translation id="7767271804335921384">აპლიკაცია დაბლოკილია თქვენი ადმინისტრატორის მიერ</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">იგივე მიმდევრობა ნაბეჭდი მხარით აღმა</translation>
 <translation id="777702478322588152">პრეფექტურა</translation>

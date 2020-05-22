@@ -204,6 +204,7 @@
 <translation id="2647434099613338025">भाषा जोड़ें</translation>
 <translation id="2650751991977523696">फ़ाइल दोबारा डाउनलोड करें?</translation>
 <translation id="2651091186440431324">{FILE_COUNT,plural, =1{# ऑडियो फ़ाइल}one{# ऑडियो फ़ाइलें}other{# ऑडियो फ़ाइलें}}</translation>
+<translation id="2656405586795711023">वेब ऐप्लिकेशन</translation>
 <translation id="2689830683995595741">Chrome इस्तेमाल करने का मतलब है कि आप <ph name="BEGIN_LINK1" />Google की सेवा की शर्तों<ph name="END_LINK1" /> और <ph name="BEGIN_LINK2" />Google Chrome और Chrome OS की सेवा की अतिरिक्त शर्तों<ph name="END_LINK2" /> से सहमत हैं. साथ ही, आप <ph name="BEGIN_LINK3" />Family Link से प्रबंधित होने वाले Google खातों के लिए निजता सूचना<ph name="END_LINK3" /> से भी सहमत हैं.</translation>
 <translation id="2707726405694321444">पेज रीफ्रेश करें</translation>
 <translation id="2709516037105925701">ऑटोमैटिक भरना</translation>
@@ -365,6 +366,7 @@
 <translation id="3997476611815694295">महत्वहीन मेमोरी</translation>
 <translation id="4000212216660919741">ऑफ़लाइन होम</translation>
 <translation id="4034817413553209278">{HOURS,plural, =1{# घंटा}one{# घंटे}other{# घंटे}}</translation>
+<translation id="403687620286099920">क्यूआर कोड खोलने के लिए टैप करें</translation>
 <translation id="4046123991198612571">अगला ट्रैक</translation>
 <translation id="4056223980640387499">Sepia</translation>
 <translation id="4060598801229743805">स्क्रीन के शीर्ष भाग में मौजूद विकल्प</translation>
@@ -449,6 +451,7 @@
 <translation id="4749960740855309258">नया टैब खोलें</translation>
 <translation id="4759238208242260848">डाउनलोड</translation>
 <translation id="4763829664323285145">{FILE_COUNT,plural, =1{1 डाउनलोड पूरा हुआ.}one{# डाउनलोड पूरे हुए.}other{# डाउनलोड पूरे हुए.}}</translation>
+<translation id="478981486571169252">आप Chrome में अपनी <ph name="SITE_NAME" /> की साइन इन स्थिति, ब्राउज़िंग डेटा, और साइट डेटा देख पाएंगे.</translation>
 <translation id="4802417911091824046">लंबा पासवर्ड सुरक्षित करने में Google Pay से भुगतान करने के तरीके और पते शामिल नहीं हैं.
 
 यह सेटिंग बदलने के लिए, <ph name="BEGIN_LINK" />सिंक रीसेट करें<ph name="END_LINK" /></translation>
@@ -560,6 +563,7 @@
 <translation id="5659593005791499971">ईमेल</translation>
 <translation id="5665379678064389456"><ph name="APP_NAME" /> में इवेंट बनाएं</translation>
 <translation id="5668404140385795438">किसी वेबसाइट के वेबपेज ज़ूम इन न करने के नियम को बदल देता है</translation>
+<translation id="5681394891799747640">क्यूआर कोड डाउनलोड नहीं किया जा सका</translation>
 <translation id="5684874026226664614">ओह. इस पेज का अनुवाद नहीं किया जा सका.</translation>
 <translation id="5686790454216892815">फ़ाइल का नाम बहुत लंबा है</translation>
 <translation id="5694049548840660018">होम पेज पर आसानी से वापस जाएं</translation>
@@ -608,6 +612,7 @@
 <translation id="6042308850641462728">और ज़्यादा</translation>
 <translation id="604996488070107836">किसी अज्ञात गड़बड़ी के कारण <ph name="FILE_NAME" /> का डाउनलोड विफल रहा.</translation>
 <translation id="605721222689873409">YY</translation>
+<translation id="6059830886158432458">अपनी खबरों और गतिविधि को यहां नियंत्रित करें</translation>
 <translation id="60923314841986378"><ph name="HOURS" /> घंटे शेष</translation>
 <translation id="6108923351542677676">सेटअप प्रगति में है…</translation>
 <translation id="6111020039983847643">डेटा इस्तेमाल किया गया</translation>
@@ -631,6 +636,7 @@
 <translation id="629730747756840877">खाता</translation>
 <translation id="6297765934698848803">आपके डिवाइस काे प्रबंधित करने वाले संगठन ने आपका कैमरा बंद कर दिया है.</translation>
 <translation id="6303969859164067831">साइन आउट करें और सिंक बंद करें</translation>
+<translation id="6312687380483398334">वेब ऐप्लिकेशन (म्यूट)</translation>
 <translation id="6316139424528454185">Android वर्शन काम नहीं कर रहा है</translation>
 <translation id="6324034347079777476">Android सिस्टम समन्वयन अक्षम है</translation>
 <translation id="6333140779060797560"><ph name="APPLICATION" /> के द्वारा शेयर करें</translation>
@@ -790,6 +796,7 @@
 <translation id="7605594153474022051">समन्वयन काम नहीं कर रहा है</translation>
 <translation id="7606077192958116810">लाइट मोड चालू है. इसे 'सेटिंग' में जाकर प्रबंधित करें.</translation>
 <translation id="7612619742409846846">आपने Google में इस ईमेल पते से साइन इन किया है</translation>
+<translation id="7614971007231847352">क्यूआर कोड डाउनलोड हो गया</translation>
 <translation id="7619072057915878432">नेटवर्क विफलताओं के कारण <ph name="FILE_NAME" /> डाउनलोड विफल रहा.</translation>
 <translation id="7624880197989616768"><ph name="BEGIN_LINK1" />सहायता पाएं<ph name="END_LINK1" /> या <ph name="BEGIN_LINK2" />फिर से स्कैन करें<ph name="END_LINK2" /></translation>
 <translation id="7626032353295482388">Chrome में आपका स्वागत है</translation>
@@ -817,6 +824,7 @@
 <translation id="7821588508402923572">बचाया गया डेटा यहां दिखाई देगा</translation>
 <translation id="7835852323729233924">चलाया जा रहा मीडिया</translation>
 <translation id="783819812427904514">वीडियो अनम्यूट करें</translation>
+<translation id="7846296061357476882">Google की सेवाएं</translation>
 <translation id="784934925303690534">समय सीमा</translation>
 <translation id="7851858861565204677">अन्य डिवाइस</translation>
 <translation id="7875915731392087153">ईमेल बनाएं</translation>
@@ -972,7 +980,6 @@
 <translation id="9155898266292537608">आप किसी शब्द पर बस एक टैप करके भी खोज सकते हैं</translation>
 <translation id="9169507124922466868">नेविगेशन का इतिहास आधी स्क्रीन में खुला हुआ है</translation>
 <translation id="9204836675896933765">1 फ़ाइल बची है</translation>
-<translation id="9205796607887024517">यहां से खबरें प्रबंधित करें</translation>
 <translation id="9206873250291191720">A</translation>
 <translation id="9209888181064652401">कॉल नहीं कर पा रहे</translation>
 <translation id="9219103736887031265">इमेज</translation>

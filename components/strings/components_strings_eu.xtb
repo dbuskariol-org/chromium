@@ -871,6 +871,7 @@ Bestela, pribatutasun-ezarpenek blokeatu egingo dute baimen hori. Baimen honekin
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows-en sare-diagnostikoak abiarazten<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Kargatu berriro gidalerroak</translation>
 <translation id="4728558894243024398">Plataforma</translation>
+<translation id="4731638775147756694">Administratzaileak blokeatu du aplikazio hori</translation>
 <translation id="4731967714531604179">Prc2 (gutun-azala)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> webguneak gailuaren kokapena erabili nahi du</translation>
 <translation id="4736825316280949806">Berrabiarazi Chromium</translation>
@@ -1236,6 +1237,7 @@ Bestela, pribatutasun-ezarpenek blokeatu egingo dute baimen hori. Baimen honekin
 <translation id="6263376278284652872"><ph name="DOMAIN" /> laster-marka</translation>
 <translation id="6264485186158353794">Itzuli segurtasunera</translation>
 <translation id="6266934640124581640">Anil argia</translation>
+<translation id="6272383483618007430">Google-ren eguneratzea</translation>
 <translation id="6276112860590028508">Hemen agertuko dira irakurketa-zerrendako orriak</translation>
 <translation id="627746635834430766">Hurrengoan bizkorrago ordaintzeko, gorde txartela eta fakturazio-helbidea Google-ko kontuan.</translation>
 <translation id="6279516281132775660">Chrome-k <ph name="BEGIN_EMPHASIS" />ez du gordeko<ph name="END_EMPHASIS" /> informazio hau:
@@ -1590,7 +1592,6 @@ Xehetasun gehiago:
 <translation id="7763386264682878361">Ordainketa-manifestuen analizatzailea</translation>
 <translation id="7764225426217299476">Gehitu helbidea</translation>
 <translation id="7766518757692125295">Ingurunea</translation>
-<translation id="7767271804335921384">Administratzaileak aplikazioa blokeatu du</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Ordena berean, ahoz gora</translation>
 <translation id="777702478322588152">Administrazio-eremua</translation>

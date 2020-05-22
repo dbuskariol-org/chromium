@@ -877,6 +877,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows Network Diagnostics құралын қосу<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Саясаттарды қайта жүктеу</translation>
 <translation id="4728558894243024398">Платформа</translation>
+<translation id="4731638775147756694">Бұл қолданбаны әкімші бөгеді.</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> құрылғыңыздың орналасқан жер деректерін пайдаланғысы келеді</translation>
 <translation id="4736825316280949806">Chromium браузерін қайта іске қосу</translation>
@@ -1247,6 +1248,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> бетбелгілері</translation>
 <translation id="6264485186158353794">Қауіпсіз аймаққа қайту</translation>
 <translation id="6266934640124581640">Ашық көкшіл жасыл</translation>
+<translation id="6272383483618007430">Google Update</translation>
 <translation id="6276112860590028508">Оқу тізіміндегі беттер осы жерге шығады</translation>
 <translation id="627746635834430766">Келесіде жылдамырақ төлеу үшін картаны және төлем мекенжайын Google есептік жазбасына сақтаңыз.</translation>
 <translation id="6279516281132775660">Chrome келесі ақпаратты <ph name="BEGIN_EMPHASIS" />сақтамайды<ph name="END_EMPHASIS" />:
@@ -1601,7 +1603,6 @@
 <translation id="7763386264682878361">Төлем манифестін талдау құралы</translation>
 <translation id="7764225426217299476">Мекенжай қосу</translation>
 <translation id="7766518757692125295">Шеті</translation>
-<translation id="7767271804335921384">Қолданбаны әкімші бөгеді.</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Бірдей ретпен беткі жағында</translation>
 <translation id="777702478322588152">Префектура</translation>

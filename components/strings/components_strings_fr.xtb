@@ -871,6 +871,7 @@ Par défaut, ce type d'accès est bloqué par vos paramètres de confidentialit�
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Exécutez les diagnostics réseau de Windows<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Actualiser les règles</translation>
 <translation id="4728558894243024398">Plate-forme</translation>
+<translation id="4731638775147756694">Cette application a été bloquée par votre administrateur</translation>
 <translation id="4731967714531604179">Prc2 (enveloppe)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> souhaite utiliser la position de votre appareil</translation>
 <translation id="4736825316280949806">Relancez Chromium</translation>
@@ -1237,6 +1238,7 @@ Par défaut, ce type d'accès est bloqué par vos paramètres de confidentialit�
 <translation id="6263376278284652872">Favoris de <ph name="DOMAIN" /></translation>
 <translation id="6264485186158353794">Revenir en lieu sûr</translation>
 <translation id="6266934640124581640">Turquoise clair</translation>
+<translation id="6272383483618007430">Google Update</translation>
 <translation id="6276112860590028508">Les pages de votre liste de lecture s'affichent ici</translation>
 <translation id="627746635834430766">Pour régler vos achats plus rapidement la prochaine fois, enregistrez votre carte et votre adresse de facturation dans votre compte Google.</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />n'enregistrera pas<ph name="END_EMPHASIS" /> les informations suivantes :
@@ -1591,7 +1593,6 @@ Informations supplémentaires :
 <translation id="7763386264682878361">Analyseur du fichier manifeste du paiement</translation>
 <translation id="7764225426217299476">Ajouter une adresse</translation>
 <translation id="7766518757692125295">Jupe</translation>
-<translation id="7767271804335921384">Cette application a été bloquée par votre administrateur</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Même ordre, face vers le haut</translation>
 <translation id="777702478322588152">Préfecture</translation>

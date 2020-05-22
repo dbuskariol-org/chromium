@@ -869,6 +869,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />執行 Windows 網絡診斷<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">重新載入政策</translation>
 <translation id="4728558894243024398">平台</translation>
+<translation id="4731638775147756694">您的管理員已封鎖此應用程式</translation>
 <translation id="4731967714531604179">Prc2 (信封)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> 要求使用裝置的位置資料</translation>
 <translation id="4736825316280949806">重新啟動 Chromium</translation>
@@ -1235,6 +1236,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> 書籤</translation>
 <translation id="6264485186158353794">返回安全連線</translation>
 <translation id="6266934640124581640">淺藍綠色</translation>
+<translation id="6272383483618007430">Google 更新</translation>
 <translation id="6276112860590028508">您的閱讀清單中的網頁將會在這裡顯示</translation>
 <translation id="627746635834430766">只要將此付款卡和帳單地址儲存至您的 Google 帳戶，下次即可更快完成付款程序。</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />不會儲存<ph name="END_EMPHASIS" />以下資料：
@@ -1589,7 +1591,6 @@
 <translation id="7763386264682878361">付款資訊清單剖析器</translation>
 <translation id="7764225426217299476">新增地址</translation>
 <translation id="7766518757692125295">預印</translation>
-<translation id="7767271804335921384">您的管理員已封鎖應用程式</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">相同順序 (正面朝上)</translation>
 <translation id="777702478322588152">縣</translation>

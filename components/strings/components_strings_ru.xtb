@@ -870,6 +870,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Выполните диагностику сети в Windows<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Повторно загрузить политики</translation>
 <translation id="4728558894243024398">Платформа</translation>
+<translation id="4731638775147756694">Приложение заблокировано администратором.</translation>
 <translation id="4731967714531604179">Prc2 (конверт)</translation>
 <translation id="4733082559415072992">Сайт <ph name="URL" /> запрашивает данные о местоположении вашего устройства.</translation>
 <translation id="4736825316280949806">Перезапустите Chromium.</translation>
@@ -1236,6 +1237,7 @@
 <translation id="6263376278284652872">Закладки <ph name="DOMAIN" /></translation>
 <translation id="6264485186158353794">Вернуться к безопасной странице</translation>
 <translation id="6266934640124581640">Светло-бирюзовый</translation>
+<translation id="6272383483618007430">Google Update</translation>
 <translation id="6276112860590028508">Здесь будут страницы из списка для чтения.</translation>
 <translation id="627746635834430766">Чтобы ускорить процесс оплаты в будущем, сохраните карту и платежный адрес в аккаунте Google.</translation>
 <translation id="6279516281132775660">В Chrome <ph name="BEGIN_EMPHASIS" />не будет сохраняться<ph name="END_EMPHASIS" /> следующая информация:
@@ -1590,7 +1592,6 @@
 <translation id="7763386264682878361">Синтаксический анализатор манифестов</translation>
 <translation id="7764225426217299476">Добавить адрес</translation>
 <translation id="7766518757692125295">Юбка</translation>
-<translation id="7767271804335921384">Приложение заблокировано администратором.</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">В том же порядке лицевой стороной вверх</translation>
 <translation id="777702478322588152">Префектура</translation>

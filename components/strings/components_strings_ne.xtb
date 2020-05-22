@@ -870,6 +870,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows नेटवर्क सम्बन्धी निदान चलाएर हेर्नुहोस्<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">नीतिहरू पुन: लोड गर्नुहोस्</translation>
 <translation id="4728558894243024398">प्लेटफर्म</translation>
+<translation id="4731638775147756694">तपाईंका एड्मिनले यो एपलाई रोक लगाउनुभएको छ</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> तपाईंको यन्त्रको स्थान प्रयोग गर्न चाहन्छ</translation>
 <translation id="4736825316280949806">Chromium लाई पुनः सुरु गर्नुहोस्</translation>
@@ -1236,6 +1237,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> बुकमार्कहरू</translation>
 <translation id="6264485186158353794">सुरक्षामा फर्कनुहोस्</translation>
 <translation id="6266934640124581640">हल्का निलो र हरियो</translation>
+<translation id="6272383483618007430">Google अपडेट</translation>
 <translation id="6276112860590028508">तपाईंको पाठ्य सूचीका पृष्ठहरू यहाँ देखिन्छन्</translation>
 <translation id="627746635834430766">अर्को पटक अझ छिटो भुक्तानी गर्न आफ्नो Google खातामा आफ्नो कार्ड र बिलिङ ठेगाना सुरक्षित गर्नुहोस्।</translation>
 <translation id="6279516281132775660">Chrome ले निम्न जानकारी <ph name="BEGIN_EMPHASIS" />सुरक्षित गर्ने छैन<ph name="END_EMPHASIS" />:
@@ -1590,7 +1592,6 @@
 <translation id="7763386264682878361">भुक्तानी म्यानिफेस्ट पार्सर</translation>
 <translation id="7764225426217299476">ठेगाना थप्नुहोस्</translation>
 <translation id="7766518757692125295">स्कर्ट</translation>
-<translation id="7767271804335921384">तपाईंका प्रशासकले यो अनुप्रयोगमाथि रोक लगाउनुभएको छ</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">उही क्रम तर माथितिर फर्काएर</translation>
 <translation id="777702478322588152">प्रशासकिय क्षेत्र</translation>

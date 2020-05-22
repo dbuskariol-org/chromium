@@ -878,6 +878,7 @@ Dit sal andersins deur jou privaatheidinstellings geblokkeer word. Dit sal die i
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Voer tans Windows Network Diagnostics uit<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Herlaai beleide</translation>
 <translation id="4728558894243024398">Platform</translation>
+<translation id="4731638775147756694">Jou administrateur het hierdie program geblokkeer</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> wil jou toestel se ligging gebruik</translation>
 <translation id="4736825316280949806">Herbegin Chromium</translation>
@@ -1248,6 +1249,7 @@ Dit sal andersins deur jou privaatheidinstellings geblokkeer word. Dit sal die i
 <translation id="6263376278284652872"><ph name="DOMAIN" />-boekmerke</translation>
 <translation id="6264485186158353794">Terug na veiligheid</translation>
 <translation id="6266934640124581640">Liggroenblou</translation>
+<translation id="6272383483618007430">Google-opdatering</translation>
 <translation id="6276112860590028508">Bladsye uit jou leeslys verskyn hier</translation>
 <translation id="627746635834430766">Stoor jou kaart en faktureringadres in jou Google-rekening om volgende keer vinniger te betaal.</translation>
 <translation id="6279516281132775660">Chrome sal nie die volgende inligting <ph name="BEGIN_EMPHASIS" />stoor nie<ph name="END_EMPHASIS" />:
@@ -1602,7 +1604,6 @@ om uit te vind hoe om die sagteware permanent van jou rekenaar te verwyder&lt;/o
 <translation id="7763386264682878361">Betalingmanifesontleder</translation>
 <translation id="7764225426217299476">Voeg adres by</translation>
 <translation id="7766518757692125295">Buitelyn</translation>
-<translation id="7767271804335921384">Jou administrateur het die program geblokkeer</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Dieselfde volgorde, voorkant na bo</translation>
 <translation id="777702478322588152">Prefektuur</translation>

@@ -870,6 +870,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows നെറ്റ്‌വർക്ക് ഡയഗണോസ്‌റ്റിക്‌സ് റൺ ചെയ്യുന്നു<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">നയങ്ങൾ വീണ്ടും ലോഡ് ചെയ്യുക</translation>
 <translation id="4728558894243024398">പ്ലാറ്റ്ഫോം</translation>
+<translation id="4731638775147756694">ഈ ആപ്പ് നിങ്ങളുടെ അഡ്‌മിൻ ബ്ലോക്ക് ചെയ്‌തിരിക്കുന്നു</translation>
 <translation id="4731967714531604179">Prc2 (എൻവലപ്പ്)</translation>
 <translation id="4733082559415072992">നിങ്ങളുടെ ഉപകരണത്തിന്‍റെ ലൊക്കേഷൻ ഉപയോഗിക്കാൻ <ph name="URL" /> ആഗ്രഹിക്കുന്നു</translation>
 <translation id="4736825316280949806">Chromium റീസ്‌റ്റാർട്ടുചെയ്യുക</translation>
@@ -1238,6 +1239,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> ബുക്ക്‌മാർക്കുകൾ</translation>
 <translation id="6264485186158353794">തിരികെ സുരക്ഷയിലേക്ക്</translation>
 <translation id="6266934640124581640">ഇളം ടീൽ</translation>
+<translation id="6272383483618007430">Google അപ്ഡേറ്റ്</translation>
 <translation id="6276112860590028508">നിങ്ങളുടെ വായന പട്ടികയിൽ നിന്നുള്ള പേജുകൾ ഇവിടെ ദൃശൃമാകും</translation>
 <translation id="627746635834430766">അടുത്ത പ്രാവശ്യം വേഗത്തിൽ പണമടയ്ക്കാൻ, നിങ്ങളുടെ Google അക്കൗണ്ടിൽ ഈ കാർഡും ബില്ലിംഗ് വിലാസവും സംരക്ഷിക്കുക.</translation>
 <translation id="6279516281132775660">ഇനിപ്പറയുന്ന വിവരങ്ങൾ Chrome <ph name="BEGIN_EMPHASIS" />സംരക്ഷിക്കില്ല<ph name="END_EMPHASIS" />:
@@ -1590,7 +1592,6 @@
 <translation id="7763386264682878361">പേയ്‌മെന്റ് മാനിഫെസ്‌റ്റ് പാർസർ</translation>
 <translation id="7764225426217299476">വിലാസം ചേർക്കുക</translation>
 <translation id="7766518757692125295">സ്കേർട്ട്</translation>
-<translation id="7767271804335921384">ആപ്പ് നിങ്ങളുടെ അഡ്‌മിൻ ബ്ലോക്ക് ചെയ്‌തിരിക്കുന്നു</translation>
 <translation id="7770259615151589601">ഡെസിഗ്‌നേറ്റ് ചെയ്‌തത്-വലുത്</translation>
 <translation id="7773005668374414287">അതേ ക്രമത്തിൽ ഫേസ് അപ്പ്</translation>
 <translation id="777702478322588152">പ്രിഫെക്ച്വര്‍</translation>

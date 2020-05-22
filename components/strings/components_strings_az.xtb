@@ -874,6 +874,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows Şəbəkə Diaqnostikası İşləyir<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Qaydaları yenidən yükləyin</translation>
 <translation id="4728558894243024398">Platforma</translation>
+<translation id="4731638775147756694">Bu tətbiq admin tərəfindən bloklanıb</translation>
 <translation id="4731967714531604179">Prc2 (Zərf)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> cihazın məkanını istifadə etmək istəyir</translation>
 <translation id="4736825316280949806">Chromium'u yenidən başladın</translation>
@@ -1244,6 +1245,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> əlfəcinləri</translation>
 <translation id="6264485186158353794">Güvənliyə qayıdın</translation>
 <translation id="6266934640124581640">Açıq-firuzəyi</translation>
+<translation id="6272383483618007430">Google Güncəlləməsi</translation>
 <translation id="6276112860590028508">Oxu siyahısının səhifələri burada görünəcək</translation>
 <translation id="627746635834430766">Növbəti dəfə daha sürətli ödəniş etmək üçün kartı və faktura ünvanını Google Hesabınızda yadda saxlayın.</translation>
 <translation id="6279516281132775660">Chrome aşağıdakı məlumatları <ph name="BEGIN_EMPHASIS" />yadda saxlamayacaq<ph name="END_EMPHASIS" />:
@@ -1598,7 +1600,6 @@
 <translation id="7763386264682878361">Ödəniş Manifest Təhlili</translation>
 <translation id="7764225426217299476">Ünvan əlavə edin</translation>
 <translation id="7766518757692125295">Ətək</translation>
-<translation id="7767271804335921384">Tətbiq admin tərəfindən bloklanıb</translation>
 <translation id="7770259615151589601">Təyin Edilmiş Uzunluq</translation>
 <translation id="7773005668374414287">Eyni sıra ilə üzü yuxarı</translation>
 <translation id="777702478322588152">Prefektura</translation>

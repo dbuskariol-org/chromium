@@ -204,6 +204,7 @@ Atinge lung orice cuvânt pentru a-l căuta. Pentru a rafina căutarea, selectea
 <translation id="2647434099613338025">Adaugă o limbă</translation>
 <translation id="2650751991977523696">Descarci din nou fișierul?</translation>
 <translation id="2651091186440431324">{FILE_COUNT,plural, =1{Un fișier audio}few{# fișiere audio}other{# de fișiere audio}}</translation>
+<translation id="2656405586795711023">Aplicații web</translation>
 <translation id="2689830683995595741">Dacă folosești Chrome, ești de acord cu <ph name="BEGIN_LINK1" />Termenii și condițiile Google<ph name="END_LINK1" /> și cu <ph name="BEGIN_LINK2" />Termenii și condițiile suplimentare pentru Google Chrome și Sistemul de operare Chrome<ph name="END_LINK2" />. Se aplică și <ph name="BEGIN_LINK3" />Notificarea privind confidențialitatea pentru Conturile Google gestionate cu Family Link<ph name="END_LINK3" />.</translation>
 <translation id="2707726405694321444">Actualizează pagina</translation>
 <translation id="2709516037105925701">Completare automată</translation>
@@ -365,6 +366,7 @@ Doar tu poți vedea ce vede camera. Site-ul nu vede imaginile de pe cameră.</tr
 <translation id="3997476611815694295">Stocare neimportantă</translation>
 <translation id="4000212216660919741">Pagina de pornire offline</translation>
 <translation id="4034817413553209278">{HOURS,plural, =1{O oră}few{# ore}other{# de ore}}</translation>
+<translation id="403687620286099920">Atinge pentru a deschide codul QR</translation>
 <translation id="4046123991198612571">Melodia următoare</translation>
 <translation id="4056223980640387499">Sepia</translation>
 <translation id="4060598801229743805">Opțiunile sunt disponibile în partea de sus a ecranului</translation>
@@ -449,6 +451,7 @@ Contul Google poate să ofere alte forme ale istoricului de navigare, cum ar fi 
 <translation id="4749960740855309258">Deschide o filă nouă</translation>
 <translation id="4759238208242260848">Descărcări</translation>
 <translation id="4763829664323285145">{FILE_COUNT,plural, =1{O descărcare finalizată.}few{# descărcări finalizate.}other{# de descărcări finalizate.}}</translation>
+<translation id="478981486571169252">Vei vedea starea de conectare la <ph name="SITE_NAME" />, datele de navigare și datele privind site-ul în Chrome.</translation>
 <translation id="4802417911091824046">Criptarea expresiei de acces nu include metodele de plată și adresele din Google Pay.
 
 Pentru a modifica această setare, <ph name="BEGIN_LINK" />resetează sincronizarea<ph name="END_LINK" /></translation>
@@ -560,6 +563,7 @@ Pentru a modifica această setare, <ph name="BEGIN_LINK" />resetează sincroniza
 <translation id="5659593005791499971">Adresă de e-mail</translation>
 <translation id="5665379678064389456">Creează un eveniment în <ph name="APP_NAME" /></translation>
 <translation id="5668404140385795438">Ignoră solicitarea unui site de a împiedica mărirea</translation>
+<translation id="5681394891799747640">Codul QR nu se poate descărca</translation>
 <translation id="5684874026226664614">Hopa. Această pagină nu a putut fi tradusă.</translation>
 <translation id="5686790454216892815">Numele fișierului este prea lung</translation>
 <translation id="5694049548840660018">Întoarce-te acasă cu ușurință</translation>
@@ -608,6 +612,7 @@ Pentru a modifica această setare, <ph name="BEGIN_LINK" />resetează sincroniza
 <translation id="6042308850641462728">Mai multe</translation>
 <translation id="604996488070107836">Fișierul <ph name="FILE_NAME" /> nu a fost descărcat din cauza unei erori necunoscute.</translation>
 <translation id="605721222689873409">AA</translation>
+<translation id="6059830886158432458">Gestionează subiectele și activitatea aici</translation>
 <translation id="60923314841986378"><ph name="HOURS" /> ore rămase</translation>
 <translation id="6108923351542677676">Configurare în curs...</translation>
 <translation id="6111020039983847643">date utilizate</translation>
@@ -631,6 +636,7 @@ De exemplu, unele site-uri pot răspunde la această solicitare afișând anunț
 <translation id="629730747756840877">Cont</translation>
 <translation id="6297765934698848803">Organizația care îți gestionează dispozitivul ți-a dezactivat camera.</translation>
 <translation id="6303969859164067831">Deconectează-te și dezactivează sincronizarea</translation>
+<translation id="6312687380483398334">Aplicații web (silențioase)</translation>
 <translation id="6316139424528454185">Versiunea Android nu este acceptată</translation>
 <translation id="6324034347079777476">Sincronizarea de sistem Android este dezactivată</translation>
 <translation id="6333140779060797560">Trimite prin <ph name="APPLICATION" /></translation>
@@ -790,6 +796,7 @@ De exemplu, unele site-uri pot răspunde la această solicitare afișând anunț
 <translation id="7605594153474022051">Sincronizarea nu funcționează</translation>
 <translation id="7606077192958116810">Modul Lite este activat. Gestionează-l în Setări.</translation>
 <translation id="7612619742409846846">Conectat(ă) la Google ca</translation>
+<translation id="7614971007231847352">Codul QR a fost descărcat</translation>
 <translation id="7619072057915878432">Descărcarea fișierului <ph name="FILE_NAME" /> nu a reușit din cauza erorilor de rețea.</translation>
 <translation id="7624880197989616768"><ph name="BEGIN_LINK1" />Obține ajutor<ph name="END_LINK1" /> sau <ph name="BEGIN_LINK2" />scanează din nou<ph name="END_LINK2" /></translation>
 <translation id="7626032353295482388">Bun venit la Chrome</translation>
@@ -817,6 +824,7 @@ De exemplu, unele site-uri pot răspunde la această solicitare afișând anunț
 <translation id="7821588508402923572">Economiile de date vor apărea aici</translation>
 <translation id="7835852323729233924">Se redă conținutul media</translation>
 <translation id="783819812427904514">Activează sunetul videoclipului</translation>
+<translation id="7846296061357476882">Servicii Google</translation>
 <translation id="784934925303690534">Interval de timp</translation>
 <translation id="7851858861565204677">Alte dispozitive</translation>
 <translation id="7875915731392087153">Creează un e-mail</translation>
@@ -972,7 +980,6 @@ De exemplu, unele site-uri pot răspunde la această solicitare afișând anunț
 <translation id="9155898266292537608">De asemenea, poți căuta atingând scurt un cuvânt</translation>
 <translation id="9169507124922466868">Istoricul de navigare este pe jumătate deschis</translation>
 <translation id="9204836675896933765">1 fișier rămas</translation>
-<translation id="9205796607887024517">Gestionează subiectele aici</translation>
 <translation id="9206873250291191720">A</translation>
 <translation id="9209888181064652401">Nu pot apela</translation>
 <translation id="9219103736887031265">Imagini</translation>

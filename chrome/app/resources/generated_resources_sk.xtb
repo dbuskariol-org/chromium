@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">Prístup ku ktorýmkoľvek z týchto zariadení USB</translation>
 <translation id="1036982837258183574">Režim celej obrazovky ukončíte stlačením klávesa |<ph name="ACCELERATOR" />|</translation>
 <translation id="1038168778161626396">Len zašifrovanie</translation>
+<translation id="1038462104119736705">Na používanie systému Linux sa vyžaduje minimálne <ph name="INSTALL_SIZE" /> voľného priestoru. Uvoľníte ho odstránením súborov zo zariadenia.</translation>
 <translation id="1039337018183941703">Neplatný alebo poškodený súbor</translation>
 <translation id="1041175011127912238">Táto stránka nereaguje</translation>
 <translation id="1041263367839475438">Dostupné zariadenia</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">Určuje frekvenciu aktualizácie obrazovky</translation>
 <translation id="1061904396131502319">Už je takmer čas na prestávku</translation>
-<translation id="1064552680598333868">Zmeny mikrofónu sa uplatnia po ďalšom reštartovaní systému Linux.</translation>
 <translation id="1067048845568873861">Vytvorené</translation>
 <translation id="1067291318998134776">Linux (Beta)</translation>
 <translation id="1067922213147265141">Ďalšie služby Googlu</translation>
@@ -301,7 +301,6 @@
 <translation id="1386387014181100145">Dobrý deň!</translation>
 <translation id="138784436342154190">Obnoviť predvolenú stránku pri spustení?</translation>
 <translation id="1390548061267426325">Otvoriť ako bežnú kartu</translation>
-<translation id="1392232653471491344">Vyžaduje sa reštartovanie systému LInux</translation>
 <translation id="1393283411312835250">Slnko a mraky</translation>
 <translation id="1395730723686586365">Služba Updater bola spustená</translation>
 <translation id="1396139853388185343">Pri nastavovaní tlačiarne sa vyskytla chyba</translation>
@@ -342,7 +341,7 @@
 <translation id="1431188203598586230">Posledná aktualizácia softvéru</translation>
 <translation id="1431432486300429272">Google môže pomocou tvojej histórie prehliadania prispôsobovať Vyhľadávanie a ďalšie služby Googlu. Toto nastavenie môžeš ty alebo tvoj rodič kedykoľvek zmeniť na myaccount.google.com/activitycontrols/search.</translation>
 <translation id="1432581352905426595">Spravovať vyhľadávače</translation>
-<translation id="1433811987160647649">Spýtať sa pred pristupovaním</translation>
+<translation id="1433811987160647649">Pred prístupom sa spýtať</translation>
 <translation id="1434696352799406980">Týmto sa obnoví vaša stránka pri spustení, stránka na novej karte, vyhľadávač a pripnuté karty. Zakážu sa aj všetky rozšírenia a vymažú dočasné dáta, ako napríklad súbory cookie. Záložky, história a uložené heslá sa nevymažú.</translation>
 <translation id="1434886155212424586">Domovská stránka je stránka na novej karte</translation>
 <translation id="1436390408194692385">Do konca platnosti zostáva: <ph name="TICKET_TIME_LEFT" /></translation>
@@ -711,7 +710,6 @@
 <translation id="186612162884103683"><ph name="EXTENSION" /> môže čítať a zapisovať obrázky, video a zvukové súbory vo vybratých umiestneniach.</translation>
 <translation id="1867780286110144690">Aplikácia <ph name="PRODUCT_NAME" /> je pripravená dokončiť inštaláciu</translation>
 <translation id="1868193363684582383">„Ok Google“</translation>
-<translation id="1870629042957780127">Udelenie prístupu k mikrofónu</translation>
 <translation id="1871534214638631766">Zobrazovať súvisiace informácie, keď na obsah kliknete pravým tlačidlom alebo ho dlho stlačíte</translation>
 <translation id="1871615898038944731">Vaše zariadenie <ph name="DEVICE_TYPE" /> je aktuálne</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{Presunúť kartu do iného okna}few{Presunúť karty do iného okna}many{Presunúť karty do iného okna}other{Presunúť karty do iného okna}}</translation>
@@ -2008,6 +2006,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="3528033729920178817">Táto stránka sleduje vašu polohu.</translation>
 <translation id="3528498924003805721">Ciele odkazov</translation>
 <translation id="353316712352074340"><ph name="WINDOW_TITLE" /> – Vypnuté zvuky</translation>
+<translation id="3537881477201137177">Môžete to neskôr upraviť v Nastaveniach</translation>
 <translation id="3538066758857505094">Pri odinštalovaní systému Linux sa vyskytla chyba. Skúste to znova.</translation>
 <translation id="354060433403403521">Sieťový napájací adaptér</translation>
 <translation id="354068948465830244">Môže čítať údaje o webe a meniť ich</translation>
@@ -2117,7 +2116,6 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="3661172646479098821">Momentálne sú podporované iba zariadenia s Androidom.</translation>
 <translation id="3664511988987167893">Ikona rozšírenia</translation>
 <translation id="3665589677786828986">Chrome zistil, že niektoré nastavenia boli poškodené iným programom, a preto obnovil pôvodné predvolené nastavenia.</translation>
-<translation id="366867565525278777">Nepodarilo sa nainštalovať pre nedostatok miesta v úložisku. Vyžaduje sa minimálne <ph name="INSTALL_SIZE" /> voľného miesta. Miesto uvoľníte odstránením súborov z úložiska zariadenia.</translation>
 <translation id="3668801437375206837">Zamestnanci Googlu môžu do svojich hlásení so spätnou väzbou zahrnúť ďalšie denníky rozhrania Bluetooth, aby bolo možné lepšie diagnostikovať problémy s rozhraním Bluetooth. Keď začiarknete túto možnosť, hlásenie bude obsahovať denníky btsnoop a HCI aktuálnej relácie, z ktorých boli odstránené všetky informácie umožňujúce identifikáciu osôb. Prístup k týmto denníkom bude obmedzený na správcov skupiny produktov so systémom Chrome OS v nástroji Listnr. Denníky budú vyčistené po 90 dňoch.</translation>
 <translation id="3668823961463113931">Obslužné nástroje</translation>
 <translation id="3670113805793654926">Zariadenia od ľubovoľného dodávateľa</translation>
@@ -2267,6 +2265,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="3820749202859700794">Eliptická krivka SECG secp521r1 (známa tiež ako NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{Rozšírenie bolo schválené}few{Boli schválené # rozšírenia}many{# extensions have been approved}other{Bolo schválených # rozšírení}}</translation>
 <translation id="3822559385185038546">Tento proxy server je vynútený správcom</translation>
+<translation id="3823310065043511710">Na používanie systému Linux sa vyžaduje minimálne <ph name="INSTALL_SIZE" /> voľného priestoru.</translation>
 <translation id="3826440694796503677">Váš správca zakázal pridávanie ďalších účtov Google</translation>
 <translation id="3827306204503227641">Pokračovať v povoľovaní doplnkov, ktoré nie sú v karanténe</translation>
 <translation id="3827774300009121996">&amp;Celá obrazovka</translation>
@@ -2275,6 +2274,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Váš správca znova zapol 1 potenciálne škodlivé rozšírenie}few{Váš správca znova zapol {NUM_EXTENSIONS} potenciálne škodlivé rozšírenia}many{Your administrator turned {NUM_EXTENSIONS} potentially harmful extensions back on}other{Váš správca znova zapol {NUM_EXTENSIONS} potenciálnych škodlivých rozšírení}}</translation>
 <translation id="3831436149286513437">Návrhy vyhľadávania z Disku Google</translation>
 <translation id="383161972796689579">Vlastník tohto zariadenia zakázal pridávanie nových používateľov</translation>
+<translation id="3834728400518755610">Zmena nastavenia mikrofónu vyžaduje vypnutie systému Linux. Pokračujte vypnutím systému Linux.</translation>
 <translation id="3834775135533257713">Aplikáciu <ph name="TO_INSTALL_APP_NAME" /> sa nepodarilo pridať, pretože je v konflikte s aplikáciou <ph name="INSTALLED_APP_NAME" />.</translation>
 <translation id="3835522725882634757">Tento server odosiela údaje, ktoré sú pre prehliadač <ph name="PRODUCT_NAME" /> nezrozumiteľné. <ph name="BEGIN_LINK" />Nahláste chybu<ph name="END_LINK" /> a priložte <ph name="BEGIN2_LINK" />nespracovaný záznam<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Toto sú všeobecné informácie o tomto zariadení a jeho používaní (napríklad stav batérie, aktivita v systéme a aplikáciách a chyby). Údaje sa použijú na zlepšenie Androidu a niektoré súhrnné informácie pomôžu tiež aplikáciám Google a partnerom (napríklad vývojárom pre Android) zlepšiť svoje aplikácie a produkty.</translation>
@@ -3499,6 +3499,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="5488468185303821006">Povoliť v režime inkognito</translation>
 <translation id="5489435190927933437">Uložené heslá domény <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Odpojiť zariadenie Bluetooth</translation>
+<translation id="5490798133083738649">Povoľte systému Linux prístup k mikrofónu</translation>
 <translation id="549211519852037402">Béžová a biela</translation>
 <translation id="5493792505296048976">obrazovka je zapnutá</translation>
 <translation id="5494362494988149300">Po &amp;stiahnutí otvoriť</translation>
@@ -4688,6 +4689,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="7029809446516969842">Heslá</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> – sériový port je pripojený</translation>
 <translation id="7031962166228839643">Model TPM sa pripravuje, čakajte (môže to trvať niekoľko minút)...</translation>
+<translation id="7036706669646341689">Na používanie systému Linux sa vyžaduje <ph name="DISK_SIZE" /> voľného priestoru. Uvoľníte ho odstránením súborov zo zariadenia.</translation>
 <translation id="7037509989619051237">Ukážka textu</translation>
 <translation id="7038632520572155338">Ovládanie prepínačmi</translation>
 <translation id="7039326228527141150">Pristupovať k zariadením USB od dodávateľa <ph name="VENDOR_NAME" /></translation>
@@ -5233,6 +5235,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="7744192722284567281">Nájdené v rámci porušenia ochrany údajov</translation>
 <translation id="7750228210027921155">Obraz v obraze</translation>
 <translation id="7751260505918304024">Zobraziť všetky</translation>
+<translation id="7753735457098489144">Nepodarilo sa nainštalovať pre nedostatok priestoru. Uvoľníte ho odstránením súborov z úložiska zariadenia.</translation>
 <translation id="7754704193130578113">Pred každým sťahovaním sa spýtať, kam uložiť súbor</translation>
 <translation id="7755287808199759310">Váš rodič ho môže pre vás odblokovať</translation>
 <translation id="7757787379047923882">Text zdieľaný zo zariadenia <ph name="DEVICE_NAME" /></translation>
@@ -5948,7 +5951,6 @@ Súbor kľúča uložte na bezpečné miesto. Budete ho potrebovať na vytvoreni
 <translation id="8650543407998814195">Aj keď už nemáte prístup k starému profilu, môžete ho stále odstrániť.</translation>
 <translation id="8651585100578802546">Vynútiť obnovenie tejto stránky</translation>
 <translation id="8652400352452647993">Chyba zbalenia rozšírenia</translation>
-<translation id="8653578191563425126">Priestor na Disku rezervovaný pre Crostini (neskôr to môžete zmeniť).</translation>
 <translation id="8654151524613148204">Súbor je príliš veľký a váš počítač ho nemôže spracovať. Ľutujeme.</translation>
 <translation id="8655295600908251630">Kanál</translation>
 <translation id="8655319619291175901">Hops, niečo sa pokazilo.</translation>
@@ -6251,6 +6253,7 @@ Súbor kľúča uložte na bezpečné miesto. Budete ho potrebovať na vytvoreni
 <translation id="9008201768610948239">Ignorovať</translation>
 <translation id="9009369504041480176">Nahrávanie (<ph name="PROGRESS_PERCENT" />%)...</translation>
 <translation id="9011163749350026987">Vždy zobrazovať ikonu</translation>
+<translation id="9013037634206938463">Na inštaláciu systému Linux sa vyžaduje minimálne <ph name="INSTALL_SIZE" /> voľného priestoru. Uvoľníte ho odstránením súborov zo zariadenia.</translation>
 <translation id="9013707997379828817">Správca obnovil toto zariadenie. Uložte si dôležité súbory a potom zariadenie reštartujte. Zo zariadenia sa odstránia všetky dáta.</translation>
 <translation id="901668144954885282">Záloha na Disku Google</translation>
 <translation id="9018218886431812662">Inštalácia bola dokončená</translation>

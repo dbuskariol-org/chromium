@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">Fikia chochote kati ya vifaa hivi vya USB</translation>
 <translation id="1036982837258183574">Bonyeza |<ph name="ACCELERATOR" />| ili uondoke kwenye skrini nzima</translation>
 <translation id="1038168778161626396">Usimabji Tu</translation>
+<translation id="1038462104119736705">Tunapendekeza uwe na angalau nafasi ya <ph name="INSTALL_SIZE" /> kwenye Linux. Ili upate nafasi zaidi ya hifadhi, futa faili kwenye kifaa chako.</translation>
 <translation id="1039337018183941703">Faili si sahihi au imeharibika</translation>
 <translation id="1041175011127912238">Ukurasa huu haufanyi kazi</translation>
 <translation id="1041263367839475438">Vifaa vinavyopatikana</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">Hubaini kasi ya kusasisha skrini</translation>
 <translation id="1061904396131502319">Muda wa kupumzika umekaribia</translation>
-<translation id="1064552680598333868">Mabadiliko kwenye maikrofoni yatatekelezwa utakapozima Linux kisha uiwashe.</translation>
 <translation id="1067048845568873861">Kiliundwa</translation>
 <translation id="1067291318998134776">Linux (Beta)</translation>
 <translation id="1067922213147265141">Huduma zingine za Google</translation>
@@ -301,7 +301,6 @@
 <translation id="1386387014181100145">Hujambo.</translation>
 <translation id="138784436342154190">Ungependa kurejesha ukurasa unaoanza chaguomsingi?</translation>
 <translation id="1390548061267426325">Fungua kama Kichupo cha Kawaida</translation>
-<translation id="1392232653471491344">Unahitaji kuzima Linux kisha uiwashe</translation>
 <translation id="1393283411312835250">Jua na mawingu</translation>
 <translation id="1395730723686586365">Kisasishaji kimeanza</translation>
 <translation id="1396139853388185343">Hitilafu imetokea wakati wa kuweka mipangilio ya printa</translation>
@@ -708,7 +707,6 @@ Hatua hii haiathiri programu au maudhui kwenye vifaa vingine.</translation>
 <translation id="186612162884103683">"<ph name="EXTENSION" />" inaweza kusoma na kuandika picha, video, na faili za sauti katika maeneo yaliyowekewa alama.</translation>
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" /> iko tayari kukamilisha usakinishaji wako</translation>
 <translation id="1868193363684582383">"Ok Google"</translation>
-<translation id="1870629042957780127">Ipe uwezo wa kufikia maikrofoni</translation>
 <translation id="1871534214638631766">Onyesha maelezo yanayohusiana unapobofya kulia au unapobonyeza maudhui kwa muda mrefu</translation>
 <translation id="1871615898038944731">Kifaa chako cha <ph name="DEVICE_TYPE" /> kimesasishwa</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{Hamishia kichupo kwenye dirisha jingine}other{Hamishia vichupo kwenye dirisha jingine}}</translation>
@@ -2006,6 +2004,7 @@ Unaweza kudhibiti mipangilio ya akaunti hii kwa kusakinisha programu ya Family L
 <translation id="3528033729920178817">Ukurasa huu unafuatilia mahali ulipo</translation>
 <translation id="3528498924003805721">Malengo ya mikato</translation>
 <translation id="353316712352074340"><ph name="WINDOW_TITLE" /> - Sauti imezimwa</translation>
+<translation id="3537881477201137177">Unaweza kubadilisha hali hii baadaye katika Mipangilio</translation>
 <translation id="3538066758857505094">Hitilafu imetokea wakati wa kuondoa Linux. Tafadhali jaribu tena.</translation>
 <translation id="354060433403403521">Kamba ya umeme</translation>
 <translation id="354068948465830244">Hii inaweza kusoma na kubadilisha data ya tovuti</translation>
@@ -2115,7 +2114,6 @@ Unaweza kudhibiti mipangilio ya akaunti hii kwa kusakinisha programu ya Family L
 <translation id="3661172646479098821">Kwa sasa inaweza kutumia vifaa vya Android pekee.</translation>
 <translation id="3664511988987167893">Aikoni ya Kiendelezi</translation>
 <translation id="3665589677786828986">Chrome imegundua kuwa baadhi ya mipangilio yako ilivurugwa na programu nyingine na ikairejesha kwenye mipangilio yake iliyotoka nayo kiwandani.</translation>
-<translation id="366867565525278777">Imeshindwa kusakinisha kwa sababu nafasi ya hifadhi haitoshi. Unahitaji hifadhi ya angalau <ph name="INSTALL_SIZE" /> ambayo hujatumia. Ili kuokoa hifadhi, futa faili kutoka kwenye hifadhi ya kifaa</translation>
 <translation id="3668801437375206837">Ili kutambua matatizo ya Bluetooth vyema zaidi, WanaGoogle wanaweza kujumuisha kumbukumbu za ziada za Bluetooth kwenye ripoti zao za maoni. Wakati umeteua chaguo hili, ripoti yako itajumuisha kumbukumbu za btsnoop na HCI kuanzia kipindi chako cha sasa, zilizosafishwa ili kuondoa PII nyingi kadri iwezekanavyo. Wasimamizi wa kundi la bidhaa ya Chrome OS katika Listnr ndio tu wataweza kufikia kumbukumbu hizi. Kumbukumbu zitaondolewa kabisa baada ya siku 90.</translation>
 <translation id="3668823961463113931">Vishikilizi</translation>
 <translation id="3670113805793654926">Vifaa kutoka muuzaji yeyote</translation>
@@ -2265,6 +2263,7 @@ Unaweza kudhibiti mipangilio ya akaunti hii kwa kusakinisha programu ya Family L
 <translation id="3820749202859700794">SECG kizingo cha mviringo secp521r1 (aka NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{Kiendelezi kimeidhinishwa}other{Viendelezi # vimeidhinishwa}}</translation>
 <translation id="3822559385185038546">Seva hii mbadala inadhibitiwa na msimamizi wako</translation>
+<translation id="3823310065043511710">Angalau nafasi ya <ph name="INSTALL_SIZE" /> inapendekezwa kwenye Linux.</translation>
 <translation id="3826440694796503677">Msimamizi wako amezima kipengele cha kuongeza Akaunti zaidi za Google</translation>
 <translation id="3827306204503227641">Endelea kuruhusu programu jalizi zisizo kwenye sandbox</translation>
 <translation id="3827774300009121996">&amp;Skrini Kamili</translation>
@@ -2273,6 +2272,7 @@ Unaweza kudhibiti mipangilio ya akaunti hii kwa kusakinisha programu ya Family L
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Msimamizi wako amewasha tena kiendelezi kimoja ambacho huenda ni hatari}other{Msimamizi wako amewasha tena viendelezi {NUM_EXTENSIONS} ambavyo huenda ni hatari}}</translation>
 <translation id="3831436149286513437">Mapendekezo ya utafutaji ya Hifadhi ya Google</translation>
 <translation id="383161972796689579">Mmiliki wa kifaa hiki amelemaza kuongezwa kwa watumiaji wapya</translation>
+<translation id="3834728400518755610">Mabadiliko katika mipangilio ya maikrofoni yanahitaji uzime Linux. Zima Linux ili uendelee.</translation>
 <translation id="3834775135533257713">Hukuweza kuongeza programu ya "<ph name="TO_INSTALL_APP_NAME" />" kwa sababu inakinzana na "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">Loo...lo! Seva hii inatuma data ambayo <ph name="PRODUCT_NAME" /> haiwezi kuelewa. Tafadhali <ph name="BEGIN_LINK" />ripoti hitilafu<ph name="END_LINK" />, na ujumuishe <ph name="BEGIN2_LINK" />kipengee ghafi<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Haya ni maelezo ya jumla kuhusu kifaa hiki na jinsi kinavyotumika (kama vile hitilafu, kiwango cha chaji ya betri, shughuli za programu na mfumo). Data itatumika kuboresha Android na baadhi ya maelezo yanayojumlishwa yatasaidia pia programu na washirika wa Google, kama vile wasanidi programu za Android, kuboresha programu na bidhaa zao.</translation>
@@ -3495,6 +3495,7 @@ Ungependa kuanza <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="5488468185303821006">Ruhusu katika hali fiche</translation>
 <translation id="5489435190927933437">Manenosiri yaliyohifadhiwa ya <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Ondoa kifaa cha Bluetooth</translation>
+<translation id="5490798133083738649">Ruhusu Linux ifikie maikrofoni yako</translation>
 <translation id="549211519852037402">Kahawia hafifu na nyeupe</translation>
 <translation id="5493792505296048976">skrini imewashwa</translation>
 <translation id="5494362494988149300">Funga &amp;Utakapomalizika</translation>
@@ -4684,6 +4685,7 @@ Ungependa kuanza <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="7029809446516969842">Manenosiri</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> - Imeunganisha kwenye mlango wa kuchomeka vifaa</translation>
 <translation id="7031962166228839643">TPM inaandaliwa, tafadhali subiri (huenda hii ikachukua dakika chache)...</translation>
+<translation id="7036706669646341689">Tunapendekeza uwe na nafasi ya <ph name="DISK_SIZE" /> kwenye Linux. Ili upate nafasi zaidi ya hifadhi, futa faili kwenye kifaa chako.</translation>
 <translation id="7037509989619051237">Maandishi kwa ajili ya kukagua</translation>
 <translation id="7038632520572155338">Kufikia kupitia swichi</translation>
 <translation id="7039326228527141150">Fikia vifaa vya USB kutoka kwa <ph name="VENDOR_NAME" /></translation>
@@ -5229,6 +5231,7 @@ Ungependa kuanza <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="7744192722284567281">Limepatikana kwenye tukio la ufichuzi haramu wa data</translation>
 <translation id="7750228210027921155">Picha ndani ya picha</translation>
 <translation id="7751260505918304024">Onyesha zote</translation>
+<translation id="7753735457098489144">Imeshindwa kusakinisha kwa sababu nafasi ya hifadhi haitoshi. Ili upate nafasi, futa faili zilizo kwenye hifadhi ya kifaa.</translation>
 <translation id="7754704193130578113">Uliza mahali pa kuhifadhi kila faili kabla ya kuipakua.</translation>
 <translation id="7755287808199759310">Mzazi wako anaweza kukuondolea kizuizi</translation>
 <translation id="7757787379047923882">Maandishi yameshirikiwa kutoka <ph name="DEVICE_NAME" /></translation>
@@ -5947,7 +5950,6 @@ Sidhani tovuti hii inapaswa kuzuiwa!</translation>
 <translation id="8650543407998814195">Ingawa huwezi kufikia tena wasifu wako wa awali, bado unaweza kuuondoa.</translation>
 <translation id="8651585100578802546">Lazimisha Ukurasa Huu Upakiwe Tena</translation>
 <translation id="8652400352452647993">Hitilafu ya kiendelezi cha kifurushi</translation>
-<translation id="8653578191563425126">Nafasi ya diski ya kuhifadhi kwenye Crostini (unaweza kubadilisha hali hii baadaye).</translation>
 <translation id="8654151524613148204">Faili hii ni kubwa sana kwa kompyuta yako kuishughulikia. Samahani.</translation>
 <translation id="8655295600908251630">Kituo</translation>
 <translation id="8655319619291175901">Lo! hitilafu fulani imetokea.</translation>
@@ -6250,6 +6252,7 @@ Sidhani tovuti hii inapaswa kuzuiwa!</translation>
 <translation id="9008201768610948239">Puuza</translation>
 <translation id="9009369504041480176">Inapakia (<ph name="PROGRESS_PERCENT" />%)...</translation>
 <translation id="9011163749350026987">Onyesha aikoni kila wakati</translation>
+<translation id="9013037634206938463">Unahitaji nafasi ya <ph name="INSTALL_SIZE" /> ambayo haijatumika ili usakinishe Linux. Ili upate nafasi zaidi ya hifadhi, futa faili kwenye kifaa chako.</translation>
 <translation id="9013707997379828817">Msimamizi wako alirejesha mipangilio ya awali ya kifaa hiki. Tafadhali hifadhi faili muhimu, alafu ukizime kisha ukiwashe. Data yote iliyo kwenye kifaa itafutwa.</translation>
 <translation id="901668144954885282">Weka nakala kwenye Hifadhi ya Google</translation>
 <translation id="9018218886431812662">Imemaliza kusakinisha</translation>

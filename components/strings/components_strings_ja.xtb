@@ -871,6 +871,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows ネットワーク診断ツールを実行する<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">ポリシーを再読み込み</translation>
 <translation id="4728558894243024398">プラットフォーム</translation>
+<translation id="4731638775147756694">このアプリケーションは管理者によってブロックされています</translation>
 <translation id="4731967714531604179">Prc2（封筒）</translation>
 <translation id="4733082559415072992"><ph name="URL" /> から、デバイスの現在地情報の使用許可を求められています</translation>
 <translation id="4736825316280949806">Chromium を再起動する</translation>
@@ -1237,6 +1238,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> のブックマーク</translation>
 <translation id="6264485186158353794">セキュリティで保護されたページに戻る</translation>
 <translation id="6266934640124581640">ライトティール</translation>
+<translation id="6272383483618007430">Google Update</translation>
 <translation id="6276112860590028508">リーディング リストに登録されたページがここに表示されます</translation>
 <translation id="627746635834430766">カードと請求先住所を Google アカウントに保存すると、次回のお支払いが簡単になります。</translation>
 <translation id="6279516281132775660">Chrome には、次の情報は<ph name="BEGIN_EMPHASIS" />保存されません<ph name="END_EMPHASIS" />。
@@ -1591,7 +1593,6 @@
 <translation id="7763386264682878361">Payment Manifest Parser</translation>
 <translation id="7764225426217299476">住所を追加</translation>
 <translation id="7766518757692125295">スカート</translation>
-<translation id="7767271804335921384">アプリケーションは管理者によってブロックされています</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">同じ順序（上向き）</translation>
 <translation id="777702478322588152">都道府県</translation>

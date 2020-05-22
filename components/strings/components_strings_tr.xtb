@@ -875,6 +875,7 @@ Aksi halde bu işlem gizlilik ayarlarınız tarafından engellenecek. Buna izin 
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows Ağ Teşhislerini Çalıştırma<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Politikaları yeniden yükle</translation>
 <translation id="4728558894243024398">Platform</translation>
+<translation id="4731638775147756694">bu uygulama, yöneticiniz tarafından engellendi</translation>
 <translation id="4731967714531604179">Prc2 (Zarf)</translation>
 <translation id="4733082559415072992"><ph name="URL" />, cihazınızın konumunu kullanmak istiyor</translation>
 <translation id="4736825316280949806">Chromium'u yeniden başlatın</translation>
@@ -1242,6 +1243,7 @@ Aksi halde bu işlem gizlilik ayarlarınız tarafından engellenecek. Buna izin 
 <translation id="6263376278284652872"><ph name="DOMAIN" /> yer işaretleri</translation>
 <translation id="6264485186158353794">Güvenliğe geri dön</translation>
 <translation id="6266934640124581640">Açık Turkuaz</translation>
+<translation id="6272383483618007430">Google Güncelleme</translation>
 <translation id="6276112860590028508">Okuma listenize ait sayfalar burada görünür</translation>
 <translation id="627746635834430766">Bir dahaki sefere daha hızlı ödeme yapmak için kartınızı ve fatura adresinizi Google Hesabınıza kaydedin.</translation>
 <translation id="6279516281132775660">Chrome aşağıdaki bilgileri <ph name="BEGIN_EMPHASIS" />kaydetmez<ph name="END_EMPHASIS" />:
@@ -1596,7 +1598,6 @@ Ek ayrıntılar:
 <translation id="7763386264682878361">Ödeme Bildirimi Ayrıştırıcısı</translation>
 <translation id="7764225426217299476">Adres ekle</translation>
 <translation id="7766518757692125295">Skirt</translation>
-<translation id="7767271804335921384">Uygulama, yöneticiniz tarafından engellendi</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Aynı sırada ön yüz yukarı bakacak şekilde</translation>
 <translation id="777702478322588152">Bölge</translation>

@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">Access any of these USB devices</translation>
 <translation id="1036982837258183574">Press |<ph name="ACCELERATOR" />| to exit full screen</translation>
 <translation id="1038168778161626396">Encipher Only</translation>
+<translation id="1038462104119736705">At least <ph name="INSTALL_SIZE" /> of space is recommended for Linux. To increase free space, delete files from your device.</translation>
 <translation id="1039337018183941703">Invalid or corrupt file</translation>
 <translation id="1041175011127912238">This page isn't responding</translation>
 <translation id="1041263367839475438">Available devices</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">Determines the frequency that the screen updates</translation>
 <translation id="1061904396131502319">Almost time for a break</translation>
-<translation id="1064552680598333868">Changes to microphone will take effect when Linux is next restarted.</translation>
 <translation id="1067048845568873861">Created</translation>
 <translation id="1067291318998134776">Linux (Beta)</translation>
 <translation id="1067922213147265141">Other Google services</translation>
@@ -301,7 +301,6 @@
 <translation id="1386387014181100145">Howdy.</translation>
 <translation id="138784436342154190">Restore default start-up page?</translation>
 <translation id="1390548061267426325">Open as a Standard Tab</translation>
-<translation id="1392232653471491344">Linux restart required</translation>
 <translation id="1393283411312835250">Sun and clouds</translation>
 <translation id="1395730723686586365">Updater started</translation>
 <translation id="1396139853388185343">Error setting up printer</translation>
@@ -711,7 +710,6 @@
 <translation id="186612162884103683">"<ph name="EXTENSION" />" can read and write images, video and sound files in the ticked locations.</translation>
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" /> is ready to complete your installation</translation>
 <translation id="1868193363684582383">"Ok Google"</translation>
-<translation id="1870629042957780127">Give access to microphone</translation>
 <translation id="1871534214638631766">Show related info when you right-click or long press on content</translation>
 <translation id="1871615898038944731">Your <ph name="DEVICE_TYPE" /> is up to date</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{Move tab to another window}other{Move tabs to another window}}</translation>
@@ -2009,6 +2007,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3528033729920178817">This page is tracking your location.</translation>
 <translation id="3528498924003805721">Shortcut targets</translation>
 <translation id="353316712352074340"><ph name="WINDOW_TITLE" /> – Audio muted</translation>
+<translation id="3537881477201137177">This can be modified later in Settings</translation>
 <translation id="3538066758857505094">Error uninstalling Linux. Please try again.</translation>
 <translation id="354060433403403521">AC adaptor</translation>
 <translation id="354068948465830244">This can read and change site data</translation>
@@ -2118,7 +2117,6 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3661172646479098821">Only Android devices are currently supported.</translation>
 <translation id="3664511988987167893">Extension Icon</translation>
 <translation id="3665589677786828986">Chrome detected that some of your settings were corrupted by another program and reset them to their original defaults.</translation>
-<translation id="366867565525278777">Installation failed due to lack of storage space. At least <ph name="INSTALL_SIZE" /> of free space is required. To free up space, delete files from device storage.</translation>
 <translation id="3668801437375206837">To better diagnose Bluetooth issues, Googlers can include additional Bluetooth logs with their feedback reports. When this option is ticked, your report will include btsnoop and HCI logs from your current session, sanitised to remove as much PII as possible. Access to these logs will be restricted to managers of the Chrome OS product group in Listnr. Logs will be purged after 90 days.</translation>
 <translation id="3668823961463113931">Handlers</translation>
 <translation id="3670113805793654926">Devices from any vendor</translation>
@@ -2268,6 +2266,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3820749202859700794">SECG elliptic curve secp521r1 (aka NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{An extension has been approved}other{# extensions have been approved}}</translation>
 <translation id="3822559385185038546">This proxy is enforced by your administrator</translation>
+<translation id="3823310065043511710">At least <ph name="INSTALL_SIZE" /> of space is recommended for Linux.</translation>
 <translation id="3826440694796503677">Your administrator has disabled the addition of more Google accounts</translation>
 <translation id="3827306204503227641">Continue allowing unsandboxed plug-ins</translation>
 <translation id="3827774300009121996">&amp;Full Screen</translation>
@@ -2276,6 +2275,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Your administrator turned 1 potentially harmful extension back on}other{Your administrator turned {NUM_EXTENSIONS} potentially harmful extensions back on}}</translation>
 <translation id="3831436149286513437">Google Drive search suggestions</translation>
 <translation id="383161972796689579">The owner of this device has disabled new users from being added</translation>
+<translation id="3834728400518755610">The change in microphone setting requires Linux to shut down. Shut down Linux to proceed.</translation>
 <translation id="3834775135533257713">Could not add application "<ph name="TO_INSTALL_APP_NAME" />" because it conflicts with "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">Oh no! This server is sending data that <ph name="PRODUCT_NAME" /> can't understand. Please <ph name="BEGIN_LINK" />report a bug<ph name="END_LINK" /> and include the <ph name="BEGIN2_LINK" />raw listing<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">This is general information about this device and how it's used (such as battery level, system and app activity, and errors). The data will be used to improve Android, and some aggregated information will also help Google apps and partners, such as Android developers, make their apps and products better.</translation>
@@ -3500,6 +3500,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="5488468185303821006">Allow in incognito</translation>
 <translation id="5489435190927933437">Saved passwords for <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Disconnect Bluetooth device</translation>
+<translation id="5490798133083738649">Allow Linux to access your microphone</translation>
 <translation id="549211519852037402">Beige and white</translation>
 <translation id="5493792505296048976">screen on</translation>
 <translation id="5494362494988149300">Open When &amp;Finished</translation>
@@ -4689,6 +4690,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="7029809446516969842">Passwords</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> – Serial port connected</translation>
 <translation id="7031962166228839643">TPM is being prepared, please wait (this may take a few minutes)...</translation>
+<translation id="7036706669646341689"><ph name="DISK_SIZE" /> of space is recommended for Linux. To increase free space, delete files from your device.</translation>
 <translation id="7037509989619051237">Text to preview</translation>
 <translation id="7038632520572155338">Switch access</translation>
 <translation id="7039326228527141150">Access USB devices from <ph name="VENDOR_NAME" /></translation>
@@ -5234,6 +5236,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="7744192722284567281">Found in data breach</translation>
 <translation id="7750228210027921155">Picture-in-picture</translation>
 <translation id="7751260505918304024">Show all</translation>
+<translation id="7753735457098489144">Installation failed due to lack of storage space. To free up space, delete files from device storage.</translation>
 <translation id="7754704193130578113">Ask where to save each file before downloading</translation>
 <translation id="7755287808199759310">Your parent can unblock it for you</translation>
 <translation id="7757787379047923882">Text shared from <ph name="DEVICE_NAME" /></translation>
@@ -5950,7 +5953,6 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="8650543407998814195">Although you can no longer access your old profile, you can still remove it.</translation>
 <translation id="8651585100578802546">Force Reload This Page</translation>
 <translation id="8652400352452647993">Pack extension error</translation>
-<translation id="8653578191563425126">Disk space to reserve for Crostini (you can change this later).</translation>
 <translation id="8654151524613148204">The file is too large for your computer to handle. Sorry.</translation>
 <translation id="8655295600908251630">Channel</translation>
 <translation id="8655319619291175901">Oops, something went wrong.</translation>
@@ -6253,6 +6255,7 @@ Keep your key file in a safe place. You will need it to create new versions of y
 <translation id="9008201768610948239">Ignore</translation>
 <translation id="9009369504041480176">Uploading (<ph name="PROGRESS_PERCENT" />%)...</translation>
 <translation id="9011163749350026987">Always show icon</translation>
+<translation id="9013037634206938463"><ph name="INSTALL_SIZE" /> of free space is required to install Linux. To increase free space, delete files from your device.</translation>
 <translation id="9013707997379828817">Your administrator rolled back this device. Please save important files, then restart. All data on the device will be deleted.</translation>
 <translation id="901668144954885282">Back up to Google Drive</translation>
 <translation id="9018218886431812662">Installation complete</translation>

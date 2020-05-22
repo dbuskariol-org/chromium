@@ -867,6 +867,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />运行 Windows 网络诊断<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">重新加载政策</translation>
 <translation id="4728558894243024398">平台</translation>
+<translation id="4731638775147756694">此应用已被您的管理员禁用</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> 想使用您设备的位置信息</translation>
 <translation id="4736825316280949806">重新启动 Chromium</translation>
@@ -1232,6 +1233,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> 书签</translation>
 <translation id="6264485186158353794">返回安全连接</translation>
 <translation id="6266934640124581640">浅青色</translation>
+<translation id="6272383483618007430">Google 更新</translation>
 <translation id="6276112860590028508">您的阅读清单中的网页会显示在此处</translation>
 <translation id="627746635834430766">若想在下次购物时更快捷地付款，请将您的付款卡信息和帐单邮寄地址保存到您的 Google 帐号中。</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />不会保存<ph name="END_EMPHASIS" />以下信息：
@@ -1586,7 +1588,6 @@
 <translation id="7763386264682878361">付款清单解析器</translation>
 <translation id="7764225426217299476">添加地址</translation>
 <translation id="7766518757692125295">裙式</translation>
-<translation id="7767271804335921384">此应用已被您的管理员禁用</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">顺序不变，正面朝上</translation>
 <translation id="777702478322588152">县</translation>

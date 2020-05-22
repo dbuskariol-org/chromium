@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">‏גש לכל אחד מהתקני ה-USB האלה</translation>
 <translation id="1036982837258183574">לחץ על |<ph name="ACCELERATOR" />| כדי לצאת ממסך מלא</translation>
 <translation id="1038168778161626396">הצפנה בלבד</translation>
+<translation id="1038462104119736705">‏מומלץ ששטח האחסון הפנוי יהיה <ph name="INSTALL_SIZE" /> לפחות כדי להשתמש ב-Linux. כדי לפנות שטח אחסון, יש למחוק קבצים מהמכשיר.</translation>
 <translation id="1039337018183941703">הקובץ לא חוקי, או שהוא פגום</translation>
 <translation id="1041175011127912238">הדף לא מגיב</translation>
 <translation id="1041263367839475438">מכשירים זמינים</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">קובע את תדירות רענון המסך</translation>
 <translation id="1061904396131502319">עוד מעט זמן להפסקה</translation>
-<translation id="1064552680598333868">‏השינויים במיקרופון ייכנסו לתוקף בפעם הבאה שבה תתבצע הפעלה מחדש של Linux.</translation>
 <translation id="1067048845568873861">נוצר</translation>
 <translation id="1067291318998134776">‏Linux (בטא)</translation>
 <translation id="1067922213147265141">‏שירותי Google אחרים</translation>
@@ -158,6 +158,7 @@
 <translation id="1197088940767939838">כתום</translation>
 <translation id="1197979282329025000">אירעה שגיאה בעת אחזור יכולות של המדפסת <ph name="PRINTER_NAME" />. לא ניתן לרשום מדפסת זו ב-<ph name="CLOUD_PRINT_NAME" />.</translation>
 <translation id="119944043368869598">ניקוי הכל</translation>
+<translation id="1199814941632954229">המערכת מקצה אישורים לפרופילי האישורים האלה</translation>
 <translation id="1201402288615127009">הבא</translation>
 <translation id="1202596434010270079">אפליקצית הקיוסק עודכנה. הסר את הדיסק און קי.</translation>
 <translation id="120368089816228251">תו מוזיקלי</translation>
@@ -300,7 +301,6 @@
 <translation id="1386387014181100145">אהלן.</translation>
 <translation id="138784436342154190">לשחזר את דף הפתיחה שהוגדר כברירת המחדל?</translation>
 <translation id="1390548061267426325">פתח ככרטיסייה רגילה</translation>
-<translation id="1392232653471491344">‏יש להפעיל מחדש את Linux</translation>
 <translation id="1393283411312835250">שמש ועננים</translation>
 <translation id="1395730723686586365">המעדכן הופעל</translation>
 <translation id="1396139853388185343">אירעה שגיאה בהגדרת המדפסת</translation>
@@ -540,6 +540,7 @@
 <translation id="1670399744444387456">בסיסי</translation>
 <translation id="167160931442925455">עוצמת הקול הגבוהה ביותר</translation>
 <translation id="1673137583248014546">האתר <ph name="URL" /> מבקש לראות את היצרן והדגם של מפתח האבטחה שלך</translation>
+<translation id="1677306805708094828">אי אפשר להוסיף את ה<ph name="EXTENSION_TYPE_PARAMETER" /></translation>
 <translation id="1677472565718498478">זמן נותר - <ph name="TIME" /></translation>
 <translation id="1679068421605151609">כלים עבור מפתחים</translation>
 <translation id="1679806121152819234">Plugin VM</translation>
@@ -706,7 +707,6 @@
 <translation id="186612162884103683">"<ph name="EXTENSION" />" יכול לקרוא ולכתוב קובצי תמונות, וידאו ואודיו במיקומים המסומנים.</translation>
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" /> מוכן להשלים את ההתקנה שלך</translation>
 <translation id="1868193363684582383">"Ok Google"</translation>
-<translation id="1870629042957780127">הענקת גישה למיקרופון</translation>
 <translation id="1871534214638631766">הצגת פרטים קשורים אחרי לחיצה ימנית או לחיצה ארוכה על תוכן</translation>
 <translation id="1871615898038944731">ה-<ph name="DEVICE_TYPE" /> שלך מעודכן</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{העברת כרטיסייה לחלון אחר}two{העברת כרטיסיות לחלון אחר}many{העברת כרטיסיות לחלון אחר}other{העברת כרטיסיות לחלון אחר}}</translation>
@@ -793,6 +793,9 @@
 <translation id="1989112275319619282">דפדף</translation>
 <translation id="1990512225220753005">לא להציג קיצורי דרך בדף הזה</translation>
 <translation id="1992397118740194946">לא מוגדר</translation>
+<translation id="199340248656592341">‏כאן אפשר לנהל את החשבונות שלך. <ph name="LINK_BEGIN" />מידע נוסף<ph name="LINK_END" />&lt;br&gt;&lt;br&gt;
+    סימניות, סיסמאות ונתוני דפדפן אחרים מסונכרנים עם החשבון הראשי.&lt;br&gt;&lt;br&gt;
+    הוספת חשבון בית ספרי מאפשרת לתלמידים להיכנס בקלות לאתרים ולתוספים, ועדיין לפעול במסגרת המגבלות של בקרת ההורים.</translation>
 <translation id="1994173015038366702">כתובת אתר</translation>
 <translation id="1995916364271252349">בדף הזה אפשר לשלוט על המידע שאתרים יכולים להשתמש בו ולהציג אותו (מיקום, מצלמה, חלונות קופצים ועוד)</translation>
 <translation id="1997616988432401742">האישורים שלך</translation>
@@ -992,6 +995,7 @@
 <translation id="2241634353105152135">פעם אחת בלבד</translation>
 <translation id="2242687258748107519">פרטי קובץ</translation>
 <translation id="2246549592927364792">‏רוצה לקבל תיאורי תמונות מ-Google?</translation>
+<translation id="2249111429176737533">פתיחה בחלון מרובה כרטיסיות</translation>
 <translation id="2249605167705922988">למשל 1-5, 8, 11-13</translation>
 <translation id="2251218783371366160">פתח את מציג המערכת</translation>
 <translation id="225163402930830576">רענן רשתות</translation>
@@ -1186,6 +1190,7 @@
 <translation id="2489918096470125693">הוסף &amp;תיקיה...</translation>
 <translation id="2490481887078769936">'<ph name="FILE_NAME" />' הוסר מהרשימה</translation>
 <translation id="249113932447298600">מצטערים, המכשיר <ph name="DEVICE_LABEL" /> אינו נתמך בשלב זה.</translation>
+<translation id="2492461744635776704">המערכת מכינה את בקשת החתימה על אישור</translation>
 <translation id="249303669840926644">לא ניתן היה להשלים את הרישום</translation>
 <translation id="2495777824269688114">הכר תכונות נוספות או קבל תשובות לשאלות. בחר '?' כדי לגשת לעזרה.</translation>
 <translation id="2496180316473517155">היסטוריית גלישה</translation>
@@ -1297,6 +1302,7 @@
 <translation id="2633212996805280240">להסיר את "<ph name="EXTENSION_NAME" />"?</translation>
 <translation id="263325223718984101"><ph name="PRODUCT_NAME" /> לא הצליח להשלים את ההתקנה, אך ימשיך לפעול מתמונת הדיסק שלו.</translation>
 <translation id="2633764681656412085">FIDO</translation>
+<translation id="2634199532920451708">היסטוריית ההדפסה</translation>
 <translation id="2635094637295383009">Twitter</translation>
 <translation id="2635276683026132559">חתימה</translation>
 <translation id="2636625531157955190">‏ל-Chrome אין אפשרות לגשת לתמונה.</translation>
@@ -1480,6 +1486,7 @@
 <translation id="2841013758207633010">שעה</translation>
 <translation id="2841837950101800123">ספק</translation>
 <translation id="2844169650293029770">‏מכשיר עם יציאת USB-C (יציאה שמאלית-קדמית)</translation>
+<translation id="2844809857160214557">הצגה וניהול של משימות הדפסה</translation>
 <translation id="2845382757467349449">הצג תמיד את סרגל הסימניות</translation>
 <translation id="284805635805850872">להסיר את התוכנה המזיקה?</translation>
 <translation id="284970761985428403"><ph name="ASCII_NAME" /> (<ph name="UNICODE_NAME" />)</translation>
@@ -1548,6 +1555,7 @@
 <translation id="2932330436172705843"><ph name="PROFILE_DISPLAY_NAME" /> (חשבון בשביל ילדים)</translation>
 <translation id="2932483646085333864">צא והיכנס שוב כדי להתחיל את הסנכרון</translation>
 <translation id="2932883381142163287">דיווח על שימוש לרעה</translation>
+<translation id="2933632078076743449">עדכון אחרון</translation>
 <translation id="2936851848721175671">גיבוי ושחזור</translation>
 <translation id="2938225289965773019">לפתוח קישורי <ph name="PROTOCOL" /></translation>
 <translation id="2938845886082362843">הצגה ומחיקה של פרטי כניסה המאוחסנים במפתח האבטחה</translation>
@@ -1676,6 +1684,7 @@
 <translation id="310671807099593501">‏האתר משתמש ב-Bluetooth</translation>
 <translation id="3115147772012638511">ממתין למטמון...</translation>
 <translation id="3115580024857770654">כיווץ הכול</translation>
+<translation id="3116968597797150452">פרופיל האישור</translation>
 <translation id="3117362587799608430">אביזר העגינה אינו תואם באופן מלא</translation>
 <translation id="3118319026408854581">עזרה של <ph name="PRODUCT_NAME" /></translation>
 <translation id="3118654181216384296">‏אפשר לנסות שוב להפעיל את Linux בעוד כמה רגעים.</translation>
@@ -1722,6 +1731,7 @@
 <translation id="3163201441334626963">מוצר לא ידוע <ph name="PRODUCT_ID" /> מהספק <ph name="VENDOR_ID" /></translation>
 <translation id="3164329792803560526">המערכת משתפת את הכרטיסייה הזו עם <ph name="APP_NAME" /></translation>
 <translation id="3165390001037658081">ייתכן שספקים מסוימים חוסמים את התכונה הזו.</translation>
+<translation id="316652501498554287">‏חשבונות G Suite for Education</translation>
 <translation id="3169472444629675720">Discover</translation>
 <translation id="3170072451822350649">ניתן גם לדלג על הכניסה ו<ph name="LINK_START" />לגלוש כאורח<ph name="LINK_END" />.</translation>
 <translation id="3177909033752230686">שפת הדף:</translation>
@@ -1888,6 +1898,7 @@
 <translation id="3405664148539009465">התאם אישית גופנים</translation>
 <translation id="3405763860805964263">...</translation>
 <translation id="3406605057700382950">&amp;הצג את סרגל הסימניות</translation>
+<translation id="340671561090997290">{NUM_EXTENSIONS,plural, =1{התוסף הזה עשוי להיות מסוכן}two{התוספים האלה עשויים להיות מסוכנים}many{התוספים האלה עשויים להיות מסוכנים}other{התוספים האלה עשויים להיות מסוכנים}}</translation>
 <translation id="3409785640040772790">מפות</translation>
 <translation id="3410832398355316179">כל הקבצים והנתונים המקומיים שמשויכים למשתמש הזה יימחקו לצמיתות אחרי שהמשתמש יוסר. <ph name="USER_EMAIL" /> יוכל עדיין להיכנס לחשבון מאוחר יותר.</translation>
 <translation id="3412265149091626468">עבור אל בחירה</translation>
@@ -1994,6 +2005,7 @@
 <translation id="3528033729920178817">דף זה עוקב אחר המיקום שלך.</translation>
 <translation id="3528498924003805721">יעדים של קיצורי דרך</translation>
 <translation id="353316712352074340"><ph name="WINDOW_TITLE" /> - האודיו הושתק</translation>
+<translation id="3537881477201137177">ניתן לשנות זאת מאוחר יותר ב'הגדרות'</translation>
 <translation id="3538066758857505094">‏קרתה שגיאה בהסרת ההתקנה של Linux. צריך לנסות שוב.</translation>
 <translation id="354060433403403521">‏מתאם AC</translation>
 <translation id="354068948465830244">התוסף יכול לקרוא ולשנות נתוני אתרים</translation>
@@ -2063,6 +2075,7 @@
 <translation id="3616741288025931835">&amp;נקה נתוני גלישה...</translation>
 <translation id="3617891479562106823">רקעים אינם זמינים. צריך לנסות שוב מאוחר יותר.</translation>
 <translation id="3619115746895587757">קפוצ'ינו</translation>
+<translation id="362333465072914957">‏בהמתנה להנפקת אישור על ידי ה-CA</translation>
 <translation id="3624567683873126087">‏ביטול נעילת המכשיר וכניסה אל חשבון Google</translation>
 <translation id="3625258641415618104">צילומי מסך מושבתים</translation>
 <translation id="3625481642044239431">בחרת קובץ לא חוקי. יש לנסות שוב.</translation>
@@ -2102,7 +2115,6 @@
 <translation id="3661172646479098821">‏נכון לעכשיו, רק מכשירי Android נתמכים.</translation>
 <translation id="3664511988987167893">סמל התוסף</translation>
 <translation id="3665589677786828986">‏Chrome זיהה שחלק מההגדרות שלך נפגמו על ידי תכנית אחרת ואיפס אותן לברירות המחדל המקוריות.</translation>
-<translation id="366867565525278777">ההתקנה נכשלה כי אין מספיק שטח אחסון. צריך שטח אחסון פנוי של <ph name="INSTALL_SIZE" /> לפחות. כדי לפנות שטח, עליך למחוק קבצים מאחסון המכשיר.</translation>
 <translation id="3668801437375206837">‏כדי לשפר את האבחון של בעיות בחיבור Bluetooth, גוגלרים יכולים לכלול יומני Bluetooth נוספים במשובים. אם האפשרות מסומנת, הדוח יכלול את יומני btsnoop ו-HCI מהסשן הנוכחי, והמערכת "תנקה" אותו כדי להסיר כמה שיותר פרטים אישיים מזהים (PII). הגישה ליומנים האלה תוגבל למנהלים של קבוצת מוצרי Chrome OS ב-Listnr. המערכת תמחק לצמיתות את היומנים אחרי 90 ימים.</translation>
 <translation id="3668823961463113931">מטפלים</translation>
 <translation id="3670113805793654926">מכשירים של כל ספק</translation>
@@ -2242,6 +2254,7 @@
 <translation id="381202950560906753">להמשך הוספה</translation>
 <translation id="3812525830114410218">אישור פגום</translation>
 <translation id="3813296892522778813">‏אם אתה לא מוצא את מה שחיפשת, עבור אל <ph name="BEGIN_LINK_CHROMIUM" />מרכז העזרה של Google Chrome<ph name="END_LINK_CHROMIUM" /></translation>
+<translation id="3814529970604306954">חשבון בית ספרי</translation>
 <translation id="3816118180265633665">‏צבעי Chrome</translation>
 <translation id="3817524650114746564">‏פתיחת הגדרות שרת ה-proxy של המחשב</translation>
 <translation id="3817579325494460411">לא צוין</translation>
@@ -2251,6 +2264,7 @@
 <translation id="3820749202859700794">‏עקומה אליפטית SECG מסוג secp521r1 (מוכרת גם בשם NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{תוסף אושר}two{# תוספים אושרו}many{# תוספים אושרו}other{# תוספים אושרו}}</translation>
 <translation id="3822559385185038546">‏שרת ה-proxy הזה נאכף על ידי מנהל המערכת</translation>
+<translation id="3823310065043511710">‏מומלץ ששטח האחסון הפנוי יהיה <ph name="INSTALL_SIZE" /> לפחות כדי להשתמש ב-Linux.</translation>
 <translation id="3826440694796503677">‏מנהל המערכת השבית את האפשרות להוסיף חשבונות Google</translation>
 <translation id="3827306204503227641">המשך להתיר יישומי פלאגין ללא ארגז חול</translation>
 <translation id="3827774300009121996">&amp;מסך מלא</translation>
@@ -2362,6 +2376,7 @@
 <translation id="3948507072814225786">ל-<ph name="ORIGIN" /> יש הרשאה לערוך קבצים בתיקיות הבאות</translation>
 <translation id="3949790930165450333"><ph name="DEVICE_NAME" /> (<ph name="DEVICE_ID" />)</translation>
 <translation id="394984172568887996">‏מיובא מ-IE</translation>
+<translation id="3949981384795585075">{NUM_APPS,plural, =1{האפליקציה הזו עשויה להיות מסוכנת}two{האפליקציות האלה עשויות להיות מסוכנות}many{האפליקציות האלה עשויות להיות מסוכנות}other{האפליקציות האלה עשויות להיות מסוכנות}}</translation>
 <translation id="3950820424414687140">כניסה</translation>
 <translation id="3953834000574892725">החשבונות שלי</translation>
 <translation id="3954354850384043518">מתבצע</translation>
@@ -2587,6 +2602,7 @@
 <translation id="426564820080660648">‏כדי לבדוק אם יש עדכונים, השתמש ב-Ethernet, ב-Wi-Fi או בנתונים לנייד.</translation>
 <translation id="4266679478228765574">הסרה של תיקיות תפסיק את השיתוף, אבל לא תמחק קבצים.</translation>
 <translation id="4267455501101322486">כדי להוסיף חשבון לצורך גישה למקורות מידע חינוכיים, יש לבקש הרשאה מהורה</translation>
+<translation id="4267924571297947682">בקשת רשות מההורים</translation>
 <translation id="4267953847983678297">התחברות אוטומטית אל רשת סלולרית</translation>
 <translation id="4268025649754414643">קידוד מפתח</translation>
 <translation id="4270393598798225102">גרסה <ph name="NUMBER" /></translation>
@@ -2751,6 +2767,7 @@
 <translation id="4508051413094283164">פתח הכול בחלון גלישה בסתר</translation>
 <translation id="4508265954913339219">ההפעלה נכשלה</translation>
 <translation id="4508765956121923607">הצג מ&amp;קור</translation>
+<translation id="4510479820467554003">רשימת חשבונות הורים</translation>
 <translation id="4510614391273086606">‏קבצים ואפליקציות של Linux מוחזרים למצב של גרסת הגיבוי שלהם.</translation>
 <translation id="451407183922382411">מופעל על-ידי <ph name="COMPANY_NAME" /></translation>
 <translation id="4514610446763173167">הפעלת וידאו או הפסקת הפעולה</translation>
@@ -2823,7 +2840,7 @@
 <translation id="4596295440756783523">יש לך אישורים בקובץ המזהים שרתים אלה</translation>
 <translation id="4598556348158889687">ניהול אחסון</translation>
 <translation id="4598776695426288251">‏יש אפשרויות חיבור ל-Wi-Fi ממספר מכשירים</translation>
-<translation id="4602466770786743961">התר תמיד ל-<ph name="HOST" /> לגשת למצלמה ולמיקרופון</translation>
+<translation id="4602466770786743961">אני רוצה תמיד להרשות ל-<ph name="HOST" /> לגשת למצלמה ולמיקרופון</translation>
 <translation id="4606551464649945562">אתרים לא יוכלו ליצור מפה בתלת ממד של הסביבה שלך או לעקוב אחר מיקום המצלמה</translation>
 <translation id="4608500690299898628">&amp;מצא...</translation>
 <translation id="4608520674724523647">איור של הרשמה מוצלחת</translation>
@@ -3004,6 +3021,7 @@
 <translation id="4862642413395066333">‏חתימה על תגובות OCSP</translation>
 <translation id="4863769717153320198">‏נראה כמו <ph name="WIDTH" /> x <ph name="HEIGHT" /> (ברירת מחדל)</translation>
 <translation id="4864369630010738180">נכנס...</translation>
+<translation id="4864805589453749318">יש לבחור את ההורה שאישר את ההוספה של חשבון בית ספרי</translation>
 <translation id="486635084936119914">פתיחת סוגי קבצים מסוימים באופן אוטומטי לאחר הורדתם</translation>
 <translation id="4869289251183233431">שטח האחסון הפנוי במכשיר אינו מספיק. כדי להשתמש ב-<ph name="APP_NAME" /> נדרש שטח אחסון פנוי של <ph name="MINIMUM_SPACE" /> לפחות, ומומלץ שהשטח הפנוי יהיה גדול מ-<ph name="RECOMMENDED_SPACE" />. כדי לפנות שטח אחסון, יש למחוק קבצים מהמכשיר.</translation>
 <translation id="48704129375571883">הוסף תכונות נוספות</translation>
@@ -3036,6 +3054,7 @@
 <translation id="4891089016822695758">פורום ביטא</translation>
 <translation id="4892229439761351791">‏לאתר יש הרשאה להשתמש ב-Bluetooth</translation>
 <translation id="489258173289528622">מה לעשות בעת חוסר פעילות בזמן שימוש בסוללה</translation>
+<translation id="4892811427319351753">לא ניתן להפעיל את ה<ph name="EXTENSION_TYPE_PARAMETER" /></translation>
 <translation id="4893336867552636863">הפעולה הזו תמחק לצמיתות את נתוני הגלישה שלך במכשיר הזה.</translation>
 <translation id="4893522937062257019">במסך הנעילה</translation>
 <translation id="489454699928748701">אתרים יוכלו להשתמש בחיישני תנועה</translation>
@@ -3058,6 +3077,7 @@
 <translation id="4918086044614829423">אשר</translation>
 <translation id="4918221908152712722">התקנת <ph name="APP_NAME" /> (לא דרושה הורדה)</translation>
 <translation id="4920887663447894854">האתרים הבאים נחסמו ממעקב אחר המיקום שלך בדף זה:</translation>
+<translation id="4921290200821452703">פרטי חשבון בית ספרי להורים</translation>
 <translation id="49226369361073053">{0,plural, =0{יש לעדכן את המכשיר עכשיו}=1{יש לעדכן את המכשיר תוך שנייה אחת}two{יש לעדכן את המכשיר תוך # שניות}many{יש לעדכן את המכשיר תוך # שניות}other{יש לעדכן את המכשיר תוך # שניות}}</translation>
 <translation id="492299503953721473">‏הסר אפליקציות Android</translation>
 <translation id="492363500327720082">ההסרה של <ph name="APP_NAME" /> מתבצעת…</translation>
@@ -3212,6 +3232,7 @@
 <translation id="5139112070765735680"><ph name="QUERY_NAME" />, חיפוש ב-<ph name="DEFAULT_SEARCH_ENGINE_NAME" /></translation>
 <translation id="5139823398361067371">יש להזין את קוד האימות של מפתח האבטחה. אם לא ידוע לך מהו קוד האימות, יהיה עליך לאפס את מפתח האבטחה.</translation>
 <translation id="5139955368427980650">&amp;פתח</translation>
+<translation id="5141421572306659464">חשבון ראשי</translation>
 <translation id="5142793792982256885">מהירות גלילה בלוח מגע</translation>
 <translation id="5142961317498132443">אימות</translation>
 <translation id="5143374789336132547">התוסף "<ph name="EXTENSION_NAME" />" שינה את הדף שמוצג כשאתה לוחץ על הלחצן 'דף הבית'.</translation>
@@ -3312,6 +3333,7 @@
 <translation id="5269977353971873915">ההדפסה נכשלה</translation>
 <translation id="5275352920323889391">כלב</translation>
 <translation id="527605982717517565">‏אפשר תמיד JavaScript ב-<ph name="HOST" /></translation>
+<translation id="5278823018825269962">מזהה סטטוס</translation>
 <translation id="5280174558369304332">תוספים להסרה:</translation>
 <translation id="5280243692621919988">‏ניקוי קובצי cookie ונתוני אתרים כשכל החלונות נסגרים</translation>
 <translation id="5280426389926346830">ליצור קיצור דרך?</translation>
@@ -3826,6 +3848,7 @@
 <translation id="59324397759951282">‏התקן USB של <ph name="MANUFACTURER_NAME" /></translation>
 <translation id="5932881020239635062">סידורי</translation>
 <translation id="5933376509899483611">אזור זמן</translation>
+<translation id="5935158534896975820">המערכת מכינה את בקשת החתימה על האישור (בהמתנה לשרת)</translation>
 <translation id="5935656526031444304">ניהול גלישה בטוחה</translation>
 <translation id="5938002010494270685">יש שדרוג אבטחה זמין</translation>
 <translation id="5939518447894949180">אפס</translation>
@@ -4663,6 +4686,7 @@
 <translation id="7029809446516969842">סיסמאות</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> - מחובר ליציאה טורית</translation>
 <translation id="7031962166228839643">‏המערכת מכינה את TPM, אנא המתן (פעולה זו עשויה להימשך מספר דקות)...</translation>
+<translation id="7036706669646341689">‏מומלץ לפנות שטח אחסון של <ph name="DISK_SIZE" /> להתקנת Linux. כדי לפנות שטח אחסון, יש למחוק קבצים מהמכשיר.</translation>
 <translation id="7037509989619051237">טקסט לתצוגה מקדימה</translation>
 <translation id="7038632520572155338">גישה באמצעות מתג</translation>
 <translation id="7039326228527141150">‏גש למכשירי USB של <ph name="VENDOR_NAME" /></translation>
@@ -4796,6 +4820,9 @@
 <translation id="720110658997053098">השארת המכשיר הזה במצב קיוסק באופן קבוע</translation>
 <translation id="7201118060536064622">הפריט '<ph name="DELETED_ITEM_NAME" />' נמחק</translation>
 <translation id="7201420661433230412">הצג קבצים</translation>
+<translation id="7203826966018112936">‏הוספת חשבון בית ספרי לפרופיל מאפשרת לתלמיד או לתלמידה להיכנס בקלות לאתרים ולתוספים, ועדיין לפעול במסגרת המגבלות של בקרת ההורים. חשבון זה לא מעניק לילד או לילדה גישה לסימניות, לסיסמאות או לנתוני דפדפן אחרים המסונכרנים עם החשבון הבית ספרי.&lt;br&gt;&lt;br&gt;
+    אם הילד או הילדה שלך משתמשים ב-Chromebook בבית הספר, וברצונך ליצור בשבילם בבית חוויה הדומה ללמידה בבית הספר ולהבטיח שיש להם גישה לכל המקורות הדרושים ללמידה, עליך לצאת מהחשבון הזה של Family Link ולהיכנס שוב לחשבון הבית ספרי מדף החשבונות ב-Chrome (הערה: בקרת ההורים של Family Link לא תחול על החשבון).&lt;br&gt;&lt;br&gt;
+    אם הילד או הילדה לא משתמשים ב-Chromebook בבית הספר, או אם עדיף לך לנהל את החוויה של הילד או הילדה בבית באמצעות Family Link, עליך ללחוץ על הלחצן 'הבא' למטה כדי להוסיף חשבון בית ספרי לפרופיל הזה.</translation>
 <translation id="7206693748120342859">מוריד את <ph name="PLUGIN_NAME" />...</translation>
 <translation id="720715819012336933">{NUM_PAGES,plural, =1{יציאה מהדף}two{יציאה מהדפים}many{יציאה מהדפים}other{יציאה מהדפים}}</translation>
 <translation id="7207457272187520234">‏שליחת מידע לגבי אופן השימוש בנתונים וניתוח הביצועים. המכשיר הזה שולח עכשיו אל Google באופן אוטומטי נתוני אבחון, נתוני מכשיר ונתוני שימוש באפליקציות. הנתונים האלה יעזרו לשמור על היציבות של המערכת ושל האפליקציות ולבצע שיפורים אחרים. חלק מהנתונים הנצברים יעזרו גם לשפר את האפליקציות של Google וכן יעזרו לשותפים של Google, כמו מפתחים של Android. ההגדרה הזו נאכפת על-ידי הבעלים. אם הופעלה ההגדרה 'פעילות באתרי אינטרנט ובאפליקציות נוספים', ייתכן שהנתונים יישמרו בחשבון Google שלך.</translation>
@@ -5090,6 +5117,7 @@
 <translation id="7600965453749440009">איני רוצה לקבל תרגום מ<ph name="LANGUAGE" /> בכלל</translation>
 <translation id="760197030861754408">כדי להתחבר, עבור אל <ph name="LANDING_PAGE" />.</translation>
 <translation id="7602079150116086782">אין כרטיסיות ממכשירים אחרים</translation>
+<translation id="7602173054665172958">ניהול הדפסה</translation>
 <translation id="7604942372593434070">כניסה לפעילות הגלישה שלך</translation>
 <translation id="7605594153474022051">הסנכרון לא עובד</translation>
 <translation id="7606992457248886637">רשויות</translation>
@@ -5204,6 +5232,7 @@
 <translation id="7744192722284567281">נמצאה בפרצה באבטחת מידע</translation>
 <translation id="7750228210027921155">תמונה בתוך תמונה</translation>
 <translation id="7751260505918304024">הצג הכל</translation>
+<translation id="7753735457098489144">ההתקנה נכשלה כי אין מספיק שטח אחסון. כדי לפנות שטח, עליך למחוק קבצים מאחסון המכשיר.</translation>
 <translation id="7754704193130578113">שאל היכן לשמור כל קובץ לפני הורדתו</translation>
 <translation id="7755287808199759310">אחד מההורים שלך יכול לבטל בשבילך את החסימה</translation>
 <translation id="7757787379047923882">הטקסט שותף דרך <ph name="DEVICE_NAME" /></translation>
@@ -5697,6 +5726,7 @@
 <translation id="833986336429795709">צריך לבחור אפליקציה כדי לפתוח את הקישור הזה</translation>
 <translation id="8342861492835240085">בחירת אוסף</translation>
 <translation id="834290227245955730">קוד האימות לא חוקי. מספר הניסיונות החוזרים שנותרו: <ph name="RETRIES" />.</translation>
+<translation id="8347227221149377169">משימות הדפסה</translation>
 <translation id="8350789879725387295">כלי סטיילוס באזור המוצמד</translation>
 <translation id="8351316842353540018">להציג תמיד אפשרויות נגישוּת</translation>
 <translation id="8351419472474436977">‏תוסף זה השתלט על הגדרות שרת ה-Proxy שלך. משמעות הדבר היא שהוא יכול לשנות, לקטוע או לצותת לכל פעולה שתבצע באינטרנט. אם אינך יודע בוודאות מדוע שינוי זה התרחש, סביר להניח שזהו שינוי לא רצוי.</translation>
@@ -5920,7 +5950,6 @@
 <translation id="8650543407998814195">למרות שכבר אין לך גישה לפרופיל הישן, אפשר עדיין להסיר אותו.</translation>
 <translation id="8651585100578802546">אלץ טעינה מחדש של דף זה</translation>
 <translation id="8652400352452647993">שגיאת 'ארוז תוסף'</translation>
-<translation id="8653578191563425126">‏שטח דיסק לשמירה עבור Crostini (אפשר לשנות זאת מאוחר יותר).</translation>
 <translation id="8654151524613148204">הקובץ גדול מכדי שהמחשב שלך יוכל לטפל בו. מצטערים.</translation>
 <translation id="8655295600908251630">ערוץ</translation>
 <translation id="8655319619291175901">אופס. משהו השתבש.</translation>
@@ -6223,6 +6252,7 @@
 <translation id="9008201768610948239">התעלם</translation>
 <translation id="9009369504041480176">טוען (%<ph name="PROGRESS_PERCENT" />)...</translation>
 <translation id="9011163749350026987">הצג תמיד את הסמל</translation>
+<translation id="9013037634206938463">‏נדרש שטח אחסון פנוי של <ph name="INSTALL_SIZE" /> כדי להתקין את Linux. כדי לפנות שטח אחסון, יש למחוק קבצים מהמכשיר.</translation>
 <translation id="9013707997379828817">מנהל המערכת שלך החזיר את המכשיר הזה למצב קודם. צריך לשמור קבצים חשובים ולהפעיל מחדש. כל הנתונים במכשיר זה יימחקו.</translation>
 <translation id="901668144954885282">‏גיבוי ב-Google Drive</translation>
 <translation id="9018218886431812662">ההתקנה הושלמה</translation>
@@ -6295,6 +6325,7 @@
 <translation id="9101691533782776290">הפעל את היישום</translation>
 <translation id="9102610709270966160">הפעל תוסף</translation>
 <translation id="9103868373786083162">לחץ כדי לחזור אחורה, תפריט הקשר כדי לראות היסטוריה</translation>
+<translation id="9108692355621501797">‏<ph name="LINK_BEGIN" />הודעת הפרטיות בנושא G Suite for Education<ph name="LINK_END" /> נועדה לעזור למשתמשי G Suite for Education ולהורים שלהם להבין אילו נתונים המוצר הזה אוסף, למה הוא אוסף אותם ואיזה שימוש נעשה בהם.</translation>
 <translation id="9108808586816295166">‏ה-DNS המאובטח לא יהיה בהכרח זמין תמיד</translation>
 <translation id="9109122242323516435">כדי לפנות שטח, מחק קבצים מאחסון המכשיר.</translation>
 <translation id="9109283579179481106">חיבור לרשת סלולרית</translation>

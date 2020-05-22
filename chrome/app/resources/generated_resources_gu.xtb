@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">આ USB ઉપકરણોમાંથી કોઈપણ ઍક્સેસ કરો</translation>
 <translation id="1036982837258183574">બહાર નીકળવા માટે |<ph name="ACCELERATOR" />| દબાવો</translation>
 <translation id="1038168778161626396">ફક્ત ચિહ્નિત કરો</translation>
+<translation id="1038462104119736705">Linux માટે ઓછામાં ઓછી <ph name="INSTALL_SIZE" /> સ્પેસનો સુઝાવ આપવામાં આવે છે. ખાસી સ્પેસ વધારવા માટે, તમારા ડિવાઇસમાંથી ફાઇલો ડિલીટ કરો.</translation>
 <translation id="1039337018183941703">અમાન્ય અથવા દૂષિત ફાઇલ</translation>
 <translation id="1041175011127912238">આ પેજ પ્રતિભાવ આપી રહ્યું નથી</translation>
 <translation id="1041263367839475438">ઉપલબ્ધ ડિવાઇસ</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">જે આવર્તન પર સ્ક્રીન અપડેટ કરે છે તેનું નિર્ધારણ કરે છે</translation>
 <translation id="1061904396131502319">વિરામનો સમય થવા જ આવ્યો છે</translation>
-<translation id="1064552680598333868">Linux હવે પછી ફરી શરૂ થશે, ત્યારે માઇક્રોફોનમાં કરેલા ફેરફાર અમલી બનશે.</translation>
 <translation id="1067048845568873861">બનાવ્યું</translation>
 <translation id="1067291318998134776">Linux (બીટા)</translation>
 <translation id="1067922213147265141">અન્ય Google સેવાઓ</translation>
@@ -158,6 +158,7 @@
 <translation id="1197088940767939838">નારંગી</translation>
 <translation id="1197979282329025000">પ્રિંટર <ph name="PRINTER_NAME" /> માટે પ્રિંટર ક્ષમતાઓ પુનર્પ્રાપ્ત કરતી વખતે ભૂલ થઈ છે. આ પ્રિંટર <ph name="CLOUD_PRINT_NAME" /> સાથે નોંધાયેલું નથી.</translation>
 <translation id="119944043368869598">બધા દૂર કરો</translation>
+<translation id="1199814941632954229">આ પ્રમાણપત્ર પ્રોફાઇલ માટે પ્રમાણપત્રોની જોગવાઈ કરવામાં આવી રહી છે</translation>
 <translation id="1201402288615127009">આગલું</translation>
 <translation id="1202596434010270079">કિઓસ્ક ઍપ્લિકેશન અપડેટ કરી. કૃપા કરીને USB સ્ટીક અપડેટ કરો.</translation>
 <translation id="120368089816228251">સંગીતનો સૂર</translation>
@@ -300,7 +301,6 @@
 <translation id="1386387014181100145">હેલો.</translation>
 <translation id="138784436342154190">ડિફૉલ્ટ સ્ટાર્ટઅપ પૃષ્ઠને પુનઃસ્થાપિત કરીએ?</translation>
 <translation id="1390548061267426325">નિયમિત ટૅબ તરીકે ખોલો</translation>
-<translation id="1392232653471491344">Linux ફરી શરૂ કરવું જરૂરી છે</translation>
 <translation id="1393283411312835250">સૂર્ય અને વાદળો</translation>
 <translation id="1395730723686586365">અપડેટકર્તા પ્રારંભ કર્યું</translation>
 <translation id="1396139853388185343">પ્રિન્ટર સેટ કરવામાં ભૂલ</translation>
@@ -539,6 +539,7 @@
 <translation id="1670399744444387456">મૂળભૂત</translation>
 <translation id="167160931442925455">સૌથી વધુ મોટો અવાજ</translation>
 <translation id="1673137583248014546"><ph name="URL" /> તમારી સુરક્ષા કીની બનાવટ અને મૉડલ જોવા માગે છે</translation>
+<translation id="1677306805708094828"><ph name="EXTENSION_TYPE_PARAMETER" />ને ઉમેરી શકતા નથી</translation>
 <translation id="1677472565718498478"><ph name="TIME" /> બાકી</translation>
 <translation id="1679068421605151609">વિકાસકર્તા સાધનો</translation>
 <translation id="1679806121152819234">પ્લગ-ઇન VM</translation>
@@ -705,7 +706,6 @@
 <translation id="186612162884103683">"<ph name="EXTENSION" />" આ તપાસાયેલા સ્થાનોમાં ફોટા, વીડિયો અને સાઉન્ડ ફાઇલોને વાંચી અને લખી શકે છે.</translation>
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" />  તમારું ઇન્સ્ટોલેશન પૂર્ણ કરવાની તૈયારીમાં છે</translation>
 <translation id="1868193363684582383">"ઓકે Google"</translation>
-<translation id="1870629042957780127">માઇક્રોફોનનો ઍક્સેસ આપો</translation>
 <translation id="1871534214638631766">તમે જ્યારે રાઇટ ક્લિક કરો અથવા કન્ટેન્ટને થોડીવાર દબાવી રાખો, ત્યારે સંબંધિત માહિતી બતાવો</translation>
 <translation id="1871615898038944731">તમારું <ph name="DEVICE_TYPE" /> અપ ટૂ ડેટ છે</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{ટૅબને બીજી વિંડોમાં ખસેડો}one{ટૅબને બીજી વિંડોમાં ખસેડો}other{ટૅબને બીજી વિંડોમાં ખસેડો}}</translation>
@@ -792,6 +792,9 @@
 <translation id="1989112275319619282">બ્રાઉઝ કરો</translation>
 <translation id="1990512225220753005">આ પેજ પર શૉર્ટકટ બતાવશો નહીં</translation>
 <translation id="1992397118740194946">સેટ નથી</translation>
+<translation id="199340248656592341">અહીં તમારા એકાઉન્ટ મેનેજ કરો. <ph name="LINK_BEGIN" />વધુ જાણો<ph name="LINK_END" />&lt;br&gt;&lt;br&gt;
+    બુકમાર્ક, પાસવર્ડ અને અન્ય બ્રાઉઝર ડેટાને પ્રાથમિક એકાઉન્ટ સાથે સિંક કરવામાં આવે છે.&lt;br&gt;&lt;br&gt;
+    સ્કૂલનું એકાઉન્ટ ઉમેરવાથી માતાપિતા યોગ્ય નિયંત્રણો હેઠળ સંચાલન કરતી વખતે વેબસાઇટ અને એક્સ્ટેન્શન પર વિદ્યાર્થી તરીકે સાઇન-ઇન કરવાનું સરળ બને છે.</translation>
 <translation id="1994173015038366702">સાઈટ URL</translation>
 <translation id="1995916364271252349">સાઇટ કઈ માહિતીનો ઉપયોગ કરી શકે અને કઈ માહિતી બતાવી શકે તે નિયંત્રિત કરો (સ્થાન, કૅમેરા, પૉપ-અપ અને અન્ય ઘણું)</translation>
 <translation id="1997616988432401742">તમારા પ્રમાણપત્રો</translation>
@@ -991,6 +994,7 @@
 <translation id="2241634353105152135">માત્ર એક વખત</translation>
 <translation id="2242687258748107519">ફાઇલ માહિતી</translation>
 <translation id="2246549592927364792">Google તરફથી છબીનાં વર્ણનો મેળવીએ?</translation>
+<translation id="2249111429176737533">ટૅબવાળી વિંડો તરીકે ખોલો</translation>
 <translation id="2249605167705922988">ઉદા. ત. 1-5, 8, 11-13</translation>
 <translation id="2251218783371366160">સિસ્ટમ દર્શક સાથે ખોલો</translation>
 <translation id="225163402930830576">નેટવર્ક રિફ્રેશ કરો</translation>
@@ -1185,6 +1189,7 @@
 <translation id="2489918096470125693">&amp;ફોલ્ડર ઉમેરો...</translation>
 <translation id="2490481887078769936"><ph name="FILE_NAME" />ને સૂચિમાંથી કાઢી નાખી</translation>
 <translation id="249113932447298600">માફ કરશો, આ સમયે ઉપકરણ <ph name="DEVICE_LABEL" /> ને સપોર્ટ નથી.</translation>
+<translation id="2492461744635776704">પ્રમાણપત્ર પર સહી કરવાની વિનંતીની પ્રક્રિયા ચાલુ છે</translation>
 <translation id="249303669840926644">નોંધણી પૂર્ણ કરી શકાઈ નથી</translation>
 <translation id="2495777824269688114">વધુ સુવિધાઓ શોધો અથવા જવાબ મેળવો. સહાય માટે "?"ને પસંદ કરો.</translation>
 <translation id="2496180316473517155">બ્રાઉઝિંગ ઇતિહાસ</translation>
@@ -1296,6 +1301,7 @@
 <translation id="2633212996805280240">"<ph name="EXTENSION_NAME" />" ને દૂર કરીએ?</translation>
 <translation id="263325223718984101"><ph name="PRODUCT_NAME" /> ઇન્સ્ટોલેશન પૂર્ણ કરી શક્યું નથી, પરંતુ તેની ડિસ્ક છબીથી ચાલુ રહી શકે છે.</translation>
 <translation id="2633764681656412085">FIDO</translation>
+<translation id="2634199532920451708">પ્રિન્ટ ઇતિહાસ</translation>
 <translation id="2635094637295383009">Twitter</translation>
 <translation id="2635276683026132559">સાઇનિંગ</translation>
 <translation id="2636625531157955190">Chrome છબી ઍક્સેસ કરી શકતું નથી.</translation>
@@ -1478,6 +1484,7 @@
 <translation id="2841013758207633010">સમય</translation>
 <translation id="2841837950101800123">પ્રદાતા</translation>
 <translation id="2844169650293029770">USB-C ઉપકરણ (ડાબી બાજુનું આગળનું પોર્ટ)</translation>
+<translation id="2844809857160214557">પ્રિન્ટ કરવાના કામો જુઓ અને મેનેજ કરો</translation>
 <translation id="2845382757467349449">બુકમાર્ક્સ બાર હંમેશા બતાવો</translation>
 <translation id="284805635805850872">નુકસાનકારક સૉફ્ટવેર દૂર કરીએ?</translation>
 <translation id="284970761985428403"><ph name="ASCII_NAME" /> (<ph name="UNICODE_NAME" />)</translation>
@@ -1546,6 +1553,7 @@
 <translation id="2932330436172705843"><ph name="PROFILE_DISPLAY_NAME" /> (બાળકો માટેનું એકાઉન્ટ)</translation>
 <translation id="2932483646085333864">સિંક ચાલુ કરવા માટે સાઇન આઉટ કરો પછી ફરી સાઇન કરો</translation>
 <translation id="2932883381142163287">દુરુપયોગ જણાવો</translation>
+<translation id="2933632078076743449">છેલ્લે અપડેટ</translation>
 <translation id="2936851848721175671">બૅકઅપ અને પુનઃસ્થાપના</translation>
 <translation id="2938225289965773019"><ph name="PROTOCOL" /> લિંક્સ ખોલો</translation>
 <translation id="2938845886082362843">તમારી સિક્યુરિટી કીમાં સ્ટોર કરવામાં આવેલો સાઇન-ઇન ડેટા જુઓ અને ડિલીટ કરો</translation>
@@ -1674,6 +1682,7 @@
 <translation id="310671807099593501">સાઇટ બ્લૂટૂથનો ઉપયોગ કરી રહી છે</translation>
 <translation id="3115147772012638511">કૅશ માટે રાહ જુએ છે...</translation>
 <translation id="3115580024857770654">બધા નાના કરો</translation>
+<translation id="3116968597797150452">પ્રમાણપત્ર પ્રોફાઇલ</translation>
 <translation id="3117362587799608430">ડૉક સંપૂર્ણપણે સુસંગત નથી</translation>
 <translation id="3118319026408854581"><ph name="PRODUCT_NAME" /> સહાય</translation>
 <translation id="3118654181216384296">કૃપા કરીને થોડીવારમાં ફરી Linux ચાલુ કરવાનો પ્રયાસ કરો.</translation>
@@ -1720,6 +1729,7 @@
 <translation id="3163201441334626963"><ph name="VENDOR_ID" /> વિક્રેતાનું અજાણ્યું ઉત્પાદન <ph name="PRODUCT_ID" /></translation>
 <translation id="3164329792803560526">આ ટૅબને <ph name="APP_NAME" />માં શેર કરી રહ્યાં છીએ</translation>
 <translation id="3165390001037658081">કેટલાક કૅરિઅર આ સુવિધાને અવરોધિત કરી શકે છે.</translation>
+<translation id="316652501498554287">G Suite for Education એકાઉન્ટ</translation>
 <translation id="3169472444629675720">Discover</translation>
 <translation id="3170072451822350649">તમે સાઇન ઇન કરવાનું છોડી અને <ph name="LINK_START" />અતિથિ તરીકે બ્રાઉઝ<ph name="LINK_END" /> પણ કરી શકો છો.</translation>
 <translation id="3177909033752230686">પૃષ્ઠ ભાષા:</translation>
@@ -1886,6 +1896,7 @@
 <translation id="3405664148539009465">ફોન્ટ્સ કસ્ટમાઇઝ કરો </translation>
 <translation id="3405763860805964263">...</translation>
 <translation id="3406605057700382950">બુકમાર્ક્સ બાર &amp;બતાવો</translation>
+<translation id="340671561090997290">{NUM_EXTENSIONS,plural, =1{આ એક્સ્ટેન્શન જોખમકારક હોઈ શકે છે}one{આ એક્સ્ટેન્શન જોખમકારક હોઈ શકે છે}other{આ એક્સ્ટેન્શન જોખમકારક હોઈ શકે છે}}</translation>
 <translation id="3409785640040772790">Maps</translation>
 <translation id="3410832398355316179">આ વપરાશકર્તા કાઢી નાખવામાં આવે તે પછી આ વપરાશકર્તા સાથે સંકળાયેલી બધી ફાઇલો અને સ્થાનિક ડેટા કાયમીરૂપે ડિલીટ કરવામાં આવશે. <ph name="USER_EMAIL" /> હજીએ થોડા સમય પછી સાઇન ઇન કરી શકશે.</translation>
 <translation id="3412265149091626468">પસંદગી પર જાઓ</translation>
@@ -1992,6 +2003,7 @@
 <translation id="3528033729920178817">આ પૃષ્ઠ તમારા સ્થાનને ટ્રૅક કરી રહ્યું છે.</translation>
 <translation id="3528498924003805721">શૉર્ટકટ લક્ષ્યો</translation>
 <translation id="353316712352074340"><ph name="WINDOW_TITLE" /> - ઑડિઓ મ્યૂટ કર્યો</translation>
+<translation id="3537881477201137177">સેટિંગમાં જઈને આમાં ફેરફાર કરી શકાશે</translation>
 <translation id="3538066758857505094">Linuxને અનઇન્સ્ટૉલ કરતી વખતે ભૂલ આવી. કૃપા કરીને ફરી પ્રયાસ કરો.</translation>
 <translation id="354060433403403521">AC એડેપ્ટર</translation>
 <translation id="354068948465830244">તે સાઇટ ડેટા વાંચી અને તેમાં ફેરફાર કરી શકે છે</translation>
@@ -2061,6 +2073,7 @@
 <translation id="3616741288025931835">બ્રાઉઝિંગ ડેટા &amp;સાફ કરો...</translation>
 <translation id="3617891479562106823">બૅકગ્રાઉન્ડ અનુપલબ્ધ છે. થોડા સમય પછી ફરી પ્રયાસ કરો.</translation>
 <translation id="3619115746895587757">કૅપુચિનો</translation>
+<translation id="362333465072914957">CA પ્રમાણપત્ર જારી કરે તેની રાહ જોઈ રહ્યાં છીએ</translation>
 <translation id="3624567683873126087">ઉપકરણ અનલૉક કરો અને Google એકાઉન્ટમાં સાઇન ઇન કરો</translation>
 <translation id="3625258641415618104">સ્ક્રીનશોટ્સ અક્ષમ કર્યા</translation>
 <translation id="3625481642044239431">અમાન્ય ફાઇલ પસંદ કરી. ફરી પ્રયાસ કરો.</translation>
@@ -2100,7 +2113,6 @@
 <translation id="3661172646479098821">અત્યારે માત્ર Android ડિવાઇસ જ ચાલે છે.</translation>
 <translation id="3664511988987167893">એક્સ્ટેંશન આઇકન</translation>
 <translation id="3665589677786828986">Chrome ને જાણ થઈ છે કે તમારી કેટલીક સેટિંગ્સ બીજા પ્રોગ્રામ દ્વારા દૂષિત કરવામાં આવેલી અને તેમને તેમના મૂળ ડિફોલ્ટ્સ પર ફરીથી સેટ કરી છે.</translation>
-<translation id="366867565525278777">સ્ટોરેજ સ્પેસના અભાવના કારણે ઇન્સ્ટૉલ કરવું નિષ્ફળ થયું. ઓછામાં ઓછી <ph name="INSTALL_SIZE" /> સ્પેસ ખાલી હોવી જરૂરી છે. સ્થાન ખાલી કરવા માટે, ડ્રાઇવ સ્ટોરેજમાંથી ફાઇલો ડિલીટ કરો.</translation>
 <translation id="3668801437375206837">બ્લૂટૂથ સમસ્યાઓ અંગે વધુ સારી તપાસ કરવા માટે, Googleનાં કર્મચારીઓ તેમના પ્રતિસાદમાં વધારાના બ્લૂટૂથ લૉગનો સમાવેશ કરી શકે છે. જ્યારે આ વિકલ્પને ચેક કરેલ હોય, ત્યારે તમારા રિપોર્ટમાં તમારા વર્તમાન સત્રમાંથી btsnoop અને HCI લૉગનો સમાવેશ થશે અને તેમાંથી શક્ય હોય તેટલાં PIIને દૂર કરવામાં આવશે. આ લૉગ સુધીના ઍક્સેસને Listnrમાં Chrome OS પ્રોડક્ટ જૂથના મેનેજરો સુધી જ નિયંત્રિત રાખવામાં આવશે. એ બધા લૉગ 90 દિવસ બાદ કાઢી નાખવામાં આવશે.</translation>
 <translation id="3668823961463113931">હેન્ડલર્સ</translation>
 <translation id="3670113805793654926">કોઈ પણ વિક્રેતા પાસે ઉપલબ્ધ ડિવાઇસની શ્રેણી</translation>
@@ -2240,6 +2252,7 @@
 <translation id="381202950560906753">બીજી ઉમેરો</translation>
 <translation id="3812525830114410218">ખોટું પ્રમાણપત્ર</translation>
 <translation id="3813296892522778813">જો તમે શોધી રહ્યાં છો તે શોધી શકતાં ન હોવ તો <ph name="BEGIN_LINK_CHROMIUM" />Google Chrome સહાય<ph name="END_LINK_CHROMIUM" /> પર જાઓ</translation>
+<translation id="3814529970604306954">સ્કૂલ એકાઉન્ટ</translation>
 <translation id="3816118180265633665">Chrome રંગો</translation>
 <translation id="3817524650114746564">તમારા કમ્પ્યુટરનાં પ્રૉક્સી સેટિંગ ખોલો</translation>
 <translation id="3817579325494460411">પ્રદાન કરેલ નથી</translation>
@@ -2249,6 +2262,7 @@
 <translation id="3820749202859700794">SECG એલિપ્ટિક કર્વ secp521r1 (ઉર્ફ NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{એક્સ્ટેંશન મંજૂર કરવામાં આવ્યું છે}one{# એક્સ્ટેંશન મંજૂર કરવામાં આવ્યું છે}other{# એક્સ્ટેંશન મંજૂર કરવામાં આવ્યા છે}}</translation>
 <translation id="3822559385185038546">આ પ્રૉક્સી તમારા એડમિન દ્વારા લાગુ કરવામાં આવે છે</translation>
+<translation id="3823310065043511710">Linux માટે ઓછામાં ઓછી <ph name="INSTALL_SIZE" />  ખાલી સ્પેસનો સુઝાવ આપવામાં આવે છે.</translation>
 <translation id="3826440694796503677">તમારા વ્યવસ્થાપકે Googleના વધુ એકાઉન્ટ ઉમેરવાની ક્ષમતા બંધ કરી છે</translation>
 <translation id="3827306204503227641">અનસેન્ડબૉક્સ્ડ પ્લગિન્સને મંજૂરી આપવાનું ચાલુ રાખો</translation>
 <translation id="3827774300009121996">&amp;પૂર્ણ સ્ક્રીન</translation>
@@ -2360,6 +2374,7 @@
 <translation id="3948507072814225786"><ph name="ORIGIN" /> નીચેના ફોલ્ડરોમાં સાચવેલી ફાઇલોમાં ફેરફાર કરી શકે છે</translation>
 <translation id="3949790930165450333"><ph name="DEVICE_NAME" /> (<ph name="DEVICE_ID" />)</translation>
 <translation id="394984172568887996">IE થી આયાત કરેલ</translation>
+<translation id="3949981384795585075">{NUM_APPS,plural, =1{આ ઍપ જોખમકારક હોઈ શકે છે}one{આ ઍપ જોખમકારક હોઈ શકે છે}other{આ ઍપ જોખમકારક હોઈ શકે છે}}</translation>
 <translation id="3950820424414687140">સાઇન ઇન</translation>
 <translation id="3953834000574892725">મારા એકાઉન્ટ</translation>
 <translation id="3954354850384043518">પ્રક્રિયામાં છે</translation>
@@ -2585,6 +2600,7 @@
 <translation id="426564820080660648">અપડેટ માટે તપાસ કરવા, કૃપા કરીને ઇથરનેટ, વાઇ-ફાઇ અથવા મોબાઇલ ડેટાનો ઉપયોગ કરો.</translation>
 <translation id="4266679478228765574">ફોલ્ડર કાઢી નાખવાથી શેર કરવાનું બંધ થશે પણ ફાઇલો ડિલીટ થશે નહીં.</translation>
 <translation id="4267455501101322486">શૈક્ષણિક સંસાધનોના ઍક્સેસ માટે એકાઉન્ટ ઉમેરવા, તમને પરવાનગી આપવાનું માતાપિતાને કહો</translation>
+<translation id="4267924571297947682">માતાપિતાને પરવાનગી માટે કહો</translation>
 <translation id="4267953847983678297">સેલ્યુલર નેટવર્કથી ઑટોમૅટિક રીતે કનેક્ટ થાઓ</translation>
 <translation id="4268025649754414643">કી ચિહ્નિકરણ</translation>
 <translation id="4270393598798225102">વર્ઝન <ph name="NUMBER" /></translation>
@@ -2749,6 +2765,7 @@
 <translation id="4508051413094283164">બધુ છુપી વિંડોમાં ખોલો</translation>
 <translation id="4508265954913339219">સક્રિયતા નિષ્ફળ</translation>
 <translation id="4508765956121923607">&amp;સ્રોત જુઓ</translation>
+<translation id="4510479820467554003">માતાપિતાના એકાઉન્ટની સૂચિ</translation>
 <translation id="4510614391273086606">Linux ફાઇલો અને ઍપને તેની બૅકઅપ લીધેલી સ્થિતિમાં રિસ્ટોર કરવામાં આવી રહ્યાં છે.</translation>
 <translation id="451407183922382411"><ph name="COMPANY_NAME" /> દ્વારા સંચાલિત</translation>
 <translation id="4514610446763173167">વીડિઓ ચલાવવા અથવા થોભાવવા માટે તેને ટૉગલ કરો</translation>
@@ -3002,6 +3019,7 @@
 <translation id="4862642413395066333">OCSP પ્રતિસાદોને સાઇન ઇન કરે છે</translation>
 <translation id="4863769717153320198"><ph name="WIDTH" /> x <ph name="HEIGHT" /> જેવું લાગે છે (ડિફૉલ્ટ)</translation>
 <translation id="4864369630010738180">સાઇન ઇન થઈ રહ્યું છે...</translation>
+<translation id="4864805589453749318">સ્કૂલ એકાઉન્ટ ઉમેરવાની પરવાનગી આપી રહ્યાં છે તે માતાપિતાને પસંદ કરો.</translation>
 <translation id="486635084936119914">ડાઉનલોડ કર્યા પછી કેટલાક ફાઇલ પ્રકારોને આપમેળે ખોલો</translation>
 <translation id="4869289251183233431">તમારા ડિવાઇસમાં સ્ટોરેજ સ્પેસ ઓછી છે. <ph name="APP_NAME" />નો ઉપયોગ કરવા માટે ઓછામાં ઓછી <ph name="MINIMUM_SPACE" /> ખાલી સ્પેસની જરૂર છે અને <ph name="RECOMMENDED_SPACE" />થી વધુ ખાલી સ્પેસ માટે સુઝાવ આપવામાં આવે છે. ખાસી સ્પેસ વધારવા માટે, ડિવાઇસમાંથી ફાઇલો ડિલીટ કરો.</translation>
 <translation id="48704129375571883">વધારાની સુવિધાઓ ઉમેરો</translation>
@@ -3034,6 +3052,7 @@
 <translation id="4891089016822695758">બીટા ચર્ચા મંચ</translation>
 <translation id="4892229439761351791">સાઇટ બ્લૂટૂથનો ઉપયોગ કરી શકે</translation>
 <translation id="489258173289528622">બૅટરી પર હોય, ત્યારની નિષ્ક્રિય ક્રિયા</translation>
+<translation id="4892811427319351753"><ph name="EXTENSION_TYPE_PARAMETER" /> ચાલુ કરી શકાતું નથી</translation>
 <translation id="4893336867552636863">આ તમારો બ્રાઉઝીંગ ડેટા આ ડિવાઇસમાંથી સ્થાયી રૂપે ડિલીટ કરશે.</translation>
 <translation id="4893522937062257019">લૉક સ્ક્રીન પર</translation>
 <translation id="489454699928748701">સાઇટને મોશન સેન્સરનો ઉપયોગ કરવાની મંજૂરી આપો</translation>
@@ -3056,6 +3075,7 @@
 <translation id="4918086044614829423">સ્વીકારો</translation>
 <translation id="4918221908152712722"><ph name="APP_NAME" />ને ઇન્સ્ટૉલ કરો (કોઈ ડાઉનલોડ આવશ્યક નથી)</translation>
 <translation id="4920887663447894854">નીચેની સાઇટ્સને આ પૃષ્ઠ પર તમારા સ્થાનને ટ્રેક કરવાથી અવરોધિત કરી છે:</translation>
+<translation id="4921290200821452703">માતાપિતા માટે સ્કૂલના એકાઉન્ટની માહિતી</translation>
 <translation id="49226369361073053">{0,plural, =0{ડિવાઇસ હમણાં અપડેટ કરો}=1{ડિવાઇસ 1 સેકન્ડમાં અપડેટ કરો}one{ડિવાઇસ # સેકન્ડમાં અપડેટ કરો}other{ડિવાઇસ # સેકન્ડમાં અપડેટ કરો}}</translation>
 <translation id="492299503953721473">Android ઍપ્લિકેશનો દૂર કરો</translation>
 <translation id="492363500327720082"><ph name="APP_NAME" />ને અનઇન્સ્ટૉલ કરી રહ્યાં છીએ...</translation>
@@ -3210,6 +3230,7 @@
 <translation id="5139112070765735680"><ph name="QUERY_NAME" />, <ph name="DEFAULT_SEARCH_ENGINE_NAME" /> શોધો</translation>
 <translation id="5139823398361067371">તમારી સિક્યુરિટી કી માટેનો પિન દાખલ કરો. જો તમને તમારો પિન યાદ ન હોય, તો તમારે સિક્યુરિટી કી રીસેટ કરવી પડશે.</translation>
 <translation id="5139955368427980650">&amp;ખોલો</translation>
+<translation id="5141421572306659464">પ્રાથમિક એકાઉન્ટ</translation>
 <translation id="5142793792982256885">ટચપૅડ સ્ક્રોલની ઝડપ</translation>
 <translation id="5142961317498132443">પ્રમાણીકરણ</translation>
 <translation id="5143374789336132547">જ્યારે તમે હોમ બટન ક્લિક કરો છો ત્યારે જે પૃષ્ઠ દર્શાવવામાં આવે છે તે <ph name="EXTENSION_NAME" /> એક્સટેન્શને બદલ્યું છે.</translation>
@@ -3310,6 +3331,7 @@
 <translation id="5269977353971873915">પ્રિન્ટ કાઢવામાં નિષ્ફળ</translation>
 <translation id="5275352920323889391">કૂતરું</translation>
 <translation id="527605982717517565"><ph name="HOST" /> પર JavaScript ને હંમેશા મંજૂરી આપો </translation>
+<translation id="5278823018825269962">સ્ટેટસ ID</translation>
 <translation id="5280174558369304332">કાઢી નાખવા માટેના એક્સ્ટેંશન:</translation>
 <translation id="5280243692621919988">જ્યારે તમે બધી વિંડો બંધ કરો, ત્યારે કુકી અને સાઇટનો ડેટા સાફ કરો</translation>
 <translation id="5280426389926346830">શૉર્ટકટ બનાવીએ?</translation>
@@ -3826,6 +3848,7 @@
 USB ડિવાઇસ</translation>
 <translation id="5932881020239635062">શ્રૃંખલા</translation>
 <translation id="5933376509899483611">સમયઝોન</translation>
+<translation id="5935158534896975820">પ્રમાણપત્ર પર સહી કરવાની વિનંતી તૈયાર કરી રહ્યાં છીએ (સર્વર પર રાહ જુએ છે)</translation>
 <translation id="5935656526031444304">Safe Browsingને મેનેજ કરો</translation>
 <translation id="5938002010494270685">સુરક્ષા અપગ્રેડ ઉપલબ્ધ</translation>
 <translation id="5939518447894949180">રીસેટ કરો</translation>
@@ -4663,6 +4686,7 @@ USB ડિવાઇસ</translation>
 <translation id="7029809446516969842">પાસવર્ડ્સ</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> - સિરીઅલ પોર્ટ કનેક્ટ કર્યું</translation>
 <translation id="7031962166228839643">TPM બનાવાઈ રહી છે, કૃપા કરીને રાહ જુઓ (આમાં થોડીવાર લાગી શકે છે)...</translation>
+<translation id="7036706669646341689">Linux માટે <ph name="DISK_SIZE" /> સ્પેસનો સુઝાવ આપ્યો છે. ખાસી સ્પેસ વધારવા માટે, તમારા ડિવાઇસમાંથી ફાઇલો ડિલીટ કરો.</translation>
 <translation id="7037509989619051237">ટેક્સ્ટ ટૂ સ્પીચના પ્રીવ્યૂ માટે</translation>
 <translation id="7038632520572155338">સ્વિચ ઍક્સેસ</translation>
 <translation id="7039326228527141150"><ph name="VENDOR_NAME" /> થી USB ઉપકરણો ઍક્સેસ કરો</translation>
@@ -4796,6 +4820,9 @@ USB ડિવાઇસ</translation>
 <translation id="720110658997053098">આ ઉપકરણને કાયમ માટે કિઓસ્ક મોડમાં રાખો</translation>
 <translation id="7201118060536064622">'<ph name="DELETED_ITEM_NAME" />' ડિલીટ કર્યું</translation>
 <translation id="7201420661433230412">ફાઇલો જુઓ</translation>
+<translation id="7203826966018112936">પ્રોફાઇલમાં સ્કૂલનું એકાઉન્ટ ઉમેરવાથી માતાપિતા યોગ્ય નિયંત્રણો હેઠળ સંચાલન કરતી વખતે વેબસાઇટ અને એક્સ્ટેન્શન પર વિદ્યાર્થી તરીકે સાઇન-ઇન કરવાનું સરળ બને છે. આ બાળકોને સ્કૂલના એકાઉન્ટ સાથે સિંક કરેલા બુકમાર્ક, પાસવર્ડ અથવા અન્ય બ્રાઉઝર ડેટાનો ઍક્સેસ આપતું નથી.&lt;br&gt;&lt;br&gt;
+    જો તમે સ્કૂલમાં Chromebookનો ઉપયોગ કરતાં હોય અને તમે તમારા બાળકને બધા જરૂરી સ્કૂલવર્કનો ઍક્સેસ છે તેની ખાતરી કરવા માટે તમે હોમ પર શાળાનો અનુભવ બતાવવા માગતા હોય, તો કૃપા કરીને આ Family Link એકાઉન્ટમાંથી સાઇન આઉટ કરીને Chrome OS એકાઉન્ટ પેજમાંથી સ્કૂલના એકાઉન્ટમાં સાઇન ઇન કરો (નોંધ: Family Linkના માતાપિતા યોગ્ય નિયંત્રણો લાગુ થશે નહીં).&lt;br&gt;&lt;br&gt;
+    જો તમારું બાળક સ્કૂલમાં Chromebookનો ઉપયોગ કરતું ન હોય અથવા જો તમે Family Linkનો ઉપયોગ કરીને બાળકના એકાઉન્ટને હોમ પર મેનેજ કરવા માગતા હોય, તો કૃપા કરીને આ એકાઉન્ટને સ્કૂલની પ્રોફાઇલમાં ઉમેરવા માટે નીચે આપેલા આગળ બટન પર ક્લિક કરો.</translation>
 <translation id="7206693748120342859"><ph name="PLUGIN_NAME" /> ડાઉનલોડ કરી રહ્યું છે...</translation>
 <translation id="720715819012336933">{NUM_PAGES,plural, =1{પેજમાંથી બહાર નીકળો}one{પેજમાંથી બહાર નીકળો}other{પેજમાંથી બહાર નીકળો}}</translation>
 <translation id="7207457272187520234">વપરાશ અને નિદાનનો ડેટા મોકલો. આ ડિવાઇસ હાલમાં Googleને નિદાન, ડિવાઇસ અને ઍપ વપરાશનો ડેટા ઑટોમૅટિક રીતે મોકલી રહ્યું છે. આ સિસ્ટમ અને ઍપની સ્થિરતા અને અન્ય સુધારણાઓમાં સહાય કરશે. એકત્ર કરેલો કેટલોક ડેટા Google ઍપ અને ભાગીદારો, જેમ કે Android ડેવલપરને પણ સહાય કરશે. આ સેટિંગ માલિક દ્વારા લાગુ કરવામાં આવ્યું છે. જો તમારી વધારાની વેબ અને ઍપ પ્રવૃત્તિનું સેટિંગ ચાલુ હોય, તો આ ડેટા તમારા Google એકાઉન્ટમાં સાચવવામાં આવી શકે છે.</translation>
@@ -5090,6 +5117,7 @@ USB ડિવાઇસ</translation>
 <translation id="7600965453749440009"><ph name="LANGUAGE" /> નું ક્યારેય અનુવાદ કરશો નહીં</translation>
 <translation id="760197030861754408">કનેક્ટ કરવા માટે <ph name="LANDING_PAGE" /> પર જાઓ.</translation>
 <translation id="7602079150116086782">અન્ય ઉપકરણોમાંથી કોઈ ટેબ્સ નથી</translation>
+<translation id="7602173054665172958">પ્રિન્ટ મેનેજમેન્ટ</translation>
 <translation id="7604942372593434070">તમારી બ્રાઉઝિંગ પ્રવૃત્તિને ઍક્સેસ કરો</translation>
 <translation id="7605594153474022051">સમન્વયન કામ કરતું નથી</translation>
 <translation id="7606992457248886637">અધિકારીઓ</translation>
@@ -5204,6 +5232,7 @@ USB ડિવાઇસ</translation>
 <translation id="7744192722284567281">ડેટા ઉલ્લંઘનમાં મળ્યો</translation>
 <translation id="7750228210027921155">ચિત્રમાં ચિત્ર</translation>
 <translation id="7751260505918304024">બધું બતાવો</translation>
+<translation id="7753735457098489144">સ્ટોરેજ સ્પેસના અભાવના કારણે ઇન્સ્ટૉલ કરવું નિષ્ફળ થયું. સ્પેસ ખાલી કરવા માટે, ડિવાઇસ સ્ટોરેજમાંથી ફાઇલો ડિલીટ કરો.</translation>
 <translation id="7754704193130578113">ડાઉનલોડ કરતાં પહેલાં પ્રત્યેક ફાઇલને ક્યાં સાચવવી છે તે જણાવો</translation>
 <translation id="7755287808199759310">તમારા માટે તમારા માતાપિતા તેને અનાવરોધિત કરી શકે છે</translation>
 <translation id="7757787379047923882"><ph name="DEVICE_NAME" />માંથી ટેક્સ્ટ શેર કરી</translation>
@@ -5690,6 +5719,7 @@ USB ડિવાઇસ</translation>
 <translation id="833986336429795709">આ લિંક ખોલવા માટે, એક ઍપ પસંદ કરો</translation>
 <translation id="8342861492835240085">સંગ્રહ પસંદ કરો</translation>
 <translation id="834290227245955730">અમાન્ય પિન. બાકીના ફરી પ્રયાસો: <ph name="RETRIES" />.</translation>
+<translation id="8347227221149377169">પ્રિન્ટ કરવાના કામો</translation>
 <translation id="8350789879725387295">ડૉકમાં સ્ટાયલસના સાધનો બતાવો</translation>
 <translation id="8351316842353540018">હંમેશાં ઍક્સેસિબિલિટીનાં વિકલ્પો બતાવો</translation>
 <translation id="8351419472474436977">આ એક્સ્ટેન્શને તમારા પ્રૉક્સી સેટિંગનું નિયંત્રણ લઈ લીધું છે, એનો અર્થ છે કે તમે જે કંઈ પણ ઓનલાઇન કરો છો એને એ બદલી, ભંગ કરી કે છુપાઈને પારકી વાતો સાંભળી શકે છે. આ ફેરફાર કેમ થયો એ અંગે જો તમને ખાતરી નથી, તો સંભવિત રૂપે એ તમને જોઈતું નહિ હોય.</translation>
@@ -5913,7 +5943,6 @@ USB ડિવાઇસ</translation>
 <translation id="8650543407998814195">જો કે તમે હવે તમારી જૂની પ્રોફાઇલ ઍક્સેસ કરી શકતા નથી, છતાં તમે તેને કાઢી નાખી શકો છો.</translation>
 <translation id="8651585100578802546">આ પૃષ્ઠ ફરીથી લોડ કરવા દબાણ કરો</translation>
 <translation id="8652400352452647993">પૅક એક્સટેન્શન ભૂલ</translation>
-<translation id="8653578191563425126">Crostini માટે આરક્ષિત રાખવાની ડિસ્ક સ્પેસ (તમે આને પછી બદલી શકો છો).</translation>
 <translation id="8654151524613148204">આ ફાઇલ તમારા કમ્પ્યુટરને સંચાલિત કરવા માટે ખૂબ મોટી છે. માફ કરશો.</translation>
 <translation id="8655295600908251630">ચેનલ</translation>
 <translation id="8655319619291175901">અરેરે, કંઈક ખોટું થયું.</translation>
@@ -6216,6 +6245,7 @@ USB ડિવાઇસ</translation>
 <translation id="9008201768610948239">અવગણો</translation>
 <translation id="9009369504041480176">અપલોડ થઈ રહ્યું છે (<ph name="PROGRESS_PERCENT" />%)...</translation>
 <translation id="9011163749350026987">હંમેશાં આઇકન બતાવો</translation>
+<translation id="9013037634206938463">Linux ઇન્સ્ટૉલ કરવા માટે <ph name="INSTALL_SIZE" /> સ્પેસ ખાલી હોવી જરૂરી છે. ખાસી સ્પેસ વધારવા માટે, તમારા ડિવાઇસમાંથી ફાઇલો ડિલીટ કરો.</translation>
 <translation id="9013707997379828817">તમારા વ્યવસ્થાપકે આ ઉપકરણને રોલ બૅક કર્યું છે. કૃપા કરીને મહત્ત્વપૂર્ણ ફાઇલો સાચવી લો પછી ફરી શરૂ કરો. ઉપકરણમાંનો બધો ડેટા ડિલીટ કરવામાં આવશે.</translation>
 <translation id="901668144954885282">Google ડ્રાઇવ પર બૅકઅપ લો</translation>
 <translation id="9018218886431812662">ઇન્સ્ટૉલેશન પૂર્ણ</translation>
@@ -6288,6 +6318,7 @@ USB ડિવાઇસ</translation>
 <translation id="9101691533782776290">ઍપ્લિકેશન લોન્ચ કરો</translation>
 <translation id="9102610709270966160">એક્સ્ટેંશન ચાલુ કરો</translation>
 <translation id="9103868373786083162">પાછા જવા માટે દબાવો, ઇતિહાસ જોવા માટે સંદર્ભ મેનૂ પર જાઓ</translation>
+<translation id="9108692355621501797"><ph name="LINK_BEGIN" />G Suite for Educationની પ્રાઇવસી નોટિસ<ph name="LINK_END" />નો આશય G Suite for Educationના વપરાશકર્તાઓ અને માતાપિતાની સમજણ માટે છે કે કયા પ્રકારનો ડેટા પ્રોડક્ટ એકત્રિત કરે છે, શા માટે તે એકત્રિત કરવામાં આવે છે અને તેનો શું ઉપયોગ કરવામાં આવે છે.</translation>
 <translation id="9108808586816295166">સુરક્ષિત DNS હંમેશાં ઉપલબ્ધ ન હોઈ શકે</translation>
 <translation id="9109122242323516435">સ્થાન ખાલી કરવા માટે, ડ્રાઇવ સ્ટોરેજમાંથી ફાઇલો ડિલીટ કરો.</translation>
 <translation id="9109283579179481106">મોબાઇલ નેટવર્ક સાથે કનેક્ટ થાઓ</translation>

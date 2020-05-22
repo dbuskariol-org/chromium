@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">Auf alle diese USB-Geräte zugreifen</translation>
 <translation id="1036982837258183574">Zum Beenden des Vollbildmodus |<ph name="ACCELERATOR" />| drücken</translation>
 <translation id="1038168778161626396">Nur verschlüsseln</translation>
+<translation id="1038462104119736705">Für Linux sind mindestens <ph name="INSTALL_SIZE" /> freier Speicherplatz erforderlich. Löschen Sie Dateien von Ihrem Gerät, um Speicherplatz freizugeben.</translation>
 <translation id="1039337018183941703">Ungültige oder beschädigte Datei</translation>
 <translation id="1041175011127912238">Diese Seite reagiert nicht</translation>
 <translation id="1041263367839475438">Verfügbare Geräte</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">Bestimmt, wie oft das sichtbare Bild auf dem Bildschirm neu aufgebaut wird</translation>
 <translation id="1061904396131502319">Bald ist es Zeit für eine Pause</translation>
-<translation id="1064552680598333868">Die Änderungen am Mikrofon werden übernommen, wenn Linux das nächste Mal neu gestartet wird.</translation>
 <translation id="1067048845568873861">Erstellt</translation>
 <translation id="1067291318998134776">Linux (Beta)</translation>
 <translation id="1067922213147265141">Weitere Google-Dienste</translation>
@@ -158,6 +158,7 @@
 <translation id="1197088940767939838">Orange</translation>
 <translation id="1197979282329025000">Beim Abrufen der Druckerfunktionen für Drucker "<ph name="PRINTER_NAME" />" ist ein Fehler aufgetreten. Dieser Drucker konnte nicht mit <ph name="CLOUD_PRINT_NAME" /> registriert werden.</translation>
 <translation id="119944043368869598">Alle löschen</translation>
+<translation id="1199814941632954229">Es werden Zertifikate für diese Zertifikatprofile bereitgestellt</translation>
 <translation id="1201402288615127009">Weiter</translation>
 <translation id="1202596434010270079">Die Kiosk-App wurde aktualisiert. Bitte entfernen Sie den USB-Stick.</translation>
 <translation id="120368089816228251">Musiknote</translation>
@@ -300,7 +301,6 @@
 <translation id="1386387014181100145">Hallo!</translation>
 <translation id="138784436342154190">"Beim Start"-Standardseite wiederherstellen?</translation>
 <translation id="1390548061267426325">In normalem Tab öffnen</translation>
-<translation id="1392232653471491344">Neustart von Linux erforderlich</translation>
 <translation id="1393283411312835250">Sonne und Wolken</translation>
 <translation id="1395730723686586365">Updater gestartet</translation>
 <translation id="1396139853388185343">Fehler beim Einrichten des Druckers</translation>
@@ -540,6 +540,7 @@
 <translation id="1670399744444387456">Grundlegend</translation>
 <translation id="167160931442925455">Am lautesten</translation>
 <translation id="1673137583248014546"><ph name="URL" /> möchte den Hersteller und das Modell Ihres Sicherheitsschlüssels aufrufen</translation>
+<translation id="1677306805708094828"><ph name="EXTENSION_TYPE_PARAMETER" /> kann nicht hinzugefügt werden</translation>
 <translation id="1677472565718498478">Verbleibende Zeit: <ph name="TIME" /> h</translation>
 <translation id="1679068421605151609">Entwicklertools</translation>
 <translation id="1679806121152819234">Plugin VM</translation>
@@ -706,7 +707,6 @@
 <translation id="186612162884103683">"<ph name="EXTENSION" />" kann Bilder, Video- und Sounddateien an den geprüften Orten lesen und schreiben.</translation>
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" /> ist zum Abschließen der Installation bereit.</translation>
 <translation id="1868193363684582383">"Ok Google"</translation>
-<translation id="1870629042957780127">Zugriff auf das Mikrofon geben</translation>
 <translation id="1871534214638631766">Zugehörige Informationen durch Rechtsklick mit der Maus oder langes Drücken einblenden</translation>
 <translation id="1871615898038944731">Ihr <ph name="DEVICE_TYPE" /> ist auf dem neuesten Stand</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{Tab in ein anderes Fenster verschieben}other{Tabs in ein anderes Fenster verschieben}}</translation>
@@ -793,6 +793,9 @@
 <translation id="1989112275319619282">Durchsuchen</translation>
 <translation id="1990512225220753005">Keine Verknüpfungen auf dieser Seite anzeigen</translation>
 <translation id="1992397118740194946">Nicht eingerichtet</translation>
+<translation id="199340248656592341">Hier kannst du deine Konten verwalten. <ph name="LINK_BEGIN" />Weitere Informationen<ph name="LINK_END" />&lt;br&gt;&lt;br&gt;
+    Lesezeichen, Passwörter und andere Browserdaten werden mit dem primären Konto synchronisiert.&lt;br&gt;&lt;br&gt;
+    Das Hinzufügen eines Kontos einer Bildungseinrichtung ermöglicht Schülern trotz Jugendschutzeinstellungen eine vereinfachte Anmeldung bei Websites und Erweiterungen.</translation>
 <translation id="1994173015038366702">Website-URL</translation>
 <translation id="1995916364271252349">Steuert, welche Informationen Websites nutzen und anzeigen können (z. B. Standort, Kamera, Pop-ups)</translation>
 <translation id="1997616988432401742">Meine Zertifikate</translation>
@@ -992,6 +995,7 @@ Wenn Sie die Family Link App auf Ihrem Gerät installieren, können Sie die Eins
 <translation id="2241634353105152135">Nur einmal</translation>
 <translation id="2242687258748107519">Dateiinformationen</translation>
 <translation id="2246549592927364792">Bildbeschreibungen von Google verwenden?</translation>
+<translation id="2249111429176737533">Als Tab-Fenster öffnen</translation>
 <translation id="2249605167705922988">z. B. 1-5, 8, 11-13</translation>
 <translation id="2251218783371366160">Mit System Viewer öffnen</translation>
 <translation id="225163402930830576">Netzwerke aktualisieren</translation>
@@ -1185,6 +1189,7 @@ Wenn Sie die Family Link App auf Ihrem Gerät installieren, können Sie die Eins
 <translation id="2489918096470125693">&amp;Ordner hinzufügen...</translation>
 <translation id="2490481887078769936">"<ph name="FILE_NAME" />" wurde aus der Liste entfernt</translation>
 <translation id="249113932447298600">Das Gerät <ph name="DEVICE_LABEL" /> wird derzeit nicht unterstützt.</translation>
+<translation id="2492461744635776704">Zertifikatssignaturanfrage wird vorbereitet</translation>
 <translation id="249303669840926644">Registrierung konnte nicht abgeschlossen werden</translation>
 <translation id="2495777824269688114">Lernen Sie weitere Funktionen kennen oder erhalten Sie Antworten auf Ihre Fragen. Wählen Sie "?", um die Hilfe aufzurufen.</translation>
 <translation id="2496180316473517155">Browserverlauf</translation>
@@ -1296,6 +1301,7 @@ Wenn Sie die Family Link App auf Ihrem Gerät installieren, können Sie die Eins
 <translation id="2633212996805280240">"<ph name="EXTENSION_NAME" />" entfernen?</translation>
 <translation id="263325223718984101"><ph name="PRODUCT_NAME" /> konnte die Installation nicht abschließen, wird jedoch weiterhin über das Datenträgerabbild ausgeführt.</translation>
 <translation id="2633764681656412085">FIDO</translation>
+<translation id="2634199532920451708">Druckverlauf</translation>
 <translation id="2635094637295383009">Twitter</translation>
 <translation id="2635276683026132559">Signatur</translation>
 <translation id="2636625531157955190">Chrome kann nicht auf das Bild zugreifen.</translation>
@@ -1478,6 +1484,7 @@ Wenn Sie die Family Link App auf Ihrem Gerät installieren, können Sie die Eins
 <translation id="2841013758207633010">Zeit</translation>
 <translation id="2841837950101800123">Anbieter</translation>
 <translation id="2844169650293029770">USB-C-Gerät (Port vorne links)</translation>
+<translation id="2844809857160214557">Druckaufträge ansehen und verwalten</translation>
 <translation id="2845382757467349449">Lesezeichenleiste immer anzeigen</translation>
 <translation id="284805635805850872">Schädliche Software entfernen?</translation>
 <translation id="284970761985428403"><ph name="ASCII_NAME" /> (<ph name="UNICODE_NAME" />)</translation>
@@ -1546,6 +1553,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="2932330436172705843"><ph name="PROFILE_DISPLAY_NAME" /> (Konto für Kinder)</translation>
 <translation id="2932483646085333864">Melden Sie sich ab und dann wieder an, um die Synchronisierung zu starten</translation>
 <translation id="2932883381142163287">Missbrauch melden</translation>
+<translation id="2933632078076743449">Letzte Aktualisierung</translation>
 <translation id="2936851848721175671">Sicherung &amp; Wiederherstellung</translation>
 <translation id="2938225289965773019"><ph name="PROTOCOL" />-Links öffnen</translation>
 <translation id="2938845886082362843">Auf Ihrem Sicherheitsschlüssel gespeicherte Anmeldedaten abrufen und löschen</translation>
@@ -1674,6 +1682,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="310671807099593501">Die Website verwendet Bluetooth</translation>
 <translation id="3115147772012638511">Warten auf den Cache...</translation>
 <translation id="3115580024857770654">Alle ausblenden</translation>
+<translation id="3116968597797150452">Zertifikatprofil</translation>
 <translation id="3117362587799608430">Dock nicht vollständig kompatibel</translation>
 <translation id="3118319026408854581"><ph name="PRODUCT_NAME" />-Hilfe</translation>
 <translation id="3118654181216384296">Bitte warten Sie ein paar Minuten und versuchen Sie dann noch einmal, Linux zu starten.</translation>
@@ -1720,6 +1729,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3163201441334626963">Unbekanntes Produkt <ph name="PRODUCT_ID" /> von Anbieter <ph name="VENDOR_ID" /></translation>
 <translation id="3164329792803560526">Tab wird mit <ph name="APP_NAME" /> geteilt</translation>
 <translation id="3165390001037658081">Einige Mobilfunkanbieter blockieren diese Funktion möglicherweise.</translation>
+<translation id="316652501498554287">G Suite for Education-Konten</translation>
 <translation id="3169472444629675720">Discover</translation>
 <translation id="3170072451822350649">Sie können die Anmeldung auch überspringen und <ph name="LINK_START" />als Gast surfen<ph name="LINK_END" />.</translation>
 <translation id="3177909033752230686">Sprache der Seite:</translation>
@@ -1886,6 +1896,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3405664148539009465">Schriftart anpassen</translation>
 <translation id="3405763860805964263">...</translation>
 <translation id="3406605057700382950">&amp;Lesezeichenleiste anzeigen</translation>
+<translation id="340671561090997290">{NUM_EXTENSIONS,plural, =1{Diese Erweiterung könnte schädlich sein}other{Diese Erweiterungen könnten schädlich sein}}</translation>
 <translation id="3409785640040772790">Maps</translation>
 <translation id="3410832398355316179">Durch das Entfernen des Nutzers werden alle mit ihm verknüpften Dateien und lokalen Daten endgültig gelöscht. <ph name="USER_EMAIL" /> kann sich später weiterhin anmelden.</translation>
 <translation id="3412265149091626468">Auswahl anzeigen</translation>
@@ -1992,6 +2003,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3528033729920178817">Diese Seite verfolgt Ihren Standort.</translation>
 <translation id="3528498924003805721">Verknüpfungsziele</translation>
 <translation id="353316712352074340"><ph name="WINDOW_TITLE" /> – stummgeschaltet</translation>
+<translation id="3537881477201137177">Das kann später in den Einstellungen geändert werden</translation>
 <translation id="3538066758857505094">Fehler beim Deinstallieren von Linux. Bitte versuchen Sie es noch einmal.</translation>
 <translation id="354060433403403521">Netzteil</translation>
 <translation id="354068948465830244">Kann Websitedaten lesen und ändern</translation>
@@ -2061,6 +2073,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3616741288025931835">&amp;Browserdaten löschen...</translation>
 <translation id="3617891479562106823">Hintergründe sind nicht verfügbar. Bitte versuchen Sie es später noch einmal.</translation>
 <translation id="3619115746895587757">Cappuccino</translation>
+<translation id="362333465072914957">Es wird darauf gewartet, dass die Zertifizierungsstelle ein Zertifikat ausstellt</translation>
 <translation id="3624567683873126087">Gerät entsperren und im Google-Konto anmelden</translation>
 <translation id="3625258641415618104">Screenshot-Funktion deaktiviert</translation>
 <translation id="3625481642044239431">Ungültige Datei ausgewählt. Versuchen Sie es noch einmal.</translation>
@@ -2100,7 +2113,6 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3661172646479098821">Aktuell werden nur Android-Geräte unterstützt.</translation>
 <translation id="3664511988987167893">Erweiterungssymbol</translation>
 <translation id="3665589677786828986">Chrome hat festgestellt, dass einige Ihrer Einstellungen von einem anderen Programm manipuliert wurden, und hat sie auf die ursprünglichen Standardwerte zurückgesetzt.</translation>
-<translation id="366867565525278777">Bei der Installation ist ein Fehler aufgetreten, da nicht genügend Speicherplatz verfügbar ist. Erforderlicher Speicherplatz: mindestens <ph name="INSTALL_SIZE" />. Löschen Sie Dateien aus dem Gerätespeicher, um Speicherplatz freizugeben.</translation>
 <translation id="3668801437375206837">Damit Bluetooth-Probleme besser diagnostiziert werden können, haben Google-Mitarbeiter die Möglichkeit, Feedbackberichte durch zusätzliche Bluetooth-Protokolle zu ergänzen. Wenn diese Option ausgewählt ist, enthält Ihr Bericht btsnoop- und HCI-Protokolle der aktuellen Sitzung. Personenidentifizierbare Informationen werden dabei so gut wie möglich entfernt. Nur die Administratoren der entsprechenden Chrome OS-Produktgruppe in Listnr haben Zugriff auf die Protokolle. Diese werden nach 90 Tagen dauerhaft gelöscht.</translation>
 <translation id="3668823961463113931">Handler</translation>
 <translation id="3670113805793654926">Geräte von allen Anbietern</translation>
@@ -2240,6 +2252,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="381202950560906753">Weitere hinzufügen</translation>
 <translation id="3812525830114410218">Ungültiges Zertifikat</translation>
 <translation id="3813296892522778813">Wenn Sie keine Ergebnisse erhalten, <ph name="BEGIN_LINK_CHROMIUM" />rufen Sie die Google Chrome-Hilfe auf<ph name="END_LINK_CHROMIUM" /></translation>
+<translation id="3814529970604306954">Konto einer Bildungseinrichtung</translation>
 <translation id="3816118180265633665">Chrome-Farben</translation>
 <translation id="3817524650114746564">Proxy-Einstellungen des Computers öffnen</translation>
 <translation id="3817579325494460411">Keine Angabe</translation>
@@ -2249,6 +2262,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3820749202859700794">Elliptische SECG-Kurve secp521r1 (NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{Eine Erweiterung wurde genehmigt}other{# Erweiterungen wurden genehmigt}}</translation>
 <translation id="3822559385185038546">Dieser Proxy wird von Ihrem Administrator erzwungen</translation>
+<translation id="3823310065043511710">Für Linux sind mindestens <ph name="INSTALL_SIZE" /> freier Speicherplatz erforderlich.</translation>
 <translation id="3826440694796503677">Ihr Administrator hat die Option zum Hinzufügen weiterer Google-Konten deaktiviert</translation>
 <translation id="3827306204503227641">Plug-ins ohne Sandbox weiterhin zulassen</translation>
 <translation id="3827774300009121996">&amp;Vollbildmodus</translation>
@@ -2257,6 +2271,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Ihr Administrator hat 1 potenziell schädliche Erweiterung wieder aktiviert}other{Ihr Administrator hat {NUM_EXTENSIONS} potenziell schädliche Erweiterungen wieder aktiviert}}</translation>
 <translation id="3831436149286513437">Google Drive-Suchvorschläge</translation>
 <translation id="383161972796689579">Der Eigentümer dieses Geräts hat die Funktion zum Hinzufügen neuer Nutzer deaktiviert.</translation>
+<translation id="3834728400518755610">Nach der Änderung der Mikrofoneinstellungen muss Linux heruntergefahren werden. Linux herunterfahren, um fortzufahren.</translation>
 <translation id="3834775135533257713">Die App "<ph name="TO_INSTALL_APP_NAME" />" konnte nicht hinzugefügt werden, da sie mit "<ph name="INSTALLED_APP_NAME" />" in Konflikt steht.</translation>
 <translation id="3835522725882634757"><ph name="PRODUCT_NAME" /> versteht die von diesem Server gesendeten Daten nicht. Bitte <ph name="BEGIN_LINK" />melden Sie einen Programmfehler<ph name="END_LINK" /> und geben Sie die <ph name="BEGIN2_LINK" />Rohdaten<ph name="END2_LINK" /> an.</translation>
 <translation id="383669374481694771">Dies sind allgemeine Informationen zu diesem Gerät und dessen Nutzung, zum Beispiel der Akkustand, System- und App-Aktivitäten und Fehler. Die Daten werden dazu verwendet, Android zu verbessern. Einige aggregierte Daten helfen auch Apps und Partnern von Google, beispielsweise Android-Entwicklern, ihre Apps und Produkte weiter zu verbessern.</translation>
@@ -2360,6 +2375,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="3948507072814225786"><ph name="ORIGIN" /> kann Dateien in den folgenden Ordnern bearbeiten</translation>
 <translation id="3949790930165450333"><ph name="DEVICE_NAME" /> (<ph name="DEVICE_ID" />)</translation>
 <translation id="394984172568887996">Aus Internet Explorer importiert</translation>
+<translation id="3949981384795585075">{NUM_APPS,plural, =1{Diese App könnte schädlich sein}other{Diese Apps könnten schädlich sein}}</translation>
 <translation id="3950820424414687140">Anmelden</translation>
 <translation id="3953834000574892725">Meine Konten</translation>
 <translation id="3954354850384043518">Wird heruntergeladen</translation>
@@ -2585,6 +2601,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="426564820080660648">Verwenden Sie Ethernet, WLAN oder eine mobile Datenverbindung zur Suche nach Updates.</translation>
 <translation id="4266679478228765574">Wenn Sie Ordner entfernen, werden die Dateien nicht mehr geteilt, aber nicht gelöscht.</translation>
 <translation id="4267455501101322486">Wenn du ein Konto hinzufügen möchtest, um auf Bildungsressourcen zuzugreifen, brauchst du die Erlaubnis deiner Eltern</translation>
+<translation id="4267924571297947682">Um Erlaubnis der Eltern bitten</translation>
 <translation id="4267953847983678297">Verbindung mit dem Mobilfunknetz automatisch herstellen</translation>
 <translation id="4268025649754414643">Schlüsselverschlüsselung</translation>
 <translation id="4270393598798225102">Version <ph name="NUMBER" /></translation>
@@ -2749,6 +2766,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4508051413094283164">Alle in Inkognitofenster öffnen</translation>
 <translation id="4508265954913339219">Aktivierung fehlgeschlagen</translation>
 <translation id="4508765956121923607">Q&amp;uelle anzeigen</translation>
+<translation id="4510479820467554003">Liste der Elternkonten</translation>
 <translation id="4510614391273086606">Linux-Dateien und ‑Apps werden auf den Stand des letzten Back-ups zurückgesetzt.</translation>
 <translation id="451407183922382411">Powered by <ph name="COMPANY_NAME" /></translation>
 <translation id="4514610446763173167">Video wiedergeben oder pausieren</translation>
@@ -3002,6 +3020,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4862642413395066333">Signatur von OCSP-Antworten</translation>
 <translation id="4863769717153320198">Auflösung <ph name="WIDTH" /> x <ph name="HEIGHT" /> (Standard)</translation>
 <translation id="4864369630010738180">Anmeldung erfolgt...</translation>
+<translation id="4864805589453749318">Es muss ein Elternteil ausgewählt werden, das seine Zustimmung gibt, damit das Konto einer Bildungseinrichtung hinzugefügt werden kann.</translation>
 <translation id="486635084936119914">Bestimmte Dateitypen nach dem Herunterladen automatisch öffnen</translation>
 <translation id="4869289251183233431">Auf Ihrem Gerät ist nur noch wenig Speicherplatz verfügbar. Zur Verwendung von <ph name="APP_NAME" /> sind mindestens <ph name="MINIMUM_SPACE" /> freier Speicherplatz erforderlich, empfohlen werden über <ph name="RECOMMENDED_SPACE" />. Löschen Sie Dateien vom Gerät, um Speicherplatz freizugeben.</translation>
 <translation id="48704129375571883">Zusätzliche Funktionen hinzufügen</translation>
@@ -3034,6 +3053,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4891089016822695758">Beta-Forum</translation>
 <translation id="4892229439761351791">Website kann Bluetooth verwenden</translation>
 <translation id="489258173289528622">Aktion bei Inaktivität im Akkubetrieb</translation>
+<translation id="4892811427319351753"><ph name="EXTENSION_TYPE_PARAMETER" /> kann nicht aktiviert werden</translation>
 <translation id="4893336867552636863">Dadurch werden die Browserdaten dauerhaft von diesem Gerät gelöscht.</translation>
 <translation id="4893522937062257019">Auf dem Sperrbildschirm</translation>
 <translation id="489454699928748701">Websites erlauben, Bewegungssensoren zu verwenden</translation>
@@ -3056,6 +3076,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4918086044614829423">Annehmen</translation>
 <translation id="4918221908152712722"><ph name="APP_NAME" /> installieren (kein Download erforderlich)</translation>
 <translation id="4920887663447894854">Die folgenden Websites dürfen Ihren Standort auf dieser Seite nicht verfolgen:</translation>
+<translation id="4921290200821452703">Informationen für Eltern zum Konto einer Bildungseinrichtung</translation>
 <translation id="49226369361073053">{0,plural, =0{Gerät jetzt neu starten}=1{Gerät innerhalb von 1 Sekunde neu starten}other{Gerät innerhalb von # Sekunden neu starten}}</translation>
 <translation id="492299503953721473">Android-Apps entfernen</translation>
 <translation id="492363500327720082"><ph name="APP_NAME" /> wird deinstalliert…</translation>
@@ -3101,7 +3122,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4988526792673242964">Seiten</translation>
 <translation id="49896407730300355">&amp;Gegen den Uhrzeigersinn drehen</translation>
 <translation id="4989966318180235467">&amp;Hintergrundseite prüfen</translation>
-<translation id="4991420928586866460">Tasten in der obersten Reihe als Funktionstasten behandeln</translation>
+<translation id="4991420928586866460">Tasten der obersten Reihe als Funktionstasten nutzen</translation>
 <translation id="499165176004408815">Modus mit hohem Kontrast verwenden</translation>
 <translation id="4992458225095111526">Powerwash bestätigen</translation>
 <translation id="4992473555164495036">Ihr Administrator hat die verfügbaren Eingabemethoden eingeschränkt.</translation>
@@ -3210,6 +3231,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="5139112070765735680"><ph name="QUERY_NAME" />, <ph name="DEFAULT_SEARCH_ENGINE_NAME" />-Suche</translation>
 <translation id="5139823398361067371">Geben Sie die PIN für Ihren Sicherheitsschlüssel ein. Falls Sie sie nicht kennen, müssen Sie den Sicherheitsschlüssel zurücksetzen.</translation>
 <translation id="5139955368427980650">Ö&amp;ffnen</translation>
+<translation id="5141421572306659464">Primäres Konto</translation>
 <translation id="5142793792982256885">Scroll-Geschwindigkeit auf dem Touchpad</translation>
 <translation id="5142961317498132443">Authentifizierung</translation>
 <translation id="5143374789336132547">Durch die Erweiterung <ph name="EXTENSION_NAME" /> wurde die Seite geändert, die beim Klicken auf die Schaltfläche "Startseite" erscheint.</translation>
@@ -3310,6 +3332,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="5269977353971873915">Fehler beim Drucken</translation>
 <translation id="5275352920323889391">Hund</translation>
 <translation id="527605982717517565">JavaScript auf <ph name="HOST" /> immer zulassen</translation>
+<translation id="5278823018825269962">Status-ID</translation>
 <translation id="5280174558369304332">Zu entfernende Erweiterungen:</translation>
 <translation id="5280243692621919988">Cookies und Websitedaten löschen, wenn alle Fenster geschlossen werden</translation>
 <translation id="5280426389926346830">Verknüpfung erstellen?</translation>
@@ -3473,6 +3496,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="5488468185303821006">Im Inkognitomodus zulassen</translation>
 <translation id="5489435190927933437">Gespeicherte Passwörter für <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Bluetooth-Gerät trennen</translation>
+<translation id="5490798133083738649">Linux Zugriff auf Ihr Mikrofon erlauben</translation>
 <translation id="549211519852037402">Beige und Weiß</translation>
 <translation id="5493792505296048976">Bildschirm an</translation>
 <translation id="5494362494988149300">Nach &amp;Fertigstellung öffnen</translation>
@@ -3824,6 +3848,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="59324397759951282">USB-Gerät von <ph name="MANUFACTURER_NAME" /></translation>
 <translation id="5932881020239635062">Seriennummer</translation>
 <translation id="5933376509899483611">Zeitzone</translation>
+<translation id="5935158534896975820">Zertifikatssignaturanfrage wird vorbereitet (Warten auf Server)</translation>
 <translation id="5935656526031444304">Safe Browsing verwalten</translation>
 <translation id="5938002010494270685">Sicherheitsupdate verfügbar</translation>
 <translation id="5939518447894949180">Zurücksetzen</translation>
@@ -4661,6 +4686,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7029809446516969842">Passwörter</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" />: serielle Schnittstelle verbunden</translation>
 <translation id="7031962166228839643">TPM wird vorbereitet, bitte warten (dies kann einige Minuten dauern)...</translation>
+<translation id="7036706669646341689">Für Linux sind mindestens <ph name="DISK_SIZE" /> freier Speicherplatz erforderlich. Löschen Sie Dateien von Ihrem Gerät, um Speicherplatz freizugeben.</translation>
 <translation id="7037509989619051237">Text zum Anhören</translation>
 <translation id="7038632520572155338">Schalterzugriff</translation>
 <translation id="7039326228527141150">Auf USB-Geräte von <ph name="VENDOR_NAME" /> zugreifen</translation>
@@ -4794,6 +4820,9 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="720110658997053098">Gerät dauerhaft im Kioskmodus betreiben</translation>
 <translation id="7201118060536064622">"<ph name="DELETED_ITEM_NAME" />" wurde gelöscht</translation>
 <translation id="7201420661433230412">Dateien ansehen</translation>
+<translation id="7203826966018112936">Das Hinzufügen eines Kontos einer Bildungseinrichtung zu einem Profil ermöglicht Schülern trotz Jugendschutzeinstellungen eine vereinfachte Anmeldung bei Websites und Erweiterungen. Es bietet einem Kind jedoch keinen Zugriff auf Lesezeichen, Passwörter und andere Browserdaten, die mit dem Konto einer Bildungseinrichtung synchronisiert werden.&lt;br&gt;&lt;br&gt;
+    Wenn Ihr Kind in der Schule ein Chromebook verwendet und es zu Hause alle Funktionen nutzen soll, um auf alle nötigen Schulaufgaben zugreifen zu können, sollten Sie sich von diesem Family Link-Konto abmelden und im Konto der Bildungseinrichtung von der Chrome OS-Kontenseite aus anmelden. Hinweis: Die Jugendschutzeinstellungen von Family Link gelten dabei nicht.&lt;br&gt;&lt;br&gt;
+    Wenn Ihr Kind in der Schule kein Chromebook verwendet oder wenn Sie alle Aufgaben Ihres Kindes zu Hause lieber über Family Link verwalten möchten, klicken Sie unten auf die Schaltfläche "Weiter", um diesem Profil ein Konto einer Bildungseinrichtung hinzuzufügen.</translation>
 <translation id="7206693748120342859"><ph name="PLUGIN_NAME" /> wird heruntergeladen...</translation>
 <translation id="720715819012336933">{NUM_PAGES,plural, =1{Seite verlassen}other{Seiten verlassen}}</translation>
 <translation id="7207457272187520234">Sie haben die Möglichkeit, Nutzungs- und Diagnosedaten zu senden. Dieses Gerät sendet momentan automatisch Diagnose- und Gerätedaten sowie App-Nutzungsdaten an Google. Die Daten helfen unter anderem dabei, die Stabilität des Systems und der Apps zu verbessern. Einige aggregierte Daten sind auch für Apps und Partner von Google, beispielsweise Android-Entwickler, nützlich. Diese Einstellung wird vom Inhaber erzwungen. Wenn die Einstellung "Zusätzliche Web- &amp; App-Aktivitäten" aktiviert ist, werden diese Daten möglicherweise in Ihrem Google-Konto gespeichert.</translation>
@@ -5088,6 +5117,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7600965453749440009"><ph name="LANGUAGE" /> nie übersetzen</translation>
 <translation id="760197030861754408">Zum Verbinden <ph name="LANDING_PAGE" /> aufrufen.</translation>
 <translation id="7602079150116086782">Keine Tabs von anderen Geräten</translation>
+<translation id="7602173054665172958">Druckverwaltung</translation>
 <translation id="7604942372593434070">Auf Ihre Browseraktivitäten zugreifen</translation>
 <translation id="7605594153474022051">Synchronisierung funktioniert nicht</translation>
 <translation id="7606992457248886637">Zertifizierungsstellen</translation>
@@ -5202,6 +5232,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7744192722284567281">Bei Datenpanne entdeckt</translation>
 <translation id="7750228210027921155">Bild-in-Bild</translation>
 <translation id="7751260505918304024">Alle anzeigen</translation>
+<translation id="7753735457098489144">Die Installation ist fehlgeschlagen, weil nicht genügend Speicherplatz vorhanden ist. Löschen Sie Dateien aus dem Gerätespeicher, um Speicherplatz freizugeben.</translation>
 <translation id="7754704193130578113">Vor dem Download von Dateien nach dem Speicherort fragen</translation>
 <translation id="7755287808199759310">Deine Eltern können die Blockierung aufheben</translation>
 <translation id="7757787379047923882">Text geteilt von <ph name="DEVICE_NAME" /></translation>
@@ -5693,6 +5724,7 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="833986336429795709">App auswählen, um diesen Link zu öffnen</translation>
 <translation id="8342861492835240085">Sammlung auswählen</translation>
 <translation id="834290227245955730">Ungültige PIN. Noch <ph name="RETRIES" /> Versuche.</translation>
+<translation id="8347227221149377169">Druckaufträge</translation>
 <translation id="8350789879725387295">Eingabestift-Tools in Leiste</translation>
 <translation id="8351316842353540018">Optionen für Bedienungshilfen immer anzeigen</translation>
 <translation id="8351419472474436977">Diese Erweiterung hat die Kontrolle über Ihre Proxyeinstellungen übernommen. Das bedeutet, dass sie sämtliche Onlineaktivitäten ändern, abbrechen oder überwachen kann. Wenn Sie nicht sicher sind, wie es zu dieser Änderung gekommen ist, war sie wahrscheinlich nicht beabsichtigt.</translation>
@@ -5916,7 +5948,6 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="8650543407998814195">Sie können zwar nicht mehr auf Ihr altes Profil zugreifen, aber Sie können es noch entfernen.</translation>
 <translation id="8651585100578802546">Erneutes Laden dieser Seite erzwingen</translation>
 <translation id="8652400352452647993">Erweiterung packen: Fehler</translation>
-<translation id="8653578191563425126">Speicherplatz, der für Crostini reserviert wird (kann später geändert werden).</translation>
 <translation id="8654151524613148204">Ihr Computer kann diese Datei leider nicht verarbeiten, da sie zu groß ist.</translation>
 <translation id="8655295600908251630">Kanal</translation>
 <translation id="8655319619291175901">Hoppla... etwas ist schiefgelaufen.</translation>
@@ -6219,6 +6250,7 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="9008201768610948239">Ignorieren</translation>
 <translation id="9009369504041480176">Hochgeladen (<ph name="PROGRESS_PERCENT" /> %)...</translation>
 <translation id="9011163749350026987">Symbol immer zeigen</translation>
+<translation id="9013037634206938463">Zur Installation von Linux sind mindestens <ph name="INSTALL_SIZE" /> freier Speicherplatz erforderlich. Löschen Sie Dateien von Ihrem Gerät, um Speicherplatz freizugeben.</translation>
 <translation id="9013707997379828817">Ihr Administrator hat dieses Gerät zurückgesetzt. Bitte speichern Sie wichtige Dateien und starten Sie es dann neu. Alle Daten auf dem Gerät werden gelöscht.</translation>
 <translation id="901668144954885282">In Google Drive sichern</translation>
 <translation id="9018218886431812662">Installation abgeschlossen</translation>
@@ -6291,6 +6323,7 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="9101691533782776290">App starten</translation>
 <translation id="9102610709270966160">Erweiterung aktivieren</translation>
 <translation id="9103868373786083162">Drücken, um zurückzugehen. Kontextmenü, um Verlauf aufzurufen</translation>
+<translation id="9108692355621501797">In den <ph name="LINK_BEGIN" />G Suite for Education-Datenschutzhinweisen<ph name="LINK_END" /> können G Suite for Education-Nutzer und Eltern nachlesen, welche Daten zu welchen Zwecken erfasst werden und was damit passiert.</translation>
 <translation id="9108808586816295166">Sicheres DNS ist möglicherweise nicht immer verfügbar</translation>
 <translation id="9109122242323516435">Löschen Sie Dateien aus dem Gerätespeicher, um Speicherplatz freizugeben.</translation>
 <translation id="9109283579179481106">Verbindung mit Mobilfunknetz herstellen</translation>

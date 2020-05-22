@@ -878,6 +878,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />ກຳລັງເປີດໃຊ້ Windows Network Diagnostics<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">ໂຫຼດນະ​ໂຍ​ບາຍຄືນໃໝ່</translation>
 <translation id="4728558894243024398">ເວທີ</translation>
+<translation id="4731638775147756694">ຜູ້ເບິ່ງແຍງລະບົບຂອງທ່ານໄດ້ບລັອກແອັບພລິເຄຊັນນີ້ໄວ້ແລ້ວ</translation>
 <translation id="4731967714531604179">Prc2 (ຊອງຈົດໝາຍ)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> ຕ້ອງການໃຊ້ສະຖານທີ່ຂອງອຸປະກອນຂອງທ່ານ</translation>
 <translation id="4736825316280949806">ປິດເປີດ Chromium ຄືນໃໝ່</translation>
@@ -1248,6 +1249,7 @@
 <translation id="6263376278284652872">ບຸກມາກສ໌ <ph name="DOMAIN" /></translation>
 <translation id="6264485186158353794">ກັບ​ຄືນ​ສູ່ຄາມປອດ​ໄພ</translation>
 <translation id="6266934640124581640">ສີ​ຂຽວ​ອົມ​ຟ້າ​ຈາງ</translation>
+<translation id="6272383483618007430">Google Update</translation>
 <translation id="6276112860590028508">ໜ້າຈາກລາຍການທີ່ຈະອ່ານຂອງທ່ານປາກົດຢູ່ບ່ອນນີ້</translation>
 <translation id="627746635834430766">ເພື່ອຈ່າຍໄດ້ໄວກວ່າໃນຄັ້ງຕໍ່ໄປ, ກະລຸນາບັນທຶກບັດ ແລະ ທີ່ຢູ່ຮຽກເກັບເງິນຂອງທ່ານໄວ້ໃນບັນຊີ Google ຂອງທ່ານ.</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />ຈະບໍ່ບັນທຶກ<ph name="END_EMPHASIS" /> ຂໍ້ມູນຕໍ່ໄປນີ້:
@@ -1602,7 +1604,6 @@
 <translation id="7763386264682878361">ຕົວແຍກວິເຄາະໄຟລ໌ Manifest</translation>
 <translation id="7764225426217299476">ເພີ່ມ​ທີ່​ຢູ່</translation>
 <translation id="7766518757692125295">Skirt</translation>
-<translation id="7767271804335921384">ຜູ້ເບິ່ງແຍງລະບົບຂອງທ່ານໄດ້ບລັອກແອັບພລິເຄຊັນໄວ້ແລ້ວ</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">ລຳດັບດຽວກັນປີ້ນໜ້າຂຶ້ນ</translation>
 <translation id="777702478322588152">ແຂວງ</translation>

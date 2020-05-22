@@ -867,6 +867,7 @@ Ich používanie by bolo inak blokované vašimi nastaveniami ochrany súkromia.
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Spustiť nástroj Diagnostika siete systému Windows<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Znova načítať pravidlá</translation>
 <translation id="4728558894243024398">Platforma</translation>
+<translation id="4731638775147756694">Táto aplikácia bola zablokovaná vaším správcom</translation>
 <translation id="4731967714531604179">Prc2 (obálka)</translation>
 <translation id="4733082559415072992">Web <ph name="URL" /> chce používať polohu vášho zariadenia</translation>
 <translation id="4736825316280949806">Reštartujte Chromium</translation>
@@ -1587,7 +1588,6 @@ Ich používanie by bolo inak blokované vašimi nastaveniami ochrany súkromia.
 <translation id="7763386264682878361">Analyzátor manifestov platieb</translation>
 <translation id="7764225426217299476">Pridať adresu</translation>
 <translation id="7766518757692125295">Lem</translation>
-<translation id="7767271804335921384">Táto aplikácia bola zablokovaná vaším správcom</translation>
 <translation id="7770259615151589601">Určené – dlhé</translation>
 <translation id="7773005668374414287">V rovnakom poradí lícom nahor</translation>
 <translation id="777702478322588152">Prefektúra</translation>

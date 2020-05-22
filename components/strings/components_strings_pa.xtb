@@ -874,6 +874,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows ਨੈੱਟਵਰਕ ਤਸ਼ਖੀਸ ਚਲਾਇਆ ਜਾ ਰਿਹਾ ਹੈ<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">ਨੀਤੀਆਂ ਰੀਲੋਡ ਕਰੋ</translation>
 <translation id="4728558894243024398">ਪਲੇਟਫਾਰਮ</translation>
+<translation id="4731638775147756694">ਇਸ ਐਪਲੀਕੇਸ਼ਨ ਨੂੰ ਤੁਹਾਡੇ ਪ੍ਰਸ਼ਾਸਕ ਵੱਲੋਂ ਬਲਾਕ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ</translation>
 <translation id="4731967714531604179">Prc2 (ਲਿਫ਼ਾਫ਼ਾ)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> ਦੀ ਤੁਹਾਡੇ ਡੀਵਾਈਸ ਦੀ ਟਿਕਾਣਾ ਜਾਣਕਾਰੀ ਵਰਤਣ ਦੀ ਇੱਛਾ ਹੈ</translation>
 <translation id="4736825316280949806">Chromium ਨੂੰ ਮੁੜ-ਚਾਲੂ ਕਰੋ</translation>
@@ -1243,6 +1244,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> ਬੁੱਕਮਾਰਕਸ</translation>
 <translation id="6264485186158353794">ਸੁਰੱਖਿਆ 'ਤੇ ਵਾਪਸ ਜਾਓ</translation>
 <translation id="6266934640124581640">ਹਲਕਾ ਹਰਾ-ਨੀਲਾ</translation>
+<translation id="6272383483618007430">Google ਅੱਪਡੇਟ</translation>
 <translation id="6276112860590028508">ਤੁਹਾਡੀ ਪੜ੍ਹਤ ਸੂਚੀ ਵਿੱਚੋਂ ਪੰਨੇ ਇੱਥੇ ਵਿਖਾਈ ਦੇਣਗੇ</translation>
 <translation id="627746635834430766">ਅਗਲੀ ਵਾਰ ਵਧੇਰੇ ਤੇਜ਼ੀ ਨਾਲ ਭੁਗਤਾਨ ਕਰਨ ਲਈ, ਆਪਣੇ ਕਾਰਡ ਅਤੇ ਬਿਲਿੰਗ ਪਤੇ ਨੂੰ ਆਪਣੇ Google ਖਾਤੇ ਵਿੱਚ ਰੱਖਿਅਤ ਕਰੋ।</translation>
 <translation id="6279516281132775660">Chrome ਅੱਗੇ ਦਿੱਤੀ ਜਾਣਕਾਰੀ ਨੂੰ<ph name="BEGIN_EMPHASIS" />ਰੱਖਿਅਤ ਨਹੀਂ ਕਰੇਗਾ<ph name="END_EMPHASIS" />:
@@ -1597,7 +1599,6 @@
 <translation id="7763386264682878361">ਭੁਗਤਾਨ ਮੈਨੀਫ਼ੈਸਟ ਪਾਰਸਰ</translation>
 <translation id="7764225426217299476">ਪਤਾ ਜੋੜੋ</translation>
 <translation id="7766518757692125295">ਕਿਨਾਰਾ</translation>
-<translation id="7767271804335921384">ਐਪਲੀਕੇਸ਼ਨ ਨੂੰ ਤੁਹਾਡੇ ਪ੍ਰਸ਼ਾਸਕ ਵੱਲੋਂ ਬਲਾਕ ਕਰ ਦਿੱਤਾ ਗਿਆ ਹੈ</translation>
 <translation id="7770259615151589601">ਮਨੋਨੀਤ-ਲੰਬਾ</translation>
 <translation id="7773005668374414287">ਉਹੀ ਕ੍ਰਮ ਵਿੱਚ ਪਾਸਾ ਉੱਪਰ ਕੀਤੇ</translation>
 <translation id="777702478322588152">ਪ੍ਰਫੀਚਰ</translation>

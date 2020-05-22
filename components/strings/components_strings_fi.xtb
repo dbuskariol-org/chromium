@@ -879,6 +879,7 @@ Muussa tapauksessa tämä estetään tietosuoja-asetuksilla. Jos sallit tämän,
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windowsin verkon diagnostiikkaa<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Päivitä käytännöt</translation>
 <translation id="4728558894243024398">Käyttöympäristö</translation>
+<translation id="4731638775147756694">Järjestelmänvalvoja on estänyt tämän sovelluksen</translation>
 <translation id="4731967714531604179">Prc2 (kirjekuori)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> haluaa käyttää laitteesi sijaintia.</translation>
 <translation id="4736825316280949806">Käynnistä Chromium uudelleen.</translation>
@@ -1249,6 +1250,7 @@ Muussa tapauksessa tämä estetään tietosuoja-asetuksilla. Jos sallit tämän,
 <translation id="6263376278284652872">Verkkotunnuksen <ph name="DOMAIN" /> kirjanmerkit</translation>
 <translation id="6264485186158353794">Takaisin suojaukseen</translation>
 <translation id="6266934640124581640">Vaaleanturkoosi</translation>
+<translation id="6272383483618007430">Google-päivitys</translation>
 <translation id="6276112860590028508">Lukulistasi sivuja tulee näkyviin tänne.</translation>
 <translation id="627746635834430766">Jos haluat maksaa nopeammin ensi kerralla, tallenna kortti ja laskutusosoite Google-tilillesi.</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />ei tallenna<ph name="END_EMPHASIS" /> näitä tietoja:
@@ -1603,7 +1605,6 @@ Lisätietoja:
 <translation id="7763386264682878361">Maksuluettelon jäsentäjä</translation>
 <translation id="7764225426217299476">Lisää osoite</translation>
 <translation id="7766518757692125295">Reunus</translation>
-<translation id="7767271804335921384">Järjestelmänvalvoja on estänyt sovelluksen</translation>
 <translation id="7770259615151589601">Määritetty-pitkä</translation>
 <translation id="7773005668374414287">Sama järjestys tulostuspuoli ylöspäin</translation>
 <translation id="777702478322588152">Prefektuuri</translation>

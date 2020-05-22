@@ -879,6 +879,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows নেটওয়ার্ক ডায়গনিস্টিক্স চালান<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">নীতিগুলি রিলোড করুন</translation>
 <translation id="4728558894243024398">প্ল্যাটফর্ম</translation>
+<translation id="4731638775147756694">আপনার অ্যাডমিনিস্ট্রেটর এই অ্যাপ্লিকেশন ব্লক করে দিয়েছেন</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> আপনার ডিভাইসের লোকেশন ব্যবহার করতে চায়</translation>
 <translation id="4736825316280949806">Chromium পুনরায় চালু করুন</translation>
@@ -1248,6 +1249,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> বুকমার্কগুলি</translation>
 <translation id="6264485186158353794">সুরক্ষাতে ফিরুন</translation>
 <translation id="6266934640124581640">হালকা টিল</translation>
+<translation id="6272383483618007430">Google আপডেট</translation>
 <translation id="6276112860590028508">পড়ার তালিকার পৃষ্ঠাগুলি এখানে দেখা যাবে</translation>
 <translation id="627746635834430766">পরের বার আরও দ্রুত পেমেন্ট করা জন্য আপনার এই কার্ড এবং বিলিং ঠিকানাটি Google অ্যাকাউন্টে সেভ করে রাখুন।</translation>
 <translation id="6279516281132775660">এক্ষেত্রে নিচে দেওয়া তথ্য Chrome <ph name="BEGIN_EMPHASIS" />সেভ করবে না<ph name="END_EMPHASIS" />:
@@ -1602,7 +1604,6 @@
 <translation id="7763386264682878361">পেমেন্ট ম্যানিফেস্ট বিশ্লেষক</translation>
 <translation id="7764225426217299476">ঠিকানা যোগ করুন</translation>
 <translation id="7766518757692125295">স্কার্ট</translation>
-<translation id="7767271804335921384">আপনার অ্যাডমিনিস্ট্রেটর অ্যাপ্লিকেশনটি ব্লক করে দিয়েছেন</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">একই অর্ডার, সামনের দিক উপরে</translation>
 <translation id="777702478322588152">জেলা</translation>

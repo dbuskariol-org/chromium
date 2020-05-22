@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">Pasiekti bet kurį iš šių USB įrenginių</translation>
 <translation id="1036982837258183574">Paspauskite |<ph name="ACCELERATOR" />|, kad išeitumėte iš viso ekrano režimo</translation>
 <translation id="1038168778161626396">Tik šifruoti</translation>
+<translation id="1038462104119736705">„Linux“ rekomenduojama turėti bent <ph name="INSTALL_SIZE" /> vietos. Kad padidintumėte nemokamos saugyklos vietos, ištrinkite failus iš įrenginio.</translation>
 <translation id="1039337018183941703">Netinkamas arba sugadintas failas</translation>
 <translation id="1041175011127912238">Šis puslapis neatsako</translation>
 <translation id="1041263367839475438">Pasiekiami įrenginiai</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">Nustatomas ekrano atnaujinimo dažnis</translation>
 <translation id="1061904396131502319">Beveik atėjo laikas padaryti pertrauką</translation>
-<translation id="1064552680598333868">Mikrofono pakeitimai įsigalios kitą kartą iš naujo paleidus „Linux“.</translation>
 <translation id="1067048845568873861">Sukurtas</translation>
 <translation id="1067291318998134776">Linux (beta)</translation>
 <translation id="1067922213147265141">Kitos „Google“ paslaugos</translation>
@@ -301,7 +301,6 @@
 <translation id="1386387014181100145">Sveiki!</translation>
 <translation id="138784436342154190">Atkurti numatytąjį paleidimo puslapį?</translation>
 <translation id="1390548061267426325">Atidaryti kaip įprastą skirtuką</translation>
-<translation id="1392232653471491344">Būtina iš naujo paleisti „Linux“</translation>
 <translation id="1393283411312835250">Saulė ir debesys</translation>
 <translation id="1395730723686586365">Atnaujinimo priemonė paleista</translation>
 <translation id="1396139853388185343">Nustatant spausdintuvą įvyko klaida</translation>
@@ -711,7 +710,6 @@
 <translation id="186612162884103683">„<ph name="EXTENSION" />“ patikrintose vietose gali nuskaityti ir įrašyti vaizdus, vaizdo įrašus ir garso failus.</translation>
 <translation id="1867780286110144690">„<ph name="PRODUCT_NAME" />“ pasirengusi baigti diegimą</translation>
 <translation id="1868193363684582383">„Ok Google“</translation>
-<translation id="1870629042957780127">Suteikti prieigą prie mikrofono</translation>
 <translation id="1871534214638631766">Rodyti susijusią informaciją, kai turinys spustelėjamas dešiniuoju klavišu arba ilgai paspaudžiamas</translation>
 <translation id="1871615898038944731">„<ph name="DEVICE_TYPE" />“ atnaujintas</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{Perkelti skirtuką į kitą langą}one{Perkelti skirtukus į kitą langą}few{Perkelti skirtukus į kitą langą}many{Perkelti skirtukus į kitą langą}other{Perkelti skirtukus į kitą langą}}</translation>
@@ -2009,6 +2007,7 @@ Jei nenorite, dabar atsijunkite, kad šios paskyros pakeitimai būtų matomi ši
 <translation id="3528033729920178817">Šiame puslapyje stebima jūsų vietovė.</translation>
 <translation id="3528498924003805721">Tiksliniai spartieji klavišai</translation>
 <translation id="353316712352074340">„<ph name="WINDOW_TITLE" />“ – garso įrašas nutildytas</translation>
+<translation id="3537881477201137177">Tai galėsite pakeisti vėliau „Nustatymų“ skiltyje</translation>
 <translation id="3538066758857505094">Pašalinant „Linux“ įvyko klaida. Bandykite dar kartą.</translation>
 <translation id="354060433403403521">Kintamosios srovės adapteris</translation>
 <translation id="354068948465830244">Gali būti skaitomi ir keičiami svetainės duomenys</translation>
@@ -2118,7 +2117,6 @@ Jei nenorite, dabar atsijunkite, kad šios paskyros pakeitimai būtų matomi ši
 <translation id="3661172646479098821">Šiuo metu palaikomi tik „Android“ įrenginiai.</translation>
 <translation id="3664511988987167893">Plėtinio piktograma</translation>
 <translation id="3665589677786828986">„Chrome“ aptiko, kad kai kuriuos nustatymus sugadino kita programa, ir nustatė juos iš naujo į pirminius numatytuosius nustatymus.</translation>
-<translation id="366867565525278777">Įdiegti nepavyko, nes pritrūko saugyklos vietos. Reikia bent <ph name="INSTALL_SIZE" /> laisvos vietos. Kad atlaisvintumėte vietos, ištrinkite failus iš įrenginio saugyklos.</translation>
 <translation id="3668801437375206837">Siekdami geriau diagnozuoti „Bluetooth“ problemas, „Google“ darbuotojai gali įtraukti papildomų „Bluetooth“ žurnalų į savo atsiliepimų ataskaitas. Kai ši parinktis pažymėta, į ataskaitą iš dabartinės sesijos bus įtraukti „btsnoop“ ir HCI žurnalai, pašalinus kuo daugiau AAI. Pasiekti šiuos žurnalus galės tik „Listnr“ „Chrome“ OS produkto grupės valdytojai. Žurnalai bus panaikinti po 90 dienų.</translation>
 <translation id="3668823961463113931">Apdorojimo programos</translation>
 <translation id="3670113805793654926">Įrenginiai iš bet kurio paslaugos teikėjo</translation>
@@ -2268,6 +2266,7 @@ Jei nenorite, dabar atsijunkite, kad šios paskyros pakeitimai būtų matomi ši
 <translation id="3820749202859700794">SECG elipsės formos kreivės secp521r1 (taip pat vadinama NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{Plėtinys patvirtintas}one{Patvirtintas # plėtinys}few{Patvirtinti # plėtiniai}many{Patvirtinta # plėtinio}other{Patvirtinta # plėtinių}}</translation>
 <translation id="3822559385185038546">Šį tarpinio serverio nustatymą priverstinai pritaikė administratorius</translation>
+<translation id="3823310065043511710">„Linux“ rekomenduojama turėti bent <ph name="INSTALL_SIZE" /> vietos.</translation>
 <translation id="3826440694796503677">Administratorius išjungė galimybę pridėti daugiau „Google“ paskyrų</translation>
 <translation id="3827306204503227641">Toliau leisti ne „smėlio dėžės“ papildinius</translation>
 <translation id="3827774300009121996">&amp;Visas ekranas</translation>
@@ -2276,6 +2275,7 @@ Jei nenorite, dabar atsijunkite, kad šios paskyros pakeitimai būtų matomi ši
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Administratorius vėl įjungė 1 potencialiai žalingą plėtinį}one{Administratorius vėl įjungė {NUM_EXTENSIONS} potencialiai žalingą plėtinį}few{Administratorius vėl įjungė {NUM_EXTENSIONS} potencialiai žalingus plėtinius}many{Administratorius vėl įjungė {NUM_EXTENSIONS} potencialiai žalingo plėtinio}other{Administratorius vėl įjungė {NUM_EXTENSIONS} potencialiai žalingų plėtinių}}</translation>
 <translation id="3831436149286513437">„Google“ disko paieškos pasiūlymai</translation>
 <translation id="383161972796689579">Šio įrenginio savininkas neleido pridėti naujų naudotojų</translation>
+<translation id="3834728400518755610">Norint pritaikyti mikrofono nustatymų pakeitimą, reikia išjungti „Linux“. Išjunkite „Linux“, jei norite tęsti.</translation>
 <translation id="3834775135533257713">Nepavyko pridėti programos „<ph name="TO_INSTALL_APP_NAME" />“, nes ji nesuderinama su „<ph name="INSTALLED_APP_NAME" />“.</translation>
 <translation id="3835522725882634757">O ne! Šis serveris siunčia duomenis, kurių „<ph name="PRODUCT_NAME" />“ nesupranta. <ph name="BEGIN_LINK" />Pateikite ataskaitą apie riktą<ph name="END_LINK" /> ir įtraukite <ph name="BEGIN2_LINK" />neapdorotą sąrašą<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Tai yra bendra informacija apie šį įrenginį ir jo naudojimą (pvz., akumuliatoriaus įkrovos lygį, sistemos ir programų veiklą bei klaidas). Duomenys bus naudojami siekiant patobulinti „Android“, o tam tikra sukaupta informacija taip pat padės „Google“ programoms ir partneriams, pvz., „Android“ kūrėjams, pagerinti savo programas ir produktus.</translation>
@@ -3500,6 +3500,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="5488468185303821006">Leisti „inkognito“ režimą</translation>
 <translation id="5489435190927933437">Išsaugoti <ph name="DOMAIN" /> slaptažodžiai</translation>
 <translation id="5490721031479690399">„Bluetooth“ įrenginio atjungimas</translation>
+<translation id="5490798133083738649">Leidimas „Linux“ pasiekti mikrofoną</translation>
 <translation id="549211519852037402">Smėlio spalva ir balta</translation>
 <translation id="5493792505296048976">ekranas įjungtas</translation>
 <translation id="5494362494988149300">&amp;Baigus atidaryti</translation>
@@ -4690,6 +4691,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="7029809446516969842">Slaptažodžiai</translation>
 <translation id="7031608529463141342">„<ph name="WINDOW_TITLE" />“ – nuoseklusis prievadas prijungtas</translation>
 <translation id="7031962166228839643">Ruošiamas TPM; palaukite (tai gali užtrukti kelias minutes)...</translation>
+<translation id="7036706669646341689">„Linux“ rekomenduojama turėti <ph name="DISK_SIZE" /> vietos. Kad padidintumėte nemokamos saugyklos vietos, ištrinkite failus iš įrenginio.</translation>
 <translation id="7037509989619051237">Tekstas, kurį galima išklausyti</translation>
 <translation id="7038632520572155338">Prieiga jungikliu</translation>
 <translation id="7039326228527141150">Pasiekti „<ph name="VENDOR_NAME" />“ USB įrenginius</translation>
@@ -5235,6 +5237,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="7744192722284567281">Rasta duomenų saugos pažeidime</translation>
 <translation id="7750228210027921155">Vaizdas vaizde</translation>
 <translation id="7751260505918304024">Rodyti visas</translation>
+<translation id="7753735457098489144">Įdiegti nepavyko, nes pritrūko saugyklos vietos. Kad atlaisvintumėte vietos, ištrinkite failus iš įrenginio saugyklos.</translation>
 <translation id="7754704193130578113">Prieš atsiunčiant failą klausti, kur jį išsaugoti</translation>
 <translation id="7755287808199759310">Jūsų tėtis ar mama gali ją atblokuoti už jus</translation>
 <translation id="7757787379047923882">Tekstas bendrinamas iš „<ph name="DEVICE_NAME" />“</translation>
@@ -5951,7 +5954,6 @@ Rakto failą laikykite saugioje vietoje. Jo reikės, kai norėsite sukurti nauja
 <translation id="8650543407998814195">Nors nebegalite pasiekti seno profilio, vis tiek galite jį pašalinti.</translation>
 <translation id="8651585100578802546">Priversti iš naujo įkelti šį puslapį</translation>
 <translation id="8652400352452647993">Paketo plėtinio klaida</translation>
-<translation id="8653578191563425126">„Crostini“ rezervuojama vieta diske (vėliau galėsite tai pakeisti).</translation>
 <translation id="8654151524613148204">Failas per didelis, kad jį būtų galima apdoroti kompiuteriu. Apgailestaujame.</translation>
 <translation id="8655295600908251630">Kanalas</translation>
 <translation id="8655319619291175901">Oi, įvyko klaida.</translation>
@@ -6254,6 +6256,7 @@ Rakto failą laikykite saugioje vietoje. Jo reikės, kai norėsite sukurti nauja
 <translation id="9008201768610948239">Nepaisyti</translation>
 <translation id="9009369504041480176">Įkeliama (<ph name="PROGRESS_PERCENT" /> %)...</translation>
 <translation id="9011163749350026987">Visada rodyti piktogramą</translation>
+<translation id="9013037634206938463">Norint įdiegti „Linux“ reikia <ph name="INSTALL_SIZE" /> laisvos vietos. Kad padidintumėte nemokamos saugyklos vietos, ištrinkite failus iš įrenginio.</translation>
 <translation id="9013707997379828817">Administratorius atkūrė šį įrenginį. Išsaugokite svarbius failus, tada paleiskite jį iš naujo. Visi šiame įrenginyje esantys duomenys bus ištrinti.</translation>
 <translation id="901668144954885282">Atsarginės kopijos kūrimas „Google“ diske</translation>
 <translation id="9018218886431812662">Diegimas baigtas</translation>

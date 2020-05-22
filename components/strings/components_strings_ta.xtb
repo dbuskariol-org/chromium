@@ -868,6 +868,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows நெட்வொர்க் டயக்னாஸ்டிக்ஸ் கருவியை இயக்கவும்<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">கொள்கைகளை மீண்டும் ஏற்று</translation>
 <translation id="4728558894243024398">ப்ளாட்ஃபார்ம்</translation>
+<translation id="4731638775147756694">உங்கள் நிர்வாகி இந்த ஆப்ஸைத் தடுத்துள்ளார்</translation>
 <translation id="4731967714531604179">Prc2 (என்வலப்)</translation>
 <translation id="4733082559415072992">உங்கள் சாதனத்தின் இருப்பிடத்தை, <ph name="URL" /> பயன்படுத்த விரும்புகிறது</translation>
 <translation id="4736825316280949806">Chromiumஐ மீண்டும் தொடங்கவும்</translation>
@@ -1237,6 +1238,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> புக்மார்க்குகள்</translation>
 <translation id="6264485186158353794">பாதுகாப்பான நிலைக்குத் திரும்பு</translation>
 <translation id="6266934640124581640">வெளிர் பசும் நீலம்</translation>
+<translation id="6272383483618007430">Google புதுப்பிப்பு</translation>
 <translation id="6276112860590028508">வாசிப்புப் பட்டியலில் இருக்கும் பக்கங்கள் இங்கே தோன்றும்</translation>
 <translation id="627746635834430766">அடுத்த முறை விரைவாகப் பணம் அனுப்ப, உங்கள் கார்டையும் பில்லிங் முகவரியையும் Google கணக்கில் சேமிக்கவும்.</translation>
 <translation id="6279516281132775660">பின்வரும் தகவலை Chrome <ph name="BEGIN_EMPHASIS" />சேமிக்காது<ph name="END_EMPHASIS" />:
@@ -1591,7 +1593,6 @@
 <translation id="7763386264682878361">பேமெண்ட் மெனிஃபெஸ்ட் பாகுபடுத்தி</translation>
 <translation id="7764225426217299476">முகவரியைச் சேர்</translation>
 <translation id="7766518757692125295">ஸ்கர்ட்</translation>
-<translation id="7767271804335921384">உங்கள் நிர்வாகி இந்த ஆப்ஸைத் தடுத்துள்ளார்</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">அதே வரிசையில் மேல் நோக்கிய பாணி</translation>
 <translation id="777702478322588152">ப்ரீஃபெக்சர்</translation>

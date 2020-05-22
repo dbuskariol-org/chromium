@@ -882,6 +882,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />កំពុងដំណើរការការវិភាគបណ្តាញ Windows<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">ដំណើរការគោលការណ៍ឡើងវិញ</translation>
 <translation id="4728558894243024398">អង្គប្រតិបត្តិការ</translation>
+<translation id="4731638775147756694">កម្មវិធីនេះ​ត្រូវបាន​ទប់ស្កាត់​ដោយ​អ្នកគ្រប់គ្រង​របស់អ្នក</translation>
 <translation id="4731967714531604179">Prc2 (ស្រោម​សំបុត្រ)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> ចង់ប្រើ​ទីតាំង​ឧបករណ៍​របស់អ្នក</translation>
 <translation id="4736825316280949806">ចាប់ផ្តើម Chromium ឡើងវិញ</translation>
@@ -1252,6 +1253,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> ចំណាំ</translation>
 <translation id="6264485186158353794">ត្រលប់ទៅកន្លែងសុវត្ថិភាព</translation>
 <translation id="6266934640124581640">បៃតង​ស្រាល</translation>
+<translation id="6272383483618007430">Google បច្ចុប្បន្នភាព</translation>
 <translation id="6276112860590028508">ទំព័រ​ពីបញ្ជីអាន​របស់​អ្នក​បង្ហាញ​នៅ​ទីនេះ</translation>
 <translation id="627746635834430766">ដើម្បី​បង់ប្រាក់​លឿន​ជាងនេះ​នៅពេល​ក្រោយ សូម​រក្សា​ទុកបណ្ណ និង​អាសយដ្ឋាន​ចេញ​វិក្កយបត្រ​របស់អ្នក​ទៅក្នុង​គណនី Google របស់​អ្នក។</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />នឹង​មិន​រក្សាទុក<ph name="END_EMPHASIS" />ព័ត៌មាន​ខាងក្រោម​ទេ៖
@@ -1607,7 +1609,6 @@
 <translation id="7763386264682878361">ការបង់ប្រាក់​សម្រាប់​កម្មវិធី​ញែក​ជាក់លាក់</translation>
 <translation id="7764225426217299476">បន្ថែមអាសយដ្ឋាន</translation>
 <translation id="7766518757692125295">ស្រទាប់ខាងក្រៅ</translation>
-<translation id="7767271804335921384">កម្មវិធី​ត្រូវបាន​ទប់ស្កាត់​ដោយ​អ្នកគ្រប់គ្រង​របស់អ្នក</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">ផ្ងារឡើង​តាមលំដាប់​លំដោយដូចគ្នា</translation>
 <translation id="777702478322588152">អាណាខេត្ត</translation>

@@ -878,6 +878,7 @@ Ellers vil det blive blokeret af dine privatlivsindstillinger. Det giver det ind
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Køre Windows Netværksdiagnosticering<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Opdater politikker</translation>
 <translation id="4728558894243024398">Platform</translation>
+<translation id="4731638775147756694">Denne app er blokeret af din administrator</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> anmoder om at bruge enhedens placering</translation>
 <translation id="4736825316280949806">Genstart Chromium</translation>
@@ -1248,6 +1249,7 @@ Ellers vil det blive blokeret af dine privatlivsindstillinger. Det giver det ind
 <translation id="6263376278284652872"><ph name="DOMAIN" />-bogmærker</translation>
 <translation id="6264485186158353794">Tilbage i sikkerhed</translation>
 <translation id="6266934640124581640">Lys grønblå</translation>
+<translation id="6272383483618007430">Google Update</translation>
 <translation id="6276112860590028508">Sider fra din læseliste vises her</translation>
 <translation id="627746635834430766">Gem dit kort og din faktureringsadresse på din Google-konto for at betale hurtigere næste gang.</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />gemmer ikke<ph name="END_EMPHASIS" /> følgende oplysninger:
@@ -1602,7 +1604,6 @@ Yderligere oplysninger:
 <translation id="7763386264682878361">Værktøj til parsing af betalingsmanifester</translation>
 <translation id="7764225426217299476">Tilføj adresse</translation>
 <translation id="7766518757692125295">Skørte</translation>
-<translation id="7767271804335921384">Appen er blevet blokeret af din administrator</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Samme rækkefølge med forside opad</translation>
 <translation id="777702478322588152">Præfektur</translation>

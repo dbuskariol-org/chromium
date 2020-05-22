@@ -878,6 +878,7 @@ brukere av denne nettleseren.</translation>
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Kjør Windows Nettverksdiagnose<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Last inn retningslinjer på nytt</translation>
 <translation id="4728558894243024398">Plattform</translation>
+<translation id="4731638775147756694">Dette programmet er blokkert av administratoren din</translation>
 <translation id="4731967714531604179">Prc2 (konvolutt)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> ber om å bruke posisjonen til enheten din</translation>
 <translation id="4736825316280949806">Start Chromium på nytt</translation>
@@ -1249,6 +1250,7 @@ effektuere
 <translation id="6263376278284652872"><ph name="DOMAIN" />-bokmerker</translation>
 <translation id="6264485186158353794">Tilbake til trygg grunn</translation>
 <translation id="6266934640124581640">Lys blågrønn</translation>
+<translation id="6272383483618007430">Google Oppdatering</translation>
 <translation id="6276112860590028508">Sider fra leselisten din vises her</translation>
 <translation id="627746635834430766">For å betale raskere neste gang, lagre kortet ditt og faktureringsadressen i Google-kontoen din.</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />lagrer ikke<ph name="END_EMPHASIS" />
@@ -1602,7 +1604,6 @@ effektuere
 <translation id="7763386264682878361">Parser for betalingsmanifest</translation>
 <translation id="7764225426217299476">Legg til adresse</translation>
 <translation id="7766518757692125295">Skjørt</translation>
-<translation id="7767271804335921384">Programmet er blokkert av administratoren din</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Samme rekkefølge – forsiden opp</translation>
 <translation id="777702478322588152">Prefektur</translation>

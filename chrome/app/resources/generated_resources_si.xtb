@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">මෙම USB උපාංග වලින් ඕනෑම එකකට පිවිසෙන්න</translation>
 <translation id="1036982837258183574">පූර්ණ තිරයෙන් පිටවීමට |<ph name="ACCELERATOR" />| ඔබන්න</translation>
 <translation id="1038168778161626396">Encipher පමණි</translation>
+<translation id="1038462104119736705">ලිනක්ස් සඳහා අවම වශයෙන් <ph name="INSTALL_SIZE" /> ක ඉඩ නිර්දේශ කෙරේ. නිදහස් ඉඩ වැඩි කිරීමට, ඔබේ උපාංගයෙන් ගොනු මකන්න.</translation>
 <translation id="1039337018183941703">වලංගු නොවන හෝ දූෂිත ගොනුවකි</translation>
 <translation id="1041175011127912238">මෙම පිටුව ප්‍රතිචාර නොදක්වයි</translation>
 <translation id="1041263367839475438">තිබෙන උපාංග</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">තිරය යාවත්කාලීන වන සංඛ්‍යාතය තීරණ කරයි</translation>
 <translation id="1061904396131502319">විවේකයක් සඳහා වේලාවයි</translation>
-<translation id="1064552680598333868">මයික්‍රොෆෝනය වෙත වෙනස්කම් ලිනක්ස් මීළඟ වරට යළි ඇරඹූ විට ක්‍රියාත්මක වෙයි.</translation>
 <translation id="1067048845568873861">සාදන ලදි</translation>
 <translation id="1067291318998134776">Linux (බීටා)</translation>
 <translation id="1067922213147265141">වෙනත් Google සේවාවන්</translation>
@@ -301,7 +301,6 @@
 <translation id="1386387014181100145">හෙලෝ.</translation>
 <translation id="138784436342154190">පෙරනිමි ආරම්භක පිටුව ප්‍රතිසාධනය කරනවා ද?</translation>
 <translation id="1390548061267426325">සාමාන්‍ය ටැබයක් ලෙස විවෘත කරන්න</translation>
-<translation id="1392232653471491344">ලිනක්ස් යළි ඇරඹුම අවශ්‍යයි</translation>
 <translation id="1393283411312835250">හිරු හා වළාකුළු</translation>
 <translation id="1395730723686586365">යාවත්කාලකය ඇරඹිණි</translation>
 <translation id="1396139853388185343">මුද්‍රණ යන්ත්‍රය පිහිටුවීමේ දෝෂය</translation>
@@ -708,7 +707,6 @@
 <translation id="186612162884103683">"<ph name="EXTENSION" />" ට පරීක්ෂා කළ ස්ථානවල රූප, වීඩියෝ, සහ ශබ්ද ගොනු කියවිය සහ ලිවිය හැක.</translation>
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" /> ඔබේ ස්ථාපනය සම්පූර්ණ කිරීමට සූදානම්</translation>
 <translation id="1868193363684582383">"Ok Google"</translation>
-<translation id="1870629042957780127">මයික්‍රොෆෝනයට ප්‍රවේශය දෙන්න</translation>
 <translation id="1871534214638631766">ඔබ අන්තර්ගතය දකුණු ක්ලික් කළ විට හෝ දිගු කාලයක් එබූ විට අදාළ තතු පෙන්වන්න</translation>
 <translation id="1871615898038944731">ඔබගේ <ph name="DEVICE_TYPE" /> යාවත්කාලීනයි</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{පටිත්ත වෙනත් කවුළුවකට ගෙන යන්න}one{පටිති වෙනත් කවුළුවකට ගෙන යන්න}other{පටිති වෙනත් කවුළුවකට ගෙන යන්න}}</translation>
@@ -2006,6 +2004,7 @@
 <translation id="3528033729920178817">මෙම පිටුව ඔබගේ පිහිටීම හඹා යමින් සිටී.</translation>
 <translation id="3528498924003805721">කෙටිමං ඉලක්ක</translation>
 <translation id="353316712352074340"><ph name="WINDOW_TITLE" /> - ශ්‍රව්‍ය නිහඬ කළ</translation>
+<translation id="3537881477201137177">පසුව සැකසීම් තුළ මෙය වෙනස් කළ හැක</translation>
 <translation id="3538066758857505094">Linux අස්ථාපනය කිරීමේ දෝෂයකි. කරුණාකර නැවත උත්සාහ කරන්න.</translation>
 <translation id="354060433403403521">AC අනුවර්තකය</translation>
 <translation id="354068948465830244">මෙයට වෙබ් අඩවි දත්ත කියවීමට සහ වෙනස් කිරීමට හැකිය</translation>
@@ -2115,7 +2114,6 @@
 <translation id="3661172646479098821">දැනට Android උපාංගවලට පමණක් සහය දක්වනු ලැබේ.</translation>
 <translation id="3664511988987167893">දිගු නිරූපකය</translation>
 <translation id="3665589677786828986">ඔබගේ ඇතැම් සැකසීම් වෙනත් ක්‍රමලේඛයක් මගින් දූෂිතව ඇති බව Chrome අනාවරණය කර ගත් අතර, ඒවා එහි මුල් පෙරනිමිවලට යළි සකසන ලදී.</translation>
-<translation id="366867565525278777">ආචයන ඉඩ නොමැති වීම නිසා ස්ථාපනය අසාර්ථක විය. අවම වශයෙන් <ph name="INSTALL_SIZE" /> ක හිස් ඉඩක් අවශ්‍යයි. ඉඩ හිස් කිරීමට, උපාංග ගබඩාවෙන් ගොනු මකන්න.</translation>
 <translation id="3668801437375206837">බ්ලූටූත් ගැටලු වඩාත් හොඳින් හඳුනා ගැනීම සඳහා, ගූගල්කරුවන් ඔවුන්ගේ ප්‍රතිපෝෂණ වාර්තා සමඟ අතිරේක බ්ලූටූත් ලොග ඇතුළත් කළ හැකිය. මෙම විකල්පය ලකුණු කරනු ලැබූ විට, ඔබේ වර්තමාන සැසියේ සිට btsnoop සහ HCI ලොග ඇතුළත් වනු ඇත, හැකි තරම් PII ඉවත් කිරීමට පවිත්‍ර කෙරේ. මෙම ලොගවලට පිවිසීමට Listnr හි Chrome OS නිෂ්පාදන කණ්ඩායමේ කළමනාකරුවන්ට සීමා වනු ඇත. දින 90 කට පසුව ලොග ඉවත් කරනු ලැබේ.</translation>
 <translation id="3668823961463113931">හසුරු</translation>
 <translation id="3670113805793654926">ඕනෑම විකුණුම්කරු වෙතින් උපාංග</translation>
@@ -2265,6 +2263,7 @@
 <translation id="3820749202859700794">SECG ඉලිප්සාකාර වක්‍ර secp521r1 (එනම් NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{දිගුවක් අනුමත විය}one{දිගු # ක් අනුමත විය}other{දිගු # ක් අනුමත විය}}</translation>
 <translation id="3822559385185038546">මෙම ප්‍රොක්සිය ඔබේ පරිපාලක විසින් බලගන්වා ඇත</translation>
+<translation id="3823310065043511710">ලිනක්ස් සඳහා අවම වශයෙන් <ph name="INSTALL_SIZE" />  ක ඉඩ නිර්දේශ කෙරේ.</translation>
 <translation id="3826440694796503677">ඔබේ පරිපාලකයා වැඩිපුර Google ගිණුම් එක් කිරීම අබල කර ඇත</translation>
 <translation id="3827306204503227641">unsandboxed ප්ලගින ඉඩදීම දිගටම කරගෙන යන්න</translation>
 <translation id="3827774300009121996">&amp;පූර්ණ තිරය</translation>
@@ -2273,6 +2272,7 @@
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{ඔබේ පරිපාලකයා 1 හානිකර විය හැකි දිගුවක් ආපසු සක්‍රීය කර ඇත}one{ඔබේ පරිපාලකයා හානිකර විය හැකි දිගු {NUM_EXTENSIONS} ක් ආපසු සක්‍රීය කර ඇත}other{ඔබේ පරිපාලකයා හානිකර විය හැකි දිගු {NUM_EXTENSIONS} ක් ආපසු සක්‍රීය කර ඇත}}</translation>
 <translation id="3831436149286513437">Google Drive සෙවීමේ යෝජනා</translation>
 <translation id="383161972796689579">මෙම උපාංගයේ හිමිකරු නව පරිශීලකයන් එක් කිරීමෙන් අබල කර ඇත.</translation>
+<translation id="3834728400518755610">මයික්‍රොෆෝන් සැකසීම් තුළ වෙනස ලිනක්ස් වසා දැමීම අවශ්‍ය කරයි. ඉදිරියට යාමට ලිනක්ස් වසා දමන්න.</translation>
 <translation id="3834775135533257713">"<ph name="INSTALLED_APP_NAME" />" සමඟ ගැටෙන නිසා "<ph name="TO_INSTALL_APP_NAME" />" යෙදුම එක් කිරීමට නොහැකි විය.</translation>
 <translation id="3835522725882634757">අයියෝ! මෙම සර්වරය දත්ත යවන  <ph name="PRODUCT_NAME" /> දත්ත වටහා ගත නොහැකිය. කරුණාකර <ph name="BEGIN_LINK" /> දෝෂයක් වාර්තා කර<ph name="END_LINK" />, ඊට <ph name="BEGIN2_LINK" />සංස්කරණය නොකළ ලැයිස්තු<ph name="END2_LINK" /> ආයාත කරන්න.</translation>
 <translation id="383669374481694771">මේ (බැටරි මට්ටම, පද්ධති සහ යෙදුම් ක්‍රියාකාරකම්, සහ දෝෂ වැනි) මෙම උපාංගය සහ එය භාවිත කෙරෙන ආකාරය පිළිබඳ සාමාන්‍ය තොරතුරු වෙයි. Android වැඩි දියුණු කිරීමට දත්ත භාවිත කරන අතර සමහර රැස් කළ තොරතුරු Google යෙදුම් සහ Android සංවර්ධකයන් වැනි, හවුල්කරුවන්ට ඔවුන්ගේ යෙදුම් සහ නිෂ්පාදන වඩා යහපත් කිරීමට ද උදවු කරයි.</translation>
@@ -3498,6 +3498,7 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="5488468185303821006">අප්‍රකටව ඉඩ දෙන්න</translation>
 <translation id="5489435190927933437"><ph name="DOMAIN" /> සඳහා මුර පදය සුරකින ලදී</translation>
 <translation id="5490721031479690399">බ්ලූටූත් උපාංගය විසන්ධි කරන්න</translation>
+<translation id="5490798133083738649">ලිනක්ස් හට ඔබේ මයික්‍රොෆෝනයට ප්‍රවේශ වීමට ඉඩ දෙන්න</translation>
 <translation id="549211519852037402">බේජ් සහ සුදු</translation>
 <translation id="5493792505296048976">තිරය ක්‍රියාත්මකයි</translation>
 <translation id="5494362494988149300">&amp;නිම කළ විට විවෘත කරන්න</translation>
@@ -4686,6 +4687,7 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="7029809446516969842">මුරපද</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> - අනුක්‍රමික තොට සම්බන්ධිතයි</translation>
 <translation id="7031962166228839643">TPM සූදානම් කෙරෙමින් පවතී. කරුණාකර මඳක් සිටින්න (මීට විනාඩි ගණනක් ගත වනු ඇත)...</translation>
+<translation id="7036706669646341689">ලිනක්ස් සඳහා <ph name="DISK_SIZE" /> ක ඉඩ නිර්දේශ කෙරේ. නිදහස් ඉඩ වැඩි කිරීමට, ඔබේ උපාංගයෙන් ගොනු මකන්න.</translation>
 <translation id="7037509989619051237">පෙරදසුන සඳහා පෙළ</translation>
 <translation id="7038632520572155338">ප්‍රවේශය මාරු කරන්න</translation>
 <translation id="7039326228527141150"><ph name="VENDOR_NAME" /> හි USB උපාංගයන්ට පිවිසෙන්න</translation>
@@ -5231,6 +5233,7 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="7744192722284567281">දත්ත කඩ කිරීම තුළ හමු විය</translation>
 <translation id="7750228210027921155">පින්තූරය-තුළ-පින්තූරය</translation>
 <translation id="7751260505918304024">සියල්ල පෙන්වන්න</translation>
+<translation id="7753735457098489144">ආචයන ඉඩ නොමැති වීම නිසා ස්ථාපනය අසාර්ථක විය. ඉඩ හිස් කිරීමට, උපාංග ගබඩාවෙන් ගොනු මකන්න.</translation>
 <translation id="7754704193130578113">බාගැනීමට පෙර එක් එක් ගොනුව සුරකින තැන විමසන්න</translation>
 <translation id="7755287808199759310">ඔබේ දෙමව්පියන්ගෙන් අයෙකුට එය ඔබ සඳහා අනවහිර කළ හැකිය</translation>
 <translation id="7757787379047923882"><ph name="DEVICE_NAME" /> වෙතින් බෙදා ගත් පාඨය</translation>
@@ -5945,7 +5948,6 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="8650543407998814195">ඔබට තවදුරටත් ඔබේ පැරණි පැතිකඩට ප්‍රවේශ වීමට නොහැකි වුවද, එය තවමත් ඉවත් කළ හැකිය.</translation>
 <translation id="8651585100578802546">මෙම පිටුව බලෙන් නැවත පටවන්න</translation>
 <translation id="8652400352452647993">ඇසුරුම් දිගු දෝෂය</translation>
-<translation id="8653578191563425126">Crostini සඳහා වෙන් කිරීම සඳහා වන තැටි ඉඩ (පසුව ඔබට මෙය වෙනස් කළ හැක).</translation>
 <translation id="8654151524613148204">කණගාටුයි. මෙම ගොනුව ඔබේ පරිගණකයෙන් පාලනය කිරීම සඳහා විශාල වැඩිය.</translation>
 <translation id="8655295600908251630">නාලිකාව</translation>
 <translation id="8655319619291175901">ඕහ්, යමක් වැරදී ඇත.</translation>
@@ -6248,6 +6250,7 @@ Linux ස්ථාපනය කිරීම දත්තවලින් <ph name
 <translation id="9008201768610948239">මඟහරින්න</translation>
 <translation id="9009369504041480176">අපගත කරමින් (<ph name="PROGRESS_PERCENT" />%)...</translation>
 <translation id="9011163749350026987">සෑම විටම නිරූපකය පෙන්වන්න</translation>
+<translation id="9013037634206938463">ලිනක්ස් ස්ථාපන කිරීමට <ph name="INSTALL_SIZE" /> ක නිදහස් ඉඩ අවශ්‍යයි. නිදහස් ඉඩ වැඩි කිරීමට, ඔබේ උපාංගයෙන් ගොනු මකන්න.</translation>
 <translation id="9013707997379828817">ඔබගේ පරිපාලකයා මෙම උපාංගය ආපසු පෙරළා ඇත. කරුණාකර වැදගත් ගොනු සුරකින්න, ඉන්පසු යළි ආරම්භ කරන්න. උපාංගයේ සියලු දත්ත මැකෙනු ඇත.</translation>
 <translation id="901668144954885282">Google Drive වෙත උපස්ථ කරන්න</translation>
 <translation id="9018218886431812662">ස්ථාපනය සම්පූර්ණයි</translation>

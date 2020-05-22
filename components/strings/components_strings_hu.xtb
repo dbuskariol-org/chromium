@@ -874,6 +874,7 @@ Ezt egyéb esetben letiltják az adatvédelmi beállításai. Az engedélyezéss
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />A Windows Hálózati diagnosztika futtatása<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Házirendek újratöltése</translation>
 <translation id="4728558894243024398">Platform</translation>
+<translation id="4731638775147756694">Ezt az alkalmazást a rendszergazda letiltotta</translation>
 <translation id="4731967714531604179">Prc2 (boríték)</translation>
 <translation id="4733082559415072992">A(z) <ph name="URL" /> az eszköz helyadatait szeretné használni</translation>
 <translation id="4736825316280949806">Indítsa újra a Chromiumot</translation>
@@ -1240,6 +1241,7 @@ Ezt egyéb esetben letiltják az adatvédelmi beállításai. Az engedélyezéss
 <translation id="6263376278284652872"><ph name="DOMAIN" /> könyvjelzők</translation>
 <translation id="6264485186158353794">Vissza a biztonsághoz</translation>
 <translation id="6266934640124581640">Világos pávakék</translation>
+<translation id="6272383483618007430">Google Frissítés</translation>
 <translation id="6276112860590028508">Az olvasási listájának adatai itt jelennek meg</translation>
 <translation id="627746635834430766">A következő alkalommal gyorsabban fizethet, ha Google-fiókjába menti kártyáját és számlázási címét.</translation>
 <translation id="6279516281132775660">A Chrome <ph name="BEGIN_EMPHASIS" />nem menti<ph name="END_EMPHASIS" /> a következő adatokat:
@@ -1594,7 +1596,6 @@ További részletek:
 <translation id="7763386264682878361">Fizetésijegyzék-elemző</translation>
 <translation id="7764225426217299476">Cím hozzáadása</translation>
 <translation id="7766518757692125295">Szoknya</translation>
-<translation id="7767271804335921384">A rendszergazda letiltotta ezt az alkalmazást</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Azonos sorrend, felfelé fordítva</translation>
 <translation id="777702478322588152">Prefektúra</translation>

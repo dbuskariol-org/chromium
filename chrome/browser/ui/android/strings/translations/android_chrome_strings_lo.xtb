@@ -204,6 +204,7 @@
 <translation id="2647434099613338025">ເພີ່ມພາສາ</translation>
 <translation id="2650751991977523696">ດາວໂຫຼດໄຟລ໌ອີກຄັ້ງບໍ?</translation>
 <translation id="2651091186440431324">{FILE_COUNT,plural, =1{# ໄຟລ໌ສຽງ}other{# ໄຟລ໌ສຽງ}}</translation>
+<translation id="2656405586795711023">ເວັບແອັບ</translation>
 <translation id="2689830683995595741">ໂດຍການໃຊ້ Chrome, ແມ່ນຖືວ່າທ່ານເຫັນດີນຳ <ph name="BEGIN_LINK1" />ຂໍ້ກຳນົດການບໍລິການຂອງ Google<ph name="END_LINK1" /> ແລະ <ph name="BEGIN_LINK2" />ຂໍ້ກຳນົດການບໍລິການເພີ່ມເຕີມຂອງ Google Chrome ແລະ Chrome OS<ph name="END_LINK2" />. ນຳໃຊ້ <ph name="BEGIN_LINK3" />ແຈ້ງການຄວາມເປັນສ່ວນຕົວສຳລັບບັນຊີ Google ທີ່ຈັດການດ້ວຍ Family Link<ph name="END_LINK3" /> ເຊັ່ນກັນ.</translation>
 <translation id="2707726405694321444">ຣີ​ເຟ​ຣ​ຊຫນ້າ</translation>
 <translation id="2709516037105925701">ຕື່ມອັດຕະໂນມັດ</translation>
@@ -365,6 +366,7 @@
 <translation id="3997476611815694295">ບ່ອນເກັບຂໍ້ມູນທີ່ບໍ່ສຳຄັນ</translation>
 <translation id="4000212216660919741">ໜ້າຫຼັກອອບລາຍຢູ່</translation>
 <translation id="4034817413553209278">{HOURS,plural, =1{# ຊົ່ວໂມງ}other{# ຊົ່ວໂມງ}}</translation>
+<translation id="403687620286099920">ແຕະເພື່ອເປີດລະຫັດ QR</translation>
 <translation id="4046123991198612571">ເພງຕໍ່ໄປ</translation>
 <translation id="4056223980640387499">ສີນໍ້າຕານດໍາ</translation>
 <translation id="4060598801229743805">ຕົວເລືອກຕ່າງໆມີໃຫ້ນຳໃຊ້ຢູ່ໃກ້ສ່ວນເທິງຂອງໜ້າຈໍ</translation>
@@ -449,6 +451,7 @@
 <translation id="4749960740855309258">ເປີດແຖບໃໝ່</translation>
 <translation id="4759238208242260848">ດາວ​ໂຫຼດ</translation>
 <translation id="4763829664323285145">{FILE_COUNT,plural, =1{ສຳເລັດ 1 ການດາວໂຫຼດແລ້ວ.}other{ສຳເລັດ # ການດາວໂຫຼດແລ້ວ.}}</translation>
+<translation id="478981486571169252">ທ່ານຈະເຫັນສະຖານະການເຂົ້າສູ່ລະບົບ <ph name="SITE_NAME" />, ຂໍ້ມູນການທ່ອງເວັບ ແລະ ຂໍ້ມູນເວັບໄຊຂອງທ່ານໃນ Chrome.</translation>
 <translation id="4802417911091824046">ການເຂົ້າລະຫັດໂດຍໃຊ້ລະຫັດຜ່ານບໍ່ຮວມເອົາວິທີການຈ່າຍເງິນ ແລະ ທີ່ຢູ່ຈາກ Google Pay.
 
 ເພື່ອປ່ຽນການຕັ້ງຄ່ານີ້, ກະລຸນາ <ph name="BEGIN_LINK" />ຣີເຊັດການຊິິ້ງຂໍ້ມູນ<ph name="END_LINK" /></translation>
@@ -560,6 +563,7 @@
 <translation id="5659593005791499971">ອີເມວ</translation>
 <translation id="5665379678064389456">ສ້າງເຫດການໃນ <ph name="APP_NAME" /></translation>
 <translation id="5668404140385795438">ແທນ​ທີ່​ຄຳ​ຂໍ​ຂອງ​ເວັບໄຊທ໌​ເພື່ອ​ປ້ອງ​ກັນ​ການ​ຊູມ​ເຂົ້າ</translation>
+<translation id="5681394891799747640">ບໍ່ສາມາດດາວໂຫຼດລະຫັດ QR ໄດ້</translation>
 <translation id="5684874026226664614">ອຸ້ຍ. ບໍ່ສາມາດແປໜ້ານີ້ໄດ້.</translation>
 <translation id="5686790454216892815">ຊື່ໄຟລ໌ຍາວເກີນໄປ</translation>
 <translation id="5694049548840660018">ກັບຄືນໜ້າຫຼັກໄດ້ຢ່າງງ່າຍດາຍ</translation>
@@ -608,6 +612,7 @@
 <translation id="6042308850641462728">ເພີ່ມເຕີມ</translation>
 <translation id="604996488070107836">ການດາວໂຫຼດ <ph name="FILE_NAME" /> ບໍ່ສຳເລັດເນື່ອງຈາກເກີດຄວາມຜິດພາດທີ່ບໍ່ຮູ້ຈັກ.</translation>
 <translation id="605721222689873409">ປ​ປ</translation>
+<translation id="6059830886158432458">ຄວບຄຸມເລື່ອງລາວ ແລະ ການເຄື່ອນໄຫວຢູ່ບ່ອນນີ້</translation>
 <translation id="60923314841986378">ຍັງເຫຼືອ <ph name="HOURS" /> ຊົ່ວໂມງ</translation>
 <translation id="6108923351542677676">ກຳລັງດຳເນີນການຕັ້ງຄ່າ...</translation>
 <translation id="6111020039983847643">ຂໍ້ມູນທີ່ໃຊ້</translation>
@@ -631,6 +636,7 @@
 <translation id="629730747756840877">ບັນ​ຊີ</translation>
 <translation id="6297765934698848803">ອົງການທີ່ຈັດການອຸປະກອນຂອງທ່ານໄດ້ປິດກ້ອງຂອງທ່ານແລ້ວ.</translation>
 <translation id="6303969859164067831">ອອກຈາກລະບົບ ແລະ ປິດການຊິ້ງຂໍ້ມູນ</translation>
+<translation id="6312687380483398334">ແອັບເວັບ (ມິດງຽບ)</translation>
 <translation id="6316139424528454185">ບໍ່ຮອງຮັບເວີຊັນ Android</translation>
 <translation id="6324034347079777476">ການຊິ້ງຂໍ້ມູນລະບົບ Android ປິດນຳໃຊ້ຢູ່</translation>
 <translation id="6333140779060797560">ແຊຣ໌ຜ່ານ <ph name="APPLICATION" /></translation>
@@ -790,6 +796,7 @@
 <translation id="7605594153474022051">ການຊິ້ງຂໍ້ມູນໃຊ້ບໍ່ໄດ້</translation>
 <translation id="7606077192958116810">ໂໝດ Lite ເປີດຢູ່. ຈັດການມັນໃນການຕັ້ງຄ່າ.</translation>
 <translation id="7612619742409846846">ເຂົ້າສູ່ລະບົບ Google ເປັນ</translation>
+<translation id="7614971007231847352">ດາວໂຫຼດລະຫັດ QR ແລ້ວ</translation>
 <translation id="7619072057915878432">ການ​ດາວ​ໂຫຼ​ດ <ph name="FILE_NAME" /> ລົ້ມເຫລວ​ເນື່ອງ​ຈາກ​ເຄືອ​ຂ່າຍ​ຂັດຂ້ອງ.</translation>
 <translation id="7624880197989616768"><ph name="BEGIN_LINK1" />ຂໍຄວາມຊ່ວຍເຫຼືອ<ph name="END_LINK1" /> ຫຼື <ph name="BEGIN_LINK2" />ສະແກນຄືນໃໝ່<ph name="END_LINK2" /></translation>
 <translation id="7626032353295482388">ຍິນ​ດີ​ຕ້ອນ​ຮັບສູ່ Chrome</translation>
@@ -817,6 +824,7 @@
 <translation id="7821588508402923572">ການປະຢັດຂໍ້ມູນຂອງທ່ານຈະປາກົດຢູ່ບ່ອນນີ້</translation>
 <translation id="7835852323729233924">ກຳລັງຫຼິ້ນສື່</translation>
 <translation id="783819812427904514">ເປີດສຽງວິດີໂອ</translation>
+<translation id="7846296061357476882">ບໍລິການ Google</translation>
 <translation id="784934925303690534">ຂອບເຂດເວລາ</translation>
 <translation id="7851858861565204677">ອຸ​ປະ​ກອນ​ອື່ນໆ</translation>
 <translation id="7875915731392087153">ສ້າງອີເມວ</translation>
@@ -972,7 +980,6 @@
 <translation id="9155898266292537608">ທ່ານສາມາດຊອກຫາດ້ວຍການແຕະດ່ວນໃສ່ຄຳສັບໃດໜຶ່ງໄດ້ເຊັ່ນກັນ</translation>
 <translation id="9169507124922466868">ປະຫວັດການນຳທາງເປີດຢູ່ເຄິ່ງໜຶ່ງ</translation>
 <translation id="9204836675896933765">ຍັງເຫຼືອ 1 ໄຟລ໌</translation>
-<translation id="9205796607887024517">ຄວບຄຸມເລື່ອງລາວຂອງທ່ານຢູ່ບ່ອນນີ້</translation>
 <translation id="9206873250291191720">ກ</translation>
 <translation id="9209888181064652401">ບໍ່ສາມາດໂທອອກໄດ້</translation>
 <translation id="9219103736887031265">ຮູບ</translation>

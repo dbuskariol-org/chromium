@@ -873,6 +873,7 @@ This will otherwise be blocked by your privacy settings. This will allow the con
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Running Windows Network Diagnostics<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Reload policies</translation>
 <translation id="4728558894243024398">Platform</translation>
+<translation id="4731638775147756694">This application has been blocked by your administrator</translation>
 <translation id="4731967714531604179">Prc2 (Envelope)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> wants to use your device's location</translation>
 <translation id="4736825316280949806">Restart Chromium</translation>
@@ -1597,7 +1598,6 @@ Additional details:
 <translation id="7763386264682878361">Payment Manifest Parser</translation>
 <translation id="7764225426217299476">Add address</translation>
 <translation id="7766518757692125295">Skirt</translation>
-<translation id="7767271804335921384">The application has been blocked by your administrator</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Same order face up</translation>
 <translation id="777702478322588152">Prefecture</translation>

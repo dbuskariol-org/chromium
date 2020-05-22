@@ -34,6 +34,7 @@
 <translation id="1036511912703768636">pristupiti bilo kojem od ovih USB uređaja</translation>
 <translation id="1036982837258183574">Pritisnite |<ph name="ACCELERATOR" />| da biste zatvorili prikaz na cijelom zaslonu</translation>
 <translation id="1038168778161626396">Samo za šifriranje</translation>
+<translation id="1038462104119736705">Za Linux se preporučuje najmanje <ph name="INSTALL_SIZE" /> prostora. Da biste oslobodili prostor, izbrišite datoteke s uređaja.</translation>
 <translation id="1039337018183941703">Neispravna ili oštećena datoteka</translation>
 <translation id="1041175011127912238">Stranica ne reagira</translation>
 <translation id="1041263367839475438">Dostupni uređaji</translation>
@@ -54,7 +55,6 @@
 <translation id="1058262162121953039">PUK</translation>
 <translation id="1060292118287751956">Određuje učestalost kojom se zaslon ažurira</translation>
 <translation id="1061904396131502319">Ubrzo je vrijeme za pauzu</translation>
-<translation id="1064552680598333868">Promjene na mikrofonu aktivirat će se nakon ponovnog pokretanja Linuxa.</translation>
 <translation id="1067048845568873861">Izrađeno</translation>
 <translation id="1067291318998134776">Linux (Beta)</translation>
 <translation id="1067922213147265141">Ostale Googleove usluge</translation>
@@ -301,7 +301,6 @@
 <translation id="1386387014181100145">Pozdrav.</translation>
 <translation id="138784436342154190">Želite li vratiti zadanu polaznu stranicu?</translation>
 <translation id="1390548061267426325">Otvori kao uobičajenu karticu</translation>
-<translation id="1392232653471491344">Potrebno je ponovo pokrenuti Linux</translation>
 <translation id="1393283411312835250">Sunce i oblaci</translation>
 <translation id="1395730723686586365">Alat za ažuriranje pokrenut je</translation>
 <translation id="1396139853388185343">Pogreška pri postavljanju pisača</translation>
@@ -711,7 +710,6 @@
 <translation id="186612162884103683">"<ph name="EXTENSION" />" može čitati i zapisivati slikovne, video i audiodatoteke na označenim lokacijama.</translation>
 <translation id="1867780286110144690"><ph name="PRODUCT_NAME" /> je spreman za dovršetak instalacije</translation>
 <translation id="1868193363684582383">"Ok Google"</translation>
-<translation id="1870629042957780127">Davanje pristupa mikrofonu</translation>
 <translation id="1871534214638631766">Prikaz povezanih informacija kad sadržaj kliknete desnom tipkom ili dugo pritisnete</translation>
 <translation id="1871615898038944731"><ph name="DEVICE_TYPE" /> je ažuriran</translation>
 <translation id="1874972853365565008">{NUM_TABS,plural, =1{Premjesti karticu u neki drugi prozor}one{Premjesti kartice u neki drugi prozor}few{Premjesti kartice u neki drugi prozor}other{Premjesti kartice u neki drugi prozor}}</translation>
@@ -2009,6 +2007,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="3528033729920178817">Ova stranica prati vašu lokaciju.</translation>
 <translation id="3528498924003805721">Ciljevi prečaca</translation>
 <translation id="353316712352074340"><ph name="WINDOW_TITLE" /> – zvuk je isključen</translation>
+<translation id="3537881477201137177">To se može izmijeniti kasnije u postavkama</translation>
 <translation id="3538066758857505094">Došlo je do pogreške prilikom deinstaliranja Linuxa. Pokušajte ponovo.</translation>
 <translation id="354060433403403521">Punjač</translation>
 <translation id="354068948465830244">Može čitati i mijenjati podatke web-lokacije</translation>
@@ -2118,7 +2117,6 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="3661172646479098821">Trenutačno su podržani samo Android uređaji.</translation>
 <translation id="3664511988987167893">Ikona proširenja</translation>
 <translation id="3665589677786828986">Chrome je otkrio da je neki drugi program promijenio vaše postavke, pa ih je vratio na izvorne zadane vrijednosti.</translation>
-<translation id="366867565525278777">Instaliranje nije uspjelo jer nema dovoljno prostora za pohranu. Potrebno je najmanje <ph name="INSTALL_SIZE" /> slobodnog prostora. Da biste oslobodili prostor, izbrišite datoteke iz pohrane uređaja.</translation>
 <translation id="3668801437375206837">Kako bi lakše dijagnosticirali poteškoće s Bluetoothom, Googleovi zaposlenici mogu uključiti dodatne Bluetooth zapisnike u svoja izvješća s povratnim informacijama. Kada se stavi kvačica u okvir te opcije, u vaše će izvješće biti uključeni btsnoop i HCI zapisnici iz vaše trenutačne sesije, a iz njih će u najvećoj mogućoj mjeri biti uklonjeni podaci koji otkrivaju identitet. Pristup tim zapisnicima bit će ograničen na upravitelje grupe proizvoda OS-a Chrome u Listnru. Zapisnici će se nepovratno ukloniti nakon 90 dana.</translation>
 <translation id="3668823961463113931">Rukovatelji</translation>
 <translation id="3670113805793654926">Uređaji bilo kojeg dobavljača</translation>
@@ -2268,6 +2266,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="3820749202859700794">SECG eliptična krivulja secp521r1 (poznata i kao NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{Proširenje je odobreno}one{Odobreno je # proširenje}few{Odobrena su # proširenja}other{Odobreno je # proširenja}}</translation>
 <translation id="3822559385185038546">Taj proxy nametnuo je administrator</translation>
+<translation id="3823310065043511710">Za Linux se preporučuje najmanje <ph name="INSTALL_SIZE" /> prostora.</translation>
 <translation id="3826440694796503677">Vaš je administrator onemogućio dodavanje dodatnih Google računa</translation>
 <translation id="3827306204503227641">Nastavi dopuštati dodatke izvan testnog okruženja</translation>
 <translation id="3827774300009121996">&amp;Cijeli zaslon</translation>
@@ -2276,6 +2275,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Vaš je administrator ponovo uključio jedno potencijalno štetno proširenje}one{Vaš je administrator ponovo uključio {NUM_EXTENSIONS} potencijalno štetno proširenje}few{Vaš je administrator ponovo uključio {NUM_EXTENSIONS} potencijalno štetna proširenja}other{Vaš je administrator ponovo uključio {NUM_EXTENSIONS} potencijalno štetnih proširenja}}</translation>
 <translation id="3831436149286513437">Prijedlozi za pretraživanje Google diska</translation>
 <translation id="383161972796689579">Vlasnik ovog uređaja onemogućio je dodavanje novih korisnika</translation>
+<translation id="3834728400518755610">Promjena izvršena u postavkama mikrofona zahtijeva isključivanje Linuxa. Isključite Linux da biste nastavili.</translation>
 <translation id="3834775135533257713">Nije moguće dodati aplikaciju "<ph name="TO_INSTALL_APP_NAME" />" jer je u sukobu s aplikacijom "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">O, ne! Poslužitelj šalje podatke koje <ph name="PRODUCT_NAME" /> ne razumije. <ph name="BEGIN_LINK" />Prijavite bug<ph name="END_LINK" /> i uključite <ph name="BEGIN2_LINK" />neobrađeni popis<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">To su općeniti podaci o ovom uređaju i načinu na koji se upotrebljava (kao što su razina baterije, aktivnosti sustava i aplikacija te pogreške). Ti podaci upotrijebit će se za poboljšanje Androida, a neki skupni podaci pomoći će i Googleovim aplikacijama i partnerima, na primjer razvojnim programerima za Android, da poboljšaju svoje aplikacije i proizvode.</translation>
@@ -3500,6 +3500,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="5488468185303821006">Dopusti u anonimnom načinu</translation>
 <translation id="5489435190927933437">Spremljene zaporke za <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Prekid veze s Bluetooth uređajem</translation>
+<translation id="5490798133083738649">Dopustite Linuxu da pristupa vašem mikrofonu</translation>
 <translation id="549211519852037402">Bež i bijela</translation>
 <translation id="5493792505296048976">zaslon uključen</translation>
 <translation id="5494362494988149300">Otvori nakon &amp;dovršetka</translation>
@@ -4689,6 +4690,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="7029809446516969842">Zaporke</translation>
 <translation id="7031608529463141342"><ph name="WINDOW_TITLE" /> – povezano sa serijskim priključkom</translation>
 <translation id="7031962166228839643">TPM se priprema, pričekajte (može potrajati nekoliko minuta)...</translation>
+<translation id="7036706669646341689">Za Linux se preporučuje <ph name="DISK_SIZE" /> prostora. Da biste oslobodili prostor, izbrišite datoteke s uređaja.</translation>
 <translation id="7037509989619051237">Tekst za pregled</translation>
 <translation id="7038632520572155338">Prekidač za pristup</translation>
 <translation id="7039326228527141150">pristupiti USB uređajima dobavljača <ph name="VENDOR_NAME" /></translation>
@@ -5234,6 +5236,7 @@ Postavkama računa možete upravljati tako da instalirate aplikaciju Family Link
 <translation id="7744192722284567281">Pronađeno u povredi podataka</translation>
 <translation id="7750228210027921155">Slika u slici</translation>
 <translation id="7751260505918304024">Prikaži sve</translation>
+<translation id="7753735457098489144">Instaliranje nije uspjelo jer nema dovoljno prostora za pohranu. Da biste oslobodili prostor, izbrišite datoteke iz pohrane uređaja.</translation>
 <translation id="7754704193130578113">Pitaj gdje spremiti svaku datoteku prije preuzimanja</translation>
 <translation id="7755287808199759310">Roditelj je može deblokirati</translation>
 <translation id="7757787379047923882">Tekst dijeljen s uređaja <ph name="DEVICE_NAME" /></translation>
@@ -5950,7 +5953,6 @@ Mislim da ta web-lokacija ne bi trebala biti blokirana!</translation>
 <translation id="8650543407998814195">Iako više ne možete pristupiti svojem starom profilu, možete ga ukloniti.</translation>
 <translation id="8651585100578802546">Ponovo prisilno učitaj ovu stranicu</translation>
 <translation id="8652400352452647993">Pogreška proširenja paketa</translation>
-<translation id="8653578191563425126">Prostor na disku koji će se rezervirati za Crostini (to možete promijeniti kasnije).</translation>
 <translation id="8654151524613148204">Nažalost, datoteka je prevelika da bi ju vaše računalo obradilo.</translation>
 <translation id="8655295600908251630">Kanal</translation>
 <translation id="8655319619291175901">Ups... Nešto je pošlo po krivu.</translation>
@@ -6253,6 +6255,7 @@ Mislim da ta web-lokacija ne bi trebala biti blokirana!</translation>
 <translation id="9008201768610948239">Zanemari</translation>
 <translation id="9009369504041480176">Prijenos (<ph name="PROGRESS_PERCENT" />%)...</translation>
 <translation id="9011163749350026987">Uvijek prikaži ikonu</translation>
+<translation id="9013037634206938463">Za instaliranje Linuxa trebate <ph name="INSTALL_SIZE" /> slobodnog prostora. Da biste oslobodili prostor, izbrišite datoteke s uređaja.</translation>
 <translation id="9013707997379828817">Vaš administrator vratio je uređaj na prethodnu verziju sustava. Spremite važne datoteke, a zatim ponovo pokrenite uređaj. Izbrisat će se svi podaci s uređaja.</translation>
 <translation id="901668144954885282">Sigurnosno kopiranje na Google disku</translation>
 <translation id="9018218886431812662">Instalacija je dovršena</translation>

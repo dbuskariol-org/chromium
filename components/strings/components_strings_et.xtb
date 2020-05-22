@@ -878,6 +878,7 @@ Vastasel korral blokeeritakse see teie privaatsusseadetes. See võimaldab teie k
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windowsi võrgudiagnostika käitamine<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">Laadi reeglid uuesti</translation>
 <translation id="4728558894243024398">Platvorm</translation>
+<translation id="4731638775147756694">Administraator blokeeris selle rakenduse</translation>
 <translation id="4731967714531604179">Prc2 (ümbrik)</translation>
 <translation id="4733082559415072992"><ph name="URL" /> soovib kasutada teie seadme asukohta</translation>
 <translation id="4736825316280949806">Taaskäivitage Chromium</translation>
@@ -1247,6 +1248,7 @@ Vastasel korral blokeeritakse see teie privaatsusseadetes. See võimaldab teie k
 <translation id="6263376278284652872">Domeeni <ph name="DOMAIN" /> järjehoidjad</translation>
 <translation id="6264485186158353794">Tagasi turvalisusse</translation>
 <translation id="6266934640124581640">Helesinakasroheline</translation>
+<translation id="6272383483618007430">Google Update</translation>
 <translation id="6276112860590028508">Siin kuvatakse teie lugemisloendis olevad lehed</translation>
 <translation id="627746635834430766">Kui soovite järgmisel korral kiiremini maksta, salvestage kaart ja arveldusaadress oma Google'i kontole.</translation>
 <translation id="6279516281132775660">Chrome <ph name="BEGIN_EMPHASIS" />ei salvesta<ph name="END_EMPHASIS" /> järgmist teavet:
@@ -1601,7 +1603,6 @@ Lisateave:
 <translation id="7763386264682878361">Makse manifesti parser</translation>
 <translation id="7764225426217299476">Lisage aadress</translation>
 <translation id="7766518757692125295">Ümbris</translation>
-<translation id="7767271804335921384">Administraator blokeeris selle rakenduse</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">Sama järjestus, esikülg ülespoole</translation>
 <translation id="777702478322588152">Prefektuur</translation>

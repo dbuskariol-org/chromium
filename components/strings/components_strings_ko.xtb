@@ -876,6 +876,7 @@
 <translation id="4722547256916164131"><ph name="BEGIN_LINK" />Windows 네트워크 진단 프로그램 실행<ph name="END_LINK" /></translation>
 <translation id="4726672564094551039">정책 새로고침</translation>
 <translation id="4728558894243024398">플랫폼</translation>
+<translation id="4731638775147756694">관리자가 애플리케이션을 차단했습니다.</translation>
 <translation id="4731967714531604179">Prc2(봉투)</translation>
 <translation id="4733082559415072992"><ph name="URL" />에서 기기의 위치에 액세스하려고 합니다.</translation>
 <translation id="4736825316280949806">Chromium 다시 시작</translation>
@@ -1246,6 +1247,7 @@
 <translation id="6263376278284652872"><ph name="DOMAIN" /> 북마크</translation>
 <translation id="6264485186158353794">안전한 페이지로 돌아가기</translation>
 <translation id="6266934640124581640">연한 청록색</translation>
+<translation id="6272383483618007430">Google 업데이트</translation>
 <translation id="6276112860590028508">읽기 목록의 페이지가 여기에 표시됩니다.</translation>
 <translation id="627746635834430766">다음번에 더 빠르게 결제할 수 있도록 Google 계정에 카드와 청구서 수신 주소를 저장하세요.</translation>
 <translation id="6279516281132775660">Chrome에서는 다음 정보를 <ph name="BEGIN_EMPHASIS" />저장하지 않습니다<ph name="END_EMPHASIS" />.
@@ -1599,7 +1601,6 @@
 <translation id="7763386264682878361">결제 매니페스트 파서</translation>
 <translation id="7764225426217299476">주소 추가</translation>
 <translation id="7766518757692125295">스커트</translation>
-<translation id="7767271804335921384">관리자가 애플리케이션을 차단했습니다.</translation>
 <translation id="7770259615151589601">Designated-Long</translation>
 <translation id="7773005668374414287">같은 순서로 인쇄면이 위를 향하게</translation>
 <translation id="777702478322588152">현</translation>
