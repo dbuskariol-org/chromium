@@ -1212,6 +1212,16 @@
         ],
       },
     },
+    'replacements': {
+      'ChromeOS FYI Release (amd64-generic)': {
+        'args': {
+          # Swarming does not report a GPU since tests are run in a VM, but
+          # the VM does report that a GPU is present.
+          '--expected-vendor-id': '1af4',
+          '--expected-device-id': '1050',
+        },
+      }
+    },
   },
   'interactive_ui_tests': {
     'remove_from': [
