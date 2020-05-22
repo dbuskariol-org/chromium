@@ -6,6 +6,7 @@
 
 #import <Cocoa/Cocoa.h>
 
+#include <re2/re2.h>
 #include "base/files/file_path.h"
 #include "base/json/json_writer.h"
 #include "base/strings/string_number_conversions.h"
@@ -90,6 +91,8 @@ class AccessibilityTreeFormatterMac : public AccessibilityTreeFormatterBase {
   base::string16 ProcessTreeForOutput(
       const base::DictionaryValue& node,
       base::DictionaryValue* filtered_dict_result = nullptr) override;
+
+  std::string FormatAttributeValue(const base::Value& value);
 };
 
 // static
@@ -321,45 +324,78 @@ base::string16 AccessibilityTreeFormatterMac::ProcessTreeForOutput(
 
   // Expose all other attributes.
   for (auto item : dict.DictItems()) {
-    if (item.second.is_string()) {
-      if (item.first != role_attr && item.first != subrole_attr) {
-        WriteAttribute(false,
-                       StringPrintf("%s='%s'", item.first.c_str(),
-                                    item.second.GetString().c_str()),
-                       &line);
-      }
+    if (item.second.is_string() &&
+        (item.first == role_attr || item.first == subrole_attr)) {
       continue;
     }
 
     // Special processing for position and size.
-    if (item.second.is_dict()) {
-      if (item.first == kPositionDictAttr) {
-        WriteAttribute(false,
-                       FormatCoordinates(
-                           base::Value::AsDictionaryValue(item.second),
-                           kPositionDictAttr, kXCoordDictAttr, kYCoordDictAttr),
-                       &line);
-        continue;
-      }
-      if (item.first == kSizeDictAttr) {
-        WriteAttribute(
-            false,
-            FormatCoordinates(base::Value::AsDictionaryValue(item.second),
-                              kSizeDictAttr, kWidthDictAttr, kHeightDictAttr),
-            &line);
-        continue;
-      }
+    if (item.first == kPositionDictAttr) {
+      WriteAttribute(false,
+                     FormatCoordinates(
+                         base::Value::AsDictionaryValue(item.second),
+                         kPositionDictAttr, kXCoordDictAttr, kYCoordDictAttr),
+                     &line);
+      continue;
+    }
+    if (item.first == kSizeDictAttr) {
+      WriteAttribute(
+          false,
+          FormatCoordinates(base::Value::AsDictionaryValue(item.second),
+                            kSizeDictAttr, kWidthDictAttr, kHeightDictAttr),
+          &line);
+      continue;
     }
 
-    // Write everything else as JSON.
-    std::string json_value;
-    base::JSONWriter::Write(item.second, &json_value);
+    // Write formatted value.
+    std::string formatted_value = FormatAttributeValue(item.second);
     WriteAttribute(
-        false, StringPrintf("%s=%s", item.first.c_str(), json_value.c_str()),
+        false,
+        StringPrintf("%s=%s", item.first.c_str(), formatted_value.c_str()),
         &line);
   }
 
   return line;
+}
+
+std::string AccessibilityTreeFormatterMac::FormatAttributeValue(
+    const base::Value& value) {
+  if (value.is_string()) {
+    // Special handling for accessible object relations, which are encoded
+    // as a line index the related accessible object is written at. The format
+    // is :LINE_NUM.
+    if (RE2::FullMatch(value.GetString(), "^:\\d+$")) {
+      return value.GetString();
+    }
+    return "'" + value.GetString() + "'";
+  }
+
+  if (value.is_int()) {
+    return base::NumberToString(value.GetInt());
+  }
+
+  if (value.is_list()) {
+    std::string output;
+    for (const auto& item : value.GetList()) {
+      if (!output.empty()) {
+        output += ", ";
+      }
+      output += FormatAttributeValue(item);
+    }
+    return "[" + output + "]";
+  }
+
+  if (value.is_dict()) {
+    std::string output;
+    for (const auto& item : value.DictItems()) {
+      if (!output.empty()) {
+        output += ", ";
+      }
+      output += item.first + ": " + FormatAttributeValue(item.second);
+    }
+    return "{" + output + "}";
+  }
+  return "";
 }
 
 base::FilePath::StringType
