@@ -670,6 +670,7 @@
       # cause them to produce different baselines than the release
       # waterfall bots, and run_web_tests.py can't handle that (by design).
       'linux-blink-rel': 'release_bot_minimal_symbols',
+      'linux-blink-optional-highdpi-rel': 'release_bot_minimal_symbols',
       'mac10.10-blink-rel': 'release_bot_minimal_symbols',
       'mac10.11-blink-rel': 'release_bot_minimal_symbols',
       'mac10.12-blink-rel': 'release_bot_minimal_symbols',
