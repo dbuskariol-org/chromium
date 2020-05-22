@@ -35945,6 +35945,14 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="5" label="IPV6_INTERFACE_ARRAY_TOO_SHORT"/>
 </enum>
 
+<enum name="IsFullyManagedBoolean">
+  <summary>
+    A boolean for whether a device is &quot;fully managed&quot;.
+  </summary>
+  <int value="0" label="Not fully managed"/>
+  <int value="1" label="Fully managed"/>
+</enum>
+
 <enum name="IsolatedPrerenderPrefetchStatus">
   <int value="0" label="Prefetch Used, No Probe">
     The interceptor used a prefetch.
