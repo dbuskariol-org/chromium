@@ -2266,7 +2266,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="3820749202859700794">SECG kurba eliptikoko secp521r1 (edo, bestela esanda: NIST P-521)</translation>
 <translation id="3821372858277557370">{NUM_EXTENSIONS,plural, =1{Luzapen bat onartu da}other{# luzapen onartu dira}}</translation>
 <translation id="3822559385185038546">Administratzaileak ezartzen du proxya</translation>
-<translation id="3823310065043511710">Linux-erako, gutxienez <ph name="INSTALL_SIZE" /> edukitzea gomendatzen da.</translation>
+<translation id="3823310065043511710">Linux instalatzeko, gutxienez <ph name="INSTALL_SIZE" /> eduki behar dira libre.</translation>
 <translation id="3826440694796503677">Administratzaileak desgaitu egin du Google-ko kontuak gehitzeko aukera</translation>
 <translation id="3827306204503227641">Jarraitu baimentzen proben eremuan sartu gabeko pluginak</translation>
 <translation id="3827774300009121996">&amp;Pantaila osoa</translation>
@@ -2275,6 +2275,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Luzapen kaltegarri bat berriro aktibatu du administratzaileak}other{{NUM_EXTENSIONS} luzapen kaltegarri berriro aktibatu ditu administratzaileak}}</translation>
 <translation id="3831436149286513437">Google Drive-ko bilaketa-iradokizunak</translation>
 <translation id="383161972796689579">Gailuaren jabeak erabiltzaile berriak gehitzeko aukera desgaitu du</translation>
+<translation id="3834728400518755610">Mikrofonoaren ezarpenean egindako aldaketa aplikatzeko, itzali egin behar da Linux. Aurrera egiteko, itzali Linux.</translation>
 <translation id="3834775135533257713">Ezin izan da gehitu "<ph name="TO_INSTALL_APP_NAME" />" aplikazioa, "<ph name="INSTALLED_APP_NAME" />" aplikazioarekin gatazkan dagoelako.</translation>
 <translation id="3835522725882634757"><ph name="PRODUCT_NAME" />-k ezin ditu ulertu zerbitzariak bidalitako datuak. <ph name="BEGIN_LINK" />Emaguzu akatsaren berri<ph name="END_LINK" /> eta sartu <ph name="BEGIN2_LINK" />direktorio-zerrenda prozesatu gabeko testuan<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Gailu honi eta hura erabiltzeko moduari buruzko informazio orokorra da hau (adibidez, bateria-maila, sistemako eta aplikazioetako jarduerak, eta erroreak). Android hobetzeko erabiliko dira datuok. Gainera, multzokatutako datu batzuk oso baliagarriak dira Google-ren aplikazioak hobetzeko eta bazkideei (adibidez, Android-en garatzaileei) euren aplikazio eta produktuak hobetzen laguntzeko.</translation>
@@ -3499,6 +3500,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="5488468185303821006">Baimendu ezkutuko moduan</translation>
 <translation id="5489435190927933437"><ph name="DOMAIN" /> domeinuaren gordetako pasahitzak</translation>
 <translation id="5490721031479690399">Deskonektatu Bluetooth bidezko gailua</translation>
+<translation id="5490798133083738649">Eman Linux-i mikrofonoa atzitzeko baimena</translation>
 <translation id="549211519852037402">Beixa eta zuria</translation>
 <translation id="5493792505296048976">pantaila piztuta dago</translation>
 <translation id="5494362494988149300">Ireki deskargatzen &amp;amaitutakoan</translation>
@@ -5119,7 +5121,7 @@ Haurrak ikastetxean ez badu Chromebook-ik erabiltzen, edo nahiago baduzu etxean 
 <translation id="7600965453749440009">Ez itzuli <ph name="LANGUAGE" /> inoiz</translation>
 <translation id="760197030861754408">Konektatzeko, joan <ph name="LANDING_PAGE" /> orrira.</translation>
 <translation id="7602079150116086782">Ez dago beste gailuetako fitxarik</translation>
-<translation id="7602173054665172958">Inprimatzeen kudeaketa</translation>
+<translation id="7602173054665172958">Inprimatze-lanen kudeaketa</translation>
 <translation id="7604942372593434070">Atzitu arakatze-jarduerak</translation>
 <translation id="7605594153474022051">Sinkronizazioa ez dabil.</translation>
 <translation id="7606992457248886637">Ziurtagiri-emaileak</translation>

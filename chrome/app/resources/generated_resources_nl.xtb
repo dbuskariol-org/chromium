@@ -2275,6 +2275,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Je beheerder heeft 1 potentieel schadelijke extensie weer ingeschakeld}other{Je beheerder heeft {NUM_EXTENSIONS} potentieel schadelijke extensies weer ingeschakeld}}</translation>
 <translation id="3831436149286513437">Zoeksuggesties voor Google Drive</translation>
 <translation id="383161972796689579">De eigenaar van dit apparaat heeft het toevoegen van nieuwe gebruikers uitgeschakeld</translation>
+<translation id="3834728400518755610">Linux moeten worden afgesloten om de microfooninstelling te wijzigen. Sluit Linux af om door te gaan.</translation>
 <translation id="3834775135533257713">De app <ph name="TO_INSTALL_APP_NAME" /> kan niet worden toegevoegd, omdat deze conflicten veroorzaakt met <ph name="INSTALLED_APP_NAME" />.</translation>
 <translation id="3835522725882634757">O nee! Deze server verzendt gegevens die <ph name="PRODUCT_NAME" /> niet begrijpt. <ph name="BEGIN_LINK" />Meld een fout<ph name="END_LINK" /> en voeg de <ph name="BEGIN2_LINK" />onbewerkte vermelding<ph name="END2_LINK" /> toe.</translation>
 <translation id="383669374481694771">Dit is algemene informatie over dit apparaat en hoe je het gebruikt (zoals batterijniveau, systeem- en app-activiteit en fouten). De gegevens worden gebruikt om Android te verbeteren voor iedereen. Daarnaast helpen bepaalde verzamelde gegevens Google-apps en -partners, zoals Android-ontwikkelaars, bij de verbetering van hun apps en producten.</translation>
@@ -3499,6 +3500,7 @@ Je kunt de instellingen van dit account beheren door de Family Link-app op je ap
 <translation id="5488468185303821006">Toestaan in incognitomodus</translation>
 <translation id="5489435190927933437">Opgeslagen wachtwoorden voor <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Bluetooth-apparaat ontkoppelen</translation>
+<translation id="5490798133083738649">Linux toegang geven tot je microfoon</translation>
 <translation id="549211519852037402">Beige/wit</translation>
 <translation id="5493792505296048976">scherm aan</translation>
 <translation id="5494362494988149300">Openen wanneer geree&amp;d</translation>

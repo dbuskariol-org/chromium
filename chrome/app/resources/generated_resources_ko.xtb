@@ -2275,6 +2275,7 @@
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{관리자가 1개의 잠재적으로 위험한 확장 프로그램을 다시 설정했습니다.}other{관리자가 {NUM_EXTENSIONS}개의 잠재적으로 위험한 확장 프로그램을 다시 설정했습니다.}}</translation>
 <translation id="3831436149286513437">Google 드라이브 검색 추천어</translation>
 <translation id="383161972796689579">이 기기의 소유자가 새로운 사용자를 추가하지 못하도록 설정함</translation>
+<translation id="3834728400518755610">마이크 설정을 변경하려면 Linux를 종료해야 합니다. 계속하려면 Linux를 종료하세요.</translation>
 <translation id="3834775135533257713">애플리케이션 '<ph name="TO_INSTALL_APP_NAME" />'이(가) '<ph name="INSTALLED_APP_NAME" />'와(과) 충돌하기 때문에 추가하지 못했습니다.</translation>
 <translation id="3835522725882634757">이 서버가 <ph name="PRODUCT_NAME" />에서 이해할 수 없는 데이터를 전송합니다. <ph name="BEGIN_LINK" />버그를 신고<ph name="END_LINK" />하고 <ph name="BEGIN2_LINK" />원본 목록<ph name="END2_LINK" />을 포함하세요.</translation>
 <translation id="383669374481694771">기기 및 기기 사용 방식에 관한 일반적인 정보(배터리 수준, 시스템 및 앱 활동, 오류 등)입니다. 데이터는 Android를 개선하는 데 사용되며 일부 수집 정보는 Google 앱과 파트너(Android 개발자 등)가 앱 및 제품을 개선하는 데도 도움이 됩니다.</translation>
@@ -3497,6 +3498,7 @@
 <translation id="5488468185303821006">시크릿 모드에서 허용</translation>
 <translation id="5489435190927933437"><ph name="DOMAIN" />에 저장된 비밀번호</translation>
 <translation id="5490721031479690399">블루투스 기기 연결 해제</translation>
+<translation id="5490798133083738649">Linux에서 마이크에 액세스하도록 허용</translation>
 <translation id="549211519852037402">베이지색 및 흰색</translation>
 <translation id="5493792505296048976">화면 켜짐</translation>
 <translation id="5494362494988149300">완료되면 열기(&amp;D)</translation>
@@ -4821,7 +4823,7 @@
 <translation id="7201118060536064622">'<ph name="DELETED_ITEM_NAME" />' 삭제됨</translation>
 <translation id="7201420661433230412">파일 보기</translation>
 <translation id="7203826966018112936">프로필에 학교 계정을 추가하면 계속 자녀 보호 기능으로 사용하면서 학생으로서 웹사이트 및 확장 프로그램에 편리하게 로그인할 수 있습니다. 이렇게 해도 자녀는 학교 계정과 동기화된 북마크, 비밀번호 및 기타 브라우저 데이터에 액세스할 수 없습니다.&lt;br&gt;&lt;br&gt;
-    자녀가 학교에서 Chromebook을 사용하며 필요한 학교 작업에 모두 액세스할 수 있는 권한이 있는지 확인하기 위해 집에서 학교 환경을 미러링하고 싶다면 이 Family Link 계정에서 로그아웃한 후 Chrome OS 계정 페이지에서 학교 계정으로 로그인하세요(참고: Family Link 자녀 보호 기능이 적용되지 않음).&lt;br&gt;&lt;br&gt;
+    자녀가 학교에서 Chromebook을 사용하며 집에서 학교 환경을 미러링하여 필요한 학교 작업에 모두 액세스할 수 있기를 원한다면 이 Family Link 계정에서 로그아웃한 후 Chrome OS 계정 페이지에서 학교 계정으로 로그인하세요(참고: Family Link 자녀 보호 기능이 적용되지 않음).&lt;br&gt;&lt;br&gt;
     자녀가 학교에서 Chromebook을 사용하지 않거나 Family Link를 사용하여 집에서 자녀의 환경을 관리하고 싶다면 아래에서 다음 버튼을 클릭하여 이 프로필에 학교 계정을 추가하세요.</translation>
 <translation id="7206693748120342859"><ph name="PLUGIN_NAME" />을(를) 다운로드 중...</translation>
 <translation id="720715819012336933">{NUM_PAGES,plural, =1{페이지 나가기}other{페이지 나가기}}</translation>
@@ -6324,7 +6326,7 @@
 <translation id="9101691533782776290">앱 실행</translation>
 <translation id="9102610709270966160">확장 프로그램 사용</translation>
 <translation id="9103868373786083162">돌아가려면 뒤로 버튼을 누르고, 방문 기록을 보려면 컨텍스트 메뉴 키를 누릅니다.</translation>
-<translation id="9108692355621501797"><ph name="LINK_BEGIN" />G Suite for Education 개인정보처리방침<ph name="LINK_END" />은 G Suite for Education 사용자와 부모가 제품에서 수집하는 데이터의 유형과 데이터를 수집하는 이유, 데이터의 용도를 이해할 수 있도록 지원하기 위한 것입니다.</translation>
+<translation id="9108692355621501797"><ph name="LINK_BEGIN" />G Suite for Education 개인정보처리방침<ph name="LINK_END" />은 G Suite for Education 사용자와 부모가 제품에서 수집하는 데이터의 유형과 데이터를 수집하는 이유, 데이터의 용도를 이해할 수 있도록 돕기 위한 것입니다.</translation>
 <translation id="9108808586816295166">보안 DNS가 항상 제공되지는 않을 수도 있습니다.</translation>
 <translation id="9109122242323516435">저장 공간을 확보하려면 기기 저장소에서 파일을 삭제하세요.</translation>
 <translation id="9109283579179481106">모바일 네트워크에 연결</translation>

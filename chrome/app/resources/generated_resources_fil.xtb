@@ -2275,6 +2275,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Na-on ulit ng iyong administrator ang 1 posibleng mapaminsalang extension}one{Na-on ulit ng iyong administrator ang {NUM_EXTENSIONS} posibleng mapaminsalang extension}other{Na-on ulit ng iyong administrator ang {NUM_EXTENSIONS} na posibleng mapaminsalang extension}}</translation>
 <translation id="3831436149286513437">Mga suhestyon sa paghahanap sa Google Drive</translation>
 <translation id="383161972796689579">Hindi pinagana ng may-ari ng device na ito ang pagdaragdag ng mga bagong user</translation>
+<translation id="3834728400518755610">Kinakailangan sa pagbabago sa setting ng mikropono na i-shut down ang Linux. I-shut down ang Linux para magpatuloy.</translation>
 <translation id="3834775135533257713">Hindi maidagdag ang application na "<ph name="TO_INSTALL_APP_NAME" />" dahil sumasalungat ito sa "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">Naku! Nagpapadala ang server na ito ng data <ph name="PRODUCT_NAME" /> na hindi maunawaan. Mangyaring <ph name="BEGIN_LINK" />mag-ulat ng bug<ph name="END_LINK" />, at isama ang <ph name="BEGIN2_LINK" />raw na listahan<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Ito ay pangkalahatang impormasyon tungkol sa device na ito at kung paano ito ginagamit (gaya ng antas ng baterya, aktibidad ng system at app, at mga error). Gagamitin ang data para pahusayin ang Android, at makakatulong din ang ilang pinagsama-samang impormasyon sa mga app at partner ng Google, gaya ng mga developer ng Android, na pahusayin ang kanilang mga app at produkto.</translation>
@@ -3499,6 +3500,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="5488468185303821006">Payagan sa incognito</translation>
 <translation id="5489435190927933437">Mga naka-save na password para sa <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Idiskonekta ang Bluetooth device</translation>
+<translation id="5490798133083738649">Payagan ang Linux na ma-access ang iyong mikropono</translation>
 <translation id="549211519852037402">Beige at puti</translation>
 <translation id="5493792505296048976">naka-on ang screen</translation>
 <translation id="5494362494988149300">Buksan Kapag &amp;Tapos Na</translation>

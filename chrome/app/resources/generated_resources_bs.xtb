@@ -543,7 +543,7 @@ da li    proksi server funkcionira. Ako smatrate da ne trebate koristiti
 <translation id="1670399744444387456">Osnovni</translation>
 <translation id="167160931442925455">Najglasnije</translation>
 <translation id="1673137583248014546"><ph name="URL" /> želi vidjeti proizvođača i model vašeg sigurnosnog ključa</translation>
-<translation id="1677306805708094828">Nije moguće dodati stavku (<ph name="EXTENSION_TYPE_PARAMETER" />)</translation>
+<translation id="1677306805708094828">Nije moguće dodati stavku <ph name="EXTENSION_TYPE_PARAMETER" /></translation>
 <translation id="1677472565718498478">Još <ph name="TIME" /></translation>
 <translation id="1679068421605151609">Programerski alati</translation>
 <translation id="1679806121152819234">Dodatak VM</translation>
@@ -2275,7 +2275,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Vaš administrator je ponovo uključio 1 potencijalno štetnu ekstenziju}one{Vaš administrator je ponovo uključio {NUM_EXTENSIONS} potencijalno štetnu ekstenziju}few{Vaš administrator je ponovo uključio {NUM_EXTENSIONS} potencijalno štetne ekstenzije}other{Vaš administrator je ponovo uključio {NUM_EXTENSIONS} potencijalno štetnih ekstenzija}}</translation>
 <translation id="3831436149286513437">Prijedlozi za pretraživanje Google Diska</translation>
 <translation id="383161972796689579">Vlasnik ovog uređaja je onemogućio dodavanje novih korisnika</translation>
-<translation id="3834728400518755610">Promjena izvršena u postavkama mikrofona zahtijeva isključivanje Linuxa. Isključite Linux da biste nastavili.</translation>
+<translation id="3834728400518755610">Za promjenu postavki mikrofona potrebno je isključiti Linux. Isključite Linux da nastavite.</translation>
 <translation id="3834775135533257713">Dodavanje aplikacije "<ph name="TO_INSTALL_APP_NAME" />" nije uspjelo jer je u konfliktu s aplikacijom "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">O ne! Ovaj server šalje podatke koje <ph name="PRODUCT_NAME" /> ne može razumjeti. <ph name="BEGIN_LINK" />Prijavite grešku u programu<ph name="END_LINK" /> i uključite <ph name="BEGIN2_LINK" /> neobrađeni listing<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Ovo su opće informacije o ovom uređaju i načinu na koji se koristi (kao što je nivo napunjenosti baterije, aktivnosti sistema i aplikacija te greške). Ovi podaci će se koristiti da se poboljša Android, a neki zbirni podaci će također pomoći Google aplikacijama i partnerima, kao što su Android programeri, da poboljšaju svoje aplikacije i proizvode.</translation>
@@ -2605,7 +2605,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="426564820080660648">Da provjerite ažuriranja, koristite ethernet, WiFi ili prijenos podataka na mobilnoj mreži.</translation>
 <translation id="4266679478228765574">Ako uklonite foldere, zaustavit ćete dijeljenje, ali nećete izbrisati fajlove.</translation>
 <translation id="4267455501101322486">Da dodaš račun za pristup obrazovnim izvorima, zatraži od roditelja pristup</translation>
-<translation id="4267924571297947682">Zatražite odobrenje od roditelja</translation>
+<translation id="4267924571297947682">Traženje odobrenja od roditelja</translation>
 <translation id="4267953847983678297">Automatski se poveži na mobilnu mrežu</translation>
 <translation id="4268025649754414643">Šifriranje ključa</translation>
 <translation id="4270393598798225102">Verzija <ph name="NUMBER" /></translation>
@@ -3057,7 +3057,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="4891089016822695758">Forum za beta verziju</translation>
 <translation id="4892229439761351791">Web lokacija može koristiti Bluetooth</translation>
 <translation id="489258173289528622">Radnja u slučaju neaktivnosti tokom rada na bateriji</translation>
-<translation id="4892811427319351753">Nije moguće omogućiti stavku (<ph name="EXTENSION_TYPE_PARAMETER" />)</translation>
+<translation id="4892811427319351753">Nije moguće omogućiti stavku <ph name="EXTENSION_TYPE_PARAMETER" /></translation>
 <translation id="4893336867552636863">Ovo će trajno izbrisati vaše podatke o pregledanju s ovog uređaja.</translation>
 <translation id="4893522937062257019">Na zaključanom zaslonu</translation>
 <translation id="489454699928748701">Dozvoli web lokacijama korištenje senzora pokreta</translation>
@@ -3500,7 +3500,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="5488468185303821006">Dopusti u anonimnom načinu</translation>
 <translation id="5489435190927933437">Sačuvane lozinke za <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Prekini povezanost s Bluetooth uređajem</translation>
-<translation id="5490798133083738649">Dopustite Linuxu da pristupa vašem mikrofonu</translation>
+<translation id="5490798133083738649">Dozvolite Linuxu da pristupi mikrofonu</translation>
 <translation id="549211519852037402">Bež i bijela</translation>
 <translation id="5493792505296048976">ekran je uključen</translation>
 <translation id="5494362494988149300">Otvori kada bude &amp;gotovo</translation>
@@ -4825,8 +4825,8 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="7201118060536064622">Stavka "<ph name="DELETED_ITEM_NAME" />" je izbrisana</translation>
 <translation id="7201420661433230412">Pregled datoteka</translation>
 <translation id="7203826966018112936">Ako dodate školski račun na profil, omogućit ćete jednostavnu prijavu na web lokacije i ekstenzije za učenike, a i dalje će biti aktivan roditeljski nadzor. Ovim dijete ne dobija pristup oznakama, lozinkama ili drugim podacima preglednika koji se sinhroniziraju sa školskim računom.&lt;br&gt;&lt;br&gt;
-    Ako vaše dijete koristi Chromebook u školi i želite preslikati iskustvo školskog okruženja kod kuće da djetetu osigurate pristup svim školskim zadacima, odjavite se s ovog računa Family Linka i prijavite se na školski račun putem stranice računa Chrome OS-a (napomena: roditeljski nadzor Family Linka se neće primjenjivati).&lt;br&gt;&lt;br&gt;
-    Ako vaše dijete ne koristi Chromebook u školi ili ako želite upravljati njegovim iskustvom kod kuće putem Family Linka, kliknite dugme Dalje u nastavku da dodate školski račun na ovaj profil.</translation>
+    Ako vaše dijete koristi Chromebook u školi i želite preslikati iskustvo školskog okruženja kod kuće da djetetu osigurate pristup svim školskim zadacima, odjavite se s ovog računa Family Linka i prijavite se na školski račun putem stranice računa Chrome OS-a (napomena: roditeljski nadzor Family Linka se neće primjenjivati).&lt;br&gt;&lt;br&gt;
+    Ako vaše dijete ne koristi Chromebook u školi ili ako želite upravljati njegovim iskustvom kod kuće putem Family Linka, kliknite dugme Naprijed u nastavku da dodate školski račun na ovaj profil.</translation>
 <translation id="7206693748120342859">Preuzimanje dodatka: <ph name="PLUGIN_NAME" />…</translation>
 <translation id="720715819012336933">{NUM_PAGES,plural, =1{Napusti stranicu}one{Napusti stranice}few{Napusti stranice}other{Napusti stranice}}</translation>
 <translation id="7207457272187520234">Šaljite podatke o korištenju i dijagnostici. Ovaj uređaj trenutno automatski šalje Googleu podatke o dijagnostici, uređaju i korištenju aplikacija. Ovo će pomoći stabilnosti sistema i aplikacija, kao i drugim poboljšanjima. Neki zbirni podaci će također pomoći Googleovim aplikacijama i partnerima, kao što su Android programeri. Ovu postavku je nametnuo vlasnik. Ako vam je uključena postavka dodatna Aktivnost na webu i u aplikacijama, ti podaci će možda biti sačuvani na vašem Google računu.</translation>
@@ -5236,7 +5236,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="7744192722284567281">Pronađeno u narušavanju podataka</translation>
 <translation id="7750228210027921155">Slika u slici</translation>
 <translation id="7751260505918304024">Prikaži sve</translation>
-<translation id="7753735457098489144">Instalacija nije uspjela jer nedostaje prostora za pohranu. Izbrišite fajlove iz pohrane uređaja da oslobodite prostor.</translation>
+<translation id="7753735457098489144">Instalacija nije uspjela jer nedostaje prostora za pohranu. Da oslobodite prostor, izbrišite fajlove iz pohrane uređaja.</translation>
 <translation id="7754704193130578113">Pitaj gdje spremiti svaku datoteku prije preuzimanja</translation>
 <translation id="7755287808199759310">Roditelj može deblokirati tu web lokaciju</translation>
 <translation id="7757787379047923882">Tekst je podijeljen s uređaja <ph name="DEVICE_NAME" /></translation>

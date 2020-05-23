@@ -5000,7 +5000,7 @@ Windows'da politika yapılandırmak için önerilen yol GPO kullanmaktır. Ancak
 
       Bu politika ayarlanırsa dosyalar yalnızca URL bu kümenin bir parçasıysa ve dosya türü <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" /> öğesinde listeleniyorsa politikaya göre otomatik olarak açılır. İki koşuldan biri yanlışsa indirilen, politikaya göre otomatik olarak açılmaz.
 
-      Bu politika ayarlanmazsa dosya türü <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" />öğesinde bulunan indirilenler otomatik olarak açılır.
+      Bu politika ayarlanmazsa dosya türü <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" /> öğesinde bulunan indirilenler otomatik olarak açılır.
 
       URL kalıplarının, https://www.chromium.org/administrators/url-blacklist-filter-format adresinde belirtilen biçime uygun olması gerekir.</translation>
 <translation id="8382184662529825177">Cihazda içerik koruma için uzak onay kullanımını etkinleştir</translation>

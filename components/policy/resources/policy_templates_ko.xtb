@@ -4292,7 +4292,7 @@ False로 설정하면 <ph name="PRODUCT_NAME" />에서 기본 알림을 사용�
       VirtualMachinesAllowed, CrostiniAllowed, DeviceUnaffiliatedCrostiniAllowed가 Crostini에 적용되어 실행할 수 있으려면 세 가지 정책이 모두 True로 설정되어 있어야 합니다.
       이 정책이 False로 변경되면 새 Crostini 컨테이너가 시작되지만 이미 실행 중인 컨테이너는 종료되지 않습니다.</translation>
 <translation id="7234280155140786597">차단된 기본 메시지 호스트의 이름(모두 차단하려면 * 값 적용)</translation>
-<translation id="7244405731715221632">사용 가능</translation>
+<translation id="7244405731715221632">Full</translation>
 <translation id="7249828445670652637">ARC 앱에서 <ph name="PRODUCT_OS_NAME" /> CA 인증서를 사용하도록 설정</translation>
 <translation id="7251652588006515288">이 정책은 사용자가 인증서 관리자를 통해 클라이언트 인증서를 가져오거나 삭제할 수 있는지 결정합니다.
 

@@ -140,7 +140,7 @@ Jika kebijakan ini tidak disetel, setelan default-nya dinonaktifkan bagi penggun
       Jika kebijakan ini ditetapkan ke Benar atau tidak ditetapkan, saat konfirmasi protokol eksternal ditampilkan, pengguna dapat memilih "Selalu izinkan" untuk melewati semua perintah konfirmasi pada waktu berikutnya di situs ini.
 
       Jika kebijakan ini ditetapkan ke Salah, kotak centang "Selalu izinkan" tidak akan ditampilkan dan pengguna akan diminta untuk mengonfirmasi setiap kali protokol eksternal dipanggil.</translation>
-<translation id="11903325225202653">Jika kebijakan ditetapkan ke Benar, Mode kontras tinggi akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah, Mode kontras tinggi akan tetap dinonaktifkan.
+<translation id="11903325225202653">Jika kebijakan ditetapkan ke Benar (True), Mode kontras tinggi akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah (False), Mode kontras tinggi akan tetap dinonaktifkan.
 
       Jika kebijakan ditetapkan, pengguna tidak dapat mengubahnya. Jika tidak ditetapkan, Mode kontras tinggi akan dinonaktifkan, tetapi pengguna dapat mengaktifkannya kapan saja.</translation>
 <translation id="1194005076170619046">Jika diaktifkan, tombol logout besar berwarna merah akan ditampilkan di baki sistem selama sesi aktif dan layar tidak dikunci.
@@ -254,7 +254,7 @@ Secara default, tidak ada mode buka kunci cepat yang tersedia untuk perangkat ya
 <translation id="1427655258943162134">Alamat atau URL server proxy</translation>
 <translation id="1435659902881071157">Konfigurasi jaringan tingkat perangkat</translation>
 <translation id="1438739959477268107">Setelan pembuatan kunci default</translation>
-<translation id="1449083855104537880">Jika kebijakan ditetapkan ke Benar, opsi aksesibilitas akan ditampilkan di menu baki sistem. Jika kebijakan ditetapkan ke Salah, opsi tidak akan muncul di menu.
+<translation id="1449083855104537880">Jika kebijakan ditetapkan ke Benar (True), opsi aksesibilitas akan ditampilkan di menu baki sistem. Jika kebijakan ditetapkan ke Salah (False), opsi tidak akan muncul di menu.
 
       Jika kebijakan tidak ditetapkan, pengguna tidak dapat mengubahnya. Jika tidak ditetapkan, opsi aksesibilitas tidak akan muncul di menu, tetapi pengguna dapat menampilkannya melalui halaman Setelan.
 
@@ -857,14 +857,14 @@ Jika Anda menonaktifkan kebijakan ini, scroll halaman web ke fragmen teks terten
       Template dengan format yang salah akan diabaikan.</translation>
 <translation id="2333763898098246468">Mengontrol cara <ph name="PRODUCT_NAME" /> mencetak di Windows.
 
-      Saat mencetak dengan printer PostScript di Windows, terkadang pekerjaan cetak harus dirasterisasi agar dapat tercetak dengan benar.
+      Saat mencetak dengan printer non-PostScript di Windows, terkadang pekerjaan cetak harus dirasterisasi agar dapat tercetak dengan benar.
 
-      Jika kebijakan ini ditetapkan ke Penuh, <ph name="PRODUCT_NAME" /> akan melakukan rasterisasi halaman penuh jika diperlukan.
+      Jika kebijakan ini ditetapkan ke Penuh (Full), <ph name="PRODUCT_NAME" /> akan melakukan rasterisasi halaman penuh jika diperlukan.
 
-      Jika kebijakan ditetapkan ke Cepat, <ph name="PRODUCT_NAME" /> akan menghindari rasterisasi ketika memungkinkan. Dengan demikian, jumlah rasterisasi akan berkurang sehingga dapat membantu mengurangi ukuran pekerjaan cetak dan meningkatkan kecepatan cetak.
+      Jika kebijakan ditetapkan ke Cepat (Fast), <ph name="PRODUCT_NAME" /> akan menghindari rasterisasi ketika memungkinkan. Dengan demikian, jumlah rasterisasi akan berkurang sehingga dapat membantu mengurangi ukuran pekerjaan cetak dan meningkatkan kecepatan cetak.
 
       Jika kebijakan ini tidak ditetapkan, <ph name="PRODUCT_NAME" /> akan berada dalam mode Penuh.</translation>
-<translation id="2336221492251647548">Jika kebijakan ditetapkan ke Benar, keyboard virtual akan diaktifkan saat login. Jika kebijakan ditetapkan ke Salah, keyboard virtual akan dinonaktifkan saat login.
+<translation id="2336221492251647548">Jika kebijakan ditetapkan ke Benar (True), keyboard virtual akan diaktifkan saat login. Jika kebijakan ditetapkan ke Salah (False), keyboard virtual akan dinonaktifkan saat login.
 
       Jika kebijakan ditetapkan, pengguna dapat mengaktifkan atau menonaktifkan keyboard virtual untuk sementara. Saat dimuat ulang atau tidak ada aktivitas selama satu menit, layar login akan kembali ke keadaan semula.
 
@@ -872,9 +872,9 @@ Jika Anda menonaktifkan kebijakan ini, scroll halaman web ke fragmen teks terten
 
           Catatan: <ph name="DEVICE_LOGIN_SCREEN_VIRTUAL_KEYBOARD_ENABLED_POLICY_NAME" /> akan mengganti kebijakan ini jika kebijakan tersebut ditentukan.</translation>
 <translation id="2345547870894930157">Aktifkan DNS-over-HTTPS tanpa fallback yang tidak aman</translation>
-<translation id="2349117476121456297">Jika kebijakan ditetapkan ke Benar, tombol baris teratas pada keyboard akan bertindak sebagai perintah tombol fungsi. Jika menekan tombol Penelusuran, perilaku tombol tersebut akan kembali menjadi tombol media.
+<translation id="2349117476121456297">Jika kebijakan ditetapkan ke Benar (True), tombol baris teratas pada keyboard akan bertindak sebagai perintah tombol fungsi. Jika menekan tombol Penelusuran, perilaku tombol tersebut akan kembali menjadi tombol media.
 
-      Jika ditetapkan ke Salah atau tidak ditetapkan, default keyboard adalah membuat perintah tombol media. Jika menekan tombol Penelusuran, tombol tersebut akan berubah menjadi tombol fungsi.</translation>
+      Jika ditetapkan ke Salah (False) atau tidak ditetapkan, default keyboard adalah membuat perintah tombol media. Jika menekan tombol Penelusuran, tombol tersebut akan berubah menjadi tombol fungsi.</translation>
 <translation id="2353442107789326507">Daftar setelan layanan Konektor Chrome Enterprise yang akan diterapkan ke Konektor Enterprise <ph name="ON_FILE_ATTACHED_ENTERPRISE_CONNECTOR" />, yang terpicu saat file dilampirkan ke Chrome.
 
       Kolom <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" /> dan <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> digunakan untuk menentukan apakah konektor perlu mengirimkan file untuk dianalisis saat dilampirkan ke halaman tertentu, dan jenis tag yang perlu disertakan dalam permintaan analisis untuk file tersebut. Tag yang sesuai dengan pola 'aktifkan' akan disertakan dalam permintaan analisis jika URL halaman cocok dengan pola yang terkait dengan tag tersebut, selama tidak ada pola 'nonaktifkan' yang memiliki tag sama yang cocok dengan URL halaman itu. Analisis dilakukan jika terdapat minimal 1 tag yang disertakan dalam permintaan.
@@ -1179,7 +1179,7 @@ Jika kebijakan ini tidak ditetapkan, layar privasi mula-mula akan dinonaktifkan 
 <translation id="2647069081229792812">Aktifkan atau nonaktifkan pengeditan bookmark</translation>
 <translation id="2649896281375932517">Biarkan pengguna memutuskan</translation>
 <translation id="2650049181907741121">Tindakan yang akan diambil saat pengguna menutup penutupnya</translation>
-<translation id="2650255110448120764">Jika kebijakan ditetapkan ke Tidak ada, kaca pembesar layar akan dinonaktifkan.
+<translation id="2650255110448120764">Jika kebijakan ditetapkan ke Tidak Ada (None), kaca pembesar layar akan dinonaktifkan.
 
       Jika kebijakan ditetapkan, pengguna tidak dapat mengubahnya. Jika tidak ditetapkan, kaca pembesar layar mula-mula akan dinonaktifkan, tetapi pengguna dapat mengaktifkannya kapan saja.
 
@@ -2357,8 +2357,8 @@ Jika kebijakan ini tidak disetel, setelan default-nya tidak diizinkan bagi pengg
 <translation id="443665821428652897">Hapus data situs saat browser ditutup (tidak digunakan lagi)</translation>
 <translation id="4438784219739665968">Mengizinkan perangkat ini menjalankan PluginVm.
 
-      Jika kebijakan ditetapkan ke salah atau tidak ditetapkan, <ph name="PLUGIN_VM_NAME" /> tidak akan diaktifkan untuk perangkat tersebut.
-      Jika ditetapkan ke benar, <ph name="PLUGIN_VM_NAME" /> akan diaktifkan untuk perangkat tersebut selama setelan lain mengizinkannya. <ph name="PLUGIN_VM_ALLOWED_POLICY_NAME" /> dan <ph name="USER_PLUGIN_VM_ALLOWED_POLICY_NAME" /> harus ditetapkan ke benar, dan <ph name="PLUGIN_VM_LICENSE_KEY_POLICY_NAME" /> atau <ph name="PLUGIN_VM_USER_ID_POLICY_NAME" /> harus ditetapkan agar <ph name="PLUGIN_VM_NAME" /> dapat berjalan.</translation>
+      Jika kebijakan ditetapkan ke salah (false) atau tidak ditetapkan, <ph name="PLUGIN_VM_NAME" /> tidak akan diaktifkan untuk perangkat tersebut.
+      Jika ditetapkan ke benar (true), <ph name="PLUGIN_VM_NAME" /> akan diaktifkan untuk perangkat tersebut selama setelan lain mengizinkannya. <ph name="PLUGIN_VM_ALLOWED_POLICY_NAME" /> dan <ph name="USER_PLUGIN_VM_ALLOWED_POLICY_NAME" /> harus ditetapkan ke benar (true), dan <ph name="PLUGIN_VM_LICENSE_KEY_POLICY_NAME" /> atau <ph name="PLUGIN_VM_USER_ID_POLICY_NAME" /> harus ditetapkan agar <ph name="PLUGIN_VM_NAME" /> dapat berjalan.</translation>
 <translation id="4439336120285389675">Menentukan daftar fitur platform web yang tak digunakan lagi untuk diaktifkan kembali secara sementara.
 
       Kebijakan ini memberikan administrator kemampuan untuk mengaktifkan kembali fitur platform web yang tak digunakan lagi dalam waktu yang terbatas. Fitur diidentifikasi dengan tag string dan fitur yang sesuai dengan tag yang disertakan dalam daftar yang ditentukan oleh kebijakan ini akan diaktifkan kembali.
@@ -2613,7 +2613,7 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
           Jika kebijakan ini ditetapkan, pengguna tidak dapat mengubah atau menggantinya.
 
           Jika kebijakan ini tidak ditetapkan, audio mono mula-mula akan dinonaktifkan di layar login, tetapi dapat diaktifkan oleh pengguna kapan saja.</translation>
-<translation id="4942681160308347946">Jika kebijakan ditetapkan ke Benar, masukan lisan akan diaktifkan di layar login. Jika kebijakan ditetapkan ke Salah, masukan lisan akan dinonaktifkan di layar login.
+<translation id="4942681160308347946">Jika kebijakan ditetapkan ke Benar (True), masukan lisan akan diaktifkan di layar login. Jika kebijakan ditetapkan ke Salah (False), masukan lisan akan dinonaktifkan di layar login.
 
       Jika kebijakan ditetapkan, pengguna dapat mengaktifkan atau menonaktifkan masukan lisan untuk sementara. Saat dimuat ulang atau tidak ada aktivitas selama satu menit, layar login akan kembali ke keadaan semula.
 
@@ -2921,7 +2921,7 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
 <translation id="5369937289900051171">Khusus pencetakan warna</translation>
 <translation id="5370279767682621504">Aktifkan dukungan HTTP/0.9 pada porta non-default</translation>
 <translation id="5377606826822211923">Mengontrol penggunaan aplikasi Android dari sumber yang tidak tepercaya untuk pengguna</translation>
-<translation id="5377668121137111316">Jika kebijakan ditetapkan ke Benar, keyboard virtual akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah, keyboard virtual akan tetap dinonaktifkan.
+<translation id="5377668121137111316">Jika kebijakan ditetapkan ke Benar (True), keyboard virtual akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah (False), keyboard virtual akan tetap dinonaktifkan.
 
        Jika kebijakan ditetapkan, pengguna tidak dapat mengubahnya. Jika tidak ditetapkan, keyboard virtual mula-mula akan dinonaktifkan, tetapi pengguna dapat mengaktifkannya kapan saja.</translation>
 <translation id="537786648513450280">Mengontrol penggunaan aplikasi Android dari sumber yang tidak tepercaya untuk perangkat</translation>
@@ -3399,7 +3399,7 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
 <translation id="5997543603646547632">Menggunakan 24 jam sebagai default</translation>
 <translation id="5997846976342452720">Menentukan apakah pencari plugin harus dinonaktifkan (tidak digunakan lagi)</translation>
 <translation id="5998198091336830580">Kebijakan ini merupakan bagian dari grup atom berikut (hanya kebijakan dari sumber tertinggi yang ada di grup yang akan diterapkan) :</translation>
-<translation id="6009062900206392980">Menetapkan kebijakan ke Tidak ada akan menonaktifkan fitur pembesaran layar di layar login.
+<translation id="6009062900206392980">Menetapkan kebijakan ke Tidak Ada (None) akan menonaktifkan fitur pembesaran layar di layar login.
 
        Jika kebijakan ditetapkan, pengguna dapat mengaktifkan atau menonaktifkan Kaca Pembesar Layar untuk sementara. Saat dimuat ulang atau tidak ada aktivitas selama satu menit, layar login akan kembali ke keadaan semula.
 
@@ -3821,7 +3821,7 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
 <translation id="6652197835259177259">Setelan pengguna yang dikelola secara lokal</translation>
 <translation id="6658245400435704251">Menentukan jumlah waktu (dalam detik) sebuah perangkat dapat menunda download pembaruannya secara acak dari saat pembaruan tersebut pertama kali didorong ke server. Perangkat dapat menunggu dengan sebagian dari waktu ini dari segi prediksi waktu penyelesaian tugas dan sisa waktunya dari segi jumlah pemeriksaan pembaruan. Dalam keadaan apa pun, penyebaran dibatasi dengan jumlah waktu yang konstan sehingga perangkat tidak akan terus menunggu download pembaruan selamanya.</translation>
 <translation id="6665670272107384733">Setel seberapa sering pengguna harus memasukkan sandi untuk menggunakan buka kunci cepat.</translation>
-<translation id="6667586534922258705">Memperlihatkan tampilan tombol sandi pada layar login dan layar kunci</translation>
+<translation id="6667586534922258705">Memperlihatkan tombol tampilkan sandi pada layar login dan layar kunci</translation>
 <translation id="6672070613706645316">Izinkan pengguna menyesuaikan latar belakang di halaman Tab Baru</translation>
 <translation id="6672630473862787247">Mengaktifkan autentikasi standby di sesi reguler, samaran, dan tamu.</translation>
 <translation id="6685903773201985073">Mengaktifkan autentikasi standby di sesi tamu dan reguler.</translation>
@@ -3843,8 +3843,8 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
 <translation id="6735701345096330595">Mengaktifkan paksa pemeriksaan ejaan bahasa</translation>
 <translation id="6740611636377710500">Mengizinkan pengguna ini menjalankan PluginVm.
 
-      Jika kebijakan ditetapkan ke salah atau tidak ditetapkan, <ph name="PLUGIN_VM_NAME" /> tidak akan diaktifkan untuk pengguna tersebut.
-      Jika ditetapkan ke benar, <ph name="PLUGIN_VM_NAME" /> akan diaktifkan untuk pengguna tersebut selama setelan lain mengizinkannya. <ph name="PLUGIN_VM_ALLOWED_POLICY_NAME" /> dan <ph name="USER_PLUGIN_VM_ALLOWED_POLICY_NAME" /> harus ditetapkan ke benar, dan <ph name="PLUGIN_VM_LICENSE_KEY_POLICY_NAME" /> atau <ph name="PLUGIN_VM_USER_ID_POLICY_NAME" /> harus ditetapkan agar <ph name="PLUGIN_VM_NAME" /> dapat berjalan.</translation>
+      Jika kebijakan ditetapkan ke salah (false) atau tidak ditetapkan, <ph name="PLUGIN_VM_NAME" /> tidak akan diaktifkan untuk pengguna tersebut.
+      Jika ditetapkan ke benar (true), <ph name="PLUGIN_VM_NAME" /> akan diaktifkan untuk pengguna tersebut selama setelan lain mengizinkannya. <ph name="PLUGIN_VM_ALLOWED_POLICY_NAME" /> dan <ph name="USER_PLUGIN_VM_ALLOWED_POLICY_NAME" /> harus ditetapkan ke benar (true), dan <ph name="PLUGIN_VM_LICENSE_KEY_POLICY_NAME" /> atau <ph name="PLUGIN_VM_USER_ID_POLICY_NAME" /> harus ditetapkan agar <ph name="PLUGIN_VM_NAME" /> dapat berjalan.</translation>
 <translation id="6757613329154374267">Pencadangan dan pemulihan diaktifkan</translation>
 <translation id="6758659208493449452">Kebijakan ini mengontrol apakah pengguna yang terdaftar dalam Program Perlindungan Lanjutan menerima perlindungan tambahan. Beberapa fitur ini dapat mencakup pembagian data kepada Google (misalnya, pengguna Perlindungan Lanjutan akan dapat mengirimkan hasil downloadnya ke Google untuk pemindaian malware). Jika ditetapkan ke Benar atau tidak ditetapkan, pengguna terdaftar akan menerima perlindungan tambahan. Jika ditetapkan ke Salah, pengguna Perlindungan Lanjutan hanya akan menerima fitur konsumen standar.</translation>
 <translation id="6762235610019366960">Memungkinkan Anda mengontrol penyajian konten promosi dan/atau edukasi tab penuh di <ph name="PRODUCT_NAME" />.
@@ -3868,7 +3868,7 @@ Jika kebijakan ini dinonaktifkan atau tidak disetel, situs tidak akan dapat mena
 <translation id="6813263547126514821">Daya dan penonaktifan</translation>
 <translation id="681446116407619279">Skema autentikasi yang didukung</translation>
 <translation id="6821268164692776674">Tujuan <ph name="CLOUD_PRINT_NAME" /> dan 'Simpan ke Google Drive'</translation>
-<translation id="6833064854262015312">Jika kebijakan ditetapkan ke Benar, Mode kontras tinggi akan diaktifkan di layar login. Jika kebijakan ditetapkan ke Salah, Mode kontras tinggi akan dinonaktifkan di layar login.
+<translation id="6833064854262015312">Jika kebijakan ditetapkan ke Benar (True), Mode kontras tinggi akan diaktifkan di layar login. Jika kebijakan ditetapkan ke Salah (False), Mode kontras tinggi akan dinonaktifkan di layar login.
 
       Jika kebijakan ditetapkan, pengguna dapat mengaktifkan atau menonaktifkan Mode kontras tinggi untuk sementara. Saat dimuat ulang atau tidak ada aktivitas selama satu menit, layar login akan kembali ke keadaan semula.
 
@@ -4435,7 +4435,7 @@ Cara yang diharapkan terkait penggunaan kebijakan ini adalah merotasi konfiguras
       Jika kebijakan ini disetel, Kode Akses Orang Tua dapat diverifikasi di perangkat pengguna anak.
       Jika kebijakan ini tidak disetel, Kode Akses Orang Tua tidak dapat diverifikasi di perangkat pengguna anak.</translation>
 <translation id="7625444193696794922">Menentukan saluran rilis yang harus dikunci oleh perangkat ini.</translation>
-<translation id="7629840767216985001">Jika kebijakan ditetapkan ke Benar, kursor besar akan diaktifkan di layar login. Jika kebijakan ditetapkan ke Salah, kursor besar akan dinonaktifkan di layar login.
+<translation id="7629840767216985001">Jika kebijakan ditetapkan ke Benar (True), kursor besar akan diaktifkan di layar login. Jika kebijakan ditetapkan ke Salah (False), kursor besar akan dinonaktifkan di layar login.
 
       Jika kebijakan ditetapkan, pengguna akan dapat mengaktifkan atau menonaktifkan kursor besar untuk sementara. Saat dimuat ulang atau tidak ada aktivitas selama satu menit, layar login akan kembali ke keadaan semula.
 
@@ -4917,7 +4917,7 @@ Cara yang disarankan untuk mengonfigurasi kebijakan di Windows adalah melalui GP
           Jika kebijakan ini tidak ditetapkan, setelan tersebut akan diaktifkan.</translation>
 <translation id="838056554726401140">Daftar URL yang menentukan URL tempat <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" /> akan diterapkan. Kebijakan ini tidak berdampak pada nilai yang terbuka otomatis yang ditetapkan oleh pengguna.
 
-      Jika kebijakan ini ditetapkan, file hanya akan otomatis terbuka oleh kebijakan jika URL merupakan bagian dari daftar ini dan jenis file tercantum di <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" />. Jika salah satu kondisinya salah, hasil download tidak akan dibuka otomatis oleh kebijakan.
+      Jika kebijakan ini ditetapkan, file hanya akan otomatis terbuka oleh kebijakan jika URL merupakan bagian dari daftar ini dan jenis file tercantum di <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" />. Jika salah satu kondisinya ditetapkan ke salah (false), hasil download tidak akan dibuka otomatis oleh kebijakan.
 
       Jika kebijakan ini tidak ditetapkan, semua hasil download yang jenis filenya tercantum di <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" /> akan terbuka secara otomatis.
 
@@ -5106,7 +5106,7 @@ Pengguna tidak dapat mengubah atau mengganti setelan ini.</translation>
           Jika disetel ke true, atau tidak disetel, atestasi jarak jauh dapat digunakan untuk perlindungan konten.</translation>
 <translation id="8650974590712548439">Lokasi registry Windows untuk klien Windows:</translation>
 <translation id="8653085952260859632">Melaporkan info memori</translation>
-<translation id="8653561013005884087">Jika kebijakan ditetapkan ke Benar, masukan lisan akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah, masukan lisan akan tetap dinonaktifkan.
+<translation id="8653561013005884087">Jika kebijakan ditetapkan ke Benar (True), masukan lisan akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah (False), masukan lisan akan tetap dinonaktifkan.
 
        Jika kebijakan ditetapkan, pengguna tidak dapat mengubahnya. Jika tidak ditetapkan, masukan lisan mula-mula dinonaktifkan, tetapi pengguna dapat mengaktifkannya kapan saja.</translation>
 <translation id="8654286232573430130">Menentukan server mana yang harus dimasukkan ke daftar putih untuk autentikasi yang terintegrasi. Autentikasi yang terintegrasi hanya diaktifkan saat <ph name="PRODUCT_NAME" /> menerima tantangan autentikasi dari proxy atau dari server yang ada dalam daftar yang diizinkan ini.
@@ -5166,7 +5166,7 @@ Pengguna tidak dapat mengubah atau mengganti setelan ini.</translation>
       Jika setelan ini diaktifkan atau tidak disetel, histori penjelajahan atau download dapat dihapus.
 
       Jika setelan ini dinonaktifkan, histori penjelajahan dan download tidak dapat dihapus.</translation>
-<translation id="8749536858950505376">Jika kebijakan ditetapkan ke Benar, kursor besar akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah, kursor besar akan tetap dinonaktifkan.
+<translation id="8749536858950505376">Jika kebijakan ditetapkan ke Benar (True), kursor besar akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah (False), kursor besar akan tetap dinonaktifkan.
 
       Jika kebijakan tersebut ditetapkan, pengguna tidak dapat mengubah fitur. Jika tidak ditetapkan, kursor besar mula-mula akan dinonaktifkan, tetapi pengguna dapat mengaktifkannya kapan saja.</translation>
 <translation id="8749803771700374502">Printer dengan jenis yang tercantum dalam daftar tolak akan dinonaktifkan agar tidak dapat ditemukan atau digunakan.
@@ -5392,7 +5392,7 @@ Pengguna tidak dapat mengubah atau mengganti setelan ini.</translation>
 <translation id="9112897538922695510">Memungkinkan Anda mendaftarkan daftar penangan protokol. Ini hanya dapat menjadi kebijakan yang disarankan. Properti |protokol| sebaiknya disetel ke skema seperti 'mailto' dan properti |url| sebaiknya disetel ke pola URL aplikasi yang menangani skema. Pola tersebut dapat berisi '%s', yang apabila disajikan akan menggantikan URL yang ditangani.
 
           Penangan protokol yang didaftarkan oleh kebijakan digabung dengan penangan protokol yang didaftarkan oleh pengguna dan keduanya tersedia untuk digunakan. Pengguna dapat mengganti penangan protokol yang dipasang oleh kebijakan dengan memasang penangan default baru, namun pengguna tidak dapat membuang penangan protokol yang didaftarkan oleh kebijakan.</translation>
-<translation id="9117826695152538214">Jika kebijakan ditetapkan ke Benar, tombol lekat akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah, tombol lekat akan tetap dinonaktifkan.
+<translation id="9117826695152538214">Jika kebijakan ditetapkan ke Benar (True), tombol lekat akan tetap diaktifkan. Jika kebijakan ditetapkan ke Salah (False), tombol lekat akan tetap dinonaktifkan.
 
       Jika kebijakan ditetapkan, pengguna tidak dapat mengubahnya. Jika tidak ditetapkan, tombol lekat mula-mula akan dinonaktifkan, tetapi pengguna dapat mengaktifkannya kapan saja.</translation>
 <translation id="91196902572559194">Kebijakan ini memberikan izin kepada Asisten Google untuk mendengarkan frasa aktivasi suara.

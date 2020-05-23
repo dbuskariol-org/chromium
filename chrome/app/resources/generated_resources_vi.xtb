@@ -1805,7 +1805,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="3269612321104318480">Xanh két nhạt và trắng</translation>
 <translation id="326999365752735949">Đang tải xuống phần khác nhau</translation>
 <translation id="3270965368676314374">Đọc, thay đổi và xóa ảnh, nhạc và các phương tiện khác khỏi máy tính của bạn</translation>
-<translation id="327147043223061465">Xem tất cả các cookie và dữ liệu trang web</translation>
+<translation id="327147043223061465">Xem tất cả cookie và dữ liệu trang web</translation>
 <translation id="3271648667212143903"><ph name="ORIGIN" /> muốn kết nối</translation>
 <translation id="3274763671541996799">Bạn đang ở chế độ toàn màn hình.</translation>
 <translation id="3275778809241512831">Khóa bảo mật nội bộ của bạn hiện không an toàn. Vui lòng xóa khóa khỏi mọi dịch vụ mà bạn đã dùng khóa đó. Để khắc phục sự cố này, vui lòng đặt lại khóa bảo mật.</translation>
@@ -2275,6 +2275,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Quản trị viên đã bật lại 1 tiện ích có thể gây hại}other{Quản trị viên đã bật lại {NUM_EXTENSIONS} tiện ích có thể gây hại}}</translation>
 <translation id="3831436149286513437">Đề xuất tìm kiếm của Google Drive</translation>
 <translation id="383161972796689579">Chủ sở hữu của thiết bị này đã vô hiệu hóa thêm người dùng mới</translation>
+<translation id="3834728400518755610">Bạn cần tắt Linux để thay đổi tùy chọn cài đặt micrô. Hãy tắt Linux để tiếp tục.</translation>
 <translation id="3834775135533257713">Không thể thêm ứng dụng "<ph name="TO_INSTALL_APP_NAME" />" vì ứng dụng này xung đột với "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">Ồ, không! Máy chủ này đang gửi dữ liệu <ph name="PRODUCT_NAME" /> không thể hiểu được. Vui lòng <ph name="BEGIN_LINK" />báo cáo lỗi<ph name="END_LINK" /> và đưa vào <ph name="BEGIN2_LINK" />danh sách mới<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Đây là thông tin chung về thiết bị này và cách bạn sử dụng thiết bị (như mức pin, hoạt động của ứng dụng và hệ thống cũng như các lỗi). Dữ liệu sẽ dùng để cải thiện Android và một số thông tin tổng hợp cũng sẽ giúp các ứng dụng và đối tác của Google, chẳng hạn như nhà phát triển Android, cải thiện ứng dụng và sản phẩm của họ.</translation>
@@ -3499,6 +3500,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="5488468185303821006">Cho phép ở chế độ ẩn danh</translation>
 <translation id="5489435190927933437">Các mật khẩu đã lưu cho <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Ngắt kết nối thiết bị Bluetooth</translation>
+<translation id="5490798133083738649">Cho phép Linux sử dụng micrô của bạn</translation>
 <translation id="549211519852037402">Be và trắng</translation>
 <translation id="5493792505296048976">màn hình bật</translation>
 <translation id="5494362494988149300">Mở Khi &amp;Hoàn tất</translation>

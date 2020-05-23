@@ -619,7 +619,7 @@
 <translation id="2006530844219044261">電源管理</translation>
 <translation id="2014757022750736514">控管登入畫面的行為，使用者會從該畫面登入帳戶。可調整的設定包含可登入的人員、系統允許的帳戶類型、應使用何種驗證方法，以及一般無障礙、輸入法和語言代碼設定。</translation>
 <translation id="201557587962247231">裝置狀態報告上傳頻率</translation>
-<translation id="2017301949684549118">以無訊息方式安裝的網路應用程式網址。</translation>
+<translation id="2017301949684549118">以無訊息方式安裝的網頁應用程式網址。</translation>
 <translation id="2017459564744167827">如要進一步瞭解架構和格式設定，請參閱 <ph name="REFERENCE_URL" />。</translation>
 <translation id="2018836497795982119">指定向裝置管理服務查詢使用者政策資訊的時間 (以毫秒為單位)。
 
@@ -836,15 +836,15 @@
       如果 URI 範本包含 <ph name="HTTP_VARIABLE_DNS" /> 變數，則對解析器的要求會使用 <ph name="HTTP_METHOD_GET" />；否則這些要求會使用 <ph name="HTTP_METHOD_POST" />。
 
       系統會忽略格式不正確的範本。</translation>
-<translation id="2333763898098246468">控管「<ph name="PRODUCT_NAME" />」在 Windows 上的列印方式。
+<translation id="2333763898098246468">控管 <ph name="PRODUCT_NAME" /> 在 Windows 上的列印方式。
 
       在 Windows 上透過非 PostScript 印表機進行列印時，有時需要將列印工作光柵化才能正確列印。
 
-      如果將這項政策設為 Full，「<ph name="PRODUCT_NAME" />」會視需要為整個頁面執行光柵化。
+      如果將這項政策設為 Full，<ph name="PRODUCT_NAME" /> 會視需要為整個頁面執行光柵化。
 
-      如果將這項政策設為 Fast，「<ph name="PRODUCT_NAME" />」會盡可能避免執行光柵化。減少光柵化的數量有助於降低列印工作大小並提高列印速度。
+      如果將這項政策設為 Fast，<ph name="PRODUCT_NAME" /> 會盡可能避免執行光柵化。減少光柵化的數量有助於降低列印工作大小並提高列印速度。
 
-      如果不設定這項政策，「<ph name="PRODUCT_NAME" />」會使用 Full 模式。</translation>
+      如果不設定這項政策，<ph name="PRODUCT_NAME" /> 會使用 Full 模式。</translation>
 <translation id="2336221492251647548">將這項政策設為 True，即可在登入時啟用螢幕小鍵盤。將這項政策設為 False，即可在登入時停用螢幕小鍵盤。
 
       如果設定這項政策，使用者可暫時啟用或停用螢幕小鍵盤。當登入畫面重新載入或閒置達一分鐘時，螢幕小鍵盤會還原成原始狀態。
@@ -1159,9 +1159,9 @@
 <translation id="2647069081229792812">允許或禁止編輯書籤</translation>
 <translation id="2649896281375932517">讓使用者決定</translation>
 <translation id="2650049181907741121">使用者蓋上螢幕時所採取的動作</translation>
-<translation id="2650255110448120764">將這項政策設為 None 時，系統會停用放大鏡功能。
+<translation id="2650255110448120764">將這項政策設為 None 時，系統會停用放大鏡。
 
-      如果設定這項政策，使用者將無法變更。如果未設定，系統會先停用放大鏡功能，但使用者隨時可以啟用。
+      如果設定這項政策，使用者將無法變更。如果未設定，系統會先停用放大鏡，但使用者隨時可以啟用。
 
       有效值：• 0 = 停用 • 1 = 啟用 • 2 = 啟用置頂放大鏡</translation>
 <translation id="2655233147335439767">指定執行預設搜尋時使用的搜尋引擎網址。網址應包含 <ph name="SEARCH_TERM_MARKER" /> 字串，使用者搜尋時輸入的文字會取代這條字串。
@@ -1956,7 +1956,7 @@
           如果不設定這項政策，系統預設會停用鍵盤焦點醒目顯示功能，但使用者隨時可以啟用這項功能。</translation>
 <translation id="3877517141460819966">整合式雙重驗證模式</translation>
 <translation id="3879196885908353077">檢查下載內容是否違反機密資料保護規則</translation>
-<translation id="3879208481373875102">設定強制安裝的網路應用程式清單</translation>
+<translation id="3879208481373875102">設定強制安裝的網頁應用程式清單</translation>
 <translation id="388237772682176890">自 M53 起我們已淘汰這項政策，至 M54 則移除了這項政策 (因為我們已不再支援 SPDY/3.1)。
 
       停用 <ph name="PRODUCT_NAME" /> 的 SPDY 通訊協定。
@@ -2313,8 +2313,8 @@
 <translation id="443665821428652897">瀏覽器關閉時清除網站資料 (已淘汰)</translation>
 <translation id="4438784219739665968">允許這部裝置執行 PluginVm。
 
-      如果將這項政策設為 False 或不設定，系統不會為裝置啟用「<ph name="PLUGIN_VM_NAME" />」。
-      如果設為 True，在其他相關設定也允許這項操作的情況下，系統會為裝置啟用「<ph name="PLUGIN_VM_NAME" />」。為了讓「<ph name="PLUGIN_VM_NAME" />」順利執行，你必須將 <ph name="PLUGIN_VM_ALLOWED_POLICY_NAME" /> 和 <ph name="USER_PLUGIN_VM_ALLOWED_POLICY_NAME" /> 設為 True，並設定 <ph name="PLUGIN_VM_LICENSE_KEY_POLICY_NAME" /> 或 <ph name="PLUGIN_VM_USER_ID_POLICY_NAME" />。</translation>
+      如果將這項政策設為 False 或不設定，系統不會為裝置啟用 <ph name="PLUGIN_VM_NAME" />。
+      如果設為 True，在其他相關設定也允許這項操作的情況下，系統會為裝置啟用 <ph name="PLUGIN_VM_NAME" />。為了讓 <ph name="PLUGIN_VM_NAME" /> 順利執行，你必須將 <ph name="PLUGIN_VM_ALLOWED_POLICY_NAME" /> 和 <ph name="USER_PLUGIN_VM_ALLOWED_POLICY_NAME" /> 設為 True，並設定 <ph name="PLUGIN_VM_LICENSE_KEY_POLICY_NAME" /> 或 <ph name="PLUGIN_VM_USER_ID_POLICY_NAME" />。</translation>
 <translation id="4439336120285389675">指定要暫時重新啟用的已淘汰網路平台功能清單。
 
       這項政策可讓管理員在限定時間內重新啟用已淘汰的網路平台功能。系統會使用字串標記辨識功能，並根據這項政策在清單中指定的標記重新啟用對應的功能。
@@ -3007,7 +3007,7 @@
       </translation>
 <translation id="5498045818698736356">指定要以無訊息方式 (使用者無需操作) 安裝的網站清單；使用者無法解除安裝或停用這些網站。
 
-      這項政策的每個清單項目都是一個物件，由下列必要元素組成：「url」和兩個選擇性元素：「default_launch_container」和「create_desktop_shortcut」。「url」是要安裝的網路應用程式網址，「launch_container」則是「window」(視窗) 或「tab」(分頁)，用於指定網路應用程式安裝後所採用的開啟方式。如要在 Linux 和 Windows 上建立桌面捷徑，請將「create_desktop_shortcut」設為 True。如果未設定「default_launch_container」，應用程式預設會在分頁中開啟。無論「default_launch_container」的值為何，使用者都可以變更開啟應用程式的方式。如果未設定「create_desktop_shortcuts」，系統將不會建立桌面捷徑。如需將應用程式固定到 Chrome OS 檔案櫃，請參閱 <ph name="PINNED_LAUNCHER_APPS_POLICY_NAME" /> 政策。</translation>
+      這項政策的每個清單項目都是一個物件，由下列必要元素組成：「url」和兩個選擇性元素：「default_launch_container」和「create_desktop_shortcut」。「url」是要安裝的網頁應用程式網址，「launch_container」則是「window」(視窗) 或「tab」(分頁)，用於指定網頁應用程式安裝後所採用的開啟方式。如要在 Linux 和 Windows 上建立桌面捷徑，請將「create_desktop_shortcut」設為 True。如果未設定「default_launch_container」，應用程式預設會在分頁中開啟。無論「default_launch_container」的值為何，使用者都可以變更開啟應用程式的方式。如果未設定「create_desktop_shortcuts」，系統將不會建立桌面捷徑。如需將應用程式固定到 Chrome OS 檔案櫃，請參閱 <ph name="PINNED_LAUNCHER_APPS_POLICY_NAME" /> 政策。</translation>
 <translation id="5499375345075963939">這項政策僅於零售模式中有效。
 
       如果這項政策設為 0 以外的值，則系統會在指定的閒置時間過後，自動登出目前登入示範模式的使用者。
@@ -3374,7 +3374,7 @@
 <translation id="6070667616071269965">裝置登入畫面鍵盤配置</translation>
 <translation id="6074963268421707432">不允許任何網站顯示桌面通知</translation>
 <translation id="6074964551275531965">設定更新通知的時間範圍</translation>
-<translation id="6076099373507468537">定義可從核心驅動程式卸離的 USB 裝置 (以便直接在網路應用程式中透過 chrome.usb API 使用) 清單。清單中的項目必須是一組 USB 供應商識別碼和產品識別碼，用於識別特定硬體。
+<translation id="6076099373507468537">定義可從核心驅動程式卸離的 USB 裝置 (以便直接在網頁應用程式中透過 chrome.usb API 使用) 清單。清單中的項目必須是一組 USB 供應商識別碼和產品識別碼，用於識別特定硬體。
 
       如果未設定這項政策，卸離式 USB 裝置清單就不會顯示任何項目。</translation>
 <translation id="607726879389885889">當使用者嘗試上傳或下載的檔案過大 (50 MB 以上)，無法傳送給系統進行惡意軟體或機密資料保護掃描時，這項政策可控管 <ph name="PRODUCT_NAME" /> 採取的動作。
@@ -3795,8 +3795,8 @@
 <translation id="6735701345096330595">強制執行拼字檢查的語言</translation>
 <translation id="6740611636377710500">允許這位使用者執行 PluginVm。
 
-      如果將這項政策設為 False 或不設定，系統不會為使用者啟用「<ph name="PLUGIN_VM_NAME" />」。
-      如果設為 True，在其他相關設定也允許這項操作的情況下，系統會為使用者啟用「<ph name="PLUGIN_VM_NAME" />」。為了讓「<ph name="PLUGIN_VM_NAME" />」順利執行，你必須將 <ph name="PLUGIN_VM_ALLOWED_POLICY_NAME" /> 和 <ph name="USER_PLUGIN_VM_ALLOWED_POLICY_NAME" /> 設為 True，並設定 <ph name="PLUGIN_VM_LICENSE_KEY_POLICY_NAME" /> 或 <ph name="PLUGIN_VM_USER_ID_POLICY_NAME" />。</translation>
+      如果將這項政策設為 False 或不設定，系統不會為使用者啟用 <ph name="PLUGIN_VM_NAME" />。
+      如果設為 True，在其他相關設定也允許這項操作的情況下，系統會為使用者啟用 <ph name="PLUGIN_VM_NAME" />。為了讓 <ph name="PLUGIN_VM_NAME" /> 順利執行，你必須將 <ph name="PLUGIN_VM_ALLOWED_POLICY_NAME" /> 和 <ph name="USER_PLUGIN_VM_ALLOWED_POLICY_NAME" /> 設為 True，並設定 <ph name="PLUGIN_VM_LICENSE_KEY_POLICY_NAME" /> 或 <ph name="PLUGIN_VM_USER_ID_POLICY_NAME" />。</translation>
 <translation id="6757613329154374267">已啟用備份與還原功能</translation>
 <translation id="6758659208493449452">這項政策可控管已加入進階保護計畫的使用者是否可以享有額外的防護。部分功能可能涉及與 Google 共用資料 (例如，進階保護計畫的使用者可將下載內容傳送至 Google 進行惡意軟體掃描)。如果設為 True 或不予設定，已加入計畫的使用者將能享有額外的防護。如果設為 False，進階保護計畫的使用者只能享有標準的消費者功能。</translation>
 <translation id="6762235610019366960">讓你控制 <ph name="PRODUCT_NAME" /> 能否以完整分頁顯示宣傳和/或教學內容。
@@ -3895,7 +3895,7 @@
 
       這項政策的值必須介於 6 到 100 之間，預設值為 32。
 
-      已知部分網路應用程式會耗用許多連線來處理停滯的 GET 動作，如果調降後的值低於 32，開啟太多這類網路應用程式時可能會導致瀏覽器網路當機。請自行承擔低於預設值的風險。
+      已知部分網頁應用程式會耗用許多連線來處理停滯的 GET 動作，如果調降後的值低於 32，開啟太多這類網頁應用程式時可能會導致瀏覽器網路當機。請自行承擔低於預設值的風險。
 
       如果你未設定這項政策，系統將採用 32 做為預設值。</translation>
 <translation id="6943577887654905793">Mac/Linux 偏好設定名稱：</translation>
@@ -4863,7 +4863,7 @@
           請注意，如果 <ph name="REMOTE_ACCESS_HOST_FIREWALL_TRAVERSAL_POLICY_NAME" /> 政策設為停用，系統就會忽略這項政策。
 
           如果不設定這項政策，系統就會啟用這項政策。</translation>
-<translation id="838056554726401140">指定哪些網址要套用 <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" /> 的網址清單。這項政策不會影響使用者設定的自動開啟值。
+<translation id="838056554726401140">指定要套用 <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" /> 的網址清單。這項政策不會影響使用者設定的自動開啟值。
 
       如果設定這項政策，只有當網址列在這份清單中，且檔案類型列在 <ph name="AUTO_OPEN_FILE_TYPES_POLICY_NAME" /> 中時，系統才會依照政策自動開啟檔案。如果未達成其中一項條件，系統就不會依照政策自動開啟下載的內容。
 
@@ -5184,7 +5184,7 @@
 <translation id="8858642179038618439">強制採用 YouTube 安全模式</translation>
 <translation id="8860342862142842017">不針對列出的 subjectPublicKeyInfo 雜湊強制執行憑證透明化政策</translation>
 <translation id="8864975621965365890">瀏覽使用 <ph name="PRODUCT_FRAME_NAME" />轉譯的網站時，隱藏停止支援提示。</translation>
-<translation id="886645881209114007">允許使用者在「<ph name="PRODUCT_OS_NAME" />」上使用「<ph name="PLUGIN_VM_NAME" />」</translation>
+<translation id="886645881209114007">允許使用者在 <ph name="PRODUCT_OS_NAME" />上使用 <ph name="PLUGIN_VM_NAME" /></translation>
 <translation id="8867464911288727016">在 <ph name="PRODUCT_NAME" /> 中啟用整合式 Google 翻譯服務。
 
       如果啟用這項設定，<ph name="PRODUCT_NAME" /> 會在適當的時機顯示整合式翻譯工具列，提供網頁內容翻譯功能。此外，使用者也可以點選滑鼠右鍵開啟內容選單，從中選擇翻譯網頁內容。

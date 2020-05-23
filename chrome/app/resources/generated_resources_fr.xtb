@@ -796,7 +796,7 @@
 <translation id="1989112275319619282">Parcourir</translation>
 <translation id="1990512225220753005">Ne pas afficher de raccourcis sur cette page</translation>
 <translation id="1992397118740194946">Non défini</translation>
-<translation id="199340248656592341">Tu peux gérer ton compte sur cette page. <ph name="LINK_BEGIN" />En savoir plus<ph name="LINK_END" />&lt;br&gt;&lt;br&gt;
+<translation id="199340248656592341">Tu peux gérer tes comptes sur cette page. <ph name="LINK_BEGIN" />En savoir plus<ph name="LINK_END" />&lt;br&gt;&lt;br&gt;
     Les favoris, les mots de passe et les autres données du navigateur sont synchronisés avec le compte principal.&lt;br&gt;&lt;br&gt;
     L'ajout d'un compte scolaire permet de se connecter facilement aux sites Web et aux extensions en tant qu'élève. Le contrôle parental n'est pas désactivé.</translation>
 <translation id="1994173015038366702">URL du site</translation>
@@ -2275,6 +2275,7 @@ Vous pouvez gérer les paramètres de ce compte en installant l'application Fami
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Votre administrateur a réactivé 1 extension potentiellement dangereuse}one{Your administrator turned {NUM_EXTENSIONS} potentially harmful extensions back on}other{Votre administrateur a réactivé {NUM_EXTENSIONS} extensions potentiellement dangereuses}}</translation>
 <translation id="3831436149286513437">Suggestions de recherche Google Drive</translation>
 <translation id="383161972796689579">Le propriétaire de cet appareil a désactivé la fonctionnalité d'ajout de nouveaux utilisateurs</translation>
+<translation id="3834728400518755610">La modification des paramètres du micro nécessite l'arrêt de Linux. Arrêtez Linux pour continuer.</translation>
 <translation id="3834775135533257713">Impossible d'ajouter l'application <ph name="TO_INSTALL_APP_NAME" />, car elle crée un conflit avec <ph name="INSTALLED_APP_NAME" />.</translation>
 <translation id="3835522725882634757">Ce serveur envoie des données que <ph name="PRODUCT_NAME" /> ne comprend pas. Veuillez <ph name="BEGIN_LINK" />signaler un bug<ph name="END_LINK" /> et inclure la <ph name="BEGIN2_LINK" />liste des raw<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Ces informations d'ordre général concernent votre appareil et son utilisation (comme le niveau de la batterie, les erreurs, ainsi que l'activité du système et des applications). Elles serviront à améliorer Android, et certaines données globales aideront également nos développeurs d'applications et nos partenaires tels que les développeurs Android, à perfectionner leurs applications et leurs produits.</translation>
@@ -3499,6 +3500,7 @@ Souhaitez-vous lancer <ph name="CONTROL_PANEL_APPLET_NAME" /> ?</translation>
 <translation id="5488468185303821006">Autoriser en mode navigation privée</translation>
 <translation id="5489435190927933437">Mots de passe enregistrés pour <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Déconnecter l'appareil Bluetooth</translation>
+<translation id="5490798133083738649">Autoriser Linux à accéder au micro</translation>
 <translation id="549211519852037402">Beige et blanc</translation>
 <translation id="5493792505296048976">écran activé</translation>
 <translation id="5494362494988149300">Ouvrir une fois le téléchargement &amp;terminé</translation>

@@ -269,7 +269,7 @@
 <translation id="1336902454946927954">Ihr Sicherheitsschlüssel ist gesperrt, weil Ihr Fingerabdruck nicht erkannt werden konnte. Geben Sie Ihre PIN ein, um ihn zu entsperren.</translation>
 <translation id="1338802252451106843"><ph name="ORIGIN" /> möchte diese Anwendung öffnen.</translation>
 <translation id="1338950911836659113">Wird gelöscht...</translation>
-<translation id="13392265090583506">A11y</translation>
+<translation id="13392265090583506">Barrierefreiheit</translation>
 <translation id="1340527397989195812">Sichern Sie Medien von diesem Gerät mit der App "Dateien".</translation>
 <translation id="1341988552785875222">Der aktuelle Hintergrund wurde von <ph name="APP_NAME" /> festgelegt. Sie müssen <ph name="APP_NAME" /> möglicherweise deinstallieren, bevor Sie einen anderen Hintergrund auswählen.</translation>
 <translation id="1343865611738742294">Linux-Apps erlauben, auf USB-Geräte zuzugreifen. Linux speichert keine USB-Geräte, nachdem diese entfernt wurden.</translation>
@@ -1512,7 +1512,7 @@ Wenn Sie die Family Link App auf Ihrem Gerät installieren, können Sie die Eins
 <translation id="2875698561019555027">(Chrome-Fehlerseiten)</translation>
 <translation id="2876336351874743617">Finger 2</translation>
 <translation id="2876369937070532032">URLs einiger von mir besuchter Seiten an Google senden, wenn meine Sicherheit gefährdet ist</translation>
-<translation id="2878321553140713111">Für verschiedene Geräte</translation>
+<translation id="2878321553140713111">Geräte verbinden</translation>
 <translation id="2878782256107578644">Scan wird erstellt. Jetzt öffnen?</translation>
 <translation id="288042212351694283">Auf Ihre Universal 2nd Factor-Geräte zugreifen</translation>
 <translation id="2880660355386638022">Fensterpositionierung</translation>
@@ -2650,7 +2650,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="4348766275249686434">Fehler erfassen</translation>
 <translation id="4349828822184870497">Hilfreich</translation>
 <translation id="4350019051035968019">Dieses Gerät kann nicht in der Domain registriert werden, zu der Ihr Konto gehört, weil das Gerät für die Verwaltung in einer anderen Domain gekennzeichnet wurde.</translation>
-<translation id="4350782034419308508">Ok Google</translation>
+<translation id="4350782034419308508">Hey Google</translation>
 <translation id="4351060348582610152"><ph name="ORIGIN" /> möchte nach Bluetooth-Geräten in der Nähe suchen. Die folgenden Geräte wurden gefunden:</translation>
 <translation id="4353114845960720315">Während Sie im VR-Modus sind, erhält die Website möglicherweise bestimmte Informationen über Sie. Dazu gehören:</translation>
 <translation id="4354073718307267720">Nachfragen, wenn eine Website eine 3D-Karte meiner Umgebung erstellen oder die Kameraposition verfolgen möchte</translation>
@@ -3496,7 +3496,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="5488468185303821006">Im Inkognitomodus zulassen</translation>
 <translation id="5489435190927933437">Gespeicherte Passwörter für <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Bluetooth-Gerät trennen</translation>
-<translation id="5490798133083738649">Linux Zugriff auf Ihr Mikrofon erlauben</translation>
+<translation id="5490798133083738649">Linux Zugriff auf mein Mikrofon erlauben</translation>
 <translation id="549211519852037402">Beige und Weiß</translation>
 <translation id="5493792505296048976">Bildschirm an</translation>
 <translation id="5494362494988149300">Nach &amp;Fertigstellung öffnen</translation>
@@ -4814,7 +4814,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7197190419934240522">Cleverer suchen und surfen mit Google</translation>
 <translation id="7197632491113152433">Wir haben <ph name="NUMBER_OF_APPS" /> Apps in Ihrem Konto gefunden, die auf diesem Gerät verwendet werden können.</translation>
 <translation id="7199158086730159431">H&amp;ilfe erhalten</translation>
-<translation id="7199237594231970159">Datenschutzverifizierter Zugriff</translation>
+<translation id="7199237594231970159">Verifizierter Zugriff</translation>
 <translation id="7200083590239651963">Konfiguration auswählen</translation>
 <translation id="7201042526153088083">Apps und Spiele von Google Play auf dem <ph name="DEVICE_TYPE" /> installieren. &lt;a target="_blank" href="<ph name="URL" />"&gt;Weitere Informationen&lt;/a&gt;</translation>
 <translation id="720110658997053098">Gerät dauerhaft im Kioskmodus betreiben</translation>
@@ -6323,7 +6323,7 @@ Speichern Sie Ihre Schlüsseldatei an einem sicheren Ort. Sie benötigen die Dat
 <translation id="9101691533782776290">App starten</translation>
 <translation id="9102610709270966160">Erweiterung aktivieren</translation>
 <translation id="9103868373786083162">Drücken, um zurückzugehen. Kontextmenü, um Verlauf aufzurufen</translation>
-<translation id="9108692355621501797">In den <ph name="LINK_BEGIN" />G Suite for Education-Datenschutzhinweisen<ph name="LINK_END" /> können G Suite for Education-Nutzer und Eltern nachlesen, welche Daten zu welchen Zwecken erfasst werden und was damit passiert.</translation>
+<translation id="9108692355621501797">In den <ph name="LINK_BEGIN" />G Suite for Education-Datenschutzhinweisen<ph name="LINK_END" /> können G Suite for Education-Nutzer und Eltern nachlesen, welche Daten zu welchen Zwecken erhoben werden und was damit passiert.</translation>
 <translation id="9108808586816295166">Sicheres DNS ist möglicherweise nicht immer verfügbar</translation>
 <translation id="9109122242323516435">Löschen Sie Dateien aus dem Gerätespeicher, um Speicherplatz freizugeben.</translation>
 <translation id="9109283579179481106">Verbindung mit Mobilfunknetz herstellen</translation>

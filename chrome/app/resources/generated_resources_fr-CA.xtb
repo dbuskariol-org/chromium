@@ -2276,6 +2276,7 @@ https://support.google.com/chrome/?p=applescript</translation>
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Votre administrateur a réactivé 1 extension potentiellement nuisible}one{Votre administrateur a réactivé {NUM_EXTENSIONS} extension potentiellement nuisible}other{Votre administrateur a réactivé {NUM_EXTENSIONS} extensions potentiellement nuisibles}}</translation>
 <translation id="3831436149286513437">Suggestions de recherche dans Google Disque</translation>
 <translation id="383161972796689579">Le propriétaire de cet appareil a désactivé la fonctionnalité d'ajout de nouveaux utilisateurs.</translation>
+<translation id="3834728400518755610">Pour que la modification apportée au microphone soit appliquée, Linux doit être éteint. Éteignez Linux pour continuer.</translation>
 <translation id="3834775135533257713">Impossible d'ajouter l'application « <ph name="TO_INSTALL_APP_NAME" /> », car elle crée un conflit avec « <ph name="INSTALLED_APP_NAME" /> ».</translation>
 <translation id="3835522725882634757">Oh, non! Ce serveur envoie des données que <ph name="PRODUCT_NAME" /> ne peut pas comprendre. Veuillez <ph name="BEGIN_LINK" />signaler un bogue<ph name="END_LINK" /> et inclure la <ph name="BEGIN2_LINK" />liste brute<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Ces données d'ordre général concernent votre appareil et son utilisation (comme le niveau de la pile, les erreurs, ainsi que l'activité du système et des applications). Elles serviront à améliorer la plateforme Android. Certaines données collectées aideront également nos partenaires, tels que les concepteurs Android, à améliorer leurs applications et leurs produits.</translation>
@@ -3500,6 +3501,7 @@ Souhaitez-vous lancer <ph name="CONTROL_PANEL_APPLET_NAME" />?</translation>
 <translation id="5488468185303821006">Autoriser en mode de navigation privée</translation>
 <translation id="5489435190927933437">Mots de passe enregistrés pour <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Déconnecter l'appareil Bluetooth</translation>
+<translation id="5490798133083738649">Autoriser Linux à accéder à votre microphone</translation>
 <translation id="549211519852037402">Beige et blanc</translation>
 <translation id="5493792505296048976">écran activé</translation>
 <translation id="5494362494988149300">Ouvrir une fois le téléchargement &amp;terminé</translation>

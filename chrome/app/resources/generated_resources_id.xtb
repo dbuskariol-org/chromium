@@ -2275,6 +2275,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Administrator Anda mengaktifkan kembali 1 ekstensi yang berpotensi berbahaya}other{Administrator Anda mengaktifkan kembali {NUM_EXTENSIONS} ekstensi yang berpotensi berbahaya}}</translation>
 <translation id="3831436149286513437">Saran penelusuran Google Drive</translation>
 <translation id="383161972796689579">Pemilik perangkat ini telah menonaktifkan pengguna baru agar tidak ditambahkan</translation>
+<translation id="3834728400518755610">Perubahan pada setelan mikrofon mengharuskan Linux dimatikan. Matikan Linux untuk melanjutkan.</translation>
 <translation id="3834775135533257713">Tidak dapat menambahkan aplikasi "<ph name="TO_INSTALL_APP_NAME" />" karena bentrok dengan "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">Aduh! Server ini mengirimkan data <ph name="PRODUCT_NAME" /> yang tidak bisa dipahami. <ph name="BEGIN_LINK" />Laporkan bug<ph name="END_LINK" />, dan sertakan <ph name="BEGIN2_LINK" />cantuman mentah<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Ini adalah informasi umum tentang perangkat ini dan cara penggunaannya (seperti tingkat daya baterai, aktivitas sistem dan aplikasi, serta error). Data ini akan digunakan untuk menyempurnakan Android. Beberapa informasi gabungan juga akan membantu aplikasi dan partner Google, seperti developer Android, membuat aplikasi dan produk mereka menjadi lebih baik.</translation>
@@ -3499,6 +3500,7 @@ Anda dapat mengelola setelan akun ini dengan menginstal aplikasi Family Link di 
 <translation id="5488468185303821006">Izinkan dalam mode samaran</translation>
 <translation id="5489435190927933437">Sandi yang tersimpan untuk <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Putuskan hubungan perangkat Bluetooth</translation>
+<translation id="5490798133083738649">Izinkan Linux mengakses mikrofon Anda</translation>
 <translation id="549211519852037402">Beige dan putih</translation>
 <translation id="5493792505296048976">layar aktif</translation>
 <translation id="5494362494988149300">Buka Setelah &amp;Selesai</translation>

@@ -374,7 +374,7 @@ Si esta política está establecida en "false" o no está establecida, se inhabi
           Si no se asigna ningún valor a esta política o está inhabilitada, la configuración de las cuentas de Kerberos está inhabilitada. No se podrán añadir cuentas de Kerberos y no se podrá utilizar la autenticación Kerberos. Se eliminarán todas las cuentas de Kerberos y todas las contraseñas almacenadas.</translation>
 <translation id="1561424797596341174">La política anula las compilaciones de depuración del host de acceso remoto.</translation>
 <translation id="1561967320164410511">U2F y extensiones de confirmación individual</translation>
-<translation id="1575015449587326319">Política de configuración del conector OnFileDownloaded de Chrome Enterprise</translation>
+<translation id="1575015449587326319">Política de configuración del conector OnFileDownloaded de Chrome Enterprise Connectors</translation>
 <translation id="1583248206450240930">Utilizar <ph name="PRODUCT_FRAME_NAME" /> de forma predeterminada</translation>
 <translation id="1588240398285670601">Configuración del navegador</translation>
 <translation id="1599424828227887013">Habilitar el aislamiento de sitios web específicos en dispositivos Android</translation>
@@ -1601,7 +1601,7 @@ Si no se le asigna ningún valor, la pantalla de privacidad se inhabilitará ini
 <translation id="3303653927512453822">Te permite restablecer la antigua configuración de comportamiento de cookies de <ph name="ATTRIBUTE_SAMESITE_NAME" />. Si restableces la configuración de comportamiento antigua, las cookies que no especifiquen ningún atributo <ph name="ATTRIBUTE_SAMESITE_NAME" /> se tratarán como si tuvieran "<ph name="ATTRIBUTE_VALUE_SAMESITE_NONE" />" y las cookies "<ph name="ATTRIBUTE_VALUE_SAMESITE_NONE" />" no necesitarán tener el atributo "<ph name="ATTRIBUTE_SECURE_NAME" />". Para ver la descripción completa, consulta https://www.chromium.org/administrators/policy-list-3/cookie-legacy-samesite-policies
 
           Si no se define esta política, el comportamiento predeterminado de <ph name="ATTRIBUTE_SAMESITE_NAME" /> para las cookies que no especifiquen ningún atributo <ph name="ATTRIBUTE_SAMESITE_NAME" /> dependerá de la configuración personal del usuario para la función <ph name="FEATURE_NAME_SAMESITE_BY_DEFAULT_COOKIES" />, que puede definirse mediante una prueba pública o bien habilitando o inhabilitando el indicador <ph name="FLAG_NAME_SAMESITE_BY_DEFAULT_COOKIES" />.</translation>
-<translation id="3303911765031636277">Política de configuración para el conector OnFileAttached de Chrome Enterprise</translation>
+<translation id="3303911765031636277">Política de configuración para el conector OnFileAttached de Chrome Enterprise Connectors</translation>
 <translation id="3304662785258434098">Permite especificar si los usuarios pueden añadir excepciones para permitir el contenido mixto en determinados sitios web.
 
           Es posible anular la aplicación de esta política en patrones de URL concretos usando las políticas "InsecureContentAllowedForUrls" e "InsecureContentBlockedForUrls".
@@ -4817,7 +4817,7 @@ Si esta opción no está establecida o está establecida en True, los dispositiv
 
       La política <ph name="SYNC_DISABLED_POLICY_NAME" /> inhabilita todas las sincronizaciones de datos y anula <ph name="ROAMING_PROFILE_SUPPORT_ENABLED_POLICY_NAME" />.</translation>
 <translation id="802147957407376460">Girar la pantalla 0 grados</translation>
-<translation id="8027265928215448940">Lista con los ajustes de los servicios de conectores de Chrome Enterprise que se van a aplicar al conector <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" /> de Enterprise, que se activa cuando se descarga un archivo en Chrome.
+<translation id="8027265928215448940">Lista con los ajustes de los servicios de Chrome Enterprise Connectors que se van a aplicar al conector <ph name="ON_FILE_DOWNLOADED_ENTERPRISE_CONNECTOR" /> de Enterprise, que se activa cuando se descarga un archivo en Chrome.
 
       Los campos <ph name="ENTERPRISE_CONNECTOR_URL_LIST_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_TAGS_FIELD" />, <ph name="ENTERPRISE_CONNECTOR_ENABLE_FIELD" /> y <ph name="ENTERPRISE_CONNECTOR_DISABLE_FIELD" /> se usan para determinar si el conector debe enviar un archivo para su análisis cuando se descargue de una página específica y qué etiquetas se van a incluir en la solicitud de análisis del archivo. Se incluirá en la solicitud de análisis una etiqueta correspondiente a un patrón "enable" si la URL de la página coincide con un patrón asociado a esta etiqueta, siempre y cuando no se encuentre una misma etiqueta que coincida con la URL de la página con el patrón "disable". El análisis se realiza si se debe incluir al menos 1 etiqueta en la solicitud.
 

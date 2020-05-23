@@ -2274,6 +2274,7 @@
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{系統管理員已重新開啟 1 個可能有害的擴充功能}other{系統管理員已重新開啟 {NUM_EXTENSIONS} 個可能有害的擴充功能}}</translation>
 <translation id="3831436149286513437">Google 雲端硬碟搜尋建議</translation>
 <translation id="383161972796689579">裝置擁有者已停用新增使用者功能</translation>
+<translation id="3834728400518755610">必須先關閉 Linux，麥克風設定的變更才會生效。請關閉 Linux 以繼續操作。</translation>
 <translation id="3834775135533257713">「<ph name="TO_INSTALL_APP_NAME" />」應用程式和「<ph name="INSTALLED_APP_NAME" />」發生衝突，因此無法新增。</translation>
 <translation id="3835522725882634757">糟糕！這個伺服器傳送了「<ph name="PRODUCT_NAME" />」無法判讀的資料。請<ph name="BEGIN_LINK" />回報錯誤<ph name="END_LINK" />，同時提供<ph name="BEGIN2_LINK" />原始清單<ph name="END2_LINK" />。</translation>
 <translation id="383669374481694771">這個頁面會顯示這部裝置和裝置使用情況的一般資訊 (例如電池電量、系統和應用程式活動，以及錯誤資訊)。這些資料將用於改善 Android，且部分匯總資訊還能協助 Google 應用程式和合作夥伴 (例如 Android 開發人員) 提高應用程式和產品的服務品質。</translation>
@@ -3497,6 +3498,7 @@
 <translation id="5488468185303821006">允許在無痕模式中執行</translation>
 <translation id="5489435190927933437">已儲存的 <ph name="DOMAIN" /> 密碼</translation>
 <translation id="5490721031479690399">中斷與藍牙裝置的連線</translation>
+<translation id="5490798133083738649">允許 Linux 存取你的麥克風</translation>
 <translation id="549211519852037402">米色與白色</translation>
 <translation id="5493792505296048976">螢幕已開啟</translation>
 <translation id="5494362494988149300">下載完成時自動開啟檔案(&amp;D)</translation>
@@ -4820,9 +4822,9 @@
 <translation id="720110658997053098">讓裝置永久使用 Kiosk 模式</translation>
 <translation id="7201118060536064622">已刪除「<ph name="DELETED_ITEM_NAME" />」</translation>
 <translation id="7201420661433230412">查看檔案</translation>
-<translation id="7203826966018112936">將學校帳戶新增至設定檔可讓貴子女以學生的身分輕鬆登入網站和擴充功能，同時遵守家長監護功能的操作規範。這項操作不會允許貴子女存取與學校帳戶同步的書籤、密碼或其他瀏覽器資料。&lt;br&gt;&lt;br&gt;
-    如果貴子女在學校使用 Chromebook，而你想在家中複製相同的學校使用體驗，以確保子女可存取所有與學校作業相關的必要資訊，請登出這個 Family Link 帳戶，然後從 Chrome 作業系統帳戶頁面登入學校帳戶 (注意：系統不會套用 Family Link 家長監護功能)。&lt;br&gt;&lt;br&gt;
-    如果貴子女在學校不是使用Chromebook，或是你想要使用 Family Link 管理貴子女在家中的使用體驗，請按下方的 [下一步] 按鈕，將學校帳戶新增至這個設定檔。</translation>
+<translation id="7203826966018112936">將學校帳戶新增至設定檔可讓子女以學生的身分輕鬆登入網站和擴充功能，同時遵守家長監護功能的操作規範。這項操作不允許子女存取與學校帳戶同步的書籤、密碼或其他瀏覽器資料。&lt;br&gt;&lt;br&gt;
+    如果子女在學校使用 Chromebook，而您想在家中複製相同的學校使用體驗，以確保子女可存取所有與學校作業相關的必要資訊，請登出這個 Family Link 帳戶，然後從 Chrome 作業系統帳戶頁面登入學校帳戶 (注意：系統不會套用 Family Link 家長監護功能)。&lt;br&gt;&lt;br&gt;
+    如果子女在學校不是使用 Chromebook，或是您想要使用 Family Link 管理子女在家中的使用體驗，請按下方的 [下一步] 按鈕，將學校帳戶新增至這個設定檔。</translation>
 <translation id="7206693748120342859">正在下載 <ph name="PLUGIN_NAME" />...</translation>
 <translation id="720715819012336933">{NUM_PAGES,plural, =1{離開網頁}other{離開網頁}}</translation>
 <translation id="7207457272187520234">傳送使用狀況與診斷資料。這部裝置目前會自動將診斷資料、裝置和應用程式的使用資料傳送給 Google。這些資料將有助於改善系統和應用程式的穩定性與其他功能。此外，部分匯總資料還能協助 Google 應用程式和合作夥伴 (例如 Android 開發人員) 改善自己的產品和服務。這項設定是由裝置擁有者強制執行。如果你將「其他網路和應用程式活動」設定為開啟，這些資料可能會儲存在你的 Google 帳戶中。</translation>

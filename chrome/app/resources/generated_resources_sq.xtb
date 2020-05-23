@@ -2272,6 +2272,7 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Administratori yt aktivizoi përsëri 1 shtesë që mund të jetë e dëmshme}other{Administratori yt aktivizoi përsëri {NUM_EXTENSIONS} shtesa që mund të jenë të dëmshme}}</translation>
 <translation id="3831436149286513437">Sugjerimet e kërkimit në "Diskun e Google"</translation>
 <translation id="383161972796689579">Zotëruesi i kësaj pajisjeje ka çaktivizuar shtimin e përdoruesve të rinj</translation>
+<translation id="3834728400518755610">Ndryshimi në cilësimin e mikrofonit kërkon që të fiket sistemi Linux. Fike sistemin Linux për të vazhduar.</translation>
 <translation id="3834775135533257713">Aplikacioni "<ph name="TO_INSTALL_APP_NAME" />" nuk mund të shtohej sepse është në konflikt me "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">Oh, jo! Ky server po dërgon të dhëna që <ph name="PRODUCT_NAME" /> nuk mund t'i kuptojë. <ph name="BEGIN_LINK" />Raporto gabimin<ph name="END_LINK" /> dhe përfshi <ph name="BEGIN2_LINK" />listimin e papërpunuar<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Këto janë informacione të përgjithshme për këtë pajisje dhe se si përdoret (si p.sh. niveli i baterisë, aktiviteti i sistemit dhe aplikacioneve dhe gabimet). Të dhënat do të përdoren për të përmirësuar Android dhe disa informacione të përmbledhura do t'i ndihmojnë po ashtu aplikacionet dhe partnerët e Google, si p.sh. zhvilluesit e Android, që të përmirësojnë aplikacionet dhe produktet e tyre.</translation>
@@ -3496,6 +3497,7 @@ Cilësimet e kësaj llogarie mund t'i menaxhosh duke instaluar aplikacionin Fami
 <translation id="5488468185303821006">Lejo në modalitetin "i fshehtë"</translation>
 <translation id="5489435190927933437">Fjalëkalimet e ruajtura për <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Shkëput pajisjen me Bluetooth</translation>
+<translation id="5490798133083738649">Lejo që Linux të ketë qasje te mikrofoni yt</translation>
 <translation id="549211519852037402">Bezhë dhe e bardhë</translation>
 <translation id="5493792505296048976">ekrani aktiv</translation>
 <translation id="5494362494988149300">Hape kur të &amp;përfundosh</translation>

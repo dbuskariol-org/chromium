@@ -3660,7 +3660,7 @@ Si vous désactivez ce paramètre ou si vous ne le configurez pas, le SPN Kerber
         Cette règle peut empêcher l'utilisateur d'accéder à un contenu soumis à des restrictions sur les propriétés Web Google.
         Si cette règle est définie sur "True", l'utilisateur est déconnecté dès que son jeton d'authentification n'est plus valide et que les tentatives de restauration de ce jeton échouent.
         Si cette règle est définie sur "False" ou n'est pas définie, l'utilisateur peut poursuivre ses activités sans être authentifié.</translation>
-<translation id="631183702829488873">Lorsque cette règle est activée, elle permet d'afficher le mot de passe en cliquant sur un bouton situé sur l'écran de connexion et de verrouillage.
+<translation id="631183702829488873">Lorsque cette règle est activée, elle permet d'afficher le mot de passe via un clic sur un bouton situé sur l'écran de connexion et de verrouillage.
           Son icône représente un œil et se trouve dans le champ du mot de passe. Le bouton n'est pas affiché lorsque cette fonctionnalité est désactivée.
       </translation>
 <translation id="6315673513957120120">Chrome affiche une page d'avertissement lorsque les utilisateurs naviguent vers des sites présentant des erreurs SSL. Par défaut, ou quand cette règle est définie sur "True", les utilisateurs sont autorisés à poursuivre leur navigation vers la page concernée.

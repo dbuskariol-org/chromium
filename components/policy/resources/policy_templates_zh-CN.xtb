@@ -255,7 +255,7 @@
 <translation id="1438739959477268107">默认的密钥生成设置</translation>
 <translation id="1449083855104537880">如果此政策设为 True，无障碍选项将会显示在系统任务栏菜单中。如果此政策设为 False，这些选项就不会显示在菜单中。
 
-      如果您设置了此政策，用户便无法更改它。如果您未设置此政策，无障碍选项将不会显示在菜单中，但用户可通过“设置”页面让它们显示。
+      如果您设置了此政策，用户便无法更改它。如果您未设置此政策，无障碍选项将不会显示在菜单中，但用户可通过“设置”页面将其设为显示。
 
       如果您通过其他方式（例如，通过组合键）开启无障碍功能，无障碍选项会一直显示在系统任务栏菜单中。</translation>
 <translation id="1456822151187621582">Windows（<ph name="PRODUCT_OS_NAME" />客户端）：</translation>
@@ -820,10 +820,10 @@
 
       当此政策设为 Full 时，<ph name="PRODUCT_NAME" /> 将在必要时进行整页光栅化。
 
-      当此政策设为 Fast 时，<ph name="PRODUCT_NAME" /> 会尽量避免执行光栅化 - 减少光栅化操作有助于缩小打印任务的规模并提高打印速度。
+      当此政策设为 Fast 时，<ph name="PRODUCT_NAME" /> 会尽量避免执行光栅化。减少光栅化操作有助于缩小打印任务的规模并提高打印速度。
 
       如果您未设置此政策，<ph name="PRODUCT_NAME" /> 将处于 Full 模式。</translation>
-<translation id="2336221492251647548">将此政策设为 True 会在登录时开启屏幕键盘。将此政策设为 False 会在登录时关闭屏幕键盘。
+<translation id="2336221492251647548">将此政策设为 True 时，系统会在登录时开启屏幕键盘。将此政策设为 False 时，系统会在登录时关闭屏幕键盘。
 
       如果您设置了此政策，用户便可暂时开启或关闭屏幕键盘。当登录屏幕重新加载或闲置了 1 分钟后，屏幕键盘就会还原为初始状态。
 
@@ -831,7 +831,7 @@
 
           注意：<ph name="DEVICE_LOGIN_SCREEN_VIRTUAL_KEYBOARD_ENABLED_POLICY_NAME" />（若已指定）会覆盖此政策。</translation>
 <translation id="2345547870894930157">启用 DNS-over-HTTPS，且禁止改用不安全的查询</translation>
-<translation id="2349117476121456297">将此政策设为 True 会让键盘顶行中的各个键充当功能键命令。按搜索键可将这些键的行为改回媒体键。
+<translation id="2349117476121456297">将此政策设为 True 时，系统会让键盘顶行中的各个键充当功能键命令。按搜索键可将这些键的行为改回媒体键。
 
       如果此政策设为 False 或未设置，键盘会默认发出媒体键命令。按搜索键可将这些键改为功能键。</translation>
 <translation id="2353442107789326507">让您能够指定应用于 <ph name="ON_FILE_ATTACHED_ENTERPRISE_CONNECTOR" /> Enterprise Connector 的 Chrome Enterprise Connector 服务设置列表，以供在有人向 Chrome 附加文件时调用。
@@ -2550,7 +2550,7 @@
           如果您设置了此政策，用户将无法更改或覆盖它。
 
           如果此政策未设置，“单声道音频”在登录屏幕上最初会处于停用状态，但用户可以随时启用它。</translation>
-<translation id="4942681160308347946">将此政策设为 True 会在登录屏幕上开启语音反馈。将此政策设为 False 会在登录屏幕上关闭语音反馈。
+<translation id="4942681160308347946">将此政策设为 True 时，系统会在登录屏幕上开启语音反馈。将此政策设为 False 时，系统会在登录屏幕上关闭语音反馈。
 
       如果您设置了此政策，用户便可暂时开启或关闭语音反馈。当登录屏幕重新加载或闲置了 1 分钟后，语音反馈就会还原为初始状态。
 
@@ -3321,7 +3321,7 @@
 <translation id="5997543603646547632">默认情况下，使用24小时制</translation>
 <translation id="5997846976342452720">指定是否应停用插件查找器（已弃用）</translation>
 <translation id="5998198091336830580">此政策是下面这个原子政策组的一部分（系统仅会应用该组中来源优先级最高的政策）：</translation>
-<translation id="6009062900206392980">将此政策设为 None 会在登录屏幕上关闭屏幕放大功能。
+<translation id="6009062900206392980">将此政策设为 None 时，系统会在登录屏幕上关闭屏幕放大功能。
 
        如果您设置了此政策，用户便可暂时开启或关闭放大镜。当登录屏幕重新加载或闲置了 1 分钟后，放大镜就会还原为初始状态。
 
@@ -3796,7 +3796,7 @@
 <translation id="6813263547126514821">电源和关机</translation>
 <translation id="681446116407619279">支持的身份验证方案</translation>
 <translation id="6821268164692776674"><ph name="CLOUD_PRINT_NAME" />和“保存到 Google 云端硬盘”目的地</translation>
-<translation id="6833064854262015312">将此政策设为 True 会在登录屏幕上开启高对比度模式。将此政策设为 False 会在登录屏幕上关闭高对比度模式。
+<translation id="6833064854262015312">将此政策设为 True 时，系统会在登录屏幕上开启高对比度模式。将此政策设为 False 时，系统会在登录屏幕上关闭高对比度模式。
 
       如果您设置了此政策，用户便可暂时更改（开启或关闭）高对比度模式。当登录屏幕重新加载或闲置了 1 分钟后，高对比度模式就会还原为初始状态。
 
@@ -4108,7 +4108,7 @@
       若想通过应用 VirtualMachinesAllowed、CrostiniAllowed 和 DeviceUnaffiliatedCrostiniAllowed 这三项政策以允许 Crostini 运行，则这三项政策都需设为 true。
       如果此政策改设为 false，则只会导致无法启动新的 Crostini 容器，而不会关闭已在运行的容器。</translation>
 <translation id="7234280155140786597">被禁的本地消息传递主机的名称（用“*”则表示全部禁止）</translation>
-<translation id="7244405731715221632">可用</translation>
+<translation id="7244405731715221632">Full</translation>
 <translation id="7249828445670652637">允许 ARC 应用使用 <ph name="PRODUCT_OS_NAME" /> CA 证书</translation>
 <translation id="7251652588006515288">此政策用于控制用户是否能够通过证书管理器导入和移除客户端证书。
 
@@ -4361,7 +4361,7 @@
       如果设置了此政策，则可在未成年用户的设备上验证家长访问码。
       如果未设置此政策，则无法在未成年用户的设备上验证家长访问码。</translation>
 <translation id="7625444193696794922">指定该设备应锁定到的发布渠道。</translation>
-<translation id="7629840767216985001">将此政策设为 True 会在登录屏幕上开启大号光标。将此政策设为 False 会在登录屏幕上关闭大号光标。
+<translation id="7629840767216985001">将此政策设为 True 时，系统会在登录屏幕上开启大号光标。将此政策设为 False 时，系统会在登录屏幕上关闭大号光标。
 
       如果您设置了此政策，用户便可暂时开启或关闭大号光标。当登录屏幕重新加载或闲置了 1 分钟后，大号光标就会还原为初始状态。
 

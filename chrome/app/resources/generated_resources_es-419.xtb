@@ -2272,6 +2272,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{El administrador volvió a activar 1 extensión potencialmente dañina}other{El administrador volvió a activar {NUM_EXTENSIONS} extensiones potencialmente dañinas}}</translation>
 <translation id="3831436149286513437">Sugerencias de búsqueda de Google Drive</translation>
 <translation id="383161972796689579">El propietario de este dispositivo ha inhabilitado a nuevos usuarios para evitar que se agreguen.</translation>
+<translation id="3834728400518755610">Para cambiar la configuración del micrófono, debes cerrar Linux. Realiza esta acción para continuar.</translation>
 <translation id="3834775135533257713">No se pudo agregar la aplicación "<ph name="TO_INSTALL_APP_NAME" />" debido a un conflicto con "<ph name="INSTALLED_APP_NAME" />".</translation>
 <translation id="3835522725882634757">¡No! Este servidor está enviando datos que <ph name="PRODUCT_NAME" /> no comprende. <ph name="BEGIN_LINK" />Informar un error<ph name="END_LINK" /> e incluir la <ph name="BEGIN2_LINK" />lista sin procesar<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Aquí se muestra información general sobre este dispositivo y cómo se usa (por ejemplo, el nivel de batería, la actividad de las apps y el sistema, y los errores). Los datos se usarán para mejorar Android, y la información agregada también permitirá que las apps y los socios de Google, como los desarrolladores de Android, mejoren sus apps y productos.</translation>
@@ -3496,6 +3497,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="5488468185303821006">Permitir modo incógnito</translation>
 <translation id="5489435190927933437">Contraseñas guardadas para <ph name="DOMAIN" /></translation>
 <translation id="5490721031479690399">Desconectar el dispositivo Bluetooth</translation>
+<translation id="5490798133083738649">Permitir que Linux acceda a tu micrófono</translation>
 <translation id="549211519852037402">Beige y blanco</translation>
 <translation id="5493792505296048976">pantalla encendida</translation>
 <translation id="5494362494988149300">Abrir cuan&amp;do esté listo</translation>

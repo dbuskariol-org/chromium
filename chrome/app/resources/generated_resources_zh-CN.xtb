@@ -2271,6 +2271,7 @@
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{您的管理员重新开启了 1 个可能有害的扩展程序}other{您的管理员重新开启了 {NUM_EXTENSIONS} 个可能有害的扩展程序}}</translation>
 <translation id="3831436149286513437">Google 云端硬盘搜索建议</translation>
 <translation id="383161972796689579">此设备的所有者已禁止添加新用户</translation>
+<translation id="3834728400518755610">您必须关闭 Linux 才能更改麦克风设置。请关闭 Linux 以继续操作。</translation>
 <translation id="3834775135533257713">无法添加应用“<ph name="TO_INSTALL_APP_NAME" />”，因为它与“<ph name="INSTALLED_APP_NAME" />”冲突。</translation>
 <translation id="3835522725882634757">糟糕！<ph name="PRODUCT_NAME" />无法解读服务器所发送的数据。请<ph name="BEGIN_LINK" />报告错误<ph name="END_LINK" />，并附上<ph name="BEGIN2_LINK" />原始列表<ph name="END2_LINK" />。</translation>
 <translation id="383669374481694771">这是关于此设备及其使用情况（例如电池电量、系统与应用活动以及错误）的一般信息。我们会使用这些数据来改善 Android，部分汇总信息还会有助于改善 Google 应用，并会协助我们的合作伙伴（例如 Android 开发者）改善其应用和产品。</translation>
@@ -3494,6 +3495,7 @@
 <translation id="5488468185303821006">在无痕模式下启用</translation>
 <translation id="5489435190927933437">已保存的用于登录 <ph name="DOMAIN" /> 的密码</translation>
 <translation id="5490721031479690399">断开蓝牙设备</translation>
+<translation id="5490798133083738649">允许 Linux 使用您的麦克风</translation>
 <translation id="549211519852037402">米黄色和白色</translation>
 <translation id="5493792505296048976">已开启屏幕</translation>
 <translation id="5494362494988149300">完成后打开(&amp;D)</translation>
@@ -4818,7 +4820,7 @@
 <translation id="7201118060536064622">已删除“<ph name="DELETED_ITEM_NAME" />”</translation>
 <translation id="7201420661433230412">查看文件</translation>
 <translation id="7203826966018112936">在个人资料中添加学校帐号可让孩子以学生身份轻松登录网站和扩展程序，同时仍在家长控制下执行操作。此操作不会授权孩子访问与学校帐号同步的书签、密码或其他浏览器数据。&lt;br&gt;&lt;br&gt;
-    如果您的孩子在校时使用 Chromebook，并且您希望在家中复制同样的在校使用体验以确保孩子能够获取所有必要的学校作业，请退出此 Family Link 帐号，然后从 Chrome 操作系统帐号页面登录学校帐号（注意：Family Link 家长控制将不适用）。&lt;br&gt;&lt;br&gt;
+    如果您的孩子在校时使用 Chromebook，并且您希望在家中复制同样的在校使用体验，确保孩子能够获取所有必要的学校作业，请退出此 Family Link 帐号，然后从 Chrome 操作系统帐号页面登录学校帐号（注意：Family Link 家长控制将不适用）。&lt;br&gt;&lt;br&gt;
     如果您的孩子在校时不使用 Chromebook，或者您更愿意借助 Family Link 管理孩子的在家使用体验，请点击下面的“下一步”按钮向此个人资料添加学校帐号。</translation>
 <translation id="7206693748120342859">正在下载 <ph name="PLUGIN_NAME" />...</translation>
 <translation id="720715819012336933">{NUM_PAGES,plural, =1{退出网页}other{退出网页}}</translation>
@@ -5229,7 +5231,7 @@
 <translation id="7744192722284567281">遭遇了数据泄露</translation>
 <translation id="7750228210027921155">画中画</translation>
 <translation id="7751260505918304024">全部显示</translation>
-<translation id="7753735457098489144">安装失败，因为存储空间不足。若要释放空间，请从设备存储空间中删除文件。</translation>
+<translation id="7753735457098489144">存储空间不足，安装失败。如需释放空间，请从设备存储空间中删除文件。</translation>
 <translation id="7754704193130578113">下载前询问每个文件的保存位置</translation>
 <translation id="7755287808199759310">您的父亲/母亲可为您取消屏蔽此网站</translation>
 <translation id="7757787379047923882">分享自“<ph name="DEVICE_NAME" />”的文字</translation>
@@ -6320,7 +6322,7 @@
 <translation id="9101691533782776290">启动应用</translation>
 <translation id="9102610709270966160">启用扩展程序</translation>
 <translation id="9103868373786083162">点按该按钮可后退，点按上下文菜单可查看历史记录</translation>
-<translation id="9108692355621501797"><ph name="LINK_BEGIN" />G Suite 教育版隐私权声明<ph name="LINK_END" />旨在帮助 G Suite 教育版用户和家长了解此产品会收集哪些数据、为什么收集这些数据以及会利用这些数据做什么。</translation>
+<translation id="9108692355621501797"><ph name="LINK_BEGIN" />G Suite 教育版隐私权声明<ph name="LINK_END" />旨在帮助 G Suite 教育版用户和家长了解此产品会收集哪些数据、为什么收集这些数据以及会使用这些数据做什么。</translation>
 <translation id="9108808586816295166">安全 DNS 未必一直可用</translation>
 <translation id="9109122242323516435">要释放空间，请将文件从设备存储空间中删除。</translation>
 <translation id="9109283579179481106">连接到移动网络</translation>

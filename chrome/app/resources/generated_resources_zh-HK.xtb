@@ -2274,6 +2274,7 @@
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{您的管理員已重新開啟 1 個可能有害的擴充程式}other{您的管理員已重新開啟 {NUM_EXTENSIONS} 個可能有害的擴充程式}}</translation>
 <translation id="3831436149286513437">「Google 雲端硬碟」搜尋建議</translation>
 <translation id="383161972796689579">裝置擁有者已停用新增使用者功能</translation>
+<translation id="3834728400518755610">Linux 需要關閉，麥克風設定的變更才會生效。關閉 Linux 即可繼續。</translation>
 <translation id="3834775135533257713">「<ph name="TO_INSTALL_APP_NAME" />」應用程式和「<ph name="INSTALLED_APP_NAME" />」發生衝突，因此無法新增。</translation>
 <translation id="3835522725882634757">糟糕！這個伺服器傳送了「<ph name="PRODUCT_NAME" />」無法判讀的數據。請<ph name="BEGIN_LINK" />報告錯誤<ph name="END_LINK" />，同時提供<ph name="BEGIN2_LINK" />原始清單<ph name="END2_LINK" />。</translation>
 <translation id="383669374481694771">這個選項會提供此裝置的一般資料和使用情况 (例如電量、系統及應用程式活動和錯誤)。這些資料將會用來改善 Android。部分彙整資料還能協助 Google 應用程式和合作夥伴 (例如 Android 開發人員) 改良應用程式和產品。</translation>
@@ -3498,6 +3499,7 @@
 <translation id="5488468185303821006">允許在無痕模式中執行</translation>
 <translation id="5489435190927933437"><ph name="DOMAIN" /> 的已儲存密碼</translation>
 <translation id="5490721031479690399">解除連結藍牙裝置</translation>
+<translation id="5490798133083738649">允許 Linux 存取您的麥克風</translation>
 <translation id="549211519852037402">米色和白色</translation>
 <translation id="5493792505296048976">螢幕已開啟</translation>
 <translation id="5494362494988149300">下載完成時自動開啟檔案(&amp;D)</translation>
