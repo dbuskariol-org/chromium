@@ -1956,6 +1956,12 @@ Unknown properties are collapsed to zero. -->
   <int value="3" label="Refresh the crash list"/>
 </enum>
 
+<enum name="AndroidWebViewDevUiMetricsTransmission">
+  <int value="0" label="Success"/>
+  <int value="1" label="Malformed protobuf"/>
+  <int value="2" label="RemoteException"/>
+</enum>
+
 <enum name="AndroidWebViewProxySchemeFilterType">
   <int value="0" label="HTTP"/>
   <int value="1" label="HTTPS"/>
