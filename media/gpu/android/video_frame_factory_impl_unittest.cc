@@ -41,49 +41,21 @@ class MockMaybeRenderEarlyManager : public MaybeRenderEarlyManager {
   MOCK_METHOD0(MaybeRenderEarly, void());
 };
 
-class MockFrameInfoHelper : public FrameInfoHelper,
-                            public DestructionObservable {
+class MockYCbCrHelper : public YCbCrHelper, public DestructionObservable {
  public:
-  MockFrameInfoHelper(MockFrameInfoHelper** thiz) { *thiz = this; }
+  MockYCbCrHelper(MockYCbCrHelper** thiz) { *thiz = this; }
 
-  void GetFrameInfo(
-      std::unique_ptr<CodecOutputBufferRenderer> buffer_renderer,
-      base::OnceCallback<
-          void(std::unique_ptr<CodecOutputBufferRenderer>, FrameInfo, bool)> cb)
-      override {
-    MockGetFrameInfo(buffer_renderer.get());
+  void GetYCbCrInfo(
+      scoped_refptr<CodecImageHolder> codec_image_holder,
+      base::OnceCallback<void(OptionalInfo ycbcr_info)> cb) override {
+    MockGetYCbCrInfo(codec_image_holder);
     cb_ = std::move(cb);
-    buffer_renderer_ = std::move(buffer_renderer);
-
-    if (run_callback_automatically_) {
-      RunWithYcbCrInfo(true);
-      base::RunLoop().RunUntilIdle();
-    }
   }
 
-  void RunWithYcbCrInfo(bool success) {
-    DCHECK(buffer_renderer_);
+  MOCK_METHOD1(MockGetYCbCrInfo,
+               void(scoped_refptr<CodecImageHolder> codec_image_holder));
 
-    FrameInfo info;
-    info.coded_size = buffer_renderer_->size();
-    info.visible_rect = gfx::Rect(info.coded_size);
-
-    std::move(cb_).Run(std::move(buffer_renderer_), info, success);
-  }
-
-  void set_run_callback_automatically(bool run_callback_automatically) {
-    run_callback_automatically_ = run_callback_automatically;
-  }
-
-  MOCK_METHOD1(MockGetFrameInfo,
-               void(CodecOutputBufferRenderer* buffer_renderer));
-
- private:
-  bool run_callback_automatically_ = true;
-  base::OnceCallback<
-      void(std::unique_ptr<CodecOutputBufferRenderer>, FrameInfo, bool)>
-      cb_;
-  std::unique_ptr<CodecOutputBufferRenderer> buffer_renderer_;
+  base::OnceCallback<void(OptionalInfo ycbcr_info)> cb_;
 };
 
 class VideoFrameFactoryImplTest : public testing::Test {
@@ -96,8 +68,8 @@ class VideoFrameFactoryImplTest : public testing::Test {
     auto mre_manager = std::make_unique<MockMaybeRenderEarlyManager>();
     mre_manager_raw_ = mre_manager.get();
 
-    auto ycbcr_helper = base::SequenceBound<MockFrameInfoHelper>(
-        task_runner_, &ycbcr_helper_raw_);
+    auto ycbcr_helper =
+        base::SequenceBound<MockYCbCrHelper>(task_runner_, &ycbcr_helper_raw_);
     base::RunLoop().RunUntilIdle();  // Init |ycbcr_helper_raw_|.
     ycbcr_destruction_observer_ =
         ycbcr_helper_raw_->CreateDestructionObserver();
@@ -176,7 +148,7 @@ class VideoFrameFactoryImplTest : public testing::Test {
   // Sent to |impl_| by RequestVideoFrame..
   base::MockCallback<VideoFrameFactory::OnceOutputCB> output_cb_;
 
-  MockFrameInfoHelper* ycbcr_helper_raw_ = nullptr;
+  MockYCbCrHelper* ycbcr_helper_raw_ = nullptr;
   std::unique_ptr<DestructionObserver> ycbcr_destruction_observer_;
 
   gpu::GpuPreferences gpu_preferences_;
@@ -272,72 +244,77 @@ TEST_F(VideoFrameFactoryImplTest,
   base::RunLoop().RunUntilIdle();
 }
 
-TEST_F(VideoFrameFactoryImplTest, DoesCallFrameInfoHelperIfVulkan) {
-  // We will be driving callback by ourselves in this test.
-  ycbcr_helper_raw_->set_run_callback_automatically(false);
-  // Expect call to get info for the first frame.
-  EXPECT_CALL(*ycbcr_helper_raw_, MockGetFrameInfo(_)).Times(1);
-
+TEST_F(VideoFrameFactoryImplTest, DoesNotCallYCbCrHelperIfNotVulkan) {
+  EXPECT_CALL(*ycbcr_helper_raw_, MockGetYCbCrInfo(_)).Times(0);
   RequestVideoFrame();
-
-  // Provide info.  It should send image request.
-  ycbcr_helper_raw_->RunWithYcbCrInfo(true);
-  base::RunLoop().RunUntilIdle();
-
-  testing::Mock::VerifyAndClearExpectations(ycbcr_helper_raw_);
-
-  // Fulfilling image request should provide video frame.
-  EXPECT_CALL(output_cb_, Run(_)).Times(1);
-
   auto image_record = MakeImageRecord();
+  image_record.is_vulkan = false;
   image_provider_raw_->ProvideOneRequestedImage(&image_record);
   base::RunLoop().RunUntilIdle();
+}
+
+TEST_F(VideoFrameFactoryImplTest, DoesCallYCbCrHelperIfVulkan) {
+  RequestVideoFrame();
+  auto image_record = MakeImageRecord();
+  base::OnceCallback<void(YCbCrHelper::OptionalInfo)> cb;
+  EXPECT_CALL(*ycbcr_helper_raw_,
+              MockGetYCbCrInfo(image_record.codec_image_holder))
+      .Times(1);
+  image_record.is_vulkan = true;
+  image_provider_raw_->ProvideOneRequestedImage(&image_record);
+  base::RunLoop().RunUntilIdle();
+
+  // Provide YCbCrInfo.  It should provide the VideoFrame too.
+  EXPECT_CALL(output_cb_, Run(_)).Times(1);
+  gpu::VulkanYCbCrInfo ycbcr;
+  std::move(ycbcr_helper_raw_->cb_).Run(ycbcr);
+  base::RunLoop().RunUntilIdle();
+  // It's okay if the ycbcr helper is destroyed.  If not, then verify
+  // expectations explicitly now.
+  if (ycbcr_destruction_observer_->destructed())
+    ycbcr_helper_raw_ = nullptr;
+  else
+    testing::Mock::VerifyAndClearExpectations(ycbcr_helper_raw_);
 
   // Verify that no more calls happen, since we don't want thread hops on every
   // frame.  Note that multiple could be dispatched before now.  It should still
   // send along a VideoFrame, though.
-  EXPECT_CALL(*ycbcr_helper_raw_, MockGetFrameInfo(_)).Times(0);
-  EXPECT_CALL(output_cb_, Run(_)).Times(1);
-
   RequestVideoFrame();
   auto other_image_record = MakeImageRecord();
   // If the helper hasn't been destroyed, then we don't expect it to be called.
+  if (ycbcr_helper_raw_)
+    EXPECT_CALL(*ycbcr_helper_raw_, MockGetYCbCrInfo(_)).Times(0);
+  EXPECT_CALL(output_cb_, Run(_)).Times(1);
   image_provider_raw_->ProvideOneRequestedImage(&other_image_record);
   base::RunLoop().RunUntilIdle();
 }
 
 TEST_F(VideoFrameFactoryImplTest, NullYCbCrInfoDoesntCrash) {
-  // We will be driving callback by ourselves in this test.
-  ycbcr_helper_raw_->set_run_callback_automatically(false);
-
-  // Expect call to get info for the first frame.
-  EXPECT_CALL(*ycbcr_helper_raw_, MockGetFrameInfo(_)).Times(1);
-
+  // Sending a null YCbCrInfo then requesting a frame shouldn't cause a crash.
+  // See https://crbug.com/1007196 .
   RequestVideoFrame();
-
-  // Provide info.  It should send image request.
-  ycbcr_helper_raw_->RunWithYcbCrInfo(false);
-  base::RunLoop().RunUntilIdle();
-
-  testing::Mock::VerifyAndClearExpectations(ycbcr_helper_raw_);
-
-  // Fulfilling image request should provide video frame.
-  EXPECT_CALL(output_cb_, Run(_)).Times(1);
-
   auto image_record = MakeImageRecord();
+  EXPECT_CALL(*ycbcr_helper_raw_,
+              MockGetYCbCrInfo(image_record.codec_image_holder))
+      .Times(1);
+  image_record.is_vulkan = true;
   image_provider_raw_->ProvideOneRequestedImage(&image_record);
   base::RunLoop().RunUntilIdle();
 
-  // Verify that we will get call to GetFrameInfo as previous one failed.
-  EXPECT_CALL(*ycbcr_helper_raw_, MockGetFrameInfo(_)).Times(1);
+  // Provide an empty YCbCrInfo.
   EXPECT_CALL(output_cb_, Run(_)).Times(1);
-
-  RequestVideoFrame();
-  ycbcr_helper_raw_->RunWithYcbCrInfo(true);
+  std::move(ycbcr_helper_raw_->cb_).Run(base::nullopt);
   base::RunLoop().RunUntilIdle();
 
+  // It shouldn't crash on the next frame.  crbug.com/1007196
+  RequestVideoFrame();
   auto other_image_record = MakeImageRecord();
-  // If the helper hasn't been destroyed, then we don't expect it to be called.
+  other_image_record.is_vulkan = true;
+  // Should still call the helper, since it didn't get YCbCrInfo last time.
+  EXPECT_CALL(*ycbcr_helper_raw_,
+              MockGetYCbCrInfo(other_image_record.codec_image_holder))
+      .Times(1);
+  // Since we aren't sending YCbCr info, it won't call us back with a frame.
   image_provider_raw_->ProvideOneRequestedImage(&other_image_record);
   base::RunLoop().RunUntilIdle();
 }

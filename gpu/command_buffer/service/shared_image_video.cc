@@ -103,7 +103,7 @@ void SharedImageVideo::OnContextLost() {
 }
 
 base::Optional<VulkanYCbCrInfo> SharedImageVideo::GetYcbcrInfo(
-    TextureOwner* texture_owner,
+    StreamTextureSharedImageInterface* stream_texture_sii,
     scoped_refptr<SharedContextState> context_state) {
   // For non-vulkan context, return null.
   if (!context_state->GrContextIsVulkan())
@@ -111,7 +111,7 @@ base::Optional<VulkanYCbCrInfo> SharedImageVideo::GetYcbcrInfo(
 
   // GetAHardwareBuffer() renders the latest image and gets AHardwareBuffer
   // from it.
-  auto scoped_hardware_buffer = texture_owner->GetAHardwareBuffer();
+  auto scoped_hardware_buffer = stream_texture_sii->GetAHardwareBuffer();
   if (!scoped_hardware_buffer) {
     return base::nullopt;
   }
