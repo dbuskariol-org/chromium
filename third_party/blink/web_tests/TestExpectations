@@ -5425,7 +5425,7 @@ crbug.com/1034492 http/tests/devtools/unit/filtered-list-widget-providers.js [ P
 
 # Sheriff 2019-12-17
 crbug.com/1034789 [ Mac ] http/tests/security/frameNavigation/xss-ALLOWED-parent-navigation-change-async.html [ Pass Timeout ]
-crbug.com/1034789 [ Mac10.13 ] virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Timeout ]
+crbug.com/1034789 virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Timeout ]
 crbug.com/1034789 [ Mac10.13 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
 
 # Sheriff 2019-12-23
@@ -5769,7 +5769,6 @@ crbug.com/1070995 external/wpt/html/infrastructure/safe-passing-of-structured-da
 crbug.com/1057020 [ Fuchsia ] http/tests/streams/chromium/get-reader-byob.html [ Pass Timeout ]
 
 # Sheriff 2020-03-05
-crbug.com/1058073 [ Retina ] virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Failure ]
 crbug.com/1058073 [ Mac10.14 ] accessibility/content-changed-notification-causes-crash.html [ Pass Failure ]
 crbug.com/1058073 [ Retina ] accessibility/content-changed-notification-causes-crash.html [ Pass Failure ]
 
