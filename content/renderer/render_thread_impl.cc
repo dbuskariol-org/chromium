@@ -1916,14 +1916,14 @@ void RenderThreadImpl::CreateFrame(mojom::CreateFrameParamsPtr params) {
 void RenderThreadImpl::CreateFrameProxy(
     int32_t routing_id,
     int32_t render_view_routing_id,
-    int32_t opener_routing_id,
+    const base::Optional<base::UnguessableToken>& opener_frame_token,
     int32_t parent_routing_id,
     const FrameReplicationState& replicated_state,
     const base::UnguessableToken& frame_token,
     const base::UnguessableToken& devtools_frame_token) {
   RenderFrameProxy::CreateFrameProxy(
       routing_id, render_view_routing_id,
-      RenderFrameImpl::ResolveWebFrame(opener_routing_id), parent_routing_id,
+      opener_frame_token.value_or(base::UnguessableToken()), parent_routing_id,
       replicated_state, frame_token, devtools_frame_token);
 }
 

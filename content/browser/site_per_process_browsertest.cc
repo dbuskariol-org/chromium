@@ -6131,7 +6131,7 @@ IN_PROC_BROWSER_TEST_F(SitePerProcessBrowserTest,
   // used to crash, as parent_routing_id refers to a proxy that doesn't exist
   // anymore.
   process_a->GetRendererInterface()->CreateFrameProxy(
-      new_routing_id, view_routing_id, MSG_ROUTING_NONE, parent_routing_id,
+      new_routing_id, view_routing_id, base::nullopt, parent_routing_id,
       FrameReplicationState(), base::UnguessableToken::Create(),
       base::UnguessableToken::Create());
 
