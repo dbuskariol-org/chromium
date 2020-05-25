@@ -3710,19 +3710,6 @@ crbug.com/576815 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftest
 crbug.com/576815 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/selectors4/dir-style-03b.html [ Failure ]
 crbug.com/576815 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/selectors4/dir-style-04.html [ Failure ]
 
-# TODO(chrishall): this is a temporary mediation step as part of the P0 issue crbug.com/657646
-# this is not meant to be here for more than a few days (from 2016-11-03 SYD)
-crbug.com/657646 [ Win ] virtual/text-antialias/font-weight.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/textIteratorNilRenderer.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/font-stretch.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/sub-pixel/text-scaling-pixel.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/international/bidi-listbox-atsui.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/international/bidi-listbox.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/international/lang-glyph-cache-separation.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/font-stretch-variant.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/drawBidiText.html [ Failure Pass ]
-crbug.com/657646 [ Win ] virtual/text-antialias/font-features/caps-native-synthesis.html [ Failure Pass ]
-
 crbug.com/664450 http/tests/devtools/console/console-on-animation-worklet.js [ Skip ]
 
 crbug.com/826419 external/wpt/html/semantics/embedded-content/media-elements/track/track-element/track-remove-track-inband.html [ Skip ]
