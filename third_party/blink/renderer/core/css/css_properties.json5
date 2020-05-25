@@ -1303,6 +1303,7 @@
       typedom_types: ["Length", "Percentage"],
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-bottom-right-radius",
@@ -1317,6 +1318,7 @@
       typedom_types: ["Length", "Percentage"],
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-bottom-style",
@@ -1332,6 +1334,7 @@
       type_name: "EBorderStyle",
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-bottom-width",
@@ -1348,6 +1351,7 @@
       converter: "ConvertBorderWidth",
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-collapse",
@@ -1451,6 +1455,7 @@
       type_name: "EBorderStyle",
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-left-width",
@@ -1467,6 +1472,7 @@
       converter: "ConvertBorderWidth",
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-right-color",
@@ -1501,6 +1507,7 @@
       type_name: "EBorderStyle",
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-right-width",
@@ -1517,6 +1524,7 @@
       converter: "ConvertBorderWidth",
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-top-color",
@@ -1550,6 +1558,7 @@
       typedom_types: ["Length", "Percentage"],
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-top-right-radius",
@@ -1564,6 +1573,7 @@
       typedom_types: ["Length", "Percentage"],
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-top-style",
@@ -1579,6 +1589,7 @@
       type_name: "EBorderStyle",
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "border-top-width",
@@ -1595,6 +1606,7 @@
       converter: "ConvertBorderWidth",
       valid_for_first_letter: true,
       is_border: true,
+      computed_value_comparable: true,
     },
     {
       name: "bottom",
