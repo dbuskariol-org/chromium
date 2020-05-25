@@ -156,6 +156,9 @@ const char* length_or_none_examples[] = {"none", "1px", "2px", "5%", nullptr};
 const char* length_size_examples[] = {"4px", "1px 2px", "3%", "calc(1% + 1px)",
                                       nullptr};
 const char* line_width_examples[] = {"medium", "thin", "100px", nullptr};
+const char* none_auto_examples[] = {"none", "auto", nullptr};
+const char* text_decoration_line_examples[] = {"none", "underline", nullptr};
+const char* text_decoration_style_examples[] = {"solid", "dashed", nullptr};
 const char* vertical_align_examples[] = {"sub", "super", "1px", "3%", nullptr};
 const char* writing_mode_examples[] = {"horizontal-tb", "vertical-rl", nullptr};
 
@@ -189,6 +192,11 @@ struct ComputedValuesEqualData {
     {"min-height", length_or_auto_examples},
     {"min-width", length_or_auto_examples},
     {"right", length_or_auto_examples},
+    {"text-decoration-color", color_examples},
+    {"text-decoration-line", text_decoration_line_examples},
+    {"text-decoration-skip-ink", none_auto_examples},
+    {"text-decoration-style", text_decoration_style_examples},
+    {"text-decoration-thickness", length_or_auto_examples},
     {"top", length_or_auto_examples},
     {"vertical-align", vertical_align_examples},
     {"width", length_or_auto_examples},

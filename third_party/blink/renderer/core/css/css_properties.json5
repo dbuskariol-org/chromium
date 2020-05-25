@@ -3550,6 +3550,7 @@
       affected_by_forced_colors: true,
       valid_for_first_letter: true,
       valid_for_cue: true,
+      computed_value_comparable: true,
     },
     {
       name: "text-decoration-line",
@@ -3564,6 +3565,7 @@
       converter: "ConvertFlags<TextDecoration>",
       valid_for_first_letter: true,
       valid_for_cue: true,
+      computed_value_comparable: true,
     },
     {
       name: "text-decoration-skip-ink",
@@ -3576,6 +3578,7 @@
       default_value: "auto",
       valid_for_first_letter: true,
       valid_for_cue: true,
+      computed_value_comparable: true,
     },
     {
       name: "text-decoration-style",
@@ -3587,12 +3590,12 @@
       default_value: "solid",
       valid_for_first_letter: true,
       valid_for_cue: true,
+      computed_value_comparable: true,
     },
     {
       name: "text-decoration-thickness",
       runtime_flag: "UnderlineOffsetThickness",
       property_methods: ["ParseSingleValue", "CSSValueFromComputedStyleInternal"],
-      # TODO: Move to core/style?
       include_paths: ["third_party/blink/renderer/core/style/text_decoration_thickness.h"],
       inherited: true,
       field_group: "*",
@@ -3603,6 +3606,7 @@
       keywords: ["auto", "from-font"],
       typedom_types: ["Keyword", "Length", "Percentage"],
       valid_for_first_letter: true,
+      computed_value_comparable: true,
     },
     {
       name: "text-indent",
