@@ -48,14 +48,12 @@ class CONTENT_EXPORT ServiceWorkerHost {
  public:
   ServiceWorkerHost(mojo::PendingAssociatedReceiver<
                         blink::mojom::ServiceWorkerContainerHost> host_receiver,
-                    ServiceWorkerVersion* running_hosted_version,
+                    ServiceWorkerVersion* version,
                     base::WeakPtr<ServiceWorkerContextCore> context);
   ~ServiceWorkerHost();
 
   int worker_process_id() const { return worker_process_id_; }
-  ServiceWorkerVersion* running_hosted_version() const {
-    return running_hosted_version_;
-  }
+  ServiceWorkerVersion* version() const { return version_; }
 
   // Completes initialization of this provider host. It is called once a
   // renderer process has been found to host the worker.
@@ -83,7 +81,7 @@ class CONTENT_EXPORT ServiceWorkerHost {
 
   // The service worker being hosted. Raw pointer is safe because the version
   // owns |this|.
-  ServiceWorkerVersion* const running_hosted_version_;
+  ServiceWorkerVersion* const version_;
 
   BrowserInterfaceBrokerImpl<ServiceWorkerHost, const ServiceWorkerVersionInfo&>
       broker_{this};

@@ -36,8 +36,7 @@ ServiceWorkerScriptLoaderFactory::ServiceWorkerScriptLoaderFactory(
       loader_factory_for_new_scripts_(
           std::move(loader_factory_for_new_scripts)) {
   DCHECK(loader_factory_for_new_scripts_ ||
-         ServiceWorkerVersion::IsInstalled(
-             worker_host_->running_hosted_version()->status()));
+         ServiceWorkerVersion::IsInstalled(worker_host_->version()->status()));
 }
 
 ServiceWorkerScriptLoaderFactory::~ServiceWorkerScriptLoaderFactory() = default;
@@ -79,8 +78,7 @@ void ServiceWorkerScriptLoaderFactory::CreateLoaderAndStart(
   //       using ServiceWorkerNewScriptLoader.
 
   // Case A and C:
-  scoped_refptr<ServiceWorkerVersion> version =
-      worker_host_->running_hosted_version();
+  scoped_refptr<ServiceWorkerVersion> version = worker_host_->version();
   int64_t resource_id =
       version->script_cache_map()->LookupResourceId(resource_request.url);
   if (resource_id != blink::mojom::kInvalidServiceWorkerResourceId) {
@@ -160,8 +158,7 @@ bool ServiceWorkerScriptLoaderFactory::CheckIfScriptRequestIsValid(
   if (!context_ || !worker_host_)
     return false;
 
-  scoped_refptr<ServiceWorkerVersion> version =
-      worker_host_->running_hosted_version();
+  scoped_refptr<ServiceWorkerVersion> version = worker_host_->version();
   if (!version)
     return false;
 
@@ -206,8 +203,7 @@ void ServiceWorkerScriptLoaderFactory::CopyScript(
       storage->CreateResponseReader(resource_id),
       storage->CreateResponseWriter(new_resource_id));
 
-  scoped_refptr<ServiceWorkerVersion> version =
-      worker_host_->running_hosted_version();
+  scoped_refptr<ServiceWorkerVersion> version = worker_host_->version();
   version->script_cache_map()->NotifyStartedCaching(url, new_resource_id);
 
   net::Error error = cache_writer_->StartCopy(
@@ -229,8 +225,7 @@ void ServiceWorkerScriptLoaderFactory::OnCopyScriptFinished(
     net::Error error) {
   int64_t resource_size = cache_writer_->bytes_written();
   cache_writer_.reset();
-  scoped_refptr<ServiceWorkerVersion> version =
-      worker_host_->running_hosted_version();
+  scoped_refptr<ServiceWorkerVersion> version = worker_host_->version();
 
   if (error != net::OK) {
     version->script_cache_map()->NotifyFinishedCaching(
@@ -274,8 +269,8 @@ void ServiceWorkerScriptLoaderFactory::OnResourceIdAssignedForNewScriptLoader(
   mojo::MakeSelfOwnedReceiver(
       ServiceWorkerNewScriptLoader::CreateAndStart(
           routing_id, request_id, options, resource_request, std::move(client),
-          worker_host_->running_hosted_version(),
-          loader_factory_for_new_scripts_, traffic_annotation, resource_id),
+          worker_host_->version(), loader_factory_for_new_scripts_,
+          traffic_annotation, resource_id),
       std::move(receiver));
 }
 

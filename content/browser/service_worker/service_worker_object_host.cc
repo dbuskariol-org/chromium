@@ -131,8 +131,7 @@ bool PrepareExtendableMessageEventFromServiceWorker(
       worker->worker_host()
           ->container_host()
           ->GetOrCreateServiceWorkerObjectHost(
-              source_container_host->service_worker_host()
-                  ->running_hosted_version());
+              source_container_host->service_worker_host()->version());
   if (service_worker_object_host) {
     // CreateCompleteObjectInfoToSend() is safe because |source_worker_info|
     // will be sent immediately by the caller of this function.
@@ -289,9 +288,8 @@ void ServiceWorkerObjectHost::DispatchExtendableMessageEvent(
   if (container_host_->IsContainerForServiceWorker()) {
     // Clamp timeout to the sending worker's remaining timeout, to prevent
     // postMessage from keeping workers alive forever.
-    base::TimeDelta timeout = container_host_->service_worker_host()
-                                  ->running_hosted_version()
-                                  ->remaining_timeout();
+    base::TimeDelta timeout =
+        container_host_->service_worker_host()->version()->remaining_timeout();
 
     base::ThreadTaskRunnerHandle::Get()->PostTask(
         FROM_HERE,

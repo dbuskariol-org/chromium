@@ -51,20 +51,20 @@ void CreateQuicTransportConnectorImpl(
 ServiceWorkerHost::ServiceWorkerHost(
     mojo::PendingAssociatedReceiver<blink::mojom::ServiceWorkerContainerHost>
         host_receiver,
-    ServiceWorkerVersion* running_hosted_version,
+    ServiceWorkerVersion* version,
     base::WeakPtr<ServiceWorkerContextCore> context)
-    : running_hosted_version_(running_hosted_version),
+    : version_(version),
       container_host_(std::make_unique<content::ServiceWorkerContainerHost>(
           std::move(context))),
       host_receiver_(container_host_.get(), std::move(host_receiver)) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-  DCHECK(running_hosted_version_);
+  DCHECK(version_);
 
   container_host_->set_service_worker_host(this);
   container_host_->UpdateUrls(
-      running_hosted_version_->script_url(),
-      net::SiteForCookies::FromUrl(running_hosted_version_->script_url()),
-      running_hosted_version_->script_origin());
+      version_->script_url(),
+      net::SiteForCookies::FromUrl(version_->script_url()),
+      version_->script_origin());
 }
 
 ServiceWorkerHost::~ServiceWorkerHost() {
@@ -75,8 +75,8 @@ ServiceWorkerHost::~ServiceWorkerHost() {
   // that. Otherwise, this destructor can trigger their Mojo connection error
   // handlers, which would call back into halfway destroyed |this|. This is
   // because they are associated with the ServiceWorker interface, which can be
-  // destroyed while in this destructor (|running_hosted_version_|'s
-  // |event_dispatcher_|). See https://crbug.com/854993.
+  // destroyed while in this destructor (|version_|'s |event_dispatcher_|).
+  // See https://crbug.com/854993.
   container_host_.reset();
 }
 
@@ -97,8 +97,7 @@ void ServiceWorkerHost::CreateQuicTransportConnector(
   RunOrPostTaskOnThread(
       FROM_HERE, BrowserThread::UI,
       base::BindOnce(&CreateQuicTransportConnectorImpl, worker_process_id_,
-                     running_hosted_version_->script_origin(),
-                     std::move(receiver)));
+                     version_->script_origin(), std::move(receiver)));
 }
 
 void ServiceWorkerHost::BindCacheStorage(
@@ -106,8 +105,7 @@ void ServiceWorkerHost::BindCacheStorage(
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   DCHECK(!base::FeatureList::IsEnabled(
       blink::features::kEagerCacheStorageSetupForServiceWorkers));
-  running_hosted_version_->embedded_worker()->BindCacheStorage(
-      std::move(receiver));
+  version_->embedded_worker()->BindCacheStorage(std::move(receiver));
 }
 
 base::WeakPtr<ServiceWorkerHost> ServiceWorkerHost::GetWeakPtr() {

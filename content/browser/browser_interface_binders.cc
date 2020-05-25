@@ -219,7 +219,7 @@ void BindBadgeServiceForServiceWorker(
       FROM_HERE, content::BrowserThread::UI,
       base::BindOnce(&BindBadgeServiceForServiceWorkerOnUI,
                      service_worker_host->worker_process_id(),
-                     service_worker_host->running_hosted_version()->scope(),
+                     service_worker_host->version()->scope(),
                      std::move(receiver)));
 }
 
@@ -938,8 +938,7 @@ void PopulateBinderMap(SharedWorkerHost* host, mojo::BinderMap* map) {
 // Service workers
 ServiceWorkerVersionInfo GetContextForHost(ServiceWorkerHost* host) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
-
-  return host->running_hosted_version()->GetInfo();
+  return host->version()->GetInfo();
 }
 
 void PopulateServiceWorkerBinders(ServiceWorkerHost* host,

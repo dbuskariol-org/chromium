@@ -187,7 +187,7 @@ void ServiceWorkerRegistrationObjectHost::Update(
   // with an "InvalidStateError" DOMException and abort these steps.
   ServiceWorkerVersion* version = nullptr;
   if (container_host_->IsContainerForServiceWorker()) {
-    version = container_host_->service_worker_host()->running_hosted_version();
+    version = container_host_->service_worker_host()->version();
     DCHECK(version);
     if (ServiceWorkerVersion::Status::INSTALLING == version->status()) {
       // This can happen if update() is called during execution of the
