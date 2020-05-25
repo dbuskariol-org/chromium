@@ -5204,9 +5204,6 @@ crbug.com/994008 [ Linux ] http/tests/devtools/elements/styles-3/styles-computed
 crbug.com/994008 [ Win ] http/tests/devtools/elements/styles-3/styles-computed-trace.js [ Pass Failure Timeout ]
 crbug.com/994034 [ Linux ] http/tests/devtools/elements/styles-3/styles-add-new-rule-colon.js [ Pass Failure Timeout ]
 crbug.com/994034 [ Win ] http/tests/devtools/elements/styles-3/styles-add-new-rule-colon.js [ Pass Failure Timeout ]
-crbug.com/995142 crbug.com/900706 [ Mac ] virtual/gpu/fast/canvas/pixelated-canvas.html [ Pass Failure ]
-crbug.com/995142 crbug.com/900706 [ Mac ] virtual/gpu/fast/canvas/pixelated-resize.html [ Pass Failure ]
-crbug.com/995142 crbug.com/900706 [ Mac ] virtual/gpu/fast/canvas/pixelated.html [ Pass Failure ]
 
 crbug.com/995669 [ Win ] http/tests/media/video-throttled-load-metadata.html [ Pass Failure Crash ]
 
