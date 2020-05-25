@@ -144,8 +144,8 @@ struct CreateFrameParams {
   mojo_base.mojom.UnguessableToken frame_token;
 
   // Specifies the new frame's opener.  The opener will be null if this is
-  // MSG_ROUTING_NONE.
-  int32 opener_routing_id;
+  // base::nullopt.
+  mojo_base.mojom.UnguessableToken? opener_frame_token;
 
   // The new frame should be created as a child of the object
   // identified by |parent_routing_id| or as top level if that is

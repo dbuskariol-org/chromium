@@ -1905,9 +1905,10 @@ void RenderThreadImpl::CreateFrame(mojom::CreateFrameParamsPtr params) {
   RenderFrameImpl::CreateFrame(
       params->routing_id, std::move(interface_provider),
       std::move(browser_interface_broker), params->previous_routing_id,
-      params->opener_routing_id, params->parent_routing_id,
-      params->previous_sibling_routing_id, params->frame_token,
-      params->devtools_frame_token, params->replication_state, compositor_deps,
+      params->opener_frame_token.value_or(base::UnguessableToken()),
+      params->parent_routing_id, params->previous_sibling_routing_id,
+      params->frame_token, params->devtools_frame_token,
+      params->replication_state, compositor_deps,
       std::move(params->widget_params),
       std::move(params->frame_owner_properties),
       params->has_committed_real_load);
