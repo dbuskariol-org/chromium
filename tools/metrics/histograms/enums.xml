@@ -7305,6 +7305,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Missing data in disk cache"/>
 </enum>
 
+<enum name="BooleanMultipleApps">
+  <int value="0" label="Match one app"/>
+  <int value="1" label="Match multiple apps"/>
+</enum>
+
 <enum name="BooleanNativeNotifications">
   <int value="0" label="Using Chrome notifications"/>
   <int value="1" label="Using native notifications"/>
