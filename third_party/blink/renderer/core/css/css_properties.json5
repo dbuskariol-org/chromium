@@ -985,8 +985,9 @@
       property_methods: ["CSSValueFromComputedStyleInternal"],
       inherited: true,
       type_name: "TextOrientation",
-      style_builder_custom_functions: ["value"],
+      style_builder_custom_functions: ["initial", "inherit", "value"],
       priority: "High",
+      surrogate_for: "text-orientation",
     },
     {
       name: "writing-mode",
