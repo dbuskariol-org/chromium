@@ -13,7 +13,6 @@
 #include "base/containers/flat_set.h"
 #include "base/logging.h"
 #include "base/optional.h"
-#include "base/threading/sequenced_task_runner_handle.h"
 #include "base/util/type_safety/pass_key.h"
 #include "chrome/browser/web_applications/components/web_app_helpers.h"
 #include "chrome/browser/web_applications/components/web_app_utils.h"
@@ -316,11 +315,9 @@ void WebAppSyncBridge::OnDatabaseOpened(
   change_processor()->ModelReadyToSync(std::move(metadata_batch));
 
   registrar_->InitRegistry(std::move(registry));
+  std::move(callback).Run();
 
   MaybeInstallAppsInSyncInstall();
-
-  base::SequencedTaskRunnerHandle::Get()->PostTask(FROM_HERE,
-                                                   std::move(callback));
 }
 
 void WebAppSyncBridge::OnDataWritten(CommitCallback callback, bool success) {
