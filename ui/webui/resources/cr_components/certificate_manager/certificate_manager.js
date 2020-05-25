@@ -14,6 +14,7 @@ import './certificate_list.js';
 import './certificate_password_decryption_dialog.js';
 import './certificate_password_encryption_dialog.js';
 import './certificates_error_dialog.js';
+import './certificate_provisioning_list.js';
 
 import {assert} from 'chrome://resources/js/assert.m.js';
 import {focusWithoutInk} from 'chrome://resources/js/cr/ui/focus_without_ink.m.js';
