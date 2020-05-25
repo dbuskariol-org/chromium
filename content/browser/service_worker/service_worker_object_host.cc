@@ -10,7 +10,7 @@
 #include "content/browser/service_worker/service_worker_container_host.h"
 #include "content/browser/service_worker/service_worker_context_core.h"
 #include "content/browser/service_worker/service_worker_context_wrapper.h"
-#include "content/browser/service_worker/service_worker_provider_host.h"
+#include "content/browser/service_worker/service_worker_host.h"
 #include "content/browser/service_worker/service_worker_registration.h"
 #include "content/browser/service_worker/service_worker_type_converters.h"
 #include "content/common/service_worker/service_worker_utils.h"
@@ -128,7 +128,7 @@ bool PrepareExtendableMessageEventFromServiceWorker(
   DCHECK(source_container_host->IsContainerForServiceWorker());
   blink::mojom::ServiceWorkerObjectInfoPtr source_worker_info;
   base::WeakPtr<ServiceWorkerObjectHost> service_worker_object_host =
-      worker->provider_host()
+      worker->worker_host()
           ->container_host()
           ->GetOrCreateServiceWorkerObjectHost(
               source_container_host->service_worker_host()

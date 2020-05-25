@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/service_worker/service_worker_provider_host.h"
+#include "content/browser/service_worker/service_worker_host.h"
 
 #include <utility>
 
@@ -48,7 +48,7 @@ void CreateQuicTransportConnectorImpl(
 
 }  // anonymous namespace
 
-ServiceWorkerProviderHost::ServiceWorkerProviderHost(
+ServiceWorkerHost::ServiceWorkerHost(
     mojo::PendingAssociatedReceiver<blink::mojom::ServiceWorkerContainerHost>
         host_receiver,
     ServiceWorkerVersion* running_hosted_version,
@@ -67,7 +67,7 @@ ServiceWorkerProviderHost::ServiceWorkerProviderHost(
       running_hosted_version_->script_origin());
 }
 
-ServiceWorkerProviderHost::~ServiceWorkerProviderHost() {
+ServiceWorkerHost::~ServiceWorkerHost() {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
 
   // Explicitly destroy the ServiceWorkerContainerHost to release
@@ -80,7 +80,7 @@ ServiceWorkerProviderHost::~ServiceWorkerProviderHost() {
   container_host_.reset();
 }
 
-void ServiceWorkerProviderHost::CompleteStartWorkerPreparation(
+void ServiceWorkerHost::CompleteStartWorkerPreparation(
     int process_id,
     mojo::PendingReceiver<blink::mojom::BrowserInterfaceBroker>
         broker_receiver) {
@@ -91,7 +91,7 @@ void ServiceWorkerProviderHost::CompleteStartWorkerPreparation(
   broker_receiver_.Bind(std::move(broker_receiver));
 }
 
-void ServiceWorkerProviderHost::CreateQuicTransportConnector(
+void ServiceWorkerHost::CreateQuicTransportConnector(
     mojo::PendingReceiver<blink::mojom::QuicTransportConnector> receiver) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   RunOrPostTaskOnThread(
@@ -101,7 +101,7 @@ void ServiceWorkerProviderHost::CreateQuicTransportConnector(
                      std::move(receiver)));
 }
 
-void ServiceWorkerProviderHost::BindCacheStorage(
+void ServiceWorkerHost::BindCacheStorage(
     mojo::PendingReceiver<blink::mojom::CacheStorage> receiver) {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   DCHECK(!base::FeatureList::IsEnabled(
@@ -110,14 +110,12 @@ void ServiceWorkerProviderHost::BindCacheStorage(
       std::move(receiver));
 }
 
-base::WeakPtr<ServiceWorkerProviderHost>
-ServiceWorkerProviderHost::GetWeakPtr() {
+base::WeakPtr<ServiceWorkerHost> ServiceWorkerHost::GetWeakPtr() {
   DCHECK_CURRENTLY_ON(ServiceWorkerContext::GetCoreThreadId());
   return weak_factory_.GetWeakPtr();
 }
 
-void ServiceWorkerProviderHost::ReportNoBinderForInterface(
-    const std::string& error) {
+void ServiceWorkerHost::ReportNoBinderForInterface(const std::string& error) {
   broker_receiver_.ReportBadMessage(error + " for the service worker scope");
 }
 

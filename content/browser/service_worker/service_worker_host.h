@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_PROVIDER_HOST_H_
-#define CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_PROVIDER_HOST_H_
+#ifndef CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_HOST_H_
+#define CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_HOST_H_
 
 #include <memory>
 #include <string>
@@ -37,23 +37,20 @@ namespace content {
 class ServiceWorkerContextCore;
 class ServiceWorkerVersion;
 
-// ServiceWorkerProviderHost is the host of a service worker execution context
-// in the renderer process. One ServiceWorkerProviderHost instance hosts one
-// service worker execution context instance.
+// ServiceWorkerHost is the host of a service worker execution context in the
+// renderer process. One ServiceWorkerHost instance hosts one service worker
+// execution context instance.
 //
-// ServiceWorkerProviderHost lives on the service worker core thread, since all
-// nearly all browser process service worker machinery lives on the service
-// worker core thread.
-//
-// TODO(https://crbug.com/931087): Rename this to ServiceWorkerHost.
-class CONTENT_EXPORT ServiceWorkerProviderHost {
+// ServiceWorkerHost lives on the service worker core thread, since all nearly
+// all browser process service worker machinery lives on the service worker core
+// thread.
+class CONTENT_EXPORT ServiceWorkerHost {
  public:
-  ServiceWorkerProviderHost(
-      mojo::PendingAssociatedReceiver<blink::mojom::ServiceWorkerContainerHost>
-          host_receiver,
-      ServiceWorkerVersion* running_hosted_version,
-      base::WeakPtr<ServiceWorkerContextCore> context);
-  ~ServiceWorkerProviderHost();
+  ServiceWorkerHost(mojo::PendingAssociatedReceiver<
+                        blink::mojom::ServiceWorkerContainerHost> host_receiver,
+                    ServiceWorkerVersion* running_hosted_version,
+                    base::WeakPtr<ServiceWorkerContextCore> context);
+  ~ServiceWorkerHost();
 
   int worker_process_id() const { return worker_process_id_; }
   ServiceWorkerVersion* running_hosted_version() const {
@@ -77,19 +74,18 @@ class CONTENT_EXPORT ServiceWorkerProviderHost {
     return container_host_.get();
   }
 
-  base::WeakPtr<ServiceWorkerProviderHost> GetWeakPtr();
+  base::WeakPtr<ServiceWorkerHost> GetWeakPtr();
 
   void ReportNoBinderForInterface(const std::string& error);
 
  private:
   int worker_process_id_ = ChildProcessHost::kInvalidUniqueID;
 
-  // The instance of service worker this provider hosts.
-  // Raw pointer is safe because the version owns |this|.
+  // The service worker being hosted. Raw pointer is safe because the version
+  // owns |this|.
   ServiceWorkerVersion* const running_hosted_version_;
 
-  BrowserInterfaceBrokerImpl<ServiceWorkerProviderHost,
-                             const ServiceWorkerVersionInfo&>
+  BrowserInterfaceBrokerImpl<ServiceWorkerHost, const ServiceWorkerVersionInfo&>
       broker_{this};
   mojo::Receiver<blink::mojom::BrowserInterfaceBroker> broker_receiver_{
       &broker_};
@@ -99,11 +95,11 @@ class CONTENT_EXPORT ServiceWorkerProviderHost {
   mojo::AssociatedReceiver<blink::mojom::ServiceWorkerContainerHost>
       host_receiver_;
 
-  base::WeakPtrFactory<ServiceWorkerProviderHost> weak_factory_{this};
+  base::WeakPtrFactory<ServiceWorkerHost> weak_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(ServiceWorkerProviderHost);
+  DISALLOW_COPY_AND_ASSIGN(ServiceWorkerHost);
 };
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_PROVIDER_HOST_H_
+#endif  // CONTENT_BROWSER_SERVICE_WORKER_SERVICE_WORKER_HOST_H_
