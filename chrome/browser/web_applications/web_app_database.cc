@@ -11,6 +11,7 @@
 #include "base/bind.h"
 #include "base/callback.h"
 #include "base/stl_util.h"
+#include "base/threading/sequenced_task_runner_handle.h"
 #include "chrome/browser/web_applications/components/web_app_helpers.h"
 #include "chrome/browser/web_applications/components/web_app_utils.h"
 #include "chrome/browser/web_applications/web_app.h"
@@ -414,8 +415,11 @@ void WebAppDatabase::OnAllMetadataRead(
       registry.emplace(app_id, std::move(web_app));
   }
 
-  std::move(callback).Run(std::move(registry), std::move(metadata_batch));
   opened_ = true;
+
+  base::SequencedTaskRunnerHandle::Get()->PostTask(
+      FROM_HERE, base::BindOnce(std::move(callback), std::move(registry),
+                                std::move(metadata_batch)));
 }
 
 void WebAppDatabase::OnDataWritten(
