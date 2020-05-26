@@ -387,8 +387,10 @@ Polymer({
     this.parentNode.pageTitle = networkName;
     Polymer.dom.flush();
 
-    if (!this.didSetFocus_) {
-      // Focus a button once the initial state is set.
+    if (!this.didSetFocus_ &&
+        !settings.Router.getInstance().getQueryParameters().has('search')) {
+      // Unless the page was navigated to via search, focus a button once the
+      // initial state is set.
       this.didSetFocus_ = true;
       const button = this.$$('#titleDiv .action-button:not([hidden])');
       if (button) {
