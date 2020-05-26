@@ -27456,6 +27456,10 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3302" label="PopupMouseDownExceedsOwnerWindowBounds"/>
   <int value="3303" label="PopupMouseWheelExceedsOwnerWindowBounds"/>
   <int value="3304" label="V8VarRedeclaredCatchBinding"/>
+  <int value="3305"
+      label="WebBluetoothRemoteCharacteristicWriteValueWithResponse"/>
+  <int value="3306"
+      label="WebBluetoothRemoteCharacteristicWriteValueWithoutResponse"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
