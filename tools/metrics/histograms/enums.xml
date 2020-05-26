@@ -6433,6 +6433,14 @@ Unknown properties are collapsed to zero. -->
   <int value="6" label="Experiment enabled (sync unknown)"/>
 </enum>
 
+<enum name="BookmarksGUIDDuplicates">
+  <int value="0" label="Matching urls"/>
+  <int value="1" label="Matching folders"/>
+  <int value="2" label="Different urls"/>
+  <int value="3" label="Different folders"/>
+  <int value="4" label="Different types"/>
+</enum>
+
 <enum name="BookmarksOpenAction">
   <int value="0" label="Open in current tab"/>
   <int value="1" label="Open in new tab"/>
