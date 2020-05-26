@@ -929,7 +929,6 @@ if (!is_android) {
       "../browser/media/webrtc/webrtc_internals_integration_browsertest.cc",
       "../browser/media/webrtc/webrtc_internals_perf_browsertest.cc",
       "../browser/media/webrtc/webrtc_pan_tilt_zoom_browsertest.cc",
-      "../browser/media/webrtc/webrtc_simulcast_browsertest.cc",
       "../browser/media/webrtc/webrtc_stats_perf_browsertest.cc",
       "../browser/media/webrtc/webrtc_video_display_perf_browsertest.cc",
       "../browser/media/webrtc/webrtc_video_high_bitrate_browsertest.cc",
