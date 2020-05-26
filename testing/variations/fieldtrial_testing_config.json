@@ -5595,9 +5595,10 @@
             ],
             "experiments": [
                 {
-                    "name": "Enabled",
+                    "name": "Enabled_With_WebRTC_2020-05-21",
                     "enable_features": [
-                        "SharedClipboardUI"
+                        "SharedClipboardUI",
+                        "SharingPeerConnectionReceiver"
                     ]
                 }
             ]
@@ -5622,24 +5623,6 @@
                     },
                     "enable_features": [
                         "SharingMatchPulseInterval"
-                    ]
-                }
-            ]
-        }
-    ],
-    "SharingWebRTC": [
-        {
-            "platforms": [
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "SharingPeerConnectionReceiver"
                     ]
                 }
             ]
