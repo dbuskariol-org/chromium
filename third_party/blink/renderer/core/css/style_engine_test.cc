@@ -2667,7 +2667,12 @@ TEST_F(StyleEngineTest, PrintNoDarkColorScheme) {
   GetDocument().body()->setInnerHTML(R"HTML(
     <style>
       :root { color-scheme: dark }
-      body { color: green; }
+      @media (prefers-color-scheme: light) {
+        body { color: green; }
+      }
+      @media (prefers-color-scheme: no-preference) {
+        body { color: orange; }
+      }
       @media (prefers-color-scheme: dark) {
         body { color: red; }
       }
