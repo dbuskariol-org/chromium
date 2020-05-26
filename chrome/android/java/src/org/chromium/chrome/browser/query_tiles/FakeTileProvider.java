@@ -193,8 +193,7 @@ public class FakeTileProvider implements TileProvider {
         public String url;
 
         public FakeTile(String id, String displayTitle, String url, List<QueryTile> children) {
-            super(id, displayTitle, displayTitle, displayTitle, new String[] {url}, new String[0],
-                    children);
+            super(id, displayTitle, displayTitle, displayTitle, new String[] {url}, children);
             this.url = url;
         }
     }

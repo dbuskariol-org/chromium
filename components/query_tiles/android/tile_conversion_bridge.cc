@@ -35,8 +35,7 @@ ScopedJavaLocalRef<jobject> CreateJavaTileAndMaybeAddToList(
       ConvertUTF8ToJavaString(env, tile.display_text),
       ConvertUTF8ToJavaString(env, tile.accessibility_text),
       ConvertUTF8ToJavaString(env, tile.query_text),
-      ToJavaArrayOfStrings(env, urls),
-      ToJavaArrayOfStrings(env, tile.search_params), jchildren);
+      ToJavaArrayOfStrings(env, urls), jchildren);
 }
 
 ScopedJavaLocalRef<jobject> TileConversionBridge::CreateJavaTiles(

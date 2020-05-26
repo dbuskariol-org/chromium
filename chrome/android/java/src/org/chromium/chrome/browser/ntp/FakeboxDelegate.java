@@ -11,8 +11,6 @@ import org.chromium.chrome.browser.omnibox.UrlFocusChangeListener;
 import org.chromium.chrome.browser.omnibox.voice.VoiceRecognitionHandler;
 import org.chromium.chrome.browser.ui.native_page.NativePage;
 
-import java.util.List;
-
 /**
  * Handles user interaction with the fakebox (the URL bar in the NTP and tasks surface).
  */
@@ -33,9 +31,8 @@ public interface FakeboxDelegate {
      * TemplateUrlService#getUrlForSearchQuery(String)} to get a url based on {@code query} and
      * loads that url in the current {@link Tab}.
      * @param query The {@link String} that represents the text query that should be searched for.
-     * @param searchParams A list of params for the search query.
      */
-    void performSearchQuery(String query, List<String> searchParams);
+    void performSearchQuery(String query);
 
     /**
      * @return Whether the URL bar is currently focused.

@@ -26,9 +26,9 @@ public class TileConversionBridge {
     @CalledByNative
     private static QueryTile createTileAndMaybeAddToList(@Nullable List<QueryTile> list,
             String tileId, String displayTitle, String accessibilityText, String queryText,
-            String[] urls, String[] searchParams, List<QueryTile> children) {
-        QueryTile tile = new QueryTile(
-                tileId, displayTitle, accessibilityText, queryText, urls, searchParams, children);
+            String[] urls, List<QueryTile> children) {
+        QueryTile tile =
+                new QueryTile(tileId, displayTitle, accessibilityText, queryText, urls, children);
         if (list != null) list.add(tile);
         return tile;
     }

@@ -51,30 +51,17 @@ public class QueryTileSection {
 
     private final ViewGroup mQueryTileSectionView;
     private final SearchBoxCoordinator mSearchBoxCoordinator;
-    private final Callback<QueryInfo> mSubmitQueryCallback;
+    private final Callback<String> mSubmitQueryCallback;
     private ImageTileCoordinator mTileCoordinator;
     private TileProvider mTileProvider;
     private TileUmaLogger mTileUmaLogger;
     private ImageFetcher mImageFetcher;
     private Integer mTileWidth;
 
-    /**
-     * Represents the information needed to launch a search query when clicking on a tile.
-     */
-    public static class QueryInfo {
-        public final String queryText;
-        public final List<String> searchParams;
-
-        public QueryInfo(String queryText, List<String> searchParams) {
-            this.queryText = queryText;
-            this.searchParams = searchParams;
-        }
-    }
-
     /** Constructor. */
     public QueryTileSection(ViewGroup queryTileSectionView,
             SearchBoxCoordinator searchBoxCoordinator, Profile profile,
-            Callback<QueryInfo> performSearchQueryCallback) {
+            Callback<String> performSearchQueryCallback) {
         mQueryTileSectionView = queryTileSectionView;
         mSearchBoxCoordinator = searchBoxCoordinator;
         mSubmitQueryCallback = performSearchQueryCallback;
@@ -118,8 +105,7 @@ public class QueryTileSection {
             if (QueryTileUtils.isQueryEditingEnabled()) {
                 mSearchBoxCoordinator.setSearchText(queryTile.queryText);
             } else {
-                mSubmitQueryCallback.onResult(
-                        new QueryInfo(queryTile.queryText, queryTile.searchParams));
+                mSubmitQueryCallback.onResult(queryTile.queryText);
             }
             return;
         }
@@ -134,8 +120,7 @@ public class QueryTileSection {
             @Override
             public void onChipClicked() {
                 mTileUmaLogger.recordSearchButtonClicked(queryTile);
-                mSubmitQueryCallback.onResult(
-                        new QueryInfo(queryTile.queryText, queryTile.searchParams));
+                mSubmitQueryCallback.onResult(queryTile.queryText);
             }
 
             @Override
