@@ -30,6 +30,9 @@ class AppNotifications {
   // Removes the notification for the given |notification_id|.
   void RemoveNotification(const std::string& notification_id);
 
+  // Removes notifications for the given |app_id|.
+  void RemoveNotificationsForApp(const std::string& app_id);
+
   // Returns true, if the app has notifications. Otherwise, returns false.
   bool HasNotification(const std::string& app_id);
 

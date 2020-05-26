@@ -733,6 +733,7 @@ void ArcApps::OnAppStatesChanged(const std::string& app_id,
 }
 
 void ArcApps::OnAppRemoved(const std::string& app_id) {
+  app_notifications_.RemoveNotificationsForApp(app_id);
   paused_apps_.MaybeRemoveApp(app_id);
 
   if (base::Contains(app_id_to_task_ids_, app_id)) {

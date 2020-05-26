@@ -469,6 +469,7 @@ void ExtensionAppsChromeOs::OnExtensionUninstalled(
     return;
   }
 
+  app_notifications_.RemoveNotificationsForApp(extension->id());
   paused_apps_.MaybeRemoveApp(extension->id());
 
   ExtensionAppsBase::OnExtensionUninstalled(browser_context, extension, reason);

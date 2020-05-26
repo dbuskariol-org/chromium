@@ -235,6 +235,7 @@ void WebAppsChromeOs::OnWebAppUninstalled(const web_app::AppId& app_id) {
     return;
   }
 
+  app_notifications_.RemoveNotificationsForApp(app_id);
   paused_apps_.MaybeRemoveApp(app_id);
 
   WebAppsBase::OnWebAppUninstalled(app_id);

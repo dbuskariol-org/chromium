@@ -22,8 +22,7 @@ void AppNotifications::RemoveNotification(const std::string& notification_id) {
   auto it = notification_id_to_app_ids_.find(notification_id);
   DCHECK(it != notification_id_to_app_ids_.end());
 
-  const auto& app_ids = it->second;
-  for (const auto& app_id : app_ids) {
+  for (const auto& app_id : it->second) {
     auto app_id_it = app_id_to_notification_ids_.find(app_id);
     app_id_it->second.erase(notification_id);
     if (app_id_it->second.empty()) {
@@ -31,6 +30,22 @@ void AppNotifications::RemoveNotification(const std::string& notification_id) {
     }
   }
   notification_id_to_app_ids_.erase(it);
+}
+
+void AppNotifications::RemoveNotificationsForApp(const std::string& app_id) {
+  auto it = app_id_to_notification_ids_.find(app_id);
+  if (it == app_id_to_notification_ids_.end()) {
+    return;
+  }
+
+  for (const auto& notification_id : it->second) {
+    auto notification_id_it = notification_id_to_app_ids_.find(notification_id);
+    notification_id_it->second.erase(app_id);
+    if (notification_id_it->second.empty()) {
+      notification_id_to_app_ids_.erase(notification_id_it);
+    }
+  }
+  app_id_to_notification_ids_.erase(it);
 }
 
 bool AppNotifications::HasNotification(const std::string& app_id) {
