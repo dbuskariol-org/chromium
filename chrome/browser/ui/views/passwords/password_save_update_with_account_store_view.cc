@@ -12,7 +12,6 @@
 #include "base/strings/utf_string_conversions.h"
 #include "build/build_config.h"
 #include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/signin/identity_manager_factory.h"
 #include "chrome/browser/ui/passwords/manage_passwords_view_utils.h"
 #include "chrome/browser/ui/passwords/password_dialog_prompts.h"
 #include "chrome/browser/ui/passwords/passwords_model_delegate.h"
@@ -23,13 +22,14 @@
 #include "chrome/browser/ui/views/passwords/password_items_view.h"
 #include "chrome/grit/generated_resources.h"
 #include "chrome/grit/theme_resources.h"
-#include "components/signin/public/identity_manager/identity_manager.h"
+#include "components/vector_icons/vector_icons.h"
 #include "content/public/browser/storage_partition.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/models/combobox_model.h"
 #include "ui/base/models/combobox_model_observer.h"
 #include "ui/base/models/simple_combobox_model.h"
 #include "ui/base/resource/resource_bundle.h"
+#include "ui/gfx/color_palette.h"
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/paint_vector_icon.h"
 #include "ui/views/bubble/bubble_frame_view.h"
@@ -46,6 +46,43 @@
 #include "ui/views/view_class_properties.h"
 
 namespace {
+
+// TODO(crbug.com/1044038): Use a layout constant instead of a hard coded
+// value.
+constexpr int kAccountPickerComboboxIconSize = 20;
+
+struct ComboboxItem {
+  std::string combobox_text;
+  std::string dropdown_text;
+  std::string dropdown_secondary_text;
+  ui::ImageModel icon;
+};
+
+class ComboboxModelWithIcons : public ui::ComboboxModel {
+ public:
+  explicit ComboboxModelWithIcons(std::vector<ComboboxItem> items)
+      : items_(std::move(items)) {}
+
+  int GetItemCount() const override { return items_.size(); }
+  base::string16 GetItemAt(int index) const override {
+    return base::ASCIIToUTF16(items_[index].combobox_text);
+  }
+  base::string16 GetDropDownTextAt(int index) const override {
+    return base::ASCIIToUTF16(items_[index].dropdown_text);
+  }
+  base::string16 GetDropDownSecondaryTextAt(int index) const override {
+    return base::ASCIIToUTF16(items_[index].dropdown_secondary_text);
+  }
+  ui::ImageModel GetIconAt(int index) const override {
+    return items_[index].icon;
+  }
+  ui::ImageModel GetDropDownIconAt(int index) const override {
+    return items_[index].icon;
+  }
+
+ private:
+  const std::vector<ComboboxItem> items_;
+};
 
 std::unique_ptr<views::View> CreateRow() {
   auto row = std::make_unique<views::View>();
@@ -219,16 +256,28 @@ std::unique_ptr<views::EditableCombobox> CreatePasswordEditableCombobox(
 }
 
 std::unique_ptr<views::Combobox> CreateDestinationCombobox(
-    const std::string& account,
+    std::string primary_account_email,
+    ui::ImageModel primary_account_avatar,
     bool is_using_account_store) {
-  std::vector<base::string16> destinations;
-  destinations.push_back(
-      base::ASCIIToUTF16("in your Google Account (" + account + ")"));
+  // TODO(crbug.com/1044038): Use a proper device logo instead of this place
+  // holder icon.
+  ui::ImageModel device = ui::ImageModel::FromImageSkia(gfx::CreateVectorIcon(
+      vector_icons::kDevicesIcon, kAccountPickerComboboxIconSize,
+      gfx::kGoogleGrey700));
+
   // TODO(crbug.com/1044038): Use an internationalized string instead.
-  destinations.push_back(base::ASCIIToUTF16("only on this device"));
+  std::vector<ComboboxItem> destinations = {
+      {.combobox_text = "in your Google Acccount",
+       .dropdown_text = "in your Google Acccount",
+       .dropdown_secondary_text = primary_account_email,
+       .icon = primary_account_avatar},
+      {.combobox_text = "only on this device",
+       .dropdown_text = "only on this device",
+       .dropdown_secondary_text = "",
+       .icon = device}};
 
   auto combobox = std::make_unique<views::Combobox>(
-      std::make_unique<ui::SimpleComboboxModel>(std::move(destinations)));
+      std::make_unique<ComboboxModelWithIcons>(std::move(destinations)));
   if (is_using_account_store)
     combobox->SetSelectedRow(0);
   else
@@ -253,16 +302,6 @@ std::unique_ptr<views::View> CreateHeaderImage(int image_id) {
     image_view->SetImageSize(preferred_size);
   }
   return image_view;
-}
-
-std::string GetSignedInEmail(Profile* profile) {
-  signin::IdentityManager* identity_manager =
-      IdentityManagerFactory::GetForProfile(profile);
-  if (!identity_manager)
-    return std::string();
-  return identity_manager
-      ->GetPrimaryAccountInfo(signin::ConsentLevel::kNotRequired)
-      .email;
 }
 
 }  // namespace
@@ -328,9 +367,10 @@ PasswordSaveUpdateWithAccountStoreView::PasswordSaveUpdateWithAccountStoreView(
   } else {
     std::unique_ptr<views::Combobox> destination_dropdown;
     if (controller_.ShouldShowPasswordStorePicker()) {
-      destination_dropdown =
-          CreateDestinationCombobox(GetSignedInEmail(controller_.GetProfile()),
-                                    controller_.IsUsingAccountStore());
+      destination_dropdown = CreateDestinationCombobox(
+          controller_.GetPrimaryAccountEmail(),
+          controller_.GetPrimaryAccountAvatar(kAccountPickerComboboxIconSize),
+          controller_.IsUsingAccountStore());
       destination_dropdown->set_listener(this);
     }
     std::unique_ptr<views::EditableCombobox> username_dropdown =
