@@ -8200,7 +8200,7 @@ const CSSValue* ZIndex::CSSValueFromComputedStyleInternal(
     const SVGComputedStyle&,
     const LayoutObject*,
     bool allow_visited_style) const {
-  if (style.HasAutoZIndex() || !style.IsStackingContext())
+  if (style.HasAutoZIndex())
     return CSSIdentifierValue::Create(CSSValueID::kAuto);
   return CSSNumericLiteralValue::Create(style.ZIndex(),
                                         CSSPrimitiveValue::UnitType::kInteger);
