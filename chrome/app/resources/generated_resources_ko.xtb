@@ -170,6 +170,7 @@
 <translation id="1211769675100312947">내가 선별한 바로가기입니다.</translation>
 <translation id="1213037489357051291">지문 <ph name="NUM_FINGERPRINTS" />개 설정됨</translation>
 <translation id="1213254615020057352">사용 및 진단 데이터를 보냅니다. 진단, 기기, 앱 사용 데이터를 Google에 자동으로 보내 자녀의 Android 사용 환경 개선에 참여합니다. 데이터는 자녀를 식별하는 용도로 사용되지 않으며, 시스템 및 앱 안정성 등을 개선하는 데 활용됩니다. 일부 수집 데이터는 Google 앱과 파트너(Android 개발자 등)에게도 도움을 줍니다. 설정은 소유자가 지정합니다. 소유자가 이 기기의 진단 및 사용 데이터를 Google에 전송할지 선택할 수 있습니다. 자녀의 추가 웹 및 앱 활동이 사용 설정되어 있다면 이 데이터가 자녀의 Google 계정에 저장될 수 있습니다.</translation>
+<translation id="121384500095351701">이 파일은 안전하게 다운로드할 수 없습니다.</translation>
 <translation id="1215411991991485844">새 백그라운드 앱을 추가함</translation>
 <translation id="1216542092748365687">지문 삭제</translation>
 <translation id="1217483152325416304">로컬 데이터가 곧 삭제됩니다</translation>
@@ -1069,6 +1070,7 @@
 <translation id="2336228925368920074">모든 탭 북마크...</translation>
 <translation id="2336376423977300504">창이 닫히면 항상 쿠키 삭제</translation>
 <translation id="2336381494582898602">파워워시</translation>
+<translation id="2340239562261172947"><ph name="FILE_NAME" /> 파일은 안전하게 다운로드할 수 없습니다.</translation>
 <translation id="2340263603246777781"><ph name="ORIGIN" />에서 페어링하려고 함</translation>
 <translation id="2342740338116612727">북마크 추가됨</translation>
 <translation id="2343747224442182863">이 탭에 포커스</translation>
@@ -1292,7 +1294,6 @@
 <translation id="2616366145935564096"><ph name="WEBSITE_1" />의 데이터를 읽고 변경</translation>
 <translation id="2617342710774726426">SIM 카드가 잠겨 있습니다.</translation>
 <translation id="2619761439309613843">매일 새로고침</translation>
-<translation id="2620215283731032047"><ph name="FILE_NAME" /> 파일은 안전하게 다운로드할 수 없습니다.</translation>
 <translation id="2620436844016719705">시스템</translation>
 <translation id="2621713457727696555">잠김</translation>
 <translation id="26224892172169984">모든 사이트에서 프로토콜 처리 허용 안함</translation>
@@ -1478,7 +1479,6 @@
 <translation id="2824942875887026017"><ph name="IDS_SHORT_PRODUCT_NAME" />이(가) 관리자의 프록시 설정을 사용 중입니다.</translation>
 <translation id="2825758591930162672">대상의 공개 키</translation>
 <translation id="2828650939514476812">Wi-Fi 네트워크에 연결</translation>
-<translation id="2835294513443818940">이 파일은 안전하게 다운로드할 수 없습니다.</translation>
 <translation id="2835547721736623118">음성 인식 서비스</translation>
 <translation id="2836269494620652131">비정상 종료</translation>
 <translation id="2836635946302913370">해당 사용자 이름 로그인이 관리자에 의해 사용 중지되었습니다.</translation>
