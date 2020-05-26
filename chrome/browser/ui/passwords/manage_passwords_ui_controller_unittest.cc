@@ -1385,11 +1385,9 @@ TEST_F(ManagePasswordsUIControllerTest,
 TEST_F(ManagePasswordsUIControllerTest, SaveUnsyncedCredentialsInProfileStore) {
   // Setup state with unsynced credentials.
   EXPECT_CALL(*controller(), OnUpdateBubbleAndIconVisibility());
-  std::vector<autofill::PasswordForm> credentials(2);
-  credentials[0] =
-      BuildFormFromLoginAndOrigin("user1", "password1", "http://a.com");
-  credentials[1] =
-      BuildFormFromLoginAndOrigin("user2", "password2", "http://b.com");
+  std::vector<autofill::PasswordForm> credentials = {
+      BuildFormFromLoginAndOrigin("user1", "password1", "http://a.com"),
+      BuildFormFromLoginAndOrigin("user2", "password2", "http://b.com")};
   controller()->NotifyUnsyncedCredentialsWillBeDeleted(credentials);
 
   // Set expectations on the store.
@@ -1407,6 +1405,28 @@ TEST_F(ManagePasswordsUIControllerTest, SaveUnsyncedCredentialsInProfileStore) {
   // Save.
   EXPECT_CALL(*controller(), OnUpdateBubbleAndIconVisibility());
   controller()->SaveUnsyncedCredentialsInProfileStore();
+
+  // Check the credentials are gone and the bubble is closed.
+  EXPECT_TRUE(controller()->GetUnsyncedCredentials().empty());
+  EXPECT_FALSE(controller()->opened_bubble());
+  ExpectIconAndControllerStateIs(password_manager::ui::INACTIVE_STATE);
+}
+
+TEST_F(ManagePasswordsUIControllerTest, DiscardUnsyncedCredentials) {
+  // Setup state with unsynced credentials.
+  EXPECT_CALL(*controller(), OnUpdateBubbleAndIconVisibility());
+  std::vector<autofill::PasswordForm> credentials = {
+      BuildFormFromLoginAndOrigin("user", "password", "http://a.com")};
+  controller()->NotifyUnsyncedCredentialsWillBeDeleted(credentials);
+
+  // No save should happen on the profile store.
+  auto* profile_store = static_cast<password_manager::MockPasswordStore*>(
+      client().GetProfilePasswordStore());
+  EXPECT_CALL(*profile_store, AddLogin).Times(0);
+
+  // Discard.
+  EXPECT_CALL(*controller(), OnUpdateBubbleAndIconVisibility());
+  controller()->DiscardUnsyncedCredentials();
 
   // Check the credentials are gone and the bubble is closed.
   EXPECT_TRUE(controller()->GetUnsyncedCredentials().empty());

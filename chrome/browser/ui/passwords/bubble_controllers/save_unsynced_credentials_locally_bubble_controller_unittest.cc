@@ -49,3 +49,11 @@ TEST_F(SaveUnsyncedCredentialsLocallyBubbleControllerTest,
   EXPECT_CALL(model_delegate_mock_, SaveUnsyncedCredentialsInProfileStore);
   controller.OnSaveClicked();
 }
+
+TEST_F(SaveUnsyncedCredentialsLocallyBubbleControllerTest,
+       ShouldDiscardCredentialsInProfileStoreOnCancelButtonClicked) {
+  SaveUnsyncedCredentialsLocallyBubbleController controller(
+      model_delegate_mock_.AsWeakPtr());
+  EXPECT_CALL(model_delegate_mock_, DiscardUnsyncedCredentials);
+  controller.OnCancelClicked();
+}

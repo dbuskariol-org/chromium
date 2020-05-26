@@ -33,9 +33,7 @@ void SaveUnsyncedCredentialsLocallyBubbleController::OnSaveClicked() {
 }
 
 void SaveUnsyncedCredentialsLocallyBubbleController::OnCancelClicked() {
-  // TODO(crbug.com/1060132): This method should clear the unsynced credentials
-  // wherever they are being stored.
-  NOTIMPLEMENTED();
+  delegate_->DiscardUnsyncedCredentials();
 }
 
 const std::vector<autofill::PasswordForm>&

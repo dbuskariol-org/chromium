@@ -102,9 +102,15 @@ class PasswordsModelDelegate {
   virtual void SavePassword(const base::string16& username,
                             const base::string16& password) = 0;
 
-  // Called when the user chooses to save the unsynced credentials deleted on
-  // signout (the ones returned by GetUnsyncedCredentials()).
+  // Called when the user chooses to save locally the unsynced credentials
+  // deleted from the account store on signout (the ones returned by
+  // GetUnsyncedCredentials()).
   virtual void SaveUnsyncedCredentialsInProfileStore() = 0;
+
+  // Called when the user chooses not to save locally the unsynced credentials
+  // deleted from the account store on signout (the ones returned by
+  // GetUnsyncedCredentials()).
+  virtual void DiscardUnsyncedCredentials() = 0;
 
   // Called from the dialog controller when a user confirms moving the recently
   // used credential to their account store.

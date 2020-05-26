@@ -504,6 +504,12 @@ void ManagePasswordsUIController::SaveUnsyncedCredentialsInProfileStore() {
   UpdateBubbleAndIconVisibility();
 }
 
+void ManagePasswordsUIController::DiscardUnsyncedCredentials() {
+  ClearPopUpFlagForBubble();
+  passwords_data_.OnInactive();
+  UpdateBubbleAndIconVisibility();
+}
+
 void ManagePasswordsUIController::MovePasswordToAccountStore() {
   DCHECK_EQ(GetState(),
             password_manager::ui::CAN_MOVE_PASSWORD_TO_ACCOUNT_STATE)
