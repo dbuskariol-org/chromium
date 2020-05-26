@@ -592,7 +592,7 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, UpdateAppDataFromProfile) {
 }
 
 // Flaky; https://crbug.com/783450
-IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_UpdateAppDataFromCrx) {
+IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, UpdateAppDataFromCrx) {
   const char kAppId[] = "iiigpodgfihagabpagjehoocpakbnclp";
   const char kAppName[] = "Test Kiosk App";
 
@@ -656,7 +656,7 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_BadApp) {
 }
 
 // Disabled: https://crbug.com/1044417
-IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_GoodApp) {
+IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, GoodApp) {
   // Webstore data json is in
   //   chrome/test/data/chromeos/app_mode/webstore/inlineinstall/detail/app_1
   const char kAppId[] = "app_1";
@@ -672,8 +672,7 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_GoodApp) {
 }
 
 // Disabled: https://crbug.com/1044417
-IN_PROC_BROWSER_TEST_F(KioskAppManagerTest,
-                       DISABLED_AppWithRequiredPlatformVersion) {
+IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, AppWithRequiredPlatformVersion) {
   // Webstore data json is in
   //   chrome/test/data/chromeos/app_mode/webstore/inlineinstall/detail/
   //     app_with_required_platform_version
@@ -706,12 +705,12 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, AppWithBadRequiredPlatformVersion) {
 }
 
 // Disabled: https://crbug.com/1044417
-IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_DownloadNewApp) {
+IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DownloadNewApp) {
   RunAddNewAppTest(kTestLocalFsKioskApp, "1.0.0", kTestLocalFsKioskAppName, "");
 }
 
 // Disabled: https://crbug.com/1044417
-IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_RemoveApp) {
+IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, RemoveApp) {
   // Add a new app.
   RunAddNewAppTest(kTestLocalFsKioskApp, "1.0.0", kTestLocalFsKioskAppName, "");
   KioskAppManager::AppList apps;
@@ -789,7 +788,7 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, UpdateApp) {
 }
 
 // Test is flaky: https://crbug.com/1044417
-IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_UpdateAndRemoveApp) {
+IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, UpdateAndRemoveApp) {
   // Add a version 1 app first.
   RunAddNewAppTest(kTestLocalFsKioskApp, "1.0.0", kTestLocalFsKioskAppName, "");
   KioskAppManager::AppList apps;
