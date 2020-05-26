@@ -3508,13 +3508,20 @@ test("unit_tests") {
     "../../base/path_service_unittest.cc",
     "../../testing/gtest_mac_unittest.mm",
 
-    # Chromium's zlib unit tests
+    # Chromium's zlib unit tests.
     "../../third_party/zlib/contrib/tests/infcover.cc",
     "../../third_party/zlib/contrib/tests/infcover.h",
     "../../third_party/zlib/contrib/tests/utils_unittest.cc",
     "../../third_party/zlib/google/compression_utils_unittest.cc",
     "../../third_party/zlib/google/zip_reader_unittest.cc",
     "../../third_party/zlib/google/zip_unittest.cc",
+  ]
+
+  # Required by Chromium's zlib unit tests.
+  include_dirs = [
+    "//third_party/googletest/src/googletest/include/gtest",
+    "//third_party/zlib",
+    "//third_party/zlib/google",
   ]
 
   if (enable_downgrade_processing) {
