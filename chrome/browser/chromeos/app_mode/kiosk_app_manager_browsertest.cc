@@ -14,6 +14,7 @@
 #include "base/files/file_util.h"
 #include "base/files/scoped_temp_dir.h"
 #include "base/path_service.h"
+#include "base/run_loop.h"
 #include "base/stl_util.h"
 #include "base/strings/stringprintf.h"
 #include "base/system/sys_info.h"
@@ -142,8 +143,8 @@ class AppDataLoadWaiter : public KioskAppManagerObserver {
   void Wait() {
     if (quit_)
       return;
-    runner_ = new content::MessageLoopRunner;
-    runner_->Run();
+    run_loop_ = std::make_unique<base::RunLoop>();
+    run_loop_->Run();
   }
 
   void Reset() {
@@ -163,16 +164,16 @@ class AppDataLoadWaiter : public KioskAppManagerObserver {
       return;
     loaded_ = true;
     quit_ = true;
-    if (runner_.get())
-      runner_->Quit();
+    if (run_loop_)
+      run_loop_->Quit();
   }
 
   void OnKioskAppDataLoadFailure(const std::string& app_id) override {
     ++data_load_failure_count_;
     loaded_ = false;
     quit_ = true;
-    if (runner_.get())
-      runner_->Quit();
+    if (run_loop_)
+      run_loop_->Quit();
   }
 
   void OnKioskExtensionLoadedInCache(const std::string& app_id) override {
@@ -186,7 +187,7 @@ class AppDataLoadWaiter : public KioskAppManagerObserver {
     // to missing update URL in manifest.
   }
 
-  scoped_refptr<content::MessageLoopRunner> runner_;
+  std::unique_ptr<base::RunLoop> run_loop_;
   KioskAppManager* manager_;
   bool loaded_ = false;
   bool quit_ = false;
@@ -206,21 +207,21 @@ class ExternalCachePutWaiter {
   void Wait() {
     if (quit_)
       return;
-    runner_ = new content::MessageLoopRunner;
-    runner_->Run();
+    run_loop_ = std::make_unique<base::RunLoop>();
+    run_loop_->Run();
   }
 
   void OnPutExtension(const std::string& id, bool success) {
     success_ = success;
     quit_ = true;
-    if (runner_.get())
-      runner_->Quit();
+    if (run_loop_)
+      run_loop_->Quit();
   }
 
   bool success() const { return success_; }
 
  private:
-  scoped_refptr<content::MessageLoopRunner> runner_;
+  std::unique_ptr<base::RunLoop> run_loop_;
   bool quit_ = false;
   bool success_ = false;
 
@@ -293,8 +294,7 @@ class KioskAppManagerTest : public InProcessBrowserTest {
     std::unique_ptr<InstallAttributes::LockResult> lock_result =
         std::make_unique<InstallAttributes::LockResult>(
             InstallAttributes::LOCK_NOT_READY);
-    scoped_refptr<content::MessageLoopRunner> runner =
-        new content::MessageLoopRunner;
+    base::RunLoop run_loop;
     policy::BrowserPolicyConnectorChromeOS* connector =
         g_browser_process->platform_part()->browser_policy_connector_chromeos();
     connector->GetInstallAttributes()->LockDevice(
@@ -302,8 +302,8 @@ class KioskAppManagerTest : public InProcessBrowserTest {
         std::string(),  // realm
         "device-id",
         base::BindOnce(&OnEnterpriseDeviceLock, lock_result.get(),
-                       runner->QuitClosure()));
-    runner->Run();
+                       run_loop.QuitClosure()));
+    run_loop.Run();
     return *lock_result.get();
   }
 
@@ -828,25 +828,22 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, EnableConsumerKiosk) {
       KioskAppManager::CONSUMER_KIOSK_AUTO_LAUNCH_DISABLED;
   bool locked = false;
 
-  scoped_refptr<content::MessageLoopRunner> runner =
-      new content::MessageLoopRunner;
+  base::RunLoop run_loop;
   manager()->GetConsumerKioskAutoLaunchStatus(base::BindOnce(
-      &ConsumerKioskAutoLaunchStatusCheck, &status, runner->QuitClosure()));
-  runner->Run();
+      &ConsumerKioskAutoLaunchStatusCheck, &status, run_loop.QuitClosure()));
+  run_loop.Run();
   EXPECT_EQ(status, KioskAppManager::CONSUMER_KIOSK_AUTO_LAUNCH_CONFIGURABLE);
 
-  scoped_refptr<content::MessageLoopRunner> runner2 =
-      new content::MessageLoopRunner;
+  base::RunLoop run_loop2;
   manager()->EnableConsumerKioskAutoLaunch(base::BindOnce(
-      &ConsumerKioskModeLockCheck, &locked, runner2->QuitClosure()));
-  runner2->Run();
+      &ConsumerKioskModeLockCheck, &locked, run_loop2.QuitClosure()));
+  run_loop2.Run();
   EXPECT_TRUE(locked);
 
-  scoped_refptr<content::MessageLoopRunner> runner3 =
-      new content::MessageLoopRunner;
+  base::RunLoop run_loop3;
   manager()->GetConsumerKioskAutoLaunchStatus(base::BindOnce(
-      &ConsumerKioskAutoLaunchStatusCheck, &status, runner3->QuitClosure()));
-  runner3->Run();
+      &ConsumerKioskAutoLaunchStatusCheck, &status, run_loop3.QuitClosure()));
+  run_loop3.Run();
   EXPECT_EQ(status, KioskAppManager::CONSUMER_KIOSK_AUTO_LAUNCH_ENABLED);
 }
 
@@ -854,11 +851,10 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, ConsumerKioskDisabled) {
   KioskAppManager::ConsumerKioskAutoLaunchStatus status =
       KioskAppManager::CONSUMER_KIOSK_AUTO_LAUNCH_CONFIGURABLE;
 
-  scoped_refptr<content::MessageLoopRunner> runner =
-      new content::MessageLoopRunner;
+  base::RunLoop run_loop;
   manager()->GetConsumerKioskAutoLaunchStatus(base::BindOnce(
-      &ConsumerKioskAutoLaunchStatusCheck, &status, runner->QuitClosure()));
-  runner->Run();
+      &ConsumerKioskAutoLaunchStatusCheck, &status, run_loop.QuitClosure()));
+  run_loop.Run();
   EXPECT_EQ(status, KioskAppManager::CONSUMER_KIOSK_AUTO_LAUNCH_DISABLED);
 }
 
@@ -875,25 +871,22 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest,
       KioskAppManager::CONSUMER_KIOSK_AUTO_LAUNCH_DISABLED;
   bool locked = true;
 
-  scoped_refptr<content::MessageLoopRunner> runner =
-      new content::MessageLoopRunner;
+  base::RunLoop run_loop;
   manager()->GetConsumerKioskAutoLaunchStatus(base::BindOnce(
-      &ConsumerKioskAutoLaunchStatusCheck, &status, runner->QuitClosure()));
-  runner->Run();
+      &ConsumerKioskAutoLaunchStatusCheck, &status, run_loop.QuitClosure()));
+  run_loop.Run();
   EXPECT_EQ(status, KioskAppManager::CONSUMER_KIOSK_AUTO_LAUNCH_DISABLED);
 
-  scoped_refptr<content::MessageLoopRunner> runner2 =
-      new content::MessageLoopRunner;
+  base::RunLoop run_loop2;
   manager()->EnableConsumerKioskAutoLaunch(base::BindOnce(
-      &ConsumerKioskModeLockCheck, &locked, runner2->QuitClosure()));
-  runner2->Run();
+      &ConsumerKioskModeLockCheck, &locked, run_loop2.QuitClosure()));
+  run_loop2.Run();
   EXPECT_FALSE(locked);
 
-  scoped_refptr<content::MessageLoopRunner> runner3 =
-      new content::MessageLoopRunner;
+  base::RunLoop run_loop3;
   manager()->GetConsumerKioskAutoLaunchStatus(base::BindOnce(
-      &ConsumerKioskAutoLaunchStatusCheck, &status, runner3->QuitClosure()));
-  runner3->Run();
+      &ConsumerKioskAutoLaunchStatusCheck, &status, run_loop3.QuitClosure()));
+  run_loop3.Run();
   EXPECT_EQ(status, KioskAppManager::CONSUMER_KIOSK_AUTO_LAUNCH_DISABLED);
 }
 
