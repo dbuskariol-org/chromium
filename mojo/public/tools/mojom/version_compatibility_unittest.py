@@ -102,3 +102,207 @@ class VersionCompatibilityTest(MojomParserTestCase):
     not introduce any new numeric values."""
     self.assertBackwardCompatible(
         'enum E { kA, kB };', 'enum E { kA, kB, kC = kA, kD = 1, kE = kD };')
+
+  def testEnumIdentity(self):
+    """An unchanged enum is obviously backward-compatible."""
+    self.assertBackwardCompatible('enum E { kA, kB, kC };',
+                                  'enum E { kA, kB, kC };')
+
+  def testNewStructFieldUnversioned(self):
+    """Adding a new field to a struct without a new (i.e. higher than any
+    existing version) [MinVersion] tag breaks backward-compatibility."""
+    self.assertNotBackwardCompatible('struct S { string a; };',
+                                     'struct S { string a; string b; };')
+
+  def testStructFieldRemoval(self):
+    """Removing a field from a struct breaks backward-compatibility."""
+    self.assertNotBackwardCompatible('struct S { string a; string b; };',
+                                     'struct S { string a; };')
+
+  def testStructFieldTypeChange(self):
+    """Changing the type of an existing field always breaks
+    backward-compatibility."""
+    self.assertNotBackwardCompatible('struct S { string a; };',
+                                     'struct S { array<int32> a; };')
+
+  def testStructFieldBecomingOptional(self):
+    """Changing a field from non-optional to optional breaks
+    backward-compatibility."""
+    self.assertNotBackwardCompatible('struct S { string a; };',
+                                     'struct S { string? a; };')
+
+  def testStructFieldBecomingNonOptional(self):
+    """Changing a field from optional to non-optional breaks
+    backward-compatibility."""
+    self.assertNotBackwardCompatible('struct S { string? a; };',
+                                     'struct S { string a; };')
+
+  def testStructFieldOrderChange(self):
+    """Changing the order of fields breaks backward-compatibility."""
+    self.assertNotBackwardCompatible('struct S { string a; bool b; };',
+                                     'struct S { bool b; string a; };')
+    self.assertNotBackwardCompatible('struct S { string a@0; bool b@1; };',
+                                     'struct S { string a@1; bool b@0; };')
+
+  def testStructFieldMinVersionChange(self):
+    """Changing the MinVersion of a field breaks backward-compatibility."""
+    self.assertNotBackwardCompatible(
+        'struct S { string a; [MinVersion=1] string? b; };',
+        'struct S { string a; [MinVersion=2] string? b; };')
+
+  def testStructFieldTypeChange(self):
+    """If a struct field's own type definition changes, the containing struct
+    is backward-compatible if and only if the field type's change is
+    backward-compatible."""
+    self.assertBackwardCompatible(
+        'struct S {}; struct T { S s; };',
+        'struct S { [MinVersion=1] int32 x; }; struct T { S s; };')
+    self.assertBackwardCompatible(
+        '[Extensible] enum E { kA }; struct S { E e; };',
+        '[Extensible] enum E { kA, [MinVersion=1] kB }; struct S { E e; };')
+    self.assertNotBackwardCompatible(
+        'struct S {}; struct T { S s; };',
+        'struct S { int32 x; }; struct T { S s; };')
+    self.assertNotBackwardCompatible(
+        '[Extensible] enum E { kA }; struct S { E e; };',
+        '[Extensible] enum E { kA, kB }; struct S { E e; };')
+
+  def testNewStructFieldWithInvalidMinVersion(self):
+    """Adding a new field using an existing MinVersion breaks backward-
+    compatibility."""
+    self.assertNotBackwardCompatible(
+        """\
+        struct S {
+          string a;
+          [MinVersion=1] string? b;
+        };
+        """, """\
+        struct S {
+          string a;
+          [MinVersion=1] string? b;
+          [MinVersion=1] string? c;
+        };""")
+
+  def testNewStructFieldWithValidMinVersion(self):
+    """Adding a new field is safe if tagged with a MinVersion greater than any
+    previously used MinVersion in the struct."""
+    self.assertBackwardCompatible(
+        'struct S { int32 a; };',
+        'struct S { int32 a; [MinVersion=1] int32 b; };')
+    self.assertBackwardCompatible(
+        'struct S { int32 a; [MinVersion=1] int32 b; };',
+        'struct S { int32 a; [MinVersion=1] int32 b; [MinVersion=2] bool c; };')
+
+  def testNewStructFieldNullableReference(self):
+    """Adding a new nullable reference-typed field is fine if versioned
+    properly."""
+    self.assertBackwardCompatible(
+        'struct S { int32 a; };',
+        'struct S { int32 a; [MinVersion=1] string? b; };')
+
+  def testStructFieldRename(self):
+    """Renaming a field has no effect on backward-compatibility."""
+    self.assertBackwardCompatible('struct S { int32 x; bool b; };',
+                                  'struct S { int32 a; bool b; };')
+
+  def testStructFieldReorderWithExplicitOrdinals(self):
+    """Reordering fields has no effect on backward-compatibility when field
+    ordinals are explicitly labeled and remain unchanged."""
+    self.assertBackwardCompatible('struct S { bool b@1; int32 a@0; };',
+                                  'struct S { int32 a@0; bool b@1; };')
+
+  def testNewUnionFieldUnversioned(self):
+    """Adding a new field to a union without a new (i.e. higher than any
+    existing version) [MinVersion] tag breaks backward-compatibility."""
+    self.assertNotBackwardCompatible('union U { string a; };',
+                                     'union U { string a; string b; };')
+
+  def testUnionFieldRemoval(self):
+    """Removing a field from a union breaks backward-compatibility."""
+    self.assertNotBackwardCompatible('union U { string a; string b; };',
+                                     'union U { string a; };')
+
+  def testUnionFieldTypeChange(self):
+    """Changing the type of an existing field always breaks
+    backward-compatibility."""
+    self.assertNotBackwardCompatible('union U { string a; };',
+                                     'union U { array<int32> a; };')
+
+  def testUnionFieldBecomingOptional(self):
+    """Changing a field from non-optional to optional breaks
+    backward-compatibility."""
+    self.assertNotBackwardCompatible('union U { string a; };',
+                                     'union U { string? a; };')
+
+  def testUnionFieldBecomingNonOptional(self):
+    """Changing a field from optional to non-optional breaks
+    backward-compatibility."""
+    self.assertNotBackwardCompatible('union U { string? a; };',
+                                     'union U { string a; };')
+
+  def testUnionFieldOrderChange(self):
+    """Changing the order of fields breaks backward-compatibility."""
+    self.assertNotBackwardCompatible('union U { string a; bool b; };',
+                                     'union U { bool b; string a; };')
+    self.assertNotBackwardCompatible('union U { string a@0; bool b@1; };',
+                                     'union U { string a@1; bool b@0; };')
+
+  def testUnionFieldMinVersionChange(self):
+    """Changing the MinVersion of a field breaks backward-compatibility."""
+    self.assertNotBackwardCompatible(
+        'union U { string a; [MinVersion=1] string b; };',
+        'union U { string a; [MinVersion=2] string b; };')
+
+  def testUnionFieldTypeChange(self):
+    """If a union field's own type definition changes, the containing union
+    is backward-compatible if and only if the field type's change is
+    backward-compatible."""
+    self.assertBackwardCompatible(
+        'struct S {}; union U { S s; };',
+        'struct S { [MinVersion=1] int32 x; }; union U { S s; };')
+    self.assertBackwardCompatible(
+        '[Extensible] enum E { kA }; union U { E e; };',
+        '[Extensible] enum E { kA, [MinVersion=1] kB }; union U { E e; };')
+    self.assertNotBackwardCompatible(
+        'struct S {}; union U { S s; };',
+        'struct S { int32 x; }; union U { S s; };')
+    self.assertNotBackwardCompatible(
+        '[Extensible] enum E { kA }; union U { E e; };',
+        '[Extensible] enum E { kA, kB }; union U { E e; };')
+
+  def testNewUnionFieldWithInvalidMinVersion(self):
+    """Adding a new field using an existing MinVersion breaks backward-
+    compatibility."""
+    self.assertNotBackwardCompatible(
+        """\
+        union U {
+          string a;
+          [MinVersion=1] string b;
+        };
+        """, """\
+        union U {
+          string a;
+          [MinVersion=1] string b;
+          [MinVersion=1] string c;
+        };""")
+
+  def testNewUnionFieldWithValidMinVersion(self):
+    """Adding a new field is safe if tagged with a MinVersion greater than any
+    previously used MinVersion in the union."""
+    self.assertBackwardCompatible(
+        'union U { int32 a; };',
+        'union U { int32 a; [MinVersion=1] int32 b; };')
+    self.assertBackwardCompatible(
+        'union U { int32 a; [MinVersion=1] int32 b; };',
+        'union U { int32 a; [MinVersion=1] int32 b; [MinVersion=2] bool c; };')
+
+  def testUnionFieldRename(self):
+    """Renaming a field has no effect on backward-compatibility."""
+    self.assertBackwardCompatible('union U { int32 x; bool b; };',
+                                  'union U { int32 a; bool b; };')
+
+  def testUnionFieldReorderWithExplicitOrdinals(self):
+    """Reordering fields has no effect on backward-compatibility when field
+    ordinals are explicitly labeled and remain unchanged."""
+    self.assertBackwardCompatible('union U { bool b@1; int32 a@0; };',
+                                  'union U { int32 a@0; bool b@1; };')
