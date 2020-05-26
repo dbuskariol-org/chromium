@@ -154,6 +154,7 @@ class AppDataLoadWaiter : public KioskAppManagerObserver {
   }
 
   bool loaded() const { return loaded_; }
+  int data_change_count() const { return data_change_count_; }
   int data_load_failure_count() const { return data_load_failure_count_; }
 
  private:
@@ -415,6 +416,8 @@ class KioskAppManagerTest : public InProcessBrowserTest {
     manager()->AddApp(id, owner_settings_service_.get());
     waiter.Wait();
     EXPECT_TRUE(waiter.loaded());
+    EXPECT_EQ(waiter.data_change_count(), 3);
+    EXPECT_EQ(waiter.data_load_failure_count(), 0);
 
     // Check CRX file is cached.
     base::FilePath crx_path;
@@ -541,6 +544,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, LoadCached) {
   AppDataLoadWaiter waiter(manager(), 1);
   waiter.Wait();
   EXPECT_TRUE(waiter.loaded());
+  EXPECT_EQ(waiter.data_change_count(), 1);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
 
   CheckAppData("app_1", "Cached App1 Name", "1234");
 }
@@ -567,6 +572,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, UpdateAppDataFromProfile) {
   AppDataLoadWaiter waiter(manager(), 1);
   waiter.Wait();
   EXPECT_TRUE(waiter.loaded());
+  EXPECT_EQ(waiter.data_change_count(), 1);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
 
   CheckAppData("app_1", "Cached App1 Name", "");
 
@@ -578,6 +585,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, UpdateAppDataFromProfile) {
   waiter.Reset();
   waiter.Wait();
   EXPECT_TRUE(waiter.loaded());
+  EXPECT_EQ(waiter.data_change_count(), 1);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
 
   CheckAppData("app_1", "Updated App1 Name", "1234");
 }
@@ -591,6 +600,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_UpdateAppDataFromCrx) {
   fake_cws()->SetNoUpdate(kAppId);
   AppDataLoadWaiter waiter(manager(), 1);
   waiter.Wait();
+  EXPECT_EQ(waiter.data_change_count(), 1);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
   EXPECT_TRUE(waiter.loaded());
 
   CheckAppData(kAppId, kAppName, "");
@@ -626,6 +637,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_UpdateAppDataFromCrx) {
        ++i) {
     waiter.Reset();
     waiter.Wait();
+    EXPECT_EQ(waiter.data_change_count(), 1);
+    EXPECT_EQ(waiter.data_load_failure_count(), 0);
   }
   ASSERT_EQ(KioskAppData::STATUS_LOADED, app_data->status());
 
@@ -636,6 +649,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_BadApp) {
   AppDataLoadWaiter waiter(manager(), 2);
   manager()->AddApp("unknown_app", owner_settings_service_.get());
   waiter.Wait();
+  EXPECT_EQ(waiter.data_change_count(), 2);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
   EXPECT_FALSE(waiter.loaded());
   EXPECT_EQ("", GetAppIds());
 }
@@ -650,6 +665,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_GoodApp) {
   manager()->AddApp(kAppId, owner_settings_service_.get());
   waiter.Wait();
   EXPECT_TRUE(waiter.loaded());
+  EXPECT_EQ(waiter.data_change_count(), 2);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
 
   CheckAppDataAndCache(kAppId, "Name of App 1", "");
 }
@@ -666,6 +683,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest,
   manager()->AddApp(kAppId, owner_settings_service_.get());
   waiter.Wait();
   EXPECT_TRUE(waiter.loaded());
+  EXPECT_EQ(waiter.data_change_count(), 2);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
 
   CheckAppDataAndCache(kAppId, "App with required platform version", "1234");
 }
@@ -680,6 +699,7 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, AppWithBadRequiredPlatformVersion) {
   manager()->AddApp(kAppId, owner_settings_service_.get());
   waiter.Wait();
   EXPECT_FALSE(waiter.loaded());
+  EXPECT_EQ(waiter.data_change_count(), 1);
   EXPECT_EQ(1, waiter.data_load_failure_count());
 
   EXPECT_EQ("", GetAppIds());
@@ -741,6 +761,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, UpdateApp) {
   UpdateAppsFromPolicy();
   waiter.Wait();
   EXPECT_TRUE(waiter.loaded());
+  EXPECT_EQ(waiter.data_change_count(), 1);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
 
   // Verify the app has been updated to v2.
   manager()->GetApps(&apps);
@@ -789,6 +811,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest, DISABLED_UpdateAndRemoveApp) {
   AppDataLoadWaiter waiter(manager(), 1);
   UpdateAppsFromPolicy();
   waiter.Wait();
+  EXPECT_EQ(waiter.data_change_count(), 1);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
   EXPECT_TRUE(waiter.loaded());
 
   // Verify the app has been updated to v2.
@@ -900,6 +924,8 @@ IN_PROC_BROWSER_TEST_F(KioskAppManagerTest,
   AppDataLoadWaiter waiter(manager(), 1);
   waiter.Wait();
   EXPECT_TRUE(waiter.loaded());
+  EXPECT_EQ(waiter.data_change_count(), 1);
+  EXPECT_EQ(waiter.data_load_failure_count(), 0);
 
   EXPECT_FALSE(manager()->IsAutoLaunchEnabled());
   EXPECT_EQ("", manager()->GetAutoLaunchAppRequiredPlatformVersion());
