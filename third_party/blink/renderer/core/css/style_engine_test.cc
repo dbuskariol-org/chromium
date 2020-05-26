@@ -2702,6 +2702,30 @@ TEST_F(StyleEngineTest, PrintNoDarkColorScheme) {
                                     GetCSSPropertyColor()));
 }
 
+TEST_F(StyleEngineTest, AtPropertyUseCount) {
+  ScopedCSSVariables2AtPropertyForTest scoped_feature(true);
+
+  GetDocument().body()->setInnerHTML(R"HTML(
+    <style>
+      body { --x: No @property rule here; }
+    </style>
+  )HTML");
+  UpdateAllLifecyclePhases();
+  EXPECT_FALSE(GetDocument().IsUseCounted(WebFeature::kCSSAtRuleProperty));
+
+  GetDocument().body()->setInnerHTML(R"HTML(
+    <style>
+      @property --x {
+        syntax: "<length>";
+        inherits: false;
+        initial-value: 0px;
+      }
+    </style>
+  )HTML");
+  UpdateAllLifecyclePhases();
+  EXPECT_TRUE(GetDocument().IsUseCounted(WebFeature::kCSSAtRuleProperty));
+}
+
 class ParameterizedStyleEngineTest
     : public testing::WithParamInterface<bool>,
       private ScopedCSSReducedFontLoadingInvalidationsForTest,
