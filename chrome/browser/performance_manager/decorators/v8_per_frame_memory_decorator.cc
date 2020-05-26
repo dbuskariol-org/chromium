@@ -227,6 +227,20 @@ uint64_t V8PerFrameMemoryDecorator::GetUnassociatedBytesForTesting(
   return process_data->unassociated_v8_bytes_used();
 }
 
+uint64_t V8PerFrameMemoryDecorator::GetAssociatedBytesForTesting(
+    const FrameNode* frame_node) {
+  FrameData* frame_data = FrameData::Get(frame_node);
+  if (!frame_data)
+    return 0u;
+
+  return frame_data->v8_bytes_used();
+}
+
+bool V8PerFrameMemoryDecorator::HasAssociatedBytesForTesting(
+    const FrameNode* frame_node) {
+  return FrameData::Get(frame_node);
+}
+
 void V8PerFrameMemoryDecorator::BindReceiverWithProxyHost(
     mojo::PendingReceiver<performance_manager::mojom::V8PerFrameMemoryReporter>
         pending_receiver,
