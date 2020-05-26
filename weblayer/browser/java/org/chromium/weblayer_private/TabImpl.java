@@ -328,7 +328,6 @@ public final class TabImpl extends ITab.Stub {
         TabImplJni.get().setBrowserControlsContainerViews(
                 mNativeTab, topControlsContainerViewHandle, bottomControlsContainerViewHandle);
         updateWebContentsVisibility();
-        mWebContents.onShow();
     }
 
     /**
@@ -336,7 +335,6 @@ public final class TabImpl extends ITab.Stub {
      */
     public void onDidLoseActive() {
         hideFindInPageUiAndNotifyClient();
-        mWebContents.onHide();
         updateWebContentsVisibility();
         TabImplJni.get().setBrowserControlsContainerViews(mNativeTab, 0, 0);
     }
