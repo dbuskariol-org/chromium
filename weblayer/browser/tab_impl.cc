@@ -211,6 +211,18 @@ void OnScreenShotCaptured(const ScopedJavaGlobalRef<jobject>& value_callback,
 }  // namespace
 
 #if defined(OS_ANDROID)
+
+static ScopedJavaLocalRef<jobject> JNI_TabImpl_FromWebContents(
+    JNIEnv* env,
+    const base::android::JavaParamRef<jobject>& j_web_contents) {
+  content::WebContents* web_contents =
+      content::WebContents::FromJavaWebContents(j_web_contents);
+  TabImpl* tab = TabImpl::FromWebContents(web_contents);
+  if (tab)
+    return ScopedJavaLocalRef<jobject>(tab->GetJavaTab());
+  return nullptr;
+}
+
 TabImpl::TabImpl(ProfileImpl* profile, const JavaParamRef<jobject>& java_impl)
     : TabImpl(profile) {
   java_impl_ = java_impl;
