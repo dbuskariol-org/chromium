@@ -964,6 +964,37 @@ class Enum(Kind):
     return self.attributes.get(ATTRIBUTE_EXTENSIBLE, False) \
         if self.attributes else False
 
+  def IsBackwardCompatible(self, older_enum):
+    """This enum is backward-compatible with older_enum if and only if one of
+    the following conditions holds:
+        - Neither enum is [Extensible] and both have the exact same set of valid
+          numeric values. Field names and aliases for the same numeric value do
+          not affect compatibility.
+        - older_enum is [Extensible], and for every version defined by
+          older_enum, this enum has the exact same set of valid numeric values.
+    """
+
+    def buildVersionFieldMap(enum):
+      fields_by_min_version = {}
+      for field in enum.fields:
+        if field.min_version not in fields_by_min_version:
+          fields_by_min_version[field.min_version] = set()
+        fields_by_min_version[field.min_version].add(field.numeric_value)
+      return fields_by_min_version
+
+    old_fields = buildVersionFieldMap(older_enum)
+    new_fields = buildVersionFieldMap(self)
+
+    if new_fields.keys() != old_fields.keys() and not older_enum.extensible:
+      return False
+
+    for min_version, valid_values in old_fields.items():
+      if (min_version not in new_fields
+          or new_fields[min_version] != valid_values):
+        return False
+
+    return True
+
   def __eq__(self, rhs):
     return (isinstance(rhs, Enum) and
             (self.mojom_name, self.native_only, self.fields, self.attributes,
