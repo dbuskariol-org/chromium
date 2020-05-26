@@ -184,6 +184,19 @@ std::string MojoVpnTypeToOnc(mojom::VpnType mojo_vpn_type) {
   return ::onc::vpn::kOpenVPN;
 }
 
+bool GetIsConfiguredByUser(const std::string& network_guid) {
+  if (!NetworkHandler::IsInitialized())
+    return false;
+
+  NetworkMetadataStore* network_metadata_store =
+      NetworkHandler::Get()->network_metadata_store();
+
+  if (!network_metadata_store)
+    return false;
+
+  return network_metadata_store->GetIsCreatedByUser(network_guid);
+}
+
 mojom::DeviceStateType GetMojoDeviceStateType(
     NetworkStateHandler::TechnologyState technology_state) {
   switch (technology_state) {
@@ -1410,8 +1423,9 @@ mojom::ManagedPropertiesPtr ManagedPropertiesToMojo(
       wifi->tethering_state =
           GetString(wifi_dict, ::onc::wifi::kTetheringState);
       wifi->is_syncable = sync_wifi::IsEligibleForSync(
-          result->guid, result->connectable, result->source, wifi->security,
+          result->guid, result->connectable, wifi->security,
           /*log_result=*/false);
+      wifi->is_configured_by_active_user = GetIsConfiguredByUser(result->guid);
 
       result->type_properties =
           mojom::NetworkTypeManagedProperties::NewWifi(std::move(wifi));

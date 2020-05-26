@@ -547,6 +547,9 @@ struct ManagedWiFiProperties {
   string? tethering_state;
   // Indicates whether the network is eligible to be included in Chrome Sync.
   bool is_syncable;
+  // True for unshared networks and for shared networks configured by the
+  // active user.  Updated whenever the passphrase is modified.
+  bool is_configured_by_active_user;
 };
 
 union NetworkTypeManagedProperties {
