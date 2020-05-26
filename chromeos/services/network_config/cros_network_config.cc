@@ -1207,6 +1207,8 @@ mojom::ManagedPropertiesPtr ManagedPropertiesToMojo(
   // Managed properties
   result->ip_address_config_type =
       GetManagedString(properties, ::onc::network_config::kIPAddressConfigType);
+  result->metered =
+      GetManagedBoolean(properties, ::onc::network_config::kMetered);
   result->name = GetManagedString(properties, ::onc::network_config::kName);
   result->name_servers_config_type = GetManagedString(
       properties, ::onc::network_config::kNameServersConfigType);
@@ -1598,9 +1600,11 @@ std::unique_ptr<base::DictionaryValue> GetOncFromConfigProperties(
     onc->SetStringKey(::onc::network_config::kIPAddressConfigType,
                       *properties->ip_address_config_type);
   }
-
+  if (properties->metered) {
+    onc->SetBoolKey(::onc::network_config::kMetered,
+                    properties->metered->value);
+  }
   SetString(::onc::network_config::kName, properties->name, onc.get());
-
   SetString(::onc::network_config::kNameServersConfigType,
             properties->name_servers_config_type, onc.get());
 
