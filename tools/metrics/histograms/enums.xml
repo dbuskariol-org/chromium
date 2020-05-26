@@ -65781,6 +65781,17 @@ would be helpful to identify which type is being sent.
   <int value="6" label="Bookmark Bar and Other Bookmarks and Mobile Bookmarks"/>
 </enum>
 
+<enum name="SyncModelTypeErrorSite">
+  <int value="0" label="ReportError() called by the bridge"/>
+  <int value="1" label="Error returned when applying full updates"/>
+  <int value="2" label="Error returned when applying incremental updates"/>
+  <int value="3"
+      label="Error returned when applying updates on commit response"/>
+  <int value="4"
+      label="Error triggered by update not matching
+             SupportsIncrementalUpdates()"/>
+</enum>
+
 <enum name="SyncModelTypes">
   <int value="0" label="Unspecified"/>
   <int value="1" label="Top Level Folder"/>
