@@ -223,9 +223,9 @@ public class QueryTileSectionTest {
         private TestTileProvider() {
             List<QueryTile> children = new ArrayList<>();
             children.add(new QueryTile("tile1_1", "Tile 1_1", "Tile 1_1", "Tile_1_1_Query",
-                    new String[] {"url1_1"}, null));
+                    new String[] {"url1_1"}, null, null));
             QueryTile tile = new QueryTile(
-                    "1", "Tile 1", "Tile 1", "Tile_1_Query", new String[] {"url1"}, children);
+                    "1", "Tile 1", "Tile 1", "Tile_1_Query", new String[] {"url1"}, null, children);
             mTiles.add(tile);
         }
 
