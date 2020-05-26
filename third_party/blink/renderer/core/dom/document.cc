@@ -641,11 +641,11 @@ ExplicitlySetAttrElementsMap* Document::GetExplicitlySetAttrElementsMap(
 }
 
 Document* Document::Create(Document& document) {
-  Document* new_document =
-      MakeGarbageCollected<Document>(DocumentInit::Create()
-                                         .WithContextDocument(&document)
-                                         .WithURL(BlankURL())
-                                         .WithOwnerDocument(&document));
+  Document* new_document = MakeGarbageCollected<Document>(
+      DocumentInit::Create()
+          .WithExecutionContext(document.GetExecutionContext())
+          .WithURL(BlankURL())
+          .WithOwnerDocument(&document));
   new_document->SetContextFeatures(document.GetContextFeatures());
   return new_document;
 }
@@ -671,7 +671,7 @@ Document::Document(const DocumentInit& initializer,
       imports_controller_(initializer.ImportsController()),
       security_context_(security_initializer, SecurityContext::kWindow),
       use_counter_during_construction_(initializer.GetUseCounter()),
-      context_document_(initializer.ContextDocument()),
+      execution_context_(initializer.GetExecutionContext()),
       context_features_(ContextFeatures::DefaultSwitch()),
       http_refresh_scheduler_(MakeGarbageCollected<HttpRefreshScheduler>(this)),
       well_formed_(false),
@@ -3382,6 +3382,7 @@ void Document::Shutdown() {
   // should be renamed, or this setting of the frame to 0 could be made
   // explicit in each of the callers of Document::detachLayoutTree().
   dom_window_ = nullptr;
+  execution_context_ = nullptr;
 
   document_outlive_time_reporter_ =
       std::make_unique<DocumentOutliveTimeReporter>(this);
@@ -4595,8 +4596,8 @@ KURL Document::FallbackBaseURL() const {
     if (Document* parent = ParentDocument())
       return parent->BaseURL();
   } else if (urlForBinding().IsAboutBlankURL()) {
-    if (context_document_)
-      return context_document_->BaseURL();
+    if (!dom_window_ && execution_context_)
+      return execution_context_->BaseURL();
     // TODO(tkent): Referring to ParentDocument() is not correct.  See
     // crbug.com/751329.
     if (Document* parent = ParentDocument())
@@ -5044,7 +5045,7 @@ Node* Document::Clone(Document& factory, CloneChildrenFlag flag) const {
 
 Document* Document::CloneDocumentWithoutChildren() const {
   DocumentInit init = DocumentInit::Create()
-                          .WithContextDocument(ContextDocument())
+                          .WithExecutionContext(execution_context_.Get())
                           .WithOwnerDocument(const_cast<Document*>(this))
                           .WithURL(Url());
   if (IsA<XMLDocument>(this)) {
@@ -6734,9 +6735,8 @@ Document& Document::TopDocument() const {
   return *doc;
 }
 
-Document* Document::ContextDocument() const {
-  return context_document_ ? context_document_.Get()
-                           : const_cast<Document*>(this);
+ExecutionContext* Document::GetExecutionContext() const {
+  return execution_context_.Get();
 }
 
 Attr* Document::createAttribute(const AtomicString& name,
@@ -7247,7 +7247,7 @@ void Document::BindContentSecurityPolicy() {
 
 bool Document::CanExecuteScripts(ReasonForCallingCanExecuteScripts reason) {
   DCHECK(GetFrame())
-      << "you are querying canExecuteScripts on a non contextDocument.";
+      << "you are querying canExecuteScripts on a non-attached Document.";
 
   // Normally, scripts are not allowed in sandboxed contexts that disallow them.
   // However, there is an exception for cases when the script should bypass the
@@ -7309,7 +7309,7 @@ bool Document::AllowInlineEventHandler(Node* node,
   LocalFrame* frame = ExecutingFrame();
   if (!frame)
     return false;
-  if (!ContextDocument()->CanExecuteScripts(kNotAboutToExecuteScript))
+  if (!execution_context_->CanExecuteScripts(kNotAboutToExecuteScript))
     return false;
   if (node && node->GetDocument() != this &&
       !node->GetDocument().AllowInlineEventHandler(node, listener, context_url,
@@ -7827,13 +7827,13 @@ Document& Document::EnsureTemplateDocument() {
   if (IsA<HTMLDocument>(this)) {
     template_document_ = MakeGarbageCollected<HTMLDocument>(
         DocumentInit::Create()
-            .WithContextDocument(ContextDocument())
+            .WithExecutionContext(execution_context_.Get())
             .WithURL(BlankURL())
             .WithNewRegistrationContext());
   } else {
     template_document_ = MakeGarbageCollected<Document>(
         DocumentInit::Create()
-            .WithContextDocument(ContextDocument())
+            .WithExecutionContext(execution_context_.Get())
             .WithURL(BlankURL()));
   }
 
@@ -8252,6 +8252,8 @@ scoped_refptr<base::SingleThreadTaskRunner> Document::GetTaskRunner(
   DCHECK(IsMainThread());
   if (GetExecutionContext())
     return GetExecutionContext()->GetTaskRunner(type);
+  // GetExecutionContext() can be nullptr in unit tests and after Shutdown().
+  // Fallback to the default task runner for this thread if all else fails.
   return Thread::Current()->GetTaskRunner();
 }
 
@@ -8343,7 +8345,7 @@ void Document::Trace(Visitor* visitor) const {
   visitor->Trace(timeline_);
   visitor->Trace(pending_animations_);
   visitor->Trace(worklet_animation_controller_);
-  visitor->Trace(context_document_);
+  visitor->Trace(execution_context_);
   visitor->Trace(canvas_font_cache_);
   visitor->Trace(intersection_observer_controller_);
   visitor->Trace(snap_coordinator_);
