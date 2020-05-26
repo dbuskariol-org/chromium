@@ -443,6 +443,10 @@ void ConnectorsManager::SetUpForTesting() {
 
 void ConnectorsManager::TearDownForTesting() {
   pref_change_registrar_.RemoveAll();
+  ClearCacheForTesting();
+}
+
+void ConnectorsManager::ClearCacheForTesting() {
   analysis_connector_settings_.clear();
   reporting_connector_settings_.clear();
 }

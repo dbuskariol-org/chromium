@@ -76,6 +76,7 @@ class ConnectorsManager {
   // singleton that would otherwise persist its state.
   void SetUpForTesting();
   void TearDownForTesting();
+  void ClearCacheForTesting();
 
  private:
   friend struct base::DefaultSingletonTraits<ConnectorsManager>;
