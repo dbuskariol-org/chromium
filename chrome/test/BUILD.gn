@@ -1480,6 +1480,7 @@ if (!is_android) {
       ]
 
       sources += [
+        "../browser/apps/app_service/notifications_browsertest.cc",
         "../browser/policy/accessibility_policy_browsertest.cc",
         "../browser/policy/arc_policy_browsertest.cc",
         "../browser/policy/assistant_policy_browsertest.cc",
