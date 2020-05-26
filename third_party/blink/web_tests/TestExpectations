@@ -4514,7 +4514,6 @@ crbug.com/785955 http/tests/credentialmanager/tools/virtual-authenticator-enviro
 
 # Sheriff 2018-04-11
 crbug.com/831796 fast/events/autoscroll-in-textfield.html [ Failure Pass ]
-crbug.com/831673 http/tests/devtools/reveal-objects.js [ Pass Timeout ]
 crbug.com/829952 fast/webgl/texImage-imageBitmap-from-image-resize.html [ Pass Timeout ]
 
 crbug.com/832274 [ Linux ] fast/forms/search/search-appearance-basic.html [ Pass Failure ]
@@ -5509,7 +5508,6 @@ crbug.com/1043893 [ Debug Mac10.13 ] webexposed/global-interface-listing-dedicat
 crbug.com/1043893 [ Release ] webexposed/global-interface-listing-dedicated-worker.html [ Pass Timeout ]
 crbug.com/1043920 [ Release Win ] http/tests/devtools/stylesheet-source-mapping.js [ Pass Timeout ]
 crbug.com/1043920 [ Release Mac ] http/tests/devtools/stylesheet-source-mapping.js [ Pass Timeout ]
-crbug.com/1044350 [ Release ] http/tests/devtools/network/network-xhr-replay.js [ Pass Timeout ]
 crbug.com/1044414 [ Release ] http/tests/devtools/elements/styles/selector-line-sourcemap-header.js [ Pass Timeout ]
 crbug.com/1044415 [ Release ] http/tests/devtools/runtime/evaluate-without-side-effects.js [ Pass Timeout ]
 crbug.com/1044424 [ Release ] http/tests/devtools/elements/css-rule-hover-highlights-selectors.js [ Pass Timeout ]
@@ -5848,6 +5846,20 @@ crbug.com/1084509 [ Win ] fast/forms/select/select-disabled-appearance.html [ Pa
 crbug.com/1011811 http/tests/devtools/network/network-xhr-data-received-async-response-type-blob.js [ Pass Failure ]
 crbug.com/1011811 http/tests/devtools/network/download.js [ Pass Failure ]
 crbug.com/1011811 http/tests/devtools/sxg/sxg-disable-cache.js [ Pass Failure ]
+
+# Disabled for landing DevTools change (https://crrev.com/c/2213439)
+crbug.com/1011811 http/tests/devtools/network/extra-info-redirects.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/network/network-log-service-worker-navigate.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/network/network-status-non-http.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/network/network-xhr-replay.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/network/network-xsl-content.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/reveal-objects.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/sources/debugger/async-callstack-network-initiator-image.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/sxg/sxg-cert-not-found.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/sxg/sxg-navigation-fail.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/sxg/sxg-navigation-redirect.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/sxg/sxg-navigation.js [ Pass Failure Timeout ]
+crbug.com/1011811 http/tests/devtools/sxg/sxg-transfer-size.js [ Pass Failure Timeout ]
 
 crbug.com/1080609 virtual/threaded/external/wpt/scroll-animations/element-based-offset.html [ Pass Failure ]
 
