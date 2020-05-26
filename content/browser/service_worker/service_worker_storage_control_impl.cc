@@ -160,12 +160,8 @@ void ServiceWorkerStorageControlImpl::StoreRegistration(
     storage::mojom::ServiceWorkerRegistrationDataPtr registration,
     std::vector<storage::mojom::ServiceWorkerResourceRecordPtr> resources,
     StoreRegistrationCallback callback) {
-  // TODO(bashi): Change the signature of
-  // ServiceWorkerStorage::StoreRegistrationData() to take a const reference.
   storage_->StoreRegistrationData(
-      std::move(registration),
-      std::make_unique<ServiceWorkerStorage::ResourceList>(
-          std::move(resources)),
+      std::move(registration), std::move(resources),
       base::BindOnce(&ServiceWorkerStorageControlImpl::DidStoreRegistration,
                      weak_ptr_factory_.GetWeakPtr(), std::move(callback)));
 }
