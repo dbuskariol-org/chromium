@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_APP_LIST_VIEWS_ASSISTANT_PRIVACY_INFO_VIEW_H_
-#define ASH_APP_LIST_VIEWS_ASSISTANT_PRIVACY_INFO_VIEW_H_
+#ifndef ASH_APP_LIST_VIEWS_PRIVACY_INFO_VIEW_H_
+#define ASH_APP_LIST_VIEWS_PRIVACY_INFO_VIEW_H_
 
 #include "ui/views/controls/button/button.h"
 #include "ui/views/controls/styled_label_listener.h"
@@ -20,7 +20,7 @@ namespace ash {
 class AppListViewDelegate;
 class SearchResultPageView;
 
-// View representing the Assistant privacy info in Launcher.
+// View representing privacy info in Launcher.
 class PrivacyInfoView : public views::View,
                         public views::ButtonListener,
                         public views::StyledLabelListener {
@@ -65,4 +65,4 @@ class PrivacyInfoView : public views::View,
 
 }  // namespace ash
 
-#endif  // ASH_APP_LIST_VIEWS_ASSISTANT_PRIVACY_INFO_VIEW_H_
+#endif  // ASH_APP_LIST_VIEWS_PRIVACY_INFO_VIEW_H_

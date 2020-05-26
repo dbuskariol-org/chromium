@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/app_list/views/assistant/privacy_info_view.h"
+#include "ash/app_list/views/privacy_info_view.h"
 
 #include "ash/app_list/app_list_view_delegate.h"
 #include "ash/app_list/views/search_result_page_view.h"
@@ -96,6 +96,7 @@ void PrivacyInfoView::ButtonPressed(views::Button* sender,
   if (sender != close_button_)
     return;
 
+  // TODO(crbug/1079169): Update this method based on the specific view.
   view_delegate_->MarkAssistantPrivacyInfoDismissed();
   search_result_page_view_->OnAssistantPrivacyInfoViewCloseButtonPressed();
 }
@@ -103,6 +104,8 @@ void PrivacyInfoView::ButtonPressed(views::Button* sender,
 void PrivacyInfoView::StyledLabelLinkClicked(views::StyledLabel* label,
                                              const gfx::Range& range,
                                              int event_flags) {
+  // TODO(crbug/1079169): Pass in this URL based on which privacy view is being
+  // shown.
   constexpr char url[] = "https://support.google.com/chromebook?p=assistant";
   AssistantController::Get()->OpenUrl(
       assistant::util::CreateLocalizedGURL(url));
