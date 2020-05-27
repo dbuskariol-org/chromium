@@ -38162,6 +38162,7 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="2" label="Load failed - File read error"/>
   <int value="3" label="Load failed - Checksum mismatch"/>
   <int value="4" label="Load failed - Version mismatch"/>
+  <int value="5" label="Load failed - Checksum not found in prefs"/>
 </enum>
 
 <enum name="LoadType">
