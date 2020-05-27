@@ -42,12 +42,6 @@ class PlatformSensorProviderLinux : public PlatformSensorProvider,
   using SensorDeviceMap =
       std::unordered_map<mojom::SensorType, std::unique_ptr<SensorInfoLinux>>;
 
-  void SensorDeviceFound(
-      mojom::SensorType type,
-      SensorReadingSharedBuffer* reading_buffer,
-      PlatformSensorProviderBase::CreateSensorCallback callback,
-      const SensorInfoLinux* sensor_device);
-
   // Returns SensorInfoLinux structure of a requested type.
   // If a request cannot be processed immediately, returns nullptr and
   // all the requests stored in |requests_map_| are processed after
