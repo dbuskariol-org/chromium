@@ -113,12 +113,6 @@ SensorInfoLinux* PlatformSensorProviderLinux::GetSensorDevice(
   return sensor->second.get();
 }
 
-void PlatformSensorProviderLinux::GetAllSensorDevices() {
-  DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);
-  // TODO(maksims): implement this method once we have discovery API.
-  NOTIMPLEMENTED();
-}
-
 void PlatformSensorProviderLinux::SetSensorDeviceManagerForTesting(
     std::unique_ptr<SensorDeviceManager> sensor_device_manager) {
   DCHECK_CALLED_ON_VALID_THREAD(thread_checker_);

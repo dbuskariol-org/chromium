@@ -54,9 +54,6 @@ class PlatformSensorProviderLinux : public PlatformSensorProvider,
   // enumeration is ready.
   SensorInfoLinux* GetSensorDevice(mojom::SensorType type);
 
-  // Returns all found iio devices. Currently not implemented.
-  void GetAllSensorDevices();
-
   // Processed stored requests in |request_map_|.
   void ProcessStoredRequests();
 
