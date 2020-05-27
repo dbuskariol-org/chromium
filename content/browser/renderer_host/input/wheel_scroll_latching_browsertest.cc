@@ -260,7 +260,7 @@ IN_PROC_BROWSER_TEST_F(WheelScrollLatchingBrowserTest,
 // crbug.com/777258 Flaky everywhere.
 IN_PROC_BROWSER_TEST_F(
     WheelScrollLatchingBrowserTest,
-    DISABLE_WheelScrollingRelatchWhenLatchedScrollerRemoved) {
+    DISABLED_WheelScrollingRelatchWhenLatchedScrollerRemoved) {
   LoadURL(kWheelEventLatchingDataURL);
   EXPECT_EQ(
       ExecuteScriptAndExtractDouble("document.scrollingElement.scrollTop"), 0);
