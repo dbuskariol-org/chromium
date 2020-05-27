@@ -563,7 +563,7 @@ TEST_F(LoginDatabaseTest, TestFederatedMatching) {
   EXPECT_THAT(result, UnorderedElementsAre(Pointee(form), Pointee(form2)));
 
   // Match against the mobile site.
-  form_request.origin = GURL("https://mobile.foo.com/");
+  form_request.url = GURL("https://mobile.foo.com/");
   form_request.signon_realm = "https://mobile.foo.com/";
   EXPECT_TRUE(db().GetLogins(form_request, &result));
   // Both forms are matched, only form is a PSL match.
@@ -601,7 +601,7 @@ TEST_F(LoginDatabaseTest, TestFederatedMatchingLocalhost) {
   EXPECT_TRUE(db().GetLogins(form_request, &result));
   EXPECT_THAT(result, UnorderedElementsAre(Pointee(form)));
 
-  form_request.origin = GURL("http://localhost:8080/");
+  form_request.url = GURL("http://localhost:8080/");
   form_request.signon_realm = "http://localhost:8080/";
   EXPECT_TRUE(db().GetLogins(form_request, &result));
   EXPECT_THAT(result, UnorderedElementsAre(Pointee(form_with_port)));
@@ -714,7 +714,7 @@ TEST_F(LoginDatabaseTest, TestFederatedMatchingWithoutPSLMatching) {
   EXPECT_THAT(result, testing::ElementsAre(Pointee(form)));
 
   // Match against the second one.
-  form_request.origin = form2.url;
+  form_request.url = form2.url;
   form_request.signon_realm = form2.signon_realm;
   EXPECT_TRUE(db().GetLogins(form_request, &result));
   form.is_public_suffix_match = true;
@@ -782,7 +782,7 @@ TEST_F(LoginDatabaseTest, TestPublicSuffixDomainMatchingDifferentSites) {
 
   // We go to the mobile site.
   PasswordStore::FormDigest form2(form);
-  form2.origin = GURL("https://mobile.foo.com/");
+  form2.url = GURL("https://mobile.foo.com/");
   form2.signon_realm = "https://mobile.foo.com/";
 
   // Match against the mobile site.
@@ -811,7 +811,7 @@ TEST_F(LoginDatabaseTest, TestPublicSuffixDomainMatchingDifferentSites) {
 
   // We go to the mobile site of baz.com.
   PasswordStore::FormDigest form3(form);
-  form3.origin = GURL("https://m.baz.com/login/");
+  form3.url = GURL("https://m.baz.com/login/");
   form3.signon_realm = "https://m.baz.com/";
 
   // Match against the mobile site of baz.com.

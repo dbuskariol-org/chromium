@@ -455,7 +455,7 @@ void PasswordAutofillManager::OnAddPasswordFillData(
     return;
 
   fill_data_ = std::make_unique<autofill::PasswordFormFillData>(fill_data);
-  RequestFavicon(fill_data.origin);
+  RequestFavicon(fill_data.url);
 
   if (!autofill_client_ || autofill_client_->GetPopupSuggestions().empty())
     return;

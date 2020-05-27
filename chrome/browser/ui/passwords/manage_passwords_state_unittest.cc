@@ -121,7 +121,7 @@ ManagePasswordsStateTest::CreateFormManager(
       .WillOnce(testing::ReturnRef(*best_matches));
   EXPECT_CALL(*form_manager, GetFederatedMatches())
       .WillOnce(Return(federated_matches));
-  EXPECT_CALL(*form_manager, GetOrigin())
+  EXPECT_CALL(*form_manager, GetURL())
       .WillOnce(testing::ReturnRef(saved_match_.url));
   return form_manager;
 }
@@ -601,11 +601,11 @@ TEST_F(ManagePasswordsStateTest, ChooseCredentialLocalWithNonEmptyFederation) {
 
 TEST_F(ManagePasswordsStateTest, AutofillCausedByInternalFormManager) {
   struct OwningPasswordFormManagerForUI : public MockPasswordFormManagerForUI {
-    GURL origin;
+    GURL url;
     std::vector<const autofill::PasswordForm*> best_matches;
     std::vector<const autofill::PasswordForm*> federated_matches;
 
-    const GURL& GetOrigin() const override { return origin; }
+    const GURL& GetURL() const override { return url; }
     const std::vector<const autofill::PasswordForm*>& GetBestMatches()
         const override {
       return best_matches;
@@ -618,15 +618,15 @@ TEST_F(ManagePasswordsStateTest, AutofillCausedByInternalFormManager) {
 
   auto test_form_manager = std::make_unique<OwningPasswordFormManagerForUI>();
   auto* weak_manager = test_form_manager.get();
-  test_form_manager->origin = saved_match().url;
+  test_form_manager->url = saved_match().url;
   test_form_manager->best_matches = {&saved_match()};
   test_form_manager->federated_matches = {&local_federated_form()};
   passwords_data().OnPendingPassword(std::move(test_form_manager));
 
   // Force autofill with the parameters coming from the object to be destroyed.
-  passwords_data().OnPasswordAutofilled(
-      weak_manager->best_matches, url::Origin::Create(weak_manager->origin),
-      &weak_manager->federated_matches);
+  passwords_data().OnPasswordAutofilled(weak_manager->best_matches,
+                                        url::Origin::Create(weak_manager->url),
+                                        &weak_manager->federated_matches);
   EXPECT_THAT(passwords_data().GetCurrentForms(),
               UnorderedElementsAre(Pointee(local_federated_form()),
                                    Pointee(saved_match())));

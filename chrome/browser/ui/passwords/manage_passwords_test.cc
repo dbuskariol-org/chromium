@@ -119,7 +119,7 @@ void ManagePasswordsTest::SetupMovingPasswords() {
   EXPECT_CALL(*form_manager, GetBestMatches).WillOnce(ReturnRef(best_matches));
   ON_CALL(*form_manager, GetFederatedMatches)
       .WillByDefault(Return(std::vector<const autofill::PasswordForm*>{}));
-  ON_CALL(*form_manager, GetOrigin).WillByDefault(ReturnRef(test_form()->url));
+  ON_CALL(*form_manager, GetURL).WillByDefault(ReturnRef(test_form()->url));
   GetController()->OnShowMoveToAccountBubble(std::move(form_manager));
   // Clearing the mock here ensures that |GetBestMatches| won't be called with a
   // reference to |best_matches|.

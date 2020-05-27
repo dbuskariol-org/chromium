@@ -502,7 +502,7 @@ TEST_P(PasswordFormManagerTest, Autofill) {
 
   task_environment_.FastForwardUntilNoTasksRemain();
 
-  EXPECT_EQ(observed_form_.url, fill_data.origin);
+  EXPECT_EQ(observed_form_.url, fill_data.url);
   EXPECT_FALSE(fill_data.wait_for_username);
   EXPECT_EQ(observed_form_.fields[1].name, fill_data.username_field.name);
   EXPECT_EQ(saved_match_.username_value, fill_data.username_field.value);
@@ -603,7 +603,7 @@ TEST_P(PasswordFormManagerTest, AutofillWithBlacklistedMatch) {
 
   task_environment_.FastForwardUntilNoTasksRemain();
 
-  EXPECT_EQ(observed_form_.url, fill_data.origin);
+  EXPECT_EQ(observed_form_.url, fill_data.url);
   EXPECT_EQ(saved_match_.username_value, fill_data.username_field.value);
   EXPECT_EQ(saved_match_.password_value, fill_data.password_field.value);
 }

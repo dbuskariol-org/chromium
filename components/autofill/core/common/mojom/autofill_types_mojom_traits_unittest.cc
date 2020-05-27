@@ -49,7 +49,7 @@ void CreateTestFieldDataPredictions(const std::string& signature,
 
 void CreateTestPasswordFormFillData(PasswordFormFillData* fill_data) {
   fill_data->form_renderer_id = autofill::FormRendererId(1234);
-  fill_data->origin = GURL("https://foo.com/");
+  fill_data->url = GURL("https://foo.com/");
   fill_data->action = GURL("https://foo.com/login");
   test::CreateTestSelectField("TestUsernameFieldLabel", "TestUsernameFieldName",
                               "TestUsernameFieldValue", kOptions, kOptions, 4,
@@ -132,7 +132,7 @@ void CreatePasswordGenerationUIData(
 void CheckEqualPasswordFormFillData(const PasswordFormFillData& expected,
                                     const PasswordFormFillData& actual) {
   EXPECT_EQ(expected.form_renderer_id, actual.form_renderer_id);
-  EXPECT_EQ(expected.origin, actual.origin);
+  EXPECT_EQ(expected.url, actual.url);
   EXPECT_EQ(expected.action, actual.action);
   EXPECT_TRUE(EquivalentData(expected.username_field, actual.username_field));
   EXPECT_TRUE(EquivalentData(expected.password_field, actual.password_field));

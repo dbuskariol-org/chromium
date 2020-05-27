@@ -210,7 +210,7 @@ TEST_F(PasswordGenerationManagerTest, GeneratedPasswordAccepted_UpdateUI) {
   std::unique_ptr<PasswordFormManagerForUI> ui_form =
       SetUpOverwritingUI(driver.AsWeakPtr());
   ASSERT_TRUE(ui_form);
-  EXPECT_EQ(GURL(kURL), ui_form->GetOrigin());
+  EXPECT_EQ(GURL(kURL), ui_form->GetURL());
   EXPECT_THAT(
       ui_form->GetBestMatches(),
       ElementsAre(Field(&PasswordForm::username_value, ASCIIToUTF16(""))));

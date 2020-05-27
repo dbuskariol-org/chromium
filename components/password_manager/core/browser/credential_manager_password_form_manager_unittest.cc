@@ -147,7 +147,7 @@ TEST_F(CredentialManagerPasswordFormManagerTest,
                                          {&saved_match});
   EXPECT_TRUE(form_manager->IsNewLogin());
   EXPECT_TRUE(form_manager->is_submitted());
-  EXPECT_EQ(form_to_save_.url, form_manager->GetOrigin());
+  EXPECT_EQ(form_to_save_.url, form_manager->GetURL());
 
   EXPECT_CALL(form_saver, Save(FormMatches(form_to_save_), _, _));
   form_manager->Save();

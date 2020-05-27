@@ -293,7 +293,7 @@ ManagePasswordsUIControllerTest::CreateFormManagerWithBestMatches(
   EXPECT_CALL(*form_manager, GetFederatedMatches())
       .Times(AtMost(1))
       .WillOnce(Return(std::vector<const autofill::PasswordForm*>()));
-  EXPECT_CALL(*form_manager, GetOrigin())
+  EXPECT_CALL(*form_manager, GetURL())
       .Times(AtMost(1))
       .WillOnce(ReturnRef(test_local_form_.url));
   EXPECT_CALL(*form_manager, IsBlacklisted())

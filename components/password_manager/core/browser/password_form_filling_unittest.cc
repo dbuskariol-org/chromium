@@ -175,7 +175,7 @@ TEST_F(PasswordFormFillingTest, Autofill) {
 
   // Check that the message to the renderer (i.e. |fill_data|) is filled
   // correctly.
-  EXPECT_EQ(observed_form_.url, fill_data.origin);
+  EXPECT_EQ(observed_form_.url, fill_data.url);
   EXPECT_FALSE(fill_data.wait_for_username);
   EXPECT_EQ(observed_form_.username_element, fill_data.username_field.name);
   EXPECT_EQ(saved_match_.username_value, fill_data.username_field.value);
@@ -262,7 +262,7 @@ TEST_F(PasswordFormFillingTest, AutofillPSLMatch) {
 
   // Check that the message to the renderer (i.e. |fill_data|) is filled
   // correctly.
-  EXPECT_EQ(observed_form_.url, fill_data.origin);
+  EXPECT_EQ(observed_form_.url, fill_data.url);
   EXPECT_TRUE(fill_data.wait_for_username);
   EXPECT_EQ(psl_saved_match_.signon_realm, fill_data.preferred_realm);
   EXPECT_EQ(observed_form_.username_element, fill_data.username_field.name);

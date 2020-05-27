@@ -729,7 +729,7 @@ bool PasswordManager::IsAutomaticSavePromptAvailable() {
     // We just give up.
     RecordProvisionalSaveFailure(
         PasswordManagerMetricsRecorder::MATCHING_NOT_COMPLETE,
-        submitted_manager->GetOrigin(), logger.get());
+        submitted_manager->GetURL(), logger.get());
     return false;
   }
 
@@ -874,7 +874,7 @@ void PasswordManager::OnLoginSuccessful() {
           *submitted_manager->GetSubmittedForm())) {
     RecordProvisionalSaveFailure(
         PasswordManagerMetricsRecorder::SYNC_CREDENTIAL,
-        submitted_manager->GetOrigin(), logger.get());
+        submitted_manager->GetURL(), logger.get());
     owned_submitted_form_manager_.reset();
     return;
   }

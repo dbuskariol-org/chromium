@@ -1392,8 +1392,8 @@ TEST_F(CredentialManagerImplTest,
   static_cast<MockAffiliatedMatchHelper*>(store_->affiliated_match_helper())
       ->ExpectCallToGetAffiliatedAndroidRealms(digest, affiliated_realms);
 
-  digest.origin = HttpURLFromHttps(digest.origin);
-  digest.signon_realm = digest.origin.spec();
+  digest.url = HttpURLFromHttps(digest.url);
+  digest.signon_realm = digest.url.spec();
   // The second call happens for HTTP as the migration is triggered.
   static_cast<MockAffiliatedMatchHelper*>(store_->affiliated_match_helper())
       ->ExpectCallToGetAffiliatedAndroidRealms(digest, affiliated_realms);
@@ -1496,7 +1496,7 @@ TEST_F(CredentialManagerImplTest, MediationRequiredPreventsAutoSignIn) {
 TEST_F(CredentialManagerImplTest, GetSynthesizedFormForOrigin) {
   PasswordStore::FormDigest synthesized =
       cm_service_impl_->GetSynthesizedFormForOrigin();
-  EXPECT_EQ(kTestWebOrigin, synthesized.origin.spec());
+  EXPECT_EQ(kTestWebOrigin, synthesized.url.spec());
   EXPECT_EQ(kTestWebOrigin, synthesized.signon_realm);
   EXPECT_EQ(autofill::PasswordForm::Scheme::kHtml, synthesized.scheme);
 }

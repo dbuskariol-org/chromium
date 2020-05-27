@@ -256,7 +256,7 @@ class PasswordAutofillManagerTest : public testing::Test {
     EXPECT_CALL(*client, GetFaviconService())
         .WillOnce(Return(&favicon_service));
     EXPECT_CALL(favicon_service,
-                GetFaviconImageForPageURL(fill_data_.origin, _, _));
+                GetFaviconImageForPageURL(fill_data_.url, _, _));
     password_autofill_manager_->OnAddPasswordFillData(fill_data_);
     testing::Mock::VerifyAndClearExpectations(client);
     // Suppress the warnings in the tests.
@@ -344,7 +344,7 @@ TEST_F(PasswordAutofillManagerTest, ExternalDelegatePasswordSuggestions) {
     data.uses_account_store = false;
     favicon::MockFaviconService favicon_service;
     EXPECT_CALL(client, GetFaviconService()).WillOnce(Return(&favicon_service));
-    EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.origin, _, _))
+    EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.url, _, _))
         .WillOnce(Invoke(RespondWithTestIcon));
     password_autofill_manager_->OnAddPasswordFillData(data);
 
@@ -408,7 +408,7 @@ TEST_F(PasswordAutofillManagerTest,
     data.additional_logins.push_back(duplicate);
     favicon::MockFaviconService favicon_service;
     EXPECT_CALL(client, GetFaviconService()).WillOnce(Return(&favicon_service));
-    EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.origin, _, _))
+    EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.url, _, _))
         .WillOnce(Invoke(RespondWithTestIcon));
     password_autofill_manager_->OnAddPasswordFillData(data);
 
@@ -1252,7 +1252,7 @@ TEST_F(PasswordAutofillManagerTest,
 
   favicon::MockFaviconService favicon_service;
   EXPECT_CALL(client, GetFaviconService()).WillOnce(Return(&favicon_service));
-  EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.origin, _, _));
+  EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.url, _, _));
   password_autofill_manager_->OnAddPasswordFillData(data);
 
   // Bring up the drop-down with the generaion option.
@@ -1298,7 +1298,7 @@ TEST_F(PasswordAutofillManagerTest,
 
   favicon::MockFaviconService favicon_service;
   EXPECT_CALL(client, GetFaviconService()).WillOnce(Return(&favicon_service));
-  EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.origin, _, _));
+  EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.url, _, _));
   password_autofill_manager_->OnAddPasswordFillData(data);
 
   base::string16 generation_string =
@@ -1336,7 +1336,7 @@ TEST_F(PasswordAutofillManagerTest,
 
   favicon::MockFaviconService favicon_service;
   EXPECT_CALL(client, GetFaviconService()).WillOnce(Return(&favicon_service));
-  EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.origin, _, _));
+  EXPECT_CALL(favicon_service, GetFaviconImageForPageURL(data.url, _, _));
   password_autofill_manager_->OnAddPasswordFillData(data);
 
   auto opt_in_and_generate_id = static_cast<int>(

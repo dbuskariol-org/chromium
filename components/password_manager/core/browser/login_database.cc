@@ -1549,7 +1549,7 @@ bool LoginDatabase::GetLogins(
     }
   } else if (should_federated_apply) {
     std::string expression =
-        base::StringPrintf("federation://%s/%%", form.origin.host().c_str());
+        base::StringPrintf("federation://%s/%%", form.url.host().c_str());
     s.BindString(placeholder++, expression);
   }
 
