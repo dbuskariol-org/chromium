@@ -83,7 +83,7 @@
 
 </style>
 <a id="link" href$="[[match.destinationUrl.url]]">
-  <ntp-realbox-icon match="[[match]]"
+  <ntp-realbox-icon id="icon" match="[[match]]"
       favicon-data-url="[[faviconDataUrl]]" image-data-url="[[imageDataUrl]]">
   </ntp-realbox-icon>
   <div id="container">
@@ -92,6 +92,7 @@
     <span id="description" inner-h-t-m-l="[[descriptionHtml_]]"></span>
   </div>
   <ntp-realbox-button id="remove" on-click="onRemoveButtonClick_"
+      on-keydown="onRemoveButtonKeydown_"
       title$="[[removeButtonTitle_]]" hidden$="[[!removeButtonIsVisible_]]">
   </ntp-realbox-button>
 </a>

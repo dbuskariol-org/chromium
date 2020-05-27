@@ -62,7 +62,7 @@
           group-is-hidden$="[[groupIsHidden_(hiddenGroupIds_.*, groupId)]]">
         [[headerForGroup_(groupId)]]
         <ntp-realbox-button data-id$="[[groupId]]"
-            on-click="onToggleButtonClick_">
+            on-click="onToggleButtonClick_" on-keydown="onToggleButtonKeydown_">
         </ntp-realbox-button>
       </div>
     </template>
