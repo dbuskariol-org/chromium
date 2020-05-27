@@ -18,7 +18,6 @@
 #include "base/notreached.h"
 #include "base/stl_util.h"
 #include "base/strings/string_number_conversions.h"
-#include "base/task/post_task.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "extensions/browser/api/declarative_net_request/constants.h"
@@ -380,10 +379,9 @@ void FileSequenceHelper::LoadRulesets(
 
   if (success) {
     // Set priority explicitly to avoid unwanted task priority inheritance.
-    base::PostTask(
-        FROM_HERE,
-        {content::BrowserThread::UI, base::TaskPriority::USER_BLOCKING},
-        base::BindOnce(std::move(ui_callback), std::move(load_data)));
+    content::GetUIThreadTaskRunner({base::TaskPriority::USER_BLOCKING})
+        ->PostTask(FROM_HERE, base::BindOnce(std::move(ui_callback),
+                                             std::move(load_data)));
     return;
   }
 
@@ -417,11 +415,10 @@ void FileSequenceHelper::UpdateDynamicRules(
     base::UmaHistogramEnumeration(kUpdateDynamicRulesStatusHistogram, status);
 
     // Set priority explicitly to avoid unwanted task priority inheritance.
-    base::PostTask(
-        FROM_HERE,
-        {content::BrowserThread::UI, base::TaskPriority::USER_BLOCKING},
-        base::BindOnce(std::move(ui_callback), std::move(load_data),
-                       std::move(error)));
+    content::GetUIThreadTaskRunner({base::TaskPriority::USER_BLOCKING})
+        ->PostTask(FROM_HERE,
+                   base::BindOnce(std::move(ui_callback), std::move(load_data),
+                                  std::move(error)));
   };
 
   int new_ruleset_checksum = -1;
@@ -466,10 +463,9 @@ void FileSequenceHelper::OnRulesetsReindexed(LoadRulesetsUICallback ui_callback,
   }
 
   // The UI thread will handle success or failure.
-  base::PostTask(
-      FROM_HERE,
-      {content::BrowserThread::UI, base::TaskPriority::USER_BLOCKING},
-      base::BindOnce(std::move(ui_callback), std::move(load_data)));
+  content::GetUIThreadTaskRunner({base::TaskPriority::USER_BLOCKING})
+      ->PostTask(FROM_HERE,
+                 base::BindOnce(std::move(ui_callback), std::move(load_data)));
 }
 
 }  // namespace declarative_net_request

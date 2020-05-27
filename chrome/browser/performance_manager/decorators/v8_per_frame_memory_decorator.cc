@@ -8,7 +8,6 @@
 #include "base/check.h"
 #include "base/containers/flat_map.h"
 #include "base/containers/flat_set.h"
-#include "base/task/post_task.h"
 #include "base/timer/timer.h"
 #include "components/performance_manager/public/graph/frame_node.h"
 #include "components/performance_manager/public/graph/node_attached_data.h"
@@ -17,6 +16,7 @@
 #include "components/performance_manager/public/performance_manager.h"
 #include "components/performance_manager/public/render_process_host_proxy.h"
 #include "content/public/browser/browser_task_traits.h"
+#include "content/public/browser/browser_thread.h"
 #include "content/public/browser/render_process_host.h"
 
 namespace performance_manager {
@@ -247,8 +247,8 @@ void V8PerFrameMemoryDecorator::BindReceiverWithProxyHost(
     RenderProcessHostProxy proxy) const {
   // Forward the pending receiver to the RenderProcessHost and bind it on the
   // UI thread.
-  base::PostTask(
-      FROM_HERE, {content::BrowserThread::UI},
+  content::GetUIThreadTaskRunner({})->PostTask(
+      FROM_HERE,
       base::BindOnce(
           [](RenderProcessHostProxy proxy,
              mojo::PendingReceiver<
