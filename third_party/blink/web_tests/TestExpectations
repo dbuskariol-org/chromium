@@ -76,6 +76,12 @@ crbug.com/1014421 external/wpt/css/cssom-view/MediaQueryList-addListener-handleE
 # Tested by paint/background/root-element-background-transparency.html for now.
 external/wpt/css/compositing/root-element-background-transparency.html [ Failure ]
 
+# ====== Synchronous, budgeted HTML parser tests from here ======
+
+### virtual/synchronous_html_parser/http/tests/preload/
+crbug.com/901056 virtual/synchronous_html_parser/http/tests/preload/meta-csp.html [ Failure ]
+crbug.com/901056 virtual/synchronous_html_parser/http/tests/preload/meta-viewport-link-headers-imagesrcset.html [ Timeout Failure ]
+
 # ====== Site Isolation failures from here ======
 # See also third_party/blink/web_tests/virtual/not-site-per-process/README.md
 #
