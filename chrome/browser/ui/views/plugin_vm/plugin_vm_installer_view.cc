@@ -242,63 +242,16 @@ gfx::Size PluginVmInstallerView::CalculatePreferredSize() const {
   return gfx::Size(kWindowWidth, kWindowHeight);
 }
 
+void PluginVmInstallerView::OnStateUpdated(InstallingState new_state) {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK_EQ(state_, State::kInstalling);
+  DCHECK_NE(new_state, InstallingState::kInactive);
+  installing_state_ = new_state;
+  OnStateUpdated();
+}
+
 void PluginVmInstallerView::OnProgressUpdated(double fraction_complete) {
   progress_bar_->SetValue(fraction_complete);
-}
-
-void PluginVmInstallerView::OnLicenseChecked() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  DCHECK_EQ(installing_state_, InstallingState::kCheckingLicense);
-
-  installing_state_ = InstallingState::kCheckingDiskSpace;
-  OnStateUpdated();
-}
-
-void PluginVmInstallerView::OnCheckedDiskSpace(bool low_disk_space) {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  DCHECK_EQ(installing_state_, InstallingState::kCheckingDiskSpace);
-
-  if (low_disk_space)
-    installing_state_ = InstallingState::kPausedLowDiskSpace;
-  else
-    installing_state_ = InstallingState::kDownloadingDlc;
-  OnStateUpdated();
-}
-
-void PluginVmInstallerView::OnDlcDownloadCompleted() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  DCHECK_EQ(installing_state_, InstallingState::kDownloadingDlc);
-
-  installing_state_ = InstallingState::kCheckingForExistingVm;
-  OnStateUpdated();
-}
-
-void PluginVmInstallerView::OnExistingVmCheckCompleted(bool has_vm) {
-  DCHECK_EQ(installing_state_, InstallingState::kCheckingForExistingVm);
-
-  if (has_vm) {
-    // This case should only occur if the user manually installed a VM via vmc,
-    // which is rare enough so we just re-use the regular success strings.
-    state_ = State::kImported;
-    installing_state_ = InstallingState::kInactive;
-    OnStateUpdated();
-
-    plugin_vm::RecordPluginVmSetupResultHistogram(
-        plugin_vm::PluginVmSetupResult::kVmAlreadyExists);
-    plugin_vm::RecordPluginVmSetupTimeHistogram(base::TimeTicks::Now() -
-                                                setup_start_tick_);
-  } else {
-    installing_state_ = InstallingState::kDownloadingImage;
-    OnStateUpdated();
-  }
-}
-
-// TODO(timloh): Cancelling the installation immediately closes the dialog, but
-// getting back to a clean state could take several seconds. If a user then
-// re-opens the dialog, it could cause it to fail unexpectedly. We should make
-// use of these callback to avoid this.
-void PluginVmInstallerView::OnCancelFinished() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 }
 
 void PluginVmInstallerView::OnDownloadProgressUpdated(uint64_t bytes_downloaded,
@@ -312,24 +265,19 @@ void PluginVmInstallerView::OnDownloadProgressUpdated(uint64_t bytes_downloaded,
       ax::mojom::Event::kTextChanged, true);
 }
 
-void PluginVmInstallerView::OnDownloadCompleted() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  DCHECK_EQ(installing_state_, InstallingState::kDownloadingImage);
+void PluginVmInstallerView::OnVmExists() {
+  DCHECK_EQ(installing_state_, InstallingState::kCheckingForExistingVm);
 
-  installing_state_ = InstallingState::kImporting;
-  OnStateUpdated();
-}
+  // TODO(b/154140429): Consider automatically dismissing the dialog.
 
-void PluginVmInstallerView::OnImported() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
-  DCHECK_EQ(installing_state_, InstallingState::kImporting);
-
+  // This case should only occur if the user manually installed a VM via vmc,
+  // which is rare enough so we just re-use the regular success strings.
   state_ = State::kImported;
   installing_state_ = InstallingState::kInactive;
   OnStateUpdated();
 
   plugin_vm::RecordPluginVmSetupResultHistogram(
-      plugin_vm::PluginVmSetupResult::kSuccess);
+      plugin_vm::PluginVmSetupResult::kVmAlreadyExists);
   plugin_vm::RecordPluginVmSetupTimeHistogram(base::TimeTicks::Now() -
                                               setup_start_tick_);
 }
@@ -339,6 +287,20 @@ void PluginVmInstallerView::OnCreated() {
   DCHECK_EQ(installing_state_, InstallingState::kImporting);
 
   state_ = State::kCreated;
+  installing_state_ = InstallingState::kInactive;
+  OnStateUpdated();
+
+  plugin_vm::RecordPluginVmSetupResultHistogram(
+      plugin_vm::PluginVmSetupResult::kSuccess);
+  plugin_vm::RecordPluginVmSetupTimeHistogram(base::TimeTicks::Now() -
+                                              setup_start_tick_);
+}
+
+void PluginVmInstallerView::OnImported() {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK_EQ(installing_state_, InstallingState::kImporting);
+
+  state_ = State::kImported;
   installing_state_ = InstallingState::kInactive;
   OnStateUpdated();
 
@@ -359,6 +321,14 @@ void PluginVmInstallerView::OnError(
 
   plugin_vm::RecordPluginVmSetupResultHistogram(
       plugin_vm::PluginVmSetupResult::kError);
+}
+
+// TODO(timloh): Cancelling the installation immediately closes the dialog, but
+// getting back to a clean state could take several seconds. If a user then
+// re-opens the dialog, it could cause it to fail unexpectedly. We should make
+// use of these callback to avoid this.
+void PluginVmInstallerView::OnCancelFinished() {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
 }
 
 base::string16 PluginVmInstallerView::GetBigMessage() const {

@@ -34,14 +34,12 @@ class PluginVmInstallerView : public views::BubbleDialogDelegateView,
   gfx::Size CalculatePreferredSize() const override;
 
   // plugin_vm::PluginVmImageDownload::Observer implementation.
+  void OnStateUpdated(
+      plugin_vm::PluginVmInstaller::InstallingState new_state) override;
   void OnProgressUpdated(double fraction_complete) override;
-  void OnLicenseChecked() override;
-  void OnCheckedDiskSpace(bool low_disk_space) override;
-  void OnDlcDownloadCompleted() override;
-  void OnExistingVmCheckCompleted(bool has_vm) override;
   void OnDownloadProgressUpdated(uint64_t bytes_downloaded,
                                  int64_t content_length) override;
-  void OnDownloadCompleted() override;
+  void OnVmExists() override;
   void OnCreated() override;
   void OnImported() override;
   void OnError(plugin_vm::PluginVmInstaller::FailureReason reason) override;
