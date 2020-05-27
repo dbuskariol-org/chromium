@@ -12,7 +12,6 @@
 #include "components/cast_channel/cast_framer.h"
 #include "net/base/io_buffer.h"
 #include "third_party/openscreen/src/cast/common/channel/proto/cast_channel.pb.h"
-#include "third_party/protobuf/src/google/protobuf/stubs/logging.h"
 
 // Silence logging from the protobuf library.
 google::protobuf::LogSilencer log_silencer;
