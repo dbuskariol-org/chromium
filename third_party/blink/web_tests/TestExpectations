@@ -5879,3 +5879,6 @@ crbug.com/971031 [ Mac ] fast/dom/timer-throttling-hidden-page.html [ Pass Failu
 crbug.com/1071189 [ Debug ] editing/selection/programmatic-selection-on-mac-is-directionless.html [ Timeout Pass ]
 
 crbug.com/1086353 [ Win ] http/tests/websocket/close-in-order.html [ Pass Failure ]
+
+# Sheriff 2020-05-27
+crbug.com/1083585 [ Win7 ] geolocation-api/watchPosition-page-visibility.html [ Pass Failure ]
