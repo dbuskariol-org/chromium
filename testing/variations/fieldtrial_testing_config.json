@@ -6440,7 +6440,10 @@
     "UsePreferredIntervalForVideo": [
         {
             "platforms": [
-                "chromeos"
+                "chromeos",
+                "mac",
+                "windows",
+                "linux"
             ],
             "experiments": [
                 {
