@@ -401,6 +401,7 @@ html[dir=rtl] .image-container {
 #realbox-matches .remove-match {
   border-radius: 50%;
   height: 24px;
+  outline: none;
   position: absolute;
   right: 16px;
   top: 4px;
