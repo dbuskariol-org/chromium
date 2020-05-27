@@ -634,6 +634,11 @@ const char kDesktopPWAsWithoutExtensionsDescription[] =
     "is incomplete and may corrupt your synced Chrome profile. Test accounts "
     "only are advised.";
 
+const char kDesktopPWAsRunOnOsLoginName[] = "Desktop PWAs run on OS login";
+const char kDesktopPWAsRunOnOsLoginDescription[] =
+    "Enable installed PWAs to be configured to automatically start when the OS "
+    "user logs in.";
+
 const char kEnableSystemWebAppsName[] = "System Web Apps";
 const char kEnableSystemWebAppsDescription[] =
     "Experimental system for using the Desktop PWA framework for running System"
