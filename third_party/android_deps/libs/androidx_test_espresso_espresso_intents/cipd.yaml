@@ -4,7 +4,7 @@
 
 # To create CIPD package run the following command.
 # cipd create --pkg-def cipd.yaml -tag version:3.2.0-cr0
-package: chromium/third_party/android_deps/libs/androidx_test_espresso_espresso_idling_resource
+package: chromium/third_party/android_deps/libs/androidx_test_espresso_espresso_intents
 description: "AndroidX Test Library"
 data:
-- file: espresso-idling-resource-3.2.0.aar
+- file: espresso-intents-3.2.0.aar
