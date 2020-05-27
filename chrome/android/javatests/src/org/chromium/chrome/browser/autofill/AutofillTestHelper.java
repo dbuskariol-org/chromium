@@ -9,7 +9,6 @@ import org.chromium.chrome.browser.autofill.PersonalDataManager.AutofillProfile;
 import org.chromium.chrome.browser.autofill.PersonalDataManager.CreditCard;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
 
-import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.TimeoutException;
 
@@ -258,11 +257,6 @@ public class AutofillTestHelper {
     public long getCurrentDateForTesting() {
         return TestThreadUtils.runOnUiThreadBlockingNoException(
                 () -> PersonalDataManager.getInstance().getCurrentDateForTesting());
-    }
-
-    /** Returns the YYYY value of the year after the current year. */
-    public static String nextYear() {
-        return String.valueOf(Calendar.getInstance().get(Calendar.YEAR) + 1);
     }
 
     private void registerDataObserver() {
