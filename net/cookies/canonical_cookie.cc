@@ -695,7 +695,7 @@ CanonicalCookie::CookieInclusionStatus CanonicalCookie::IncludeForRequestURL(
   }
 
   if (status.ShouldRecordDowngradeMetrics()) {
-    UMA_HISTOGRAM_ENUMERATION("SameSiteContextDowngradeRequest",
+    UMA_HISTOGRAM_ENUMERATION("Cookie.SameSiteContextDowngradeRequest",
                               status.GetBreakingDowngradeMetricsEnumValue(url));
   }
 

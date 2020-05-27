@@ -1207,7 +1207,7 @@ void CookieMonster::SetCanonicalCookie(std::unique_ptr<CanonicalCookie> cc,
   // cookie warnings/exclusions, record the downgrade metric.
   if (status.ShouldRecordDowngradeMetrics()) {
     UMA_HISTOGRAM_ENUMERATION(
-        "SameSiteContextDowngradeResponse",
+        "Cookie.SameSiteContextDowngradeResponse",
         status.GetBreakingDowngradeMetricsEnumValue(source_url));
   }
 
