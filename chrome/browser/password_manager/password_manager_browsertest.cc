@@ -181,11 +181,7 @@ class ObservingAutofillClient
   bool popup_shown() const { return popup_shown_; }
 
   void ShowAutofillPopup(
-      const gfx::RectF& element_bounds,
-      base::i18n::TextDirection text_direction,
-      const std::vector<autofill::Suggestion>& suggestions,
-      bool autoselect_first_suggestion,
-      autofill::PopupType popup_type,
+      const autofill::AutofillClient::PopupOpenArgs& open_args,
       base::WeakPtr<autofill::AutofillPopupDelegate> delegate) override {
     if (run_loop_)
       run_loop_->Quit();
