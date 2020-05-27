@@ -1471,10 +1471,6 @@ void LayerTreeHost::AddLayerShouldPushProperties(Layer* layer) {
   layers_that_should_push_properties_.insert(layer);
 }
 
-void LayerTreeHost::RemoveLayerShouldPushProperties(Layer* layer) {
-  layers_that_should_push_properties_.erase(layer);
-}
-
 void LayerTreeHost::ClearLayersThatShouldPushProperties() {
   layers_that_should_push_properties_.clear();
 }
