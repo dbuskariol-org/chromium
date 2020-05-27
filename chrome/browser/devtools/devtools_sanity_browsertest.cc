@@ -24,7 +24,6 @@
 #include "base/strings/string_util.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
-#include "base/task/post_task.h"
 #include "base/test/scoped_feature_list.h"
 #include "base/test/test_timeouts.h"
 #include "base/threading/thread_restrictions.h"
@@ -114,7 +113,6 @@
 #include "chromeos/constants/chromeos_switches.h"
 #endif
 
-using content::BrowserThread;
 using content::DevToolsAgentHost;
 using content::DevToolsAgentHostObserver;
 using content::NavigationController;
@@ -632,7 +630,7 @@ class WorkerDevToolsSanityTest : public InProcessBrowserTest {
       if (host->GetType() == DevToolsAgentHost::kTypeSharedWorker &&
           host->GetURL().path().rfind(path_) != std::string::npos) {
         *out_host_ = host;
-        base::PostTask(FROM_HERE, {BrowserThread::UI}, quit_);
+        content::GetUIThreadTaskRunner({})->PostTask(FROM_HERE, quit_);
         delete this;
       }
     }

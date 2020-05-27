@@ -46,6 +46,7 @@
 #include "content/common/page_messages.h"
 #include "content/common/unfreezable_frame_messages.h"
 #include "content/common/view_messages.h"
+#include "content/public/browser/browser_thread.h"
 #include "content/public/browser/child_process_security_policy.h"
 #include "content/public/browser/content_browser_client.h"
 #include "content/public/browser/render_process_host_observer.h"
@@ -3183,8 +3184,8 @@ void RenderFrameHostManager::NotifyPrepareForInnerDelegateAttachComplete(
   int32_t routing_id =
       success ? render_frame_host_->GetRoutingID() : MSG_ROUTING_NONE;
   // Invoking the callback asynchronously to meet the APIs promise.
-  base::PostTask(
-      FROM_HERE, {BrowserThread::UI},
+  GetUIThreadTaskRunner({})->PostTask(
+      FROM_HERE,
       base::BindOnce(
           [](RenderFrameHost::PrepareForInnerWebContentsAttachCallback callback,
              int32_t process_id, int32_t routing_id) {
