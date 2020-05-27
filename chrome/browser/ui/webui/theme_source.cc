@@ -239,3 +239,12 @@ std::string ThemeSource::GetAccessControlAllowOriginForOrigin(
 
   return content::URLDataSource::GetAccessControlAllowOriginForOrigin(origin);
 }
+
+std::string ThemeSource::GetContentSecurityPolicyDefaultSrc() {
+  if (serve_untrusted_) {
+    // TODO(https://crbug.com/1085327): Audit and tighten CSP.
+    return std::string();
+  }
+
+  return content::URLDataSource::GetContentSecurityPolicyDefaultSrc();
+}
