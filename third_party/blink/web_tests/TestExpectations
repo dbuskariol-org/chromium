@@ -100,7 +100,6 @@ crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag.h
 
 # Tests temporarily disabled with Site Isolation - uninvestigated bugs:
 # TODO(lukasza, alexmos): Burn down this list.
-crbug.com/608015 http/tests/inspector-protocol/access-inspected-object.js [ Failure Timeout ]
 crbug.com/623268 http/tests/inspector-protocol/request-mixed-content-status-blockable.js [ Timeout ]
 crbug.com/623268 http/tests/inspector-protocol/request-mixed-content-status-none.js [ Timeout ]
 crbug.com/623268 http/tests/inspector-protocol/request-mixed-content-status-optionally-blockable.js [ Timeout ]
