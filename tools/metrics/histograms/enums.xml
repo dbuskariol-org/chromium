@@ -10161,6 +10161,7 @@ histogram as enum -->
 Called by update_net_error_codes.py.-->
 
   <int value="-1478" label="SSL_CLIENT_AUTH_NO_COMMON_ALGORITHMS"/>
+  <int value="-808" label="DNS_SECURE_RESOLVER_HOSTNAME_RESOLUTION_FAILED"/>
   <int value="-807" label="DNS_HTTP_FAILED"/>
   <int value="-806" label="DNS_SORT_ERROR"/>
   <int value="-805" label="DNS_SEARCH_EMPTY"/>
@@ -10191,6 +10192,8 @@ Called by update_net_error_codes.py.-->
   <int value="-603" label="FTP_TRANSFER_ABORTED"/>
   <int value="-602" label="FTP_SERVICE_UNAVAILABLE"/>
   <int value="-601" label="FTP_FAILED"/>
+  <int value="-507" label="TRUST_TOKEN_OPERATION_CACHE_HIT"/>
+  <int value="-506" label="TRUST_TOKEN_OPERATION_FAILED"/>
   <int value="-505" label="INVALID_WEB_BUNDLE"/>
   <int value="-504" label="INVALID_SIGNED_EXCHANGE"/>
   <int value="-503" label="ADD_USER_CERT_FAILED"/>
@@ -10277,6 +10280,8 @@ Called by update_net_error_codes.py.-->
   <int value="-302" label="UNKNOWN_URL_SCHEME"/>
   <int value="-301" label="DISALLOWED_URL_SCHEME"/>
   <int value="-300" label="INVALID_URL"/>
+  <int value="-218" label="SSL_OBSOLETE_VERSION"/>
+  <int value="-217" label="CERT_KNOWN_INTERCEPTION_BLOCKED"/>
   <int value="-216" label="QUIC_CERT_ROOT_NOT_KNOWN"/>
   <int value="-215" label="CERT_SYMANTEC_LEGACY"/>
   <int value="-214" label="CERTIFICATE_TRANSPARENCY_REQUIRED"/>
@@ -46384,6 +46389,8 @@ Called by update_net_error_codes.py.-->
   <int value="214" label="CERTIFICATE_TRANSPARENCY_REQUIRED"/>
   <int value="215" label="CERT_SYMANTEC_LEGACY"/>
   <int value="216" label="QUIC_CERT_ROOT_NOT_KNOWN"/>
+  <int value="217" label="CERT_KNOWN_INTERCEPTION_BLOCKED"/>
+  <int value="218" label="SSL_OBSOLETE_VERSION"/>
   <int value="300" label="INVALID_URL"/>
   <int value="301" label="DISALLOWED_URL_SCHEME"/>
   <int value="302" label="UNKNOWN_URL_SCHEME"/>
@@ -46471,6 +46478,8 @@ Called by update_net_error_codes.py.-->
   <int value="503" label="ADD_USER_CERT_FAILED"/>
   <int value="504" label="INVALID_SIGNED_EXCHANGE"/>
   <int value="505" label="INVALID_WEB_BUNDLE"/>
+  <int value="506" label="TRUST_TOKEN_OPERATION_FAILED"/>
+  <int value="507" label="TRUST_TOKEN_OPERATION_CACHE_HIT"/>
   <int value="601" label="FTP_FAILED"/>
   <int value="602" label="FTP_SERVICE_UNAVAILABLE"/>
   <int value="603" label="FTP_TRANSFER_ABORTED"/>
@@ -46501,6 +46510,7 @@ Called by update_net_error_codes.py.-->
   <int value="805" label="DNS_SEARCH_EMPTY"/>
   <int value="806" label="DNS_SORT_ERROR"/>
   <int value="807" label="DNS_HTTP_FAILED"/>
+  <int value="808" label="DNS_SECURE_RESOLVER_HOSTNAME_RESOLUTION_FAILED"/>
   <int value="1478" label="SSL_CLIENT_AUTH_NO_COMMON_ALGORITHMS"/>
 </enum>
 
