@@ -71,7 +71,7 @@ AccountMigrationWelcomeUITest.prototype = {
   },
 };
 
-GEN('#include "chrome/browser/ui/webui/chromeos/account_migration_welcome_ui_test.h"');
+GEN('#include "chrome/browser/ui/webui/chromeos/account_manager/account_migration_welcome_ui_test.h"');
 GEN('');
 
 

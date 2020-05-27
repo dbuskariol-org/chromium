@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/chromeos/account_migration_welcome_ui_test.h"
+#include "chrome/browser/ui/webui/chromeos/account_manager/account_migration_welcome_ui_test.h"
 
 #include "base/macros.h"
-#include "chrome/browser/ui/webui/chromeos/account_migration_welcome_dialog.h"
+#include "chrome/browser/ui/webui/chromeos/account_manager/account_migration_welcome_dialog.h"
 #include "chrome/common/url_constants.h"
 #include "content/public/browser/render_view_host.h"
 #include "content/public/browser/web_contents.h"

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/chromeos/account_migration_welcome_ui.h"
+#include "chrome/browser/ui/webui/chromeos/account_manager/account_migration_welcome_ui.h"
 
 #include <memory>
 #include <string>
