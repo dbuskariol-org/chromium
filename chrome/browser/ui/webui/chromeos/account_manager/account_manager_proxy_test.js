@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-/** @implements {account_migration.AccountMigrationBrowserProxy} */
-class TestAccountMigrationBrowserProxy extends TestBrowserProxy {
+/** @implements {account_manager.AccountManagerBrowserProxy} */
+class TestAccountManagerBrowserProxy extends TestBrowserProxy {
   constructor() {
     super([
       'closeDialog',

@@ -3,11 +3,11 @@
 // found in the LICENSE file.
 
 /**
- * @fileoverview Functions for Account migration flow.
+ * @fileoverview Functions for Account manager screens.
  */
-cr.define('account_migration', function() {
+cr.define('account_manager', function() {
   /** @interface */
-  class AccountMigrationBrowserProxy {
+  class AccountManagerBrowserProxy {
     /**
      * Triggers the re-authentication flow for the account pointed to by
      * |account_email|.
@@ -22,9 +22,9 @@ cr.define('account_migration', function() {
   }
 
   /**
-   * @implements {settings.AccountMigrationBrowserProxy}
+   * @implements {account_manager.AccountManagerBrowserProxy}
    */
-  class AccountMigrationBrowserProxyImpl {
+  class AccountManagerBrowserProxyImpl {
     /** @override */
     reauthenticateAccount(account_email) {
       chrome.send('reauthenticateAccount', [account_email]);
@@ -36,10 +36,10 @@ cr.define('account_migration', function() {
     }
   }
 
-  cr.addSingletonGetter(AccountMigrationBrowserProxyImpl);
+  cr.addSingletonGetter(AccountManagerBrowserProxyImpl);
 
   return {
-    AccountMigrationBrowserProxy: AccountMigrationBrowserProxy,
-    AccountMigrationBrowserProxyImpl: AccountMigrationBrowserProxyImpl,
+    AccountManagerBrowserProxy: AccountManagerBrowserProxy,
+    AccountManagerBrowserProxyImpl: AccountManagerBrowserProxyImpl,
   };
 });
