@@ -12,6 +12,8 @@
 #include "base/test/bind_test_util.h"
 #include "base/test/scoped_feature_list.h"
 #include "build/build_config.h"
+#include "chrome/browser/media/feeds/media_feeds_service.h"
+#include "chrome/browser/media/feeds/media_feeds_service_factory.h"
 #include "chrome/browser/media/history/media_history_feed_associated_origins_table.h"
 #include "chrome/browser/media/history/media_history_feed_items_table.h"
 #include "chrome/browser/media/history/media_history_feeds_table.h"
@@ -322,6 +324,12 @@ class MediaHistoryBrowserTest : public InProcessBrowserTest,
   static MediaHistoryKeyedService* GetOTRMediaHistoryService(Browser* browser) {
     return MediaHistoryKeyedServiceFactory::GetForProfile(
         browser->profile()->GetPrimaryOTRProfile());
+  }
+
+  static media_feeds::MediaFeedsService* GetMediaFeedsService(
+      Browser* browser) {
+    return media_feeds::MediaFeedsServiceFactory::GetInstance()->GetForProfile(
+        browser->profile());
   }
 
   static void WaitForDB(MediaHistoryKeyedService* service) {
@@ -1088,8 +1096,11 @@ IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest,
   auto* service = GetMediaHistoryService(browser);
 
   // Discover a test feed.
-  service->DiscoverMediaFeed(GURL("https://www.google.com/media-feed.json"));
-  WaitForDB(service);
+  if (auto* feeds_service = GetMediaFeedsService(browser)) {
+    feeds_service->DiscoverMediaFeed(
+        GURL("https://www.google.com/media-feed.json"));
+    WaitForDB(service);
+  }
 
   // Store the feed data.
   service->StoreMediaFeedFetchResult(FetchResult(service, 1),
@@ -1154,8 +1165,11 @@ IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest,
   auto* service = GetMediaHistoryService(browser);
 
   // Discover a test feed.
-  service->DiscoverMediaFeed(feed_url);
-  WaitForDB(service);
+  if (auto* feeds_service = GetMediaFeedsService(browser)) {
+    feeds_service->DiscoverMediaFeed(
+        GURL("https://www.google.com/media-feed.json"));
+    WaitForDB(service);
+  }
 
   // Store the feed data.
   service->StoreMediaFeedFetchResult(FetchResult(service, 1),
