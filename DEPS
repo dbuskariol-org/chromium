@@ -1115,7 +1115,7 @@ deps = {
   },
 
   'src/third_party/libunwindstack': {
-      'url': Var('chromium_git') + '/chromium/src/third_party/libunwindstack.git' + '@' + 'dfd3f3d84cfc222af93bc86b276414fc690977da',
+      'url': Var('chromium_git') + '/chromium/src/third_party/libunwindstack.git' + '@' + '046920fc491aba67c6f6a750b4be7b835cff4e5b',
       'condition': 'checkout_android',
   },
 
