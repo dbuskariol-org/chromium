@@ -114,6 +114,13 @@ Polymer({
     autoConnectPref_: {
       type: Object,
       observer: 'autoConnectPrefChanged_',
+      value() {
+        return {
+          key: 'fakeAutoConnectPref',
+          type: chrome.settingsPrivate.PrefType.BOOLEAN,
+          value: false,
+        };
+      },
     },
 
     /**
@@ -129,7 +136,7 @@ Polymer({
           type: chrome.settingsPrivate.PrefType.BOOLEAN,
           value: false,
         };
-      }
+      },
     },
 
     /**
