@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ash/assistant/assistant_alarm_timer_controller.h"
+#include "ash/assistant/assistant_alarm_timer_controller_impl.h"
 
 #include <map>
 #include <string>
@@ -47,19 +47,8 @@ constexpr base::TimeDelta kTickInterval = base::TimeDelta::FromSeconds(1);
 
 // Helpers ---------------------------------------------------------------------
 
-// Creates a notification ID for the given |timer|. It is guaranteed that this
-// method will always return the same notification ID given the same timer.
-std::string CreateTimerNotificationId(const AssistantTimer& timer) {
-  return std::string(kTimerNotificationIdPrefix) + timer.id;
-}
-
-// Creates a notification title.
-std::string CreateTimerNotificationTitle() {
-  return l10n_util::GetStringUTF8(IDS_ASSISTANT_TIMER_NOTIFICATION_TITLE);
-}
-
-// Creates a notification message for the given |timer|.
-std::string CreateTimerNotificationMessage(const AssistantTimer& timer) {
+// Returns a string representation of the remaining time for the given |timer|.
+std::string ToRemainingTimeString(const AssistantTimer& timer) {
   // Method aliases to prevent line-wrapping below.
   const auto createHour = icu::MeasureUnit::createHour;
   const auto createMinute = icu::MeasureUnit::createMinute;
@@ -111,6 +100,24 @@ std::string CreateTimerNotificationMessage(const AssistantTimer& timer) {
 
   // Otherwise, all necessary formatting has been performed.
   return message;
+}
+
+// Creates a notification ID for the given |timer|. It is guaranteed that this
+// method will always return the same notification ID given the same timer.
+std::string CreateTimerNotificationId(const AssistantTimer& timer) {
+  return std::string(kTimerNotificationIdPrefix) + timer.id;
+}
+
+// Creates a notification title for the given |timer|.
+std::string CreateTimerNotificationTitle(const AssistantTimer& timer) {
+  if (IsTimersV2Enabled())
+    return ToRemainingTimeString(timer);
+  return l10n_util::GetStringUTF8(IDS_ASSISTANT_TIMER_NOTIFICATION_TITLE);
+}
+
+// Creates a notification message for the given |timer|.
+std::string CreateTimerNotificationMessage(const AssistantTimer& timer) {
+  return ToRemainingTimeString(timer);
 }
 
 // Creates notification action URL for the given |timer|.
@@ -191,7 +198,7 @@ std::vector<AssistantNotificationButtonPtr> CreateTimerNotificationButtons(
 // Creates a notification for the given |timer|.
 AssistantNotificationPtr CreateTimerNotification(const AssistantTimer& timer) {
   AssistantNotificationPtr notification = AssistantNotification::New();
-  notification->title = CreateTimerNotificationTitle();
+  notification->title = CreateTimerNotificationTitle(timer);
   notification->message = CreateTimerNotificationMessage(timer);
   notification->action_url = CreateTimerNotificationActionUrl(timer);
   notification->buttons = CreateTimerNotificationButtons(timer);

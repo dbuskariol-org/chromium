@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_ASSISTANT_ASSISTANT_ALARM_TIMER_CONTROLLER_H_
-#define ASH_ASSISTANT_ASSISTANT_ALARM_TIMER_CONTROLLER_H_
+#ifndef ASH_ASSISTANT_ASSISTANT_ALARM_TIMER_CONTROLLER_IMPL_H_
+#define ASH_ASSISTANT_ASSISTANT_ALARM_TIMER_CONTROLLER_IMPL_H_
 
 #include <map>
 #include <string>
@@ -94,4 +94,4 @@ class AssistantAlarmTimerControllerImpl
 
 }  // namespace ash
 
-#endif  // ASH_ASSISTANT_ASSISTANT_ALARM_TIMER_CONTROLLER_H_
+#endif  // ASH_ASSISTANT_ASSISTANT_ALARM_TIMER_CONTROLLER_IMPL_H_
