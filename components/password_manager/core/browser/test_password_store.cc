@@ -217,7 +217,7 @@ TestPasswordStore::FillMatchingLogins(const FormDigest& form) {
         // Repeat the condition above with an additional check for origin.
         if (realm_matches || realm_psl_matches ||
             (form.scheme == autofill::PasswordForm::Scheme::kHtml &&
-             stored_form.origin.GetOrigin() == form.origin.GetOrigin() &&
+             stored_form.url.GetOrigin() == form.origin.GetOrigin() &&
              password_manager::IsFederatedRealm(stored_form.signon_realm,
                                                 form.origin))) {
           matched_forms.push_back(

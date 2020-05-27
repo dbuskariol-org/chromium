@@ -222,7 +222,7 @@ void CredentialManagerImpl::DoneRequiringUserMediation() {
 void CredentialManagerImpl::OnProvisionalSaveComplete() {
   DCHECK(form_manager_);
   const autofill::PasswordForm& form = form_manager_->GetPendingCredentials();
-  DCHECK(client_->IsSavingAndFillingEnabled(form.origin));
+  DCHECK(client_->IsSavingAndFillingEnabled(form.url));
 
   if (form_manager_->IsPendingCredentialsPublicSuffixMatch()) {
     // Having a credential with a PSL match implies there is no credential with

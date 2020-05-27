@@ -123,7 +123,7 @@ PasswordForm CreateHTMLForm(const char* origin_url,
                             const char* password_value) {
   PasswordForm form;
   form.scheme = PasswordForm::Scheme::kHtml;
-  form.origin = GURL(origin_url);
+  form.url = GURL(origin_url);
   form.signon_realm = origin_url;
   form.username_value = ASCIIToUTF16(username_value);
   form.password_value = ASCIIToUTF16(password_value);
@@ -567,8 +567,8 @@ TEST_P(FormFetcherImplTest, TryToMigrateHTTPPasswordsOnHTTPSSites) {
   GURL::Replacements http_rep;
   http_rep.SetSchemeStr(url::kHttpScheme);
   PasswordForm http_form = https_form;
-  http_form.origin = https_form.origin.ReplaceComponents(http_rep);
-  http_form.signon_realm = http_form.origin.GetOrigin().spec();
+  http_form.url = https_form.url.ReplaceComponents(http_rep);
+  http_form.signon_realm = http_form.url.GetOrigin().spec();
 
   std::vector<PasswordForm> empty_forms;
 
@@ -641,8 +641,8 @@ TEST_P(FormFetcherImplTest, StateIsWaitingDuringMigration) {
   GURL::Replacements http_rep;
   http_rep.SetSchemeStr(url::kHttpScheme);
   PasswordForm http_form = https_form;
-  http_form.origin = https_form.origin.ReplaceComponents(http_rep);
-  http_form.signon_realm = http_form.origin.GetOrigin().spec();
+  http_form.url = https_form.url.ReplaceComponents(http_rep);
+  http_form.signon_realm = http_form.url.GetOrigin().spec();
 
   std::vector<PasswordForm> empty_forms;
 

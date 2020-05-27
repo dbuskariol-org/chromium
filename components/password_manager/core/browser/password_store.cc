@@ -113,9 +113,7 @@ PasswordStore::FormDigest::FormDigest(autofill::PasswordForm::Scheme new_scheme,
     : scheme(new_scheme), signon_realm(new_signon_realm), origin(new_origin) {}
 
 PasswordStore::FormDigest::FormDigest(const PasswordForm& form)
-    : scheme(form.scheme),
-      signon_realm(form.signon_realm),
-      origin(form.origin) {}
+    : scheme(form.scheme), signon_realm(form.signon_realm), origin(form.url) {}
 
 PasswordStore::FormDigest::FormDigest(const autofill::FormData& form)
     : scheme(PasswordForm::Scheme::kHtml),

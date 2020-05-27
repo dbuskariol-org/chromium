@@ -847,7 +847,7 @@ void PasswordFormManager::OnGeneratedPasswordAccepted(
   if (!parsed_form) {
     // Create a password form with a minimum data.
     parsed_form = std::make_unique<PasswordForm>();
-    parsed_form->origin = form_data.url;
+    parsed_form->url = form_data.url;
     parsed_form->signon_realm = GetSignonRealm(form_data.url);
   }
   parsed_form->password_value = password;
@@ -938,7 +938,7 @@ void PasswordFormManager::PresaveGeneratedPasswordInternal(
   if (!parsed_form) {
     // Create a password form with a minimum data.
     parsed_form = std::make_unique<PasswordForm>();
-    parsed_form->origin = form.url;
+    parsed_form->url = form.url;
     parsed_form->signon_realm = GetSignonRealm(form.url);
   }
   // Set |password_value| to the generated password in order to ensure that

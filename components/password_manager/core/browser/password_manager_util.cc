@@ -204,7 +204,7 @@ base::StringPiece GetSignonRealmWithProtocolExcluded(const PasswordForm& form) {
 
   // Find the web origin (with protocol excluded) in the signon_realm.
   const size_t after_protocol =
-      signon_realm_protocol_excluded.find(form.origin.host_piece());
+      signon_realm_protocol_excluded.find(form.url.host_piece());
   DCHECK_NE(after_protocol, base::StringPiece::npos);
 
   // Keep the string starting with position |after_protocol|.
@@ -326,13 +326,13 @@ autofill::PasswordForm MakeNormalizedBlacklistedForm(
   if (password_manager::FacetURI::FromPotentiallyInvalidSpec(
           digest.origin.spec())
           .IsValidAndroidFacetURI()) {
-    result.origin = std::move(digest.origin);
+    result.url = std::move(digest.origin);
   } else {
     // GetOrigin() will return an empty GURL if the origin is not valid or
     // standard. DCHECK that this will not happen.
     DCHECK(digest.origin.is_valid());
     DCHECK(digest.origin.IsStandard());
-    result.origin = digest.origin.GetOrigin();
+    result.url = digest.origin.GetOrigin();
   }
   return result;
 }

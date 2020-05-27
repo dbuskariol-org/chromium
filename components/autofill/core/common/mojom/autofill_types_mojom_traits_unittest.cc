@@ -78,7 +78,7 @@ void CreateTestPasswordFormFillData(PasswordFormFillData* fill_data) {
 void CreateTestPasswordForm(PasswordForm* form) {
   form->scheme = PasswordForm::Scheme::kHtml;
   form->signon_realm = "https://foo.com/";
-  form->origin = GURL("https://foo.com/");
+  form->url = GURL("https://foo.com/");
   form->action = GURL("https://foo.com/login");
   form->affiliated_web_realm = "https://foo.com/";
   form->submit_element = base::ASCIIToUTF16("test_submit");

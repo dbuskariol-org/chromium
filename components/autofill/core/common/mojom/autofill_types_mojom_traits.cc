@@ -272,8 +272,7 @@ bool StructTraits<
     autofill::PasswordForm>::Read(autofill::mojom::PasswordFormDataView data,
                                   autofill::PasswordForm* out) {
   if (!data.ReadScheme(&out->scheme) ||
-      !data.ReadSignonRealm(&out->signon_realm) ||
-      !data.ReadOriginWithPath(&out->origin) ||
+      !data.ReadSignonRealm(&out->signon_realm) || !data.ReadUrl(&out->url) ||
       !data.ReadAction(&out->action) ||
       !data.ReadAffiliatedWebRealm(&out->affiliated_web_realm) ||
       !data.ReadSubmitElement(&out->submit_element) ||

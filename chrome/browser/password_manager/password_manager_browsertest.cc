@@ -443,7 +443,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest, PromptForDynamicForm) {
   autofill::PasswordForm signin_form;
   GURL psl_orogin = embedded_test_server()->GetURL("psl.example.com", "/");
   signin_form.signon_realm = psl_orogin.spec();
-  signin_form.origin = psl_orogin;
+  signin_form.url = psl_orogin;
   signin_form.username_value = base::ASCIIToUTF16("unused_username");
   signin_form.password_value = base::ASCIIToUTF16("unused_password");
   password_store->AddLogin(signin_form);
@@ -1178,7 +1178,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.action = embedded_test_server()->base_url();
   signin_form.username_value = base::ASCIIToUTF16("admin");
   signin_form.password_value = base::ASCIIToUTF16("12345");
@@ -1223,7 +1223,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.action = embedded_test_server()->base_url();
   signin_form.username_value = base::ASCIIToUTF16("admin");
   signin_form.password_value = base::ASCIIToUTF16("random_secret");
@@ -1354,7 +1354,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.action = embedded_test_server()->base_url();
   signin_form.username_value = base::ASCIIToUTF16("admin");
   signin_form.password_value = base::ASCIIToUTF16("12345");
@@ -1386,7 +1386,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest, SlowPageFill) {
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.action = embedded_test_server()->base_url();
   signin_form.username_value = base::ASCIIToUTF16("admin");
   signin_form.password_value = base::ASCIIToUTF16("12345");
@@ -1577,7 +1577,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
   GURL http_origin = https_origin.ReplaceComponents(rep);
   autofill::PasswordForm http_form;
   http_form.signon_realm = http_origin.spec();
-  http_form.origin = http_origin;
+  http_form.url = http_origin;
   // Assume that the previous action was already HTTPS one matching the current
   // page.
   http_form.action = https_origin;
@@ -1616,7 +1616,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
   GURL http_origin = https_origin.ReplaceComponents(rep);
   autofill::PasswordForm http_form;
   http_form.signon_realm = http_origin.spec();
-  http_form.origin = http_origin;
+  http_form.url = http_origin;
   http_form.username_value = base::ASCIIToUTF16("user");
   http_form.password_value = base::ASCIIToUTF16("12345");
   scoped_refptr<password_manager::TestPasswordStore> password_store =
@@ -1700,7 +1700,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest, ReCreatedFormsGetFilled) {
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.action = embedded_test_server()->base_url();
   signin_form.username_value = base::ASCIIToUTF16("temp");
   signin_form.password_value = base::ASCIIToUTF16("random");
@@ -1734,7 +1734,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest, DuplicateFormsGetFilled) {
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.action = embedded_test_server()->base_url();
   signin_form.username_value = base::ASCIIToUTF16("temp");
   signin_form.password_value = base::ASCIIToUTF16("random");
@@ -1765,7 +1765,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.action = embedded_test_server()->base_url();
   signin_form.username_value = base::ASCIIToUTF16("admin");
   signin_form.password_value = base::ASCIIToUTF16("1234");
@@ -2151,7 +2151,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = iframe_url.GetOrigin().spec();
-  signin_form.origin = iframe_url;
+  signin_form.url = iframe_url;
   signin_form.username_value = base::ASCIIToUTF16("temp");
   signin_form.password_value = base::ASCIIToUTF16("pa55w0rd");
   password_store->AddLogin(signin_form);
@@ -2234,7 +2234,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = iframe_url.GetOrigin().spec();
-  signin_form.origin = iframe_url;
+  signin_form.url = iframe_url;
   signin_form.username_value = base::ASCIIToUTF16("temp");
   signin_form.password_value = base::ASCIIToUTF16("pa55w0rd");
   password_store->AddLogin(signin_form);
@@ -2881,7 +2881,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest, ProxyAuthFilling) {
               .get());
   autofill::PasswordForm creds;
   creds.scheme = autofill::PasswordForm::Scheme::kBasic;
-  creds.origin = test_page;
+  creds.url = test_page;
   creds.signon_realm = embedded_test_server()->base_url().spec() + "testrealm";
   creds.password_value = base::ASCIIToUTF16("pw");
   creds.username_value = base::ASCIIToUTF16("temp");
@@ -3151,7 +3151,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
   signin_form.password_value = base::ASCIIToUTF16("password");
   signin_form.username_value = base::ASCIIToUTF16("user");
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.skip_zero_click = true;
   password_store->AddLogin(signin_form);
 
@@ -3199,7 +3199,7 @@ IN_PROC_BROWSER_TEST_F(
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
   signin_form.password_value = base::ASCIIToUTF16("password");
   signin_form.username_value = base::ASCIIToUTF16("user");
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.skip_zero_click = true;
   password_store->AddLogin(signin_form);
 
@@ -3245,7 +3245,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
   signin_form.password_value = base::ASCIIToUTF16("password");
   signin_form.username_value = base::ASCIIToUTF16("user");
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.skip_zero_click = true;
   password_store->AddLogin(signin_form);
 
@@ -3316,7 +3316,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = embedded_test_server()->base_url().spec();
-  signin_form.origin = embedded_test_server()->base_url();
+  signin_form.url = embedded_test_server()->base_url();
   signin_form.action = embedded_test_server()->base_url();
   signin_form.username_value = base::ASCIIToUTF16("current_username");
   signin_form.password_value = base::ASCIIToUTF16("current_username_password");
@@ -3442,7 +3442,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               browser()->profile(), ServiceAccessType::IMPLICIT_ACCESS)
               .get());
   autofill::PasswordForm signin_form;
-  signin_form.origin = GURL(url::kAboutBlankURL);
+  signin_form.url = GURL(url::kAboutBlankURL);
   signin_form.signon_realm = "about:";
   GURL submit_url(embedded_test_server()->GetURL("/password/done.html"));
   signin_form.action = submit_url;
@@ -3748,7 +3748,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
               .get());
   autofill::PasswordForm signin_form;
   signin_form.signon_realm = url_A.GetOrigin().spec();
-  signin_form.origin = url_A;
+  signin_form.url = url_A;
   signin_form.username_value = base::ASCIIToUTF16("user");
   signin_form.password_value = base::ASCIIToUTF16("oldpassword");
   password_store->AddLogin(signin_form);
@@ -3846,7 +3846,7 @@ IN_PROC_BROWSER_TEST_F(PasswordManagerBrowserTest,
   // Start with two logins in the password store.
   autofill::PasswordForm admin_form;
   admin_form.signon_realm = embedded_test_server()->base_url().spec();
-  admin_form.origin = embedded_test_server()->base_url();
+  admin_form.url = embedded_test_server()->base_url();
   admin_form.username_value = base::ASCIIToUTF16("admin");
   admin_form.password_value = base::ASCIIToUTF16("random_secret");
   password_store->AddLogin(admin_form);

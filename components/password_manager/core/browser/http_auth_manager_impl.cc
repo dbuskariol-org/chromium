@@ -84,7 +84,7 @@ void HttpAuthManagerImpl::Autofill(
 
 void HttpAuthManagerImpl::OnPasswordFormSubmitted(
     const PasswordForm& password_form) {
-  if (client_->IsSavingAndFillingEnabled(password_form.origin))
+  if (client_->IsSavingAndFillingEnabled(password_form.url))
     ProvisionallySaveForm(password_form);
 }
 

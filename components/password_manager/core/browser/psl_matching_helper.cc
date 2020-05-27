@@ -78,12 +78,12 @@ MatchResult GetMatchResult(const PasswordForm& form,
   const bool allow_federated_match = !form.federation_origin.opaque();
   if (allow_federated_match &&
       IsFederatedRealm(form.signon_realm, form_digest.origin) &&
-      form.origin.GetOrigin() == form_digest.origin.GetOrigin()) {
+      form.url.GetOrigin() == form_digest.origin.GetOrigin()) {
     return MatchResult::FEDERATED_MATCH;
   }
 
   if (allow_federated_match &&
-      IsFederatedPSLMatch(form.signon_realm, form.origin, form_digest.origin)) {
+      IsFederatedPSLMatch(form.signon_realm, form.url, form_digest.origin)) {
     return MatchResult::FEDERATED_PSL_MATCH;
   }
 

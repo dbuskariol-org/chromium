@@ -93,7 +93,7 @@ PasswordDataForUI::PasswordDataForUI(
 }
 
 const GURL& PasswordDataForUI::GetOrigin() const {
-  return pending_form_.origin;
+  return pending_form_.url;
 }
 
 const std::vector<const PasswordForm*>& PasswordDataForUI::GetBestMatches()

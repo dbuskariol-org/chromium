@@ -243,7 +243,7 @@ void ManagePasswordsState::ClearData() {
 }
 
 bool ManagePasswordsState::AddForm(const PasswordForm& form) {
-  if (url::Origin::Create(form.origin) != origin_)
+  if (url::Origin::Create(form.url) != origin_)
     return false;
   if (UpdateFormInVector(form, &local_credentials_forms_))
     return true;

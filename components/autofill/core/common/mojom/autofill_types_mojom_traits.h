@@ -490,9 +490,7 @@ struct StructTraits<autofill::mojom::PasswordFormDataView,
     return r.signon_realm;
   }
 
-  static const GURL& origin_with_path(const autofill::PasswordForm& r) {
-    return r.origin;
-  }
+  static const GURL& url(const autofill::PasswordForm& r) { return r.url; }
 
   static const GURL& action(const autofill::PasswordForm& r) {
     return r.action;
