@@ -144,7 +144,8 @@ public abstract class BaseCustomTabActivity<C extends BaseCustomTabActivityCompo
     protected RootUiCoordinator createRootUiCoordinator() {
         return new BaseCustomTabRootUiCoordinator(this, getShareDelegateSupplier(),
                 mToolbarCoordinator, mNavigationController, getActivityTabProvider(),
-                mTabModelProfileSupplier, mBookmarkBridgeSupplier, mOverviewModeBehaviorSupplier);
+                mTabModelProfileSupplier, mBookmarkBridgeSupplier, mOverviewModeBehaviorSupplier,
+                this::getContextualSearchManager);
     }
 
     @Override
