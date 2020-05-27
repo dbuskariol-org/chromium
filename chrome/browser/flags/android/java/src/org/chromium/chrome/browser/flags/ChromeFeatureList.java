@@ -363,6 +363,7 @@ public abstract class ChromeFeatureList {
     public static final String RELATED_SEARCHES = "RelatedSearches";
     public static final String REPORT_FEED_USER_ACTIONS = "ReportFeedUserActions";
     public static final String REVAMPED_CONTEXT_MENU = "RevampedContextMenu";
+    public static final String SAFETY_CHECK_ANDROID = "SafetyCheckAndroid";
     public static final String SAME_SITE_BY_DEFAULT_COOKIES = "SameSiteByDefaultCookies";
     public static final String SEND_TAB_TO_SELF = "SyncSendTabToSelf";
     public static final String SERVICE_MANAGER_FOR_DOWNLOAD = "ServiceManagerForDownload";
