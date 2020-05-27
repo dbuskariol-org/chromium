@@ -4567,6 +4567,11 @@ TEST_F(WebFrameTest, ContextNotificationsIsolatedWorlds) {
   ASSERT_NE(web_view_helper.LocalMainFrame()->MainWorldScriptContext(),
             v8::Local<v8::Context>::New(isolate, notification->context));
 
+  // Check that the context we got has the right isolated world id.
+  ASSERT_EQ(isolated_world_id,
+            web_view_helper.LocalMainFrame()->GetScriptContextWorldId(
+                v8::Local<v8::Context>::New(isolate, notification->context)));
+
   web_view_helper.Reset();
 
   // We should have gotten three release notifications (one for each of the
