@@ -678,6 +678,7 @@ component("ash") {
     "shelf/shelf_bubble.h",
     "shelf/shelf_button.cc",
     "shelf/shelf_button.h",
+    "shelf/shelf_button_delegate.cc",
     "shelf/shelf_button_delegate.h",
     "shelf/shelf_button_pressed_metric_tracker.cc",
     "shelf/shelf_button_pressed_metric_tracker.h",
