@@ -3534,7 +3534,7 @@
     {
       "id": 336,
       "cr_bugs": [625785],
-      "description": "DXVA video decoder crashes on some AMD GPUs",
+      "description": "DXVA video decoder crashes on some AMD GPUs.",
       "os": {
         "type": "win"
       },
