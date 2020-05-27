@@ -275,6 +275,12 @@ class ScrollableShelfView::ScrollableShelfArrowView
     SetEventTargeter(std::make_unique<views::ViewTargeter>(this));
     SetPaintToLayer();
     layer()->SetFillsBoundsOpaquely(false);
+
+    // When the spoken feedback is enabled, scrollable shelf should ensure that
+    // the hidden icon which receives the accessibility focus shows through
+    // scroll animation. So the arrow button is not useful for the spoken
+    // feedback users. The spoken feedback should ignore the arrow button.
+    GetViewAccessibility().OverrideIsIgnored(/*value=*/true);
   }
   ~ScrollableShelfArrowView() override = default;
 
