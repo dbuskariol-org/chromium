@@ -42955,6 +42955,12 @@ from previous Chrome versions.
   <int value="12" label="Bad Update specification"/>
 </enum>
 
+<enum name="MappedAndResidentPagesDumpState">
+  <int value="0" label="kAccessPagemapDenied"/>
+  <int value="1" label="kFailure"/>
+  <int value="2" label="kSuccess"/>
+</enum>
+
 <enum name="MappedCSSProperties">
 <!-- Generated from third_party/blink/public/mojom/use_counter/css_property_id.mojom.
 Called by update_use_counter_css.py.-->
