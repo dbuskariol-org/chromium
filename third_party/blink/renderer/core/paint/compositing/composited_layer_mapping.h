@@ -348,7 +348,6 @@ class CORE_EXPORT CompositedLayerMapping final : public GraphicsLayerClient {
   bool UpdateSquashingLayers(bool needs_squashing_layers);
   void UpdateDrawsContentAndPaintsHitTest();
   void UpdateCompositedBounds();
-  void UpdateGraphicsLayerContentsOpaque(bool should_check_children);
 
   // Also sets subpixelAccumulation on the layer.
   void ComputeBoundsOfOwningLayer(
