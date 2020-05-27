@@ -1125,7 +1125,7 @@ String Document::addressSpaceForBindings(ScriptState* script_state) const {
   // "public" is the lowest-privilege value.
   if (!script_state->ContextIsValid())
     return "public";
-  return GetExecutionContext()->addressSpaceForBindings();
+  return ExecutionContext::From(script_state)->addressSpaceForBindings();
 }
 
 void Document::ChildrenChanged(const ChildrenChange& change) {
