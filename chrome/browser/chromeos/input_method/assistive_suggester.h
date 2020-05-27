@@ -61,6 +61,8 @@ class AssistiveSuggester {
   // Check if suggestion is being shown.
   bool IsSuggestionShown();
 
+  bool IsAssistPersonalInfoEnabled();
+
   bool IsEmojiSuggestAdditionEnabled();
 
   bool IsActionEnabled(AssistiveType action);
