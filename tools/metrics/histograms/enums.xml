@@ -13091,6 +13091,9 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
 </enum>
 
 <enum name="CrosSettingsBrowserBannerInteraction">
+  <obsolete>
+    Removed as of 05/2020 (crbug/1072514).
+  </obsolete>
   <int value="0" label="Not shown"/>
   <int value="1" label="Shown"/>
   <int value="2" label="Clicked"/>
