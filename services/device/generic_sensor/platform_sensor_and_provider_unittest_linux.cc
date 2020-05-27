@@ -200,8 +200,6 @@ class PlatformSensorAndProviderLinuxTest : public ::testing::Test {
         provider_->weak_ptr_factory_.GetWeakPtr()));
   }
 
-  void TearDown() override { base::RunLoop().RunUntilIdle(); }
-
  protected:
   MockSensorDeviceManager* mock_sensor_device_manager() const {
     return static_cast<MockSensorDeviceManager*>(
