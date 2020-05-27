@@ -157,7 +157,6 @@ function createSearchMatch(modifiers = {}) {
  */
 function verifyMatch(match, matchEl) {
   assertEquals('option', matchEl.getAttribute('role'));
-  assertEquals(match.destinationUrl.url, matchEl.$.link.href);
   const matchContents = decodeString16(match.contents);
   const matchDescription = decodeString16(match.description);
   assertEquals(
