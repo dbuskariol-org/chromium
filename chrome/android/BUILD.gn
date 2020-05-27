@@ -883,6 +883,7 @@ android_library("chrome_test_java") {
     ":browser_java_test_support",
     ":chrome_app_java_resources",
     ":chrome_test_util_java",
+    ":native_java_unittests_java",
     ":partner_location_descriptor_proto_java",
     "$google_play_services_package:google_play_services_base_java",
     "$google_play_services_package:google_play_services_basement_java",
