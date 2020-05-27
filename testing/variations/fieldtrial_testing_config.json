@@ -2748,34 +2748,6 @@
             ]
         }
     ],
-    "HistoryServiceAndProfileSyncServiceUseThreadPool": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "ios",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "all_enabled_20200129",
-                    "enable_features": [
-                        "HistoryServiceUsesTaskScheduler",
-                        "ProfileSyncServiceUsesThreadPool"
-                    ]
-                },
-                {
-                    "name": "all_disabled_20200129",
-                    "disable_features": [
-                        "HistoryServiceUsesTaskScheduler",
-                        "ProfileSyncServiceUsesThreadPool"
-                    ]
-                }
-            ]
-        }
-    ],
     "HomepagePromoCard": [
         {
             "platforms": [

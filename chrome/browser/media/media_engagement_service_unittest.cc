@@ -122,7 +122,6 @@ class MediaEngagementServiceTest : public ChromeRenderViewHostTestHarness,
     if (GetParam()) {
       scoped_feature_list_.InitWithFeatures(
           {media::kRecordMediaEngagementScores,
-           history::HistoryService::kHistoryServiceUsesTaskScheduler,
            media::kMediaEngagementHTTPSOnly},
           {});
     } else {
