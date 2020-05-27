@@ -1254,18 +1254,8 @@ IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest,
   }
 }
 
-#if (defined(OS_CHROMEOS) || defined(OS_LINUX) || defined(OS_WIN)) && \
-    !defined(NDEBUG)
-// TODO(1086794): failing on linux-chromeos-dbg, Linux Tests(dbg)(1) and Win7
-// Tests(dbg).
-#define MAYBE_DoNotRecordWatchtime_Background \
-  DISABLED_DoNotRecordWatchtime_Background
-#else
-#define MAYBE_DoNotRecordWatchtime_Background DoNotRecordWatchtime_Background
-#endif
-
 IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest,
-                       MAYBE_DoNotRecordWatchtime_Background) {
+                       DoNotRecordWatchtime_Background) {
   auto* browser = CreateBrowserFromParam();
   auto* service = GetMediaHistoryService(browser);
 
@@ -1290,17 +1280,7 @@ IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest,
   EXPECT_TRUE(playbacks.empty());
 }
 
-#if (defined(OS_CHROMEOS) || defined(OS_LINUX)) && \
-    (defined(IS_CFI) || !defined(NDEBUG) || defined(ADDRESS_SANITIZER))
-// TODO(1086794): failing on linux-chromeos-dbg, Linux Tests(dbg)(1) and Linux
-// CFI.
-#define MAYBE_DoNotRecordWatchtime_Muted DISABLED_DoNotRecordWatchtime_Muted
-#else
-#define MAYBE_DoNotRecordWatchtime_Muted DoNotRecordWatchtime_Muted
-#endif
-
-IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest,
-                       MAYBE_DoNotRecordWatchtime_Muted) {
+IN_PROC_BROWSER_TEST_P(MediaHistoryBrowserTest, DoNotRecordWatchtime_Muted) {
   auto* browser = CreateBrowserFromParam();
   auto* service = GetMediaHistoryService(browser);
 
