@@ -146,6 +146,8 @@ jumbo_source_set("internal") {
     "schema_registry.h",
     "schema_registry_tracking_policy_provider.cc",
     "schema_registry_tracking_policy_provider.h",
+    "values_util.cc",
+    "values_util.h",
   ]
 
   configs += [ "//build/config:precompiled_headers" ]
@@ -388,6 +390,7 @@ source_set("unit_tests") {
     "schema_registry_tracking_policy_provider_unittest.cc",
     "schema_registry_unittest.cc",
     "schema_unittest.cc",
+    "values_util_unittest.cc",
   ]
   if (is_win || is_linux) {
     sources += [

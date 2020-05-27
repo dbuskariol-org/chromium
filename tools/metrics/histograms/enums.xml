@@ -20379,6 +20379,7 @@ Called by update_document_policy_enum.py.-->
   <int value="708" label="ReportDeviceBluetoothInfo"/>
   <int value="709" label="ReportDeviceFanInfo"/>
   <int value="710" label="ReportDeviceVpdInfo"/>
+  <int value="711" label="EnableExperimentalPolicies"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
