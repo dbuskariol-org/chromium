@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/authentication/signin/add_account_signin/add_account_signin_mediator.h"
+#import "ios/chrome/browser/ui/authentication/signin/add_account_signin/add_account_signin_manager.h"
 
 #import <UIKit/UIKit.h>
 
@@ -54,13 +54,14 @@ const char kTestEmail[] = "foo@gmail.com";
 }
 @end
 
-class AddAccountSigninMediatorTest : public PlatformTest {
+class AddAccountSigninManagerTest : public PlatformTest {
  public:
-  AddAccountSigninMediatorTest()
+  AddAccountSigninManagerTest()
       : browser_state_(TestChromeBrowserState::Builder().Build()),
+        base_view_controller_([[UIViewController alloc] init]),
         identity_service_(
             ios::FakeChromeIdentityService::GetInstanceFromChromeProvider()) {
-    manager_delegate_ =
+    identity_interaction_manager_delegate_ =
         [[FakeChromeIdentityInteractionManagerDelegate alloc] init];
     identity_interaction_manager_ = GetIdentityInteractionManager();
   }
@@ -68,8 +69,8 @@ class AddAccountSigninMediatorTest : public PlatformTest {
   FakeChromeIdentityInteractionManager* GetIdentityInteractionManager() {
     FakeChromeIdentityInteractionManager* identity_interaction_manager =
         ios::FakeChromeIdentityService::GetInstanceFromChromeProvider()
-            ->CreateFakeChromeIdentityInteractionManager(browser_state_.get(),
-                                                         manager_delegate_);
+            ->CreateFakeChromeIdentityInteractionManager(
+                browser_state_.get(), identity_interaction_manager_delegate_);
     fake_identity_ = [FakeChromeIdentity
         identityWithEmail:[NSString stringWithUTF8String:kTestEmail]
                    gaiaID:[NSString stringWithUTF8String:kTestGaiaID]
@@ -96,44 +97,48 @@ class AddAccountSigninMediatorTest : public PlatformTest {
  protected:
   void SetUp() override {
     PlatformTest::SetUp();
-    mediator_ = [[AddAccountSigninMediator alloc]
-        initWithIdentityInteractionManager:identity_interaction_manager_
-                               prefService:GetPrefService()
-                           identityManager:GetIdentityManager()];
-    mediator_delegate_ =
-        OCMStrictProtocolMock(@protocol(AddAccountSigninMediatorDelegate));
-    mediator_.delegate = mediator_delegate_;
+    signin_manager_ = [[AddAccountSigninManager alloc]
+        initWithPresentingViewController:base_view_controller_
+              identityInteractionManager:identity_interaction_manager_
+                             prefService:GetPrefService()
+                         identityManager:GetIdentityManager()];
+    signin_manager_delegate_ =
+        OCMStrictProtocolMock(@protocol(AddAccountSigninManagerDelegate));
+    signin_manager_.delegate = signin_manager_delegate_;
   }
 
   void TearDown() override {
-    EXPECT_OCMOCK_VERIFY((id)mediator_delegate_);
+    EXPECT_OCMOCK_VERIFY((id)signin_manager_delegate_);
     PlatformTest::TearDown();
   }
 
   // Needed for test browser state created by TestChromeBrowserState().
   base::test::TaskEnvironment environment_;
   std::unique_ptr<TestChromeBrowserState> browser_state_;
+  UIViewController* base_view_controller_;
 
-  AddAccountSigninMediator* mediator_ = nil;
-  id<AddAccountSigninMediatorDelegate> mediator_delegate_ = nil;
-  id<ChromeIdentityInteractionManagerDelegate> manager_delegate_ = nil;
+  AddAccountSigninManager* signin_manager_ = nil;
+  id<AddAccountSigninManagerDelegate> signin_manager_delegate_ = nil;
 
   ios::FakeChromeIdentityService* identity_service_ = nullptr;
   FakeChromeIdentityInteractionManager* identity_interaction_manager_ = nil;
+  id<ChromeIdentityInteractionManagerDelegate>
+      identity_interaction_manager_delegate_ = nil;
   FakeChromeIdentity* fake_identity_ = nil;
 };
 
 // Verifies the following state in the successful add account flow:
 //   - Account is added to the identity service
 //   - Completion callback is called with success state
-TEST_F(AddAccountSigninMediatorTest, AddAccountIntent) {
+TEST_F(AddAccountSigninManagerTest, AddAccountIntent) {
   // Verify that completion was called with success state.
-  OCMExpect([mediator_delegate_
-      addAccountSigninMediatorFinishedWithSigninResult:
+  OCMExpect([signin_manager_delegate_
+      addAccountSigninManagerFinishedWithSigninResult:
           SigninCoordinatorResultSuccess
-                                              identity:fake_identity_]);
+                                             identity:fake_identity_]);
 
-  [mediator_ handleSigninWithIntent:AddAccountSigninIntentAddSecondaryAccount];
+  [signin_manager_
+      showSigninWithIntent:AddAccountSigninIntentAddSecondaryAccount];
   [identity_interaction_manager_ addAccountViewControllerDidTapSignIn];
 
   // Account added.
@@ -143,14 +148,15 @@ TEST_F(AddAccountSigninMediatorTest, AddAccountIntent) {
 // Verifies the following state in the add account flow with a user cancel:
 //   - Account is not added to the identity service
 //   - Completion callback is called with user cancel state
-TEST_F(AddAccountSigninMediatorTest, AddAccountIntentWithUserCancel) {
+TEST_F(AddAccountSigninManagerTest, AddAccountIntentWithUserCancel) {
   // Verify that completion was called with canceled result state.
-  OCMExpect([mediator_delegate_
-      addAccountSigninMediatorFinishedWithSigninResult:
+  OCMExpect([signin_manager_delegate_
+      addAccountSigninManagerFinishedWithSigninResult:
           SigninCoordinatorResultCanceledByUser
-                                              identity:nil]);
+                                             identity:nil]);
 
-  [mediator_ handleSigninWithIntent:AddAccountSigninIntentAddSecondaryAccount];
+  [signin_manager_
+      showSigninWithIntent:AddAccountSigninIntentAddSecondaryAccount];
   [identity_interaction_manager_ addAccountViewControllerDidTapCancel];
 
   // No account is present.
@@ -158,17 +164,18 @@ TEST_F(AddAccountSigninMediatorTest, AddAccountIntentWithUserCancel) {
 }
 
 // Verifies the following state in the add account flow with an error handled by
-// the mediator:
+// the view controller:
 //   - Account is not added to the identity service
 //   - Completion callback is called with user cancel state
-TEST_F(AddAccountSigninMediatorTest,
-       AddAccountIntentWithErrorHandledByMediator) {
+TEST_F(AddAccountSigninManagerTest,
+       AddAccountIntentWithErrorHandledByViewController) {
   // Verify that completion was called with canceled result state and an error
   // is shown.
-  OCMExpect([mediator_delegate_
-      addAccountSigninMediatorFailedWithError:[OCMArg any]]);
+  OCMExpect([signin_manager_delegate_
+      addAccountSigninManagerFailedWithError:[OCMArg any]]);
 
-  [mediator_ handleSigninWithIntent:AddAccountSigninIntentAddSecondaryAccount];
+  [signin_manager_
+      showSigninWithIntent:AddAccountSigninIntentAddSecondaryAccount];
   [identity_interaction_manager_
       addAccountViewControllerDidThrowUnhandledError];
 
@@ -176,29 +183,31 @@ TEST_F(AddAccountSigninMediatorTest,
   EXPECT_FALSE(identity_service_->HasIdentities());
 }
 
-TEST_F(AddAccountSigninMediatorTest, AddAccountSigninInterrupted) {
+TEST_F(AddAccountSigninManagerTest, AddAccountSigninInterrupted) {
   // Verify that completion was called with interrupted result state.
-  OCMExpect([mediator_delegate_
-      addAccountSigninMediatorFinishedWithSigninResult:
+  OCMExpect([signin_manager_delegate_
+      addAccountSigninManagerFinishedWithSigninResult:
           SigninCoordinatorResultInterrupted
-                                              identity:fake_identity_]);
+                                             identity:fake_identity_]);
 
-  [mediator_ setSigninInterrupted:YES];
-  [mediator_ handleSigninWithIntent:AddAccountSigninIntentAddSecondaryAccount];
+  [signin_manager_ setSigninInterrupted:YES];
+  [signin_manager_
+      showSigninWithIntent:AddAccountSigninIntentAddSecondaryAccount];
   [identity_interaction_manager_ addAccountViewControllerDidTapSignIn];
 }
 
 // Verifies the following state in the successful reauth flow:
 //   - Account is added to the identity service
 //   - Completion callback is called with success state
-TEST_F(AddAccountSigninMediatorTest, ReauthIntentWithSuccess) {
+TEST_F(AddAccountSigninManagerTest, ReauthIntentWithSuccess) {
   // Verify that completion was called with canceled result state.
-  OCMExpect([mediator_delegate_
-      addAccountSigninMediatorFinishedWithSigninResult:
+  OCMExpect([signin_manager_delegate_
+      addAccountSigninManagerFinishedWithSigninResult:
           SigninCoordinatorResultSuccess
-                                              identity:fake_identity_]);
+                                             identity:fake_identity_]);
 
-  [mediator_ handleSigninWithIntent:AddAccountSigninIntentReauthPrimaryAccount];
+  [signin_manager_
+      showSigninWithIntent:AddAccountSigninIntentReauthPrimaryAccount];
   [identity_interaction_manager_ addAccountViewControllerDidTapSignIn];
 
   EXPECT_TRUE(identity_service_->HasIdentities());
@@ -207,14 +216,15 @@ TEST_F(AddAccountSigninMediatorTest, ReauthIntentWithSuccess) {
 // Verifies the following state in the reauth flow with a user cancel:
 //   - Account is not added to the identity service
 //   - Completion callback is called with user cancel state
-TEST_F(AddAccountSigninMediatorTest, ReauthIntentWithUserCancel) {
+TEST_F(AddAccountSigninManagerTest, ReauthIntentWithUserCancel) {
   // Verify that completion was called with canceled result state.
-  OCMExpect([mediator_delegate_
-      addAccountSigninMediatorFinishedWithSigninResult:
+  OCMExpect([signin_manager_delegate_
+      addAccountSigninManagerFinishedWithSigninResult:
           SigninCoordinatorResultCanceledByUser
-                                              identity:nil]);
+                                             identity:nil]);
 
-  [mediator_ handleSigninWithIntent:AddAccountSigninIntentReauthPrimaryAccount];
+  [signin_manager_
+      showSigninWithIntent:AddAccountSigninIntentReauthPrimaryAccount];
   [identity_interaction_manager_ addAccountViewControllerDidTapCancel];
 
   // No account is present.
@@ -222,16 +232,18 @@ TEST_F(AddAccountSigninMediatorTest, ReauthIntentWithUserCancel) {
 }
 
 // Verifies the following state in the reauth flow with an error handled by the
-// mediator:
+// view controller:
 //   - Account is not added to the identity service
 //   - Completion callback is called with user cancel state
-TEST_F(AddAccountSigninMediatorTest, ReauthIntentWithErrorHandledByMediator) {
+TEST_F(AddAccountSigninManagerTest,
+       ReauthIntentWithErrorHandledByViewController) {
   // Verify that completion was called with canceled result state and an error
   // is shown.
-  OCMExpect([mediator_delegate_
-      addAccountSigninMediatorFailedWithError:[OCMArg any]]);
+  OCMExpect([signin_manager_delegate_
+      addAccountSigninManagerFailedWithError:[OCMArg any]]);
 
-  [mediator_ handleSigninWithIntent:AddAccountSigninIntentReauthPrimaryAccount];
+  [signin_manager_
+      showSigninWithIntent:AddAccountSigninIntentReauthPrimaryAccount];
   [identity_interaction_manager_
       addAccountViewControllerDidThrowUnhandledError];
 
@@ -239,14 +251,15 @@ TEST_F(AddAccountSigninMediatorTest, ReauthIntentWithErrorHandledByMediator) {
   EXPECT_FALSE(identity_service_->HasIdentities());
 }
 
-TEST_F(AddAccountSigninMediatorTest, ReauthSigninInterrupted) {
+TEST_F(AddAccountSigninManagerTest, ReauthSigninInterrupted) {
   // Verify that completion was called with interrupted result state.
-  OCMExpect([mediator_delegate_
-      addAccountSigninMediatorFinishedWithSigninResult:
+  OCMExpect([signin_manager_delegate_
+      addAccountSigninManagerFinishedWithSigninResult:
           SigninCoordinatorResultInterrupted
-                                              identity:fake_identity_]);
+                                             identity:fake_identity_]);
 
-  [mediator_ setSigninInterrupted:YES];
-  [mediator_ handleSigninWithIntent:AddAccountSigninIntentReauthPrimaryAccount];
+  [signin_manager_ setSigninInterrupted:YES];
+  [signin_manager_
+      showSigninWithIntent:AddAccountSigninIntentReauthPrimaryAccount];
   [identity_interaction_manager_ addAccountViewControllerDidTapSignIn];
 }
