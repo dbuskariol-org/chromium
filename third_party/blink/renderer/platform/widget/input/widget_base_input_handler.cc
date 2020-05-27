@@ -2,27 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/renderer/input/render_widget_input_handler.h"
+#include "third_party/blink/renderer/platform/widget/input/widget_base_input_handler.h"
 
 #include <stddef.h>
 #include <stdint.h>
 #include <utility>
 
-#include "base/auto_reset.h"
-#include "base/command_line.h"
 #include "base/metrics/histogram_macros.h"
 #include "build/build_config.h"
 #include "cc/metrics/event_metrics.h"
 #include "cc/paint/element_id.h"
 #include "cc/trees/latency_info_swap_promise_monitor.h"
-#include "components/viz/common/surfaces/frame_sink_id.h"
-#include "content/public/common/content_switches.h"
-#include "content/public/renderer/render_frame.h"
-#include "content/renderer/ime_event_guard.h"
-#include "content/renderer/input/render_widget_input_handler_delegate.h"
-#include "content/renderer/render_frame_proxy.h"
-#include "content/renderer/render_thread_impl.h"
-#include "content/renderer/render_widget.h"
+#include "cc/trees/layer_tree_host.h"
 #include "services/tracing/public/cpp/perfetto/flow_event_utils.h"
 #include "services/tracing/public/cpp/perfetto/macros.h"
 #include "third_party/blink/public/common/input/web_gesture_device.h"
@@ -38,30 +29,18 @@
 #include "third_party/blink/public/web/web_frame_widget.h"
 #include "third_party/blink/public/web/web_local_frame.h"
 #include "third_party/blink/public/web/web_node.h"
-#include "ui/events/blink/blink_event_util.h"
-#include "ui/events/blink/web_input_event_traits.h"
-#include "ui/gfx/geometry/dip_util.h"
-#include "ui/gfx/geometry/point_conversions.h"
+#include "third_party/blink/renderer/platform/widget/widget_base.h"
+#include "third_party/blink/renderer/platform/widget/widget_base_client.h"
 #include "ui/latency/latency_info.h"
 
 #if defined(OS_ANDROID)
 #include <android/keycodes.h>
 #endif
 
-using blink::WebGestureEvent;
-using blink::WebInputEvent;
-using blink::WebInputEventResult;
-using blink::WebKeyboardEvent;
-using blink::WebMouseEvent;
-using blink::WebMouseWheelEvent;
-using blink::WebPointerEvent;
-using blink::WebTouchEvent;
-using blink::WebTouchPoint;
 using perfetto::protos::pbzero::ChromeLatencyInfo;
 using perfetto::protos::pbzero::TrackEvent;
-using ui::DidOverscrollParams;
 
-namespace content {
+namespace blink {
 
 namespace {
 
@@ -71,9 +50,11 @@ int64_t GetEventLatencyMicros(base::TimeTicks event_timestamp,
 }
 
 void LogInputEventLatencyUma(const WebInputEvent& event, base::TimeTicks now) {
-  UMA_HISTOGRAM_CUSTOM_COUNTS("Event.AggregatedLatency.Renderer2",
-                              GetEventLatencyMicros(event.TimeStamp(), now), 1,
-                              10000000, 100);
+  UMA_HISTOGRAM_CUSTOM_COUNTS(
+      "Event.AggregatedLatency.Renderer2",
+      base::saturated_cast<base::HistogramBase::Sample>(
+          GetEventLatencyMicros(event.TimeStamp(), now)),
+      1, 10000000, 100);
 }
 
 void LogPassiveEventListenersUma(WebInputEventResult result,
@@ -136,7 +117,7 @@ void LogAllPassiveEventListenersUma(const WebInputEvent& input_event,
   }
 }
 
-blink::WebCoalescedInputEvent GetCoalescedWebPointerEventForTouch(
+WebCoalescedInputEvent GetCoalescedWebPointerEventForTouch(
     const WebPointerEvent& pointer_event,
     const std::vector<std::unique_ptr<WebInputEvent>>& coalesced_events,
     const std::vector<std::unique_ptr<WebInputEvent>>& predicted_events,
@@ -170,30 +151,48 @@ blink::WebCoalescedInputEvent GetCoalescedWebPointerEventForTouch(
     }
   }
 
-  return blink::WebCoalescedInputEvent(
-      pointer_event.Clone(), std::move(related_pointer_events),
-      std::move(predicted_pointer_events), latency);
+  return WebCoalescedInputEvent(pointer_event.Clone(),
+                                std::move(related_pointer_events),
+                                std::move(predicted_pointer_events), latency);
 }
 
-viz::FrameSinkId GetRemoteFrameSinkId(const blink::WebHitTestResult& result) {
-  const blink::WebNode& node = result.GetNode();
-  DCHECK(!node.IsNull());
-  blink::WebFrame* result_frame = blink::WebFrame::FromFrameOwnerElement(node);
-  if (!result_frame || !result_frame->IsWebRemoteFrame())
-    return viz::FrameSinkId();
-
-  blink::WebRemoteFrame* remote_frame = result_frame->ToWebRemoteFrame();
-  if (remote_frame->IsIgnoredForHitTest() || !result.ContentBoxContainsPoint())
-    return viz::FrameSinkId();
-
-  return RenderFrameProxy::FromWebFrame(remote_frame)->frame_sink_id();
-}
-
-blink::mojom::InputEventResultState GetAckResult(
-    WebInputEventResult processed) {
+mojom::InputEventResultState GetAckResult(WebInputEventResult processed) {
   return processed == WebInputEventResult::kNotHandled
-             ? blink::mojom::InputEventResultState::kNotConsumed
-             : blink::mojom::InputEventResultState::kConsumed;
+             ? mojom::InputEventResultState::kNotConsumed
+             : mojom::InputEventResultState::kConsumed;
+}
+
+bool IsGestureScroll(WebInputEvent::Type type) {
+  switch (type) {
+    case WebGestureEvent::Type::kGestureScrollBegin:
+    case WebGestureEvent::Type::kGestureScrollUpdate:
+    case WebGestureEvent::Type::kGestureScrollEnd:
+      return true;
+    default:
+      return false;
+  }
+}
+
+gfx::PointF PositionInWidgetFromInputEvent(const WebInputEvent& event) {
+  if (WebInputEvent::IsMouseEventType(event.GetType())) {
+    return static_cast<const WebMouseEvent&>(event).PositionInWidget();
+  } else if (WebInputEvent::IsGestureEventType(event.GetType())) {
+    return static_cast<const WebGestureEvent&>(event).PositionInWidget();
+  } else {
+    return gfx::PointF(0, 0);
+  }
+}
+
+bool IsTouchStartOrMove(const WebInputEvent& event) {
+  if (WebInputEvent::IsPointerEventType(event.GetType())) {
+    return static_cast<const WebPointerEvent&>(event)
+        .touch_start_or_first_touch_move;
+  } else if (WebInputEvent::IsTouchEventType(event.GetType())) {
+    return static_cast<const WebTouchEvent&>(event)
+        .touch_start_or_first_touch_move;
+  } else {
+    return false;
+  }
 }
 
 }  // namespace
@@ -201,11 +200,12 @@ blink::mojom::InputEventResultState GetAckResult(
 // This class should be placed on the stack when handling an input event. It
 // stores information from callbacks from blink while handling an input event
 // and allows them to be returned in the InputEventAck result.
-class RenderWidgetInputHandler::HandlingState {
+class WidgetBaseInputHandler::HandlingState {
  public:
-  HandlingState(base::WeakPtr<RenderWidgetInputHandler> input_handler_param,
-                blink::WebInputEvent::Type type)
-      : event_type(type), input_handler(std::move(input_handler_param)) {
+  HandlingState(base::WeakPtr<WidgetBaseInputHandler> input_handler_param,
+                bool is_touch_start_or_move)
+      : touch_start_or_move(is_touch_start_or_move),
+        input_handler(std::move(input_handler_param)) {
     previous_was_handling_input = input_handler->handling_input_event_;
     previous_state = input_handler->handling_input_state_;
     input_handler->handling_input_event_ = true;
@@ -220,138 +220,97 @@ class RenderWidgetInputHandler::HandlingState {
     input_handler->handling_input_event_ = previous_was_handling_input;
     DCHECK_EQ(input_handler->handling_input_state_, this);
     input_handler->handling_input_state_ = previous_state;
+
+#if defined(OS_ANDROID)
+    if (show_virtual_keyboard)
+      input_handler->ShowVirtualKeyboard();
+    else
+      input_handler->UpdateTextInputState();
+#endif
   }
 
   // Used to intercept overscroll notifications while an event is being
   // handled. If the event causes overscroll, the overscroll metadata can be
   // bundled in the event ack, saving an IPC.  Note that we must continue
   // supporting overscroll IPC notifications due to fling animation updates.
-  blink::mojom::DidOverscrollParamsPtr event_overscroll;
+  std::unique_ptr<InputHandlerProxy::DidOverscrollParams> event_overscroll;
 
-  base::Optional<cc::TouchAction> touch_action;
+  base::Optional<WebTouchAction> touch_action;
 
   // Used to hold a sequence of parameters corresponding to scroll gesture
   // events that should be injected once the current input event is done
   // being processed.
   std::unique_ptr<
-      std::vector<RenderWidgetInputHandler::InjectScrollGestureParams>>
+      std::vector<WidgetBaseInputHandler::InjectScrollGestureParams>>
       injected_scroll_params;
 
-  // Type of the input event we are currently handling.
-  blink::WebInputEvent::Type event_type;
+  // Whether the event we are handling is a touch start or move.
+  bool touch_start_or_move;
+
+#if defined(OS_ANDROID)
+  // Whether to show the virtual keyboard or not at the end of processing.
+  bool show_virtual_keyboard = false;
+#endif
 
  private:
   HandlingState* previous_state;
   bool previous_was_handling_input;
-  base::WeakPtr<RenderWidgetInputHandler> input_handler;
+  base::WeakPtr<WidgetBaseInputHandler> input_handler;
 };
 
-RenderWidgetInputHandler::RenderWidgetInputHandler(
-    RenderWidgetInputHandlerDelegate* delegate,
-    RenderWidget* widget)
-    : delegate_(delegate), widget_(widget) {
-  DCHECK(delegate);
-  DCHECK(widget);
-  delegate->SetInputHandler(this);
-}
+WidgetBaseInputHandler::WidgetBaseInputHandler(WidgetBase* widget)
+    : widget_(widget),
+      supports_buffered_touch_(
+          widget_->client()->SupportsBufferedTouchEvents()) {}
 
-RenderWidgetInputHandler::~RenderWidgetInputHandler() = default;
-
-blink::WebHitTestResult RenderWidgetInputHandler::GetHitTestResultAtPoint(
-    const gfx::PointF& point) {
-  gfx::PointF point_in_pixel(point);
-  if (widget_->compositor_deps()->IsUseZoomForDSFEnabled()) {
-    point_in_pixel = gfx::ConvertPointToPixel(
-        widget_->GetOriginalScreenInfo().device_scale_factor, point_in_pixel);
-  }
-  return widget_->GetWebWidget()->HitTestResultAt(point_in_pixel);
-}
-
-viz::FrameSinkId RenderWidgetInputHandler::GetFrameSinkIdAtPoint(
-    const gfx::PointF& point,
-    gfx::PointF* local_point) {
-  blink::WebHitTestResult result = GetHitTestResultAtPoint(point);
-
-  blink::WebNode result_node = result.GetNode();
-  *local_point = gfx::PointF(point);
-
-  // TODO(crbug.com/797828): When the node is null the caller may
-  // need to do extra checks. Like maybe update the layout and then
-  // call the hit-testing API. Either way it might be better to have
-  // a DCHECK for the node rather than a null check here.
-  if (result_node.IsNull()) {
-    return widget_->GetFrameSinkId();
-  }
-
-  viz::FrameSinkId frame_sink_id = GetRemoteFrameSinkId(result);
-  if (frame_sink_id.is_valid()) {
-    *local_point = gfx::PointF(result.LocalPointWithoutContentBoxOffset());
-    if (widget_->compositor_deps()->IsUseZoomForDSFEnabled()) {
-      *local_point = gfx::ConvertPointToDIP(
-          widget_->GetOriginalScreenInfo().device_scale_factor, *local_point);
-    }
-    return frame_sink_id;
-  }
-
-  // Return the FrameSinkId for the current widget if the point did not hit
-  // test to a remote frame, or the point is outside of the remote frame's
-  // content box, or the remote frame doesn't have a valid FrameSinkId yet.
-  return widget_->GetFrameSinkId();
-}
-
-WebInputEventResult RenderWidgetInputHandler::HandleTouchEvent(
-    const blink::WebCoalescedInputEvent& coalesced_event) {
+WebInputEventResult WidgetBaseInputHandler::HandleTouchEvent(
+    const WebCoalescedInputEvent& coalesced_event) {
   const WebInputEvent& input_event = coalesced_event.Event();
 
   if (input_event.GetType() == WebInputEvent::Type::kTouchScrollStarted) {
     WebPointerEvent pointer_event =
         WebPointerEvent::CreatePointerCausesUaActionEvent(
-            blink::WebPointerProperties::PointerType::kUnknown,
+            WebPointerProperties::PointerType::kUnknown,
             input_event.TimeStamp());
-    return widget_->GetWebWidget()->HandleInputEvent(
-        blink::WebCoalescedInputEvent(pointer_event,
-                                      coalesced_event.latency_info()));
+    return widget_->client()->HandleInputEvent(
+        WebCoalescedInputEvent(pointer_event, coalesced_event.latency_info()));
   }
 
   const WebTouchEvent touch_event =
       static_cast<const WebTouchEvent&>(input_event);
   for (unsigned i = 0; i < touch_event.touches_length; ++i) {
     const WebTouchPoint& touch_point = touch_event.touches[i];
-    if (touch_point.state != blink::WebTouchPoint::State::kStateStationary) {
+    if (touch_point.state != WebTouchPoint::State::kStateStationary) {
       const WebPointerEvent& pointer_event =
           WebPointerEvent(touch_event, touch_point);
-      const blink::WebCoalescedInputEvent& coalesced_pointer_event =
+      const WebCoalescedInputEvent& coalesced_pointer_event =
           GetCoalescedWebPointerEventForTouch(
               pointer_event, coalesced_event.GetCoalescedEventsPointers(),
               coalesced_event.GetPredictedEventsPointers(),
               coalesced_event.latency_info());
-      widget_->GetWebWidget()->HandleInputEvent(coalesced_pointer_event);
+      widget_->client()->HandleInputEvent(coalesced_pointer_event);
     }
   }
-  return widget_->GetWebWidget()->DispatchBufferedTouchEvents();
+  return widget_->client()->DispatchBufferedTouchEvents();
 }
 
-void RenderWidgetInputHandler::HandleInputEvent(
-    const blink::WebCoalescedInputEvent& coalesced_event,
+void WidgetBaseInputHandler::HandleInputEvent(
+    const WebCoalescedInputEvent& coalesced_event,
     HandledEventCallback callback) {
   const WebInputEvent& input_event = coalesced_event.Event();
 
-  // Keep a WeakPtr to this RenderWidgetInputHandler to detect if executing the
+  // Keep a WeakPtr to this WidgetBaseInputHandler to detect if executing the
   // input event destroyed the associated RenderWidget (and this handler).
-  base::WeakPtr<RenderWidgetInputHandler> weak_self =
+  base::WeakPtr<WidgetBaseInputHandler> weak_self =
       weak_ptr_factory_.GetWeakPtr();
-  HandlingState handling_state(weak_self, input_event.GetType());
-
-#if defined(OS_ANDROID)
-  ImeEventGuard guard(widget_->AsWeakPtr());
-#endif
+  HandlingState handling_state(weak_self, IsTouchStartOrMove(input_event));
 
   base::TimeTicks start_time;
   if (base::TimeTicks::IsHighResolution())
     start_time = base::TimeTicks::Now();
 
   TRACE_EVENT1("renderer,benchmark,rail",
-               "RenderWidgetInputHandler::OnHandleInputEvent", "event",
+               "WidgetBaseInputHandler::OnHandleInputEvent", "event",
                WebInputEvent::GetName(input_event.GetType()));
   int64_t trace_id = coalesced_event.latency_info().trace_id();
   TRACE_EVENT("input,benchmark", "LatencyInfo.Flow",
@@ -373,10 +332,10 @@ void RenderWidgetInputHandler::HandleInputEvent(
   swap_latency_info.AddLatencyNumber(
       ui::LatencyComponentType::INPUT_EVENT_LATENCY_RENDERER_MAIN_COMPONENT);
   cc::LatencyInfoSwapPromiseMonitor swap_promise_monitor(
-      &swap_latency_info, widget_->layer_tree_host()->GetSwapPromiseManager(),
+      &swap_latency_info, widget_->LayerTreeHost()->GetSwapPromiseManager(),
       nullptr);
   auto scoped_event_metrics_monitor =
-      widget_->layer_tree_host()->GetScopedEventMetricsMonitor(
+      widget_->LayerTreeHost()->GetScopedEventMetricsMonitor(
           cc::EventMetrics::Create(input_event.GetTypeAsUiEventType(),
                                    input_event.TimeStamp(),
                                    input_event.GetScrollInputType()));
@@ -390,7 +349,7 @@ void RenderWidgetInputHandler::HandleInputEvent(
                  mouse_event.PositionInWidget().x(), "y",
                  mouse_event.PositionInWidget().y());
 
-    prevent_default = delegate_->WillHandleMouseEvent(mouse_event);
+    prevent_default = widget_->client()->WillHandleMouseEvent(mouse_event);
 
     // Reset the last known cursor if mouse has left this widget. So next
     // time that the mouse enters we always set the cursor accordingly.
@@ -417,7 +376,8 @@ void RenderWidgetInputHandler::HandleInputEvent(
     const WebKeyboardEvent& key_event =
         static_cast<const WebKeyboardEvent&>(input_event);
     if (key_event.native_key_code == AKEYCODE_DPAD_CENTER &&
-        widget_->GetTextInputType() != ui::TEXT_INPUT_TYPE_NONE) {
+        widget_->client()->GetTextInputType() !=
+            WebTextInputType::kWebTextInputTypeNone) {
       // Show the keyboard on keyup (not keydown) to match the behavior of
       // Android's TextView.
       if (key_event.GetType() == WebInputEvent::Type::kKeyUp)
@@ -433,8 +393,8 @@ void RenderWidgetInputHandler::HandleInputEvent(
   if (WebInputEvent::IsGestureEventType(input_event.GetType())) {
     const WebGestureEvent& gesture_event =
         static_cast<const WebGestureEvent&>(input_event);
-    prevent_default =
-        prevent_default || delegate_->WillHandleGestureEvent(gesture_event);
+    prevent_default = prevent_default ||
+                      widget_->client()->WillHandleGestureEvent(gesture_event);
   }
 
   WebInputEventResult processed = prevent_default
@@ -443,16 +403,15 @@ void RenderWidgetInputHandler::HandleInputEvent(
   if (input_event.GetType() != WebInputEvent::Type::kChar ||
       !suppress_next_char_events_) {
     suppress_next_char_events_ = false;
-    if (processed == WebInputEventResult::kNotHandled &&
-        widget_->GetWebWidget()) {
-      if (delegate_->SupportsBufferedTouchEvents() &&
+    if (processed == WebInputEventResult::kNotHandled) {
+      if (supports_buffered_touch_ &&
           WebInputEvent::IsTouchEventType(input_event.GetType()))
         processed = HandleTouchEvent(coalesced_event);
       else
-        processed = widget_->GetWebWidget()->HandleInputEvent(coalesced_event);
+        processed = widget_->client()->HandleInputEvent(coalesced_event);
     }
 
-    // The associated RenderWidget (and this RenderWidgetInputHandler) could
+    // The associated WidgetBase (and this WidgetBaseInputHandler) could
     // have been destroyed. If it was return early before accessing any more of
     // this class.
     if (!weak_self) {
@@ -499,8 +458,8 @@ void RenderWidgetInputHandler::HandleInputEvent(
       input_event.GetType() == WebInputEvent::Type::kGestureScrollUpdate) {
     const WebGestureEvent& gesture_event =
         static_cast<const WebGestureEvent&>(input_event);
-    if (gesture_event.SourceDevice() == blink::WebGestureDevice::kTouchpad ||
-        gesture_event.SourceDevice() == blink::WebGestureDevice::kTouchscreen) {
+    if (gesture_event.SourceDevice() == WebGestureDevice::kTouchpad ||
+        gesture_event.SourceDevice() == WebGestureDevice::kTouchscreen) {
       gfx::Vector2dF latest_overscroll_delta =
           handling_state.event_overscroll
               ? handling_state.event_overscroll->latest_overscroll_delta
@@ -509,7 +468,7 @@ void RenderWidgetInputHandler::HandleInputEvent(
           handling_state.event_overscroll
               ? handling_state.event_overscroll->overscroll_behavior
               : cc::OverscrollBehavior();
-      delegate_->ObserveGestureEventAndResult(
+      widget_->client()->ObserveGestureEventAndResult(
           gesture_event, latest_overscroll_delta, overscroll_behavior,
           processed != WebInputEventResult::kNotHandled);
     }
@@ -529,12 +488,12 @@ void RenderWidgetInputHandler::HandleInputEvent(
   if ((processed != WebInputEventResult::kNotHandled &&
        input_event.GetType() == WebInputEvent::Type::kTouchEnd) ||
       show_virtual_keyboard_for_mouse) {
-    delegate_->ShowVirtualKeyboard();
+    ShowVirtualKeyboard();
   }
 
   if (!prevent_default &&
       WebInputEvent::IsKeyboardEventType(input_event.GetType()))
-    delegate_->OnDidHandleKeyEvent();
+    widget_->client()->DidHandleKeyEvent();
 
 // TODO(rouslan): Fix ChromeOS and Windows 8 behavior of autofill popup with
 // virtual keyboard.
@@ -543,7 +502,7 @@ void RenderWidgetInputHandler::HandleInputEvent(
   if ((processed != WebInputEventResult::kNotHandled &&
        input_event.GetType() == WebInputEvent::Type::kMouseDown) ||
       input_event.GetType() == WebInputEvent::Type::kGestureTap) {
-    delegate_->FocusChangeComplete();
+    widget_->client()->FocusChangeComplete();
   }
 #endif
 
@@ -553,33 +512,37 @@ void RenderWidgetInputHandler::HandleInputEvent(
          (handling_state.injected_scroll_params)->empty());
 }
 
-void RenderWidgetInputHandler::DidOverscrollFromBlink(
-    const gfx::Vector2dF& overscrollDelta,
-    const gfx::Vector2dF& accumulatedOverscroll,
+bool WidgetBaseInputHandler::DidOverscrollFromBlink(
+    const gfx::Vector2dF& overscroll_delta,
+    const gfx::Vector2dF& accumulated_overscroll,
     const gfx::PointF& position,
     const gfx::Vector2dF& velocity,
     const cc::OverscrollBehavior& behavior) {
-  blink::mojom::DidOverscrollParamsPtr params =
-      blink::mojom::DidOverscrollParams::New(
-          accumulatedOverscroll, overscrollDelta, velocity, position, behavior);
+  // We aren't currently handling an event. Allow the processing to be
+  // dispatched separately from the ACK.
+  if (!handling_input_state_)
+    return true;
 
   // If we're currently handling an event, stash the overscroll data such that
   // it can be bundled in the event ack.
-  if (handling_input_state_) {
-    handling_input_state_->event_overscroll = std::move(params);
-    return;
-  }
-
-  delegate_->OnDidOverscroll(std::move(params));
+  std::unique_ptr<InputHandlerProxy::DidOverscrollParams> params =
+      std::make_unique<InputHandlerProxy::DidOverscrollParams>();
+  params->accumulated_overscroll = accumulated_overscroll;
+  params->latest_overscroll_delta = overscroll_delta;
+  params->current_fling_velocity = velocity;
+  params->causal_event_viewport_point = position;
+  params->overscroll_behavior = behavior;
+  handling_input_state_->event_overscroll = std::move(params);
+  return false;
 }
 
-void RenderWidgetInputHandler::InjectGestureScrollEvent(
-    blink::WebGestureDevice device,
+void WidgetBaseInputHandler::InjectGestureScrollEvent(
+    WebGestureDevice device,
     const gfx::Vector2dF& delta,
     ui::ScrollGranularity granularity,
     cc::ElementId scrollable_area_element_id,
     WebInputEvent::Type injected_type) {
-  DCHECK(ui::IsGestureScroll(injected_type));
+  DCHECK(IsGestureScroll(injected_type));
   // If we're currently handling an input event, cache the appropriate
   // parameters so we can dispatch the events directly once blink finishes
   // handling the event.
@@ -613,21 +576,14 @@ void RenderWidgetInputHandler::InjectGestureScrollEvent(
           scrollable_area_element_id.GetStableId();
     }
 
-    std::unique_ptr<blink::WebCoalescedInputEvent> web_scoped_gesture_event =
-        std::make_unique<blink::WebCoalescedInputEvent>(
-            std::move(gesture_event), ui::LatencyInfo());
-    // TODO(acomminos): If/when we add support for gesture event attribution on
-    //                  the impl thread, have the caller provide attribution.
-    blink::WebInputEventAttribution attribution;
-
-    widget_->GetInputEventQueue()->HandleEvent(
-        std::move(web_scoped_gesture_event), DISPATCH_TYPE_NON_BLOCKING,
-        blink::mojom::InputEventResultState::kNotConsumed, attribution,
-        HandledEventCallback());
+    std::unique_ptr<WebCoalescedInputEvent> web_scoped_gesture_event =
+        std::make_unique<WebCoalescedInputEvent>(std::move(gesture_event),
+                                                 ui::LatencyInfo());
+    widget_->client()->QueueSyntheticEvent(std::move(web_scoped_gesture_event));
   }
 }
 
-void RenderWidgetInputHandler::HandleInjectedScrollGestures(
+void WidgetBaseInputHandler::HandleInjectedScrollGestures(
     std::vector<InjectScrollGestureParams> injected_scroll_params,
     const WebInputEvent& input_event,
     const ui::LatencyInfo& original_latency_info) {
@@ -638,7 +594,7 @@ void RenderWidgetInputHandler::HandleInjectedScrollGestures(
       ui::INPUT_EVENT_LATENCY_ORIGINAL_COMPONENT, &original_timestamp);
   DCHECK(found_original_component);
 
-  gfx::PointF position = ui::PositionInWidgetFromInputEvent(input_event);
+  gfx::PointF position = PositionInWidgetFromInputEvent(input_event);
   for (const InjectScrollGestureParams& params : injected_scroll_params) {
     // Set up a new LatencyInfo for the injected scroll - this is the original
     // LatencyInfo for the input event that was being handled when the scroll
@@ -652,7 +608,7 @@ void RenderWidgetInputHandler::HandleInjectedScrollGestures(
     // Currently only scrollbar is supported - if this DCHECK hits due to a
     // new type being injected, please modify the type passed to
     // |set_source_event_type()|.
-    DCHECK(params.device == blink::WebGestureDevice::kScrollbar);
+    DCHECK(params.device == WebGestureDevice::kScrollbar);
     scrollbar_latency_info.set_source_event_type(
         ui::SourceEventType::SCROLLBAR);
     scrollbar_latency_info.AddLatencyNumber(
@@ -695,36 +651,52 @@ void RenderWidgetInputHandler::HandleInjectedScrollGestures(
     {
       cc::LatencyInfoSwapPromiseMonitor swap_promise_monitor(
           &scrollbar_latency_info,
-          widget_->layer_tree_host()->GetSwapPromiseManager(), nullptr);
+          widget_->LayerTreeHost()->GetSwapPromiseManager(), nullptr);
       auto scoped_event_metrics_monitor =
-          widget_->layer_tree_host()->GetScopedEventMetricsMonitor(
+          widget_->LayerTreeHost()->GetScopedEventMetricsMonitor(
               cc::EventMetrics::Create(gesture_event->GetTypeAsUiEventType(),
                                        gesture_event->TimeStamp(),
                                        gesture_event->GetScrollInputType()));
-      widget_->GetWebWidget()->HandleInputEvent(blink::WebCoalescedInputEvent(
-          *gesture_event, scrollbar_latency_info));
+      widget_->client()->HandleInputEvent(
+          WebCoalescedInputEvent(*gesture_event, scrollbar_latency_info));
     }
   }
 }
 
-bool RenderWidgetInputHandler::DidChangeCursor(const ui::Cursor& cursor) {
+bool WidgetBaseInputHandler::DidChangeCursor(const ui::Cursor& cursor) {
   if (current_cursor_.has_value() && current_cursor_.value() == cursor)
     return false;
   current_cursor_ = cursor;
   return true;
 }
 
-bool RenderWidgetInputHandler::ProcessTouchAction(
-    cc::TouchAction touch_action) {
+bool WidgetBaseInputHandler::ProcessTouchAction(WebTouchAction touch_action) {
   if (!handling_input_state_)
     return false;
   // Ignore setTouchAction calls that result from synthetic touch events (eg.
   // when blink is emulating touch with mouse).
-  if (handling_input_state_->event_type != WebInputEvent::Type::kTouchStart)
+  if (!handling_input_state_->touch_start_or_move)
     return false;
-
   handling_input_state_->touch_action = touch_action;
   return true;
 }
 
-}  // namespace content
+void WidgetBaseInputHandler::ShowVirtualKeyboard() {
+#if defined(OS_ANDROID)
+  if (handling_input_state_) {
+    handling_input_state_->show_virtual_keyboard = true;
+    return;
+  }
+#endif
+  widget_->client()->ShowVirtualKeyboard();
+}
+
+void WidgetBaseInputHandler::UpdateTextInputState() {
+#if defined(OS_ANDROID)
+  if (handling_input_state_)
+    return;
+#endif
+  widget_->client()->UpdateTextInputState();
+}
+
+}  // namespace blink

@@ -1979,7 +1979,7 @@ void RenderFrameImpl::PepperDidChangeCursor(PepperPluginInstanceImpl* instance,
   // the plugin would like to set an invisible cursor when there isn't any user
   // input for a while.
   if (instance == pepper_last_mouse_event_target_)
-    GetLocalRootRenderWidget()->DidChangeCursor(cursor);
+    GetLocalRootRenderWidget()->GetWebWidget()->SetCursor(cursor);
 }
 
 void RenderFrameImpl::PepperDidReceiveMouseEvent(
@@ -4396,7 +4396,7 @@ void RenderFrameImpl::AbortClientNavigation() {
 }
 
 void RenderFrameImpl::DidChangeSelection(bool is_empty_selection) {
-  if (!GetLocalRootRenderWidget()->input_handler().handling_input_event() &&
+  if (!GetLocalRootRenderWidget()->GetWebWidget()->HandlingInputEvent() &&
       !handling_select_range_)
     return;
 
