@@ -14207,6 +14207,19 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="4" label="Channel is negotiated."/>
 </enum>
 
+<enum name="DataPackLoadErrors">
+  <int value="1" label="INIT_FAILED (obsolete)"/>
+  <int value="2" label="BAD_VERSION"/>
+  <int value="3" label="INDEX_TRUNCATED"/>
+  <int value="4" label="ENTRY_NOT_FOUND"/>
+  <int value="5" label="HEADER_TRUNCATED"/>
+  <int value="6" label="WRONG_ENCODING"/>
+  <int value="7" label="INIT_FAILED_FROM_FILE"/>
+  <int value="8" label="UNZIP_FAILED"/>
+  <int value="9" label="OPEN_FAILED"/>
+  <int value="10" label="MAP_FAILED"/>
+</enum>
+
 <enum name="DataReductionProxyAutoLoFiAccuracy">
   <int value="0"
       label="Estimated network quality as slow and was actually slow"/>
