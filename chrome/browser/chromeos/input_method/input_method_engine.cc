@@ -104,6 +104,12 @@ void InputMethodEngine::CandidateClicked(uint32_t index) {
                                 InputMethodEngineBase::MOUSE_BUTTON_LEFT);
 }
 
+void InputMethodEngine::AssistiveWindowButtonClicked(
+    const ui::ime::ButtonId& id,
+    const ui::ime::AssistiveWindowType& type) {
+  observer_->OnAssistiveWindowButtonClicked(id, type);
+}
+
 void InputMethodEngine::SetMirroringEnabled(bool mirroring_enabled) {
   if (mirroring_enabled != is_mirroring_) {
     is_mirroring_ = mirroring_enabled;

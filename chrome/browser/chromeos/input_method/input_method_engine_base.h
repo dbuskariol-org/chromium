@@ -22,6 +22,11 @@ namespace ui {
 struct CompositionText;
 class IMEEngineHandlerInterface;
 class KeyEvent;
+
+namespace ime {
+enum class ButtonId;
+enum class AssistiveWindowType;
+}  // namespace ime
 }  // namespace ui
 
 namespace input_method {
@@ -113,6 +118,11 @@ class InputMethodEngineBase : virtual public ui::IMEEngineHandlerInterface {
         const std::string& component_id,
         int candidate_id,
         InputMethodEngineBase::MouseButtonEvent button) = 0;
+
+    // Called when the user clicks on a button in assistive window.
+    virtual void OnAssistiveWindowButtonClicked(
+        const ui::ime::ButtonId& id,
+        const ui::ime::AssistiveWindowType& type) {}
 
     // Called when a menu item for this IME is interacted with.
     virtual void OnMenuItemActivated(const std::string& component_id,

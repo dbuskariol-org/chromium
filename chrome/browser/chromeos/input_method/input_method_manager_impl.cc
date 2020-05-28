@@ -49,6 +49,7 @@
 #include "ui/base/ime/chromeos/ime_keyboard_impl.h"
 #include "ui/base/ime/chromeos/input_method_delegate.h"
 #include "ui/base/ime/ime_bridge.h"
+#include "ui/chromeos/ime/assistive_delegate.h"
 #include "ui/chromeos/ime/input_method_menu_item.h"
 #include "ui/chromeos/ime/input_method_menu_manager.h"
 #include "ui/ozone/public/ozone_platform.h"
@@ -1262,6 +1263,15 @@ void InputMethodManagerImpl::CandidateWindowClosed() {
     observer.CandidateWindowClosed(this);
 }
 
+void InputMethodManagerImpl::AssistiveWindowButtonClicked(
+    ui::ime::ButtonId id,
+    ui::ime::AssistiveWindowType type) const {
+  ui::IMEEngineHandlerInterface* engine =
+      ui::IMEBridge::Get()->GetCurrentEngineHandler();
+  if (engine)
+    engine->AssistiveWindowButtonClicked(id, type);
+}
+
 void InputMethodManagerImpl::ImeMenuActivationChanged(bool is_active) {
   // Saves the state that whether the expanded IME menu has been activated by
   // users. This method is only called when the preference is changing.
@@ -1299,7 +1309,8 @@ void InputMethodManagerImpl::MaybeInitializeAssistiveWindowController() {
   if (assistive_window_controller_.get())
     return;
 
-  assistive_window_controller_ = std::make_unique<AssistiveWindowController>();
+  assistive_window_controller_ =
+      std::make_unique<AssistiveWindowController>(this);
   ui::IMEBridge::Get()->SetAssistiveWindowHandler(
       assistive_window_controller_.get());
 }
