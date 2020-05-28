@@ -4900,6 +4900,19 @@ Unknown properties are collapsed to zero. -->
   <int value="14" label="Omnibox icon shown, but not bubble (max strikes)"/>
 </enum>
 
+<enum name="AutofillSaveCreditCardPromptOfferEnum">
+  <int value="0" label="Shown"/>
+  <int value="1" label="Not shown, max strikes reached"/>
+</enum>
+
+<enum name="AutofillSaveCreditCardPromptResultEnum">
+  <int value="0" label="Accepted"/>
+  <int value="1" label="Cancelled"/>
+  <int value="2" label="Closed"/>
+  <int value="3" label="Not interacted"/>
+  <int value="4" label="Lost focus"/>
+</enum>
+
 <enum name="AutofillSaveType">
   <int value="0" label="Local"/>
   <int value="1" label="Server"/>
