@@ -1904,9 +1904,16 @@ class SafeBrowsingBlockingPageDelayedWarningBrowserTest
     content::WebContents* contents =
         browser->tab_strip_model()->GetActiveWebContents();
     content::TestNavigationObserver observer(contents);
+    content::WebContentsConsoleObserver console_observer(contents);
+    console_observer.SetPattern(
+        "A SafeBrowsing warning is pending on this page*");
+
     ui_test_utils::NavigateToURL(
         browser, GURL("data:application/octet-stream;base64,SGVsbG8="));
     observer.WaitForNavigationFinished();
+    console_observer.Wait();
+
+    ASSERT_EQ(1u, console_observer.messages().size());
   }
 
   void NavigateAndAssertNoInterstitial() {
