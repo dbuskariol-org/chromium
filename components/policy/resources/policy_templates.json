@@ -12125,7 +12125,7 @@
       'tags': [],
       'desc': '''Configuring this policy allows to specify which variations are allowed to be applied in <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph>.
 
-      Variations provide a mean for offering modifications to <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> without shipping a new version of the browser by selectively enabling or disabling already existing features.
+      Variations provide a means for offering modifications to <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> without shipping a new version of the browser by selectively enabling or disabling already existing features.
 
       Setting the <ph name="VARIATIONS_ENABLED_OPTION_NAME">VariationsEnabled</ph> (value 0), or leaving the policy not set allows all variations to be applied to the browser.
 
@@ -12170,7 +12170,7 @@
       'tags': [],
       'desc': '''Configuring this policy allows to specify which variations are allowed to be applied on an enterprise-managed <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> device.
 
-      Variations provide a mean for offering modifications to <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> without shipping a new version  by selectively enabling or disabling already existing features.
+      Variations provide a means for offering modifications to <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph> without shipping a new version  by selectively enabling or disabling already existing features.
 
       Setting the <ph name="VARIATIONS_ENABLED_OPTION_NAME">VariationsEnabled</ph> (value 0), or leaving the policy not set allows all variations to be applied to <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph>.
 
