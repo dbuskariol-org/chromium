@@ -40,7 +40,7 @@ class COMPONENT_EXPORT(DLCSERVICE_CLIENT) DlcserviceClient {
 
     // Is called whenever the state of a DLC is changed. Changing the
     // installation progress of the DLC constitues as a state change.
-    virtual void OnDlcStateChanged(const dlcservice::DlcState& dlc_state) {}
+    virtual void OnDlcStateChanged(const dlcservice::DlcState& dlc_state) = 0;
 
    protected:
     Observer() = default;
