@@ -24,6 +24,7 @@ class Rect;
 
 namespace ui {
 
+class InputMethodKeyboardController;
 class KeyEvent;
 
 // A interface to handle the engine handler method call.
@@ -113,6 +114,10 @@ class COMPONENT_EXPORT(UI_BASE_IME) IMEEngineHandlerInterface {
 
   // Called when the composition bounds changed.
   virtual void SetCompositionBounds(const std::vector<gfx::Rect>& bounds) = 0;
+
+  // Gets the implementation of the keyboard controller.
+  virtual ui::InputMethodKeyboardController* GetInputMethodKeyboardController()
+      const = 0;
 
 #if defined(OS_CHROMEOS)
 

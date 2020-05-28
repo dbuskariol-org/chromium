@@ -8,7 +8,9 @@
 #include <memory>
 #include <utility>
 
+#include "ash/keyboard/ui/keyboard_ui_controller.h"
 #include "base/check.h"
+#include "base/logging.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/notreached.h"
 #include "base/strings/string_number_conversions.h"
@@ -114,6 +116,18 @@ void InputMethodEngine::SetCastingEnabled(bool casting_enabled) {
     is_casting_ = casting_enabled;
     observer_->OnScreenProjectionChanged(is_mirroring_ || is_casting_);
   }
+}
+
+ui::InputMethodKeyboardController*
+InputMethodEngine::GetInputMethodKeyboardController() const {
+  // Callers expect a nullptr when the keyboard is disabled. See
+  // https://crbug.com/850020.
+  if (!keyboard::KeyboardUIController::HasInstance() ||
+      !keyboard::KeyboardUIController::Get()->IsEnabled()) {
+    return nullptr;
+  }
+  return keyboard::KeyboardUIController::Get()
+      ->input_method_keyboard_controller();
 }
 
 const InputMethodEngine::CandidateWindowProperty&

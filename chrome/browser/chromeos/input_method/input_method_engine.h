@@ -104,6 +104,8 @@ class InputMethodEngine : public ::input_method::InputMethodEngineBase,
   void CandidateClicked(uint32_t index) override;
   void SetMirroringEnabled(bool mirroring_enabled) override;
   void SetCastingEnabled(bool casting_enabled) override;
+  ui::InputMethodKeyboardController* GetInputMethodKeyboardController()
+      const override;
 
   // SuggestionHandlerInterface overrides.
   bool DismissSuggestion(int context_id, std::string* error) override;

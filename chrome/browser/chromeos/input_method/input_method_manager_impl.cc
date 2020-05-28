@@ -13,7 +13,6 @@
 #include <sstream>
 #include <utility>
 
-#include "ash/keyboard/ui/keyboard_ui_controller.h"
 #include "ash/public/cpp/ash_features.h"
 #include "base/bind.h"
 #include "base/feature_list.h"
@@ -1420,14 +1419,11 @@ void InputMethodManagerImpl::NotifyObserversImeExtraInputStateChange() {
 
 ui::InputMethodKeyboardController*
 InputMethodManagerImpl::GetInputMethodKeyboardController() {
-  // Callers expect a nullptr when the keyboard is disabled. See
-  // https://crbug.com/850020.
-  if (!keyboard::KeyboardUIController::HasInstance() ||
-      !keyboard::KeyboardUIController::Get()->IsEnabled()) {
+  ui::IMEEngineHandlerInterface* engine =
+      ui::IMEBridge::Get()->GetCurrentEngineHandler();
+  if (!engine)
     return nullptr;
-  }
-  return keyboard::KeyboardUIController::Get()
-      ->input_method_keyboard_controller();
+  return engine->GetInputMethodKeyboardController();
 }
 
 void InputMethodManagerImpl::ReloadKeyboard() {

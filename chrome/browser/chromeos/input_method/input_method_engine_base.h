@@ -145,6 +145,8 @@ class InputMethodEngineBase : virtual public ui::IMEEngineHandlerInterface {
                           uint32_t anchor_pos,
                           uint32_t offset_pos) override;
   void SetCompositionBounds(const std::vector<gfx::Rect>& bounds) override;
+  ui::InputMethodKeyboardController* GetInputMethodKeyboardController()
+      const override;
 
   // Returns the current active input_component id.
   const std::string& GetActiveComponentId() const;
