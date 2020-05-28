@@ -5880,3 +5880,4 @@ crbug.com/1046784 http/tests/devtools/elements/styles/stylesheet-tracking.js [ P
 
 # Sheriff 2020-05-28
 crbug.com/1087208 http/tests/images/document-policy-oversized-images-resize.php [ Pass Failure ]
+crbug.com/1083585 [ Linux ] geolocation-api/watchPosition-page-visibility.html [ Pass Failure ]
