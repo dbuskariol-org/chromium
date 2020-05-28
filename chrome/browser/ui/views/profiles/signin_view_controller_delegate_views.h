@@ -41,10 +41,6 @@ class SigninViewControllerDelegateViews
   static std::unique_ptr<views::WebView> CreateReauthConfirmationWebView(
       Browser* browser);
 
-  static std::unique_ptr<views::WebView> CreateGaiaReauthWebView(
-      Browser* browser,
-      base::OnceCallback<void(signin::ReauthResult)> reauth_callback);
-
   // views::DialogDelegateView:
   views::View* GetContentsView() override;
   views::Widget* GetWidget() override;
@@ -57,6 +53,7 @@ class SigninViewControllerDelegateViews
   void CloseModalSignin() override;
   void ResizeNativeView(int height) override;
   content::WebContents* GetWebContents() override;
+  void SetWebContents(content::WebContents* web_contents) override;
 
   // content::WebContentsDelegate:
   bool HandleContextMenu(content::RenderFrameHost* render_frame_host,
@@ -95,8 +92,8 @@ class SigninViewControllerDelegateViews
 
   Browser* browser() { return browser_; }
 
-  content::WebContents* const web_contents_;      // Not owned.
-  Browser* const browser_;                        // Not owned.
+  content::WebContents* web_contents_;  // Not owned.
+  Browser* const browser_;              // Not owned.
   views::WebView* content_view_;
   views::Widget* modal_signin_widget_;  // Not owned.
   ui::ModalType dialog_modal_type_;

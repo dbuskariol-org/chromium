@@ -12,7 +12,6 @@
 #include "chrome/browser/profiles/profile.h"
 #include "chrome/browser/profiles/profile_avatar_icon_util.h"
 #include "chrome/browser/signin/reauth_result.h"
-#include "chrome/browser/signin/reauth_tab_helper.h"
 #include "chrome/browser/signin/signin_promo.h"
 #include "chrome/browser/sync/profile_sync_service_factory.h"
 #include "chrome/browser/ui/browser.h"
@@ -50,12 +49,6 @@ int GetSyncConfirmationDialogPreferredHeight(Profile* profile) {
              : kSigninErrorDialogHeight;
 }
 
-void CompleteReauthFlow(Browser* browser,
-                        base::OnceCallback<void(signin::ReauthResult)> callback,
-                        signin::ReauthResult result) {
-  browser->signin_view_controller()->CloseModalSignin();
-  std::move(callback).Run(result);
-}
 }  // namespace
 
 // static
@@ -81,32 +74,6 @@ SigninViewControllerDelegateViews::CreateReauthConfirmationWebView(
     Browser* browser) {
   return CreateDialogWebView(browser, chrome::kChromeUISigninReauthURL,
                              kReauthDialogHeight, kReauthDialogWidth);
-}
-
-// static
-std::unique_ptr<views::WebView>
-SigninViewControllerDelegateViews::CreateGaiaReauthWebView(
-    Browser* browser,
-    base::OnceCallback<void(signin::ReauthResult)> reauth_callback) {
-  auto web_view = std::make_unique<views::WebView>(browser->profile());
-  const GURL& reauth_url = GaiaUrls::GetInstance()->reauth_url();
-  web_view->LoadInitialURL(reauth_url);
-
-  gfx::Size max_size = browser->window()
-                           ->GetWebContentsModalDialogHost()
-                           ->GetMaximumDialogSize();
-  web_view->SetPreferredSize(
-      gfx::Size(std::min(kReauthDialogWidth, max_size.width()),
-                std::min(kReauthDialogHeight, max_size.height())));
-
-  content::WebContents* web_contents = web_view->GetWebContents();
-
-  signin::ReauthTabHelper::CreateForWebContents(
-      web_contents, reauth_url, true,
-      base::BindOnce(&CompleteReauthFlow, base::Unretained(browser),
-                     std::move(reauth_callback)));
-
-  return web_view;
 }
 
 views::View* SigninViewControllerDelegateViews::GetContentsView() {
@@ -135,12 +102,6 @@ bool SigninViewControllerDelegateViews::ShouldShowCloseButton() const {
 }
 
 void SigninViewControllerDelegateViews::CloseModalSignin() {
-  signin::ReauthTabHelper* reauth_tab_helper =
-      signin::ReauthTabHelper::FromWebContents(web_contents_);
-  if (reauth_tab_helper) {
-    reauth_tab_helper->CompleteReauth(signin::ReauthResult::kCancelled);
-  }
-
   NotifyModalSigninClosed();
   if (modal_signin_widget_)
     modal_signin_widget_->Close();
@@ -164,6 +125,14 @@ void SigninViewControllerDelegateViews::ResizeNativeView(int height) {
 
 content::WebContents* SigninViewControllerDelegateViews::GetWebContents() {
   return web_contents_;
+}
+
+void SigninViewControllerDelegateViews::SetWebContents(
+    content::WebContents* web_contents) {
+  DCHECK(web_contents);
+  content_view_->SetWebContents(web_contents);
+  web_contents_ = web_contents;
+  web_contents_->SetDelegate(this);
 }
 
 bool SigninViewControllerDelegateViews::HandleContextMenu(
@@ -305,18 +274,6 @@ SigninViewControllerDelegate::CreateSigninErrorDelegate(Browser* browser) {
   return new SigninViewControllerDelegateViews(
       SigninViewControllerDelegateViews::CreateSigninErrorWebView(browser),
       browser, ui::MODAL_TYPE_WINDOW, true, false);
-}
-
-// static
-SigninViewControllerDelegate*
-SigninViewControllerDelegate::CreateGaiaReauthDelegate(
-    Browser* browser,
-    const CoreAccountId& account_id,
-    base::OnceCallback<void(signin::ReauthResult)> reauth_callback) {
-  return new SigninViewControllerDelegateViews(
-      SigninViewControllerDelegateViews::CreateGaiaReauthWebView(
-          browser, std::move(reauth_callback)),
-      browser, ui::MODAL_TYPE_CHILD, false, true);
 }
 
 // static
