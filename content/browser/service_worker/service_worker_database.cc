@@ -5,6 +5,7 @@
 #include "content/browser/service_worker/service_worker_database.h"
 
 #include "base/command_line.h"
+#include "base/debug/crash_logging.h"
 #include "base/files/file_util.h"
 #include "base/location.h"
 #include "base/logging.h"
@@ -451,6 +452,10 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::GetRegistrationsForOrigin(
 ServiceWorkerDatabase::Status ServiceWorkerDatabase::GetAllRegistrations(
     std::vector<storage::mojom::ServiceWorkerRegistrationDataPtr>*
         registrations) {
+  static base::debug::CrashKeyString* crash_key =
+      base::debug::AllocateCrashKeyString("num_registrations",
+                                          base::debug::CrashKeySize::Size32);
+
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(registrations->empty());
 
@@ -465,6 +470,9 @@ ServiceWorkerDatabase::Status ServiceWorkerDatabase::GetAllRegistrations(
         db_->NewIterator(leveldb::ReadOptions()));
     for (itr->Seek(service_worker_internals::kRegKeyPrefix); itr->Valid();
          itr->Next()) {
+      base::debug::ScopedCrashKeyString num_registrations_crash(
+          crash_key, base::NumberToString(registrations->size()));
+
       status = LevelDBStatusToServiceWorkerDBStatus(itr->status());
       if (status != Status::kOk) {
         registrations->clear();
