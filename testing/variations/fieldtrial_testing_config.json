@@ -4557,25 +4557,6 @@
             ]
         }
     ],
-    "PrerenderFallbackToPreconnect": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled_20190410",
-                    "enable_features": [
-                        "PrerenderFallbackToPreconnect"
-                    ]
-                }
-            ]
-        }
-    ],
     "PreviewsLitePageRedirect": [
         {
             "platforms": [

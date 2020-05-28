@@ -559,7 +559,7 @@ const base::Feature kPredictivePrefetchingAllowedOnAllConnectionTypes{
 
 // Allows Chrome to do preconnect when prerender fails.
 const base::Feature kPrerenderFallbackToPreconnect{
-    "PrerenderFallbackToPreconnect", base::FEATURE_DISABLED_BY_DEFAULT};
+    "PrerenderFallbackToPreconnect", base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Whether to display redesign of the chrome privacy settings page
 // to the user.
