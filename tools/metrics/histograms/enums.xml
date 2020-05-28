@@ -51493,6 +51493,13 @@ Called by update_net_trust_anchors.py.-->
   <int value="4" label="Apply metadata changed failed"/>
 </enum>
 
+<enum name="PasswordBubbleDismissalReason">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Accepted"/>
+  <int value="2" label="Declined"/>
+  <int value="3" label="Ignored"/>
+</enum>
+
 <enum name="PasswordBubbleDisplayDisposition">
   <int value="0" label="Opened automatically / Offering a password to save"/>
   <int value="1" label="Opened manually / Offering a password to save"/>
@@ -51520,6 +51527,14 @@ Called by update_net_trust_anchors.py.-->
   <int value="0" label="Dismissed"/>
   <int value="1" label="Sign in"/>
   <int value="2" label="No thanks"/>
+</enum>
+
+<enum name="PasswordBubbleTrigger">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Password Manager suggestion (automatic)"/>
+  <int value="2" label="Password Manager suggestion (manual)"/>
+  <int value="3" label="Credential Management API (automatic)"/>
+  <int value="4" label="Credential Management API (manual)"/>
 </enum>
 
 <enum name="PasswordCertificateError">
@@ -51571,6 +51586,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="1" label="Current query"/>
 </enum>
 
+<enum name="PasswordFormSubmissionResult">
+  <int value="0" label="Not submitted"/>
+  <int value="1" label="Failed"/>
+  <int value="2" label="Passed"/>
+</enum>
+
 <enum name="PasswordFormType">
   <int value="0" label="Login form"/>
   <int value="1" label="Login form without username"/>
@@ -51601,6 +51622,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="13" label="Generation item in the context menu accepted"/>
   <int value="14" label="Generation item in the context menu shown"/>
   <int value="15" label="Generated password deleted by autofilling"/>
+</enum>
+
+<enum name="PasswordGenerationPopupShown">
+  <int value="0" label="Not shown"/>
+  <int value="1" label="Shown automatically"/>
+  <int value="2" label="Shown manually"/>
 </enum>
 
 <enum name="PasswordGenerationPresaveConflict">
