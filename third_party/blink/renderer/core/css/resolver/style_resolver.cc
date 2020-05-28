@@ -784,6 +784,11 @@ scoped_refptr<ComputedStyle> StyleResolver::StyleForViewport(
   return viewport_style;
 }
 
+// Start loading resources referenced by this style.
+void StyleResolver::LoadPendingResources(StyleResolverState& state) {
+  state.GetElementStyleResources().LoadPendingResources(state.Style());
+}
+
 static ElementAnimations* GetElementAnimations(StyleResolverState& state) {
   if (!state.GetAnimatingElement())
     return nullptr;
@@ -1268,7 +1273,7 @@ scoped_refptr<const ComputedStyle> StyleResolver::StyleForPage(int page_index) {
         state, result.AllRules(), false, inherited_only, needs_apply_pass);
   }
 
-  state.LoadPendingResources();
+  LoadPendingResources(state);
 
   // Now return the style.
   return state.TakeStyle();
@@ -1462,7 +1467,7 @@ bool StyleResolver::ApplyAnimatedStandardProperties(
   }
 
   // Start loading resources used by animations.
-  state.LoadPendingResources();
+  LoadPendingResources(state);
 
   DCHECK(!state.GetFontBuilder().FontDirty());
 
@@ -2076,7 +2081,7 @@ void StyleResolver::ApplyMatchedLowPriorityProperties(
         state, match_result, apply_inherited_only, needs_apply_pass);
   }
 
-  state.LoadPendingResources();
+  LoadPendingResources(state);
   MaybeAddToMatchedPropertiesCache(state, cache_success, match_result);
 
   DCHECK(!state.GetFontBuilder().FontDirty());
@@ -2178,7 +2183,7 @@ void StyleResolver::CascadeAndApplyMatchedProperties(StyleResolverState& state,
 
   CascadeAndApplyForcedColors(state, result);
 
-  state.LoadPendingResources();
+  LoadPendingResources(state);
   MaybeAddToMatchedPropertiesCache(state, cache_success, result);
 
   DCHECK(!state.GetFontBuilder().FontDirty());
