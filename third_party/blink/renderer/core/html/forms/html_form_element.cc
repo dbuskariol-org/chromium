@@ -510,6 +510,10 @@ void HTMLFormElement::ScheduleFormSubmission(
     // Use the target frame's frame scheduler. If we can't due to targeting a
     // RemoteFrame, then use the frame scheduler from the frame this form is in.
     scheduler = target_local_frame->GetFrameScheduler();
+
+    // Cancel pending javascript url navigations for the target frame. This new
+    // form submission should take precedence over them.
+    target_local_frame->GetDocument()->CancelPendingJavaScriptUrls();
   }
 
   target_frame->ScheduleFormSubmission(scheduler, form_submission);

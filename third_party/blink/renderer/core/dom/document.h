@@ -1686,6 +1686,8 @@ class CORE_EXPORT Document : public ContainerNode,
   void MarkHasFindInPageRequest();
   void MarkHasFindInPageContentVisibilityActiveMatch();
 
+  void CancelPendingJavaScriptUrls();
+
   HeapObserverList<SynchronousMutationObserver>&
   SynchronousMutationObserverList() {
     return synchronous_mutation_observer_list_;
@@ -1798,7 +1800,6 @@ class CORE_EXPORT Document : public ContainerNode,
 
   void ExecuteScriptsWaitingForResources();
   void ExecuteJavaScriptUrls();
-  void CancelPendingJavaScriptUrls();
 
   void LoadEventDelayTimerFired(TimerBase*);
   void PluginLoadingTimerFired(TimerBase*);
