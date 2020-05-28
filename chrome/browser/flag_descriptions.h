@@ -1717,9 +1717,6 @@ extern const char kOmniboxSuggestionButtonRowDescription[];
 extern const char kOmniboxReverseAnswersName[];
 extern const char kOmniboxReverseAnswersDescription[];
 
-extern const char kOmniboxSuggestionTransparencyOptionsName[];
-extern const char kOmniboxSuggestionTransparencyOptionsDescription[];
-
 extern const char kOmniboxTabSwitchSuggestionsName[];
 extern const char kOmniboxTabSwitchSuggestionsDescription[];
 
