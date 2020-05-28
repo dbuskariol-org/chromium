@@ -805,8 +805,16 @@ base::Optional<LayoutUnit> NGInlineLayoutAlgorithm::ApplyJustify(
   // See AdjustInlineDirectionLineBounds() of LayoutRubyBase and
   // LayoutRubyText.
   if (box && (box->IsRubyText() || box->IsRubyBase())) {
-    inset = space / (spacing.ExpansionOppotunityCount() + 1);
-    inset = std::min(LayoutUnit(2 * line_info->LineStyle().FontSize()), inset);
+    unsigned count = std::min(spacing.ExpansionOppotunityCount(),
+                              static_cast<unsigned>(LayoutUnit::Max().Floor()));
+    // Inset the ruby base/text by half the inter-ideograph expansion amount.
+    inset = space / (count + 1);
+    // For ruby text,  inset it by no more than a full-width ruby character on
+    // each side.
+    if (box->IsRubyText()) {
+      inset =
+          std::min(LayoutUnit(2 * line_info->LineStyle().FontSize()), inset);
+    }
     spacing.SetExpansion(space - inset, line_info->BaseDirection(),
                          line_info->LineStyle().GetTextJustify());
   }
