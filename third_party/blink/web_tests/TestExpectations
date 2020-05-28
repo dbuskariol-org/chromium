@@ -1947,9 +1947,6 @@ crbug.com/249112 external/wpt/css/css-flexbox/flex-minimum-width-flex-items-007.
 crbug.com/336604 external/wpt/css/css-flexbox/flexbox_visibility-collapse-line-wrapping.html [ Failure ]
 crbug.com/336604 external/wpt/css/css-flexbox/flexbox_visibility-collapse.html [ Failure ]
 
-crbug.com/782948 external/wpt/css/css-flexbox/table-as-item-fixed-min-width.html [ Failure ]
-crbug.com/782948 external/wpt/css/css-flexbox/table-as-item-wide-content.html [ Failure ]
-
 crbug.com/807497 external/wpt/css/css-flexbox/anonymous-flex-item-005.html [ Failure ]
 crbug.com/467127 external/wpt/css/css-flexbox/flexbox_justifycontent-center-overflow.html [ Failure ]
 crbug.com/467127 external/wpt/css/css-flexbox/getcomputedstyle/flexbox_computedstyle_flex-basis-0percent.html [ Failure ]
