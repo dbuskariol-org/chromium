@@ -1239,6 +1239,8 @@ static_library("ui") {
       "task_manager/task_manager_columns.h",
       "task_manager/task_manager_table_model.cc",
       "task_manager/task_manager_table_model.h",
+      "thumbnails/thumbnail_capture_driver.cc",
+      "thumbnails/thumbnail_capture_driver.h",
       "thumbnails/thumbnail_image.cc",
       "thumbnails/thumbnail_image.h",
       "thumbnails/thumbnail_readiness_tracker.cc",
