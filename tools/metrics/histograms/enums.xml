@@ -13214,6 +13214,16 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="7" label="DISK_STATUS_RESIZED"/>
 </enum>
 
+<!-- Keep this in sync with CrostiniDiskImageType in crostini_simple_types.h -->
+
+<enum name="CrostiniDiskImageType">
+  <int value="0" label="DISK_TYPE_UNKNOWN"/>
+  <int value="1" label="DISK_TYPE_QCOW2_SPARSE"/>
+  <int value="2" label="DISK_TYPE_RAW_SPARSE"/>
+  <int value="3" label="DISK_TYPE_RAW_PREALLOCAED"/>
+  <int value="4" label="DISK_TYPE_MULTI_DISK"/>
+</enum>
+
 <enum name="CrostiniExportContainerResult">
   <int value="0" label="Success"/>
   <int value="1" label="Failed"/>
