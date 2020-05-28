@@ -228,8 +228,11 @@ arc::mojom::NetworkConfigurationPtr TranslateNetworkProperties(
   if (mojo->guid.empty())
     LOG(ERROR) << "Missing GUID property for network " << network_state->path();
   mojo->type = TranslateNetworkType(network_state->type());
-  // TODO(b/156302252) Migrate to kMeteredProperty
-  mojo->tethering_client_state =
+  mojo->is_metered =
+      shill_dict &&
+      shill_dict->FindBoolPath(shill::kMeteredProperty).value_or(false);
+  // TODO(b/156302252) Remove once ARC side has been migrated to |is_metered|.
+  mojo->deprecated_tethering_client_state =
       TranslateTetheringState(network_state->tethering_state());
 
   // IP configuration data is added from the properties of the underlying shill
