@@ -2559,7 +2559,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2591,7 +2591,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2622,7 +2622,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2654,7 +2654,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2686,7 +2686,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2717,7 +2717,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2748,7 +2748,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2775,7 +2775,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2802,7 +2802,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2837,7 +2837,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2870,7 +2870,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2904,7 +2904,7 @@
             },
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2933,7 +2933,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2960,7 +2960,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -2986,7 +2986,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3013,7 +3013,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3040,7 +3040,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3066,7 +3066,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3092,7 +3092,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3114,7 +3114,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3136,7 +3136,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3166,7 +3166,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3194,7 +3194,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3223,7 +3223,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3567,7 +3567,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3594,7 +3594,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3620,7 +3620,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3647,7 +3647,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3674,7 +3674,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3700,7 +3700,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3726,7 +3726,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3800,7 +3800,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3828,7 +3828,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -3857,7 +3857,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4203,7 +4203,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4230,7 +4230,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4256,7 +4256,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4283,7 +4283,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4310,7 +4310,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4336,7 +4336,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4362,7 +4362,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4384,7 +4384,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4406,7 +4406,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4436,7 +4436,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4463,7 +4463,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4491,7 +4491,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4833,7 +4833,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4860,7 +4860,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4886,7 +4886,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4913,7 +4913,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4940,7 +4940,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4966,7 +4966,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -4992,7 +4992,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -5066,7 +5066,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -5093,7 +5093,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
@@ -5121,7 +5121,7 @@
           "dimension_sets": [
             {
               "gpu": "8086:5912-24.20.100.6286",
-              "os": "Windows-10",
+              "os": "Windows-10-17134",
               "pool": "chromium.tests.gpu.template"
             }
           ],
