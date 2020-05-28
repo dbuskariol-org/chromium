@@ -448,32 +448,22 @@ NGLineHeightMetrics NGInlineLayoutAlgorithm::ComputeAnnotationOverflow(
       line_block_start + line_box_metrics.LineHeight();
   LayoutUnit annotation_block_end = line_block_end;
   for (const auto& item : line_box_) {
-    if (!item.HasInFlowFragment())
+    // Accumulate |AnnotationOverflow| from ruby runs. All ruby run items have
+    // |layout_result|.
+    const NGLayoutResult* layout_result = item.layout_result.get();
+    if (!layout_result)
       continue;
-    if (!item.layout_result)
-      continue;
-    const auto* fragment = item.PhysicalFragment();
-    const scoped_refptr<NGFragmentItem> fragment_item = item.fragment_item;
-    LayoutUnit block_end;
-    if (fragment) {
-      block_end = item.rect.offset.block_offset +
-                  fragment->Size()
-                      .ConvertToLogical(line_style.GetWritingMode())
-                      .block_size;
-    } else if (fragment_item) {
-      block_end = item.rect.offset.block_offset +
-                  fragment_item->Size()
-                      .ConvertToLogical(line_style.GetWritingMode())
-                      .block_size;
-    } else {
-      continue;
-    }
-
-    LayoutUnit overflow = item.layout_result->AnnotationOverflow();
+    const LayoutUnit overflow = layout_result->AnnotationOverflow();
     if (overflow < LayoutUnit()) {
       annotatin_block_start = std::min(
           annotatin_block_start, item.rect.offset.block_offset + overflow);
     } else if (overflow > LayoutUnit()) {
+      const LayoutUnit block_end =
+          item.rect.offset.block_offset +
+          layout_result->PhysicalFragment()
+              .Size()
+              .ConvertToLogical(line_style.GetWritingMode())
+              .block_size;
       annotation_block_end =
           std::max(annotation_block_end, block_end + overflow);
     }
