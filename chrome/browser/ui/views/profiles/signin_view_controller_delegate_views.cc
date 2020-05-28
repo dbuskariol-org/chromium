@@ -15,6 +15,7 @@
 #include "chrome/browser/signin/signin_promo.h"
 #include "chrome/browser/sync/profile_sync_service_factory.h"
 #include "chrome/browser/ui/browser.h"
+#include "chrome/browser/ui/browser_tabstrip.h"
 #include "chrome/browser/ui/signin_view_controller.h"
 #include "chrome/browser/ui/tabs/tab_strip_model.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
@@ -152,6 +153,19 @@ bool SigninViewControllerDelegateViews::HandleKeyboardEvent(
   // window.
   return unhandled_keyboard_event_handler_.HandleKeyboardEvent(
       event, GetFocusManager());
+}
+
+void SigninViewControllerDelegateViews::AddNewContents(
+    content::WebContents* source,
+    std::unique_ptr<content::WebContents> new_contents,
+    const GURL& target_url,
+    WindowOpenDisposition disposition,
+    const gfx::Rect& initial_rect,
+    bool user_gesture,
+    bool* was_blocked) {
+  // Allows the Gaia reauth page to open links in a new tab.
+  chrome::AddWebContents(browser_, source, std::move(new_contents), target_url,
+                         disposition, initial_rect);
 }
 
 web_modal::WebContentsModalDialogHost*
