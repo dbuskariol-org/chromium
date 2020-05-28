@@ -5302,9 +5302,7 @@ crbug.com/1019662 external/wpt/html/dom/idlharness.worker.html [ Pass Timeout ]
 crbug.com/1019613 http/tests/devtools/sources/debugger/debug-inlined-scripts.js [ Pass Failure ]
 
 # First frame not always painted in time
-crbug.com/1024976 media/controls/paint-controls-webkit-appearance-none.html [ Pass Failure ]
 crbug.com/1024976 media/controls/paint-controls-webkit-appearance-none-custom-bg.html [ Pass Failure ]
-crbug.com/1024976 media/video-no-audio.html [ Pass Failure ]
 
 # iframe.freeze plumbing is not hooked up at the moment.
 crbug.com/907125 external/wpt/lifecycle/freeze.html [ Failure ] # wpt_subtest_failure
