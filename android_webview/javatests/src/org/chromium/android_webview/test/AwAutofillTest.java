@@ -1796,6 +1796,44 @@ public class AwAutofillTest {
         invokeAutofill(values);
     }
 
+    @Test
+    @SmallTest
+    @Feature({"AndroidWebView"})
+    public void testDatalistSentToAutofillService() throws Throwable {
+        final String data = "<html><head></head><body><form action='a.html' name='formname'>"
+                + "<input type='text' id='text1' name='username'>"
+                + "<input list='datalist_id' name='count' id='text2'/><datalist id='datalist_id'>"
+                + "<option value='A1'>one</option><option value='A2'>two</option></datalist>"
+                + "</form></body></html>";
+        final String url = mWebServer.setResponse(FILE, data, null);
+        loadUrlSync(url);
+        int cnt = 0;
+        executeJavaScriptAndWaitForResult("document.getElementById('text1').select();");
+        dispatchDownAndUpKeyEvents(KeyEvent.KEYCODE_A);
+
+        cnt += waitForCallbackAndVerifyTypes(cnt,
+                new Integer[] {AUTOFILL_CANCEL, AUTOFILL_VIEW_ENTERED, AUTOFILL_VALUE_CHANGED});
+        invokeOnProvideAutoFillVirtualStructure();
+        TestViewStructure viewStructure = mTestValues.testViewStructure;
+        assertNotNull(viewStructure);
+        assertEquals(2, viewStructure.getChildCount());
+
+        // Verified the datalist has correctly been sent to AutofillService
+        TestViewStructure child1 = viewStructure.getChild(1);
+        assertEquals(2, child1.getAutofillOptions().length);
+        assertEquals("A1", child1.getAutofillOptions()[0]);
+        assertEquals("A2", child1.getAutofillOptions()[1]);
+
+        // Simulate autofilling the datalist by the AutofillService.
+        SparseArray<AutofillValue> values = new SparseArray<AutofillValue>();
+        values.append(child1.getId(), AutofillValue.forText("example@example.com"));
+        invokeAutofill(values);
+        cnt += waitForCallbackAndVerifyTypes(cnt, new Integer[] {AUTOFILL_VALUE_CHANGED});
+        String value1 =
+                executeJavaScriptAndWaitForResult("document.getElementById('text2').value;");
+        assertEquals("\"example@example.com\"", value1);
+    }
+
     private void scrollToBottom() {
         TestThreadUtils.runOnUiThreadBlocking(
                 () -> { mTestContainerView.scrollTo(0, mTestContainerView.getHeight()); });
