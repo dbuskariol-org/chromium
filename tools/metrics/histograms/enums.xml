@@ -32040,6 +32040,11 @@ Called by update_feature_policy_enum.py.-->
   <int value="72" label="User Disabled WIN10_19H1"/>
   <int value="73" label="Fallback to Software WIN10_19H1"/>
   <int value="74" label="Status Unknown WIN10_19H1"/>
+  <int value="75" label="Enabled WIN10_20H1"/>
+  <int value="76" label="Blacklisted WIN10_20H1"/>
+  <int value="77" label="User Disabled WIN10_20H1"/>
+  <int value="78" label="Fallback to Software WIN10_20H1"/>
+  <int value="79" label="Status Unknown WIN10_20H1"/>
 </enum>
 
 <enum name="GPUBlacklistTestResultPerEntry">
@@ -73115,6 +73120,7 @@ Called by update_scheduler_enums.py.-->
   <int value="12" label="Windows 10 RS4"/>
   <int value="13" label="Windows 10 RS5"/>
   <int value="14" label="Windows 10 19H1"/>
+  <int value="15" label="Windows 10 20H1"/>
 </enum>
 
 <enum name="WindowType">
