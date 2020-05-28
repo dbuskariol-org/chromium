@@ -700,7 +700,7 @@ class CanvasResourceProviderSwapChain final : public CanvasResourceProvider {
     auto backend_texture = GrBackendTexture(Size().Width(), Size().Height(),
                                             GrMipMapped::kNo, texture_info);
 
-    return SkSurface::MakeFromBackendTextureAsRenderTarget(
+    return SkSurface::MakeFromBackendTexture(
         GetGrContext(), backend_texture, kTopLeft_GrSurfaceOrigin,
         msaa_sample_count_, ColorParams().GetSkColorType(),
         ColorParams().GetSkColorSpaceForSkSurfaces(),
