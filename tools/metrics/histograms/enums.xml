@@ -48754,6 +48754,10 @@ Called by update_net_trust_anchors.py.-->
   <int value="11" label="Internal script"/>
   <int value="12" label="Streaming was never started"/>
   <int value="13" label="An error had occurred before GetSource was called"/>
+  <int value="14" label="Streaming was disabled"/>
+  <int value="15" label="Second use of a script resource"/>
+  <int value="16" label="Worker script"/>
+  <int value="17" label="Module script"/>
 </enum>
 
 <enum name="NPAPIPluginStatus">
