@@ -750,6 +750,9 @@ void NewTabPageHandler::QueryAutocomplete(const base::string16& input,
 }
 
 void NewTabPageHandler::StopAutocomplete(bool clear_result) {
+  if (!autocomplete_controller_)
+    return;
+
   autocomplete_controller_->Stop(clear_result);
 
   if (clear_result)
