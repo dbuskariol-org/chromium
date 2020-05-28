@@ -6790,7 +6790,8 @@ class TestIChromeAccessibleDelegate
   base::RepeatingClosure run_loop_quit_closure_;
 };
 
-TEST_F(AXPlatformNodeWinTest, BulkFetch) {
+// http://crbug.com/1087206: failing on Win7 builders.
+TEST_F(AXPlatformNodeWinTest, DISABLED_BulkFetch) {
   base::test::SingleThreadTaskEnvironment task_environment;
   AXNodeData root;
   root.id = 1;
