@@ -1346,11 +1346,6 @@ deps = {
       'dep_type': 'cipd',
   },
 
-  'src/third_party/robolectric/robolectric': {
-      'url': Var('chromium_git') + '/external/robolectric.git' + '@' + 'f2df0efb033bb402399ebfb9bf58aefee5cced05',
-      'condition': 'checkout_android',
-  },
-
   'src/third_party/androidx': {
       'packages': [
           {
