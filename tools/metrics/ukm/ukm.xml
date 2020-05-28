@@ -9167,6 +9167,34 @@ be describing additional metrics about the same event.
   </metric>
 </event>
 
+<event name="Portal.Activate">
+  <owner>lfg@chromium.org</owner>
+  <summary>
+    A portal was activated. A portal activation enables a seamless transition
+    between different pages. See the portals explainer for more details:
+    https://github.com/WICG/portals/blob/master/README.md.
+  </summary>
+  <metric name="PaintTiming.PortalActivationToFirstPaint">
+    <summary>
+      When this page load happened inside a Portal, this metrics records the
+      time in milliseconds between the portal activation and the first paint
+      after activation.
+    </summary>
+  </metric>
+  <metric name="PortalActivation">
+    <summary>
+      Measures the time between LCP and the portal activation. Uses exponential
+      bucketing with a spacing of 2, with the units in milliseconds.
+    </summary>
+  </metric>
+  <metric name="PortalActivationBeforeLCP" enum="Boolean">
+    <summary>
+      Indicates whether the portal activation happened before or after the
+      largest contentful paint.
+    </summary>
+  </metric>
+</event>
+
 <event name="PrefetchProxy" singular="True">
   <owner>robertogden@chromium.org</owner>
   <owner>ryansturm@chromium.org</owner>
