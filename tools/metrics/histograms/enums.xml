@@ -26604,7 +26604,7 @@ Called by update_use_counter_feature_enum.py.-->
       label="V8ExtendableCookieChangeEvent_Deleted_AttributeGetter"/>
   <int value="2461" label="ShapeOutsideContentBoxDifferentFromMarginBox"/>
   <int value="2462" label="ShapeOutsidePaddingBoxDifferentFromMarginBox"/>
-  <int value="2463" label="CSSContainLayoutPositionedDescendants"/>
+  <int value="2463" label="DeprecatedCSSContainLayoutPositionedDescendants"/>
   <int value="2465" label="CanvasConvertToBlob"/>
   <int value="2466" label="PolymerV1Detected"/>
   <int value="2467" label="PolymerV2Detected"/>
