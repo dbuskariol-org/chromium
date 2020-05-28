@@ -16756,6 +16756,11 @@ Called by update_document_policy_enum.py.-->
   <int value="8" label="MP3"/>
 </enum>
 
+<enum name="DownloadCancelReason">
+  <int value="0" label="Existing download path"/>
+  <int value="1" label="Target confirmation result"/>
+</enum>
+
 <enum name="DownloadConnectionSecurity">
   <int value="0"
       label="Final download url and the redirects before it all use https"/>
