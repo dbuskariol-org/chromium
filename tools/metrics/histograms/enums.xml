@@ -27541,6 +27541,8 @@ Called by update_use_counter_feature_enum.py.-->
       label="WebBluetoothRemoteCharacteristicWriteValueWithResponse"/>
   <int value="3306"
       label="WebBluetoothRemoteCharacteristicWriteValueWithoutResponse"/>
+  <int value="3307" label="FlexGapSpecified"/>
+  <int value="3308" label="FlexGapPositive"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
