@@ -234,5 +234,8 @@ bool ShouldEnableOutOfBlinkCorsForTesting() {
   return base::FeatureList::IsEnabled(features::kOutOfBlinkCors);
 }
 
+const base::Feature kWebSocketReassembleShortMessages{
+    "WebSocketReassembleShortMessages", base::FEATURE_ENABLED_BY_DEFAULT};
+
 }  // namespace features
 }  // namespace network
