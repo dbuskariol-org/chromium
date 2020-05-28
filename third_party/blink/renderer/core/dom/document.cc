@@ -3970,6 +3970,8 @@ void Document::ImplicitClose() {
     return;
   }
 
+  fetcher_->ScheduleWarnUnusedPreloads();
+
   // We used to force a synchronous display and flush here.  This really isn't
   // necessary and can in fact be actively harmful if pages are loading at a
   // rate of > 60fps
