@@ -883,8 +883,6 @@ static_library("browser") {
     "native_file_system/native_file_system_tab_helper.h",
     "native_file_system/origin_scoped_native_file_system_permission_context.cc",
     "native_file_system/origin_scoped_native_file_system_permission_context.h",
-    "native_file_system/tab_scoped_native_file_system_permission_context.cc",
-    "native_file_system/tab_scoped_native_file_system_permission_context.h",
     "native_window_notification_source.h",
     "navigation_predictor/navigation_predictor.cc",
     "navigation_predictor/navigation_predictor.h",
