@@ -104,7 +104,7 @@ struct NGLogicalLineItem {
   }
   bool HasOutOfFlowFragment() const { return out_of_flow_positioned_box; }
   bool HasFragment() const {
-    return HasInFlowFragment() || HasOutOfFlowFragment();
+    return HasInFlowOrFloatingFragment() || HasOutOfFlowFragment();
   }
   bool HasBidiLevel() const { return bidi_level != 0xff; }
   bool IsPlaceholder() const { return !HasFragment() && !HasBidiLevel(); }
