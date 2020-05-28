@@ -117,14 +117,10 @@ public class AutofillProviderImpl extends AutofillProvider {
                         child.setAutofillValue(AutofillValue.forToggle(field.isChecked()));
                         break;
                     case FormFieldData.ControlType.TEXT:
-                    case FormFieldData.ControlType.DATALIST:
                         child.setAutofillType(View.AUTOFILL_TYPE_TEXT);
                         child.setAutofillValue(AutofillValue.forText(field.getValue()));
                         if (field.mMaxLength != 0) {
                             builder.addAttribute("maxlength", String.valueOf(field.mMaxLength));
-                        }
-                        if (field.getControlType() == FormFieldData.ControlType.DATALIST) {
-                            child.setAutofillOptions(field.mDatalistValues);
                         }
                         break;
                     default:
@@ -155,7 +151,6 @@ public class AutofillProviderImpl extends AutofillProvider {
                             field.setChecked(value.getToggleValue());
                             break;
                         case FormFieldData.ControlType.TEXT:
-                        case FormFieldData.ControlType.DATALIST:
                             field.setAutofillValue((String) value.getTextValue());
                             break;
                         default:
@@ -193,7 +188,6 @@ public class AutofillProviderImpl extends AutofillProvider {
                 case FormFieldData.ControlType.TOGGLE:
                     return AutofillValue.forToggle(field.isChecked());
                 case FormFieldData.ControlType.TEXT:
-                case FormFieldData.ControlType.DATALIST:
                     return AutofillValue.forText(field.getValue());
                 default:
                     return null;
