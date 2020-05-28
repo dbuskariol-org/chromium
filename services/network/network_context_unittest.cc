@@ -3679,7 +3679,6 @@ TEST_F(NetworkContextTest, CanSetCookieFalseIfCookiesBlocked) {
                               base::Time(), base::Time(), base::Time(), false,
                               false, net::CookieSameSite::LAX_MODE,
                               net::COOKIE_PRIORITY_LOW);
-
   EXPECT_TRUE(
       network_context->url_request_context()->network_delegate()->CanSetCookie(
           *request, cookie, nullptr, true));
@@ -3717,11 +3716,11 @@ TEST_F(NetworkContextTest, CanGetCookiesFalseIfCookiesBlocked) {
 
   EXPECT_TRUE(
       network_context->url_request_context()->network_delegate()->CanGetCookies(
-          *request, {}, true));
+          *request, true));
   SetDefaultContentSetting(CONTENT_SETTING_BLOCK, network_context.get());
   EXPECT_FALSE(
       network_context->url_request_context()->network_delegate()->CanGetCookies(
-          *request, {}, true));
+          *request, true));
 }
 
 TEST_F(NetworkContextTest, CanGetCookiesTrueIfCookiesAllowed) {
@@ -3735,7 +3734,7 @@ TEST_F(NetworkContextTest, CanGetCookiesTrueIfCookiesAllowed) {
   SetDefaultContentSetting(CONTENT_SETTING_ALLOW, network_context.get());
   EXPECT_TRUE(
       network_context->url_request_context()->network_delegate()->CanGetCookies(
-          *request, {}, true));
+          *request, true));
 }
 
 // Gets notified by the EmbeddedTestServer on incoming connections being
