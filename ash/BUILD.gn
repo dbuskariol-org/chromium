@@ -188,6 +188,8 @@ component("ash") {
     "ambient/ui/ambient_view_delegate.h",
     "ambient/ui/assistant_response_container_view.cc",
     "ambient/ui/assistant_response_container_view.h",
+    "ambient/ui/glanceable_info_view.cc",
+    "ambient/ui/glanceable_info_view.h",
     "ambient/ui/photo_view.cc",
     "ambient/ui/photo_view.h",
     "ambient/util/ambient_util.cc",
