@@ -879,6 +879,9 @@ extern const char kOnTheFlyMhtmlHashComputationDescription[];
 extern const char kOopRasterizationName[];
 extern const char kOopRasterizationDescription[];
 
+extern const char kOopRasterizationDDLName[];
+extern const char kOopRasterizationDDLDescription[];
+
 extern const char kNewOsSettingsSearchName[];
 extern const char kNewOsSettingsSearchDescription[];
 

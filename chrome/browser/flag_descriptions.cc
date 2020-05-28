@@ -1497,6 +1497,13 @@ const char kOopRasterizationDescription[] =
     "Perform Ganesh raster in the GPU Process instead of the renderer.  "
     "Must also enable GPU rasterization";
 
+const char kOopRasterizationDDLName[] =
+    "Out of process rasterization using DDLs";
+const char kOopRasterizationDDLDescription[] =
+    "Use Skia Deferred Display Lists when performing rasterization in the GPU "
+    "process  "
+    "Must also enable OOP rasterization";
+
 const char kEnableDeJellyName[] = "Experimental de-jelly effect";
 const char kEnableDeJellyDescription[] =
     "Enables an experimental effect which attempts to mitigate "
