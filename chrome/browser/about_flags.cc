@@ -3591,11 +3591,6 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(features::kHandwritingGesture)},
 #endif  // OS_CHROMEOS
 
-    {"network-service-in-process",
-     flag_descriptions::kEnableNetworkServiceInProcessName,
-     flag_descriptions::kEnableNetworkServiceInProcessDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kNetworkServiceInProcess)},
-
     {"cors-for-content-scripts", flag_descriptions::kCorsForContentScriptsName,
      flag_descriptions::kCorsForContentScriptsDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(network::features::kCorbAllowlistAlsoAppliesToOorCors)},
