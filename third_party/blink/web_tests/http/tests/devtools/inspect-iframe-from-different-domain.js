@@ -11,6 +11,7 @@
     const frame = document.createElement('iframe');
     frame.src = 'http://other.domain.example.test:8000/devtools/resources/iframe-from-different-domain-data.html';
     document.body.appendChild(frame);
+    new Promise(f => frame.onload = f)
   `);
 
   ElementsTestRunner.selectNodeAndWaitForStyles('iframe-body', step1);

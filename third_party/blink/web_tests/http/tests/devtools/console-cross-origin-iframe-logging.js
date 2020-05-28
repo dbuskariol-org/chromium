@@ -5,29 +5,30 @@
 (async function() {
   TestRunner.addResult(`Tests that cross origin errors are logged with source url and line number.\n`);
   await TestRunner.loadModule('console_test_runner');
-  await TestRunner.navigatePromise("http://example.test:8000/devtools/resources/empty.html");
+  await TestRunner.loadHTML(`
+      <iframe src="http://localhost:8000/devtools/resources/cross-origin-iframe.html"></iframe>
+    `);
   await TestRunner.evaluateInPagePromise(`
-    const frame = document.createElement('iframe');
-    frame.src = 'http://other.origin.example.test:8000/devtools/resources/cross-origin-iframe.html';
-    document.body.appendChild(frame);
+      function accessFrame()
+      {
+          // Should fail.
+          try {
+              var host = frames[0].location.host;
+          } catch (e) {}
+
+          // Should fail.
+          try {
+              frames[0].location.reload();
+          } catch (e) {}
+
+          // Should fail.
+          frames[0].postMessage("fail", "http://127.0.0.1:8000");
+      }
   `);
 
   ConsoleTestRunner.addConsoleSniffer(finish);
   Common.settingForTest('monitoringXHREnabled').set(true);
-  await TestRunner.evaluateInPagePromise(`
-    // Should fail.
-    try {
-      var host = frames[0].location.host;
-    } catch (e) {}
-
-    // Should fail.
-    try {
-      frames[0].location.reload();
-    } catch (e) {}
-
-    // Should fail.
-    frames[0].postMessage("fail", "http://example.test:8000");
-  `);
+  TestRunner.evaluateInPage('accessFrame()');
 
   async function finish() {
     Common.settingForTest('monitoringXHREnabled').set(false);

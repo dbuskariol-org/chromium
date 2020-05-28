@@ -4705,6 +4705,9 @@ crbug.com/904389 http/tests/preload/delaying_onload_link_preload_after_discovery
 crbug.com/906952 editing/pasteboard/file-drag-to-editable.html [ Pass Crash ]
 
 #Sheriff 2018-11-21
+
+# See also crbug.com/907150
+crbug.com/667560 http/tests/devtools/console-cross-origin-iframe-logging.js [ Pass Failure Timeout ]
 crbug.com/907412 external/wpt/domxpath/xml_xpath_runner.html [ Pass Timeout ]
 
 #Sheriff 2018-11-22
