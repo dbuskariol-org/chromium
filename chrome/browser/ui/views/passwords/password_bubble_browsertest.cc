@@ -46,6 +46,10 @@ class PasswordBubbleBrowserTest
       SetupAutomaticPassword();
     } else if (StartsWith(name, "ManagePasswordBubble",
                           base::CompareCase::SENSITIVE)) {
+      // Set test form to be account-stored. Otherwise, there is no indicator.
+      test_form()->in_store =
+          GetParam() ? autofill::PasswordForm::Store::kAccountStore
+                     : autofill::PasswordForm::Store::kProfileStore;
       SetupManagingPasswords();
       ExecuteManagePasswordsCommand();
     } else if (StartsWith(name, "AutoSignin", base::CompareCase::SENSITIVE)) {
