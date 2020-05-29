@@ -303,12 +303,12 @@ export class PasswordSectionElementFactory {
 
   /**
    * Helper method used to create a password editing dialog.
-   * @param {!chrome.passwordsPrivate.PasswordUiEntry} passwordEntry
+   * @param {!MultiStorePasswordUiEntry} passwordEntry
    * @return {!Object}
    */
   createPasswordEditDialog(passwordEntry) {
     const passwordDialog = this.document.createElement('password-edit-dialog');
-    passwordDialog.entry = new MultiStorePasswordUiEntry(passwordEntry);
+    passwordDialog.entry = passwordEntry;
     passwordDialog.password = '';
     this.document.body.appendChild(passwordDialog);
     flush();

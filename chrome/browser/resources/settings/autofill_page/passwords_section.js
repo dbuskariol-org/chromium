@@ -555,19 +555,23 @@ Polymer({
     /** @type {!RemovalResult} */
     const result = this.activePassword.requestRemove();
 
-    if (result.removedFromDevice || result.removedFromAccount) {
-      let text = this.i18n('passwordDeleted');
-      if (this.eligibleForAccountStorage_ && this.isOptedInForAccountStorage_) {
-        // TODO(crbug.com/1049141): Style the text according to mocks.
-        // TODO(crbug.com/1049141): Adapt the string when the user can delete
-        // from both account and device.
-        text = result.removedFromAccount ?
-            this.i18n('passwordDeletedFromAccount') :
-            this.i18n('passwordDeletedFromDevice');
-      }
-      getToastManager().show(text);
-      this.fire('iron-announce', {text: this.i18n('undoDescription')});
+    if (!result.removedFromDevice && !result.removedFromAccount) {
+      /** @type {CrActionMenuElement} */ (this.$.menu).close();
+      return;
     }
+
+    let text = this.i18n('passwordDeleted');
+    if (this.eligibleForAccountStorage_ && this.isOptedInForAccountStorage_) {
+      if (result.removedFromAccount && result.removedFromDevice) {
+        text = this.i18n('passwordDeletedFromAccountAndDevice');
+      } else if (result.removedFromAccount) {
+        text = this.i18n('passwordDeletedFromAccount');
+      } else {
+        text = this.i18n('passwordDeletedFromDevice');
+      }
+    }
+    getToastManager().show(text);
+    this.fire('iron-announce', {text: this.i18n('undoDescription')});
 
     /** @type {CrActionMenuElement} */ (this.$.menu).close();
   },

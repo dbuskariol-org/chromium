@@ -704,8 +704,8 @@ suite('PasswordsSection', function() {
   });
 
   test('verifyFederatedPassword', function() {
-    const item = createPasswordEntry(
-        {url: 'goo.gl', username: 'bart', federationText: 'with chromium.org'});
+    const item = createMultiStorePasswordEntry(
+        {federationText: 'with chromium.org', username: 'bart', deviceId: 42});
     const passwordDialog = elementFactory.createPasswordEditDialog(item);
 
     flush();
@@ -716,9 +716,11 @@ suite('PasswordsSection', function() {
     assertTrue(passwordDialog.$.showPasswordButton.hidden);
   });
 
+  // Test verifies that the edit dialog informs the password is stored in the
+  // account.
   test('verifyStorageDetailsInEditDialogForAccountPassword', function() {
-    const accountPassword = createPasswordEntry(
-        {url: 'goo.gl', username: 'bart', fromAccountStore: true});
+    const accountPassword = createMultiStorePasswordEntry(
+        {url: 'goo.gl', username: 'bart', accountId: 42});
     const accountPasswordDialog =
         elementFactory.createPasswordEditDialog(accountPassword);
     flush();
@@ -731,14 +733,15 @@ suite('PasswordsSection', function() {
     flush();
     assertFalse(accountPasswordDialog.$.storageDetails.hidden);
     assertEquals(
-        accountPasswordDialog.i18nAdvanced(
-            'passwordStoredInAccount', {tags: ['b']}),
-        accountPasswordDialog.$.storageDetails.innerHTML);
+        accountPasswordDialog.i18n('passwordStoredInAccount'),
+        accountPasswordDialog.$.storageDetails.innerText);
   });
 
+  // Test verifies that the edit dialog informs the password is stored on the
+  // device.
   test('verifyStorageDetailsInEditDialogForDevicePassword', function() {
-    const devicePassword = createPasswordEntry(
-        {url: 'goo.gl', username: 'bart', fromAccountStore: false});
+    const devicePassword = createMultiStorePasswordEntry(
+        {url: 'goo.gl', username: 'bart', deviceId: 42});
     const devicePasswordDialog =
         elementFactory.createPasswordEditDialog(devicePassword);
     flush();
@@ -751,14 +754,37 @@ suite('PasswordsSection', function() {
     flush();
     assertFalse(devicePasswordDialog.$.storageDetails.hidden);
     assertEquals(
-        devicePasswordDialog.i18nAdvanced(
-            'passwordStoredOnDevice', {tags: ['b']}),
-        devicePasswordDialog.$.storageDetails.innerHTML);
+        devicePasswordDialog.i18n('passwordStoredOnDevice'),
+        devicePasswordDialog.$.storageDetails.innerText);
   });
+
+  // Test verifies that the edit dialog informs the password is stored both on
+  // the device and in the account.
+  test(
+      'verifyStorageDetailsInEditDialogForPasswordInBothLocations', function() {
+        const accountAndDevicePassword = createMultiStorePasswordEntry(
+            {url: 'goo.gl', username: 'bart', deviceId: 42, accountId: 43});
+        const accountAndDevicePasswordDialog =
+            elementFactory.createPasswordEditDialog(accountAndDevicePassword);
+        flush();
+
+        // By default no message is displayed.
+        assertTrue(accountAndDevicePasswordDialog.$.storageDetails.hidden);
+
+        // Display the message.
+        accountAndDevicePasswordDialog.shouldShowStorageDetails = true;
+        flush();
+        assertFalse(accountAndDevicePasswordDialog.$.storageDetails.hidden);
+        assertEquals(
+            accountAndDevicePasswordDialog.i18n(
+                'passwordStoredInAccountAndOnDevice'),
+            accountAndDevicePasswordDialog.$.storageDetails.innerText);
+      });
 
   test('showSavedPasswordEditDialog', function() {
     const PASSWORD = 'bAn@n@5';
-    const item = createPasswordEntry({url: 'goo.gl', username: 'bart'});
+    const item = createMultiStorePasswordEntry(
+        {url: 'goo.gl', username: 'bart', deviceId: 42});
     const passwordDialog = elementFactory.createPasswordEditDialog(item);
 
     assertFalse(passwordDialog.$.showPasswordButton.hidden);
@@ -796,8 +822,8 @@ suite('PasswordsSection', function() {
   // Tests that invoking the plaintext password sets the corresponding
   // password.
   test('onShowSavedPasswordEditDialog', function() {
-    const expectedItem =
-        createPasswordEntry({url: 'goo.gl', username: 'bart', id: 1});
+    const expectedItem = createMultiStorePasswordEntry(
+        {url: 'goo.gl', username: 'bart', deviceId: 1});
     const passwordDialog =
         elementFactory.createPasswordEditDialog(expectedItem);
     assertEquals('', passwordDialog.password);
@@ -1025,19 +1051,36 @@ suite('PasswordsSection', function() {
           isDisplayed(passwordsSection.$.accountStorageButtonsContainer));
     });
 
+    // Test verifies that the notification displayed after removing a password
+    // informs whether the password was stored on the device, in the account or
+    // in both, for users in account storage mode.
     test(
         'passwordDeletionMessageSpecifiesStoreIfAccountStorageIsEnabled',
         function() {
           // Feature flag enabled.
           loadTimeData.overrideValues({enableAccountStorage: true});
 
+          // Create array with one account-only password, one device-only, and
+          // two duplicates that will be merged.
           const passwordsSection = elementFactory.createPasswordsSection(
               passwordManager,
               [
                 createPasswordEntry(
                     {username: 'account', id: 0, fromAccountStore: true}),
                 createPasswordEntry(
-                    {username: 'local', id: 1, fromAccountStore: false})
+                    {username: 'local', id: 1, fromAccountStore: false}),
+                createPasswordEntry({
+                  username: 'both',
+                  frontendId: 2,
+                  id: 21,
+                  fromAccountStore: false
+                }),
+                createPasswordEntry({
+                  username: 'both',
+                  frontendId: 2,
+                  id: 22,
+                  fromAccountStore: true
+                }),
               ],
               []);
 
@@ -1054,19 +1097,28 @@ suite('PasswordsSection', function() {
           const passwordListItems =
               passwordsSection.root.querySelectorAll('password-list-item');
 
+          // No removal actually happens, so all passwords keep their position.
+          // The merged entry comes last.
           passwordListItems[0].$$('#passwordMenu').click();
           passwordsSection.$.menuRemovePassword.click();
           assertEquals(
               passwordsSection.i18n('passwordDeletedFromAccount'),
               getToastManager().$.content.textContent);
 
-          // The account password was not really removed, so the local one is
-          // still at index 1.
           passwordListItems[1].$$('#passwordMenu').click();
           passwordsSection.$.menuRemovePassword.click();
           assertEquals(
               passwordsSection.i18n('passwordDeletedFromDevice'),
               getToastManager().$.content.textContent);
+
+          // TODO(crbug.com/1049141): Update the test when the removal dialog
+          // is introduced.
+          passwordListItems[2].$$('#passwordMenu').click();
+          passwordsSection.$.menuRemovePassword.click();
+          assertEquals(
+              passwordsSection.i18n('passwordDeletedFromAccountAndDevice'),
+              getToastManager().$.content.textContent);
+
         });
   }
 
