@@ -681,7 +681,7 @@ class MediaHistoryStoreFeedsTest : public MediaHistoryStoreUnitTest {
       item->type = media_feeds::mojom::MediaFeedItemType::kMovie;
       item->date_published = base::Time::FromDeltaSinceWindowsEpoch(
           base::TimeDelta::FromMinutes(10));
-      item->is_family_friendly = true;
+      item->is_family_friendly = media_feeds::mojom::IsFamilyFriendly::kYes;
       item->action_status =
           media_feeds::mojom::MediaFeedItemActionStatus::kPotential;
       item->genre.push_back("test");
@@ -808,7 +808,7 @@ class MediaHistoryStoreFeedsTest : public MediaHistoryStoreUnitTest {
       item->name = base::ASCIIToUTF16("The Video");
       item->date_published = base::Time::FromDeltaSinceWindowsEpoch(
           base::TimeDelta::FromMinutes(20));
-      item->is_family_friendly = false;
+      item->is_family_friendly = media_feeds::mojom::IsFamilyFriendly::kNo;
       item->action_status =
           media_feeds::mojom::MediaFeedItemActionStatus::kActive;
       item->action = media_feeds::mojom::Action::New();
