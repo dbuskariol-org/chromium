@@ -634,11 +634,13 @@ void LockContentsView::ShowAdbEnabled() {
   UpdateBottomStatusIndicatorVisibility();
 }
 
-void LockContentsView::ShowSystemInfo() {
-  enable_system_info_if_possible_ = true;
-  bool system_info_visible = GetSystemInfoVisibility();
-  if (system_info_visible && !system_info_->GetVisible()) {
-    system_info_->SetVisible(true);
+void LockContentsView::ToggleSystemInfo() {
+  enable_system_info_if_possible_ = !enable_system_info_if_possible_;
+  // Whether the system information should be displayed or not might be
+  // enforced according to policy settings.
+  bool system_info_visibility = GetSystemInfoVisibility();
+  if (system_info_visibility != system_info_->GetVisible()) {
+    system_info_->SetVisible(system_info_visibility);
     LayoutTopHeader();
     LayoutBottomStatusIndicator();
   }
@@ -2068,7 +2070,7 @@ bool LockContentsView::OnKeyPressed(const ui::KeyEvent& event) {
 void LockContentsView::RegisterAccelerators() {
   // Applies on login and lock:
   accel_map_[ui::Accelerator(ui::VKEY_V, ui::EF_ALT_DOWN)] =
-      AcceleratorAction::kShowSystemInfo;
+      AcceleratorAction::kToggleSystemInfo;
 
   // Login-only accelerators:
   if (screen_type_ == LockScreen::ScreenType::kLogin) {
@@ -2096,8 +2098,8 @@ void LockContentsView::RegisterAccelerators() {
 
 void LockContentsView::PerformAction(AcceleratorAction action) {
   switch (action) {
-    case AcceleratorAction::kShowSystemInfo:
-      ShowSystemInfo();
+    case AcceleratorAction::kToggleSystemInfo:
+      ToggleSystemInfo();
       break;
     case AcceleratorAction::kShowFeedback:
       Shell::Get()->login_screen_controller()->ShowFeedback();

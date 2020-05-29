@@ -119,7 +119,7 @@ class ASH_EXPORT LockContentsView
   };
 
   enum class AcceleratorAction {
-    kShowSystemInfo,
+    kToggleSystemInfo,
     kShowFeedback,
     kShowResetScreen,
   };
@@ -140,7 +140,7 @@ class ASH_EXPORT LockContentsView
   void FocusNextUser();
   void FocusPreviousUser();
   void ShowAdbEnabled();
-  void ShowSystemInfo();
+  void ToggleSystemInfo();
   void ShowParentAccessDialog();
 
   // views::View:
