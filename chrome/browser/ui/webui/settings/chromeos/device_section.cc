@@ -29,7 +29,6 @@
 #include "chrome/grit/generated_resources.h"
 #include "chromeos/constants/chromeos_features.h"
 #include "chromeos/constants/chromeos_switches.h"
-#include "chromeos/dbus/dlcservice/dlcservice_client.h"
 #include "content/public/browser/web_ui.h"
 #include "content/public/browser/web_ui_data_source.h"
 #include "ui/base/l10n/l10n_util.h"
@@ -766,22 +765,11 @@ DeviceSection::DeviceSection(Profile* profile,
   }
 
   // DLC settings search tags are added/removed dynamically.
-  // TODO(crbug/1070712): Observe DLC list changes to make add/remove dynamic.
   if (features::ShouldShowDlcSettings()) {
+    DlcserviceClient::Get()->AddObserver(this);
     DlcserviceClient::Get()->GetExistingDlcs(base::BindOnce(
         &DeviceSection::OnGetExistingDlcs, weak_ptr_factory_.GetWeakPtr()));
   }
-}
-
-void DeviceSection::OnGetExistingDlcs(
-    const std::string& err,
-    const dlcservice::DlcsWithContent& dlcs_with_content) {
-  if (err != dlcservice::kErrorNone ||
-      dlcs_with_content.dlc_infos_size() == 0) {
-    registry()->RemoveSearchTags(GetDlcSearchConcepts());
-    return;
-  }
-  registry()->AddSearchTags(GetDlcSearchConcepts());
 }
 
 DeviceSection::~DeviceSection() {
@@ -796,6 +784,9 @@ DeviceSection::~DeviceSection() {
       ash::NightLightController::GetInstance();
   if (night_light_controller)
     night_light_controller->RemoveObserver(this);
+
+  if (features::ShouldShowDlcSettings())
+    DlcserviceClient::Get()->RemoveObserver(this);
 }
 
 void DeviceSection::AddLoadTimeData(content::WebUIDataSource* html_source) {
@@ -983,6 +974,22 @@ void DeviceSection::PowerChanged(
       power_manager::PowerSupplyProperties_BatteryState_NOT_PRESENT) {
     registry()->AddSearchTags(GetPowerWithBatterySearchConcepts());
   }
+}
+
+void DeviceSection::OnGetExistingDlcs(
+    const std::string& err,
+    const dlcservice::DlcsWithContent& dlcs_with_content) {
+  if (err != dlcservice::kErrorNone ||
+      dlcs_with_content.dlc_infos_size() == 0) {
+    registry()->RemoveSearchTags(GetDlcSearchConcepts());
+    return;
+  }
+  registry()->AddSearchTags(GetDlcSearchConcepts());
+}
+
+void DeviceSection::OnDlcStateChanged(const dlcservice::DlcState& dlc_state) {
+  DlcserviceClient::Get()->GetExistingDlcs(base::BindOnce(
+      &DeviceSection::OnGetExistingDlcs, weak_ptr_factory_.GetWeakPtr()));
 }
 
 void DeviceSection::OnGetDisplayUnitInfoList(
