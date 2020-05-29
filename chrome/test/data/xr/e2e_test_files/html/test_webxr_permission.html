@@ -29,7 +29,7 @@ WebXR page without any code specific to one test
         immersiveSessionInit = {};
       }
 
-      function verifySessionConsentError(sessionType) {
+      function verifyPermissionDeniedError(sessionType) {
         assert_not_equals(sessionInfos[sessionType].error, null);
         let err = sessionInfos[sessionType].error;
         assert_true(err instanceof DOMException, "Session should be rejected with a DOMException");
