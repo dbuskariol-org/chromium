@@ -115,9 +115,7 @@ HTMLCanvasElement::HTMLCanvasElement(Document& document)
       ExecutionContextLifecycleObserver(GetExecutionContext()),
       PageVisibilityObserver(document.GetPage()),
       CanvasRenderingContextHost(
-          CanvasRenderingContextHost::HostType::kCanvasHost,
-          base::make_optional<CanvasAsyncBlobCreator::UkmParams>(
-              {document.UkmRecorder(), document.UkmSourceID()})),
+          CanvasRenderingContextHost::HostType::kCanvasHost),
       size_(kDefaultCanvasWidth, kDefaultCanvasHeight),
       context_creation_was_blocked_(false),
       ignore_reset_(false),
@@ -378,6 +376,12 @@ ScriptPromise HTMLCanvasElement::convertToBlob(
     ScriptState* script_state,
     const ImageEncodeOptions* options,
     ExceptionState& exception_state) {
+  RecordIdentifiabilityMetric(
+      blink::IdentifiableSurface::FromTypeAndInput(
+          blink::IdentifiableSurface::Type::kCanvasReadback,
+          context_ ? context_->GetContextType()
+                   : CanvasRenderingContext::kContextTypeUnknown),
+      0);
   return CanvasRenderingContextHost::convertToBlob(script_state, options,
                                                    exception_state);
 }
@@ -965,8 +969,7 @@ String HTMLCanvasElement::ToDataURLInternal(
     RecordIdentifiabilityMetric(
         blink::IdentifiableSurface::FromTypeAndInput(
             blink::IdentifiableSurface::Type::kCanvasReadback, final_digest),
-        blink::IdentifiabilityDigestOfBytes(base::make_span(
-            data_buffer->Pixels(), data_buffer->ComputeByteSize())));
+        blink::IdentifiabilityDigestOfBytes(data_url.Span8()));
     return data_url;
   }
 
@@ -1033,10 +1036,15 @@ void HTMLCanvasElement::toBlob(V8BlobCallback* callback,
     async_creator = MakeGarbageCollected<CanvasAsyncBlobCreator>(
         image_bitmap, options,
         CanvasAsyncBlobCreator::kHTMLCanvasToBlobCallback, callback, start_time,
-        GetExecutionContext(),
-        base::make_optional<CanvasAsyncBlobCreator::UkmParams>(
-            {GetDocument().UkmRecorder(), GetDocument().UkmSourceID()}));
+        GetExecutionContext());
   }
+
+  RecordIdentifiabilityMetric(
+      blink::IdentifiableSurface::FromTypeAndInput(
+          blink::IdentifiableSurface::Type::kCanvasReadback,
+          context_ ? context_->GetContextType()
+                   : CanvasRenderingContext::kContextTypeUnknown),
+      0);
 
   if (async_creator) {
     async_creator->ScheduleAsyncBlobCreation(quality);
