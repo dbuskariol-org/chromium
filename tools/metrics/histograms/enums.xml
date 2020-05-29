@@ -48356,10 +48356,7 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="NetworkSecurityType">
-  <summary>
-    The security types come from the connman_service_security enum in
-    flimflam/include/service.h
-  </summary>
+  <summary>Shill's WiFi security types.</summary>
   <int value="0" label="UNKNOWN"/>
   <int value="1" label="NONE"/>
   <int value="2" label="WEP"/>
@@ -48367,6 +48364,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="4" label="802.11i/RSN"/>
   <int value="5" label="802.1x"/>
   <int value="6" label="PSK"/>
+  <int value="7" label="WPA3"/>
 </enum>
 
 <enum name="NetworkServiceAvailability">
