@@ -20,7 +20,43 @@ namespace chromeos {
 namespace settings {
 namespace {
 
-const int32_t kLocalSearchServiceMaxResults = 10;
+// Returns true if |first| should be ranked before |second|.
+bool CompareSearchResults(const mojom::SearchResultPtr& first,
+                          const mojom::SearchResultPtr& second) {
+  // Compute the difference between the results' default rankings. Note that
+  // kHigh is declared before kMedium which is declared before kLow, so a
+  // negative value indicates that |first| is ranked higher than |second| and a
+  // positive value indicates that |second| is ranked higher than |first|.
+  int32_t default_rank_diff = static_cast<int32_t>(first->default_rank) -
+                              static_cast<int32_t>(second->default_rank);
+  if (default_rank_diff < 0)
+    return true;
+  if (default_rank_diff > 0)
+    return false;
+
+  // At this point, the default ranks are equal, so compare relevance scores. A
+  // higher relevance score indicates a better text match, so the reverse is
+  // true this time.
+  if (first->relevance_score > second->relevance_score)
+    return true;
+  if (first->relevance_score < second->relevance_score)
+    return false;
+
+  // Default rank and relevance scores are equal, so prefer the result which is
+  // higher on the hierarchy. kSection is declared before kSubpage which is
+  // declared before kSetting, so follow the same pattern from default ranks
+  // above.
+  int32_t type_diff =
+      static_cast<int32_t>(first->type) - static_cast<int32_t>(second->type);
+  if (type_diff < 0)
+    return true;
+  if (type_diff > 0)
+    return false;
+
+  // If still equal at this point, arbitrarily choose than the |first| is ranked
+  // before |second|.
+  return true;
+}
 
 bool ContainsSectionResult(const std::vector<mojom::SearchResultPtr>& results,
                            mojom::Section section) {
@@ -65,8 +101,8 @@ std::vector<mojom::SearchResultPtr> SearchHandler::Search(
     uint32_t max_num_results,
     mojom::ParentResultBehavior parent_result_behavior) {
   std::vector<local_search_service::Result> local_search_service_results;
-  local_search_service::ResponseStatus response_status = index_->Find(
-      query, kLocalSearchServiceMaxResults, &local_search_service_results);
+  local_search_service::ResponseStatus response_status =
+      index_->Find(query, max_num_results, &local_search_service_results);
 
   if (response_status != local_search_service::ResponseStatus::kSuccess) {
     LOG(ERROR) << "Cannot search; LocalSearchService returned "
@@ -102,6 +138,8 @@ std::vector<mojom::SearchResultPtr> SearchHandler::GenerateSearchResultsArray(
     if (search_results.size() == max_num_results)
       break;
   }
+
+  std::sort(search_results.begin(), search_results.end(), CompareSearchResults);
 
   if (parent_result_behavior ==
       mojom::ParentResultBehavior::kAllowParentResults) {
