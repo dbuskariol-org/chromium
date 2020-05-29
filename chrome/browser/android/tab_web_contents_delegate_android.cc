@@ -23,6 +23,7 @@
 #include "chrome/browser/android/tab_android.h"
 #include "chrome/browser/banners/app_banner_manager_android.h"
 #include "chrome/browser/content_settings/sound_content_setting_observer.h"
+#include "chrome/browser/data_reduction_proxy/data_reduction_proxy_tab_helper.h"
 #include "chrome/browser/file_select_helper.h"
 #include "chrome/browser/flags/android/cached_feature_flags.h"
 #include "chrome/browser/flags/android/chrome_feature_list.h"
@@ -161,6 +162,7 @@ void TabWebContentsDelegateAndroid::PortalWebContentsCreated(
   HistoryTabHelper::CreateForWebContents(portal_contents);
   InfoBarService::CreateForWebContents(portal_contents);
   PrefsTabHelper::CreateForWebContents(portal_contents);
+  DataReductionProxyTabHelper::CreateForWebContents(portal_contents);
 }
 
 void TabWebContentsDelegateAndroid::RunFileChooser(
