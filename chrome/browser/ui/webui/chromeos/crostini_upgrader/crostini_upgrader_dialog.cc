@@ -101,7 +101,7 @@ void RunLaunchClosure(base::WeakPtr<crostini::CrostiniManager> crostini_manager,
     return;
   }
   crostini_manager->RestartCrostini(
-      crostini::ContainerId::GetDefault(),
+      crostini::kCrostiniDefaultVmName, crostini::kCrostiniDefaultContainerName,
       base::BindOnce(
           [](base::OnceClosure launch_closure,
              crostini::CrostiniResult result) {
@@ -122,7 +122,9 @@ void CrostiniUpgraderDialog::OnDialogShown(content::WebUI* webui) {
       crostini::CrostiniManager::GetForProfile(Profile::FromWebUI(webui));
   crostini_manager->SetCrostiniDialogStatus(crostini::DialogType::UPGRADER,
                                             true);
-  crostini_manager->UpgradePromptShown(crostini::ContainerId::GetDefault());
+  crostini_manager->UpgradePromptShown(
+      crostini::ContainerId(crostini::kCrostiniDefaultVmName,
+                            crostini::kCrostiniDefaultContainerName));
 
   upgrader_ui_ = static_cast<CrostiniUpgraderUI*>(webui->GetController());
   upgrader_ui_->set_launch_callback(base::BindOnce(

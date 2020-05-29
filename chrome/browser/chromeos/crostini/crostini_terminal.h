@@ -101,7 +101,8 @@ enum class TerminalSetting {
 
 // Generate the URL for Crostini terminal application.
 GURL GenerateVshInCroshUrl(Profile* profile,
-                           const ContainerId& container_id,
+                           const std::string& vm_name,
+                           const std::string& container_name,
                            const std::vector<std::string>& terminal_args);
 
 // Generate AppLaunchParams for the Crostini terminal application.
@@ -124,14 +125,16 @@ void ShowContainerTerminal(Profile* profile,
 // which will cause them to be executed as program inside that shell.
 void LaunchContainerTerminal(Profile* profile,
                              int64_t display_id,
-                             const ContainerId& container_id,
+                             const std::string& vm_name,
+                             const std::string& container_name,
                              const std::vector<std::string>& terminal_args);
 
 // Launches the terminal tabbed app.
 Browser* LaunchTerminal(
     Profile* profile,
     int64_t display_id = display::kInvalidDisplayId,
-    const ContainerId& container_id = ContainerId::GetDefault());
+    const std::string& vm_name = kCrostiniDefaultVmName,
+    const std::string& container_name = kCrostiniDefaultContainerName);
 
 // Launches the terminal settings popup window.
 Browser* LaunchTerminalSettings(

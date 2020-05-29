@@ -328,7 +328,8 @@ bool ConvertFileSystemURLToPathInsideCrostini(
     // Crostini.
     base::Optional<crostini::ContainerInfo> container_info =
         crostini::CrostiniManager::GetForProfile(profile)->GetContainerInfo(
-            crostini::ContainerId::GetDefault());
+            crostini::kCrostiniDefaultVmName,
+            crostini::kCrostiniDefaultContainerName);
     if (!container_info) {
       return false;
     }

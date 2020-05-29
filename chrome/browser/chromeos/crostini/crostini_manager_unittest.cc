@@ -215,7 +215,6 @@ class CrostiniManagerTest : public testing::Test {
   base::RunLoop* run_loop() { return run_loop_.get(); }
   Profile* profile() { return profile_.get(); }
   CrostiniManager* crostini_manager() { return crostini_manager_; }
-  const ContainerId& container_id() { return container_id_; }
 
   chromeos::FakeChromeUserManager* fake_user_manager() const {
     return static_cast<chromeos::FakeChromeUserManager*>(
@@ -231,7 +230,6 @@ class CrostiniManagerTest : public testing::Test {
       run_loop_;  // run_loop_ must be created on the UI thread.
   std::unique_ptr<TestingProfile> profile_;
   CrostiniManager* crostini_manager_;
-  const ContainerId container_id_ = ContainerId(kVmName, kContainerName);
   device::FakeUsbDeviceManager fake_usb_manager_;
   base::test::ScopedFeatureList scoped_feature_list_;
 
@@ -488,7 +486,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageRootAccessError) {
   FakeCrostiniFeatures crostini_features;
   crostini_features.set_root_access_allowed(false);
   crostini_manager()->InstallLinuxPackage(
-      container_id(), "/tmp/package.deb",
+      kVmName, kContainerName, "/tmp/package.deb",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::INSTALL_LINUX_PACKAGE_FAILED));
   run_loop()->Run();
@@ -498,7 +496,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageSignalNotConnectedError) {
   fake_cicerone_client_->set_install_linux_package_progress_signal_connected(
       false);
   crostini_manager()->InstallLinuxPackage(
-      container_id(), "/tmp/package.deb",
+      kVmName, kContainerName, "/tmp/package.deb",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::INSTALL_LINUX_PACKAGE_FAILED));
   run_loop()->Run();
@@ -509,7 +507,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageSignalSuccess) {
   response.set_status(vm_tools::cicerone::InstallLinuxPackageResponse::STARTED);
   fake_cicerone_client_->set_install_linux_package_response(response);
   crostini_manager()->InstallLinuxPackage(
-      container_id(), "/tmp/package.deb",
+      kVmName, kContainerName, "/tmp/package.deb",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS));
   run_loop()->Run();
@@ -522,7 +520,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageSignalFailure) {
   response.set_failure_reason(failure_reason);
   fake_cicerone_client_->set_install_linux_package_response(response);
   crostini_manager()->InstallLinuxPackage(
-      container_id(), "/tmp/package.deb",
+      kVmName, kContainerName, "/tmp/package.deb",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::INSTALL_LINUX_PACKAGE_FAILED));
   run_loop()->Run();
@@ -534,7 +532,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageSignalOperationBlocked) {
       vm_tools::cicerone::InstallLinuxPackageResponse::INSTALL_ALREADY_ACTIVE);
   fake_cicerone_client_->set_install_linux_package_response(response);
   crostini_manager()->InstallLinuxPackage(
-      container_id(), "/tmp/package.deb",
+      kVmName, kContainerName, "/tmp/package.deb",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::BLOCKING_OPERATION_ALREADY_ACTIVE));
   run_loop()->Run();
@@ -543,7 +541,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageSignalOperationBlocked) {
 TEST_F(CrostiniManagerTest, UninstallPackageOwningFileSignalNotConnectedError) {
   fake_cicerone_client_->set_uninstall_package_progress_signal_connected(false);
   crostini_manager()->UninstallPackageOwningFile(
-      container_id(), "emacs",
+      kVmName, kContainerName, "emacs",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::UNINSTALL_PACKAGE_FAILED));
   run_loop()->Run();
@@ -555,7 +553,7 @@ TEST_F(CrostiniManagerTest, UninstallPackageOwningFileSignalSuccess) {
       vm_tools::cicerone::UninstallPackageOwningFileResponse::STARTED);
   fake_cicerone_client_->set_uninstall_package_owning_file_response(response);
   crostini_manager()->UninstallPackageOwningFile(
-      container_id(), "emacs",
+      kVmName, kContainerName, "emacs",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS));
   run_loop()->Run();
@@ -568,7 +566,7 @@ TEST_F(CrostiniManagerTest, UninstallPackageOwningFileSignalFailure) {
   response.set_failure_reason("Didn't feel like it");
   fake_cicerone_client_->set_uninstall_package_owning_file_response(response);
   crostini_manager()->UninstallPackageOwningFile(
-      container_id(), "emacs",
+      kVmName, kContainerName, "emacs",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::UNINSTALL_PACKAGE_FAILED));
   run_loop()->Run();
@@ -580,7 +578,7 @@ TEST_F(CrostiniManagerTest, UninstallPackageOwningFileSignalOperationBlocked) {
                           BLOCKING_OPERATION_IN_PROGRESS);
   fake_cicerone_client_->set_uninstall_package_owning_file_response(response);
   crostini_manager()->UninstallPackageOwningFile(
-      container_id(), "emacs",
+      kVmName, kContainerName, "emacs",
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::BLOCKING_OPERATION_ALREADY_ACTIVE));
   run_loop()->Run();
@@ -837,7 +835,7 @@ class CrostiniManagerRestartTest : public CrostiniManagerTest,
 
 TEST_F(CrostiniManagerRestartTest, RestartSuccess) {
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -849,7 +847,7 @@ TEST_F(CrostiniManagerRestartTest, RestartSuccess) {
   EXPECT_EQ(1, restart_crostini_callback_count_);
 
   base::Optional<ContainerInfo> container_info =
-      crostini_manager()->GetContainerInfo(container_id());
+      crostini_manager()->GetContainerInfo(kVmName, kContainerName);
   EXPECT_EQ(container_info.value().username,
             DefaultContainerUserNameForProfile(profile()));
   ExpectRestarterUmaCount(1);
@@ -866,7 +864,7 @@ TEST_F(CrostiniManagerRestartTest, RestartDelayAndSuccessWhenVmStopping) {
         }
       });
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -878,7 +876,7 @@ TEST_F(CrostiniManagerRestartTest, RestartDelayAndSuccessWhenVmStopping) {
   EXPECT_EQ(1, restart_crostini_callback_count_);
 
   base::Optional<ContainerInfo> container_info =
-      crostini_manager()->GetContainerInfo(container_id());
+      crostini_manager()->GetContainerInfo(kVmName, kContainerName);
   EXPECT_EQ(container_info.value().username,
             DefaultContainerUserNameForProfile(profile()));
   ExpectRestarterUmaCount(1);
@@ -888,7 +886,7 @@ TEST_F(CrostiniManagerRestartTest, RestartSuccessWithOptions) {
   CrostiniManager::RestartOptions options;
   options.container_username = "helloworld";
   restart_id_ = crostini_manager()->RestartCrostiniWithOptions(
-      container_id(), std::move(options),
+      kVmName, kContainerName, std::move(options),
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -900,7 +898,7 @@ TEST_F(CrostiniManagerRestartTest, RestartSuccessWithOptions) {
   EXPECT_EQ(1, restart_crostini_callback_count_);
 
   base::Optional<ContainerInfo> container_info =
-      crostini_manager()->GetContainerInfo(container_id());
+      crostini_manager()->GetContainerInfo(kVmName, kContainerName);
   EXPECT_EQ(container_info.value().username, "helloworld");
   ExpectRestarterUmaCount(1);
 }
@@ -908,7 +906,7 @@ TEST_F(CrostiniManagerRestartTest, RestartSuccessWithOptions) {
 TEST_F(CrostiniManagerRestartTest, AbortOnComponentLoaded) {
   abort_on_component_loaded_ = true;
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -925,7 +923,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnComponentLoaded) {
 TEST_F(CrostiniManagerRestartTest, AbortOnConciergeStarted) {
   abort_on_concierge_started_ = true;
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -940,7 +938,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnConciergeStarted) {
 TEST_F(CrostiniManagerRestartTest, AbortOnDiskImageCreated) {
   abort_on_disk_image_created_ = true;
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -955,7 +953,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnDiskImageCreated) {
 TEST_F(CrostiniManagerRestartTest, AbortOnVmStarted) {
   abort_on_vm_started_ = true;
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -971,7 +969,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnContainerCreated) {
   abort_on_container_created_ = true;
   // Use termina/penguin names to allow fetch ssh keys.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -989,7 +987,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnContainerCreatedError) {
       vm_tools::cicerone::LxdContainerCreatedSignal::UNKNOWN);
   // Use termina/penguin names to allow fetch ssh keys.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::UNKNOWN_ERROR),
       this);
@@ -1006,7 +1004,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnContainerStarted) {
   abort_on_container_started_ = true;
   // Use termina/penguin names to allow fetch ssh keys.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1022,7 +1020,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnContainerSetup) {
   abort_on_container_setup_ = true;
   // Use termina/penguin names to allow fetch ssh keys.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1038,7 +1036,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnSshKeysFetched) {
   abort_on_ssh_keys_fetched_ = true;
   // Use termina/penguin names to allow fetch ssh keys.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1063,7 +1061,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnContainerMounted) {
 
   // Use termina/penguin names to allow fetch ssh keys.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1090,7 +1088,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnMountEvent) {
 
   // Use termina/penguin names to allow fetch ssh keys.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1118,7 +1116,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnMountEventWithError) {
 
   // Use termina/penguin names to allow fetch ssh keys.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1135,7 +1133,7 @@ TEST_F(CrostiniManagerRestartTest, AbortOnMountEventWithError) {
 TEST_F(CrostiniManagerRestartTest, AbortThenStopVm) {
   abort_then_stop_vm_ = true;
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), base::DoNothing::Once()),
       this);
@@ -1149,7 +1147,7 @@ TEST_F(CrostiniManagerRestartTest, AbortThenStopVm) {
 
 TEST_F(CrostiniManagerRestartTest, DoubleAbortIsSafe) {
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1171,7 +1169,7 @@ TEST_F(CrostiniManagerRestartTest, DoubleAbortIsSafe) {
 TEST_F(CrostiniManagerRestartTest, OnlyMountTerminaPenguin) {
   // Use names other than termina/penguin.  Will not mount sshfs.
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1186,15 +1184,15 @@ TEST_F(CrostiniManagerRestartTest, OnlyMountTerminaPenguin) {
 TEST_F(CrostiniManagerRestartTest, MultiRestartAllowed) {
   CrostiniManager::RestartId id1, id2, id3;
   id1 = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()));
   id2 = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()));
   id3 = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()));
 
@@ -1238,7 +1236,7 @@ TEST_F(CrostiniManagerRestartTest, MountForTerminaPenguin) {
 
   // Use termina/penguin to perform mount.
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()));
   run_loop()->Run();
@@ -1246,7 +1244,8 @@ TEST_F(CrostiniManagerRestartTest, MountForTerminaPenguin) {
   EXPECT_TRUE(fake_concierge_client_->start_termina_vm_called());
   EXPECT_TRUE(fake_concierge_client_->get_container_ssh_keys_called());
   EXPECT_TRUE(crostini_manager()
-                  ->GetContainerInfo(ContainerId::GetDefault())
+                  ->GetContainerInfo(kCrostiniDefaultVmName,
+                                     kCrostiniDefaultContainerName)
                   ->sshfs_mounted);
   EXPECT_EQ(1, restart_crostini_callback_count_);
   base::FilePath path;
@@ -1261,7 +1260,7 @@ TEST_F(CrostiniManagerRestartTest, MountForTerminaPenguin) {
 
 TEST_F(CrostiniManagerRestartTest, IsContainerRunningFalseIfVmNotStarted) {
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1275,7 +1274,7 @@ TEST_F(CrostiniManagerRestartTest, IsContainerRunningFalseIfVmNotStarted) {
   EXPECT_EQ(1, restart_crostini_callback_count_);
 
   EXPECT_TRUE(crostini_manager()->IsVmRunning(kVmName));
-  EXPECT_TRUE(crostini_manager()->GetContainerInfo(container_id()));
+  EXPECT_TRUE(crostini_manager()->GetContainerInfo(kVmName, kContainerName));
 
   // Now call StartTerminaVm again. The default response state is "STARTING",
   // so no container should be considered running.
@@ -1288,7 +1287,7 @@ TEST_F(CrostiniManagerRestartTest, IsContainerRunningFalseIfVmNotStarted) {
   run_loop2.Run();
   EXPECT_TRUE(fake_concierge_client_->start_termina_vm_called());
   EXPECT_TRUE(crostini_manager()->IsVmRunning(kVmName));
-  EXPECT_FALSE(crostini_manager()->GetContainerInfo(container_id()));
+  EXPECT_FALSE(crostini_manager()->GetContainerInfo(kVmName, kContainerName));
   ExpectRestarterUmaCount(1);
 }
 
@@ -1301,15 +1300,15 @@ TEST_F(CrostiniManagerRestartTest, OsReleaseSetCorrectly) {
   fake_cicerone_client_->set_lxd_container_os_release(os_release);
 
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
   EXPECT_TRUE(crostini_manager()->IsRestartPending(restart_id_));
   run_loop()->Run();
 
-  const auto* stored_os_release =
-      crostini_manager()->GetContainerOsRelease(container_id());
+  const auto* stored_os_release = crostini_manager()->GetContainerOsRelease(
+      ContainerId(kVmName, kContainerName));
   EXPECT_NE(stored_os_release, nullptr);
   // Sadly, we can't use MessageDifferencer here because we're using the LITE
   // API in our protos.
@@ -1319,8 +1318,9 @@ TEST_F(CrostiniManagerRestartTest, OsReleaseSetCorrectly) {
                                       ContainerOsVersion::kDebianBuster, 1);
 
   // The data for this container should also be stored in prefs.
-  const base::Value* os_release_pref_value = GetContainerPrefValue(
-      profile(), container_id(), prefs::kContainerOsVersionKey);
+  const base::Value* os_release_pref_value =
+      GetContainerPrefValue(profile(), ContainerId(kVmName, kContainerName),
+                            prefs::kContainerOsVersionKey);
   EXPECT_NE(os_release_pref_value, nullptr);
   EXPECT_EQ(os_release_pref_value->GetInt(),
             static_cast<int>(ContainerOsVersion::kDebianBuster));
@@ -1328,7 +1328,7 @@ TEST_F(CrostiniManagerRestartTest, OsReleaseSetCorrectly) {
 
 TEST_F(CrostiniManagerRestartTest, RestartThenUninstall) {
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), base::DoNothing::Once()));
 
@@ -1354,15 +1354,15 @@ TEST_F(CrostiniManagerRestartTest, RestartThenUninstall) {
 TEST_F(CrostiniManagerRestartTest, RestartMultipleThenUninstall) {
   CrostiniManager::RestartId id1, id2, id3;
   id1 = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), base::DoNothing::Once()));
   id2 = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), base::DoNothing::Once()));
   id3 = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), base::DoNothing::Once()));
 
@@ -1390,7 +1390,7 @@ TEST_F(CrostiniManagerRestartTest, UninstallThenRestart) {
   // Install crostini first so that the uninstaller doesn't terminate before we
   // can call the installer again
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()));
 
@@ -1405,7 +1405,7 @@ TEST_F(CrostiniManagerRestartTest, UninstallThenRestart) {
                      base::Unretained(this), run_loop2.QuitClosure()));
 
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), base::DoNothing::Once()));
 
@@ -1420,7 +1420,7 @@ TEST_F(CrostiniManagerRestartTest, UninstallThenRestart) {
 TEST_F(CrostiniManagerRestartTest, VmStoppedDuringRestart) {
   fake_cicerone_client_->set_send_container_started_signal(false);
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1445,7 +1445,7 @@ TEST_F(CrostiniManagerRestartTest, RestartTriggersArcSideloadIfEnabled) {
   fake_cicerone_client_->set_enable_arc_sideload_response(fake_response);
 
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1464,7 +1464,7 @@ TEST_F(CrostiniManagerRestartTest, RestartDoesNotTriggerArcSideloadIfDisabled) {
   fake_cicerone_client_->set_enable_arc_sideload_response(fake_response);
 
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1475,7 +1475,7 @@ TEST_F(CrostiniManagerRestartTest, RestartDoesNotTriggerArcSideloadIfDisabled) {
 
 TEST_F(CrostiniManagerRestartTest, RestartWhileShuttingDown) {
   restart_id_ = crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1488,7 +1488,7 @@ TEST_F(CrostiniManagerRestartTest, ComponentUpdateInProgress) {
       component_updater::CrOSComponentManager::Error::UPDATE_IN_PROGRESS);
 
   crostini_manager()->RestartCrostini(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()));
 
@@ -1540,7 +1540,7 @@ TEST_F(CrostiniManagerEnterpriseReportingTest,
       response);
 
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1566,7 +1566,7 @@ TEST_F(CrostiniManagerEnterpriseReportingTest,
       response);
 
   restart_id_ = crostini_manager()->RestartCrostini(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&CrostiniManagerRestartTest::RestartCrostiniCallback,
                      base::Unretained(this), run_loop()->QuitClosure()),
       this);
@@ -1587,7 +1587,7 @@ TEST_F(CrostiniManagerEnterpriseReportingTest,
 
 TEST_F(CrostiniManagerTest, ExportContainerSuccess) {
   crostini_manager()->ExportLxdContainer(
-      container_id(), base::FilePath("export_path"),
+      kVmName, kContainerName, base::FilePath("export_path"),
       base::BindOnce(&ExpectCrostiniExportResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS, 123, 456));
 
@@ -1617,13 +1617,13 @@ TEST_F(CrostiniManagerTest, ExportContainerSuccess) {
 TEST_F(CrostiniManagerTest, ExportContainerFailInProgress) {
   // 1st call succeeds.
   crostini_manager()->ExportLxdContainer(
-      container_id(), base::FilePath("export_path"),
+      kVmName, kContainerName, base::FilePath("export_path"),
       base::BindOnce(&ExpectCrostiniExportResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS, 123, 456));
 
   // 2nd call fails since 1st call is in progress.
   crostini_manager()->ExportLxdContainer(
-      container_id(), base::FilePath("export_path"),
+      kVmName, kContainerName, base::FilePath("export_path"),
       base::BindOnce(&ExpectCrostiniExportResult, base::DoNothing::Once(),
                      CrostiniResult::CONTAINER_EXPORT_IMPORT_FAILED, 0, 0));
 
@@ -1643,7 +1643,7 @@ TEST_F(CrostiniManagerTest, ExportContainerFailInProgress) {
 
 TEST_F(CrostiniManagerTest, ExportContainerFailFromSignal) {
   crostini_manager()->ExportLxdContainer(
-      container_id(), base::FilePath("export_path"),
+      kVmName, kContainerName, base::FilePath("export_path"),
       base::BindOnce(&ExpectCrostiniExportResult, run_loop()->QuitClosure(),
                      CrostiniResult::CONTAINER_EXPORT_IMPORT_FAILED, 123, 456));
 
@@ -1664,7 +1664,7 @@ TEST_F(CrostiniManagerTest, ExportContainerFailFromSignal) {
 TEST_F(CrostiniManagerTest, ExportContainerFailOnVmStop) {
   crostini_manager()->AddRunningVmForTesting(kVmName);
   crostini_manager()->ExportLxdContainer(
-      container_id(), base::FilePath("export_path"),
+      kVmName, kContainerName, base::FilePath("export_path"),
       base::BindOnce(&ExpectCrostiniExportResult, run_loop()->QuitClosure(),
                      CrostiniResult::CONTAINER_EXPORT_IMPORT_FAILED_VM_STOPPED,
                      0, 0));
@@ -1674,7 +1674,7 @@ TEST_F(CrostiniManagerTest, ExportContainerFailOnVmStop) {
 
 TEST_F(CrostiniManagerTest, ImportContainerSuccess) {
   crostini_manager()->ImportLxdContainer(
-      container_id(), base::FilePath("import_path"),
+      kVmName, kContainerName, base::FilePath("import_path"),
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS));
 
@@ -1703,13 +1703,13 @@ TEST_F(CrostiniManagerTest, ImportContainerSuccess) {
 TEST_F(CrostiniManagerTest, ImportContainerFailInProgress) {
   // 1st call succeeds.
   crostini_manager()->ImportLxdContainer(
-      container_id(), base::FilePath("import_path"),
+      kVmName, kContainerName, base::FilePath("import_path"),
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS));
 
   // 2nd call fails since 1st call is in progress.
   crostini_manager()->ImportLxdContainer(
-      container_id(), base::FilePath("import_path"),
+      kVmName, kContainerName, base::FilePath("import_path"),
       base::BindOnce(ExpectCrostiniResult, base::DoNothing::Once(),
                      CrostiniResult::CONTAINER_EXPORT_IMPORT_FAILED));
 
@@ -1727,7 +1727,7 @@ TEST_F(CrostiniManagerTest, ImportContainerFailInProgress) {
 
 TEST_F(CrostiniManagerTest, ImportContainerFailArchitecture) {
   crostini_manager()->ImportLxdContainer(
-      container_id(), base::FilePath("import_path"),
+      kVmName, kContainerName, base::FilePath("import_path"),
       base::BindOnce(
           &ExpectCrostiniResult, run_loop()->QuitClosure(),
           CrostiniResult::CONTAINER_EXPORT_IMPORT_FAILED_ARCHITECTURE));
@@ -1749,7 +1749,7 @@ TEST_F(CrostiniManagerTest, ImportContainerFailArchitecture) {
 
 TEST_F(CrostiniManagerTest, ImportContainerFailFromSignal) {
   crostini_manager()->ImportLxdContainer(
-      container_id(), base::FilePath("import_path"),
+      kVmName, kContainerName, base::FilePath("import_path"),
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::CONTAINER_EXPORT_IMPORT_FAILED));
 
@@ -1768,7 +1768,7 @@ TEST_F(CrostiniManagerTest, ImportContainerFailFromSignal) {
 TEST_F(CrostiniManagerTest, ImportContainerFailOnVmStop) {
   crostini_manager()->AddRunningVmForTesting(kVmName);
   crostini_manager()->ImportLxdContainer(
-      container_id(), base::FilePath("import_path"),
+      kVmName, kContainerName, base::FilePath("import_path"),
       base::BindOnce(
           &ExpectCrostiniResult, run_loop()->QuitClosure(),
           CrostiniResult::CONTAINER_EXPORT_IMPORT_FAILED_VM_STOPPED));
@@ -1780,7 +1780,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageFromAptSignalNotConnectedError) {
   fake_cicerone_client_->set_install_linux_package_progress_signal_connected(
       false);
   crostini_manager()->InstallLinuxPackageFromApt(
-      container_id(), kPackageID,
+      kVmName, kContainerName, kPackageID,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::INSTALL_LINUX_PACKAGE_FAILED));
   run_loop()->Run();
@@ -1791,7 +1791,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageFromAptSignalSuccess) {
   response.set_status(vm_tools::cicerone::InstallLinuxPackageResponse::STARTED);
   fake_cicerone_client_->set_install_linux_package_response(response);
   crostini_manager()->InstallLinuxPackageFromApt(
-      container_id(), kPackageID,
+      kVmName, kContainerName, kPackageID,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS));
   run_loop()->Run();
@@ -1804,7 +1804,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageFromAptSignalFailure) {
       "Unit tests can't install Linux package from apt!");
   fake_cicerone_client_->set_install_linux_package_response(response);
   crostini_manager()->InstallLinuxPackageFromApt(
-      container_id(), kPackageID,
+      kVmName, kContainerName, kPackageID,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::INSTALL_LINUX_PACKAGE_FAILED));
   run_loop()->Run();
@@ -1816,7 +1816,7 @@ TEST_F(CrostiniManagerTest, InstallLinuxPackageFromAptSignalOperationBlocked) {
       vm_tools::cicerone::InstallLinuxPackageResponse::INSTALL_ALREADY_ACTIVE);
   fake_cicerone_client_->set_install_linux_package_response(response);
   crostini_manager()->InstallLinuxPackageFromApt(
-      container_id(), kPackageID,
+      kVmName, kContainerName, kPackageID,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::BLOCKING_OPERATION_ALREADY_ACTIVE));
   run_loop()->Run();
@@ -1829,7 +1829,7 @@ TEST_F(CrostiniManagerTest, InstallerStatusInitiallyFalse) {
 
 TEST_F(CrostiniManagerTest, StartContainerSuccess) {
   crostini_manager()->StartLxdContainer(
-      container_id(),
+      kVmName, kContainerName,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS));
 
@@ -1877,7 +1877,7 @@ TEST_F(CrostiniManagerAnsibleInfraTest, StartContainerAnsibleInstallFailure) {
       vm_tools::cicerone::InstallLinuxPackageResponse::FAILED);
 
   crostini_manager()->StartLxdContainer(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::CONTAINER_CONFIGURATION_FAILED));
 
@@ -1891,7 +1891,7 @@ TEST_F(CrostiniManagerAnsibleInfraTest, StartContainerApplyFailure) {
       vm_tools::cicerone::ApplyAnsiblePlaybookResponse::FAILED);
 
   crostini_manager()->StartLxdContainer(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::CONTAINER_CONFIGURATION_FAILED));
 
@@ -1909,7 +1909,7 @@ TEST_F(CrostiniManagerAnsibleInfraTest, StartContainerSuccess) {
       vm_tools::cicerone::ApplyAnsiblePlaybookResponse::STARTED);
 
   crostini_manager()->StartLxdContainer(
-      ContainerId::GetDefault(),
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName,
       base::BindOnce(&ExpectCrostiniResult, run_loop()->QuitClosure(),
                      CrostiniResult::SUCCESS));
   base::RunLoop().RunUntilIdle();

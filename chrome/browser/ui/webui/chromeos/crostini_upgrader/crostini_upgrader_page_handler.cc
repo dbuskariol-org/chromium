@@ -53,8 +53,10 @@ void CrostiniUpgraderPageHandler::Backup(bool show_file_chooser) {
   Redisplay();
   base::UmaHistogramEnumeration(crostini::kUpgradeDialogEventHistogram,
                                 crostini::UpgradeDialogEvent::kDidBackup);
-  upgrader_ui_delegate_->Backup(crostini::ContainerId::GetDefault(),
-                                show_file_chooser, web_contents_);
+  upgrader_ui_delegate_->Backup(
+      crostini::ContainerId(crostini::kCrostiniDefaultVmName,
+                            crostini::kCrostiniDefaultContainerName),
+      show_file_chooser, web_contents_);
 }
 
 void CrostiniUpgraderPageHandler::StartPrechecks() {
@@ -63,15 +65,19 @@ void CrostiniUpgraderPageHandler::StartPrechecks() {
 
 void CrostiniUpgraderPageHandler::Upgrade() {
   Redisplay();
-  upgrader_ui_delegate_->Upgrade(crostini::ContainerId::GetDefault());
+  upgrader_ui_delegate_->Upgrade(
+      crostini::ContainerId(crostini::kCrostiniDefaultVmName,
+                            crostini::kCrostiniDefaultContainerName));
 }
 
 void CrostiniUpgraderPageHandler::Restore() {
   Redisplay();
   base::UmaHistogramEnumeration(crostini::kUpgradeDialogEventHistogram,
                                 crostini::UpgradeDialogEvent::kDidRestore);
-  upgrader_ui_delegate_->Restore(crostini::ContainerId::GetDefault(),
-                                 web_contents_);
+  upgrader_ui_delegate_->Restore(
+      crostini::ContainerId(crostini::kCrostiniDefaultVmName,
+                            crostini::kCrostiniDefaultContainerName),
+      web_contents_);
 }
 
 void CrostiniUpgraderPageHandler::Cancel() {

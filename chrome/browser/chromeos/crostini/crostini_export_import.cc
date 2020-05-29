@@ -123,7 +123,8 @@ CrostiniExportImport::OperationData* CrostiniExportImport::NewOperationData(
 
 CrostiniExportImport::OperationData* CrostiniExportImport::NewOperationData(
     ExportImportType type) {
-  return NewOperationData(type, ContainerId::GetDefault());
+  return NewOperationData(
+      type, ContainerId(kCrostiniDefaultVmName, kCrostiniDefaultContainerName));
 }
 
 void CrostiniExportImport::ExportContainer(content::WebContents* web_contents) {
@@ -328,7 +329,7 @@ void CrostiniExportImport::ExportAfterSharing(
     return;
   }
   CrostiniManager::GetForProfile(profile_)->ExportLxdContainer(
-      ContainerId::GetDefault(), container_path,
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName, container_path,
       base::BindOnce(&CrostiniExportImport::OnExportComplete,
                      weak_ptr_factory_.GetWeakPtr(), base::Time::Now(),
                      container_id, std::move(callback)));
@@ -488,7 +489,7 @@ void CrostiniExportImport::ImportAfterSharing(
     return;
   }
   CrostiniManager::GetForProfile(profile_)->ImportLxdContainer(
-      ContainerId::GetDefault(), container_path,
+      kCrostiniDefaultVmName, kCrostiniDefaultContainerName, container_path,
       base::BindOnce(&CrostiniExportImport::OnImportComplete,
                      weak_ptr_factory_.GetWeakPtr(), base::Time::Now(),
                      container_id, std::move(callback)));
@@ -579,7 +580,7 @@ void CrostiniExportImport::OnImportComplete(
 
   // Restart from CrostiniManager.
   CrostiniManager::GetForProfile(profile_)->RestartCrostini(
-      container_id, std::move(callback));
+      container_id.vm_name, container_id.container_name, std::move(callback));
 }
 
 void CrostiniExportImport::OnImportContainerProgress(

@@ -63,7 +63,8 @@ TEST_F(CrostiniPackageNotificationTest, InstallWithNoIcons) {
   CrostiniPackageNotification notification(
       profile_.get(),
       CrostiniPackageNotification::NotificationType::PACKAGE_INSTALL,
-      PackageOperationStatus::RUNNING, ContainerId::GetDefault(),
+      PackageOperationStatus::RUNNING,
+      ContainerId(kCrostiniDefaultVmName, kCrostiniDefaultContainerName),
       base::string16(), kNotificationId, service_.get());
 
   notification.UpdateProgress(PackageOperationStatus::SUCCEEDED, 100);
@@ -74,7 +75,8 @@ TEST_F(CrostiniPackageNotificationTest, InstallWithOneIcon) {
   CrostiniPackageNotification notification(
       profile_.get(),
       CrostiniPackageNotification::NotificationType::PACKAGE_INSTALL,
-      PackageOperationStatus::RUNNING, ContainerId::GetDefault(),
+      PackageOperationStatus::RUNNING,
+      ContainerId(kCrostiniDefaultVmName, kCrostiniDefaultContainerName),
       base::string16(), kNotificationId, service_.get());
 
   auto app = CrostiniTestHelper::BasicApp(kDefaultAppFileId);
@@ -88,7 +90,8 @@ TEST_F(CrostiniPackageNotificationTest, InstallWithTwoIcons) {
   CrostiniPackageNotification notification(
       profile_.get(),
       CrostiniPackageNotification::NotificationType::PACKAGE_INSTALL,
-      PackageOperationStatus::RUNNING, ContainerId::GetDefault(),
+      PackageOperationStatus::RUNNING,
+      ContainerId(kCrostiniDefaultVmName, kCrostiniDefaultContainerName),
       base::string16(), kNotificationId, service_.get());
 
   auto app = CrostiniTestHelper::BasicApp(kDefaultAppFileId);

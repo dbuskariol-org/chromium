@@ -50,7 +50,8 @@ class CrostiniPackageService : public KeyedService,
   void NotificationCompleted(CrostiniPackageNotification* notification);
 
   void GetLinuxPackageInfo(
-      const ContainerId& container_id,
+      const std::string& vm_name,
+      const std::string& container_name,
       const storage::FileSystemURL& package_url,
       CrostiniManager::GetLinuxPackageInfoCallback callback);
 
@@ -74,7 +75,8 @@ class CrostiniPackageService : public KeyedService,
   // (Eventually) install a Linux package. If successfully started, a system
   // notification will be used to display further updates.
   void QueueInstallLinuxPackage(
-      const ContainerId& container_id,
+      const std::string& vm_name,
+      const std::string& container_name,
       const storage::FileSystemURL& package_url,
       CrostiniManager::InstallLinuxPackageCallback callback);
 
@@ -126,7 +128,8 @@ class CrostiniPackageService : public KeyedService,
 
   // Callback between sharing and invoking GetLinuxPackageInfo().
   void OnSharePathForGetLinuxPackageInfo(
-      const ContainerId& container_id,
+      const std::string& vm_name,
+      const std::string& container_name,
       const storage::FileSystemURL& package_url,
       const base::FilePath& package_path,
       CrostiniManager::GetLinuxPackageInfoCallback callback,
@@ -135,13 +138,15 @@ class CrostiniPackageService : public KeyedService,
 
   // Wraps the callback provided in GetLinuxPackageInfo().
   void OnGetLinuxPackageInfo(
-      const ContainerId& container_id,
+      const std::string& vm_name,
+      const std::string& container_name,
       CrostiniManager::GetLinuxPackageInfoCallback callback,
       const LinuxPackageInfo& linux_package_info);
 
   // Wraps the callback provided in InstallLinuxPackage().
   void OnInstallLinuxPackage(
-      const ContainerId& container_id,
+      const std::string& vm_name,
+      const std::string& container_name,
       CrostiniManager::InstallLinuxPackageCallback callback,
       CrostiniResult result);
 
