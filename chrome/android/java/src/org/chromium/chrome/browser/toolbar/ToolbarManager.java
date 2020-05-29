@@ -308,7 +308,9 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
 
         mToolbar = new TopToolbarCoordinator(controlContainer, mActivity.findViewById(R.id.toolbar),
                 identityDiscController, mLocationBarModel, mToolbarTabController,
-                new UserEducationHelper(mActivity), buttonDataProviders);
+                new UserEducationHelper(mActivity), buttonDataProviders,
+                mActivity.isTablet() ? mAppThemeColorProvider : mTabThemeColorProvider,
+                mAppThemeColorProvider);
 
         mActionModeController =
                 new ActionModeController(mActivity, mActionBarDelegate, toolbarActionModeCallback);
@@ -643,8 +645,6 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
 
         mToolbar.setTabCountProvider(mTabCountProvider);
         mToolbar.setIncognitoStateProvider(mIncognitoStateProvider);
-        mToolbar.setThemeColorProvider(
-                mActivity.isTablet() ? mAppThemeColorProvider : mTabThemeColorProvider);
 
         AccessibilityUtil.addObserver(this);
 
