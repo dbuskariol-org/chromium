@@ -5893,3 +5893,4 @@ crbug.com/1085564 [ Debug ] virtual/threaded-no-composited-antialiasing/animatio
 # Sheriff 2020-05-29
 crbug.com/1084637 compositing/video/video-reflection.html [ Pass Failure ]
 crbug.com/1083362 compositing/reflections/load-video-in-reflection.html [ Pass Failure ]
+crbug.com/1087471 [ Linux ] virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gesture-touchscreen-zoom-in-slow.html [ Pass Failure ]
