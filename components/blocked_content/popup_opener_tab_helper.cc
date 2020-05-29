@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/blocked_content/popup_opener_tab_helper.h"
+#include "components/blocked_content/popup_opener_tab_helper.h"
 
 #include <utility>
 
@@ -10,10 +10,7 @@
 #include "base/memory/ptr_util.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/time/tick_clock.h"
-#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/browser/ui/blocked_content/popup_tracker.h"
-#include "chrome/browser/ui/blocked_content/tab_under_navigation_throttle.h"
+#include "components/blocked_content/popup_tracker.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/content_settings/core/common/content_settings.h"
 #include "components/ukm/content/source_url_recorder.h"
@@ -24,15 +21,18 @@
 #include "services/metrics/public/cpp/ukm_recorder.h"
 #include "ui/base/scoped_visibility_tracker.h"
 
+namespace blocked_content {
+
 // static
 void PopupOpenerTabHelper::CreateForWebContents(
     content::WebContents* contents,
-    const base::TickClock* tick_clock) {
+    const base::TickClock* tick_clock,
+    HostContentSettingsMap* settings_map) {
   DCHECK(contents);
   if (!FromWebContents(contents)) {
-    contents->SetUserData(
-        UserDataKey(),
-        base::WrapUnique(new PopupOpenerTabHelper(contents, tick_clock)));
+    contents->SetUserData(UserDataKey(),
+                          base::WrapUnique(new PopupOpenerTabHelper(
+                              contents, tick_clock, settings_map)));
   }
 }
 
@@ -71,8 +71,11 @@ void PopupOpenerTabHelper::OnDidTabUnder() {
 }
 
 PopupOpenerTabHelper::PopupOpenerTabHelper(content::WebContents* web_contents,
-                                           const base::TickClock* tick_clock)
-    : content::WebContentsObserver(web_contents), tick_clock_(tick_clock) {
+                                           const base::TickClock* tick_clock,
+                                           HostContentSettingsMap* settings_map)
+    : content::WebContentsObserver(web_contents),
+      tick_clock_(tick_clock),
+      settings_map_(settings_map) {
   visibility_tracker_ = std::make_unique<ui::ScopedVisibilityTracker>(
       tick_clock_,
       web_contents->GetVisibility() != content::Visibility::HIDDEN);
@@ -111,12 +114,9 @@ void PopupOpenerTabHelper::MaybeLogPagePopupContentSettings() {
   // Do not record duplicate Popup.Page events for popups opened in succession
   // from the same opener.
   if (source_id != last_opener_source_id_) {
-    Profile* profile =
-        Profile::FromBrowserContext(web_contents()->GetBrowserContext());
-    bool user_allows_popups =
-        HostContentSettingsMapFactory::GetForProfile(profile)
-            ->GetContentSetting(url, url, ContentSettingsType::POPUPS,
-                                std::string()) == CONTENT_SETTING_ALLOW;
+    bool user_allows_popups = settings_map_->GetContentSetting(
+                                  url, url, ContentSettingsType::POPUPS,
+                                  std::string()) == CONTENT_SETTING_ALLOW;
     ukm::builders::Popup_Page(source_id)
         .SetAllowed(user_allows_popups)
         .Record(ukm::UkmRecorder::Get());
@@ -125,3 +125,5 @@ void PopupOpenerTabHelper::MaybeLogPagePopupContentSettings() {
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(PopupOpenerTabHelper)
+
+}  // namespace blocked_content

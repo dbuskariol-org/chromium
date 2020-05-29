@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_OPENER_TAB_HELPER_H_
-#define CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_OPENER_TAB_HELPER_H_
+#ifndef COMPONENTS_BLOCKED_CONTENT_POPUP_OPENER_TAB_HELPER_H_
+#define COMPONENTS_BLOCKED_CONTENT_POPUP_OPENER_TAB_HELPER_H_
 
 #include <memory>
 
@@ -11,6 +11,7 @@
 #include "base/optional.h"
 #include "base/time/tick_clock.h"
 #include "base/time/time.h"
+#include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
 
@@ -26,6 +27,7 @@ namespace ui {
 class ScopedVisibilityTracker;
 }
 
+namespace blocked_content {
 class PopupTracker;
 
 // This class tracks WebContents for the purpose of logging metrics related to
@@ -34,11 +36,12 @@ class PopupOpenerTabHelper
     : public content::WebContentsObserver,
       public content::WebContentsUserData<PopupOpenerTabHelper> {
  public:
-  // |tick_clock| overrides the internal time for testing. This doesn't take the
-  // ownership of the clock. |tick_clock| must outlive the PopupOpenerTabHelper
-  // instance.
+  // |tick_clock| overrides the internal time for testing. This doesn't take
+  // ownership of |tick_clock| or |settings_map|, and they both must outlive the
+  // PopupOpenerTabHelper instance.
   static void CreateForWebContents(content::WebContents* contents,
-                                   const base::TickClock* tick_clock);
+                                   const base::TickClock* tick_clock,
+                                   HostContentSettingsMap* settings_map);
   ~PopupOpenerTabHelper() override;
 
   void OnOpenedPopup(PopupTracker* popup_tracker);
@@ -56,7 +59,8 @@ class PopupOpenerTabHelper
   friend class content::WebContentsUserData<PopupOpenerTabHelper>;
 
   PopupOpenerTabHelper(content::WebContents* web_contents,
-                       const base::TickClock* tick_clock);
+                       const base::TickClock* tick_clock,
+                       HostContentSettingsMap* settings_map);
 
   // content::WebContentsObserver:
   void OnVisibilityChanged(content::Visibility visibility) override;
@@ -88,9 +92,14 @@ class PopupOpenerTabHelper
   // The last source id used for logging Popup_Page.
   ukm::SourceId last_opener_source_id_ = ukm::kInvalidSourceId;
 
+  // The settings map for the web contents this object is associated with.
+  HostContentSettingsMap* settings_map_ = nullptr;
+
   WEB_CONTENTS_USER_DATA_KEY_DECL();
 
   DISALLOW_COPY_AND_ASSIGN(PopupOpenerTabHelper);
 };
 
-#endif  // CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_OPENER_TAB_HELPER_H_
+}  // namespace blocked_content
+
+#endif  // COMPONENTS_BLOCKED_CONTENT_POPUP_OPENER_TAB_HELPER_H_

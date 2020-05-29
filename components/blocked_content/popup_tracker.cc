@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/blocked_content/popup_tracker.h"
+#include "components/blocked_content/popup_tracker.h"
 
 #include <algorithm>
 
@@ -10,7 +10,7 @@
 #include "base/memory/ptr_util.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/time/default_tick_clock.h"
-#include "chrome/browser/ui/blocked_content/popup_opener_tab_helper.h"
+#include "components/blocked_content/popup_opener_tab_helper.h"
 #include "components/ukm/content/source_url_recorder.h"
 #include "content/public/browser/navigation_handle.h"
 #include "content/public/browser/web_contents.h"
@@ -18,6 +18,7 @@
 #include "services/metrics/public/cpp/ukm_builders.h"
 #include "services/metrics/public/cpp/ukm_recorder.h"
 
+namespace blocked_content {
 namespace {
 
 int CappedUserInteractions(int user_interactions, int max_interactions) {
@@ -169,3 +170,5 @@ void PopupTracker::OnSubresourceFilterGoingAway() {
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(PopupTracker)
+
+}  // namespace blocked_content

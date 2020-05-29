@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_TRACKER_H_
-#define CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_TRACKER_H_
+#ifndef COMPONENTS_BLOCKED_CONTENT_POPUP_TRACKER_H_
+#define COMPONENTS_BLOCKED_CONTENT_POPUP_TRACKER_H_
 
 #include "base/macros.h"
 #include "base/optional.h"
@@ -20,6 +20,8 @@
 namespace content {
 class WebContents;
 }
+
+namespace blocked_content {
 
 // This class tracks new popups, and is used to log metrics on the visibility
 // time of the first document in the popup.
@@ -106,4 +108,6 @@ class PopupTracker : public content::WebContentsObserver,
   DISALLOW_COPY_AND_ASSIGN(PopupTracker);
 };
 
-#endif  // CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_TRACKER_H_
+}  // namespace blocked_content
+
+#endif  // COMPONENTS_BLOCKED_CONTENT_POPUP_TRACKER_H_
