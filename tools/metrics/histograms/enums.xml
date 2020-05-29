@@ -20872,6 +20872,15 @@ Called by update_document_policy_enum.py.-->
   <int value="8" label="GestureScrollBegin"/>
   <int value="9" label="GestureScrollUpdate"/>
   <int value="10" label="GestureScrollEnd"/>
+  <int value="11" label="GestureDoubleTap"/>
+  <int value="12" label="GestureLongPress"/>
+  <int value="13" label="GestureLongTap"/>
+  <int value="14" label="GestureShowPress"/>
+  <int value="15" label="GestureTap"/>
+  <int value="16" label="GestureTapCancel"/>
+  <int value="17" label="GestureTapDown"/>
+  <int value="18" label="GestureTapUnconfirmed"/>
+  <int value="19" label="GestureTwoFingerTap"/>
 </enum>
 
 <enum name="EventLatencyScrollInputType">
