@@ -740,7 +740,9 @@ public class ContentViewRenderView extends RelativeLayout {
         mWebContents = webContents;
 
         if (webContents != null) {
-            updateWebContentsSize();
+            if (getWidth() != 0 && getHeight() != 0) {
+                updateWebContentsSize();
+            }
             ContentViewRenderViewJni.get().onPhysicalBackingSizeChanged(
                     mNativeContentViewRenderView, webContents, mPhysicalWidth, mPhysicalHeight);
         }
