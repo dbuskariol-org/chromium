@@ -133,6 +133,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
     }
     private FirstMeaningfulPaintRecorder mFirstMeaningfulPaintRecorder;
     private boolean mRegisteredFirstMeaningfulPaintRecorder;
+    private @TabListCoordinator.TabListMode int mMode;
 
     /**
      * Interface to delegate resetting the tab grid.
@@ -199,6 +200,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
         mContainerViewModel = containerViewModel;
         mTabModelSelector = tabModelSelector;
         mFullscreenManager = fullscreenManager;
+        mMode = mode;
 
         mTabModelSelectorObserver = new EmptyTabModelSelectorObserver() {
             @Override
@@ -296,7 +298,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
             @Override
             public void onTopControlsHeightChanged(
                     int topControlsHeight, int topControlsMinHeight) {
-                if (mode == TabListCoordinator.TabListMode.CAROUSEL) return;
+                if (mMode == TabListCoordinator.TabListMode.CAROUSEL) return;
 
                 updateTopControlsProperties(topControlsHeight);
             }
@@ -338,7 +340,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
         mContainerViewModel.set(ANIMATE_VISIBILITY_CHANGES, true);
 
         // Container view takes care of padding and margin in start surface.
-        if (mode != TabListCoordinator.TabListMode.CAROUSEL) {
+        if (mMode != TabListCoordinator.TabListMode.CAROUSEL) {
             updateTopControlsProperties(fullscreenManager.getTopControlsHeight());
             mContainerViewModel.set(
                     BOTTOM_CONTROLS_HEIGHT, fullscreenManager.getBottomControlsHeight());
@@ -443,6 +445,13 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
         assert fromTab != null;
         if (mModelIndexWhenShown == mTabModelSelector.getCurrentModelIndex()) {
             if (tab.getId() == mTabIdWhenShown) {
+                if (mMode == TabListCoordinator.TabListMode.CAROUSEL) {
+                    RecordUserAction.record("MobileTabReturnedToCurrentTab.TabCarousel");
+                } else if (mMode == TabListCoordinator.TabListMode.GRID) {
+                    RecordUserAction.record("MobileTabReturnedToCurrentTab.TabGrid");
+                } else {
+                    // TODO(crbug.com/1085246): Differentiate others.
+                }
                 RecordUserAction.record("MobileTabReturnedToCurrentTab");
                 RecordHistogram.recordSparseHistogram(
                         "Tabs.TabOffsetOfSwitch." + TabSwitcherCoordinator.COMPONENT_NAME, 0);
