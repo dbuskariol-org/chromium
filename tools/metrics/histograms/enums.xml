@@ -20860,6 +20860,27 @@ Called by update_document_policy_enum.py.-->
   <int value="128" label="Request type matched."/>
 </enum>
 
+<enum name="EventLatencyEventType">
+  <int value="0" label="MousePressed"/>
+  <int value="1" label="MouseReleased"/>
+  <int value="2" label="MouseWheel"/>
+  <int value="3" label="KeyPressed"/>
+  <int value="4" label="KeyReleased"/>
+  <int value="5" label="TouchPressed"/>
+  <int value="6" label="TouchReleased"/>
+  <int value="7" label="TouchMoved"/>
+  <int value="8" label="GestureScrollBegin"/>
+  <int value="9" label="GestureScrollUpdate"/>
+  <int value="10" label="GestureScrollEnd"/>
+</enum>
+
+<enum name="EventLatencyScrollInputType">
+  <int value="0" label="Autoscroll"/>
+  <int value="1" label="Scrollbar"/>
+  <int value="2" label="Touchscreen"/>
+  <int value="3" label="Wheel"/>
+</enum>
+
 <enum name="EventPreFilterResult">
   <int value="0" label="Unfiltered"/>
   <int value="1" label="Filtered due to no page handlers"/>
