@@ -15,7 +15,6 @@
 namespace ui {
 
 class WaylandConnection;
-class WaylandDataDevice;
 class WaylandDataSource;
 
 class WaylandDataDeviceManager {
@@ -24,15 +23,13 @@ class WaylandDataDeviceManager {
                            WaylandConnection* connection);
   ~WaylandDataDeviceManager();
 
-  WaylandDataDevice* GetDevice();
+  wl_data_device* GetDevice();
   std::unique_ptr<WaylandDataSource> CreateSource();
 
  private:
   wl::Object<wl_data_device_manager> device_manager_;
 
-  WaylandConnection* const connection_;
-
-  std::unique_ptr<WaylandDataDevice> data_device_;
+  WaylandConnection* connection_;
 
   DISALLOW_COPY_AND_ASSIGN(WaylandDataDeviceManager);
 };

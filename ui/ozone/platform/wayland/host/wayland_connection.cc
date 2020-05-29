@@ -9,7 +9,7 @@
 
 #include <algorithm>
 #include <memory>
-#include <vector>
+#include <utility>
 
 #include "base/bind.h"
 #include "base/logging.h"
@@ -17,15 +17,12 @@
 #include "base/message_loop/message_loop_current.h"
 #include "base/strings/string_util.h"
 #include "base/threading/thread_task_runner_handle.h"
+#include "mojo/public/cpp/system/platform_handle.h"
 #include "ui/events/ozone/layout/keyboard_layout_engine_manager.h"
-#include "ui/gfx/geometry/point.h"
+#include "ui/gfx/swap_result.h"
 #include "ui/ozone/platform/wayland/common/wayland_object.h"
-#include "ui/ozone/platform/wayland/host/gtk_primary_selection_device_manager.h"
 #include "ui/ozone/platform/wayland/host/wayland_buffer_manager_host.h"
-#include "ui/ozone/platform/wayland/host/wayland_clipboard.h"
 #include "ui/ozone/platform/wayland/host/wayland_cursor.h"
-#include "ui/ozone/platform/wayland/host/wayland_cursor_position.h"
-#include "ui/ozone/platform/wayland/host/wayland_data_device_manager.h"
 #include "ui/ozone/platform/wayland/host/wayland_data_drag_controller.h"
 #include "ui/ozone/platform/wayland/host/wayland_drm.h"
 #include "ui/ozone/platform/wayland/host/wayland_event_source.h"
@@ -133,7 +130,7 @@ void WaylandConnection::SetCursorBitmap(const std::vector<SkBitmap>& bitmaps,
 }
 
 bool WaylandConnection::IsDragInProgress() const {
-  // |data_drag_controller_| can be null when running on headless weston.
+  // |data_device_| can be null when running on headless weston.
   return data_drag_controller_ && data_drag_controller_->state() !=
                                       WaylandDataDragController::State::kIdle;
 }
@@ -183,16 +180,22 @@ void WaylandConnection::UpdateInputDevices(wl_seat* seat,
   }
 }
 
-void WaylandConnection::CreateDataObjectsIfReady() {
-  if (data_device_manager_ && seat_) {
-    DCHECK(!data_drag_controller_);
-    data_drag_controller_ = std::make_unique<WaylandDataDragController>(
-        this, data_device_manager_.get());
+void WaylandConnection::EnsureDataDevice() {
+  if (!data_device_manager_ || !seat_)
+    return;
+  DCHECK(!data_device_);
+  wl_data_device* data_device = data_device_manager_->GetDevice();
+  data_device_ = std::make_unique<WaylandDataDevice>(this, data_device);
+  data_drag_controller_ = std::make_unique<WaylandDataDragController>(this);
 
-    DCHECK(!clipboard_);
-    clipboard_ =
-        std::make_unique<WaylandClipboard>(this, data_device_manager_.get());
+  if (primary_selection_device_manager_) {
+    primary_selection_device_ = std::make_unique<GtkPrimarySelectionDevice>(
+        this, primary_selection_device_manager_->GetDevice());
   }
+
+  clipboard_ = std::make_unique<WaylandClipboard>(
+      data_device_manager_.get(), data_device_.get(),
+      primary_selection_device_manager_.get(), primary_selection_device_.get());
 }
 
 // static
@@ -238,7 +241,7 @@ void WaylandConnection::Global(void* data,
       return;
     }
     wl_seat_add_listener(connection->seat_.get(), &seat_listener, connection);
-    connection->CreateDataObjectsIfReady();
+    connection->EnsureDataDevice();
   } else if (!connection->shell_v6_ &&
              strcmp(interface, "zxdg_shell_v6") == 0) {
     // Check for zxdg_shell_v6 first.
@@ -293,7 +296,7 @@ void WaylandConnection::Global(void* data,
     connection->data_device_manager_ =
         std::make_unique<WaylandDataDeviceManager>(
             data_device_manager.release(), connection);
-    connection->CreateDataObjectsIfReady();
+    connection->EnsureDataDevice();
   } else if (!connection->primary_selection_device_manager_ &&
              strcmp(interface, "gtk_primary_selection_device_manager") == 0) {
     wl::Object<gtk_primary_selection_device_manager> manager =

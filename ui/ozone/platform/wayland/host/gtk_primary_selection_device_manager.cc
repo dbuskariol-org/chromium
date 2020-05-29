@@ -6,9 +6,6 @@
 
 #include <gtk-primary-selection-client-protocol.h>
 
-#include <memory>
-
-#include "ui/ozone/platform/wayland/host/gtk_primary_selection_device.h"
 #include "ui/ozone/platform/wayland/host/gtk_primary_selection_source.h"
 #include "ui/ozone/platform/wayland/host/wayland_connection.h"
 
@@ -17,28 +14,24 @@ namespace ui {
 GtkPrimarySelectionDeviceManager::GtkPrimarySelectionDeviceManager(
     gtk_primary_selection_device_manager* manager,
     WaylandConnection* connection)
-    : device_manager_(manager), connection_(connection) {
+    : gtk_primary_selection_device_manager_(manager), connection_(connection) {
   DCHECK(connection_);
-  DCHECK(device_manager_);
+  DCHECK(gtk_primary_selection_device_manager_);
 }
 
 GtkPrimarySelectionDeviceManager::~GtkPrimarySelectionDeviceManager() = default;
 
-GtkPrimarySelectionDevice* GtkPrimarySelectionDeviceManager::GetDevice() {
+gtk_primary_selection_device* GtkPrimarySelectionDeviceManager::GetDevice() {
   DCHECK(connection_->seat());
-  if (!device_) {
-    device_ = std::make_unique<GtkPrimarySelectionDevice>(
-        connection_, gtk_primary_selection_device_manager_get_device(
-                         device_manager_.get(), connection_->seat()));
-  }
-  DCHECK(device_);
-  return device_.get();
+  return gtk_primary_selection_device_manager_get_device(
+      gtk_primary_selection_device_manager_.get(), connection_->seat());
 }
 
 std::unique_ptr<GtkPrimarySelectionSource>
 GtkPrimarySelectionDeviceManager::CreateSource() {
-  auto* data_source =
-      gtk_primary_selection_device_manager_create_source(device_manager_.get());
+  gtk_primary_selection_source* data_source =
+      gtk_primary_selection_device_manager_create_source(
+          gtk_primary_selection_device_manager_.get());
   return std::make_unique<GtkPrimarySelectionSource>(data_source, connection_);
 }
 

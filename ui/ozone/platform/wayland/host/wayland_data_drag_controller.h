@@ -38,8 +38,7 @@ class WaylandDataDragController : public WaylandDataDevice::DragDelegate,
  public:
   enum class State { kIdle, kStarted, kTransferring };
 
-  WaylandDataDragController(WaylandConnection* connection,
-                            WaylandDataDeviceManager* data_device_manager);
+  explicit WaylandDataDragController(WaylandConnection* connection);
   WaylandDataDragController(const WaylandDataDragController&) = delete;
   WaylandDataDragController& operator=(const WaylandDataDragController&) =
       delete;
@@ -85,6 +84,7 @@ class WaylandDataDragController : public WaylandDataDevice::DragDelegate,
   void SetOperation(const int operation);
 
   WaylandConnection* const connection_;
+  WaylandDataDevice* const data_device_;
   WaylandDataDeviceManager* const data_device_manager_;
   WaylandWindowManager* const window_manager_;
 
