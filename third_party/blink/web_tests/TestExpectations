@@ -735,6 +735,8 @@ crbug.com/1068947 [ Win10 ] external/wpt/css/css-text-decor/text-underline-posit
 # Tentative mansonry tests
 crbug.com/1076027 external/wpt/css/css-grid/masonry.tentative/* [ Skip ]
 
+crbug.com/786475 external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-overflow.html [ Failure Crash ]
+
 # ====== Layout team owned tests to here ======
 
 # ====== LayoutNG-only failures from here ======
@@ -3197,7 +3199,6 @@ crbug.com/432153 external/wpt/css/css-masking/mask-image/mask-image-url-local-ma
 crbug.com/432153 external/wpt/css/css-masking/mask-image/mask-image-url-image.html [ Failure ]
 crbug.com/432153 external/wpt/css/css-masking/mask-image/mask-image-url-remote-mask.html [ Failure ]
 crbug.com/432153 external/wpt/css/css-masking/mask-image/mask-image-url-image-hash.html [ Failure ]
-crbug.com/626703 external/wpt/html/rendering/non-replaced-elements/the-fieldset-and-legend-elements/fieldset-overflow.html [ Failure ]
 crbug.com/626703 external/wpt/css/CSS2/floats/float-nowrap-9.html [ Failure ]
 crbug.com/626703 external/wpt/css/CSS2/floats/float-nowrap-8.html [ Failure ]
 crbug.com/626703 external/wpt/css/CSS2/floats/float-nowrap-7.html [ Failure ]
