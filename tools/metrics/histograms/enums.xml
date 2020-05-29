@@ -27770,6 +27770,8 @@ Called by update_feature_policy_enum.py.-->
       label="Failed - cannot load more content because the model is not yet
              loaded"/>
   <int value="17" label="Failed - feed is disabled by enterprise policy"/>
+  <int value="18"
+      label="Failed - network fetch failed or returned a non-200 status"/>
 </enum>
 
 <enum name="FeedRequestReason">
