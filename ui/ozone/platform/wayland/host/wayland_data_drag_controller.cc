@@ -64,15 +64,15 @@ const SkBitmap* GetDragImage(const OSExchangeData& data) {
 }  // namespace
 
 WaylandDataDragController::WaylandDataDragController(
-    WaylandConnection* connection)
+    WaylandConnection* connection,
+    WaylandDataDeviceManager* data_device_manager)
     : connection_(connection),
-      data_device_(connection->wayland_data_device()),
-      data_device_manager_(connection->data_device_manager()),
+      data_device_manager_(data_device_manager),
       window_manager_(connection->wayland_window_manager()) {
   DCHECK(connection_);
-  DCHECK(data_device_);
-  DCHECK(data_device_manager_);
   DCHECK(window_manager_);
+  DCHECK(data_device_manager_);
+  DCHECK(data_device_manager_->GetDevice());
 }
 
 WaylandDataDragController::~WaylandDataDragController() = default;
@@ -100,8 +100,8 @@ void WaylandDataDragController::StartSession(const OSExchangeData& data,
 
   // Starts the wayland drag session setting |this| object as delegate.
   state_ = State::kStarted;
-  data_device_->StartDrag(*data_source_, *origin_window_, icon_surface_.get(),
-                          this);
+  data_device_manager_->GetDevice()->StartDrag(*data_source_, *origin_window_,
+                                               icon_surface_.get(), this);
 }
 
 // Sessions initiated from Chromium, will have |origin_window_| pointing to the
@@ -254,7 +254,7 @@ void WaylandDataDragController::HandleUnprocessedMimeTypes() {
     OnDataTransferFinished(std::move(received_data_));
   } else {
     DCHECK(data_offer_);
-    data_device_->RequestData(
+    data_device_manager_->GetDevice()->RequestData(
         data_offer_.get(), mime_type,
         base::BindOnce(&WaylandDataDragController::OnMimeTypeDataTransferred,
                        weak_factory_.GetWeakPtr()));
