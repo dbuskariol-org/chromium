@@ -1940,10 +1940,6 @@ void AddSiteSettingsStrings(content::WebUIDataSource* html_source,
   html_source->AddBoolean("enableWebBluetoothNewPermissionsBackend",
                           base::FeatureList::IsEnabled(
                               features::kWebBluetoothNewPermissionsBackend));
-
-  html_source->AddBoolean(
-      "enableWebXrContentSetting",
-      base::FeatureList::IsEnabled(features::kWebXrPermissionsApi));
 }
 
 #if !defined(OS_CHROMEOS)
