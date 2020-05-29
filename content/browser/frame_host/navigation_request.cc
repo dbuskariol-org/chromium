@@ -3730,6 +3730,12 @@ void NavigationRequest::DidCommitNavigation(
     DCHECK(!IsSameDocument() || !frame_tree_node()->is_collapsed());
     frame_tree_node()->SetCollapsed(false);
   }
+
+  if (service_worker_handle_) {
+    // Notify the service worker navigation handle that the navigation finished
+    // committing.
+    service_worker_handle_->OnEndNavigationCommit();
+  }
 }
 
 GURL NavigationRequest::GetSiteForCommonParamsURL() const {
