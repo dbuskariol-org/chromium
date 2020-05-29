@@ -150,7 +150,7 @@ import org.chromium.chrome.browser.ui.TabObscuringHandler;
 import org.chromium.chrome.browser.ui.appmenu.AppMenuPropertiesDelegate;
 import org.chromium.chrome.browser.undo_tab_close_snackbar.UndoBarController;
 import org.chromium.chrome.browser.usage_stats.UsageStatsService;
-import org.chromium.chrome.browser.util.AccessibilityUtil;
+import org.chromium.chrome.browser.util.ChromeAccessibilityUtil;
 import org.chromium.chrome.browser.vr.VrModuleProvider;
 import org.chromium.chrome.browser.widget.bottomsheet.EmptyBottomSheetObserver;
 import org.chromium.chrome.features.start_surface.StartSurface;
@@ -179,8 +179,8 @@ import java.util.Locale;
  * This is the main activity for ChromeMobile when not running in document mode.  All the tabs
  * are accessible via a chrome specific tab switching UI.
  */
-public class ChromeTabbedActivity
-        extends ChromeActivity<ChromeActivityComponent> implements AccessibilityUtil.Observer {
+public class ChromeTabbedActivity extends ChromeActivity<ChromeActivityComponent>
+        implements ChromeAccessibilityUtil.Observer {
     private static final String TAG = "ChromeTabbedActivity";
 
     private static final String HELP_URL_PREFIX = "https://support.google.com/chrome/";
@@ -882,7 +882,7 @@ public class ChromeTabbedActivity
                     this::maybeGetFeedAppLifecycleAndMaybeCreatePageViewObserver);
             PostTask.postTask(UiThreadTaskTraits.DEFAULT, this::addOverviewModeObserverPostNative);
             PostTask.postTask(UiThreadTaskTraits.DEFAULT, this::finishNativeInitialization);
-            AccessibilityUtil.addObserver(this);
+            ChromeAccessibilityUtil.get().addObserver(this);
         }
     }
 
@@ -896,8 +896,8 @@ public class ChromeTabbedActivity
         getTabObscuringHandler().addObserver(mCompositorViewHolder);
         getTabObscuringHandler().addObserver(mOverviewListLayout);
 
-        AccessibilityUtil.addObserver(mLayoutManager);
-        if (isTablet()) AccessibilityUtil.addObserver(mCompositorViewHolder);
+        ChromeAccessibilityUtil.get().addObserver(mLayoutManager);
+        if (isTablet()) ChromeAccessibilityUtil.get().addObserver(mCompositorViewHolder);
     }
 
     @Override
@@ -1255,7 +1255,7 @@ public class ChromeTabbedActivity
         }
         mIsAccessibilityTabSwitcherEnabled = accessibilityTabSwitcherEnabled;
 
-        if (AccessibilityUtil.isAccessibilityEnabled()) {
+        if (ChromeAccessibilityUtil.get().isAccessibilityEnabled()) {
             RecordHistogram.recordBooleanHistogram(
                     "Accessibility.Android.TabSwitcherPreferenceEnabled",
                     mIsAccessibilityTabSwitcherEnabled);
@@ -2107,9 +2107,9 @@ public class ChromeTabbedActivity
             getTabObscuringHandler().removeObserver(mOverviewListLayout);
         }
 
-        if (isTablet()) AccessibilityUtil.removeObserver(mCompositorViewHolder);
-        AccessibilityUtil.removeObserver(this);
-        AccessibilityUtil.removeObserver(mLayoutManager);
+        if (isTablet()) ChromeAccessibilityUtil.get().removeObserver(mCompositorViewHolder);
+        ChromeAccessibilityUtil.get().removeObserver(this);
+        ChromeAccessibilityUtil.get().removeObserver(mLayoutManager);
 
         super.onDestroyInternal();
     }
