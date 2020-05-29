@@ -49,6 +49,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.chromium.base.test.util.CommandLineFlags;
+import org.chromium.base.test.util.DisabledTest;
 import org.chromium.chrome.autofill_assistant.R;
 import org.chromium.chrome.browser.autofill_assistant.proto.ActionProto;
 import org.chromium.chrome.browser.autofill_assistant.proto.ChipProto;
@@ -176,6 +177,7 @@ public class AutofillAssistantPersonalDataManagerTest {
      */
     @Test
     @MediumTest
+    @DisabledTest(message = "crbug.com/1087042")
     public void testCreateAndEditProfileMultipleTimes() throws Exception {
         ArrayList<ActionProto> list = new ArrayList<>();
         list.add(
