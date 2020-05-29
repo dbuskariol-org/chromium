@@ -39,6 +39,7 @@ class StatusIndicatorMediator
     private Runnable mOnCompositorShowAnimationEnd;
     private Supplier<Boolean> mCanAnimateNativeBrowserControls;
     private Callback<Runnable> mInvalidateCompositorView;
+    private Runnable mRequestLayout;
 
     private int mIndicatorHeight;
     private int mJavaLayoutHeight;
@@ -57,16 +58,18 @@ class StatusIndicatorMediator
      *                                        where we can't have a reliable cc::BCOM instance, e.g.
      *                                        tab switcher.
      * @param invalidateCompositorView Callback to invalidate the compositor texture.
+     * @param requestLayout Runnable to request layout for the view.
      */
     StatusIndicatorMediator(PropertyModel model, ChromeFullscreenManager fullscreenManager,
             Supplier<Integer> statusBarWithoutIndicatorColorSupplier,
             Supplier<Boolean> canAnimateNativeBrowserControls,
-            Callback<Runnable> invalidateCompositorView) {
+            Callback<Runnable> invalidateCompositorView, Runnable requestLayout) {
         mModel = model;
         mFullscreenManager = fullscreenManager;
         mStatusBarWithoutIndicatorColorSupplier = statusBarWithoutIndicatorColorSupplier;
         mCanAnimateNativeBrowserControls = canAnimateNativeBrowserControls;
         mInvalidateCompositorView = invalidateCompositorView;
+        mRequestLayout = requestLayout;
     }
 
     @Override
@@ -170,6 +173,12 @@ class StatusIndicatorMediator
             final float currentAlpha = (float) anim.getAnimatedValue();
             mModel.set(StatusIndicatorProperties.TEXT_ALPHA, currentAlpha);
         }));
+        animation.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                mRequestLayout.run();
+            }
+        });
         animation.start();
     }
 
