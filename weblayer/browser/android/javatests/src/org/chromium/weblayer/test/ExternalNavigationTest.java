@@ -4,6 +4,7 @@
 
 package org.chromium.weblayer.test;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -32,7 +33,27 @@ public class ExternalNavigationTest {
     public InstrumentationActivityTestRule mActivityTestRule =
             new InstrumentationActivityTestRule();
 
+    /**
+     * A dummy activity that claims to handle "weblayer://weblayertest".
+     */
+    public static class DummyActivityForSpecialScheme extends Activity {
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            finish();
+        }
+    }
+
     private static final String ABOUT_BLANK_URL = "about:blank";
+    private static final String CUSTOM_SCHEME_URL_WITH_DEFAULT_EXTERNAL_HANDLER =
+            "weblayer://weblayertest/intent";
+    private static final String INTENT_TO_DUMMY_ACTIVITY_FOR_SPECIAL_SCHEME_DATA_STRING =
+            CUSTOM_SCHEME_URL_WITH_DEFAULT_EXTERNAL_HANDLER;
+    private static final String INTENT_TO_DUMMY_ACTIVITY_FOR_SPECIAL_SCHEME_ACTION =
+            "android.intent.action.VIEW";
+    // The package is not specified in the intent that gets created when navigating to the special
+    // scheme.
+    private static final String INTENT_TO_DUMMY_ACTIVITY_FOR_SPECIAL_SCHEME_PACKAGE = null;
     private static final String INTENT_TO_CHROME_DATA_CONTENT =
             "play.google.com/store/apps/details?id=com.facebook.katana/";
     private static final String INTENT_TO_CHROME_SCHEME = "https";
@@ -75,6 +96,9 @@ public class ExternalNavigationTest {
     private final String mNonResolvableIntentWithFallbackUrl =
             NON_RESOLVABLE_INTENT + mTestServerSiteFallbackUrlExtra + "end";
 
+    private final String mRedirectToCustomSchemeUrlWithDefaultExternalHandler =
+            mActivityTestRule.getTestServer().getURL(
+                    "/server-redirect?" + CUSTOM_SCHEME_URL_WITH_DEFAULT_EXTERNAL_HANDLER);
     private final String mRedirectToIntentToChromeURL =
             mActivityTestRule.getTestServer().getURL("/server-redirect?" + INTENT_TO_CHROME_URL);
     private final String mNonResolvableIntentWithFallbackUrlThatLaunchesIntent =
@@ -166,6 +190,38 @@ public class ExternalNavigationTest {
         Assert.assertEquals(INTENT_TO_CHROME_PACKAGE, intent.getPackage());
         Assert.assertEquals(INTENT_TO_CHROME_ACTION, intent.getAction());
         Assert.assertEquals(INTENT_TO_CHROME_DATA_STRING, intent.getDataString());
+    }
+
+    /**
+     * Tests that a navigation that redirects to a URL with a special scheme that has a default
+     * external handler results in an external intent being launched.
+     */
+    @Test
+    @SmallTest
+    public void testRedirectToCustomSchemeUrlWithDefaultExternalHandlerLaunchesIntent()
+            throws Throwable {
+        InstrumentationActivity activity = mActivityTestRule.launchShellWithUrl(ABOUT_BLANK_URL);
+        IntentInterceptor intentInterceptor = new IntentInterceptor();
+        activity.setIntentInterceptor(intentInterceptor);
+
+        Tab tab = mActivityTestRule.getActivity().getTab();
+        TestThreadUtils.runOnUiThreadBlocking(() -> {
+            tab.getNavigationController().navigate(
+                    Uri.parse(mRedirectToCustomSchemeUrlWithDefaultExternalHandler));
+        });
+
+        intentInterceptor.waitForIntent();
+
+        // The current URL should not have changed, and the intent should have been launched.
+        Assert.assertEquals(ABOUT_BLANK_URL, mActivityTestRule.getCurrentDisplayUrl());
+        Intent intent = intentInterceptor.mLastIntent;
+        Assert.assertNotNull(intent);
+
+        Assert.assertEquals(
+                INTENT_TO_DUMMY_ACTIVITY_FOR_SPECIAL_SCHEME_PACKAGE, intent.getPackage());
+        Assert.assertEquals(INTENT_TO_DUMMY_ACTIVITY_FOR_SPECIAL_SCHEME_ACTION, intent.getAction());
+        Assert.assertEquals(
+                INTENT_TO_DUMMY_ACTIVITY_FOR_SPECIAL_SCHEME_DATA_STRING, intent.getDataString());
     }
 
     /**
