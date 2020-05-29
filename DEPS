@@ -924,7 +924,7 @@ deps = {
     Var('chromium_git') + '/external/github.com/google/emoji-segmenter.git' + '@' + Var('emoji_segmenter_revision'),
 
   'src/third_party/libgav1/src':
-    Var('chromium_git') + '/codecs/libgav1.git' + '@' + '638ef84819f8b3cd614dcf63378fe4814aa4cb2a',
+    Var('chromium_git') + '/codecs/libgav1.git' + '@' + 'bf190c43e5c7cc81751867c917a81bc2920be079',
 
   'src/third_party/glslang/src':
     Var('chromium_git') + '/external/github.com/KhronosGroup/glslang.git' + '@' + 'd39b8afc47a1f700b5670463c0d1068878acee6f',
