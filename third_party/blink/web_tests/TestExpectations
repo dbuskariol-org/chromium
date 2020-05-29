@@ -5797,6 +5797,7 @@ crbug.com/1067533 [ Mac10.10 ] external/wpt/shape-detection/idlharness.https.any
 
 # Temporarily disabled for landing changes to DevTools frontend
 crbug.com/1066595 http/tests/devtools/tracing/timeline-network/timeline-network-resource.js [ Pass Failure ]
+crbug.com/1066579 http/tests/devtools/har-importer.js [ Pass Failure ]
 
 # Flaky test, happens only on Mac 10.13.
 # The "timeout" was detected by the wpt-importer bot.
