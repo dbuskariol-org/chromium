@@ -4145,6 +4145,8 @@ Unknown properties are collapsed to zero. -->
   <int value="19" label="No initial scripts"/>
   <int value="20" label="Installing the feature module failed"/>
   <int value="21" label="User navigation to a different domain in BROWSE mode"/>
+  <int value="22" label="User clicked back button"/>
+  <int value="23" label="User clicked back button during onboarding"/>
 </enum>
 
 <enum name="AutofillAssistantFeatureModuleInstallation">
@@ -4159,6 +4161,7 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Not shown (returning user)"/>
   <int value="2" label="Accepted"/>
   <int value="3" label="Cancelled"/>
+  <int value="4" label="No answer, defaults to not accepted"/>
 </enum>
 
 <enum name="AutofillAssistantPaymentRequestAutofillInfoChanged">
