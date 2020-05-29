@@ -40151,6 +40151,7 @@ from previous Chrome versions.
   <int value="-315741215"
       label="IntentBlockExternalFormRedirectsNoGesture:enabled"/>
   <int value="-315604713" label="WebUSB:enabled"/>
+  <int value="-315333837" label="AutofillEnableCardNicknameUpstream:enabled"/>
   <int value="-314910380" label="disable-distance-field-text"/>
   <int value="-314605926" label="protect-sync-credential-on-reauth:enabled"/>
   <int value="-311148335" label="v8-pac-mojo-out-of-process"/>
@@ -41139,6 +41140,7 @@ from previous Chrome versions.
   <int value="835726069" label="NtpWebUI:disabled"/>
   <int value="836406476" label="EnableTouchableAppContextMenu:enabled"/>
   <int value="838887742" label="manual-enhanced-bookmarks"/>
+  <int value="839230937" label="AutofillEnableCardNicknameUpstream:disabled"/>
   <int value="839798268" label="SafeBrowsingTelemetryForApkDownloads:disabled"/>
   <int value="840057845" label="HardwareMediaKeyHandling:enabled"/>
   <int value="841276069" label="ChromeHomeDoodle:disabled"/>
