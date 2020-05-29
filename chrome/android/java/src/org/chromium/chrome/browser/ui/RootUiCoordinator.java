@@ -489,7 +489,7 @@ public class RootUiCoordinator
                     mActivity, mActivity.getLifecycleDispatcher(), bottomToolbarVisibilitySupplier);
             ShareButtonController shareButtonController = new ShareButtonController(mActivity,
                     mActivityTabProvider, mShareDelegateSupplier, new ShareUtils(),
-                    bottomToolbarVisibilitySupplier);
+                    bottomToolbarVisibilitySupplier, mActivity.getLifecycleDispatcher());
             mButtonDataProviders = Arrays.asList(mIdentityDiscController, shareButtonController);
             mActionModeControllerCallback = new ToolbarActionModeCallback();
             mToolbarManager = new ToolbarManager(mActivity, mActivity.getFullscreenManager(),
