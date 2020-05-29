@@ -350,7 +350,8 @@ bool DirectCompositionSurfaceWin::IsDirectCompositionSupported() {
 
     return true;
   }();
-  return supported;
+  return supported && !DirectCompositionChildSurfaceWin::
+                          IsDirectCompositionSwapChainFailed();
 }
 
 // static

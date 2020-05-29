@@ -45,6 +45,8 @@ namespace {
 // is made current, then this surface will be suspended.
 IDCompositionSurface* g_current_surface = nullptr;
 
+bool g_direct_composition_swap_chain_failed = false;
+
 }  // namespace
 
 DirectCompositionChildSurfaceWin::DirectCompositionChildSurfaceWin() = default;
@@ -320,6 +322,14 @@ bool DirectCompositionChildSurfaceWin::SetDrawRectangle(
     base::UmaHistogramSparse(
         "GPU.DirectComposition.CreateSwapChainForComposition", hr);
 
+    // TODO (magchen@): Return fail after disabling DC support so we can restart
+    // a new GPU command buffer with DC disabled.
+    if (FAILED(hr)) {
+      DLOG(ERROR) << "CreateSwapChainForComposition failed with error "
+                  << std::hex << hr;
+      g_direct_composition_swap_chain_failed = true;
+    }
+
     // If CreateSwapChainForComposition fails, we cannot draw to the
     // browser window. Failure here is indicative of an unrecoverable driver
     // bug.
@@ -449,6 +459,11 @@ bool DirectCompositionChildSurfaceWin::SetEnableDCLayers(bool enable) {
   swap_chain_.Reset();
   dcomp_surface_.Reset();
   return true;
+}
+
+// static
+bool DirectCompositionChildSurfaceWin::IsDirectCompositionSwapChainFailed() {
+  return g_direct_composition_swap_chain_failed;
 }
 
 }  // namespace gl
