@@ -538,13 +538,10 @@ LockContentsView::~LockContentsView() {
   keyboard::KeyboardUIController::Get()->RemoveObserver(this);
   Shell::Get()->system_tray_notifier()->RemoveSystemTrayFocusObserver(this);
 
-  if (unlock_attempt_ > 0) {
-    // Times a password was incorrectly entered until user gives up (sign out
-    // current session or shutdown the device). For a successful unlock,
-    // unlock_attempt_ should already be reset by OnLockStateChanged.
-    Shell::Get()->metrics()->login_metrics_recorder()->RecordNumLoginAttempts(
-        unlock_attempt_, false /*success*/);
-  }
+  // Times a password was incorrectly entered until view is destroyed.
+  Shell::Get()->metrics()->login_metrics_recorder()->RecordNumLoginAttempts(
+      false /*success*/, &unlock_attempt_);
+
   chromeos::PowerManagerClient::Get()->RemoveObserver(this);
 }
 
@@ -1251,15 +1248,6 @@ void LockContentsView::OnDisplayMetricsChanged(const display::Display& display,
       display::Screen::GetScreen()->GetPrimaryDisplay().bounds());
 }
 
-void LockContentsView::OnLockStateChanged(bool locked) {
-  if (!locked) {
-    // Successfully unlock the screen.
-    Shell::Get()->metrics()->login_metrics_recorder()->RecordNumLoginAttempts(
-        unlock_attempt_, true /*success*/);
-    unlock_attempt_ = 0;
-  }
-}
-
 void LockContentsView::OnKeyboardVisibilityChanged(bool is_visible) {
   if (!primary_big_view_ || keyboard_shown_ == is_visible)
     return;
@@ -1632,6 +1620,10 @@ void LockContentsView::OnAuthenticate(bool auth_success,
       detachable_base_model_->SetPairedBaseAsLastUsedByUser(
           CurrentBigUserView()->GetCurrentUser().basic_user_info);
     }
+
+    // Times a password was incorrectly entered until user succeeds.
+    Shell::Get()->metrics()->login_metrics_recorder()->RecordNumLoginAttempts(
+        true /*success*/, &unlock_attempt_);
   } else {
     ++unlock_attempt_;
     if (display_error_messages)
@@ -1770,16 +1762,6 @@ void LockContentsView::OnBigUserChanged() {
 
   Shell::Get()->login_screen_controller()->OnFocusPod(big_user_account_id);
   UpdateEasyUnlockIconForUser(big_user_account_id);
-
-  if (unlock_attempt_ > 0) {
-    // Times a password was incorrectly entered until user gives up (change
-    // user pod).
-    Shell::Get()->metrics()->login_metrics_recorder()->RecordNumLoginAttempts(
-        unlock_attempt_, false /*success*/);
-
-    // Reset unlock attempt when the auth user changes.
-    unlock_attempt_ = 0;
-  }
 
   // http://crbug/866790: After Supervised Users are deprecated, remove this.
   if (features::IsSupervisedUserDeprecationNoticeEnabled() &&
