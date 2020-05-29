@@ -1147,7 +1147,6 @@ bool ColorSpace::ToSkYUVColorSpace(SkYUVColorSpace* out) const {
 
     case MatrixID::BT470BG:
     case MatrixID::SMPTE170M:
-    case MatrixID::SMPTE240M:
       *out = kRec601_SkYUVColorSpace;
       return true;
 
