@@ -748,6 +748,7 @@ junit_binary("chrome_junit_tests") {
     "//chrome/browser/profiles/android:java",
     "//chrome/browser/tab:java",
     "//chrome/browser/thumbnail:java",
+    "//chrome/browser/ui/android/appmenu:java",
     "//chrome/browser/ui/android/appmenu/internal:junit",
     "//chrome/browser/ui/android/favicon:java",
     "//chrome/browser/ui/android/native_page:java",

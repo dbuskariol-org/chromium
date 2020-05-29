@@ -756,8 +756,7 @@ public class ChromeTabbedActivity
                 return false;
             };
 
-            getToolbarManager().initializeWithNative(mTabModelSelectorImpl,
-                    getFullscreenManager().getBrowserVisibilityDelegate(), mLayoutManager,
+            getToolbarManager().initializeWithNative(mTabModelSelectorImpl, mLayoutManager,
                     tabSwitcherClickHandler, newTabClickHandler, bookmarkClickHandler, null,
                     showStartSurfaceSupplier);
 
