@@ -13,6 +13,7 @@
 #include "base/logging.h"
 #include "base/macros.h"
 #include "base/scoped_observer.h"
+#include "base/sequence_checker.h"
 #include "components/performance_manager/service_worker_client.h"
 #include "content/public/browser/dedicated_worker_id.h"
 #include "content/public/browser/dedicated_worker_service.h"
@@ -167,6 +168,8 @@ class WorkerWatcher : public content::DedicatedWorkerService::Observer,
       content::DedicatedWorkerId dedicated_worker_id);
   WorkerNodeImpl* GetSharedWorkerNode(content::SharedWorkerId shared_worker_id);
   WorkerNodeImpl* GetServiceWorkerNode(int64_t version_id);
+
+  SEQUENCE_CHECKER(sequence_checker_);
 
   // The ID of the BrowserContext who owns the shared worker service.
   const std::string browser_context_id_;

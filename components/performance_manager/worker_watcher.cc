@@ -112,17 +112,20 @@ WorkerWatcher::WorkerWatcher(
     : browser_context_id_(browser_context_id),
       process_node_source_(process_node_source),
       frame_node_source_(frame_node_source) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(dedicated_worker_service);
   DCHECK(shared_worker_service);
   DCHECK(service_worker_context);
   DCHECK(process_node_source_);
   DCHECK(frame_node_source_);
+
   dedicated_worker_service_observer_.Add(dedicated_worker_service);
   shared_worker_service_observer_.Add(shared_worker_service);
   service_worker_context_observer_.Add(service_worker_context);
 }
 
 WorkerWatcher::~WorkerWatcher() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(frame_node_child_workers_.empty());
   DCHECK(dedicated_worker_nodes_.empty());
   DCHECK(!dedicated_worker_service_observer_.IsObservingSources());
@@ -133,6 +136,8 @@ WorkerWatcher::~WorkerWatcher() {
 }
 
 void WorkerWatcher::TearDown() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   // First clear client-child connections between frames and workers.
   for (auto& kv : frame_node_child_workers_) {
     const content::GlobalFrameRoutingId& render_frame_host_id = kv.first;
@@ -202,6 +207,8 @@ void WorkerWatcher::OnWorkerCreated(
     content::DedicatedWorkerId dedicated_worker_id,
     int worker_process_id,
     content::GlobalFrameRoutingId ancestor_render_frame_host_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   // TODO(https://crbug.com/993029): Plumb through the URL and the DevTools
   // token.
   auto worker_node = PerformanceManagerImpl::CreateWorkerNode(
@@ -219,6 +226,8 @@ void WorkerWatcher::OnWorkerCreated(
 void WorkerWatcher::OnBeforeWorkerDestroyed(
     content::DedicatedWorkerId dedicated_worker_id,
     content::GlobalFrameRoutingId ancestor_render_frame_host_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto it = dedicated_worker_nodes_.find(dedicated_worker_id);
   DCHECK(it != dedicated_worker_nodes_.end());
 
@@ -238,6 +247,8 @@ void WorkerWatcher::OnBeforeWorkerDestroyed(
 void WorkerWatcher::OnFinalResponseURLDetermined(
     content::DedicatedWorkerId dedicated_worker_id,
     const GURL& url) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   SetFinalResponseURL(GetDedicatedWorkerNode(dedicated_worker_id), url);
 }
 
@@ -245,6 +256,8 @@ void WorkerWatcher::OnWorkerCreated(
     content::SharedWorkerId shared_worker_id,
     int worker_process_id,
     const base::UnguessableToken& dev_tools_token) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto worker_node = PerformanceManagerImpl::CreateWorkerNode(
       browser_context_id_, WorkerNode::WorkerType::kShared,
       process_node_source_->GetProcessNode(worker_process_id), dev_tools_token);
@@ -256,6 +269,8 @@ void WorkerWatcher::OnWorkerCreated(
 
 void WorkerWatcher::OnBeforeWorkerDestroyed(
     content::SharedWorkerId shared_worker_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto it = shared_worker_nodes_.find(shared_worker_id);
   DCHECK(it != shared_worker_nodes_.end());
 
@@ -271,12 +286,16 @@ void WorkerWatcher::OnBeforeWorkerDestroyed(
 void WorkerWatcher::OnFinalResponseURLDetermined(
     content::SharedWorkerId shared_worker_id,
     const GURL& url) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   SetFinalResponseURL(GetSharedWorkerNode(shared_worker_id), url);
 }
 
 void WorkerWatcher::OnClientAdded(
     content::SharedWorkerId shared_worker_id,
     content::GlobalFrameRoutingId render_frame_host_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   ConnectFrameClient(GetSharedWorkerNode(shared_worker_id),
                      render_frame_host_id);
 }
@@ -284,6 +303,8 @@ void WorkerWatcher::OnClientAdded(
 void WorkerWatcher::OnClientRemoved(
     content::SharedWorkerId shared_worker_id,
     content::GlobalFrameRoutingId render_frame_host_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   DisconnectFrameClient(GetSharedWorkerNode(shared_worker_id),
                         render_frame_host_id);
 }
@@ -291,6 +312,8 @@ void WorkerWatcher::OnClientRemoved(
 void WorkerWatcher::OnVersionStartedRunning(
     int64_t version_id,
     const content::ServiceWorkerRunningInfo& running_info) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   // TODO(pmonette): Plumb in the DevTools token.
   auto insertion_result = service_worker_nodes_.emplace(
       version_id,
@@ -308,6 +331,8 @@ void WorkerWatcher::OnVersionStartedRunning(
 }
 
 void WorkerWatcher::OnVersionStoppedRunning(int64_t version_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto it = service_worker_nodes_.find(version_id);
   DCHECK(it != service_worker_nodes_.end());
 
@@ -329,6 +354,8 @@ void WorkerWatcher::OnControlleeAdded(
     int64_t version_id,
     const std::string& client_uuid,
     const content::ServiceWorkerClientInfo& client_info) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   switch (client_info.type()) {
     case blink::mojom::ServiceWorkerClientType::kWindow: {
       // For window clients, it is necessary to wait until the navigation has
@@ -375,6 +402,8 @@ void WorkerWatcher::OnControlleeAdded(
 
 void WorkerWatcher::OnControlleeRemoved(int64_t version_id,
                                         const std::string& client_uuid) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   // Nothing to do for a frame client whose navigation never committed.
   size_t removed = client_frames_awaiting_commit_.erase(client_uuid);
   if (removed) {
@@ -428,6 +457,8 @@ void WorkerWatcher::OnControlleeNavigationCommitted(
     int64_t version_id,
     const std::string& client_uuid,
     content::GlobalFrameRoutingId render_frame_host_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   size_t removed = client_frames_awaiting_commit_.erase(client_uuid);
   DCHECK_EQ(removed, 1u);
 
@@ -444,6 +475,7 @@ void WorkerWatcher::OnControlleeNavigationCommitted(
 void WorkerWatcher::ConnectFrameClient(
     WorkerNodeImpl* worker_node,
     content::GlobalFrameRoutingId client_render_frame_host_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(worker_node);
 
   FrameNodeImpl* frame_node =
@@ -477,6 +509,7 @@ void WorkerWatcher::ConnectFrameClient(
 void WorkerWatcher::DisconnectFrameClient(
     WorkerNodeImpl* worker_node,
     content::GlobalFrameRoutingId client_render_frame_host_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(worker_node);
 
   FrameNodeImpl* frame_node =
@@ -518,6 +551,7 @@ void WorkerWatcher::DisconnectFrameClient(
 void WorkerWatcher::ConnectDedicatedWorkerClient(
     WorkerNodeImpl* worker_node,
     content::DedicatedWorkerId client_dedicated_worker_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(worker_node);
 
   ConnectClientOnGraph(worker_node,
@@ -533,6 +567,7 @@ void WorkerWatcher::ConnectDedicatedWorkerClient(
 void WorkerWatcher::DisconnectDedicatedWorkerClient(
     WorkerNodeImpl* worker_node,
     content::DedicatedWorkerId client_dedicated_worker_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(worker_node);
 
   // Remove |worker_node| from the set of child workers of this dedicated
@@ -554,6 +589,7 @@ void WorkerWatcher::DisconnectDedicatedWorkerClient(
 void WorkerWatcher::ConnectSharedWorkerClient(
     WorkerNodeImpl* worker_node,
     content::SharedWorkerId client_shared_worker_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(worker_node);
 
   ConnectClientOnGraph(worker_node,
@@ -569,6 +605,7 @@ void WorkerWatcher::ConnectSharedWorkerClient(
 void WorkerWatcher::DisconnectSharedWorkerClient(
     WorkerNodeImpl* worker_node,
     content::SharedWorkerId client_shared_worker_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
   DCHECK(worker_node);
 
   // Remove |worker_node| from the set of child workers of this shared worker.
@@ -589,6 +626,8 @@ void WorkerWatcher::DisconnectSharedWorkerClient(
 void WorkerWatcher::ConnectAllServiceWorkerClients(
     WorkerNodeImpl* service_worker_node,
     int64_t version_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   // Nothing to do if there are no clients.
   auto it = service_worker_clients_.find(version_id);
   if (it == service_worker_clients_.end())
@@ -619,6 +658,8 @@ void WorkerWatcher::ConnectAllServiceWorkerClients(
 void WorkerWatcher::DisconnectAllServiceWorkerClients(
     WorkerNodeImpl* service_worker_node,
     int64_t version_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   // Nothing to do if there are no clients.
   auto it = service_worker_clients_.find(version_id);
   if (it == service_worker_clients_.end())
@@ -650,6 +691,8 @@ void WorkerWatcher::DisconnectAllServiceWorkerClients(
 void WorkerWatcher::OnBeforeFrameNodeRemoved(
     content::GlobalFrameRoutingId render_frame_host_id,
     FrameNodeImpl* frame_node) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto it = frame_node_child_workers_.find(render_frame_host_id);
   DCHECK(it != frame_node_child_workers_.end());
 
@@ -675,6 +718,8 @@ void WorkerWatcher::OnBeforeFrameNodeRemoved(
 bool WorkerWatcher::AddChildWorker(
     content::GlobalFrameRoutingId render_frame_host_id,
     WorkerNodeImpl* child_worker_node) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto insertion_result =
       frame_node_child_workers_.insert({render_frame_host_id, {}});
 
@@ -688,6 +733,8 @@ bool WorkerWatcher::AddChildWorker(
 bool WorkerWatcher::RemoveChildWorker(
     content::GlobalFrameRoutingId render_frame_host_id,
     WorkerNodeImpl* child_worker_node) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto it = frame_node_child_workers_.find(render_frame_host_id);
   DCHECK(it != frame_node_child_workers_.end());
   auto& child_workers = it->second;
@@ -704,6 +751,8 @@ bool WorkerWatcher::RemoveChildWorker(
 
 WorkerNodeImpl* WorkerWatcher::GetDedicatedWorkerNode(
     content::DedicatedWorkerId dedicated_worker_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto it = dedicated_worker_nodes_.find(dedicated_worker_id);
   if (it == dedicated_worker_nodes_.end()) {
     NOTREACHED();
@@ -714,6 +763,8 @@ WorkerNodeImpl* WorkerWatcher::GetDedicatedWorkerNode(
 
 WorkerNodeImpl* WorkerWatcher::GetSharedWorkerNode(
     content::SharedWorkerId shared_worker_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto it = shared_worker_nodes_.find(shared_worker_id);
   if (it == shared_worker_nodes_.end()) {
     NOTREACHED();
@@ -723,6 +774,8 @@ WorkerNodeImpl* WorkerWatcher::GetSharedWorkerNode(
 }
 
 WorkerNodeImpl* WorkerWatcher::GetServiceWorkerNode(int64_t version_id) {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   auto it = service_worker_nodes_.find(version_id);
   if (it == service_worker_nodes_.end()) {
     return nullptr;
