@@ -701,10 +701,13 @@ ZeroSuggestProvider::ResultType ZeroSuggestProvider::TypeOfResultToRun(
   if (current_page_classification_ == OmniboxEventProto::CHROMEOS_APP_LIST)
     return REMOTE_NO_URL;
 
-  // Contextual Open Web.
+  // Contextual Open Web - (same client side behavior for multiple variants).
+  bool contextual_web_suggestions_enabled =
+      base::FeatureList::IsEnabled(omnibox::kOnFocusSuggestionsContextualWeb) ||
+      base::FeatureList::IsEnabled(
+          omnibox::kOnFocusSuggestionsContextualWebOnContent);
   if (current_page_classification_ == OmniboxEventProto::OTHER &&
-      base::FeatureList::IsEnabled(omnibox::kOnFocusSuggestionsContextualWeb) &&
-      can_send_current_url) {
+      can_send_current_url && contextual_web_suggestions_enabled) {
     return REMOTE_SEND_URL;
   }
 
