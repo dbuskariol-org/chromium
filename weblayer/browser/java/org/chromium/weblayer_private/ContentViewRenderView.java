@@ -86,6 +86,7 @@ public class ContentViewRenderView extends RelativeLayout {
                 int width, int height);
         // |cacheBackBuffer| will delay destroying the EGLSurface until after the next swap.
         void surfaceDestroyed(boolean cacheBackBuffer);
+        void surfaceRedrawNeededAsync(Runnable drawingFinished);
     }
 
     private final ArrayList<TrackedRunnable> mPendingRunnables = new ArrayList<>();
@@ -160,6 +161,11 @@ public class ContentViewRenderView extends RelativeLayout {
                     mNativeContentViewRenderView, cacheBackBuffer);
             mCompositorHasSurface = false;
         }
+
+        @Override
+        public void surfaceRedrawNeededAsync(Runnable drawingFinished) {
+            assert false; // NOTREACHED.
+        }
     }
 
     // Abstract differences between SurfaceView and TextureView behind this class.
@@ -220,6 +226,7 @@ public class ContentViewRenderView extends RelativeLayout {
         private final TextureViewSurfaceTextureListener mSurfaceTextureListener;
 
         private final ArrayList<ValueCallback<Boolean>> mModeCallbacks = new ArrayList<>();
+        private ArrayList<Runnable> mSurfaceRedrawNeededCallbacks;
 
         public SurfaceData(@Mode int mode, FrameLayout parent, SurfaceEventListener listener,
                 int backgroundColor, Runnable evict) {
@@ -302,6 +309,7 @@ public class ContentViewRenderView extends RelativeLayout {
                 mListener.surfaceDestroyed(mCachedSurfaceNeedsEviction);
                 mNeedsOnSurfaceDestroyed = false;
             }
+            runSurfaceRedrawNeededCallbacks();
 
             if (mMode == MODE_SURFACE_VIEW) {
                 mSurfaceView.getHolder().removeCallback(mSurfaceCallback);
@@ -403,6 +411,15 @@ public class ContentViewRenderView extends RelativeLayout {
             return false;
         }
 
+        public void runSurfaceRedrawNeededCallbacks() {
+            ArrayList<Runnable> callbacks = mSurfaceRedrawNeededCallbacks;
+            mSurfaceRedrawNeededCallbacks = null;
+            if (callbacks == null) return;
+            for (Runnable r : callbacks) {
+                r.run();
+            }
+        }
+
         private void destroyPreviousData() {
             if (mPrevSurfaceDataNeedsDestroy != null) {
                 mPrevSurfaceDataNeedsDestroy.destroy();
@@ -445,6 +462,22 @@ public class ContentViewRenderView extends RelativeLayout {
             assert mNeedsOnSurfaceDestroyed;
             mListener.surfaceDestroyed(cacheBackBuffer);
             mNeedsOnSurfaceDestroyed = false;
+            runSurfaceRedrawNeededCallbacks();
+        }
+
+        @Override
+        public void surfaceRedrawNeededAsync(Runnable drawingFinished) {
+            if (mMarkedForDestroy) {
+                drawingFinished.run();
+                return;
+            }
+            assert mNativeContentViewRenderView != 0;
+            assert this == ContentViewRenderView.this.mCurrent;
+            if (mSurfaceRedrawNeededCallbacks == null) {
+                mSurfaceRedrawNeededCallbacks = new ArrayList<>();
+            }
+            mSurfaceRedrawNeededCallbacks.add(drawingFinished);
+            ContentViewRenderViewJni.get().setNeedsRedraw(mNativeContentViewRenderView);
         }
 
         private void runCallbacks() {
@@ -470,7 +503,7 @@ public class ContentViewRenderView extends RelativeLayout {
     }
 
     // Adapter for SurfaceHoolder.Callback.
-    private static class SurfaceHolderCallback implements SurfaceHolder.Callback {
+    private static class SurfaceHolderCallback implements SurfaceHolder.Callback2 {
         private final SurfaceEventListener mListener;
 
         public SurfaceHolderCallback(SurfaceEventListener listener) {
@@ -490,6 +523,16 @@ public class ContentViewRenderView extends RelativeLayout {
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
             mListener.surfaceDestroyed(false /* cacheBackBuffer */);
+        }
+
+        @Override
+        public void surfaceRedrawNeeded(SurfaceHolder holder) {
+            // Intentionally not implemented.
+        }
+
+        @Override
+        public void surfaceRedrawNeededAsync(SurfaceHolder holder, Runnable drawingFinished) {
+            mListener.surfaceRedrawNeededAsync(drawingFinished);
         }
     }
 
@@ -719,6 +762,13 @@ public class ContentViewRenderView extends RelativeLayout {
         return mCurrent.didSwapFrame();
     }
 
+    @CalledByNative
+    private void didSwapBuffers(boolean sizeMatches) {
+        assert mCurrent != null;
+        if (!sizeMatches) return;
+        mCurrent.runSurfaceRedrawNeededCallbacks();
+    }
+
     private void evictCachedSurface() {
         if (mNativeContentViewRenderView == 0) return;
         ContentViewRenderViewJni.get().evictCachedSurface(mNativeContentViewRenderView);
@@ -752,6 +802,7 @@ public class ContentViewRenderView extends RelativeLayout {
         void surfaceDestroyed(long nativeContentViewRenderView, boolean cacheBackBuffer);
         void surfaceChanged(long nativeContentViewRenderView, boolean canBeUsedWithSurfaceControl,
                 int format, int width, int height, Surface surface);
+        void setNeedsRedraw(long nativeContentViewRenderView);
         void evictCachedSurface(long nativeContentViewRenderView);
         ResourceManager getResourceManager(long nativeContentViewRenderView);
     }
