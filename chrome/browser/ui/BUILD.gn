@@ -328,15 +328,6 @@ static_library("ui") {
     ]
   }
 
-  if (enable_vr) {
-    if (is_win) {
-      sources += [
-        "xr/xr_session_request_consent_dialog_delegate.cc",
-        "xr/xr_session_request_consent_dialog_delegate.h",
-      ]
-    }
-  }
-
   if (safe_browsing_mode == 1) {
     sources += [
       "webui/reset_password/reset_password_ui.cc",
