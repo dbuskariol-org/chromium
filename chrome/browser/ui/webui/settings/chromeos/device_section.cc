@@ -113,7 +113,7 @@ const std::vector<SearchConcept>& GetDeviceSearchConcepts() {
       {IDS_OS_SETTINGS_TAG_DEVICE,
        mojom::kDeviceSectionPath,
        mojom::SearchResultIcon::kLaptop,
-       mojom::SearchResultDefaultRank::kMedium,
+       mojom::SearchResultDefaultRank::kHigh,
        mojom::SearchResultType::kSection,
        {.section = mojom::Section::kDevice}},
       {IDS_OS_SETTINGS_TAG_KEYBOARD_FUNCTION_KEYS,
