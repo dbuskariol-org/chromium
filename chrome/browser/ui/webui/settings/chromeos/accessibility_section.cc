@@ -56,7 +56,7 @@ const std::vector<SearchConcept>& GetA11ySearchConcepts() {
       {IDS_OS_SETTINGS_TAG_A11Y,
        mojom::kAccessibilitySectionPath,
        mojom::SearchResultIcon::kA11y,
-       mojom::SearchResultDefaultRank::kMedium,
+       mojom::SearchResultDefaultRank::kHigh,
        mojom::SearchResultType::kSection,
        {.section = mojom::Section::kAccessibility},
        {IDS_OS_SETTINGS_TAG_A11Y_ALT1, SearchConcept::kAltTagEnd}},
