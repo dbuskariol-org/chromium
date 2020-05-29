@@ -473,8 +473,20 @@ Polymer({
    * @private
    */
   computeMultiStoreSavedPasswords_() {
-    return this.savedPasswords.map(
-        entry => new MultiStorePasswordUiEntry(entry));
+    /** @type {!Array<!MultiStorePasswordUiEntry>} */
+    const multiStoreEntries = [];
+    /** @type {!Map<number, !MultiStorePasswordUiEntry>} */
+    const frontendIdToMergedEntry = new Map();
+    for (const entry of this.savedPasswords) {
+      if (frontendIdToMergedEntry.has(entry.frontendId)) {
+        frontendIdToMergedEntry.get(entry.frontendId).merge(entry);
+      } else {
+        const multiStoreEntry = new MultiStorePasswordUiEntry(entry);
+        frontendIdToMergedEntry.set(entry.frontendId, multiStoreEntry);
+        multiStoreEntries.push(multiStoreEntry);
+      }
+    }
+    return multiStoreEntries;
   },
 
   /**

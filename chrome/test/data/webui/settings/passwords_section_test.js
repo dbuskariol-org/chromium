@@ -10,7 +10,7 @@ import {loadTimeData} from 'chrome://resources/js/load_time_data.m.js';
 import {flush} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 import {getToastManager} from 'chrome://settings/lazy_load.js';
 import {MultiStorePasswordUiEntry, PasswordManagerImpl, PasswordManagerProxy, PluralStringProxyImpl, Router, routes} from 'chrome://settings/settings.js';
-import {createExceptionEntry, createPasswordEntry, makeCompromisedCredential, makePasswordCheckStatus, PasswordSectionElementFactory} from 'chrome://test/settings/passwords_and_autofill_fake_data.js';
+import {createExceptionEntry, createMultiStorePasswordEntry, createPasswordEntry, makeCompromisedCredential, makePasswordCheckStatus, PasswordSectionElementFactory} from 'chrome://test/settings/passwords_and_autofill_fake_data.js';
 import {runCancelExportTest, runExportFlowErrorRetryTest, runExportFlowErrorTest, runExportFlowFastTest, runExportFlowSlowTest, runFireCloseEventAfterExportCompleteTest,runStartExportTest} from 'chrome://test/settings/passwords_export_test.js';
 import {getSyncAllPrefs, simulateStoredAccounts, simulateSyncStatus} from 'chrome://test/settings/sync_test_util.m.js';
 import {TestPasswordManagerProxy} from 'chrome://test/settings/test_password_manager_proxy.js';
@@ -26,11 +26,10 @@ const PasswordCheckState = chrome.passwordsPrivate.PasswordCheckState;
  * the expected data.
  * @param {!Element} passwordsSection The passwords section element that will
  *     be checked.
- * @param {!Array<!chrome.passwordsPrivate.PasswordUiEntry>} passwordList The
- *     expected data.
+ * @param {!Array<!MultiStorePasswordUiEntry>} passwordList The expected data.
  * @private
  */
-function validatePasswordList(passwordsSection, passwordList) {
+function validateMultiStorePasswordList(passwordsSection, passwordList) {
   const listElement = passwordsSection.$.passwordList;
   assertEquals(passwordList.length, listElement.items.length);
   for (let index = 0; index < passwordList.length; ++index) {
@@ -43,10 +42,25 @@ function validatePasswordList(passwordsSection, passwordList) {
         passwordInfo.urls.shown, node.$$('#originUrl').textContent.trim());
     assertEquals(passwordInfo.urls.link, node.$$('#originUrl').href);
     assertEquals(passwordInfo.username, node.$$('#username').value);
-    assertDeepEquals(
-        listElement.items[index], new MultiStorePasswordUiEntry(passwordInfo));
+    assertDeepEquals(listElement.items[index], passwordInfo);
   }
 }
+
+/**
+ * Convenience version of validateMultiStorePasswordList for when store
+ * duplicates don't exist.
+ * @param {!Element} passwordsSection The passwords section element that will
+ *     be checked.
+ * @param {!Array<!chrome.passwordsPrivate.PasswordUiEntry>} passwordList The
+ *     expected data.
+ * @private
+ */
+function validatePasswordList(passwordsSection, passwordList) {
+  validateMultiStorePasswordList(
+      passwordsSection,
+      passwordList.map(entry => new MultiStorePasswordUiEntry(entry)));
+}
+
 
 /**
  * Helper method that validates a that elements in the exception list match
@@ -168,7 +182,7 @@ suite('PasswordsSection', function() {
     assertTrue(passwordsSection.$.savedPasswordsHeaders.hidden);
   });
 
-  test('verifySavedPasswordLength', function() {
+  test('verifySavedPasswordEntries', function() {
     const passwordList = [
       createPasswordEntry({url: 'site1.com', username: 'luigi', id: 0}),
       createPasswordEntry({url: 'longwebsite.com', username: 'peach', id: 1}),
@@ -191,6 +205,46 @@ suite('PasswordsSection', function() {
 
     assertTrue(passwordsSection.$.noPasswordsLabel.hidden);
     assertFalse(passwordsSection.$.savedPasswordsHeaders.hidden);
+  });
+
+  // Test verifies that passwords duplicated across stores get properly merged
+  // in the UI.
+  test('verifySavedPasswordEntriesWithMultiStore', function() {
+    // Entries with duplicates.
+    const accountPassword1 = createPasswordEntry(
+        {username: 'user1', frontendId: 1, id: 10, fromAccountStore: true});
+    const devicePassword1 = createPasswordEntry(
+        {username: 'user1', frontendId: 1, id: 11, fromAccountStore: false});
+    const accountPassword2 = createPasswordEntry(
+        {username: 'user2', frontendId: 2, id: 20, fromAccountStore: true});
+    const devicePassword2 = createPasswordEntry(
+        {username: 'user2', frontendId: 2, id: 21, fromAccountStore: false});
+    // Entries without duplicate.
+    const devicePassword3 = createPasswordEntry(
+        {username: 'user3', frontendId: 3, id: 3, fromAccountStore: false});
+    const accountPassword4 = createPasswordEntry(
+        {username: 'user4', frontendId: 4, id: 4, fromAccountStore: true});
+
+    // Shuffle entries a little.
+    const passwordsSection = elementFactory.createPasswordsSection(
+        passwordManager,
+        [
+          devicePassword3, accountPassword1, devicePassword2, accountPassword4,
+          devicePassword1, accountPassword2
+        ],
+        []);
+
+    // Expected list keeping relative order.
+    const expectedList = [
+      createMultiStorePasswordEntry({username: 'user3', deviceId: 3}),
+      createMultiStorePasswordEntry(
+          {username: 'user1', accountId: 10, deviceId: 11}),
+      createMultiStorePasswordEntry(
+          {username: 'user2', accountId: 20, deviceId: 21}),
+      createMultiStorePasswordEntry({username: 'user4', accountId: 4}),
+    ];
+
+    validateMultiStorePasswordList(passwordsSection, expectedList);
   });
 
   // Test verifies that removing a password will update the elements.
@@ -219,6 +273,77 @@ suite('PasswordsSection', function() {
     validatePasswordList(passwordsSection, passwordList);
   });
 
+  // Test verifies that removing the account copy of a duplicated password will
+  // still leave the device copy present.
+  test('verifyPasswordListRemoveAccountCopy', function() {
+    const passwordList = [
+      createPasswordEntry({frontendId: 0, id: 0, fromAccountStore: true}),
+      createPasswordEntry({frontendId: 0, id: 1, fromAccountStore: false}),
+    ];
+
+    const passwordsSection = elementFactory.createPasswordsSection(
+        passwordManager, passwordList, []);
+
+    validateMultiStorePasswordList(
+        passwordsSection,
+        [createMultiStorePasswordEntry({accountId: 0, deviceId: 1})]);
+    // Simulate account copy being removed from the list.
+    passwordList.splice(0, 1);
+    passwordManager.lastCallback.addSavedPasswordListChangedListener(
+        passwordList);
+    flush();
+
+    validateMultiStorePasswordList(
+        passwordsSection, [createMultiStorePasswordEntry({deviceId: 1})]);
+  });
+
+  // Test verifies that removing the device copy of a duplicated password will
+  // still leave the account copy present.
+  test('verifyPasswordListRemoveDeviceCopy', function() {
+    const passwordList = [
+      createPasswordEntry({frontendId: 0, id: 0, fromAccountStore: true}),
+      createPasswordEntry({frontendId: 0, id: 1, fromAccountStore: false}),
+    ];
+
+    const passwordsSection = elementFactory.createPasswordsSection(
+        passwordManager, passwordList, []);
+
+    validateMultiStorePasswordList(
+        passwordsSection,
+        [createMultiStorePasswordEntry({accountId: 0, deviceId: 1})]);
+    // Simulate device copy being removed from the list.
+    passwordList.splice(1, 1);
+    passwordManager.lastCallback.addSavedPasswordListChangedListener(
+        passwordList);
+    flush();
+
+    validateMultiStorePasswordList(
+        passwordsSection, [createMultiStorePasswordEntry({accountId: 0})]);
+  });
+
+  // Test verifies that removing both copies of a duplicated password will
+  // cause no password to be displayed.
+  test('verifyPasswordListRemoveBothCopies', function() {
+    const passwordList = [
+      createPasswordEntry({frontendId: 0, id: 0, fromAccountStore: true}),
+      createPasswordEntry({frontendId: 0, id: 1, fromAccountStore: false}),
+    ];
+
+    const passwordsSection = elementFactory.createPasswordsSection(
+        passwordManager, passwordList, []);
+
+    validateMultiStorePasswordList(
+        passwordsSection,
+        [createMultiStorePasswordEntry({accountId: 0, deviceId: 1})]);
+    // Simulate both copies being removed from the list.
+    passwordList.splice(0, 2);
+    passwordManager.lastCallback.addSavedPasswordListChangedListener(
+        passwordList);
+    flush();
+
+    validateMultiStorePasswordList(passwordsSection, []);
+  });
+
   // Test verifies that adding a password will update the elements.
   test('verifyPasswordListAdd', function() {
     const passwordList = [
@@ -239,6 +364,54 @@ suite('PasswordsSection', function() {
     flush();
 
     validatePasswordList(passwordsSection, passwordList);
+  });
+
+  // Test verifies that adding an account copy of an existing password will
+  // merge it with the one already in the list.
+  test('verifyPasswordListAddAccountCopy', function() {
+    const passwordList = [
+      createPasswordEntry({frontendId: 0, fromAccountStore: false, id: 0}),
+    ];
+
+    const passwordsSection = elementFactory.createPasswordsSection(
+        passwordManager, passwordList, []);
+
+    validatePasswordList(passwordsSection, passwordList);
+    // Simulate account copy being added to the list.
+    passwordList.unshift(
+        createPasswordEntry({frontendId: 0, fromAccountStore: true, id: 1}));
+
+    passwordManager.lastCallback.addSavedPasswordListChangedListener(
+        passwordList);
+    flush();
+
+    validateMultiStorePasswordList(
+        passwordsSection,
+        [createMultiStorePasswordEntry({deviceId: 0, accountId: 1})]);
+  });
+
+  // Test verifies that adding a device copy of an existing password will
+  // merge it with the one already in the list.
+  test('verifyPasswordListAddDeviceCopy', function() {
+    const passwordList = [
+      createPasswordEntry({frontendId: 0, fromAccountStore: true, id: 0}),
+    ];
+
+    const passwordsSection = elementFactory.createPasswordsSection(
+        passwordManager, passwordList, []);
+
+    validatePasswordList(passwordsSection, passwordList);
+    // Simulate device copy being added to the list.
+    passwordList.unshift(
+        createPasswordEntry({frontendId: 0, fromAccountStore: false, id: 1}));
+
+    passwordManager.lastCallback.addSavedPasswordListChangedListener(
+        passwordList);
+    flush();
+
+    validateMultiStorePasswordList(
+        passwordsSection,
+        [createMultiStorePasswordEntry({accountId: 0, deviceId: 1})]);
   });
 
   // Test verifies that removing one out of two passwords for the same website
