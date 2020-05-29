@@ -1676,6 +1676,8 @@ const FeatureEntry::FeatureParam
     kQuietNotificationPromptsWithAdaptiveActivation[] = {
         {QuietNotificationPermissionUiConfig::kEnableAdaptiveActivation,
          "true"},
+        {QuietNotificationPermissionUiConfig::kEnableAbusiveRequestBlocking,
+         "true"},
         {QuietNotificationPermissionUiConfig::kEnableCrowdDenyTriggering,
          "true"},
         {QuietNotificationPermissionUiConfig::kCrowdDenyHoldBackChance, "0"}};
