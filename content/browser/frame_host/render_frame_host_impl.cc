@@ -14,6 +14,7 @@
 #include "base/command_line.h"
 #include "base/containers/queue.h"
 #include "base/debug/alias.h"
+#include "base/debug/crash_logging.h"
 #include "base/debug/dump_without_crashing.h"
 #include "base/hash/hash.h"
 #include "base/i18n/character_encoding.h"
@@ -7384,6 +7385,15 @@ void RenderFrameHostImpl::GetInterface(
 void RenderFrameHostImpl::CreateAppCacheBackend(
     mojo::PendingReceiver<blink::mojom::AppCacheBackend> receiver) {
   DCHECK_CURRENTLY_ON(BrowserThread::UI);
+  static auto* crash_key = base::debug::AllocateCrashKeyString(
+      "CreateAppCacheBackend-data", base::debug::CrashKeySize::Size64);
+  std::string data = base::StringPrintf(
+      "f=%d br=%d irfl=%d iiand=%d fid=%d", frame_.is_bound(),
+      broker_receiver_.is_bound(), IsRenderFrameLive(),
+      GetProcess()->IsInitializedAndNotDead(),
+      RenderProcessHost::FromID(GetProcess()->GetID()) != nullptr);
+  base::debug::ScopedCrashKeyString scoped_crash_key(crash_key, data);
+
   auto* storage_partition_impl =
       static_cast<StoragePartitionImpl*>(GetProcess()->GetStoragePartition());
   storage_partition_impl->GetAppCacheService()->CreateBackend(
