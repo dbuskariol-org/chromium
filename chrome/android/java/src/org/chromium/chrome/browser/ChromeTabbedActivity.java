@@ -106,6 +106,7 @@ import org.chromium.chrome.browser.navigation_predictor.NavigationPredictorBridg
 import org.chromium.chrome.browser.night_mode.WebContentsDarkModeController;
 import org.chromium.chrome.browser.ntp.NewTabPage;
 import org.chromium.chrome.browser.ntp.NewTabPageUma;
+import org.chromium.chrome.browser.ntp.cards.promo.HomepagePromoVariationManager;
 import org.chromium.chrome.browser.omaha.OmahaBase;
 import org.chromium.chrome.browser.omnibox.LocationBar;
 import org.chromium.chrome.browser.paint_preview.PaintPreviewTabHelper;
@@ -1677,6 +1678,8 @@ public class ChromeTabbedActivity extends ChromeActivity<ChromeActivityComponent
             LauncherShortcutActivity.updateIncognitoShortcut(ChromeTabbedActivity.this);
 
             ChromeSurveyController.initialize(mTabModelSelectorImpl);
+
+            HomepagePromoVariationManager.getInstance().tagSyntheticHomepagePromoSeenGroup();
         });
     }
 
