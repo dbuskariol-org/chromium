@@ -1925,11 +1925,10 @@ bool Browser::EmbedsFullscreenWidget() {
 }
 
 void Browser::EnterFullscreenModeForTab(
-    WebContents* web_contents,
-    const GURL& origin,
+    content::RenderFrameHost* requesting_frame,
     const blink::mojom::FullscreenOptions& options) {
   exclusive_access_manager_->fullscreen_controller()->EnterFullscreenModeForTab(
-      web_contents, origin, options.display_id);
+      requesting_frame, options.display_id);
 }
 
 void Browser::ExitFullscreenModeForTab(WebContents* web_contents) {

@@ -4286,8 +4286,7 @@ void RenderFrameHostImpl::EnterFullscreen(
     notified_instances.insert(parent_site_instance);
   }
 
-  // TODO(alexmos): See if this can use the last committed origin instead.
-  delegate_->EnterFullscreenMode(GetLastCommittedURL().GetOrigin(), *options);
+  delegate_->EnterFullscreenMode(this, *options);
   delegate_->FullscreenStateChanged(this, true /* is_fullscreen */);
 
   // The previous call might change the fullscreen state. We need to make sure
