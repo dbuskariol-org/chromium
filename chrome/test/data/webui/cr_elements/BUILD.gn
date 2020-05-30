@@ -73,11 +73,11 @@ js_type_check("closure_compile") {
     ":cr_policy_indicator_tests.m",
     ":cr_policy_pref_indicator_tests.m",
     ":cr_policy_strings",
+    ":cr_profile_avatar_selector_tests.m",
+    ":cr_radio_button_test.m",
+    ":cr_radio_group_test.m",
+    ":cr_scrollable_behavior_tests.m",
 
-    #":cr_profile_avatar_selector_tests",
-    #":cr_radio_button_test",
-    #":cr_radio_group_test",
-    #":cr_scrollable_behavior_tests",
     #":cr_search_field_tests",
     #":cr_slider_test",
     #":cr_splitter_test",
@@ -321,4 +321,56 @@ js_library("cr_policy_pref_indicator_tests.m") {
 }
 
 js_library("cr_policy_strings") {
+}
+
+js_library("cr_profile_avatar_selector_tests.m") {
+  sources = [ "$root_gen_dir/chrome/test/data/webui/cr_elements/cr_profile_avatar_selector_tests.m.js" ]
+  deps = [
+    "..:chai_assert",
+    "//third_party/polymer/v3_0/components-chromium/iron-test-helpers:mock-interactions",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/cr_elements/cr_profile_avatar_selector:cr_profile_avatar_selector.m",
+    "//ui/webui/resources/js:util.m",
+  ]
+  externs_list = [ "$externs_path/mocha-2.5.js" ]
+  extra_deps = [ ":modulize" ]
+}
+
+js_library("cr_radio_button_test.m") {
+  sources = [ "$root_gen_dir/chrome/test/data/webui/cr_elements/cr_radio_button_test.m.js" ]
+  deps = [
+    "..:chai_assert",
+    "//ui/webui/resources/cr_elements/cr_radio_button:cr_radio_button.m",
+  ]
+  externs_list = [ "$externs_path/mocha-2.5.js" ]
+  extra_deps = [ ":modulize" ]
+}
+
+js_library("cr_radio_group_test.m") {
+  sources = [
+    "$root_gen_dir/chrome/test/data/webui/cr_elements/cr_radio_group_test.m.js",
+  ]
+  deps = [
+    "..:chai_assert",
+    "..:test_util.m",
+    "//third_party/polymer/v3_0/components-chromium/iron-test-helpers:mock-interactions",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/cr_elements/cr_radio_button:cr_radio_button.m",
+    "//ui/webui/resources/cr_elements/cr_radio_group:cr_radio_group.m",
+  ]
+  externs_list = [ "$externs_path/mocha-2.5.js" ]
+  extra_deps = [ ":modulize" ]
+}
+
+js_library("cr_scrollable_behavior_tests.m") {
+  sources = [ "$root_gen_dir/chrome/test/data/webui/cr_elements/cr_scrollable_behavior_tests.m.js" ]
+  deps = [
+    "..:chai_assert",
+    "..:test_util.m",
+    "//third_party/polymer/v3_0/components-chromium/iron-list:iron-list",
+    "//third_party/polymer/v3_0/components-chromium/polymer:polymer_bundled",
+    "//ui/webui/resources/cr_elements:cr_scrollable_behavior.m",
+  ]
+  externs_list = [ "$externs_path/mocha-2.5.js" ]
+  extra_deps = [ ":modulize" ]
 }
