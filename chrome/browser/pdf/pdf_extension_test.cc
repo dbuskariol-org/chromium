@@ -910,10 +910,7 @@ class PDFExtensionContentSettingJSTest
   }
 
   std::string GetDisabledJsTestFile() const {
-    // TODO(crbug.com/696650): Run nobeep_test.js when
-    // |honor_js_content_settings_| once JS content settings get respected in
-    // the PDF extension.
-    return "beep_test.js";
+    return ShouldHonorJsContentSettings() ? "nobeep_test.js" : "beep_test.js";
   }
 
  private:

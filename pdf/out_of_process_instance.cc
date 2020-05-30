@@ -484,7 +484,7 @@ bool OutOfProcessInstance::Init(uint32_t argc,
 
   text_input_ = std::make_unique<pp::TextInput_Dev>(this);
 
-  bool enable_javascript = false;
+  bool enable_javascript = true;
   const char* stream_url = nullptr;
   const char* original_url = nullptr;
   const char* top_level_url = nullptr;
@@ -505,7 +505,8 @@ bool OutOfProcessInstance::Init(uint32_t argc,
       success =
           base::StringToInt(argv[i], &top_toolbar_height_in_viewport_coords_);
     } else if (strcmp(argn[i], "javascript") == 0) {
-      enable_javascript = (strcmp(argv[i], "allow") == 0);
+      if (base::FeatureList::IsEnabled(features::kPdfHonorJsContentSettings))
+        enable_javascript = (strcmp(argv[i], "allow") == 0);
     }
     if (!success)
       return false;
@@ -518,8 +519,7 @@ bool OutOfProcessInstance::Init(uint32_t argc,
     stream_url = original_url;
 
   if (!engine_) {
-    // TODO(tsepez): fix lifetime issue, conditionalize javascript.
-    engine_ = PDFEngine::Create(this, true);
+    engine_ = PDFEngine::Create(this, enable_javascript);
   }
 
   // If we're in print preview mode we don't need to load the document yet.
