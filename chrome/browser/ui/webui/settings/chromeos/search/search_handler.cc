@@ -100,9 +100,16 @@ std::vector<mojom::SearchResultPtr> SearchHandler::Search(
     const base::string16& query,
     uint32_t max_num_results,
     mojom::ParentResultBehavior parent_result_behavior) {
+  // Search for 5x the maximum set of results. If there are many matches for
+  // a query, it may be the case that |index_| returns some matches with higher
+  // SearchResultDefaultRank values later in the list. Requesting up to 5x the
+  // maximum number ensures that such results will be returned and can be ranked
+  // accordingly when sorted.
+  uint32_t max_local_search_service_results = 5 * max_num_results;
+
   std::vector<local_search_service::Result> local_search_service_results;
-  local_search_service::ResponseStatus response_status =
-      index_->Find(query, max_num_results, &local_search_service_results);
+  local_search_service::ResponseStatus response_status = index_->Find(
+      query, max_local_search_service_results, &local_search_service_results);
 
   if (response_status != local_search_service::ResponseStatus::kSuccess) {
     LOG(ERROR) << "Cannot search; LocalSearchService returned "
@@ -133,13 +140,14 @@ std::vector<mojom::SearchResultPtr> SearchHandler::GenerateSearchResultsArray(
     mojom::SearchResultPtr result_ptr = ResultToSearchResult(result);
     if (result_ptr)
       search_results.push_back(std::move(result_ptr));
-
-    // Limit the number of results to return.
-    if (search_results.size() == max_num_results)
-      break;
   }
 
   std::sort(search_results.begin(), search_results.end(), CompareSearchResults);
+
+  // Now that the results have been sorted, limit the size of to
+  // |max_num_results|.
+  search_results.resize(
+      std::min(static_cast<size_t>(max_num_results), search_results.size()));
 
   if (parent_result_behavior ==
       mojom::ParentResultBehavior::kAllowParentResults) {
