@@ -36,8 +36,6 @@ class MockPackageManagerDelegate extends PackageManagerDelegate {
     private final List<ResolveInfo> mServices = new ArrayList<>();
     private final Map<ApplicationInfo, List<String[]>> mResources = new HashMap<>();
 
-    private String mInvokedAppPackageName;
-
     /**
      * Simulates an installed payment app with no supported delegations.
      *
@@ -98,7 +96,6 @@ class MockPackageManagerDelegate extends PackageManagerDelegate {
 
         if (signature != null) {
             PackageInfo packageInfo = new PackageInfo();
-            packageInfo.packageName = packageName;
             packageInfo.versionCode = 10;
             if (signature.isEmpty()) {
                 packageInfo.signatures = new Signature[0];
@@ -181,11 +178,6 @@ class MockPackageManagerDelegate extends PackageManagerDelegate {
     }
 
     @Override
-    public PackageInfo getPackageInfoWithSignatures(int uid) {
-        return mPackages.get(mInvokedAppPackageName);
-    }
-
-    @Override
     public CharSequence getAppLabel(ResolveInfo resolveInfo) {
         return mLabels.get(resolveInfo);
     }
@@ -201,14 +193,5 @@ class MockPackageManagerDelegate extends PackageManagerDelegate {
             ApplicationInfo applicationInfo, int resourceId) {
         assert resourceId > 0 && resourceId <= RESOURCES_SIZE;
         return mResources.get(applicationInfo).get(resourceId - 1);
-    }
-
-    /**
-     * Sets the package name of the invoked payment app.
-     * @param packageName The package name of the invoked payment app.
-     */
-    public void setInvokedAppPackageName(String packageName) {
-        assert mPackages.containsKey(packageName);
-        mInvokedAppPackageName = packageName;
     }
 }

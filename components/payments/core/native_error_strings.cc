@@ -80,6 +80,10 @@ const char kInvalidWebAppIcon[] =
     "Failed to download or decode a non-empty icon for payment app with \"$1\" "
     "manifest.";
 
+const char kMethodDataRequired[] = "Method data required.";
+
+const char kMethodNameRequired[] = "Method name required.";
+
 const char kMultiplePaymentMethodsNotSupportedFormat[] =
     "The payment methods $ are not supported.";
 
@@ -136,6 +140,8 @@ const char kPaymentHandlerInsecureNavigation[] =
 
 const char kSinglePaymentMethodNotSupportedFormat[] =
     "The payment method $ is not supported.";
+
+const char kShippingOptionIdRequired[] = "Shipping option identifier required.";
 
 const char kCanMakePaymentEventRejected[] =
     "Payment handler rejected the promise passed into "
