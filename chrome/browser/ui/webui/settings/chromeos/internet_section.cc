@@ -90,7 +90,7 @@ const std::vector<SearchConcept>& GetWifiSearchConcepts() {
       {IDS_OS_SETTINGS_TAG_WIFI,
        mojom::kWifiNetworksSubpagePath,
        mojom::SearchResultIcon::kWifi,
-       mojom::SearchResultDefaultRank::kMedium,
+       mojom::SearchResultDefaultRank::kHigh,
        mojom::SearchResultType::kSubpage,
        {.subpage = mojom::Subpage::kWifiNetworks},
        {IDS_OS_SETTINGS_TAG_WIFI_ALT1, IDS_OS_SETTINGS_TAG_WIFI_ALT2,
