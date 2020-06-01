@@ -2241,6 +2241,7 @@ static_library("browser") {
     "//printing/buildflags",
     "//rlz/buildflags",
     "//services/audio/public/cpp",
+    "//services/cert_verifier:lib",
     "//services/data_decoder/public/cpp",
     "//services/device/public/cpp:device_features",
     "//services/device/public/cpp/usb",

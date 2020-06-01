@@ -335,6 +335,7 @@ include_rules = [
   "+rlz",
   "+sandbox/win/src",  # The path doesn't say it, but this is the Windows sandbox.
   "+services/audio/public",
+  "+services/cert_verifier",
   "+services/data_decoder/public",
   "+services/device/public",
   "+services/image_annotation/public",

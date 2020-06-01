@@ -220,6 +220,7 @@ static_library("test_support") {
     "//pdf",
     "//ppapi/buildflags",
     "//printing/buildflags",
+    "//services/cert_verifier:test_support",
     "//skia",
     "//sql",
     "//sql:test_support",
