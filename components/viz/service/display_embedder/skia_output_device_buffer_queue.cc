@@ -519,7 +519,8 @@ void SkiaOutputDeviceBufferQueue::SwapBuffers(
     DoFinishSwapBuffers(image_size_, std::move(latency_info),
                         submitted_image_->GetWeakPtr(),
                         std::move(committed_overlays_),
-                        gl_surface_->SwapBuffers(std::move(feedback)), nullptr);
+                        gfx::SwapCompletionResult(
+                            gl_surface_->SwapBuffers(std::move(feedback))));
   }
   committed_overlays_.clear();
   std::swap(committed_overlays_, pending_overlays_);
@@ -551,12 +552,12 @@ void SkiaOutputDeviceBufferQueue::PostSubBuffer(
         rect.x(), rect.y(), rect.width(), rect.height(),
         swap_completion_callbacks_.back()->callback(), std::move(feedback));
   } else {
-    DoFinishSwapBuffers(
-        image_size_, std::move(latency_info), submitted_image_->GetWeakPtr(),
-        std::move(committed_overlays_),
-        gl_surface_->PostSubBuffer(rect.x(), rect.y(), rect.width(),
-                                   rect.height(), std::move(feedback)),
-        nullptr);
+    DoFinishSwapBuffers(image_size_, std::move(latency_info),
+                        submitted_image_->GetWeakPtr(),
+                        std::move(committed_overlays_),
+                        gfx::SwapCompletionResult(gl_surface_->PostSubBuffer(
+                            rect.x(), rect.y(), rect.width(), rect.height(),
+                            std::move(feedback))));
   }
   committed_overlays_.clear();
   std::swap(committed_overlays_, pending_overlays_);
@@ -588,7 +589,8 @@ void SkiaOutputDeviceBufferQueue::CommitOverlayPlanes(
     DoFinishSwapBuffers(
         image_size_, std::move(latency_info), submitted_image_->GetWeakPtr(),
         std::move(committed_overlays_),
-        gl_surface_->CommitOverlayPlanes(std::move(feedback)), nullptr);
+        gfx::SwapCompletionResult(
+            gl_surface_->CommitOverlayPlanes(std::move(feedback))));
   }
   committed_overlays_.clear();
   std::swap(committed_overlays_, pending_overlays_);
@@ -599,11 +601,9 @@ void SkiaOutputDeviceBufferQueue::DoFinishSwapBuffers(
     std::vector<ui::LatencyInfo> latency_info,
     const base::WeakPtr<Image>& image,
     std::vector<OverlayData> overlays,
-    gfx::SwapResult result,
-    std::unique_ptr<gfx::GpuFence> gpu_fence) {
-  DCHECK(!gpu_fence);
-
-  FinishSwapBuffers(result, size, latency_info);
+    gfx::SwapCompletionResult result) {
+  DCHECK(!result.gpu_fence);
+  FinishSwapBuffers(result.swap_result, size, latency_info);
   PageFlipComplete(image.get());
 }
 
