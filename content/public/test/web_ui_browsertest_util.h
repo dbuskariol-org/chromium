@@ -21,7 +21,6 @@ struct TestUntrustedDataSourceCSP {
 
   base::Optional<std::string> child_src = base::nullopt;
   base::Optional<std::string> script_src = base::nullopt;
-  base::Optional<std::string> default_src = base::nullopt;
   bool no_xfo = false;
   base::Optional<std::vector<std::string>> frame_ancestors = base::nullopt;
 };
