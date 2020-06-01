@@ -58,10 +58,10 @@ class ChromeWebContentsViewDelegateHandleOnPerformDrop : public testing::Test {
     auto callback = base::BindLambdaForTesting(
         [this, scan_succeeds](const base::FilePath&) {
           current_requests_count_++;
-          return scan_succeeds ? FakeDelegate::SuccessfulResponse()
-                               : FakeDelegate::DlpResponse(
-                                     Verdict::FAILURE, std::string(),
-                                     Verdict::TriggeredRule::REPORT_ONLY);
+          return scan_succeeds
+                     ? FakeDelegate::SuccessfulResponse()
+                     : FakeDelegate::DlpResponse(Verdict::SUCCESS, "block_rule",
+                                                 Verdict::TriggeredRule::BLOCK);
         });
     auto is_encrypted_callback =
         base::BindRepeating([](const base::FilePath&) { return false; });
