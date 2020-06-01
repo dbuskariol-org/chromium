@@ -522,7 +522,9 @@ IN_PROC_BROWSER_TEST_P(InputMethodEngineBrowserTest,
     ASSERT_TRUE(content::ExecuteScript(host->host_contents(),
                                        send_key_events_test_script));
 
-    const ui::KeyEvent& key_event = mock_input_context->last_sent_key_event();
+    ASSERT_EQ(1u, mock_input_context->sent_key_events().size());
+    const ui::KeyEvent& key_event =
+        mock_input_context->sent_key_events().back();
     EXPECT_EQ(ui::ET_KEY_PRESSED, key_event.type());
     EXPECT_EQ(L'z', key_event.GetCharacter());
     EXPECT_EQ(ui::DomCode::US_Z, key_event.code());
@@ -548,7 +550,9 @@ IN_PROC_BROWSER_TEST_P(InputMethodEngineBrowserTest,
     ASSERT_TRUE(content::ExecuteScript(host->host_contents(),
                                        send_key_events_test_script));
 
-    const ui::KeyEvent& key_event = mock_input_context->last_sent_key_event();
+    ASSERT_EQ(1u, mock_input_context->sent_key_events().size());
+    const ui::KeyEvent& key_event =
+        mock_input_context->sent_key_events().back();
     EXPECT_EQ(ui::ET_KEY_RELEASED, key_event.type());
     EXPECT_EQ(L'a', key_event.GetCharacter());
     EXPECT_EQ(ui::DomCode::US_Q, key_event.code());
@@ -575,7 +579,9 @@ IN_PROC_BROWSER_TEST_P(InputMethodEngineBrowserTest,
     ASSERT_TRUE(content::ExecuteScript(host->host_contents(),
                                        send_key_events_test_script));
 
-    const ui::KeyEvent& key_event = mock_input_context->last_sent_key_event();
+    ASSERT_EQ(1u, mock_input_context->sent_key_events().size());
+    const ui::KeyEvent& key_event =
+        mock_input_context->sent_key_events().back();
     EXPECT_EQ(ui::ET_KEY_RELEASED, key_event.type());
     EXPECT_EQ(L'a', key_event.GetCharacter());
     EXPECT_EQ(ui::DomCode::US_Q, key_event.code());
