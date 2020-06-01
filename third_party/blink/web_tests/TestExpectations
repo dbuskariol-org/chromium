@@ -5905,3 +5905,8 @@ crbug.com/1088220 [ Linux ] external/wpt/html/infrastructure/safe-passing-of-str
 crbug.com/1088222 [ Linux ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/window-iframe-messagechannel.https.html [ Pass Failure Timeout ]
 crbug.com/1088475 [ Linux ] external/wpt/webvtt/rendering/cues-with-video/processing-model/embedded_style_media_queries.html [ Pass Failure ]
 crbug.com/1088475 [ Linux ] external/wpt/webvtt/rendering/cues-with-video/processing-model/embedded_style_media_queries_resized.html [ Pass Failure ]
+
+crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvas-zero-size-readback.html [ Pass Crash ]
+crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvasClearRect.html [ Pass Failure ]
+crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvasClearRectPartial.html [ Pass Failure ]
+crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvas-MessageChannel-transfer.html [ Pass Failure ]
