@@ -8249,12 +8249,6 @@ DocumentResourceCoordinator* Document::GetResourceCoordinator() {
   return resource_coordinator_.get();
 }
 
-FrameOrWorkerScheduler* Document::GetScheduler() {
-  DCHECK(IsMainThread());
-  return GetExecutionContext() ? GetExecutionContext()->GetScheduler()
-                               : nullptr;
-}
-
 scoped_refptr<base::SingleThreadTaskRunner> Document::GetTaskRunner(
     TaskType type) {
   DCHECK(IsMainThread());

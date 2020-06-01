@@ -327,7 +327,6 @@ class CORE_EXPORT Document : public ContainerNode,
   String OutgoingReferrer() const;
   network::mojom::ReferrerPolicy GetReferrerPolicy() const;
   BrowserInterfaceBrokerProxy& GetBrowserInterfaceBroker();
-  FrameOrWorkerScheduler* GetScheduler();
 
   // FeaturePolicyParserDelegate override
   // TODO(crbug.com/1029822) FeaturePolicyParserDelegate overrides, these
