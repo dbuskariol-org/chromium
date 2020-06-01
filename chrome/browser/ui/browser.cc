@@ -54,7 +54,6 @@
 #include "chrome/browser/extensions/api/tabs/tabs_event_router.h"
 #include "chrome/browser/extensions/api/tabs/tabs_windows_api.h"
 #include "chrome/browser/extensions/browser_extension_window_controller.h"
-#include "chrome/browser/extensions/extension_service.h"
 #include "chrome/browser/extensions/extension_ui_util.h"
 #include "chrome/browser/extensions/extension_util.h"
 #include "chrome/browser/extensions/tab_helper.h"
@@ -3018,11 +3017,11 @@ bool Browser::ShouldCreateBackgroundContents(
     content::SiteInstance* source_site_instance,
     const GURL& opener_url,
     const std::string& frame_name) {
-  extensions::ExtensionService* extensions_service =
-      extensions::ExtensionSystem::Get(profile_)->extension_service();
+  extensions::ExtensionSystem* extension_system =
+      extensions::ExtensionSystem::Get(profile_);
 
-  if (!opener_url.is_valid() || frame_name.empty() || !extensions_service ||
-      !extensions_service->is_ready())
+  if (!opener_url.is_valid() || frame_name.empty() ||
+      !extension_system->is_ready())
     return false;
 
   // Only hosted apps have web extents, so this ensures that only hosted apps

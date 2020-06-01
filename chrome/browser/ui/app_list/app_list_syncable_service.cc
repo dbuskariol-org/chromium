@@ -342,8 +342,7 @@ AppListSyncableService::~AppListSyncableService() {
 }
 
 bool AppListSyncableService::IsExtensionServiceReady() const {
-  return extension_system_->extension_service() &&
-         extension_system_->extension_service()->is_ready();
+  return extension_system_->is_ready();
 }
 
 void AppListSyncableService::InitFromLocalStorage() {
