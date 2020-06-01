@@ -5302,26 +5302,10 @@ blink::mojom::CommitResult RenderFrameImpl::PrepareForHistoryNavigationCommit(
     }
   }
 
-  // If this navigation is to a history item for a new child frame, we may
-  // want to ignore it if a Javascript navigation (i.e., client redirect)
-  // interrupted it.
-  // To detect this we need to check for the interrupt at different stages of
-  // navigation:
-  bool interrupted_by_client_redirect =
-      // IsNavigationScheduleWithin() checks that we have something just
-      // started, sent to the browser or loading.
-      (frame_->IsNavigationScheduledWithin(base::TimeDelta()) &&
-       // The current navigation however is just returning from the browser. To
-       // check that it is not the current navigation, we verify the "initial
-       // history navigation in a subframe" flag of ClientNavigationState.
-       !frame_->IsClientNavigationInitialHistoryLoad()) ||
-      // The client navigation could already have finished, in which case there
-      // will be an history item.
-      !current_history_item_.IsNull();
-  if (common_params.is_history_navigation_in_new_child_frame &&
-      interrupted_by_client_redirect) {
-    return blink::mojom::CommitResult::Aborted;
-  }
+  // Note: we used to check that initial history navigation in the child frame
+  // was not canceled by a client redirect before committing it. However,
+  // we now destroy the NavigationClient for initial history navigation, and
+  // commit does not arrive to the renderer in this case.
 
   return blink::mojom::CommitResult::Ok;
 }
@@ -5995,8 +5979,7 @@ void RenderFrameImpl::PrepareRenderViewForNavigation(
 void RenderFrameImpl::BeginNavigationInternal(
     std::unique_ptr<blink::WebNavigationInfo> info,
     bool is_history_navigation_in_new_child_frame) {
-  if (!frame_->WillStartNavigation(*info,
-                                   is_history_navigation_in_new_child_frame))
+  if (!frame_->WillStartNavigation(*info))
     return;
 
   for (auto& observer : observers_)
