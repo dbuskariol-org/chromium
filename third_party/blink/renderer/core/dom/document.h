@@ -143,7 +143,6 @@ class FontMatchingMetrics;
 class FormController;
 class HTMLAllCollection;
 class HTMLBodyElement;
-class HTMLFormElement;
 class FrameScheduler;
 class HTMLCollection;
 class HTMLDialogElement;
@@ -1671,9 +1670,6 @@ class CORE_EXPORT Document : public ContainerNode,
   void MarkHasFindInPageRequest();
   void MarkHasFindInPageContentVisibilityActiveMatch();
 
-  void ScheduleFormSubmission(HTMLFormElement* form_element);
-  void CancelFormSubmissions();
-
   HeapObserverList<SynchronousMutationObserver>&
   SynchronousMutationObserverList() {
     return synchronous_mutation_observer_list_;
@@ -1838,8 +1834,6 @@ class CORE_EXPORT Document : public ContainerNode,
   void NotifyFocusedElementChanged(Element* old_focused_element,
                                    Element* new_focused_element);
   void DisplayNoneChangedForFrame();
-
-  void ExecuteFormSubmission(HTMLFormElement* form_element);
 
   // Handles a connection error to |has_trust_tokens_answerer_| by rejecting all
   // pending promises created by |hasTrustToken|.
@@ -2241,8 +2235,6 @@ class CORE_EXPORT Document : public ContainerNode,
   // Records find-in-page metrics, which are sent to UKM on shutdown.
   bool had_find_in_page_request_ = false;
   bool had_find_in_page_render_subtree_active_match_ = false;
-
-  HeapHashMap<Member<HTMLFormElement>, TaskHandle> form_to_pending_submission_;
 
   // Mojo remote used to determine if the document has permission to access
   // storage or not.
