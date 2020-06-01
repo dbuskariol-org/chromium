@@ -6326,7 +6326,7 @@ ScriptPromise Document::hasTrustToken(ScriptState* script_state,
   }
 
   if (!has_trust_tokens_answerer_.is_bound()) {
-    GetBrowserInterfaceBroker().GetInterface(
+    GetFrame()->GetBrowserInterfaceBroker().GetInterface(
         has_trust_tokens_answerer_.BindNewPipeAndPassReceiver(
             GetExecutionContext()->GetTaskRunner(TaskType::kInternalDefault)));
     has_trust_tokens_answerer_.set_disconnect_handler(
@@ -8225,17 +8225,10 @@ void Document::MaybeQueueSendDidEditFieldInInsecureContext() {
                 WrapWeakPersistent(this)));
 }
 
-BrowserInterfaceBrokerProxy& Document::GetBrowserInterfaceBroker() {
-  if (!GetFrame())
-    return GetEmptyBrowserInterfaceBroker();
-
-  return GetFrame()->GetBrowserInterfaceBroker();
-}
-
 DocumentResourceCoordinator* Document::GetResourceCoordinator() {
   if (!resource_coordinator_ && GetFrame()) {
-    resource_coordinator_ =
-        DocumentResourceCoordinator::MaybeCreate(GetBrowserInterfaceBroker());
+    resource_coordinator_ = DocumentResourceCoordinator::MaybeCreate(
+        GetFrame()->GetBrowserInterfaceBroker());
   }
   return resource_coordinator_.get();
 }

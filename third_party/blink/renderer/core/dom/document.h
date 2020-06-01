@@ -326,7 +326,6 @@ class CORE_EXPORT Document : public ContainerNode,
   bool CanExecuteScripts(ReasonForCallingCanExecuteScripts);
   String OutgoingReferrer() const;
   network::mojom::ReferrerPolicy GetReferrerPolicy() const;
-  BrowserInterfaceBrokerProxy& GetBrowserInterfaceBroker();
 
   // FeaturePolicyParserDelegate override
   // TODO(crbug.com/1029822) FeaturePolicyParserDelegate overrides, these
