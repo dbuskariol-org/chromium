@@ -1536,7 +1536,14 @@ TEST_F(PrerenderTest, LinkManagerAbandonThenCancel) {
   ASSERT_FALSE(prerender_manager()->FindEntry(url));
 }
 
-TEST_F(PrerenderTest, LinkManagerAddTwiceCancelTwice) {
+// Flaky on Android, crbug.com/1087876.
+#if defined(OS_ANDROID)
+#define MAYBE_LinkManagerAddTwiceCancelTwice \
+  DISABLED_LinkManagerAddTwiceCancelTwice
+#else
+#define MAYBE_LinkManagerAddTwiceCancelTwice LinkManagerAddTwiceCancelTwice
+#endif
+TEST_F(PrerenderTest, MAYBE_LinkManagerAddTwiceCancelTwice) {
   SetConcurrency(2);
   EXPECT_TRUE(IsEmptyPrerenderLinkManager());
   GURL url("http://www.myexample.com");
@@ -1567,7 +1574,15 @@ TEST_F(PrerenderTest, LinkManagerAddTwiceCancelTwice) {
 
 // TODO(gavinp): Update this test after abandon has an effect on Prerenders,
 // like shortening the timeouts.
-TEST_F(PrerenderTest, LinkManagerAddTwiceAbandonTwiceUseTwice) {
+// Flaky on Android, crbug.com/1087876.
+#if defined(OS_ANDROID)
+#define MAYBE_LinkManagerAddTwiceAbandonTwiceUseTwice \
+  DISABLED_LinkManagerAddTwiceAbandonTwiceUseTwice
+#else
+#define MAYBE_LinkManagerAddTwiceAbandonTwiceUseTwice \
+  LinkManagerAddTwiceAbandonTwiceUseTwice
+#endif
+TEST_F(PrerenderTest, MAYBE_LinkManagerAddTwiceAbandonTwiceUseTwice) {
   SetConcurrency(2);
   EXPECT_TRUE(IsEmptyPrerenderLinkManager());
   GURL url("http://www.myexample.com");
