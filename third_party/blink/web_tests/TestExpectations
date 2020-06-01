@@ -5015,10 +5015,12 @@ crbug.com/937991 [ Win7 Release ] http/tests/devtools/cache-storage/cache-data.j
 crbug.com/963141 [ Mac ] media/video-object-fit.html [ Pass Failure ]
 crbug.com/963141 [ Win ] media/video-object-fit.html [ Pass Failure ]
 crbug.com/963141 media/video-object-fit-change.html [ Pass Failure ]
-crbug.com/963141 [ Mac ] media/controls/video-overlay-cast-light-rendering.html [ Pass Failure ]
-crbug.com/963141 [ Win ] media/controls/video-overlay-cast-light-rendering.html [ Pass Failure ]
 crbug.com/963141 [ Mac ] media/video-aspect-ratio.html [ Pass Failure ]
 crbug.com/963141 [ Win ] media/video-aspect-ratio.html [ Pass Failure ]
+
+# Updated by sheriff 2020-06-01: this one seem flaky on all platforms now.
+# See also: crbug.com/1083564
+crbug.com/963141 media/controls/video-overlay-cast-light-rendering.html [ Pass Failure ]
 
 # Sheriff 2019-05-16
 crbug.com/963141 [ Linux ] media/video-object-fit.html [ Pass Failure ]
