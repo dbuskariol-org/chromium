@@ -46,7 +46,7 @@ const base::Feature kEnableStereoAudioInput{"AssistantEnableStereoAudioInput",
 const base::Feature kEnablePowerManager{"ChromeOSAssistantEnablePowerManager",
                                         base::FEATURE_DISABLED_BY_DEFAULT};
 
-const base::Feature kEnableOnDeviceAssistant{"ChromeOSOnDeviceAssistant",
+const base::Feature kEnableOnDeviceAssistant{"OnDeviceAssistant",
                                              base::FEATURE_DISABLED_BY_DEFAULT};
 
 const base::Feature kEnableMediaSessionIntegration{
