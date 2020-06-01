@@ -5,6 +5,8 @@
 #ifndef UI_GFX_X_CONNECTION_H_
 #define UI_GFX_X_CONNECTION_H_
 
+#include <queue>
+
 #include "base/component_export.h"
 #include "ui/gfx/x/extension_manager.h"
 #include "ui/gfx/x/xproto.h"
@@ -15,6 +17,15 @@ namespace x11 {
 class COMPONENT_EXPORT(X11) Connection : public XProto,
                                          public ExtensionManager {
  public:
+  class Delegate {
+   public:
+    virtual bool ShouldContinueStream() const = 0;
+    virtual void DispatchXEvent(XEvent* event) = 0;
+
+   protected:
+    virtual ~Delegate() {}
+  };
+
   // Gets or creates the singeton connection.
   static Connection* Get();
 
@@ -35,9 +46,24 @@ class COMPONENT_EXPORT(X11) Connection : public XProto,
     return defualt_root_visual_;
   }
 
+  void Dispatch(Delegate* delegate);
+
  private:
+  friend class FutureBase;
+
+  struct Request {
+    Request(unsigned int sequence, FutureBase::ResponseCallback callback);
+    Request(Request&& other);
+    ~Request();
+
+    const unsigned int sequence;
+    FutureBase::ResponseCallback callback;
+  };
+
   explicit Connection(XDisplay* display);
   ~Connection();
+
+  void AddRequest(unsigned int sequence, FutureBase::ResponseCallback callback);
 
   XDisplay* const display_;
 
@@ -47,6 +73,8 @@ class COMPONENT_EXPORT(X11) Connection : public XProto,
   const x11::Screen* default_screen_ = nullptr;
   const x11::Depth* default_root_depth_ = nullptr;
   const x11::VisualType* defualt_root_visual_ = nullptr;
+
+  std::queue<Request> requests_;
 };
 
 }  // namespace x11
