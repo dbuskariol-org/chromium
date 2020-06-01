@@ -258,7 +258,7 @@ void GPUQueue::copyImageBitmapToTexture(
     return;
   }
 
-  WGPUTextureCopyView dawn_destination = AsDawnType(destination);
+  WGPUTextureCopyView dawn_destination = AsDawnType(destination, device_);
 
   const CanvasColorParams& color_params =
       source->imageBitmap()->GetCanvasColorParams();
