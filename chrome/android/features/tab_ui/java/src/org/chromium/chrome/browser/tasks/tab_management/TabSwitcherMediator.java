@@ -33,8 +33,7 @@ import org.chromium.chrome.browser.compositor.layouts.LayoutManager;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
-import org.chromium.chrome.browser.fullscreen.ChromeFullscreenManager;
-import org.chromium.chrome.browser.fullscreen.FullscreenManager;
+import org.chromium.chrome.browser.fullscreen.BrowserControlsStateProvider;
 import org.chromium.chrome.browser.init.FirstDrawDetector;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabCreationState;
@@ -90,8 +89,8 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
     private final TabModelObserver mTabModelObserver;
     private final TabModelSelectorObserver mTabModelSelectorObserver;
     private final ObserverList<TabSwitcher.OverviewModeObserver> mObservers = new ObserverList<>();
-    private final ChromeFullscreenManager mFullscreenManager;
-    private final ChromeFullscreenManager.FullscreenListener mFullscreenListener;
+    private final BrowserControlsStateProvider mBrowserControlsStateProvider;
+    private final BrowserControlsStateProvider.Observer mBrowserControlsObserver;
     private final ViewGroup mContainerView;
     private final TabContentManager mTabContentManager;
 
@@ -186,20 +185,20 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
      * @param containerViewModel The {@link PropertyModel} to keep state on the View containing the
      *         grid or carousel.
      * @param tabModelSelector {@link TabModelSelector} to observer for model and selection changes.
-     * @param fullscreenManager {@link FullscreenManager} to use.
+     * @param browserControlsStateProvider {@link BrowserControlsStateProvider} to use.
      * @param containerView The container {@link ViewGroup} to use.
      * @param tabContentManager The {@link TabContentManager} for first meaningful paint event.
      * @param mode One of the {@link TabListCoordinator.TabListMode}.
      */
     TabSwitcherMediator(ResetHandler resetHandler, PropertyModel containerViewModel,
-            TabModelSelector tabModelSelector, ChromeFullscreenManager fullscreenManager,
-            ViewGroup containerView,
+            TabModelSelector tabModelSelector,
+            BrowserControlsStateProvider browserControlsStateProvider, ViewGroup containerView,
             TabContentManager tabContentManager, MessageItemsController messageItemsController,
             @TabListCoordinator.TabListMode int mode) {
         mResetHandler = resetHandler;
         mContainerViewModel = containerViewModel;
         mTabModelSelector = tabModelSelector;
-        mFullscreenManager = fullscreenManager;
+        mBrowserControlsStateProvider = browserControlsStateProvider;
         mMode = mode;
 
         mTabModelSelectorObserver = new EmptyTabModelSelectorObserver() {
@@ -287,7 +286,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
             }
         };
 
-        mFullscreenListener = new ChromeFullscreenManager.FullscreenListener() {
+        mBrowserControlsObserver = new BrowserControlsStateProvider.Observer() {
             @Override
             public void onContentOffsetChanged(int offset) {}
 
@@ -310,7 +309,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
             }
         };
 
-        mFullscreenManager.addListener(mFullscreenListener);
+        mBrowserControlsStateProvider.addObserver(mBrowserControlsObserver);
 
         if (mTabModelSelector.getModels().isEmpty()) {
             TabModelSelectorObserver selectorObserver = new EmptyTabModelSelectorObserver() {
@@ -340,10 +339,10 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
         mContainerViewModel.set(ANIMATE_VISIBILITY_CHANGES, true);
 
         // Container view takes care of padding and margin in start surface.
-        if (mMode != TabListCoordinator.TabListMode.CAROUSEL) {
-            updateTopControlsProperties(fullscreenManager.getTopControlsHeight());
+        if (mode != TabListCoordinator.TabListMode.CAROUSEL) {
+            updateTopControlsProperties(browserControlsStateProvider.getTopControlsHeight());
             mContainerViewModel.set(
-                    BOTTOM_CONTROLS_HEIGHT, fullscreenManager.getBottomControlsHeight());
+                    BOTTOM_CONTROLS_HEIGHT, browserControlsStateProvider.getBottomControlsHeight());
         }
 
         mContainerView = containerView;
@@ -714,7 +713,7 @@ class TabSwitcherMediator implements TabSwitcher.Controller, TabListRecyclerView
      */
     public void destroy() {
         mTabModelSelector.removeObserver(mTabModelSelectorObserver);
-        mFullscreenManager.removeListener(mFullscreenListener);
+        mBrowserControlsStateProvider.removeObserver(mBrowserControlsObserver);
         mTabModelSelector.getTabModelFilterProvider().removeTabModelFilterObserver(
                 mTabModelObserver);
     }
