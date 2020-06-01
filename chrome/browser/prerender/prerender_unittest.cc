@@ -712,11 +712,18 @@ TEST_F(PrerenderTest, FoundTest) {
       url, &prefetch_age, &final_status, &origin));
 }
 
+// Flaky on Android, crbug.com/1088454.
+#if defined(OS_ANDROID)
+#define MAYBE_DuplicateTest_NoStatePrefetch \
+  DISABLED_DuplicateTest_NoStatePrefetch
+#else
+#define MAYBE_DuplicateTest_NoStatePrefetch DuplicateTest_NoStatePrefetch
+#endif
 // Make sure that if queue a request, and a second prerender request for the
 // same URL comes in, that the second request attaches to the first prerender,
 // and we don't use the second prerender contents.
 // This test is the same as the "DuplicateTest" above, but for NoStatePrefetch.
-TEST_F(PrerenderTest, DuplicateTest_NoStatePrefetch) {
+TEST_F(PrerenderTest, MAYBE_DuplicateTest_NoStatePrefetch) {
   test_utils::RestorePrerenderMode restore_prerender_mode;
   prerender_manager()->SetMode(
       PrerenderManager::PRERENDER_MODE_NOSTATE_PREFETCH);
