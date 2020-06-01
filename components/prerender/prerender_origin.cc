@@ -2,11 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/prerender/prerender_origin.h"
+#include "components/prerender/prerender_origin.h"
 
 #include "base/metrics/histogram_macros.h"
 #include "base/stl_util.h"
-#include "chrome/browser/prerender/prerender_manager.h"
 
 namespace prerender {
 
@@ -37,8 +36,7 @@ static_assert(base::size(kOriginNames) == ORIGIN_MAX + 1,
 }  // namespace
 
 const char* NameFromOrigin(Origin origin) {
-  DCHECK(static_cast<int>(origin) >= 0 &&
-         origin <= ORIGIN_MAX);
+  DCHECK(static_cast<int>(origin) >= 0 && origin <= ORIGIN_MAX);
   return kOriginNames[origin];
 }
 
