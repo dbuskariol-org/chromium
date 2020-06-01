@@ -2631,13 +2631,13 @@ crbug.com/1086855 external/wpt/css/css-pseudo/file-chooser-button-001.tentative.
 
 # ====== New tests from wpt-importer added here ======
 crbug.com/626703 [ Mac10.12 ] virtual/web-components-v0-disabled/external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
-crbug.com/626703 [ Mac10.13 ] virtual/web-components-v0-disabled/external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
+crbug.com/626703 [ Mac10.13 ] virtual/web-components-v0-disabled/external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.14 ] virtual/web-components-v0-disabled/external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
 crbug.com/626703 [ Mac10.15 ] virtual/web-components-v0-disabled/external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
 crbug.com/626703 [ Retina ] virtual/web-components-v0-disabled/external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
 crbug.com/626703 [ Win10 ] virtual/web-components-v0-disabled/external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
 crbug.com/626703 [ Mac10.12 ] external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
-crbug.com/626703 [ Mac10.13 ] external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
+crbug.com/626703 [ Mac10.13 ] external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Failure Timeout ]
 crbug.com/626703 [ Mac10.14 ] external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
 crbug.com/626703 [ Mac10.15 ] external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
 crbug.com/626703 [ Retina ] external/wpt/dom/events/scrolling/scrollend-event-for-user-scroll.html [ Timeout ]
