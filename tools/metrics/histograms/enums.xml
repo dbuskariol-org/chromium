@@ -124,6 +124,24 @@ uploading your change for review.  These are checked by presubmit scripts.
   <int value="43" label="FLAG_RETRIEVE_INTERACTIVE_WINDOWS"/>
 </enum>
 
+<enum name="AccessibilityATKAPIEnum">
+  <summary>
+    Track which ATK APIs are being called by clients on Linux Desktop.
+  </summary>
+  <int value="0" label="kGetName">atk_object_get_name</int>
+  <int value="1" label="kGetDescription">atk_object_get_description</int>
+  <int value="2" label="kGetNChildren">
+    atk_object_get_n_accessible_children
+  </int>
+  <int value="3" label="kRefChild">atk_object_ref_accessible_child</int>
+  <int value="4" label="kGetIndexInParent">atk_object_get_index_in_parent</int>
+  <int value="5" label="kGetParent">atk_object_get_parent</int>
+  <int value="6" label="kRefRelationSet">atk_object_ref_relation_set</int>
+  <int value="7" label="kGetAttributes">atk_object_get_attributes</int>
+  <int value="8" label="kGetRole">atk_object_get_role</int>
+  <int value="9" label="kRefStateSet">atk_object_ref_state_set</int>
+</enum>
+
 <enum name="AccessibilityHighContrastColorScheme">
   <summary>Tracks the color scheme used when high contrast is enabled.</summary>
   <int value="0" label="None"/>
