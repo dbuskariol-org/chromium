@@ -436,31 +436,42 @@ void SkiaOutputDeviceBufferQueue::SchedulePrimaryPlane(
 
 void SkiaOutputDeviceBufferQueue::ScheduleOverlays(
     SkiaOutputSurface::OverlayList overlays) {
-#if defined(OS_ANDROID)
+#if defined(OS_ANDROID) || defined(OS_MACOSX)
+  // Note while reading through this for-loop that |overlay| has different
+  // types on different platforms. On Android and Ozone it is an
+  // OverlayCandidate, on Windows it is a DCLayerOverlay, and on macOS it is
+  // a CALayerOverlay.
   DCHECK(pending_overlays_.empty());
   for (auto& overlay : overlays) {
-    auto shared_image =
-        shared_image_representation_factory_->ProduceOverlay(overlay.mailbox);
-    // When display is re-opened, the first few frames might not have video
-    // resource ready. Possible investigation crbug.com/1023971.
-    if (!shared_image) {
-      LOG(ERROR) << "Invalid mailbox.";
-      continue;
-    }
-
+    // Extract the shared image and GLImage for the overlay. Note that for
+    // solid color overlays, this will remain nullptr.
+    std::unique_ptr<gpu::SharedImageRepresentationOverlay> shared_image;
     std::unique_ptr<gpu::SharedImageRepresentationOverlay::ScopedReadAccess>
-        shared_image_access =
-            shared_image->BeginScopedReadAccess(true /* needs_gl_image */);
-    if (!shared_image_access) {
-      LOG(ERROR) << "Could not access SharedImage for read.";
-      continue;
+        shared_image_access;
+    gl::GLImage* gl_image = nullptr;
+    if (overlay.mailbox.IsSharedImage()) {
+      shared_image =
+          shared_image_representation_factory_->ProduceOverlay(overlay.mailbox);
+      // When display is re-opened, the first few frames might not have video
+      // resource ready. Possible investigation crbug.com/1023971.
+      if (!shared_image) {
+        LOG(ERROR) << "Invalid mailbox.";
+        continue;
+      }
+
+      shared_image_access =
+          shared_image->BeginScopedReadAccess(true /* needs_gl_image */);
+      if (!shared_image_access) {
+        LOG(ERROR) << "Could not access SharedImage for read.";
+        continue;
+      }
+      pending_overlays_.emplace_back(std::move(shared_image),
+                                     std::move(shared_image_access));
+      gl_image = pending_overlays_.back().gl_image();
+      DLOG_IF(ERROR, !gl_image) << "Cannot get GLImage.";
     }
 
-    pending_overlays_.emplace_back(std::move(shared_image),
-                                   std::move(shared_image_access));
-    auto* gl_image = pending_overlays_.back().gl_image();
-    DLOG_IF(ERROR, !gl_image) << "Cannot get GLImage.";
-
+#if defined(OS_ANDROID)
     if (gl_image) {
       DCHECK(!overlay.gpu_fence_id);
       gl_surface_->ScheduleOverlayPlane(
@@ -468,8 +479,19 @@ void SkiaOutputDeviceBufferQueue::ScheduleOverlays(
           ToNearestRect(overlay.display_rect), overlay.uv_rect,
           !overlay.is_opaque, nullptr /* gpu_fence */);
     }
+#elif defined(OS_MACOSX)
+    gl_surface_->ScheduleCALayer(ui::CARendererLayerParams(
+        overlay.shared_state->is_clipped,
+        gfx::ToEnclosingRect(overlay.shared_state->clip_rect),
+        overlay.shared_state->rounded_corner_bounds,
+        overlay.shared_state->sorting_context_id,
+        gfx::Transform(overlay.shared_state->transform), gl_image,
+        overlay.contents_rect, gfx::ToEnclosingRect(overlay.bounds_rect),
+        overlay.background_color, overlay.edge_aa_mask,
+        overlay.shared_state->opacity, overlay.filter));
+#endif
   }
-#endif  // defined(OS_ANDROID)
+#endif  //  defined(OS_ANDROID) || defined(OS_MACOSX)
 }
 
 void SkiaOutputDeviceBufferQueue::SwapBuffers(
