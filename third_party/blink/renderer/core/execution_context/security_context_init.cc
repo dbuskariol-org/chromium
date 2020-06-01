@@ -175,7 +175,6 @@ void SecurityContextInit::InitializeContentSecurityPolicy(
   // not specify a CSP to be used. Ideally they should be forced to explicitly
   // choose one.
   csp_ = MakeGarbageCollected<ContentSecurityPolicy>();
-  bind_csp_immediately_ = true;
 }
 
 void SecurityContextInit::InitializeSandboxFlags(
