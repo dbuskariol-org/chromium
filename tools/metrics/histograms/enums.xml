@@ -71221,6 +71221,7 @@ Called by update_scheduler_enums.py.-->
   <int value="44" label="WebDatabase"/>
   <int value="45" label="PictureInPicture"/>
   <int value="46" label="Portal"/>
+  <int value="47" label="SpeechRecognizer"/>
 </enum>
 
 <enum name="WebShareMethod">
