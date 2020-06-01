@@ -1805,12 +1805,8 @@ NavigationRequest::IsOptInIsolationRequested(const GURL& url) {
                                   url, response()->headers.get(),
                                   "OriginIsolationHeader", base::Time::Now()));
 
-  // TODO(https://crbug.com/1066930): For now we just check the presence of the
-  // header; we do not parse/validate it. When we do, that will have to be
-  // outside the browser process.
   const bool requests_via_header =
-      header_is_enabled && response()->headers &&
-      response()->headers->HasHeader("origin-isolation");
+      header_is_enabled && response_head_->parsed_headers->origin_isolation;
 
   if (requests_via_header)
     return OptInIsolationCheckResult::HEADER;
