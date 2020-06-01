@@ -5904,3 +5904,5 @@ crbug.com/1087471 [ Linux ] virtual/threaded/synthetic_gestures/synthetic-pinch-
 # Also see crbug.com/626703, these timed-out before but now fail as well.
 crbug.com/1088220 [ Linux ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/window-domain-failure.https.sub.html [ Pass Failure Timeout ]
 crbug.com/1088222 [ Linux ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/window-iframe-messagechannel.https.html [ Pass Failure Timeout ]
+crbug.com/1088475 [ Linux ] external/wpt/webvtt/rendering/cues-with-video/processing-model/embedded_style_media_queries.html [ Pass Failure ]
+crbug.com/1088475 [ Linux ] external/wpt/webvtt/rendering/cues-with-video/processing-model/embedded_style_media_queries_resized.html [ Pass Failure ]
