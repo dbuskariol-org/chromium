@@ -81,6 +81,12 @@
       'Linux FYI GPU TSAN Release',
     ],
   },
+  'blink_unittests': {
+    'remove_from': [
+      'Fuchsia ARM64',  # https://crbug.com/1090068
+      'Fuchsia x64', # https://crbug.com/1090068
+    ],
+  },
   'blink_web_tests': {
     'remove_from': [
       'Win 7 Tests x64 (1)',  # 64-bit win is unsupported by the layout tests.
