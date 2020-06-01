@@ -1475,6 +1475,10 @@ void ChromeContentBrowserClient::GetStoragePartitionConfigForSite(
 content::WebContentsViewDelegate*
 ChromeContentBrowserClient::GetWebContentsViewDelegate(
     content::WebContents* web_contents) {
+  if (auto* registry =
+          performance_manager::PerformanceManagerRegistry::GetInstance()) {
+    registry->CreatePageNodeForWebContents(web_contents);
+  }
   return CreateWebContentsViewDelegate(web_contents);
 }
 
