@@ -1886,8 +1886,10 @@ void AXObjectCacheImpl::HandleFocusedUIElementChanged(
 
   if (!new_focused_element) {
     // When focus is cleared, implicitly focus the document by sending a blur.
-    DeferTreeUpdate(&AXObjectCacheImpl::HandleNodeLostFocusWithCleanLayout,
-                    GetDocument().documentElement());
+    if (GetDocument().documentElement()) {
+      DeferTreeUpdate(&AXObjectCacheImpl::HandleNodeLostFocusWithCleanLayout,
+                      GetDocument().documentElement());
+    }
     return;
   }
 
