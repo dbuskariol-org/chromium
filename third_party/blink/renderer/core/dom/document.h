@@ -353,8 +353,6 @@ class CORE_EXPORT Document : public ContainerNode,
   network::mojom::blink::WebSandboxFlags GetSandboxFlags() const;
   bool IsSandboxed(network::mojom::blink::WebSandboxFlags mask) const;
   PublicURLManager& GetPublicURLManager();
-  bool IsContextPaused() const;
-  bool IsContextDestroyed() const;
   ContentSecurityPolicyDelegate& GetContentSecurityPolicyDelegate();
   SecureContextMode GetSecureContextMode() const;
   bool IsSecureContext() const;
