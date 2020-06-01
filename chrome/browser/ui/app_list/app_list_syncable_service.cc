@@ -20,6 +20,7 @@
 #include "chrome/browser/apps/app_service/app_service_proxy_factory.h"
 #include "chrome/browser/chromeos/arc/arc_util.h"
 #include "chrome/browser/chromeos/crostini/crostini_features.h"
+#include "chrome/browser/chromeos/crostini/crostini_util.h"
 #include "chrome/browser/chromeos/file_manager/app_id.h"
 #include "chrome/browser/chromeos/web_applications/default_web_app_ids.h"
 #include "chrome/browser/extensions/extension_service.h"
@@ -191,6 +192,13 @@ bool IsPageBreakItem(const AppListSyncableService::SyncItem& sync_item) {
 // Returns true if the app is Settings app
 bool IsOsSettingsApp(const std::string& app_id) {
   return app_id == chromeos::default_web_apps::kOsSettingsAppId;
+}
+
+bool IsSystemCreatedSyncFolder(AppListSyncableService::SyncItem* folder_item) {
+  if (folder_item->item_type != sync_pb::AppListSpecifics::TYPE_FOLDER)
+    return false;
+  return (folder_item->item_id == ash::kOemFolderId ||
+          folder_item->item_id == crostini::kCrostiniFolderId);
 }
 
 }  // namespace
@@ -404,7 +412,7 @@ void AppListSyncableService::BuildModel() {
 
   app_service_apps_builder_->Initialize(this, profile_, model_updater_.get());
 
-  HandleUpdateFinished();
+  HandleUpdateFinished(false /* clean_up_after_init_sync */);
 
   if (wait_until_ready_to_sync_cb_)
     std::move(wait_until_ready_to_sync_cb_).Run();
@@ -498,7 +506,7 @@ void AppListSyncableService::ApplyAppAttributes(
   SendSyncChange(item, SyncChange::ACTION_UPDATE);
   ProcessExistingSyncItem(item);
 
-  HandleUpdateFinished();
+  HandleUpdateFinished(false /* clean_up_after_init_sync */);
 }
 
 void AppListSyncableService::SetOemFolderName(const std::string& name) {
@@ -520,15 +528,68 @@ void AppListSyncableService::HandleUpdateStarted() {
   model_updater_observer_.reset();
 }
 
-void AppListSyncableService::HandleUpdateFinished() {
+void AppListSyncableService::HandleUpdateFinished(
+    bool clean_up_after_init_sync) {
   // Processing an update may create folders without setting their positions.
   // Resolve them now.
   ResolveFolderPositions();
+
+  if (clean_up_after_init_sync) {
+    PruneEmptySyncFolders();
+    CleanUpSingleItemSyncFolder();
+  }
 
   // Resume or start observing app list model changes.
   model_updater_observer_ = std::make_unique<ModelUpdaterObserver>(this);
 
   NotifyObserversSyncUpdated();
+}
+
+void AppListSyncableService::CleanUpSingleItemSyncFolder() {
+  std::vector<std::string> ids_to_be_deleted;
+  for (auto iter = sync_items_.begin(); iter != sync_items_.end();) {
+    SyncItem* sync_item = (iter++)->second.get();
+    std::string child_item_id;
+    SyncItem* child_item = GetOnlyChildOfUserCreatedFolder(sync_item);
+    if (child_item) {
+      // Move the single child item out of folder and put at the same relative
+      // location as the folder.
+      child_item->item_ordinal = sync_item->item_ordinal;
+      child_item->parent_id = "";
+      UpdateSyncItemInLocalStorage(profile_, child_item);
+      SendSyncChange(child_item, SyncChange::ACTION_UPDATE);
+      // Update the app list model updater for the sync change.
+      ProcessExistingSyncItem(child_item);
+
+      // Remember the id of the folder item to be deleted.
+      ids_to_be_deleted.push_back(sync_item->item_id);
+    }
+  }
+
+  // Remove the empty folder items.
+  for (auto id : ids_to_be_deleted)
+    DeleteSyncItem(id);
+}
+
+AppListSyncableService::SyncItem*
+AppListSyncableService::GetOnlyChildOfUserCreatedFolder(SyncItem* sync_item) {
+  if (sync_item->item_type != sync_pb::AppListSpecifics::TYPE_FOLDER ||
+      IsSystemCreatedSyncFolder(sync_item))
+    return nullptr;
+
+  const std::string& folder_id = sync_item->item_id;
+  int child_count = 0;
+  SyncItem* child_item = nullptr;
+  for (auto iter = sync_items_.begin(); iter != sync_items_.end();) {
+    SyncItem* item = (iter++)->second.get();
+    if (item->parent_id == folder_id) {
+      ++child_count;
+      child_item = item;
+      if (child_count > 1)
+        return nullptr;
+    }
+  }
+  return child_item;
 }
 
 void AppListSyncableService::AddItem(
@@ -937,7 +998,7 @@ AppListSyncableService::MergeDataAndStartSyncing(
 
   sync_processor_->ProcessSyncChanges(FROM_HERE, change_list);
 
-  HandleUpdateFinished();
+  HandleUpdateFinished(true /* clean_up_after_init_sync */);
 
   // Check if already signaled since unit tests make multiple calls.
   if (!on_initialized_.is_signaled()) {
@@ -991,7 +1052,7 @@ base::Optional<syncer::ModelError> AppListSyncableService::ProcessSyncChanges(
     }
   }
 
-  HandleUpdateFinished();
+  HandleUpdateFinished(false /* clean_up_after_init_sync */);
 
   return base::nullopt;
 }
