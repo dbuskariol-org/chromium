@@ -175,4 +175,9 @@ public class TrustedWebActivityUmaRecorder {
                     "TrustedWebActivity.LocationPermissionChanged", enabled);
         }
     }
+
+    public void recordLocationPermissionRequestResult(boolean enabled) {
+        RecordHistogram.recordBooleanHistogram(
+                "TrustedWebActivity.LocationPermissionRequestIsGranted", enabled);
+    }
 }

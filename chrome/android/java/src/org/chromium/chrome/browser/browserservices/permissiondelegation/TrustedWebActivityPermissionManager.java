@@ -53,7 +53,7 @@ public class TrustedWebActivityPermissionManager {
 
     private final TrustedWebActivityPermissionStore mStore;
     private final PackageManager mPackageManager;
-    private final TrustedWebActivityUmaRecorder mRecorder;
+    private final TrustedWebActivityUmaRecorder mUmaRecorder;
 
     // Use a Lazy instance so we don't instantiate it on Android versions pre-O.
     private final Lazy<NotificationChannelPreserver> mPermissionPreserver;
@@ -69,7 +69,7 @@ public class TrustedWebActivityPermissionManager {
         mPackageManager = context.getPackageManager();
         mStore = store;
         mPermissionPreserver = preserver;
-        mRecorder = umaRecorder;
+        mUmaRecorder = umaRecorder;
     }
 
     boolean isRunningTwa() {
@@ -135,7 +135,7 @@ public class TrustedWebActivityPermissionManager {
         }
 
         if (stateChanged) {
-            mRecorder.recordPermissionChangedUma(type, enabled);
+            mUmaRecorder.recordPermissionChangedUma(type, enabled);
             InstalledWebappBridge.notifyPermissionsChange(type);
         }
     }
@@ -270,7 +270,7 @@ public class TrustedWebActivityPermissionManager {
         if (customTabActivity == null) return;
 
         String packageName = customTabActivity.getTwaPackage();
-        mRecorder.recordLocationDelegationEnrolled(
+        mUmaRecorder.recordLocationDelegationEnrolled(
                 hasAndroidLocationPermission(packageName) != null);
     }
 
