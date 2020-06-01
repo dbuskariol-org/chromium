@@ -555,15 +555,22 @@ class CORE_EXPORT LayoutObject : public ImageResourceObserver,
     return IsStackingContext(StyleRef());
   }
   inline bool IsStackingContext(const ComputedStyle& style) const {
+    // This is an inlined version of the following:
+    // `IsStackingContextWithoutContainment() ||
+    //  ShouldApplyLayoutContainment() ||
+    //  ShouldApplyPaintContainment()`
+    // The reason it is inlined is that the containment checks share
+    // common logic, which is extracted here to avoid repeated computation.
     return style.IsStackingContextWithoutContainment() ||
-           ShouldApplyPaintContainment(style) ||
-           ShouldApplyLayoutContainment(style);
+           ((style.ContainsLayout() || style.ContainsPaint()) &&
+            (!IsInline() || IsAtomicInlineLevel()) && !IsRubyText() &&
+            (!IsTablePart() || IsLayoutBlockFlow()));
   }
 
   inline bool IsStacked() const { return IsStacked(StyleRef()); }
   inline bool IsStacked(const ComputedStyle& style) const {
-    return IsStackingContext(style) ||
-           style.GetPosition() != EPosition::kStatic;
+    return style.GetPosition() != EPosition::kStatic ||
+           IsStackingContext(style);
   }
 
   void NotifyPriorityScrollAnchorStatusChanged();
