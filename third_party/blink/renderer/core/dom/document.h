@@ -107,7 +107,6 @@ class ComputedAccessibleNode;
 class DisplayLockDocumentState;
 class ElementIntersectionObserverData;
 class WindowAgent;
-class WindowAgentFactory;
 class ComputedStyle;
 class ConsoleMessage;
 class ContextFeatures;
@@ -1570,9 +1569,6 @@ class CORE_EXPORT Document : public ContainerNode,
   LazyLoadImageObserver& EnsureLazyLoadImageObserver();
 
   WindowAgent& GetWindowAgent();
-  WindowAgentFactory* GetWindowAgentFactory() const {
-    return window_agent_factory_;
-  }
 
   void IncrementNumberOfCanvases();
 
@@ -1864,7 +1860,6 @@ class CORE_EXPORT Document : public ContainerNode,
   // stylesheets do eventually load.
   PendingSheetLayout pending_sheet_layout_;
 
-  Member<WindowAgentFactory> window_agent_factory_;
   Member<LocalDOMWindow> dom_window_;
   Member<HTMLImportsController> imports_controller_;
 
