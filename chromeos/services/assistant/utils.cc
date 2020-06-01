@@ -147,6 +147,9 @@ std::string CreateLibAssistantConfig(
                          GetBaseAssistantDir().AsUTF8Unsafe());
   }
 
+  if (features::IsLibAssistantBetaBackendEnabled())
+    config.SetStringPath("internal.backend_type", "BETA_DOGFOOD");
+
   // Use http unless we're using the fake s3 server, which requires grpc.
   if (s3_server_uri_override)
     config.SetStringPath("internal.transport_type", "GRPC");
