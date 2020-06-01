@@ -95,6 +95,7 @@ function setUp() {
       TaskResult: {
         MESSAGE_SENT: 'test_ms_task',
         FAILED_PLUGIN_VM_TASK_DIRECTORY_NOT_SHARED: 'test_fpvtdns_task',
+        FAILED_PLUGIN_VM_TASK_EXTERNAL_DRIVE: 'test_fpvted_task',
       },
       getFileTasks: function(entries, callback) {
         setTimeout(callback.bind(null, [mockTask]), 0);
