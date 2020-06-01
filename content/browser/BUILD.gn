@@ -854,6 +854,8 @@ jumbo_source_set("browser") {
     "download/save_item.h",
     "download/save_package.cc",
     "download/save_package.h",
+    "download/save_package_serialization_handler.cc",
+    "download/save_package_serialization_handler.h",
     "download/save_types.cc",
     "download/save_types.h",
     "eye_dropper_chooser_impl.cc",
