@@ -2562,8 +2562,10 @@ void SkiaRenderer::AllocateRenderPassResourceIfNeeded(
     const RenderPassId& render_pass_id,
     const RenderPassRequirements& requirements) {
   auto it = render_pass_backings_.find(render_pass_id);
-  if (it != render_pass_backings_.end())
+  if (it != render_pass_backings_.end()) {
+    DCHECK(gfx::Rect(it->second.size).Contains(gfx::Rect(requirements.size)));
     return;
+  }
 
   // TODO(penghuang): check supported format correctly.
   gpu::Capabilities caps;
