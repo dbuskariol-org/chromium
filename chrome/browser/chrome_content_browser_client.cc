@@ -1604,8 +1604,10 @@ bool ChromeContentBrowserClient::ShouldUseProcessPerSite(
 
   // NTP should use process-per-site.  This is a performance optimization to
   // reduce process count associated with NTP tabs.
-  if (site_url == GURL(chrome::kChromeUINewTabURL))
+  if (site_url == GURL(chrome::kChromeUINewTabURL) ||
+      site_url == GURL(chrome::kChromeUINewTabPageURL)) {
     return true;
+  }
 
   // The web footer experiment should share its renderer to not effectively
   // instantiate one per window. See https://crbug.com/993502.
