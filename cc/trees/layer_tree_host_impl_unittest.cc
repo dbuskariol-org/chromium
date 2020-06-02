@@ -1079,6 +1079,8 @@ TEST_F(CommitToPendingTreeLayerTreeHostImplTest,
       "Compositing.Renderer.GPUMemoryForTilingsInKb", 1);
 }
 
+// This test verifies that we drop a scroll (and don't crash) if a scroll is
+// received before the root layer has been attached. https://crbug.com/895817.
 TEST_F(LayerTreeHostImplTest, ScrollBeforeRootLayerAttached) {
   InputHandler::ScrollStatus status =
       host_impl_->ScrollBegin(BeginState(gfx::Point(), gfx::Vector2dF(0, 1),
