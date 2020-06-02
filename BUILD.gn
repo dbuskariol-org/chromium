@@ -322,6 +322,11 @@ group("gn_all") {
     deps += [ "//chrome/installer/gcapi_mac:gcapi_example" ]
   }
 
+  # Allow building md5sum tool for other OSes.
+  if (!is_android) {
+    deps += [ "//tools/android/md5sum" ]
+  }
+
   if (is_android) {
     deps += [
       "//base:base_junit_tests",
