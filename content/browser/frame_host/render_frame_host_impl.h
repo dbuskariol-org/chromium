@@ -535,6 +535,7 @@ class CONTENT_EXPORT RenderFrameHostImpl
 
   RenderViewHostImpl* render_view_host() { return render_view_host_.get(); }
   RenderFrameHostDelegate* delegate() { return delegate_; }
+  FrameTree* frame_tree() const { return frame_tree_; }
   FrameTreeNode* frame_tree_node() const { return frame_tree_node_; }
 
   // Methods to add/remove/reset/query child FrameTreeNodes of this frame.
