@@ -58,17 +58,11 @@ const mockTaskHistory = /** @type {!TaskHistory} */ ({
   recordTaskExecuted: function(id) {},
 });
 
-/**
- * Load time data.
- */
-loadTimeData.data = {
-  'ZIP_NO_NACL': false,
-};
-
 // Set up test components.
 function setUp() {
   // Mock LoadTimeData strings.
   window.loadTimeData.getString = id => id;
+  window.loadTimeData.getBoolean = key => false;
 
   const mockTask = /** @type {!chrome.fileManagerPrivate.FileTask} */ ({
     taskId: 'handler-extension-id|app|any',
