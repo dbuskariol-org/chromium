@@ -98,14 +98,19 @@ class Video {
   base::Optional<base::FilePath> ResolveFilePath(
       const base::FilePath& file_path);
 
-  // Decode the video on a separate thread.
+  // Decode the video on a separate thread. The |resolution| needs to be
+  // specified here as the resolution of the decoded frames might differ due to
+  // the software decoder alignment.
   static void DecodeTask(const std::vector<uint8_t> data,
+                         const gfx::Size& resolution,
                          std::vector<uint8_t>* decompressed_data,
                          bool* success,
                          base::WaitableEvent* done);
-  // Called each time a |frame| is decoded while decoding a video. The decoded
-  // frame will be appended to the specified |data|.
-  static void OnFrameDecoded(std::vector<uint8_t>* data,
+  // Called each time a |frame| is decoded while decoding a video. The area
+  // specified by |resolution| of the decoded frame will be appended to the
+  // |data|.
+  static void OnFrameDecoded(const gfx::Size& resolution,
+                             std::vector<uint8_t>* data,
                              scoped_refptr<VideoFrame> frame);
 
   // The path where all test video files are stored.
