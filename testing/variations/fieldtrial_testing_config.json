@@ -1481,6 +1481,24 @@
             ]
         }
     ],
+    "ClientSideDetectionModel": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "params": {
+                        "ModelNum": "4"
+                    }
+                }
+            ]
+        }
+    ],
     "ClipboardMaximumAge": [
         {
             "platforms": [
