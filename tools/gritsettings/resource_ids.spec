@@ -603,14 +603,8 @@
 
   # This file is generated during the build.
   "<(SHARED_INTERMEDIATE_DIR)/devtools/devtools_resources.grd": {
-    "META": {"sizes": {"includes": [1000],}},
+    "META": {"sizes": {"includes": [500],}},
     "includes": [3860],
-  },
-
-  # This file is generated during the build.
-  "<(SHARED_INTERMEDIATE_DIR)/resources/inspector_overlay/inspector_overlay_resources.grd": {
-    "META": {"sizes": {"includes": [50],}},
-    "includes": [3880],
   },
 
   # END "everything else" section.
