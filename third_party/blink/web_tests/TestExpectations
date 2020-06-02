@@ -5844,13 +5844,6 @@ crbug.com/1070747 external/wpt/webrtc-quic/* [ Skip ]
 # Stale revalidation shouldn't be blocked:
 crbug.com/1079188 external/wpt/fetch/stale-while-revalidate/revalidate-not-blocked-by-csp.html [ Timeout ]
 
-# TODO(michaelludwig) - Suppressed for Skia rebaseline
-crbug.com/1087413 virtual/gpu/fast/canvas/canvas-text-alignment.html [ Pass Failure ]
-crbug.com/1087413 virtual/gpu/fast/canvas/fillrect_gradient.html [ Pass Failure ]
-crbug.com/1087413 virtual/gpu-rasterization/images/cross-fade-overflow-position.html [ Pass Failure ]
-crbug.com/1087413 virtual/gpu/fast/canvas/gradient-add-second-start-end-stop.html [ Pass Failure ]
-crbug.com/1087413 css3/blending/background-blend-mode-gradient-gradient.html [ Pass Failure ]
-
 # Web Audio active processing tests
 crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-audiobuffersourcenode-interface/active-processing.https.html [ Pass Failure Crash ]
 crbug.com/1073247 external/wpt/webaudio/the-audio-api/the-channelmergernode-interface/active-processing.https.html [ Pass Failure Crash ]
