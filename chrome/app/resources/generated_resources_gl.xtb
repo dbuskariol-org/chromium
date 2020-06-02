@@ -5533,6 +5533,7 @@ Mantén o ficheiro de clave nun lugar seguro, xa que o precisarás para crear no
     <ph name="BEGIN_PARAGRAPH5" />Podes desactivar este servizo en Configuración.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">Os PIN non coinciden</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> utiliza a configuración de proxy dunha extensión</translation>
+<translation id="8097959162767603171">O teu administrador ten que aceptar as condicións de servizo que se atopan na lista de dispositivos Chrome, na consola de administración.</translation>
 <translation id="8101987792947961127">No seguinte reinicio é necesario un Powerwash</translation>
 <translation id="8102159139658438129">Accede a <ph name="LINK_BEGIN" />Configuración<ph name="LINK_END" /> se queres ver as opción para o teléfono conectado</translation>
 <translation id="8104696615244072556">Fai un powerwash do teu dispositivo <ph name="IDS_SHORT_PRODUCT_NAME" /> e volve á versión anterior.</translation>

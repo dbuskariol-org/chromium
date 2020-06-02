@@ -2124,7 +2124,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="3677911431265050325">Eskatu mugikorretarako webgunea</translation>
 <translation id="3678156199662914018">Luzapena: <ph name="EXTENSION_NAME" /></translation>
 <translation id="3680683624079082902">Testua ahots bihurtzeko eginbidearen ahotsa</translation>
-<translation id="3681311097828166361">Eskerrik asko iritzia bidaltzeagatik. Konektatuta ez zaudenez, geroago bidaliko da txostena.</translation>
+<translation id="3681311097828166361">Eskerrik asko oharrak bidaltzeagatik. Konektatuta ez zaudenez, geroago bidaliko da txostena.</translation>
 <translation id="3682824389861648626">Mugimenduen atalasea</translation>
 <translation id="3683524264665795342"><ph name="APP_NAME" /> aplikazioaren eskaera pantaila partekatzeko</translation>
 <translation id="3685598397738512288">Linux-en USB bidezko konexioaren hobespenak</translation>
@@ -5534,6 +5534,7 @@ Gorde gakoen fitxategia leku seguru batean. Zure luzapenaren bertsio berriak sor
     <ph name="BEGIN_PARAGRAPH5" />Ezarpenak atalean desaktiba dezakezu zerbitzu hori.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">PIN kodeak ez datoz bat</translation>
 <translation id="809792523045608178">Luzapen baten proxy-ezarpenak ari da erabiltzen <ph name="IDS_SHORT_PRODUCT_NAME" /></translation>
+<translation id="8097959162767603171">Administratzaileak Zerbitzu-baldintzak onartu behar ditu administrazio-kontsolaren Chrome-ko gailuen zerrendan.</translation>
 <translation id="8101987792947961127">Fabrikako ezarpenak berrezarri behar dira Powerwash bidez hurrengo aldiz berrabiaraztean</translation>
 <translation id="8102159139658438129">Joan <ph name="LINK_BEGIN" />Ezarpenak<ph name="LINK_END" /> atalera eta ikusi konektatutako telefonoarekin egin dezakezuna</translation>
 <translation id="8104696615244072556">Berrezarri <ph name="IDS_SHORT_PRODUCT_NAME" /> gailuaren fabrikako ezarpenak eta itzuli aurreko bertsiora.</translation>

@@ -5535,6 +5535,7 @@ Deseu el fitxer de clau en una ubicació segura. El necessitareu per crear versi
     <ph name="BEGIN_PARAGRAPH5" />Pots desactivar aquest servei a Configuració.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">Els PIN no coincideixen</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> està fent servir la connexió del servidor intermediari d'una extensió</translation>
+<translation id="8097959162767603171">Primer, l'administrador ha d'acceptar les condicions del servei de la llista de dispositius Chrome que hi ha a la consola d'administració.</translation>
 <translation id="8101987792947961127">Es requereix Powerwash la propera vegada que es reiniciï</translation>
 <translation id="8102159139658438129">Ves a <ph name="LINK_BEGIN" />Configuració<ph name="LINK_END" /> per veure les opcions per al telèfon connectat</translation>
 <translation id="8104696615244072556">Feu un Powerwash al dispositiu <ph name="IDS_SHORT_PRODUCT_NAME" /> i torneu a la versió anterior.</translation>

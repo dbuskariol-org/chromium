@@ -5537,6 +5537,7 @@ Datoteko s ključem shranite na varnem. Potrebovali jo boste za izdelavo novih r
     <ph name="BEGIN_PARAGRAPH5" />To storitev lahko izklopite v nastavitvah.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">Kodi PIN se ne ujemata</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> uporablja nastavitve strežnika proxy razširitve</translation>
+<translation id="8097959162767603171">Skrbnik mora najprej sprejeti pogoje storitve na seznamu naprav Chrome v skrbniški konzoli.</translation>
 <translation id="8101987792947961127">Pri naslednjem zagonu je treba izvesti Powerwash</translation>
 <translation id="8102159139658438129">Odprite <ph name="LINK_BEGIN" />nastavitve<ph name="LINK_END" />, če si želite ogledati možnosti za povezani telefon</translation>
 <translation id="8104696615244072556">V napravi <ph name="IDS_SHORT_PRODUCT_NAME" /> uporabite funkcijo Powerwash in jo povrnite na prejšnjo različico.</translation>

@@ -5535,6 +5535,7 @@ Ilagay ang iyong key file sa ligtas na lugar. Kailangan mo ito upang lumikha ng 
     <ph name="BEGIN_PARAGRAPH5" />Maaari mong i-off ang serbisyong ito sa Mga Setting.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">Hindi nagtutugma ang mga PIN</translation>
 <translation id="809792523045608178">Gumagamit ang <ph name="IDS_SHORT_PRODUCT_NAME" /> ng mga setting ng proxy mula sa isang extension</translation>
+<translation id="8097959162767603171">Dapat munang tanggapin ng administrator ang mga tuntunin ng serbisyo sa listahan ng Chrome device ng Admin console.</translation>
 <translation id="8101987792947961127">Kinakailangan ng Powerwash sa susunod na reboot</translation>
 <translation id="8102159139658438129">Pumunta sa <ph name="LINK_BEGIN" />Mga Setting<ph name="LINK_END" /> para makakita ng mga opsyon para sa iyong nakakonektang telepono</translation>
 <translation id="8104696615244072556">I-powerwash ang iyong <ph name="IDS_SHORT_PRODUCT_NAME" /> device at ibalik sa dating bersyon.</translation>

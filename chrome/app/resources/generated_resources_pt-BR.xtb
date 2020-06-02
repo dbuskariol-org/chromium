@@ -5537,6 +5537,7 @@ Mantenha a sua chave de arquivo em um local seguro. Você precisará dela para c
     <ph name="BEGIN_PARAGRAPH5" />É possível desativar esse serviço nas configurações.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">Os PINs não correspondem</translation>
 <translation id="809792523045608178">O <ph name="IDS_SHORT_PRODUCT_NAME" /> está usando as configurações de proxy de uma extensão</translation>
+<translation id="8097959162767603171">Primeiro, o administrador precisa aceitar os Termos de Serviço na lista de dispositivos Chrome do Admin Console.</translation>
 <translation id="8101987792947961127">Powerwash obrigatório na próxima reinicialização</translation>
 <translation id="8102159139658438129">Acesse <ph name="LINK_BEGIN" />Configurações<ph name="LINK_END" /> para ver as opções do smartphone conectado</translation>
 <translation id="8104696615244072556">Execute um powerwash no seu dispositivo <ph name="IDS_SHORT_PRODUCT_NAME" /> e volte para a versão anterior.</translation>

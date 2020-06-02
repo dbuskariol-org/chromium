@@ -5535,6 +5535,7 @@ Fajl ključa: <ph name="KEY_FILE" />
     <ph name="BEGIN_PARAGRAPH5" />Ovu uslugu možete isključiti u Postavkama.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">PIN-ovi se ne podudaraju</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> koristi proksi postavke iz ekstenzije</translation>
+<translation id="8097959162767603171">Vaš administrator najprije mora prihvatiti uslove korištenja usluge na listi uređaja Chromea u administratorskoj konzoli.</translation>
 <translation id="8101987792947961127">Powerwash je obavezan prilikom sljedećeg pokretanja</translation>
 <translation id="8102159139658438129">Idite na <ph name="LINK_BEGIN" />Postavke<ph name="LINK_END" /> da vidite opcije za povezani telefon.</translation>
 <translation id="8104696615244072556">Uradite Powerwash na svom <ph name="IDS_SHORT_PRODUCT_NAME" /> uređaju i vratite ga na prethodnu verziju.</translation>

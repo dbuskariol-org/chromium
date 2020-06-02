@@ -5536,6 +5536,7 @@ A kulcsfájlt tartsa biztonságos helyen. Szüksége lesz rá ahhoz, hogy új ve
     <ph name="BEGIN_PARAGRAPH5" />Ezt a szolgáltatást a Beállítások között kapcsolhatja ki.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">A megadott PIN-kódok nem egyeznek</translation>
 <translation id="809792523045608178">A <ph name="IDS_SHORT_PRODUCT_NAME" /> az egyik bővítményből származó proxybeállításokat használja</translation>
+<translation id="8097959162767603171">Rendszergazdájának előbb el kell fogadnia az általános szerződési feltételeket a Felügyeleti Konzol Chrome-eszközeinek listáján.</translation>
 <translation id="8101987792947961127">Powerwash szükséges a következő újraindításkor</translation>
 <translation id="8102159139658438129">A <ph name="LINK_BEGIN" />Beállítások<ph name="LINK_END" /> között megtalálja a csatlakoztatott telefonra vonatkozó lehetőségeket.</translation>
 <translation id="8104696615244072556">Hajtson végre Powerwash műveletet <ph name="IDS_SHORT_PRODUCT_NAME" /> eszközén, és térjen vissza a korábbi verzióhoz.</translation>

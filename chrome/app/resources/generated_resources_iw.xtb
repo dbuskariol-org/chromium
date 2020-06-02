@@ -5534,6 +5534,7 @@
     <ph name="BEGIN_PARAGRAPH5" />אפשר לכבות את השירות הזה ב'הגדרות'.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">‏מספרי ה-PIN אינם תואמים</translation>
 <translation id="809792523045608178">‏<ph name="IDS_SHORT_PRODUCT_NAME" /> משתמש בהגדרות שרת proxy שנקבעו על-ידי תוסף</translation>
+<translation id="8097959162767603171">‏מנהל המערכת צריך קודם לאשר את התנאים וההגבלות ברשימת מכשירי Chrome שבמסוף ה-Admin.</translation>
 <translation id="8101987792947961127">‏יש לבצע Powerwash באתחול הבא</translation>
 <translation id="8102159139658438129">כדי לראות אפשרויות לגבי הטלפון המחובר, אפשר לעבור אל <ph name="LINK_BEGIN" />הגדרות<ph name="LINK_END" /></translation>
 <translation id="8104696615244072556">‏בצע פעולת Powerwash במכשיר <ph name="IDS_SHORT_PRODUCT_NAME" /> שלך וחזור לגרסה הקודמת.</translation>

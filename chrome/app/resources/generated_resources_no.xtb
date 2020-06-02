@@ -5530,6 +5530,7 @@ Oppbevar nøkkelfilen på et trygt sted. Du får bruk for den når du skal oppre
     <ph name="BEGIN_PARAGRAPH5" />Du kan slå av denne tjenesten i Innstillinger.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">PIN-kodene samsvarer ikke</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> bruker proxy-tjenerinnstillinger fra en utvidelse</translation>
+<translation id="8097959162767603171">Administratoren din må først godta vilkårene for bruk i Chrome-enhetslisten i administrasjonskonsollen.</translation>
 <translation id="8101987792947961127">Powerwash kreves ved neste omstart</translation>
 <translation id="8102159139658438129">Gå til <ph name="LINK_BEGIN" />Innstillinger<ph name="LINK_END" /> for å se alternativer for den tilkoblede telefonen</translation>
 <translation id="8104696615244072556">Kjør Powerwash på <ph name="IDS_SHORT_PRODUCT_NAME" />-enheten din og gå tilbake til forrige versjon.</translation>
