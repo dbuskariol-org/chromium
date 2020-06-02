@@ -485,6 +485,7 @@ crbug.com/1027605 [ mac amd no-passthrough ] deqp/functional/gles3/transformfeed
 crbug.com/1027605 [ mac amd no-passthrough ] deqp/functional/gles3/transformfeedback/random_separate_lines.html [ Failure ]
 crbug.com/1027605 [ mac amd no-passthrough ] deqp/functional/gles3/transformfeedback/random_separate_points.html [ Failure ]
 crbug.com/1027605 [ mac amd no-passthrough ] deqp/functional/gles3/transformfeedback/random_separate_triangles.html [ Failure ]
+crbug.com/1088465 [ mac amd no-passthrough ] deqp/data/gles3/shaders/preprocessor.html [ Failure ]
 crbug.com/751254 [ mac amd ] deqp/functional/gles3/shaderindexing/mat_00.html [ RetryOnFailure ]
 crbug.com/636648 [ mac amd ] deqp/functional/gles3/shaderindexing/mat_01.html [ RetryOnFailure ]
 crbug.com/644360 [ mac amd ] deqp/functional/gles3/shaderindexing/mat_02.html [ RetryOnFailure ]
@@ -594,6 +595,8 @@ crbug.com/982294 [ mac passthrough ] deqp/functional/gles3/transformfeedback/ran
 # Mac Passthrough / AMD
 crbug.com/982294 [ mac passthrough amd ] conformance2/rendering/instanced-arrays.html [ Failure ]
 crbug.com/982294 [ mac passthrough amd ] conformance2/rendering/vertex-id.html [ Failure ]
+crbug.com/1090059 [ mac passthrough amd ] conformance/attribs/gl-bindAttribLocation-matrix.html [ Failure ]
+
 
 # Mac Passthrough / NVIDIA
 crbug.com/982294 [ mac passthrough nvidia ] conformance/renderbuffers/framebuffer-object-attachment.html [ Failure ]
