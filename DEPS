@@ -1663,6 +1663,17 @@ deps = {
       'dep_type': 'cipd',
   },
 
+  'src/third_party/android_deps/libs/androidx_annotation_annotation_experimental': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_deps/libs/androidx_annotation_annotation_experimental',
+              'version': 'version:1.0.0-cr0',
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+
   'src/third_party/android_deps/libs/androidx_appcompat_appcompat': {
       'packages': [
           {
@@ -1755,7 +1766,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_coordinatorlayout_coordinatorlayout',
-              'version': 'version:1.0.0-cr0',
+              'version': 'version:1.1.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2085,7 +2096,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_recyclerview_recyclerview',
-              'version': 'version:1.0.0-cr0',
+              'version': 'version:1.1.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2250,7 +2261,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_transition_transition',
-              'version': 'version:1.0.0-rc02-cr0',
+              'version': 'version:1.2.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2295,6 +2306,17 @@ deps = {
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_versionedparcelable_versionedparcelable',
               'version': 'version:1.1.0-cr0',
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+
+  'src/third_party/android_deps/libs/androidx_viewpager2_viewpager2': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_deps/libs/androidx_viewpager2_viewpager2',
+              'version': 'version:1.0.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -3031,7 +3053,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/com_google_android_material_material',
-              'version': 'version:1.0.0-rc02-cr0',
+              'version': 'version:1.2.0-alpha06-cr0',
           },
       ],
       'condition': 'checkout_android',
