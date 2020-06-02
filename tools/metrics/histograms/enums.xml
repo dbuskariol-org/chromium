@@ -50340,6 +50340,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="OomInterventionUserDecision">
+  <obsolete>
+    Obsolete as of 06/2020.
+  </obsolete>
   <int value="0" label="Declined"/>
   <int value="1" label="Accepted"/>
 </enum>
