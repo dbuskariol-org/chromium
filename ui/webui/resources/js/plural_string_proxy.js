@@ -7,11 +7,11 @@
  */
 
 // clang-format off
-import {addSingletonGetter, sendWithPromise} from 'chrome://resources/js/cr.m.js';
+import {addSingletonGetter, sendWithPromise} from './cr.m.js';
 // clang-format on
 
 /** @interface */
-class PluralStringProxy {
+export class PluralStringProxy {
   /**
    * Obtains a pluralized string for |messageName| with |itemCount| items.
    * @param {!string} messageName The name of the message.

@@ -5,13 +5,13 @@
 /** @fileoverview Test implementation of PluralStringProxy. */
 
 // clang-format off
-import {TestBrowserProxy} from 'chrome://test/test_browser_proxy.m.js';
+import {PluralStringProxy} from 'chrome://resources/js/plural_string_proxy.js';
+import {TestBrowserProxy} from './test_browser_proxy.m.js';
 // clang-format on
 
 /**
  * Test implementation
  * @implements {PluralStringProxy}
- * @constructor
  */
 export class TestPluralStringProxy extends TestBrowserProxy {
   constructor() {
