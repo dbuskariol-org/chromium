@@ -6650,3 +6650,5 @@ crbug.com/1087077 external/wpt/html/semantics/forms/form-submission-0/form-doubl
 crbug.com/1087077 virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/form-submission-0/form-double-submit.html [ Failure ]
 crbug.com/1087077 virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/form-submission-0/form-double-submit-3.html [ Failure ]
 crbug.com/1087077 virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/form-submission-0/form-double-submit-to-different-origin-frame.html [ Failure ]
+
+crbug.com/1078863 [ Mac ] fast/speech/scripted/speechrecognition-restart-onend.html [ Pass Timeout ]
