@@ -1335,7 +1335,7 @@ void StoragePartitionImpl::Initialize() {
     conversion_manager_ = std::make_unique<ConversionManagerImpl>(
         this, path,
         base::ThreadPool::CreateSequencedTaskRunner(
-            {base::MayBlock(), base::TaskPriority::BEST_EFFORT}));
+            {base::MayBlock(), base::TaskPriority::USER_VISIBLE}));
   }
 
   GeneratedCodeCacheSettings settings =
