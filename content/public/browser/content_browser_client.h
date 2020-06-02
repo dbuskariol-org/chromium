@@ -1848,6 +1848,11 @@ class CONTENT_EXPORT ContentBrowserClient {
   // request received from an external client is passed to this method.
   virtual void BindBrowserControlInterface(
       mojo::GenericPendingReceiver receiver);
+
+  // Returns true when a context (e.g., iframe) whose URL is |url| should
+  // inherit the parent COEP value implicitly, similar to "blob:"
+  virtual bool ShouldInheritCrossOriginEmbedderPolicyImplicitly(
+      const GURL& url);
 };
 
 }  // namespace content
