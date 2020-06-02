@@ -17264,27 +17264,6 @@
         }
       },
       {
-        "isolate_name": "test_buildbucket_api_gpu_use_cases",
-        "merge": {
-          "args": [],
-          "script": "//testing/merge_scripts/standard_isolated_script_merge.py"
-        },
-        "name": "test_buildbucket_api_gpu_use_cases",
-        "swarming": {
-          "can_use_on_swarming_builders": true,
-          "containment_type": "AUTO",
-          "dimension_sets": [
-            {
-              "gpu": "nvidia-quadro-p400-ubuntu-stable",
-              "os": "linux-nvidia-stable",
-              "pool": "chromium.tests.gpu.template"
-            }
-          ],
-          "service_account": "chromium-tester@chops-service-accounts.iam.gserviceaccount.com"
-        },
-        "test_target": "//content/test:test_buildbucket_api_gpu_use_cases"
-      },
-      {
         "args": [
           "trace_test",
           "--show-stdout",
