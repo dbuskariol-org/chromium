@@ -30,6 +30,7 @@ class CookieStoreManager final : public ScriptWrappable {
       ServiceWorkerRegistration* registration,
       HeapMojoRemote<mojom::blink::CookieStore,
                      HeapMojoWrapperMode::kWithoutContextObserver> backend);
+  ~CookieStoreManager() override = default;
 
   ScriptPromise subscribe(
       ScriptState* script_state,
