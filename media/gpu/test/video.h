@@ -42,6 +42,7 @@ class Video {
   const base::FilePath& FilePath() const;
   // Get the video data, will be empty if the video hasn't been loaded yet.
   const std::vector<uint8_t>& Data() const;
+  std::vector<uint8_t>& Data();
 
   // Decode the video, replacing the video stream data in |data_| with raw video
   // data. This is currently only supported for VP9 videos. Returns whether

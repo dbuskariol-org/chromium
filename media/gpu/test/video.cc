@@ -127,6 +127,10 @@ const std::vector<uint8_t>& Video::Data() const {
   return data_;
 }
 
+std::vector<uint8_t>& Video::Data() {
+  return data_;
+}
+
 VideoCodec Video::Codec() const {
   return codec_;
 }
@@ -478,6 +482,5 @@ base::Optional<VideoPixelFormat> Video::ConvertStringtoPixelFormat(
     return base::nullopt;
   }
 }
-
 }  // namespace test
 }  // namespace media
