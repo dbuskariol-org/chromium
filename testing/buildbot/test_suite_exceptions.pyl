@@ -758,12 +758,6 @@
       },
     },
   },
-  'compositor_unittests': {
-    'remove_from': [
-      'Fuchsia ARM64',  # https://crbug.com/1086742
-      'Fuchsia x64', # https://crbug.com/1086742
-    ],
-  },
   'content_browsertests': {
     'remove_from': [
       'CrWinAsan(dll)', # https://crbug.com/935598
@@ -1999,12 +1993,6 @@
       },
     },
   },
-  'shell_dialogs_unittests': {
-    'remove_from': [
-      'Fuchsia ARM64',  # https://crbug.com/1086742
-      'Fuchsia x64', # https://crbug.com/1086742
-    ],
-  },
   'skia_renderer_gl_blink_web_tests': {
     'modifications': {
       'Win10 FYI x64 SkiaRenderer GL (NVIDIA)': {
@@ -2014,12 +2002,6 @@
         ],
       },
     },
-  },
-  'snapshot_unittests': {
-    'remove_from': [
-      'Fuchsia ARM64',  # https://crbug.com/1086742
-      'Fuchsia x64', # https://crbug.com/1086742
-    ],
   },
   'storage_service_unsandboxed_interactive_ui_tests': {
     'modifications': {
