@@ -1471,6 +1471,7 @@ test("content_browsertests") {
     sources += [
       "../browser/accessibility/accessibility_tree_formatter_mac_browsertest.mm",
       "../browser/accessibility/browser_accessibility_cocoa_browsertest.mm",
+      "../browser/accessibility/hit_testing_mac_browsertest.mm",
     ]
     deps += [
       "//content/shell:content_shell",
