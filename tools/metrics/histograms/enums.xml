@@ -38941,6 +38941,7 @@ from previous Chrome versions.
   <int value="-1696366449" label="disable-permissions-bubbles"/>
   <int value="-1695774453" label="skip-extra-ash-window-positioning"/>
   <int value="-1692384483" label="disambiguate-autofill-server-name-types"/>
+  <int value="-1692107333" label="AccessibilityCursorColor:disabled"/>
   <int value="-1691892152" label="SafeSearchUrlReporting:disabled"/>
   <int value="-1691668194" label="enable-new-bookmark-apps"/>
   <int value="-1691602043" label="DisableOfficeEditingComponentApp:enabled"/>
@@ -41813,6 +41814,7 @@ from previous Chrome versions.
   <int value="1548776701" label="AllBookmarks:disabled"/>
   <int value="1548942246" label="PassiveDocumentEventListeners:disabled"/>
   <int value="1552753678" label="DnsHttpssvc:disabled"/>
+  <int value="1553310752" label="AccessibilityCursorColor:enabled"/>
   <int value="1553422694" label="EnablePalmOnMaxTouchMajor:enabled"/>
   <int value="1558410842" label="FilesZipNoNaCl:disabled"/>
   <int value="1559034872" label="AutofillPrefilledFields:enabled"/>
