@@ -101,7 +101,6 @@ crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag.h
 crbug.com/872952 http/tests/media/autoplay/webaudio-autoplay-iframe-with-gesture.html [ Timeout Pass ]
 crbug.com/949003 http/tests/printing/cross-site-frame-scrolled.html [ Pass Failure ]
 crbug.com/949003 http/tests/printing/cross-site-frame.html [ Pass Failure ]
-crbug.com/1007229 external/wpt/intersection-observer/same-origin-grand-child-iframe.sub.html [ Pass Failure ]
 # ====== Site Isolation failures until here ======
 
 # ====== Oilpan-only failures from here ======
@@ -239,6 +238,7 @@ crbug.com/1002049 external/wpt/css/mediaqueries/aspect-ratio-006.html [ Failure 
 
 crbug.com/1007134 external/wpt/intersection-observer/v2/delay-test.html [ Pass Failure ]
 crbug.com/1004547 external/wpt/intersection-observer/cross-origin-iframe.sub.html [ Pass Failure ]
+crbug.com/1007229 external/wpt/intersection-observer/same-origin-grand-child-iframe.sub.html [ Pass Failure ]
 
 # Display locking failures
 
