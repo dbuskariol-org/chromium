@@ -277,8 +277,9 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
     // ends.
     return;
   }
-
-  if (level > SceneActivationLevelBackground && !self.hasInitializedUI) {
+  BOOL initializingUIInColdStart =
+      level > SceneActivationLevelBackground && !self.hasInitializedUI;
+  if (initializingUIInColdStart) {
     [self initializeUI];
   }
 
@@ -315,6 +316,24 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
       [self openTabFromLaunchWithParams:params
                      startupInformation:self.mainController
                                appState:self.mainController.appState];
+    }
+
+    if (!initializingUIInColdStart && self.tabSwitcherIsActive &&
+        [self shouldOpenNTPTabOnActivationOfBrowser:self.currentInterface
+                                                        .browser]) {
+      DCHECK(!self.dismissingTabSwitcher);
+      [self beginDismissingTabSwitcherWithCurrentBrowser:self.currentInterface
+                                                             .browser
+                                            focusOmnibox:NO];
+
+      OpenNewTabCommand* command = [OpenNewTabCommand
+          commandWithIncognito:self.currentInterface.incognito];
+      command.userInitiated = NO;
+      Browser* browser = self.currentInterface.browser;
+      id<ApplicationCommands> applicationHandler = HandlerForProtocol(
+          browser->GetCommandDispatcher(), ApplicationCommands);
+      [applicationHandler openURLInNewTab:command];
+      [self finishDismissingTabSwitcher];
     }
   }
 }
