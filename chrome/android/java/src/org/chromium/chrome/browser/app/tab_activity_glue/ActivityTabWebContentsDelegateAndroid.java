@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.tab_activity_glue;
+package org.chromium.chrome.browser.app.tab_activity_glue;
 
 import android.annotation.TargetApi;
 import android.content.Context;
