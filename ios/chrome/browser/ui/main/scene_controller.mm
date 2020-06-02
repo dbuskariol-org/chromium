@@ -346,6 +346,21 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   }
 }
 
+- (void)sceneState:(SceneState*)sceneState
+    hasPendingURLs:(NSSet<UIOpenURLContext*>*)URLContexts
+    API_AVAILABLE(ios(13)) {
+  if (URLContexts &&
+      sceneState.activationLevel == SceneActivationLevelForegroundActive) {
+    // It is necessary to reset the URLContextsToOpen after opening them.
+    // Handle the opening asynchronously to avoid interfering with potential
+    // other observers.
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self openURLContexts:sceneState.URLContextsToOpen];
+      self.sceneState.URLContextsToOpen = nil;
+    });
+  }
+}
+
 #pragma mark - AppStateObserver
 
 - (void)appStateDidExitSafeMode:(AppState*)appState {
