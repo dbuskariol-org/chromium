@@ -46,8 +46,6 @@ const char kMediaFeedsAltTestURL[] = "/alt";
 
 const char kMediaFeedsMinTestURL[] = "/min";
 
-const char kMediaFeedsCacheClearTestURL[] = "/cache-clear";
-
 const char kMediaFeedsWellKnownURL[] = "/.well-known/media-feeds";
 
 const char kMediaFeedsWellKnownResponse[] = R"END({
@@ -233,10 +231,6 @@ class MediaFeedsBrowserTest : public InProcessBrowserTest {
     return url::Origin::Create(associated_origin_server_.GetURL("/"));
   }
 
-  void SetClearSiteDataHeader(const std::string& value) {
-    clear_site_data_header_ = value;
-  }
-
   bool HandledWellKnownRequest() const { return handled_well_known_; }
 
  private:
@@ -254,10 +248,6 @@ class MediaFeedsBrowserTest : public InProcessBrowserTest {
       return response;
     } else if (request.relative_url == kMediaFeedsAltTestURL) {
       return std::make_unique<net::test_server::BasicHttpResponse>();
-    } else if (request.relative_url == kMediaFeedsCacheClearTestURL) {
-      auto response = std::make_unique<net::test_server::BasicHttpResponse>();
-      response->AddCustomHeader("Clear-Site-Data", clear_site_data_header_);
-      return response;
     } else if (base::EndsWith(request.relative_url, "json",
                               base::CompareCase::SENSITIVE)) {
       if (full_test_data_.empty())
@@ -306,8 +296,6 @@ class MediaFeedsBrowserTest : public InProcessBrowserTest {
   base::test::ScopedFeatureList scoped_feature_list_;
 
   std::string full_test_data_;
-
-  std::string clear_site_data_header_;
 };
 
 IN_PROC_BROWSER_TEST_F(MediaFeedsBrowserTest, DiscoverAndFetch) {
@@ -994,70 +982,6 @@ IN_PROC_BROWSER_TEST_F(MediaFeedsBrowserTest,
     auto feeds = GetDiscoveredFeeds();
     ASSERT_EQ(1u, feeds.size());
     EXPECT_EQ(media_feeds::mojom::ResetReason::kVisit, feeds[0]->reset_reason);
-  }
-}
-
-IN_PROC_BROWSER_TEST_F(MediaFeedsBrowserTest,
-                       ResetMediaFeed_ClearSiteDataHeader_Cache) {
-  DiscoverFeed(kMediaFeedsTestURL);
-
-  {
-    auto feeds = GetDiscoveredFeeds();
-    ASSERT_EQ(1u, feeds.size());
-    EXPECT_EQ(media_feeds::mojom::ResetReason::kNone, feeds[0]->reset_reason);
-
-    // Fetch the feed.
-    base::RunLoop run_loop;
-    GetMediaFeedsService()->FetchMediaFeed(
-        feeds[0]->id,
-        base::BindLambdaForTesting(
-            [&](const std::string& ignored) { run_loop.Quit(); }));
-    run_loop.Run();
-    WaitForDB();
-  }
-
-  // If we set the clear site data header to cache then we should reset the
-  // feed.
-  SetClearSiteDataHeader("\"cache\"");
-  ui_test_utils::NavigateToURL(
-      browser(), GetServer()->GetURL(kMediaFeedsCacheClearTestURL));
-  WaitForDB();
-
-  {
-    auto feeds = GetDiscoveredFeeds();
-    ASSERT_EQ(1u, feeds.size());
-    EXPECT_EQ(media_feeds::mojom::ResetReason::kCache, feeds[0]->reset_reason);
-  }
-}
-
-IN_PROC_BROWSER_TEST_F(MediaFeedsBrowserTest,
-                       ResetMediaFeed_ClearSiteDataHeader_ExecutionContexts) {
-  DiscoverFeed(kMediaFeedsTestURL);
-
-  {
-    auto feeds = GetDiscoveredFeeds();
-    ASSERT_EQ(1u, feeds.size());
-    EXPECT_EQ(media_feeds::mojom::ResetReason::kNone, feeds[0]->reset_reason);
-
-    // Fetch the feed.
-    base::RunLoop run_loop;
-    GetMediaFeedsService()->FetchMediaFeed(
-        feeds[0]->id,
-        base::BindLambdaForTesting(
-            [&](const std::string& ignored) { run_loop.Quit(); }));
-    run_loop.Run();
-    WaitForDB();
-  }
-
-  SetClearSiteDataHeader("\"executionContexts\"");
-  ui_test_utils::NavigateToURL(
-      browser(), GetServer()->GetURL(kMediaFeedsCacheClearTestURL));
-  WaitForDB();
-
-  {
-    auto feeds = GetDiscoveredFeeds();
-    ASSERT_EQ(1u, feeds.size());
-    EXPECT_EQ(media_feeds::mojom::ResetReason::kNone, feeds[0]->reset_reason);
   }
 }
 
