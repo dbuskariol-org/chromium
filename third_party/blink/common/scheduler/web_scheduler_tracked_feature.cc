@@ -101,8 +101,6 @@ const char* FeatureToString(WebSchedulerTrackedFeature feature) {
       return "Portal";
     case WebSchedulerTrackedFeature::kSpeechRecognizer:
       return "SpeechRecognizer";
-    case WebSchedulerTrackedFeature::kPaymentManager:
-      return "PaymentManager";
   }
 }
 

@@ -2000,44 +2000,6 @@ IN_PROC_BROWSER_TEST_F(BackForwardCacheBrowserTest, DoesNotCacheIfHttpError) {
       FROM_HERE);
 }
 
-IN_PROC_BROWSER_TEST_F(BackForwardCacheBrowserTest,
-                       DoesNotCachePaymentManager) {
-  ASSERT_TRUE(CreateHttpsServer()->Start());
-
-  // 1) Navigate to a page which includes PaymentManager functionality. Note
-  // that service workers are used, and therefore we use https server instead of
-  // embedded_server()
-  EXPECT_TRUE(NavigateToURL(
-      shell(), https_server()->GetURL(
-                   "a.com", "/payments/payment_app_invocation.html")));
-  RenderFrameHostImpl* rfh_a = current_frame_host();
-  RenderFrameDeletedObserver deleted(rfh_a);
-
-  // Execute functionality that calls PaymentManager.
-  EXPECT_TRUE(ExecJs(rfh_a, R"(
-    new Promise(async resolve => {
-      registerPaymentApp();
-      resolve();
-    });
-  )"));
-
-  // 2) Navigate away.
-  EXPECT_TRUE(
-      NavigateToURL(shell(), https_server()->GetURL("b.com", "/title1.html")));
-
-  // The page uses PaymentManager so it should be deleted.
-  deleted.WaitUntilDeleted();
-
-  // 3) Go back.
-  web_contents()->GetController().GoBack();
-  EXPECT_TRUE(WaitForLoadStop(shell()->web_contents()));
-  ExpectNotRestored(
-      {BackForwardCacheMetrics::NotRestoredReason::kBlocklistedFeatures},
-      FROM_HERE);
-  ExpectBlocklistedFeature(
-      blink::scheduler::WebSchedulerTrackedFeature::kPaymentManager, FROM_HERE);
-}
-
 class MockAppBannerService : public blink::mojom::AppBannerService {
  public:
   MockAppBannerService() = default;
