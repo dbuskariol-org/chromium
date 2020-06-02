@@ -35,6 +35,7 @@ import("//ppapi/buildflags/buildflags.gni")
 import("//rlz/buildflags/buildflags.gni")
 import("//testing/libfuzzer/fuzzer_test.gni")
 import("//testing/test.gni")
+import("//third_party/protobuf/proto_library.gni")
 import("//third_party/widevine/cdm/widevine.gni")
 import("//ui/base/ui_features.gni")
 import("//ui/gl/features.gni")
@@ -3297,6 +3298,7 @@ test("unit_tests") {
     "../browser/policy/homepage_location_policy_handler_unittest.cc",
     "../browser/policy/javascript_policy_handler_unittest.cc",
     "../browser/policy/messaging_layer/public/report_queue_configuration_unittest.cc",
+    "../browser/policy/messaging_layer/public/report_queue_unittest.cc",
     "../browser/policy/messaging_layer/util/status_macros_unittest.cc",
     "../browser/policy/messaging_layer/util/status_unittest.cc",
     "../browser/policy/messaging_layer/util/statusor_unittest.cc",
@@ -3681,6 +3683,7 @@ test("unit_tests") {
   defines = []
 
   deps = [
+    ":messaging_test_proto",
     ":test_support",
     ":test_support_unit",
     "//base:base_stack_sampling_profiler_test_util",
@@ -5658,8 +5661,6 @@ if (!is_android) {
     }
   }
 
-  import("//third_party/protobuf/proto_library.gni")
-
   proto_library("test_proto") {
     sources = [ "../common/safe_browsing/ipc_protobuf_message_test.proto" ]
   }
@@ -7026,4 +7027,8 @@ if (!is_android) {
     sources = [ "//chrome/browser/vr/test/run_xr_browser_tests.py" ]
     outputs = [ "$root_out_dir/run_xr_browser_tests.py" ]
   }
+}
+
+proto_library("messaging_test_proto") {
+  sources = [ "//chrome/browser/policy/messaging_layer/proto/test.proto" ]
 }
