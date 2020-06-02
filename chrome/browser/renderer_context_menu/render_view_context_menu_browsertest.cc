@@ -80,6 +80,8 @@
 #include "net/test/embedded_test_server/http_request.h"
 #include "net/test/embedded_test_server/http_response.h"
 #include "services/service_manager/public/cpp/interface_provider.h"
+#include "testing/gmock/include/gmock/gmock.h"
+#include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/context_menu_data/media_type.h"
 #include "third_party/blink/public/common/input/web_input_event.h"
@@ -890,6 +892,85 @@ IN_PROC_BROWSER_TEST_F(ContextMenuBrowserTest, SuggestedFileName) {
   // Compare filename.
   base::string16 suggested_filename = menu_observer.params().suggested_filename;
   ASSERT_EQ(kSuggestedFilename, base::UTF16ToUTF8(suggested_filename).c_str());
+}
+
+// Check which commands are present after opening the context menu for the main
+// frame.  This is a regression test for https://crbug.com/1085040.
+IN_PROC_BROWSER_TEST_F(ContextMenuBrowserTest,
+                       MenuContentsVerification_MainFrame) {
+  ASSERT_TRUE(embedded_test_server()->Start());
+  GURL url(embedded_test_server()->GetURL("/iframe.html"));
+  ui_test_utils::NavigateToURL(browser(), url);
+
+  // Open a context menu.
+  ContextMenuWaiter menu_observer;
+  blink::WebMouseEvent mouse_event(
+      blink::WebInputEvent::Type::kMouseDown,
+      blink::WebInputEvent::kNoModifiers,
+      blink::WebInputEvent::GetStaticTimeStampForTests());
+  mouse_event.button = blink::WebMouseEvent::Button::kRight;
+  mouse_event.SetPositionInWidget(2, 2);  // This is over the main frame.
+  content::WebContents* tab =
+      browser()->tab_strip_model()->GetActiveWebContents();
+  tab->GetRenderViewHost()->GetWidget()->ForwardMouseEvent(mouse_event);
+  mouse_event.SetType(blink::WebInputEvent::Type::kMouseUp);
+  tab->GetRenderViewHost()->GetWidget()->ForwardMouseEvent(mouse_event);
+
+  // Wait for context menu to be visible.
+  menu_observer.WaitForMenuOpenAndClose();
+
+  // Verify that the expected context menu items are present.  This also
+  // verifies that unwanted commands are missing (e.g. that
+  // IDC_CONTENT_CONTEXT_VIEWFRAMESOURCE is not present when clicking in the
+  // main frame - see https://crbug.com/1085040).
+  EXPECT_THAT(menu_observer.GetCapturedCommandIds(),
+              testing::ElementsAre(IDC_BACK, IDC_FORWARD, IDC_RELOAD,
+                                   -1,  // separator
+                                   IDC_SAVE_PAGE, IDC_PRINT,
+                                   IDC_ROUTE_MEDIA,  // aka "Cast"
+                                   IDC_CONTENT_CONTEXT_TRANSLATE,
+                                   -1,  // separator
+                                   IDC_VIEW_SOURCE,
+                                   IDC_CONTENT_CONTEXT_INSPECTELEMENT));
+}
+
+// Check which commands are present after opening the context menu for a
+// subframe.
+IN_PROC_BROWSER_TEST_F(ContextMenuBrowserTest,
+                       MenuContentsVerification_Subframe) {
+  ASSERT_TRUE(embedded_test_server()->Start());
+  GURL url(embedded_test_server()->GetURL("/iframe.html"));
+  ui_test_utils::NavigateToURL(browser(), url);
+
+  // Open a context menu.
+  ContextMenuWaiter menu_observer;
+  blink::WebMouseEvent mouse_event(
+      blink::WebInputEvent::Type::kMouseDown,
+      blink::WebInputEvent::kNoModifiers,
+      blink::WebInputEvent::GetStaticTimeStampForTests());
+  mouse_event.button = blink::WebMouseEvent::Button::kRight;
+  mouse_event.SetPositionInWidget(25, 25);  // This is over the subframe.
+  content::WebContents* tab =
+      browser()->tab_strip_model()->GetActiveWebContents();
+  tab->GetRenderViewHost()->GetWidget()->ForwardMouseEvent(mouse_event);
+  mouse_event.SetType(blink::WebInputEvent::Type::kMouseUp);
+  tab->GetRenderViewHost()->GetWidget()->ForwardMouseEvent(mouse_event);
+
+  // Wait for context menu to be visible.
+  menu_observer.WaitForMenuOpenAndClose();
+
+  // Verify that only the expected context menu items are present.
+  EXPECT_THAT(
+      menu_observer.GetCapturedCommandIds(),
+      testing::ElementsAre(IDC_BACK, IDC_FORWARD, IDC_RELOAD,
+                           -1,  // separator
+                           IDC_SAVE_PAGE, IDC_PRINT,
+                           IDC_ROUTE_MEDIA,  // aka "Cast"
+                           IDC_CONTENT_CONTEXT_TRANSLATE,
+                           -1,  // separator
+                           IDC_VIEW_SOURCE, IDC_CONTENT_CONTEXT_VIEWFRAMESOURCE,
+                           IDC_CONTENT_CONTEXT_RELOADFRAME,
+                           IDC_CONTENT_CONTEXT_INSPECTELEMENT));
 }
 
 // Check filename on clicking "Save Link As" is ignored for cross origin.
