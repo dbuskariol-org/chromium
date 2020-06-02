@@ -15,10 +15,9 @@ js_type_check("closure_compile") {
   # TODO(crbug.com/1000989): Add JS type checking for all commented out targets.
   deps = [
     ":advanced_dialog_test",
-
-    #":advanced_item_test",
-    #":button_strip_interactive_test",
-    #":button_strip_test",
+    ":advanced_item_test",
+    ":button_strip_interactive_test",
+    ":button_strip_test",
     ":cloud_print_interface_stub",
 
     #":color_settings_test",
@@ -82,6 +81,37 @@ js_type_check("closure_compile") {
 js_library("advanced_dialog_test") {
   deps = [
     ":print_preview_test_utils",
+    "..:chai_assert",
+    "..:test_util.m",
+    "//chrome/browser/resources/print_preview:print_preview",
+    "//ui/webui/resources/js:assert.m",
+  ]
+  externs_list = [ "$externs_path/mocha-2.5.js" ]
+}
+
+js_library("advanced_item_test") {
+  deps = [
+    ":print_preview_test_utils",
+    "..:chai_assert",
+    "..:test_util.m",
+    "//chrome/browser/resources/print_preview:print_preview",
+    "//ui/webui/resources/js:assert.m",
+  ]
+  externs_list = [ "$externs_path/mocha-2.5.js" ]
+}
+
+js_library("button_strip_test") {
+  deps = [
+    "..:chai_assert",
+    "..:test_util.m",
+    "//chrome/browser/resources/print_preview:print_preview",
+    "//ui/webui/resources/js:assert.m",
+  ]
+  externs_list = [ "$externs_path/mocha-2.5.js" ]
+}
+
+js_library("button_strip_interactive_test") {
+  deps = [
     "..:chai_assert",
     "..:test_util.m",
     "//chrome/browser/resources/print_preview:print_preview",
