@@ -2120,12 +2120,10 @@ bool RenderFrameHostImpl::CreateRenderFrame(
         rwh->BindNewFrameWidgetInterfaces();
   }
 
-  // TODO(https://crbug.com/1006814): Remove this.
-  if (params->previous_routing_id == MSG_ROUTING_NONE &&
-      params->parent_routing_id == MSG_ROUTING_NONE) {
-    base::debug::DumpWithoutCrashing();
-    NOTREACHED();
-  }
+  // https://crbug.com/1006814. The renderer needs at least one of these IDs to
+  // be able to insert the new frame in the frame tree.
+  DCHECK(params->previous_routing_id != MSG_ROUTING_NONE ||
+         params->parent_routing_id != MSG_ROUTING_NONE);
   GetProcess()->GetRendererInterface()->CreateFrame(std::move(params));
 
   if (previous_routing_id != MSG_ROUTING_NONE) {
