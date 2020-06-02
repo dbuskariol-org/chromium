@@ -452,8 +452,6 @@ source_set("chromeos") {
     "app_mode/kiosk_app_update_service.h",
     "app_mode/kiosk_cryptohome_remover.cc",
     "app_mode/kiosk_cryptohome_remover.h",
-    "app_mode/kiosk_diagnosis_runner.cc",
-    "app_mode/kiosk_diagnosis_runner.h",
     "app_mode/kiosk_external_update_validator.cc",
     "app_mode/kiosk_external_update_validator.h",
     "app_mode/kiosk_external_updater.cc",
