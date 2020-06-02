@@ -4908,10 +4908,6 @@ void RenderProcessHostImpl::OnProcessLaunched() {
   GetRendererInterface()->SetUserAgentMetadata(
       GetContentClient()->browser()->GetUserAgentMetadata());
   NotifyRendererIfLockedToSite();
-  if (SiteIsolationPolicy::UseDedicatedProcessesForAllSites() &&
-      base::FeatureList::IsEnabled(features::kV8LowMemoryModeForSubframes)) {
-    GetRendererInterface()->EnableV8LowMemoryMode();
-  }
 
   // Send the initial system color info to the renderer.
   ThemeHelper::GetInstance()->SendSystemColorInfo(GetRendererInterface());
