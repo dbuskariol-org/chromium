@@ -963,13 +963,14 @@ class CC_EXPORT LayerTreeHostImpl : public InputHandler,
       LayerImpl* first_scrolling_layer_or_drawn_scrollbar,
       ui::ScrollInputType type);
 
-  // Initial scroll hit testing can be unreliable in the presence of squashed
-  // layers. In this case, we fall back to main thread scrolling. This function
-  // compares |layer_impl| returned from a regular hit test to the layer
-  // returned from a hit test performed only on scrollers and scrollbars. If the
-  // closest scrolling ancestor of |layer_impl| is not the other layer, then the
-  // layer_impl must be a squasing layer overtop of some other scroller and we
-  // must rely on the main thread.
+  // |layer| is returned from a regular hit test, and
+  // |first_scrolling_layer_or_drawn_scrollbar| is returned from a hit test
+  // performed only on scrollers and scrollbars. Initial scroll hit testing can
+  // be unreliable if the latter is not the direct scroll ancestor of the
+  // former. In this case, we will fall back to main thread scrolling because
+  // the compositor thread doesn't know which layer to scroll. This happens when
+  // a layer covers a scroller that doesn't scroll the former, or a scroller is
+  // masked by a mask layer for mask image, clip-path, rounded border, etc.
   //
   // Note, position: fixed layers use the inner viewport as their ScrollNode
   // (since they don't scroll with the outer viewport), however, scrolls from

@@ -43006,7 +43006,7 @@ from previous Chrome versions.
   <int value="18" label="Has transform"/>
   <int value="19" label="Not opaque for text"/>
   <int value="20" label="Can't paint scrolling background"/>
-  <int value="21" label="Has clip related property"/>
+  <int value="21" label="Has clip related property (obsolete)"/>
   <int value="22" label="Has box shadow from non-root layer (obsolete)"/>
   <int value="23" label="Is not stacking context (obsolete)"/>
   <int value="24" label="Blocking wheel event handler region"/>
