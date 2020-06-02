@@ -1027,7 +1027,7 @@ class CC_EXPORT LayerTreeHostImpl : public InputHandler,
   // |viewport_point|. If no layer is hit, this falls back to the inner
   // viewport scroll node. Returns:
   // - If |hit_test_sucessful| is false, hit testing has failed and the
-  //   compositor cannot determine the corerct scroll node (e.g. see comments in
+  //   compositor cannot determine the correct scroll node (e.g. see comments in
   //   IsInitialScrollHitTestReliable). |scroll_node| is always nullptr in this
   //   case.
   // - If |hit_test_successful| is true, returns the ScrollNode to use in

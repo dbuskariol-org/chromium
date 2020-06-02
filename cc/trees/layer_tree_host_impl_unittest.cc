@@ -499,15 +499,21 @@ class LayerTreeHostImplTest : public testing::Test,
     layer_tree_impl->DidBecomeActive();
 
     // The point hits squash1 layer and also scroll layer, because scroll layer
-    // is not an ancestor of squash1 layer, we cannot scroll on impl thread.
+    // is not an ancestor of squash1 layer, we cannot scroll on impl thread
+    // (without at least a hit test on the main thread).
     InputHandler::ScrollStatus status = host_impl_->ScrollBegin(
         BeginState(gfx::Point(230, 150), gfx::Vector2dF(0, 10),
                    ui::ScrollInputType::kWheel)
             .get(),
         ui::ScrollInputType::kWheel);
-    ASSERT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
-    ASSERT_EQ(MainThreadScrollingReason::kFailedHitTest,
-              status.main_thread_scrolling_reasons);
+    if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+      ASSERT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+      ASSERT_TRUE(status.needs_main_thread_hit_test);
+    } else {
+      ASSERT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
+      ASSERT_EQ(MainThreadScrollingReason::kFailedHitTest,
+                status.main_thread_scrolling_reasons);
+    }
 
     // The point hits squash1 layer and also scrollbar layer.
     status = host_impl_->ScrollBegin(
@@ -515,9 +521,14 @@ class LayerTreeHostImplTest : public testing::Test,
                    ui::ScrollInputType::kWheel)
             .get(),
         ui::ScrollInputType::kWheel);
-    ASSERT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
-    ASSERT_EQ(MainThreadScrollingReason::kFailedHitTest,
-              status.main_thread_scrolling_reasons);
+    if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+      ASSERT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+      ASSERT_TRUE(status.needs_main_thread_hit_test);
+    } else {
+      ASSERT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
+      ASSERT_EQ(MainThreadScrollingReason::kFailedHitTest,
+                status.main_thread_scrolling_reasons);
+    }
 
     // The point hits squash2 layer and also scroll layer, because scroll layer
     // is an ancestor of squash2 layer, we should scroll on impl.
@@ -1166,18 +1177,28 @@ TEST_F(LayerTreeHostImplTest, TargetMainThreadScroller) {
   }
 
   // Now add a MainThreadScrollingReason. Trying to target the node this time
-  // should result in a failed ScrollBegin with the appropriate return value.
+  // should result in a failed ScrollBegin with the appropriate return value,
+  // unless scroll unification is enabled - since all nodes can be scrolled
+  // from the compositor in that mode.
   host_impl_->OuterViewportScrollNode()->main_thread_scrolling_reasons =
       MainThreadScrollingReason::kThreadedScrollingDisabled;
 
   {
     InputHandler::ScrollStatus status = host_impl_->ScrollBegin(
         scroll_state.get(), ui::ScrollInputType::kWheel);
-    EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
-    EXPECT_EQ(
-        host_impl_->OuterViewportScrollNode()->main_thread_scrolling_reasons,
-        status.main_thread_scrolling_reasons);
-    EXPECT_FALSE(host_impl_->CurrentlyScrollingNode());
+    if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+      EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+      EXPECT_FALSE(status.needs_main_thread_hit_test);
+      EXPECT_EQ(
+          MainThreadScrollingReason::kThreadedScrollingDisabled,
+          host_impl_->CurrentlyScrollingNode()->main_thread_scrolling_reasons);
+    } else {
+      EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
+      EXPECT_EQ(
+          host_impl_->OuterViewportScrollNode()->main_thread_scrolling_reasons,
+          status.main_thread_scrolling_reasons);
+      EXPECT_FALSE(host_impl_->CurrentlyScrollingNode());
+    }
   }
 }
 
@@ -1474,8 +1495,8 @@ TEST_F(LayerTreeHostImplTest, ScrollBlocksOnTouchEventHandlers) {
 }
 
 TEST_F(LayerTreeHostImplTest, ShouldScrollOnMainThread) {
-  SetupViewportLayersInnerScrolls(gfx::Size(50, 50), gfx::Size(100, 100));
-  host_impl_->InnerViewportScrollNode()->main_thread_scrolling_reasons =
+  SetupViewportLayersOuterScrolls(gfx::Size(50, 50), gfx::Size(100, 100));
+  host_impl_->OuterViewportScrollNode()->main_thread_scrolling_reasons =
       MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects;
   DrawFrame();
 
@@ -1484,18 +1505,34 @@ TEST_F(LayerTreeHostImplTest, ShouldScrollOnMainThread) {
                                          ui::ScrollInputType::kWheel)
                                   .get(),
                               ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_FALSE(status.needs_main_thread_hit_test);
+    EXPECT_EQ(
+        MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
+        host_impl_->CurrentlyScrollingNode()->main_thread_scrolling_reasons);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
+              status.main_thread_scrolling_reasons);
+  }
 
   status =
       host_impl_->ScrollBegin(BeginState(gfx::Point(), gfx::Vector2d(0, 10),
                                          ui::ScrollInputType::kTouchscreen)
                                   .get(),
                               ui::ScrollInputType::kTouchscreen);
-  EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_FALSE(status.needs_main_thread_hit_test);
+    EXPECT_EQ(
+        MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
+        host_impl_->CurrentlyScrollingNode()->main_thread_scrolling_reasons);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
+              status.main_thread_scrolling_reasons);
+  }
 }
 
 TEST_F(LayerTreeHostImplTest, ScrollWithOverlappingNonScrollableLayer) {
@@ -1540,9 +1577,16 @@ TEST_F(LayerTreeHostImplTest, ScrolledOverlappingDrawnScrollbarLayer) {
                  ui::ScrollInputType::kWheel)
           .get(),
       ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kFailedHitTest,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNotScrollingOnMain,
+              status.main_thread_scrolling_reasons);
+    EXPECT_TRUE(status.needs_main_thread_hit_test);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kFailedHitTest,
+              status.main_thread_scrolling_reasons);
+  }
 
   // The point hits the drawn scrollbar layer completely and should scroll on
   // the impl thread.
@@ -1637,24 +1681,40 @@ TEST_F(LayerTreeHostImplTest, NonFastScrollableRegionBasic) {
 
   DrawFrame();
 
-  // All scroll types inside the non-fast scrollable region should fail.
+  // All scroll types inside the non-fast scrollable region should fail. When
+  // scroll unification is enabled, these scrolls succeed but request a main
+  // thread hit test.
   InputHandler::ScrollStatus status = host_impl_->ScrollBegin(
       BeginState(gfx::Point(25, 25), gfx::Vector2d(0, 10),
                  ui::ScrollInputType::kWheel)
           .get(),
       ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kNonFastScrollableRegion,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNotScrollingOnMain,
+              status.main_thread_scrolling_reasons);
+    EXPECT_TRUE(status.needs_main_thread_hit_test);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNonFastScrollableRegion,
+              status.main_thread_scrolling_reasons);
+  }
 
   status = host_impl_->ScrollBegin(
       BeginState(gfx::Point(25, 25), gfx::Vector2d(0, 10),
                  ui::ScrollInputType::kTouchscreen)
           .get(),
       ui::ScrollInputType::kTouchscreen);
-  EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kNonFastScrollableRegion,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNotScrollingOnMain,
+              status.main_thread_scrolling_reasons);
+    EXPECT_TRUE(status.needs_main_thread_hit_test);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNonFastScrollableRegion,
+              status.main_thread_scrolling_reasons);
+  }
 
   // All scroll types outside this region should succeed.
   status = host_impl_->ScrollBegin(
@@ -1705,6 +1765,7 @@ TEST_F(LayerTreeHostImplTest, NonFastScrollableRegionWithOffset) {
   EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
   EXPECT_EQ(MainThreadScrollingReason::kNotScrollingOnMain,
             status.main_thread_scrolling_reasons);
+  EXPECT_FALSE(status.needs_main_thread_hit_test);
 
   host_impl_->ScrollUpdate(UpdateState(gfx::Point(), gfx::Vector2d(0, 1),
                                        ui::ScrollInputType::kWheel)
@@ -1717,9 +1778,16 @@ TEST_F(LayerTreeHostImplTest, NonFastScrollableRegionWithOffset) {
                  ui::ScrollInputType::kWheel)
           .get(),
       ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kNonFastScrollableRegion,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNotScrollingOnMain,
+              status.main_thread_scrolling_reasons);
+    EXPECT_TRUE(status.needs_main_thread_hit_test);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNonFastScrollableRegion,
+              status.main_thread_scrolling_reasons);
+  }
 }
 
 TEST_F(LayerTreeHostImplTest, ScrollHandlerNotPresent) {
@@ -2588,7 +2656,10 @@ TEST_F(LayerTreeHostImplTest, ScrollWithUserUnscrollableLayers) {
   EXPECT_VECTOR_EQ(gfx::Vector2dF(10, 20), CurrentScrollOffset(overflow));
 }
 
-TEST_F(LayerTreeHostImplTest, ForceMainThreadScrollWithoutScrollLayer) {
+// Test that if a scroll node doesn't have an associated Layer, scrolling
+// is forced to the main thread. With scroll unification, this kind of scroll
+// is now handled on the impl thread but will force a repaint on each scroll.
+TEST_F(LayerTreeHostImplTest, ScrollNodeWithoutScrollLayer) {
   SetupViewportLayersInnerScrolls(gfx::Size(100, 100), gfx::Size(200, 200));
   ScrollNode* scroll_node = host_impl_->OuterViewportScrollNode();
   // Change the scroll node so that it no longer has an associated layer.
@@ -2601,9 +2672,20 @@ TEST_F(LayerTreeHostImplTest, ForceMainThreadScrollWithoutScrollLayer) {
                  ui::ScrollInputType::kWheel)
           .get(),
       ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kNonFastScrollableRegion,
-            status.main_thread_scrolling_reasons);
+
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNotScrollingOnMain,
+              status.main_thread_scrolling_reasons);
+    // We don't have a layer for the scroller but we didn't hit a non-fast
+    // scrolling region or fail hit testing the layer - we don't need a main
+    // thread hit test in this case.
+    EXPECT_FALSE(status.needs_main_thread_hit_test);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kNonFastScrollableRegion,
+              status.main_thread_scrolling_reasons);
+  }
 }
 
 TEST_F(CommitToPendingTreeLayerTreeHostImplTest,
@@ -5916,7 +5998,8 @@ TEST_F(LayerTreeHostImplTest, ScrollRootIgnored) {
   SetupDefaultRootLayer(gfx::Size(10, 10));
   DrawFrame();
 
-  // Scroll event is ignored because layer is not scrollable.
+  // Scroll event is ignored because layer is not scrollable and there is no
+  // viewport.
   InputHandler::ScrollStatus status =
       host_impl_->ScrollBegin(BeginState(gfx::Point(), gfx::Vector2dF(0, 10),
                                          ui::ScrollInputType::kWheel)
@@ -7092,20 +7175,20 @@ TEST_F(LayerTreeHostImplTest, ScrollChildCallsCommitAndRedraw) {
 TEST_F(LayerTreeHostImplTest, ScrollMissesChild) {
   gfx::Size viewport_size(5, 5);
   gfx::Size surface_size(10, 10);
-  LayerImpl* root = SetupDefaultRootLayer(surface_size);
-  AddScrollableLayer(root, viewport_size, surface_size);
+  SetupViewportLayersOuterScrolls(viewport_size, surface_size);
+  AddScrollableLayer(OuterViewportScrollLayer(), viewport_size, surface_size);
   DrawFrame();
 
-  // Scroll event is ignored because the input coordinate is outside the layer
-  // boundaries.
+  // A scroll that doesn't hit any layers should fall back to viewport
+  // scrolling.
   InputHandler::ScrollStatus status = host_impl_->ScrollBegin(
       BeginState(gfx::Point(15, 5), gfx::Vector2dF(0, 10),
                  ui::ScrollInputType::kWheel)
           .get(),
       ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_IGNORED, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kNoScrollingLayer,
-            status.main_thread_scrolling_reasons);
+  EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+  EXPECT_EQ(host_impl_->CurrentlyScrollingNode(),
+            host_impl_->OuterViewportScrollNode());
 
   EXPECT_FALSE(did_request_redraw_);
   EXPECT_FALSE(did_request_commit_);
@@ -7114,8 +7197,10 @@ TEST_F(LayerTreeHostImplTest, ScrollMissesChild) {
 TEST_F(LayerTreeHostImplTest, ScrollMissesBackfacingChild) {
   gfx::Size viewport_size(5, 5);
   gfx::Size surface_size(10, 10);
-  LayerImpl* root = SetupDefaultRootLayer(viewport_size);
-  LayerImpl* child = AddScrollableLayer(root, viewport_size, surface_size);
+
+  SetupViewportLayersOuterScrolls(viewport_size, surface_size);
+  LayerImpl* child = AddScrollableLayer(OuterViewportScrollLayer(),
+                                        viewport_size, surface_size);
 
   gfx::Transform matrix;
   matrix.RotateAboutXAxis(180.0);
@@ -7124,22 +7209,22 @@ TEST_F(LayerTreeHostImplTest, ScrollMissesBackfacingChild) {
   CreateEffectNode(child).double_sided = false;
   DrawFrame();
 
-  // Scroll event is ignored because the scrollable layer is not facing the
-  // viewer and there is nothing scrollable behind it.
+  // The scroll shouldn't hit the child layer because the it isn't facing the
+  // viewer. The hit test should go through it and hit the outer viewport.
   InputHandler::ScrollStatus status = host_impl_->ScrollBegin(
       BeginState(gfx::Point(5, 5), gfx::Vector2dF(0, 10),
                  ui::ScrollInputType::kWheel)
           .get(),
       ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_IGNORED, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kNoScrollingLayer,
-            status.main_thread_scrolling_reasons);
+  EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+  EXPECT_EQ(host_impl_->CurrentlyScrollingNode(),
+            host_impl_->OuterViewportScrollNode());
 
   EXPECT_FALSE(did_request_redraw_);
   EXPECT_FALSE(did_request_commit_);
 }
 
-TEST_F(LayerTreeHostImplTest, ScrollBlockedByContentLayer) {
+TEST_F(LayerTreeHostImplTest, ScrollLayerWithMainThreadReason) {
   gfx::Size scroll_container_size(5, 5);
   gfx::Size surface_size(10, 10);
   LayerImpl* root = SetupDefaultRootLayer(surface_size);
@@ -7154,16 +7239,24 @@ TEST_F(LayerTreeHostImplTest, ScrollBlockedByContentLayer) {
       MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects;
   DrawFrame();
 
-  // Scrolling fails because the content layer is asking to be scrolled on the
-  // main thread.
   InputHandler::ScrollStatus status = host_impl_->ScrollBegin(
       BeginState(gfx::Point(5, 5), gfx::Vector2dF(0, 10),
                  ui::ScrollInputType::kWheel)
           .get(),
       ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_FALSE(status.needs_main_thread_hit_test);
+    EXPECT_EQ(
+        MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
+        host_impl_->CurrentlyScrollingNode()->main_thread_scrolling_reasons);
+  } else {
+    // Scrolling fails because the content layer is asking to be scrolled on the
+    // main thread.
+    EXPECT_EQ(InputHandler::SCROLL_ON_MAIN_THREAD, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kHasBackgroundAttachmentFixedObjects,
+              status.main_thread_scrolling_reasons);
+  }
 }
 
 TEST_F(LayerTreeHostImplTest, ScrollRootAndChangePageScaleOnMainThread) {
@@ -8969,7 +9062,15 @@ TEST_F(LayerTreeHostImplTest, NoOverscrollOnNonViewportLayers) {
   host_impl_->ScrollEnd();
 }
 
+// This ensures that the --disable-threaded-scrolling flag is respected even
+// when a scroll occurs outside of a layer which normally falls back to the
+// inner viewport layer. https://crbug.com/625100.
 TEST_F(LayerTreeHostImplTest, OverscrollOnMainThread) {
+  // TODO(bokan): The meaning of this flag is lost with scroll unification. We
+  // need to decide what we should do with it. https://crbug.com/1086625.
+  if (base::FeatureList::IsEnabled(features::kScrollUnification))
+    return;
+
   InputHandlerScrollResult scroll_result;
   LayerTreeSettings settings = DefaultSettings();
   CreateHostImpl(settings, CreateLayerTreeFrameSink());
@@ -10845,12 +10946,15 @@ TEST_P(LayerTreeHostImplTestWithRenderer, ShutdownReleasesContext) {
   helper.unprocessed_result.reset();
 }
 
-TEST_F(LayerTreeHostImplTest, ScrollUnknownNotOnAncestorChain) {
+// This tests the case where hit testing only on scrollable layers returns a
+// layer that's outside the scroll chain of the first hit test *any* layer. See
+// LayerTreeHostImpl::IsInitialScrollHitTestReliable for details.
+TEST_F(LayerTreeHostImplTest, ScrollHitTestIsNotReliable) {
   // If we ray cast a scroller that is not on the first layer's ancestor chain,
   // we should return SCROLL_UNKNOWN.
   gfx::Size viewport_size(50, 50);
   gfx::Size content_size(100, 100);
-  SetupViewportLayersInnerScrolls(viewport_size, content_size);
+  SetupViewportLayersOuterScrolls(viewport_size, content_size);
 
   LayerImpl* occluder_layer = AddLayer();
   occluder_layer->SetDrawsContent(true);
@@ -10869,20 +10973,27 @@ TEST_F(LayerTreeHostImplTest, ScrollUnknownNotOnAncestorChain) {
                                          ui::ScrollInputType::kWheel)
                                   .get(),
                               ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kFailedHitTest,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_TRUE(status.needs_main_thread_hit_test);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kFailedHitTest,
+              status.main_thread_scrolling_reasons);
+  }
 }
 
-TEST_F(LayerTreeHostImplTest, ScrollUnknownScrollAncestorMismatch) {
+// Similar but different case to above. See
+// LayerTreeHostImpl::IsInitialScrollHitTestReliable for details.
+TEST_F(LayerTreeHostImplTest, ScrollHitTestAncestorMismatch) {
   // If we ray cast a scroller this is on the first layer's ancestor chain, but
   // is not the first scroller we encounter when walking up from the layer, we
   // should also return SCROLL_UNKNOWN.
   gfx::Size viewport_size(50, 50);
   gfx::Size content_size(100, 100);
-  SetupViewportLayersInnerScrolls(viewport_size, content_size);
+  SetupViewportLayersOuterScrolls(viewport_size, content_size);
 
-  LayerImpl* scroll_layer = InnerViewportScrollLayer();
+  LayerImpl* scroll_layer = OuterViewportScrollLayer();
 
   LayerImpl* child_scroll_clip = AddLayer();
   CopyProperties(scroll_layer, child_scroll_clip);
@@ -10905,9 +11016,14 @@ TEST_F(LayerTreeHostImplTest, ScrollUnknownScrollAncestorMismatch) {
                                          ui::ScrollInputType::kWheel)
                                   .get(),
                               ui::ScrollInputType::kWheel);
-  EXPECT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
-  EXPECT_EQ(MainThreadScrollingReason::kFailedHitTest,
-            status.main_thread_scrolling_reasons);
+  if (base::FeatureList::IsEnabled(features::kScrollUnification)) {
+    EXPECT_EQ(InputHandler::SCROLL_ON_IMPL_THREAD, status.thread);
+    EXPECT_TRUE(status.needs_main_thread_hit_test);
+  } else {
+    EXPECT_EQ(InputHandler::SCROLL_UNKNOWN, status.thread);
+    EXPECT_EQ(MainThreadScrollingReason::kFailedHitTest,
+              status.main_thread_scrolling_reasons);
+  }
 }
 
 TEST_F(LayerTreeHostImplTest, ScrollInvisibleScroller) {
