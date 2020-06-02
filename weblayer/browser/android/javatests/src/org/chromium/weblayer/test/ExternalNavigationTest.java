@@ -143,26 +143,29 @@ public class ExternalNavigationTest {
     }
 
     /**
-     * Tests that a direct navigation to an external intent is blocked, resulting in a failed
-     * browser navigation.
+     * Tests that a direct navigation to an external intent is launched due to the navigation type
+     * being set as from a link with a user gesture.
      */
     @Test
     @SmallTest
-    public void testExternalIntentWithNoRedirectBlocked() throws Throwable {
+    public void testExternalIntentWithNoRedirectLaunched() throws Throwable {
         InstrumentationActivity activity = mActivityTestRule.launchShellWithUrl(ABOUT_BLANK_URL);
         IntentInterceptor intentInterceptor = new IntentInterceptor();
         activity.setIntentInterceptor(intentInterceptor);
 
         Tab tab = mActivityTestRule.getActivity().getTab();
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> { tab.getNavigationController().navigate(Uri.parse(INTENT_TO_CHROME_URL)); });
 
-        // Note that this navigation will not result in a paint.
-        mActivityTestRule.navigateAndWaitForFailure(
-                tab, INTENT_TO_CHROME_URL, /*waitForPaint=*/false);
+        intentInterceptor.waitForIntent();
 
-        Assert.assertNull(intentInterceptor.mLastIntent);
-
-        // The current URL should not have changed.
+        // The current URL should not have changed, and the intent should have been launched.
         Assert.assertEquals(ABOUT_BLANK_URL, mActivityTestRule.getCurrentDisplayUrl());
+        Intent intent = intentInterceptor.mLastIntent;
+        Assert.assertNotNull(intent);
+        Assert.assertEquals(INTENT_TO_CHROME_PACKAGE, intent.getPackage());
+        Assert.assertEquals(INTENT_TO_CHROME_ACTION, intent.getAction());
+        Assert.assertEquals(INTENT_TO_CHROME_DATA_STRING, intent.getDataString());
     }
 
     /**
@@ -448,12 +451,14 @@ public class ExternalNavigationTest {
 
     /**
      * Tests that going to a page that loads an intent that can be handled in onload() results in
-     * the external intent being blocked by policy on intents without user gestures loading in the
-     * midst of a user-typed navigation.
+     * the external intent being launched due to the navigation being specified as being from a link
+     * with a user gesture (if the navigation were specified as being from user typing the intent
+     * would be blocked due to Chrome's policy on not launching intents from user-typed navigations
+     * without a redirect).
      */
     @Test
     @SmallTest
-    public void testExternalIntentViaOnLoadBlocked() throws Throwable {
+    public void testExternalIntentViaOnLoadLaunched() throws Throwable {
         InstrumentationActivity activity = mActivityTestRule.launchShellWithUrl(ABOUT_BLANK_URL);
         IntentInterceptor intentInterceptor = new IntentInterceptor();
         activity.setIntentInterceptor(intentInterceptor);
@@ -465,14 +470,15 @@ public class ExternalNavigationTest {
         TestThreadUtils.runOnUiThreadBlocking(
                 () -> { tab.getNavigationController().navigate(Uri.parse(url)); });
 
-        NavigationWaiter waiter = new NavigationWaiter(
-                INTENT_TO_CHROME_URL, tab, /*expectFailure=*/true, /*waitForPaint=*/false);
-        waiter.waitForNavigation();
+        intentInterceptor.waitForIntent();
 
-        Assert.assertNull(intentInterceptor.mLastIntent);
-
-        // The current URL should not have changed.
+        // The current URL should not have changed, and the intent should have been launched.
         Assert.assertEquals(url, mActivityTestRule.getCurrentDisplayUrl());
+        Intent intent = intentInterceptor.mLastIntent;
+        Assert.assertNotNull(intent);
+        Assert.assertEquals(INTENT_TO_CHROME_PACKAGE, intent.getPackage());
+        Assert.assertEquals(INTENT_TO_CHROME_ACTION, intent.getAction());
+        Assert.assertEquals(INTENT_TO_CHROME_DATA_STRING, intent.getDataString());
     }
 
     /**
