@@ -5889,3 +5889,6 @@ crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvas-zero-size-readback.htm
 crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvasClearRect.html [ Pass Failure ]
 crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvasClearRectPartial.html [ Pass Failure ]
 crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvas-MessageChannel-transfer.html [ Pass Failure ]
+
+# Sheriff 2020-06-02
+crbug.com/1041973 virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/constraints/form-validation-reportValidity.html [ Pass Failure ]
