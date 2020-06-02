@@ -5134,15 +5134,13 @@ void RenderProcessHostImpl::ProvideStatusFileForRenderer() {
 void RenderProcessHostImpl::ProvideSwapFileForRenderer() {
   if (!base::FeatureList::IsEnabled(features::kParkableStringsToDisk))
     return;
+
+  // In Incognito, nothing should be written to disk. Don't provide a file..
+  if (GetBrowserContext()->IsOffTheRecord())
+    return;
+
   mojo::Remote<blink::mojom::DiskAllocator> allocator;
   BindReceiver(allocator.BindNewPipeAndPassReceiver());
-
-  // In Incognito, nothing should be written to disk. Providing an invalid file
-  // prevents the renderer from doing so.
-  if (GetBrowserContext()->IsOffTheRecord()) {
-    allocator->ProvideTemporaryFile(base::File());
-    return;
-  }
 
   // File creation done on a background thread. The renderer side will behave
   // correctly even if the file is provided later or never.
