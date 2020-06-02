@@ -2690,7 +2690,7 @@ void RenderFrameHostImpl::DidChangeActiveSchedulerTrackedFeatures(
 void RenderFrameHostImpl::OnSchedulerTrackedFeatureUsed(
     blink::scheduler::WebSchedulerTrackedFeature feature) {
   browser_reported_scheduler_tracked_features_ |=
-      1 << static_cast<uint64_t>(feature);
+      1ull << static_cast<uint64_t>(feature);
 
   MaybeEvictFromBackForwardCache();
 }
@@ -6999,6 +6999,12 @@ void RenderFrameHostImpl::CreatePaymentManager(
   }
   GetProcess()->CreatePaymentManagerForOrigin(GetLastCommittedOrigin(),
                                               std::move(receiver));
+
+  // Blocklist PaymentManager from the back-forward cache as at the moment we
+  // don't cancel pending payment requests when the RenderFrameHost is stored
+  // in back-forward cache.
+  OnSchedulerTrackedFeatureUsed(
+      blink::scheduler::WebSchedulerTrackedFeature::kPaymentManager);
 }
 
 void RenderFrameHostImpl::CreateWebBluetoothService(
