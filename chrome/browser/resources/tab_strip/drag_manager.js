@@ -388,9 +388,8 @@ class DragSession {
     const dragOverTabElement =
         /** @type {?TabElement} */ (composedPath.find(isTabElement));
     if (dragOverTabElement &&
-        (dragOverTabElement.tab.pinned !== tabElement.tab.pinned ||
-         !dragOverTabElement.isValidDragOverTarget)) {
-      // Can only drag between the same pinned states and valid TabElements.
+        dragOverTabElement.tab.pinned !== tabElement.tab.pinned) {
+      // Can only drag between the same pinned states.
       return;
     }
 
