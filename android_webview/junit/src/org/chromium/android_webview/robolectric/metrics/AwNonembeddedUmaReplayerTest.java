@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.android_webview.robolectric.common.metrics;
+package org.chromium.android_webview.robolectric.metrics;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import org.chromium.android_webview.common.metrics.AwNonembeddedUmaReplayer;
+import org.chromium.android_webview.metrics.AwNonembeddedUmaReplayer;
 import org.chromium.android_webview.proto.MetricsBridgeRecords.HistogramRecord;
 import org.chromium.android_webview.proto.MetricsBridgeRecords.HistogramRecord.RecordType;
 import org.chromium.base.metrics.UmaRecorder;

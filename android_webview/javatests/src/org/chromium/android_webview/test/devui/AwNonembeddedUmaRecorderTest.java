@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.android_webview.test.common.metrics;
+package org.chromium.android_webview.test.devui;
 
 import static org.chromium.android_webview.test.OnlyRunIn.ProcessMode.SINGLE_PROCESS;
 
@@ -13,7 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.chromium.android_webview.common.metrics.AwNonembeddedUmaRecorder;
+import org.chromium.android_webview.nonembedded.AwNonembeddedUmaRecorder;
 import org.chromium.android_webview.proto.MetricsBridgeRecords.HistogramRecord;
 import org.chromium.android_webview.proto.MetricsBridgeRecords.HistogramRecord.RecordType;
 import org.chromium.android_webview.test.AwJUnit4ClassRunner;
