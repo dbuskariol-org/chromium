@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.components.signin.test.util;
+package org.chromium.chrome.test.util.browser.signin;
 
 import android.accounts.Account;
 
@@ -15,6 +15,8 @@ import org.junit.runners.model.Statement;
 import org.chromium.components.signin.AccountManagerFacadeProvider;
 import org.chromium.components.signin.AccountUtils;
 import org.chromium.components.signin.ProfileDataSource;
+import org.chromium.components.signin.test.util.FakeAccountManagerFacade;
+import org.chromium.components.signin.test.util.FakeProfileDataSource;
 
 /**
  * JUnit4 rule for overriding behaviour of {@link AccountManagerFacade} for tests.
