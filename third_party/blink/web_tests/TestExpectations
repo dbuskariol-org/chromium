@@ -1600,6 +1600,7 @@ crbug.com/944583 [ Mac ] fast/events/platform-wheelevent-paging-x-in-scrolling-p
 crbug.com/944583 [ Mac ] fast/events/platform-wheelevent-paging-y-in-scrolling-page.html [ Pass Failure Timeout ]
 # Sheriff: 2020-05-18
 crbug.com/1083820 [ Mac ] fast/scrolling/document-level-wheel-event-listener-passive-by-default.html [ Pass Failure ]
+crbug.com/1083824 [ Mac ] geolocation-api/watchPosition-page-visibility.html [ Pass Failure Timeout ]
 
 # In external/wpt/html/, we prefer checking in failure
 # expectation files. The following tests with [ Failure ] don't have failure
@@ -5867,10 +5868,12 @@ crbug.com/971031 [ Mac ] fast/dom/timer-throttling-hidden-page.html [ Pass Failu
 crbug.com/1071189 [ Debug ] editing/selection/programmatic-selection-on-mac-is-directionless.html [ Timeout Pass ]
 
 # Sheriff 2020-05-27
+crbug.com/1083585 [ Win ] geolocation-api/watchPosition-page-visibility.html [ Pass Failure ]
 crbug.com/1046784 http/tests/devtools/elements/styles/stylesheet-tracking.js [ Pass Failure Timeout ]
 
 # Sheriff 2020-05-28
 crbug.com/1087208 http/tests/images/document-policy-oversized-images-resize.php [ Pass Failure ]
+crbug.com/1083585 [ Linux ] geolocation-api/watchPosition-page-visibility.html [ Pass Failure ]
 crbug.com/1087077 external/wpt/html/semantics/forms/form-submission-0/form-double-submit.html [ Failure ]
 crbug.com/1087077 external/wpt/html/semantics/forms/form-submission-0/form-double-submit-3.html [ Failure ]
 crbug.com/1087077 external/wpt/html/semantics/forms/form-submission-0/form-double-submit-to-different-origin-frame.html [ Failure ]
