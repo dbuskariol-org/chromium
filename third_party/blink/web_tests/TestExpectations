@@ -2637,6 +2637,12 @@ crbug.com/1024156 external/wpt/css/css-pseudo/cascade-highlight-004.html [ Failu
 crbug.com/1086855 external/wpt/css/css-pseudo/file-chooser-button-001.tentative.html [ Failure ]
 
 # ====== New tests from wpt-importer added here ======
+crbug.com/626703 [ Linux ] external/wpt/infrastructure/reftest/reftest_match-print.html [ Failure ]
+crbug.com/626703 [ Mac ] external/wpt/infrastructure/reftest/reftest_match-print.html [ Failure ]
+crbug.com/626703 [ Win ] external/wpt/infrastructure/reftest/reftest_match-print.html [ Failure ]
+crbug.com/626703 [ Linux ] external/wpt/infrastructure/reftest/reftest_match_fail-print.html [ Failure ]
+crbug.com/626703 [ Mac ] external/wpt/infrastructure/reftest/reftest_match_fail-print.html [ Failure ]
+crbug.com/626703 [ Win ] external/wpt/infrastructure/reftest/reftest_match_fail-print.html [ Failure ]
 crbug.com/626703 [ Linux ] external/wpt/css/CSS2/normal-flow/min-height-applies-to-014.xht [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/css/CSS2/normal-flow/min-height-applies-to-014.xht [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/css/CSS2/normal-flow/min-height-applies-to-014.xht [ Failure ]
