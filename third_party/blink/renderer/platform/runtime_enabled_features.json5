@@ -967,6 +967,7 @@
     {
       name: "LayoutNGRuby",
       depends_on: ["LayoutNG"],
+      status: "test",
     },
     {
       name: "LayoutNGTable",
