@@ -187,6 +187,18 @@ cr.define('cr.ui.login.debug', function() {
     {
       id: 'error-message',
       kind: ScreenKind.ERROR,
+      states: [
+        {
+          // Show offline error during signin
+          id: 'signin-offline-error',
+          trigger: (screen) => {
+            screen.setUIState(2);     // signin
+            screen.setErrorState(2);  // offline
+            screen.allowGuestSignin(true);
+            screen.allowOfflineLogin(true);
+          }
+        },
+      ]
     },
     {
       id: 'update-required',
