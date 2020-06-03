@@ -590,5 +590,9 @@ const char kSkipTouchEventFilterFilteringProcessParamValueBrowser[] = "browser";
 const char kSkipTouchEventFilterFilteringProcessParamValueBrowserAndRenderer[] =
     "browser_and_renderer";
 
+// Improves support for WebXR on computers with multiple GPUs.
+const base::Feature kWebXrMultiGpu{"WebXRMultiGpu",
+                                   base::FEATURE_DISABLED_BY_DEFAULT};
+
 }  // namespace features
 }  // namespace blink

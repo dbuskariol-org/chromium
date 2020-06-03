@@ -41958,6 +41958,7 @@ from previous Chrome versions.
   <int value="1694854500" label="disable-save-password-bubble"/>
   <int value="1696139514" label="enable-ble-advertising-in-apps"/>
   <int value="1697189972" label="WebPaymentsSingleAppUiSkip:disabled"/>
+  <int value="1698089268" label="WebXRMultiGpu:disabled"/>
   <int value="1699180023" label="PaymentRequestOptionalTotal:disabled"/>
   <int value="1699182601" label="DockedMagnifier:disabled"/>
   <int value="1700394127" label="OverlayScrollbar:disabled"/>
@@ -42209,6 +42210,7 @@ from previous Chrome versions.
   <int value="1971964569" label="NewEncodeCpuLoadEstimator:disabled"/>
   <int value="1972232935" label="DisplayMoveWindowAccels:enabled"/>
   <int value="1972720114" label="WebPaymentsJustInTimePaymentApp:enabled"/>
+  <int value="1973376634" label="WebXRMultiGpu:enabled"/>
   <int value="1974565950" label="enable-experimental-accessibility-labels"/>
   <int value="1974776131" label="MediaFeeds:disabled"/>
   <int value="1975657253" label="ScalableAppList:disabled"/>

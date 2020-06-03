@@ -245,6 +245,8 @@ BLINK_COMMON_EXPORT
 extern const char
     kSkipTouchEventFilterFilteringProcessParamValueBrowserAndRenderer[];
 
+BLINK_COMMON_EXPORT extern const base::Feature kWebXrMultiGpu;
+
 }  // namespace features
 }  // namespace blink
 

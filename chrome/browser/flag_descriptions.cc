@@ -2283,6 +2283,10 @@ const char kWebXrIncubationsName[] = "WebXR Incubations";
 const char kWebXrIncubationsDescription[] =
     "Enables experimental features for WebXR.";
 
+const char kWebXrMultiGpuName[] = "WebXR Multi GPU Support";
+const char kWebXrMultiGpuDescription[] =
+    "Improves WebXR support for computers with more than one GPU.";
+
 const char kZeroCopyName[] = "Zero-copy rasterizer";
 const char kZeroCopyDescription[] =
     "Raster threads write directly to GPU memory associated with tiles.";
