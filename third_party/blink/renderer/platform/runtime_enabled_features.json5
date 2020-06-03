@@ -1907,7 +1907,12 @@
     },
     {
       name: "WebBluetoothRemoteCharacteristicNewWriteValue",
-      status: "experimental",
+      status: {
+        "Android": "stable",
+        "ChromeOS": "stable",
+        "MacOSX": "stable",
+        "default": "experimental",
+      },
     },
     {
       name: "WebBluetoothScanning",
