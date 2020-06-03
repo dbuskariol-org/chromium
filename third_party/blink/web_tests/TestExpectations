@@ -5910,3 +5910,6 @@ crbug.com/1007228 [ Mac10.13 ] external/wpt/fullscreen/api/element-request-fulls
 
 # Disabled for landing DevTools change
 crbug.com/1011811 http/tests/devtools/persistence/automapping-sourcemap.js [ Pass Failure ]
+
+# Sheriff 2020-06-03
+crbug.com/1088441 [ Mac ] http/tests/loading/bad-server-subframe.html [ Pass Failure ]
