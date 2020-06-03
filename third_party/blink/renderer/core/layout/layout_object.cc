@@ -1375,6 +1375,11 @@ bool LayoutObject::ComputeIsFixedContainer(const ComputedStyle* style) const {
   if (IsA<LayoutView>(this) || IsSVGForeignObject() || IsTextControl())
     return true;
   // https://www.w3.org/TR/css-transforms-1/#containing-block-for-all-descendants
+
+  if (RuntimeEnabledFeatures::TransformInteropEnabled() &&
+      style->TransformStyle3D() == ETransformStyle3D::kPreserve3d)
+    return true;
+
   if (style->HasTransformRelatedProperty()) {
     if (!IsInline() || IsAtomicInlineLevel())
       return true;

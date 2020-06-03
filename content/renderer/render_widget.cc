@@ -77,6 +77,7 @@
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "ppapi/buildflags/buildflags.h"
 #include "skia/ext/platform_canvas.h"
+#include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/common/input/web_input_event_attribution.h"
 #include "third_party/blink/public/common/input/web_mouse_event.h"
 #include "third_party/blink/public/common/page/web_drag_operation.h"
@@ -2886,6 +2887,9 @@ cc::LayerTreeSettings RenderWidget::GenerateLayerTreeSettings(
   settings.allow_de_jelly_effect = viz::DeJellyEnabled();
   // Disable occlusion if de-jelly effect is enabled.
   settings.enable_occlusion &= !settings.allow_de_jelly_effect;
+
+  settings.enable_transform_interop =
+      base::FeatureList::IsEnabled(blink::features::kTransformInterop);
 
   return settings;
 }

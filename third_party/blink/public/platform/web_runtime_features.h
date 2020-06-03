@@ -243,6 +243,8 @@ class WebRuntimeFeatures {
 
   BLINK_PLATFORM_EXPORT static void EnableInstalledApp(bool);
 
+  BLINK_PLATFORM_EXPORT static void EnableTransformInterop(bool);
+
  private:
   WebRuntimeFeatures();
 };
