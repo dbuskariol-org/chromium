@@ -364,22 +364,35 @@ class IdentityManager : public KeyedService,
   void RemoveDiagnosticsObserver(DiagnosticsObserver* observer);
 
   //  **************************************************************************
-  //  NOTE: All public methods methods below are either intended to be used only
-  //  by signin code, or are slated for deletion. Most IdentityManager consumers
-  //  should not need to interact with any methods below this line.
+  //  NOTE: All public methods and structures below are either intended to be
+  //  used only by signin code, or are slated for deletion. Most IdentityManager
+  //  consumers should not need to interact with any methods or structures below
+  //  this line.
   //  **************************************************************************
 
-  IdentityManager(
-      std::unique_ptr<AccountTrackerService> account_tracker_service,
-      std::unique_ptr<ProfileOAuth2TokenService> token_service,
-      std::unique_ptr<GaiaCookieManagerService> gaia_cookie_manager_service,
-      std::unique_ptr<PrimaryAccountManager> primary_account_manager,
-      std::unique_ptr<AccountFetcherService> account_fetcher_service,
-      std::unique_ptr<PrimaryAccountMutator> primary_account_mutator,
-      std::unique_ptr<AccountsMutator> accounts_mutator,
-      std::unique_ptr<AccountsCookieMutator> accounts_cookie_mutator,
-      std::unique_ptr<DiagnosticsProvider> diagnostics_provider,
-      std::unique_ptr<DeviceAccountsSynchronizer> device_accounts_synchronizer);
+  // The struct contains all fields required to initialize the
+  // IdentityManager instance.
+  struct InitParameters {
+    std::unique_ptr<ProfileOAuth2TokenService> token_service;
+    std::unique_ptr<AccountTrackerService> account_tracker_service;
+    std::unique_ptr<AccountFetcherService> account_fetcher_service;
+    std::unique_ptr<GaiaCookieManagerService> gaia_cookie_manager_service;
+    std::unique_ptr<AccountsCookieMutator> accounts_cookie_mutator;
+    std::unique_ptr<PrimaryAccountManager> primary_account_manager;
+    std::unique_ptr<PrimaryAccountMutator> primary_account_mutator;
+    std::unique_ptr<AccountsMutator> accounts_mutator;
+    std::unique_ptr<DeviceAccountsSynchronizer> device_accounts_synchronizer;
+    std::unique_ptr<DiagnosticsProvider> diagnostics_provider;
+
+    InitParameters();
+    InitParameters(InitParameters&&);
+    ~InitParameters();
+
+    InitParameters(const InitParameters&) = delete;
+    InitParameters& operator=(const InitParameters&) = delete;
+  };
+
+  explicit IdentityManager(IdentityManager::InitParameters&& parameters);
   ~IdentityManager() override;
 
   // Performs initialization that is dependent on the network being
@@ -536,6 +549,7 @@ class IdentityManager : public KeyedService,
   // order to drive its behavior.
   // TODO(https://crbug.com/943135): Find a better way to accomplish this.
   friend IdentityManagerTest;
+  FRIEND_TEST_ALL_PREFIXES(IdentityManagerTest, Construct);
   FRIEND_TEST_ALL_PREFIXES(IdentityManagerTest,
                            PrimaryAccountInfoAfterSigninAndAccountRemoval);
   FRIEND_TEST_ALL_PREFIXES(IdentityManagerTest,
