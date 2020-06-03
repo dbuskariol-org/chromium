@@ -5535,6 +5535,7 @@
     <ph name="BEGIN_PARAGRAPH5" />คุณปิดบริการนี้ได้ในการตั้งค่า<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">PIN ไม่ตรงกัน</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> ใช้การตั้งค่าพร็อกซีจากส่วนขยายอยู่</translation>
+<translation id="8097959162767603171">ผู้ดูแลระบบของคุณต้องยอมรับข้อกำหนดในการให้บริการในรายการอุปกรณ์ Chrome ของคอนโซลผู้ดูแลระบบก่อน</translation>
 <translation id="8101987792947961127">ต้องใช้ Powerwash ในการรีบูตครั้งถัดไป</translation>
 <translation id="8102159139658438129">ไปที่<ph name="LINK_BEGIN" />การตั้งค่า<ph name="LINK_END" />เพื่อดูตัวเลือกสำหรับโทรศัพท์ที่เชื่อมต่อ</translation>
 <translation id="8104696615244072556">Powerwash อุปกรณ์ <ph name="IDS_SHORT_PRODUCT_NAME" /> ของคุณและเปลี่ยนกลับไปใช้เวอร์ชันก่อนหน้า</translation>

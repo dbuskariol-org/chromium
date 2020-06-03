@@ -5532,6 +5532,7 @@ Mantén el archivo de clave en un lugar seguro. Debes crear las nuevas versiones
     <ph name="BEGIN_PARAGRAPH5" />Se puede desactivar este servicio en Configuración.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">Los PIN no coinciden</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> usa la configuración de proxy de una extensión</translation>
+<translation id="8097959162767603171">Tu administrador primero debe aceptar las condiciones del servicio de la lista de dispositivos de Chrome que se muestran en la Consola del administrador.</translation>
 <translation id="8101987792947961127">Se requiere Powerwash en el siguiente reinicio</translation>
 <translation id="8102159139658438129">Para ver las opciones para tu teléfono conectado, accede a la <ph name="LINK_BEGIN" />Configuración<ph name="LINK_END" /></translation>
 <translation id="8104696615244072556">Usa la función Powerwash en el dispositivo <ph name="IDS_SHORT_PRODUCT_NAME" /> y regresa a la versión anterior.</translation>

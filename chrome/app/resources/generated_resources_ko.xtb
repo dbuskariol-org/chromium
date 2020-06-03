@@ -909,7 +909,7 @@
 <translation id="2144557304298909478">Linux Android 앱 개발</translation>
 <translation id="2148219725039824548">공유를 마운트하는 중에 오류가 발생했습니다. 네트워크에서 지정된 공유를 찾을 수 없습니다.</translation>
 <translation id="2148756636027685713">포맷을 마쳤습니다.</translation>
-<translation id="2148892889047469596">전송 탭</translation>
+<translation id="2148892889047469596">탭 전송</translation>
 <translation id="2150139952286079145">대상 검색</translation>
 <translation id="2150661552845026580">'<ph name="EXTENSION_NAME" />'을(를) 추가하시겠습니까?</translation>
 <translation id="2151576029659734873">잘못된 탭 색인을 입력했습니다.</translation>
@@ -2645,7 +2645,7 @@
 <translation id="4345587454538109430">설정...</translation>
 <translation id="4345732373643853732">서버에 알려지지 않은 사용자 이름</translation>
 <translation id="4348766275249686434">오류 수집</translation>
-<translation id="4349828822184870497">도움이 됨</translation>
+<translation id="4349828822184870497">유용함</translation>
 <translation id="4350019051035968019">이 기기는 다른 도메인에서 관리하는 것으로 표시되어 있기 때문에 사용자의 계정이 속한 도메인에 등록할 수 없습니다.</translation>
 <translation id="4350782034419308508">Hey Google</translation>
 <translation id="4351060348582610152"><ph name="ORIGIN" />에서 주변 블루투스 기기를 검색하려고 합니다. 다음 기기가 발견되었습니다.</translation>
@@ -5533,6 +5533,7 @@
     <ph name="BEGIN_PARAGRAPH5" />설정에서 이 서비스를 사용 중지할 수 있습니다.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">PIN이 일치하지 않습니다.</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" />이(가) 확장 프로그램의 프록시 설정을 사용 중입니다.</translation>
+<translation id="8097959162767603171">관리자가 먼저 관리 콘솔의 Chrome 기기 목록에서 서비스 약관에 동의해야 합니다.</translation>
 <translation id="8101987792947961127">다음에 재부팅할 때 Powerwash 필요</translation>
 <translation id="8102159139658438129"><ph name="LINK_BEGIN" />설정<ph name="LINK_END" />으로 이동해 연결된 휴대전화의 옵션을 확인하세요.</translation>
 <translation id="8104696615244072556"><ph name="IDS_SHORT_PRODUCT_NAME" /> 기기를 Powerwash한 다음 이전 버전으로 돌아가세요.</translation>

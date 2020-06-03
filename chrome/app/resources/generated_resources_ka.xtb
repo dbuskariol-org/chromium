@@ -5533,6 +5533,7 @@
     <ph name="BEGIN_PARAGRAPH5" />ამ სერვისის გამორთვა შეგიძლიათ პარამეტრებიდან.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">PIN-კოდები ერთმანეთს არ ემთხვევა</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> იყენებს პროქსი-სერვერის პარამეტრებს, რომლებიც განსაზღვრულია გაფართოების მიერ</translation>
+<translation id="8097959162767603171">თქვენი ადმინისტრატორი ჯერ უნდა დაეთანხმოს მომსახურების პირობებს, რომლებიც მოცემულია ადმინისტრატორის კონსოლში, Chrome მოწყობილობების სიაში.</translation>
 <translation id="8101987792947961127">შემდეგი ჩატვირთვის დროს საჭიროა შესრულდეს განახლება</translation>
 <translation id="8102159139658438129">დაკავშირებული ტელეფონის ვარიანტების სანახავად გადადით <ph name="LINK_BEGIN" />პარამეტრებზე<ph name="LINK_END" /></translation>
 <translation id="8104696615244072556">გაასუფთავეთ თქვენი <ph name="IDS_SHORT_PRODUCT_NAME" /> მოწყობილობა და დაბრუნდით წინა ვერსიაზე.</translation>

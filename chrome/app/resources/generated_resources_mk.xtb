@@ -5534,6 +5534,7 @@
     <ph name="BEGIN_PARAGRAPH5" />Услугава може да ја исклучите во „Поставки“.<ph name="END_PARAGRAPH5" /></translation>
 <translation id="80974698889265265">PIN-кодовите не се поклопуваат</translation>
 <translation id="809792523045608178"><ph name="IDS_SHORT_PRODUCT_NAME" /> користи поставки за прокси од екстензија</translation>
+<translation id="8097959162767603171">Вашиот администратор прво мора да ги прифати условите на услугата на листата на уреди на Chrome на конзолата на администраторот.</translation>
 <translation id="8101987792947961127">Потребно е фабричко ресетирање на следното рестартирање</translation>
 <translation id="8102159139658438129">Одете во <ph name="LINK_BEGIN" />„Поставки“<ph name="LINK_END" /> за да видите опции за поврзаниот телефон</translation>
 <translation id="8104696615244072556">Фабрички ресетирајте го вашиот уред со <ph name="IDS_SHORT_PRODUCT_NAME" /> и вратете се на претходната верзија.</translation>
