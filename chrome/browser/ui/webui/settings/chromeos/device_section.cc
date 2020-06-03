@@ -121,13 +121,22 @@ const std::vector<SearchConcept>& GetDeviceSearchConcepts() {
        mojom::SearchResultDefaultRank::kMedium,
        mojom::SearchResultType::kSetting,
        {.setting = mojom::Setting::kKeyboardFunctionKeys}},
-      {IDS_OS_SETTINGS_TAG_POWER_IDLE,
+      {IDS_OS_SETTINGS_TAG_POWER_IDLE_WHILE_CHARGING,
        mojom::kPowerSubpagePath,
        mojom::SearchResultIcon::kPower,
        mojom::SearchResultDefaultRank::kMedium,
        mojom::SearchResultType::kSetting,
-       {.setting = mojom::Setting::kPowerIdleBehavior},
-       {IDS_OS_SETTINGS_TAG_POWER_IDLE_ALT1, SearchConcept::kAltTagEnd}},
+       {.setting = mojom::Setting::kPowerIdleBehaviorWhileCharging},
+       {IDS_OS_SETTINGS_TAG_POWER_IDLE_WHILE_CHARGING_ALT1,
+        SearchConcept::kAltTagEnd}},
+      {IDS_OS_SETTINGS_TAG_POWER_IDLE_WHILE_ON_BATTERY,
+       mojom::kPowerSubpagePath,
+       mojom::SearchResultIcon::kPower,
+       mojom::SearchResultDefaultRank::kMedium,
+       mojom::SearchResultType::kSetting,
+       {.setting = mojom::Setting::kPowerIdleBehaviorWhileOnBattery},
+       {IDS_OS_SETTINGS_TAG_POWER_IDLE_WHILE_ON_BATTERY_ALT1,
+        SearchConcept::kAltTagEnd}},
   });
   return *tags;
 }
@@ -958,7 +967,8 @@ void DeviceSection::RegisterHierarchy(HierarchyGenerator* generator) const {
       mojom::SearchResultIcon::kPower, mojom::SearchResultDefaultRank::kMedium,
       mojom::kPowerSubpagePath);
   static constexpr mojom::Setting kPowerSettings[] = {
-      mojom::Setting::kPowerIdleBehavior,
+      mojom::Setting::kPowerIdleBehaviorWhileCharging,
+      mojom::Setting::kPowerIdleBehaviorWhileOnBattery,
       mojom::Setting::kPowerSource,
       mojom::Setting::kSleepWhenLaptopLidClosed,
   };

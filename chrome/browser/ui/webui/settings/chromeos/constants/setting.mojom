@@ -91,7 +91,7 @@ enum Setting {
   kStylusLatestNoteOnLockScreen = 419,
   kDisplayOrientation = 420,
   kDisplayArrangement = 421,
-  kPowerIdleBehavior = 422,
+  kPowerIdleBehaviorWhileCharging = 422,
   kPowerSource = 423,
   kSleepWhenLaptopLidClosed = 424,
   kDisplayResolution = 425,
@@ -102,6 +102,7 @@ enum Setting {
   kAmbientColors = 430,
   kTouchscreenCalibration = 431,
   kNightLightColorTemperature = 432,
+  kPowerIdleBehaviorWhileOnBattery = 433,
 
   // Personalization section.
   kOpenWallpaper = 500,

@@ -394,11 +394,17 @@
   <message name="IDS_OS_SETTINGS_TAG_POWER" desc="Text for search result item which, when clicked, navigates the user to power settings.">
     Power
   </message>
-  <message name="IDS_OS_SETTINGS_TAG_POWER_IDLE" desc="Text for search result item which, when clicked, navigates the user to power settings, with an option to set the idle (i.e., sleep) behavior. Alternate phrase for: 'Sleep settings'">
-    Idle power
+  <message name="IDS_OS_SETTINGS_TAG_POWER_IDLE_WHILE_CHARGING" desc="Text for search result item which, when clicked, navigates the user to power settings, with an option to set the idle (i.e., sleep) behavior while charging. Alternate phrase for: 'Sleep while charging'">
+    Idle power while charging
   </message>
-  <message name="IDS_OS_SETTINGS_TAG_POWER_IDLE_ALT1" desc="Text for search result item which, when clicked, navigates the user to power settings, with an option to set the idle (i.e., sleep) behavior. Alternate phrase for: 'Idle power settings'">
-    Sleep settings
+  <message name="IDS_OS_SETTINGS_TAG_POWER_IDLE_WHILE_CHARGING_ALT1" desc="Text for search result item which, when clicked, navigates the user to power settings, with an option to set the idle (i.e., sleep) behavior while charging. Alternate phrase for: 'Idle power while charging'">
+    Sleep while charging
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_POWER_IDLE_WHILE_ON_BATTERY" desc="Text for search result item which, when clicked, navigates the user to power settings, with an option to set the idle (i.e., sleep) behavior while on the device is being powered by its battery. Alternate phrase for: 'Sleep while on battery'">
+    Idle power on battery
+  </message>
+  <message name="IDS_OS_SETTINGS_TAG_POWER_IDLE_WHILE_ON_BATTERY_ALT1" desc="Text for search result item which, when clicked, navigates the user to power settings, with an option to set the idle (i.e., sleep) behavior while on the device is being powered by its battery. Alternate phrase for: 'Idle power on battery'">
+    Sleep while on battery
   </message>
   <message name="IDS_OS_SETTINGS_TAG_TOUCHPAD" desc="Text for search result item which, when clicked, navigates the user to touchpad settings. Alternate phrase for: 'Trackpad'">
     Touchpad
