@@ -269,6 +269,10 @@ class GL_EXPORT GLSurface : public base::RefCounted<GLSurface> {
   // success. If failed, it is possible that the context is no longer current.
   virtual bool SetDrawRectangle(const gfx::Rect& rect);
 
+  // This is the amount by which the scissor and viewport rectangles should be
+  // offset.
+  virtual gfx::Vector2d GetDrawOffset() const;
+
   // Tells the surface to rely on implicit sync when swapping buffers.
   virtual void SetRelyOnImplicitSync();
 
@@ -382,6 +386,7 @@ class GL_EXPORT GLSurfaceAdapter : public GLSurface {
   bool SupportsDCLayers() const override;
   bool SupportsProtectedVideo() const override;
   bool SetDrawRectangle(const gfx::Rect& rect) override;
+  gfx::Vector2d GetDrawOffset() const override;
   void SetRelyOnImplicitSync() override;
   void SetForceGlFlushOnSwapBuffers() override;
   bool SupportsSwapTimestamps() const override;
