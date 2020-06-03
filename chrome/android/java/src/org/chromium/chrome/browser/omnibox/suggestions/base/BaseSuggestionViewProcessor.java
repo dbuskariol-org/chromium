@@ -55,15 +55,6 @@ public abstract class BaseSuggestionViewProcessor implements SuggestionProcessor
     }
 
     @Override
-    public void onUrlFocusChange(boolean hasFocus) {}
-
-    @Override
-    public void recordItemPresented(PropertyModel model) {}
-
-    @Override
-    public void recordItemUsed(PropertyModel model) {}
-
-    @Override
     public void onNativeInitialized() {
         if (ChromeFeatureList.isEnabled(ChromeFeatureList.OMNIBOX_COMPACT_SUGGESTIONS)) {
             if (SUGGESTION_DENSITY_SEMICOMPACT.equals(ChromeFeatureList.getFieldTrialParamByFeature(
@@ -78,9 +69,6 @@ public abstract class BaseSuggestionViewProcessor implements SuggestionProcessor
             }
         }
     }
-
-    @Override
-    public void onSuggestionsReceived() {}
 
     @Override
     public int getMinimumViewHeight() {
