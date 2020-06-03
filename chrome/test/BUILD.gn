@@ -79,7 +79,13 @@ group("policy_testserver_pyproto") {
 if (is_android) {
   android_library("test_support_java") {
     testonly = true
-    deps = [ "//chrome/android:chrome_all_java" ]
+    deps = [
+      "//chrome/android:chrome_all_java",
+      "//components/autofill/android:autofill_java",
+      "//components/payments/content/android:java",
+      "//components/payments/mojom:mojom_java",
+      "//third_party/blink/public/mojom:android_mojo_bindings_java",
+    ]
     sources = [ "android/test_support/src/org/chromium/chrome/test_support/PaymentRequestTestBridge.java" ]
   }
 
