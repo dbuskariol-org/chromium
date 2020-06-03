@@ -13,8 +13,8 @@
 test(() => {
   document.getElementById('date').focus();
   eventSender.keyDown("Enter");
-  assert_not_equals(internals.pagePopupWindow, null);
-}, "Test opening date picker with Enter key.");
+  assert_equals(internals.pagePopupWindow, null);
+}, "The date picker should not open with the Enter key.");
 
 </script>
 </body>
