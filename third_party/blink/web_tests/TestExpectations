@@ -1277,8 +1277,14 @@ crbug.com/626703 external/wpt/css/css-text/text-transform/math/text-transform-ma
 crbug.com/626703 external/wpt/css/css-text/text-transform/math/text-transform-math-script-001.tentative.html [ Failure ]
 crbug.com/626703 external/wpt/css/css-text/text-transform/math/text-transform-math-sans-serif-bold-italic-001.tentative.html [ Failure ]
 crbug.com/626703 external/wpt/css/css-text/text-transform/math/text-transform-math-sans-serif-001.tentative.html [ Failure ]
-crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-window.html [ Skip ]
-crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-workers.html [ Skip ]
+crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-window-enumeration.html [ Skip ]
+crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-window-getTables.html [ Skip ]
+crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-window-getTables-large-fonts.html [ Skip ]
+crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-window-blob.html [ Skip ]
+crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-workers-enumeration.html [ Skip ]
+crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-workers-getTables.html [ Skip ]
+crbug.com/1043295 [ Fuchsia ] virtual/font-access/http/tests/font-access/font-access-workers-blob.html [ Skip ]
+crbug.com/1087671 [ Mac ] virtual/font-access/http/tests/font-access/font-access-window-getTables-large-fonts.html [ Skip ]
 
 # ====== Style team owned tests from here ======
 
@@ -5830,10 +5836,6 @@ crbug.com/1073792 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/eve
 
 # the inspector-protocol/media tests only work in the virtual test environment.
 crbug.com/1074129 inspector-protocol/media/media-player.js [ TIMEOUT ]
-
-# Sheriff 2020-04-29
-crbug.com/1076467 [ Mac ] virtual/font-access/http/tests/font-access/font-access-workers.html [ Pass Timeout Crash ]
-crbug.com/1076467 [ Mac ] virtual/font-access/http/tests/font-access/font-access-window.html [ Pass Timeout Crash ]
 
 # Sheriff 2020-04-30
 crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Timeout ]
