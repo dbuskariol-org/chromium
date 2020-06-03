@@ -117,6 +117,10 @@ vars = {
   'checkout_traffic_annotation_tools': 'checkout_configuration != "small"',
   'checkout_instrumented_libraries': 'checkout_linux and checkout_configuration != "small"',
 
+  # By default bot checkouts the WPR archive files only when this
+  # flag is set True.
+  'checkout_wpr_archives': False,
+
   # By default, do not check out WebKit for iOS, as it is not needed unless
   # running against ToT WebKit rather than system WebKit. This can be overridden
   # e.g. with custom_vars.
@@ -4570,6 +4574,16 @@ hooks = [
     'condition': 'checkout_android',
     'action': [ 'python',
                 'src/chrome/test/data/android/manage_render_test_goldens.py',
+                'download',
+    ],
+  },
+  # Pull down WPR Archive files
+  {
+    'name': 'Fetch WPR archive files',
+    'pattern': '.',
+    'condition': 'checkout_android and (checkout_wpr_archives or checkout_src_internal)',
+    'action': [ 'python',
+                'src/chrome/test/data/android/manage_wpr_archives.py',
                 'download',
     ],
   },
