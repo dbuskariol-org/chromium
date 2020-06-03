@@ -122,6 +122,9 @@ TEST_F(IdentityManagerBuilderTest, BuildIdentityManagerInitParameters) {
   EXPECT_EQ(init_params.device_accounts_synchronizer, nullptr);
   EXPECT_NE(init_params.accounts_mutator, nullptr);
 #endif
+#if defined(OS_CHROMEOS)
+  EXPECT_NE(init_params.chromeos_account_manager, nullptr);
+#endif
 
   // Manually shut down AccountFetcherService to avoid DCHECK failure inside its
   // destructor.

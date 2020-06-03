@@ -28,6 +28,12 @@
 #include "base/android/jni_android.h"
 #endif
 
+#if defined(OS_CHROMEOS)
+namespace chromeos {
+class AccountManager;
+}  // namespace chromeos
+#endif
+
 namespace gaia {
 class GaiaSource;
 struct ListedAccount;
@@ -383,6 +389,9 @@ class IdentityManager : public KeyedService,
     std::unique_ptr<AccountsMutator> accounts_mutator;
     std::unique_ptr<DeviceAccountsSynchronizer> device_accounts_synchronizer;
     std::unique_ptr<DiagnosticsProvider> diagnostics_provider;
+#if defined(OS_CHROMEOS)
+    chromeos::AccountManager* chromeos_account_manager = nullptr;
+#endif
 
     InitParameters();
     InitParameters(InitParameters&&);
@@ -594,11 +603,14 @@ class IdentityManager : public KeyedService,
                            ForceRefreshOfExtendedAccountInfo);
 
   // Private getters used for testing only (i.e. see identity_test_utils.h).
-  PrimaryAccountManager* GetPrimaryAccountManager();
-  ProfileOAuth2TokenService* GetTokenService();
-  AccountTrackerService* GetAccountTrackerService();
-  AccountFetcherService* GetAccountFetcherService();
-  GaiaCookieManagerService* GetGaiaCookieManagerService();
+  PrimaryAccountManager* GetPrimaryAccountManager() const;
+  ProfileOAuth2TokenService* GetTokenService() const;
+  AccountTrackerService* GetAccountTrackerService() const;
+  AccountFetcherService* GetAccountFetcherService() const;
+  GaiaCookieManagerService* GetGaiaCookieManagerService() const;
+#if defined(OS_CHROMEOS)
+  chromeos::AccountManager* GetChromeOSAccountManager() const;
+#endif
 
   // Populates and returns an AccountInfo object corresponding to |account_id|,
   // which must be an account with a refresh token.
@@ -692,6 +704,10 @@ class IdentityManager : public KeyedService,
 #if defined(OS_ANDROID)
   // Java-side IdentityManager object.
   base::android::ScopedJavaGlobalRef<jobject> java_identity_manager_;
+#endif
+
+#if defined(OS_CHROMEOS)
+  chromeos::AccountManager* chromeos_account_manager_ = nullptr;
 #endif
 
   DISALLOW_COPY_AND_ASSIGN(IdentityManager);

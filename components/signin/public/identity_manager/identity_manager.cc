@@ -82,6 +82,10 @@ IdentityManager::IdentityManager(IdentityManager::InitParameters&& parameters)
       base::android::AttachCurrentThread(), reinterpret_cast<intptr_t>(this),
       token_service_->GetDelegate()->GetJavaObject());
 #endif
+
+#if defined(OS_CHROMEOS)
+  chromeos_account_manager_ = parameters.chromeos_account_manager;
+#endif
 }
 
 IdentityManager::~IdentityManager() {
@@ -434,25 +438,31 @@ IdentityManager::GetAccountsWithRefreshTokens(JNIEnv* env) const {
 }
 #endif
 
-PrimaryAccountManager* IdentityManager::GetPrimaryAccountManager() {
+PrimaryAccountManager* IdentityManager::GetPrimaryAccountManager() const {
   return primary_account_manager_.get();
 }
 
-ProfileOAuth2TokenService* IdentityManager::GetTokenService() {
+ProfileOAuth2TokenService* IdentityManager::GetTokenService() const {
   return token_service_.get();
 }
 
-AccountTrackerService* IdentityManager::GetAccountTrackerService() {
+AccountTrackerService* IdentityManager::GetAccountTrackerService() const {
   return account_tracker_service_.get();
 }
 
-AccountFetcherService* IdentityManager::GetAccountFetcherService() {
+AccountFetcherService* IdentityManager::GetAccountFetcherService() const {
   return account_fetcher_service_.get();
 }
 
-GaiaCookieManagerService* IdentityManager::GetGaiaCookieManagerService() {
+GaiaCookieManagerService* IdentityManager::GetGaiaCookieManagerService() const {
   return gaia_cookie_manager_service_.get();
 }
+
+#if defined(OS_CHROMEOS)
+chromeos::AccountManager* IdentityManager::GetChromeOSAccountManager() const {
+  return chromeos_account_manager_;
+}
+#endif
 
 AccountInfo IdentityManager::GetAccountInfoForAccountWithRefreshToken(
     const CoreAccountId& account_id) const {

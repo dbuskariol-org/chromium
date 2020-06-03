@@ -11,6 +11,7 @@
 #include "base/bind.h"
 #include "base/command_line.h"
 #include "base/containers/flat_set.h"
+#include "base/files/scoped_temp_dir.h"
 #include "base/run_loop.h"
 #include "base/scoped_observer.h"
 #include "base/stl_util.h"
@@ -55,6 +56,11 @@
 
 #if defined(OS_ANDROID)
 #include "components/signin/internal/identity_manager/child_account_info_fetcher_android.h"
+#endif
+
+#if defined(OS_CHROMEOS)
+#include "chromeos/components/account_manager/account_manager.h"
+#include "chromeos/components/account_manager/account_manager_factory.h"
 #endif
 
 namespace signin {
@@ -313,6 +319,8 @@ class IdentityManagerTest : public testing::Test {
     identity_manager_diagnostics_observer_.reset();
     identity_manager_.reset();
 
+    ASSERT_TRUE(temp_profile_dir_.CreateUniqueTempDir());
+
     auto token_service =
         std::make_unique<CustomFakeProfileOAuth2TokenService>(&pref_service_);
 
@@ -321,7 +329,8 @@ class IdentityManagerTest : public testing::Test {
                                                    &signin_client_);
 
     auto account_tracker_service = std::make_unique<AccountTrackerService>();
-    account_tracker_service->Initialize(&pref_service_, base::FilePath());
+    account_tracker_service->Initialize(&pref_service_,
+                                        temp_profile_dir_.GetPath());
 
     auto account_fetcher_service = std::make_unique<AccountFetcherService>();
     account_fetcher_service->Initialize(
@@ -378,6 +387,11 @@ class IdentityManagerTest : public testing::Test {
         token_service.get(), account_tracker_service.get(),
         primary_account_manager.get(), &pref_service_);
 #endif
+#if defined(OS_CHROMEOS)
+    init_params.chromeos_account_manager =
+        GetAccountManagerFactory()->GetAccountManager(
+            temp_profile_dir_.GetPath().value());
+#endif
 
     init_params.account_fetcher_service = std::move(account_fetcher_service);
     init_params.account_tracker_service = std::move(account_tracker_service);
@@ -427,7 +441,14 @@ class IdentityManagerTest : public testing::Test {
     return &test_url_loader_factory_;
   }
 
+#if defined(OS_CHROMEOS)
+  chromeos::AccountManagerFactory* GetAccountManagerFactory() {
+    return &account_manager_factory_;
+  }
+#endif
+
  private:
+  base::ScopedTempDir temp_profile_dir_;
   base::test::TaskEnvironment task_environment_;
   sync_preferences::TestingPrefServiceSyncable pref_service_;
   network::TestURLLoaderFactory test_url_loader_factory_;
@@ -437,6 +458,9 @@ class IdentityManagerTest : public testing::Test {
   std::unique_ptr<TestIdentityManagerDiagnosticsObserver>
       identity_manager_diagnostics_observer_;
   CoreAccountId primary_account_id_;
+#if defined(OS_CHROMEOS)
+  chromeos::AccountManagerFactory account_manager_factory_;
+#endif
 
   DISALLOW_COPY_AND_ASSIGN(IdentityManagerTest);
 };
@@ -457,6 +481,9 @@ TEST_F(IdentityManagerTest, Construct) {
 #else
   EXPECT_NE(identity_manager()->GetAccountsMutator(), nullptr);
   EXPECT_EQ(identity_manager()->GetDeviceAccountsSynchronizer(), nullptr);
+#endif
+#if defined(OS_CHROMEOS)
+  EXPECT_NE(identity_manager()->GetChromeOSAccountManager(), nullptr);
 #endif
 }
 
