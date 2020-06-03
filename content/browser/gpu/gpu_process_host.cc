@@ -1021,6 +1021,10 @@ void GpuProcessHost::DidUpdateOverlayInfo(
     const gpu::OverlayInfo& overlay_info) {
   GpuDataManagerImpl::GetInstance()->UpdateOverlayInfo(overlay_info);
 }
+
+void GpuProcessHost::DidUpdateHDRStatus(bool hdr_enabled) {
+  GpuDataManagerImpl::GetInstance()->UpdateHDRStatus(hdr_enabled);
+}
 #endif
 
 void GpuProcessHost::BlockDomainFrom3DAPIs(const GURL& url,
