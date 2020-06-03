@@ -2392,6 +2392,26 @@
             ]
         }
     ],
+    "FindInPageBestEffortPriority": [
+        {
+            "platforms": [
+                "android",
+                "android_weblayer",
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled_20200601",
+                    "enable_features": [
+                        "BlinkSchedulerBestEffortPriorityForFindInPage"
+                    ]
+                }
+            ]
+        }
+    ],
     "FlexNG": [
         {
             "platforms": [
