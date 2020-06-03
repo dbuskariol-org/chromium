@@ -71273,6 +71273,7 @@ Called by update_scheduler_enums.py.-->
   <int value="46" label="Portal"/>
   <int value="47" label="SpeechRecognizer"/>
   <int value="48" label="IdleManager"/>
+  <int value="49" label="PaymentManager"/>
 </enum>
 
 <enum name="WebShareMethod">

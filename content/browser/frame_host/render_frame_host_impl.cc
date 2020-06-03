@@ -6983,6 +6983,12 @@ void RenderFrameHostImpl::CreatePaymentManager(
   }
   GetProcess()->CreatePaymentManagerForOrigin(GetLastCommittedOrigin(),
                                               std::move(receiver));
+
+  // Blocklist PaymentManager from the back-forward cache as at the moment we
+  // don't cancel pending payment requests when the RenderFrameHost is stored
+  // in back-forward cache.
+  OnSchedulerTrackedFeatureUsed(
+      blink::scheduler::WebSchedulerTrackedFeature::kPaymentManager);
 }
 
 void RenderFrameHostImpl::CreateWebBluetoothService(
