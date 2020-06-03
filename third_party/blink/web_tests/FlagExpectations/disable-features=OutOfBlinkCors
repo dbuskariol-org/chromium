@@ -92,4 +92,7 @@ crbug.com/688906 http/tests/fetch/window/fetch_upload-base-https-other-https.htm
 crbug.com/688906 http/tests/fetch/window/fetch_upload.html [ Failure ]
 crbug.com/688906 http/tests/fetch/workers/fetch_upload-base-https-other-https.html [ Failure ]
 crbug.com/688906 http/tests/fetch/workers/fetch_upload.html [ Failure ]
-crbug.com/688906 external/wpt/fetch/api/basic/request-upload.any.js [ Failure ]
+crbug.com/688906 external/wpt/fetch/api/basic/request-upload.any.html [ Failure ]
+crbug.com/688906 external/wpt/fetch/api/basic/request-upload.any.worker.html [ Failure ]
+crbug.com/688906 virtual/omt-worker-fetch/external/wpt/fetch/api/basic/request-upload.any.html [ Failure ]
+crbug.com/688906 virtual/omt-worker-fetch/external/wpt/fetch/api/basic/request-upload.any.worker.html [ Failure ]
