@@ -15,7 +15,8 @@ description("Tests that when a watch times out and is cleared from the error cal
 var error;
 
 geolocationMock.setGeolocationPermission(true);
-geolocationMock.setGeolocationTimeoutError(true);
+// The geolocation request will time out if setGeolocationPosition() is never
+// called.
 
 var watchId = navigator.geolocation.watchPosition(function() {
     testFailed('Success callback invoked unexpectedly');

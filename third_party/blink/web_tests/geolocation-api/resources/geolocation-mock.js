@@ -20,17 +20,12 @@ class GeolocationMock {
     this.geoposition_ = null;
 
     /**
-     * While true, position requests will result in a timeout error.
-     */
-    this.shouldTimeout_ = false;
-
-    /**
-     * A pending request for permission awaiting a decision to be set via a
+     * A pending request for the next position update to be generated with a
      * setGeolocationPermission call.
      *
      * @type {?Function}
      */
-    this.pendingPermissionRequest_ = null;
+    this.pendingQueryPosition_ = null;
 
     /**
      * The status to respond to permission requests with. If set to ASK, then
@@ -63,22 +58,26 @@ class GeolocationMock {
 
   /**
    * A mock implementation of GeolocationService.queryNextPosition(). This
-   * returns the position set by a call to setGeolocationPosition() or
-   * setGeolocationPositionUnavailableError().
+   * returns the position set by a previous call to setGeolocationPosition() or
+   * setGeolocationPositionUnavailableError(). If neither has been called yet
+   * this returns a Promise that will be resolved when one of them is.
+   *
+   * This means that navigator.geolocation.getCurrentPosition() and
+   * watchPosition()'s success callbacks will not be called until
+   * setGeolocationPosition() is called. Not calling one of these functions
+   * will trigger a timeout.
    */
-  queryNextPosition() {
-    if (this.shouldTimeout_) {
-      // Return a promise that will never be resolved. Since no geoposition is
-      // returned, the request will eventually time out.
-      return new Promise((resolve, reject) => {});
+  async queryNextPosition() {
+    if (this.geoposition_) {
+      let geoposition = this.geoposition_;
+      this.geoposition_ = null;
+      return {geoposition};
     }
-    if (!this.geoposition_) {
-      this.setGeolocationPositionUnavailableError(
-          'Test error: position not set before call to queryNextPosition()');
-    }
-    let geoposition = this.geoposition_;
-    this.geoposition_ = null;
-    return Promise.resolve({geoposition});
+
+    return new Promise((resolve) => {
+      // This may replace a callback from a previous Geolocation connection.
+      this.pendingQueryNextPosition_ = resolve;
+    });
   }
 
   /**
@@ -111,6 +110,13 @@ class GeolocationMock {
         (new Date().getTime() + epochDeltaInMs)  * 1000;
     this.geoposition_.errorMessage = '';
     this.geoposition_.valid = true;
+
+    if (this.pendingQueryNextPosition_) {
+      let geoposition = this.geoposition_;
+      this.geoposition_ = null;
+      this.pendingQueryNextPosition_({geoposition});
+      this.pendingQueryNextPosition_ = null;
+    }
   }
 
   /**
@@ -125,13 +131,13 @@ class GeolocationMock {
     this.geoposition_.errorMessage = message;
     this.geoposition_.errorCode =
         device.mojom.Geoposition.ErrorCode.POSITION_UNAVAILABLE;
-  }
 
-  /**
-   * Sets whether geolocation requests should cause timeout errors.
-   */
-  setGeolocationTimeoutError(shouldTimeout) {
-    this.shouldTimeout_ = shouldTimeout;
+    if (this.pendingQueryNextPosition_) {
+      let geoposition = this.geoposition_;
+      this.geoposition_ = null;
+      this.pendingQueryNextPosition_({geoposition});
+      this.pendingQueryNextPosition_ = null;
+    }
   }
 
   /**
@@ -155,8 +161,6 @@ class GeolocationMock {
           resolve(this.createGeolocation(request, user_gesture));
         }, 50);
       });
-      setTimeout(() => { this.createGeolocation(request, user_gesture)}, 50);
-      break;
 
      case blink.mojom.PermissionStatus.GRANTED:
       this.geolocationBindingSet_.addBinding(this, request);

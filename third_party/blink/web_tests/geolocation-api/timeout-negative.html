@@ -15,7 +15,8 @@ description("Tests that when timeout is negative (and maximumAge is too), the er
 var error;
 
 geolocationMock.setGeolocationPermission(true);
-geolocationMock.setGeolocationTimeoutError(true);
+// The geolocation request will time out if setGeolocationPosition() is never
+// called.
 
 navigator.geolocation.getCurrentPosition(function(p) {
     testFailed('Success callback invoked unexpectedly');
