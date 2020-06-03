@@ -27422,6 +27422,19 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3295" label="ForceEncodedVideoInsertableStreams"/>
   <int value="3296" label="TransformStyleContainingBlockComputedUsedMismatch"/>
   <int value="3297" label="AdditionalGroupingPropertiesForCompat"/>
+  <int value="3298" label="PopupDoesNotExceedOwnerWindowBounds"/>
+  <int value="3299" label="PopupExceedsOwnerWindowBounds"/>
+  <int value="3300" label="PopupExceedsOwnerWindowBoundsForIframe"/>
+  <int value="3301" label="PopupGestureTapExceedsOwnerWindowBounds"/>
+  <int value="3302" label="PopupMouseDownExceedsOwnerWindowBounds"/>
+  <int value="3303" label="PopupMouseWheelExceedsOwnerWindowBounds"/>
+  <int value="3304" label="V8VarRedeclaredCatchBinding"/>
+  <int value="3305"
+      label="WebBluetoothRemoteCharacteristicWriteValueWithResponse"/>
+  <int value="3306"
+      label="WebBluetoothRemoteCharacteristicWriteValueWithoutResponse"/>
+  <int value="3307" label="FlexGapSpecified"/>
+  <int value="3308" label="FlexGapPositive"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
