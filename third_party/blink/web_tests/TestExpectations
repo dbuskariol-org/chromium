@@ -5906,7 +5906,7 @@ crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvasClearRectPartial.html [
 crbug.com/1088007 virtual/gpu/fast/canvas/OffscreenCanvas-MessageChannel-transfer.html [ Pass Failure ]
 
 # Sheriff 2020-06-03
-crbug.com/1007228 [ Mac10.13 ] external/wpt/fullscreen/api/element-request-fullscreen-and-move-to-iframe-manual.html [ Pass Failure ]
+crbug.com/1007228 [ Mac ] external/wpt/fullscreen/api/element-request-fullscreen-and-move-to-iframe-manual.html [ Pass Failure ]
 
 # Disabled for landing DevTools change
 crbug.com/1011811 http/tests/devtools/persistence/automapping-sourcemap.js [ Pass Failure ]
