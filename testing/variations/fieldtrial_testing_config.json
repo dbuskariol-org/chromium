@@ -4409,7 +4409,7 @@
             ],
             "experiments": [
                 {
-                    "name": "WithEnhancedExperiment_20200519",
+                    "name": "WithEnhancedExperiment_20200603",
                     "params": {
                         "DefaultInIncognito": "true"
                     },
