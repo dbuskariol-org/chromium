@@ -3092,10 +3092,17 @@ void NavigationRequest::UpdateNavigationHandleTimingsOnResponseReceived() {
     navigation_handle_timing_->first_response_start_time =
         response_head_->load_timing.receive_headers_start;
   }
-  if (navigation_handle_timing_->first_loader_callback_time.is_null()) {
+  base::TimeTicks loader_callback_time = base::TimeTicks::Now();
+  if (navigation_handle_timing_->first_loader_callback_time.is_null())
     navigation_handle_timing_->first_loader_callback_time =
-        base::TimeTicks::Now();
-  }
+        loader_callback_time;
+
+  navigation_handle_timing_->final_request_start_time =
+      response_head_->load_timing.send_start;
+  navigation_handle_timing_->final_response_start_time =
+      response_head_->load_timing.receive_headers_start;
+  navigation_handle_timing_->final_loader_callback_time = loader_callback_time;
+
   // |navigation_commit_sent_time| will be updated by
   // UpdateNavigationHandleTimingsOnCommitSent() later.
   DCHECK(navigation_handle_timing_->navigation_commit_sent_time.is_null());
