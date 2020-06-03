@@ -1,7 +1,8 @@
+#!/usr/bin/env python3
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""Python wrapper for running jdeps and parsing its output"""
+"""Command-line tool to run jdeps and process its output into a JSON file."""
 
 import argparse
 import pathlib
@@ -75,9 +76,9 @@ class JavaClassJdepsParser(object):  # pylint: disable=useless-object-inheritanc
             self._graph.add_nested_class_to_key(key_from, nested_to)
 
 
-def run_jdeps(filepath: str):
+def run_jdeps(jdeps_path: str, filepath: str):
     """Runs jdeps on the given filepath and returns the output."""
-    jdeps_res = subprocess.run([JDEPS_PATH, '-R', '-verbose:class', filepath],
+    jdeps_res = subprocess.run([jdeps_path, '-R', '-verbose:class', filepath],
                                capture_output=True,
                                text=True,
                                check=True)
@@ -85,42 +86,47 @@ def run_jdeps(filepath: str):
 
 
 def main():
-    """Parses args, runs jdeps, and creates a graph from the output.
-
-    Currently only works for class-level dependencies.
-    The goal is to have more functions available for interfacing with the
-    constructed graph, but currently we just print its number of nodes/edges.
-    """
+    """Runs jdeps and creates a JSON file from the output."""
     arg_parser = argparse.ArgumentParser(
-        description='Run jdeps and process output')
-    arg_parser.add_argument('filepath', help='Path of the JAR to run jdeps on')
+        description='Runs jdeps (dependency analysis tool) on a given JAR and '
+        'writes the resulting dependency graph into a JSON file.')
+    required_arg_group = arg_parser.add_argument_group('required arguments')
+    required_arg_group.add_argument(
+        '-t',
+        '--target',
+        required=True,
+        help='Path to the JAR file to run jdeps on.')
+    required_arg_group.add_argument(
+        '-o',
+        '--output',
+        required=True,
+        help='Path to the file to write JSON output to. Will be created '
+        'if it does not yet exist and overwrite existing '
+        'content if it does.')
+    arg_parser.add_argument('-j',
+                            '--jdeps-path',
+                            default=JDEPS_PATH,
+                            help='Path to the jdeps executable.')
     arguments = arg_parser.parse_args()
 
-    raw_jdeps_output = run_jdeps(arguments.filepath)
+    print('Running jdeps and parsing output...')
+    raw_jdeps_output = run_jdeps(arguments.jdeps_path, arguments.target)
     jdeps_parser = JavaClassJdepsParser()
     jdeps_parser.parse_raw_jdeps_output(raw_jdeps_output)
 
     class_graph = jdeps_parser.graph
-
-    print(f"Parsed class-level dependency graph, "
-          f"got {class_graph.num_nodes} nodes "
-          f"and {class_graph.num_edges} edges.")
+    print(f'Parsed class-level dependency graph, '
+          f'got {class_graph.num_nodes} nodes '
+          f'and {class_graph.num_edges} edges.')
 
     package_graph = package_dependency.JavaPackageDependencyGraph(class_graph)
+    print(f'Created package-level dependency graph, '
+          f'got {package_graph.num_nodes} nodes '
+          f'and {package_graph.num_edges} edges.')
 
-    print(f"Created package-level dependency graph, "
-          f"got {package_graph.num_nodes} nodes "
-          f"and {package_graph.num_edges} edges.")
-
-    print('Dumping JSON representation to testing file '
-          'dependency_analysis/testfile.txt.')
-
-    testing_filepath = (f'{pathlib.Path(__file__).parent.absolute()}'
-                        '/testfile.txt')
+    print(f'Dumping JSON representation to {arguments.output}.')
     serialization.dump_class_and_package_graphs_to_file(
-        class_graph, package_graph, testing_filepath)
-    print('Recreating graph from the dumped JSON representation.')
-    serialization.load_class_and_package_graphs_from_file(testing_filepath)
+        class_graph, package_graph, arguments.output)
 
 
 if __name__ == '__main__':

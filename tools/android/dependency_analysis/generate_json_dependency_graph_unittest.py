@@ -2,10 +2,10 @@
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""Unit tests for dependency_analysis.process_jdeps."""
+"""Unit tests for dependency_analysis.generate_json_dependency_graph."""
 
 import unittest
-import process_jdeps
+import generate_json_dependency_graph
 
 
 class TestHelperFunctions(unittest.TestCase):
@@ -13,25 +13,26 @@ class TestHelperFunctions(unittest.TestCase):
     def test_class_is_interesting(self):
         """Tests that the helper identifies a valid Chromium class name."""
         self.assertTrue(
-            process_jdeps.class_is_interesting(
+            generate_json_dependency_graph.class_is_interesting(
                 'org.chromium.chrome.browser.Foo'))
 
     def test_class_is_interesting_longer(self):
         """Tests that the helper identifies a valid Chromium class name."""
         self.assertTrue(
-            process_jdeps.class_is_interesting(
+            generate_json_dependency_graph.class_is_interesting(
                 'org.chromium.chrome.browser.foo.Bar'))
 
     def test_class_is_interesting_negative(self):
         """Tests that the helper ignores a non-Chromium class name."""
         self.assertFalse(
-            process_jdeps.class_is_interesting(
+            generate_json_dependency_graph.class_is_interesting(
                 'org.notchromium.chrome.browser.Foo'))
 
     def test_class_is_interesting_not_interesting(self):
         """Tests that the helper ignores a builtin class name."""
         self.assertFalse(
-            process_jdeps.class_is_interesting('java.lang.Object'))
+            generate_json_dependency_graph.class_is_interesting(
+                'java.lang.Object'))
 
 
 class TestJavaClassJdepsParser(unittest.TestCase):
@@ -40,7 +41,7 @@ class TestJavaClassJdepsParser(unittest.TestCase):
     """
     def setUp(self):
         """Sets up a new JavaClassJdepsParser."""
-        self.parser = process_jdeps.JavaClassJdepsParser()
+        self.parser = generate_json_dependency_graph.JavaClassJdepsParser()
 
     def test_parse_line(self):
         """Tests that new nodes + edges are added after a successful parse."""
