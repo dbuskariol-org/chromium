@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/modules/native_file_system/window_native_file_system.h"
+#include "third_party/blink/renderer/modules/native_file_system/global_native_file_system.h"
 
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/receiver_set.h"
@@ -97,7 +97,7 @@ class MockNativeFileSystemManager
   BrowserInterfaceBrokerProxy& broker_;
 };
 
-class WindowNativeFileSystemTest : public PageTestBase {
+class GlobalNativeFileSystemTest : public PageTestBase {
  public:
   void SetUp() override {
     PageTestBase::SetUp();
@@ -116,7 +116,7 @@ class WindowNativeFileSystemTest : public PageTestBase {
   }
 };
 
-TEST_F(WindowNativeFileSystemTest, UserActivationRequiredOtherwiseDenied) {
+TEST_F(GlobalNativeFileSystemTest, UserActivationRequiredOtherwiseDenied) {
   LocalFrame* frame = &GetFrame();
   EXPECT_FALSE(frame->HasStickyUserActivation());
 
@@ -131,7 +131,7 @@ TEST_F(WindowNativeFileSystemTest, UserActivationRequiredOtherwiseDenied) {
   EXPECT_FALSE(frame->HasStickyUserActivation());
 }
 
-TEST_F(WindowNativeFileSystemTest, UserActivationChooseEntriesSuccessful) {
+TEST_F(GlobalNativeFileSystemTest, UserActivationChooseEntriesSuccessful) {
   LocalFrame* frame = &GetFrame();
   EXPECT_FALSE(frame->HasStickyUserActivation());
 
@@ -174,7 +174,7 @@ TEST_F(WindowNativeFileSystemTest, UserActivationChooseEntriesSuccessful) {
   EXPECT_TRUE(frame->HasStickyUserActivation());
 }
 
-TEST_F(WindowNativeFileSystemTest, UserActivationChooseEntriesErrors) {
+TEST_F(GlobalNativeFileSystemTest, UserActivationChooseEntriesErrors) {
   LocalFrame* frame = &GetFrame();
   EXPECT_FALSE(frame->HasStickyUserActivation());
 
