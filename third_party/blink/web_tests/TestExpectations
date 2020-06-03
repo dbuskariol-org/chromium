@@ -5904,3 +5904,4 @@ crbug.com/1011811 http/tests/devtools/persistence/automapping-sourcemap.js [ Pas
 # Sheriff 2020-06-03
 crbug.com/1088441 [ Mac ] http/tests/loading/bad-server-subframe.html [ Pass Failure ]
 crbug.com/1090822 [ Mac10.10 ] virtual/cascade/fast/forms/month/month-appearance-basic.html [ Pass Failure ]
+crbug.com/1083293 [ Linux ] media/video-aspect-ratio.html [ Pass Failure ]
