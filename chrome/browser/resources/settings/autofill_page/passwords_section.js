@@ -153,16 +153,23 @@ Polymer({
     },
 
     /** @private */
-    hasStoredPasswords_: {
+    hasSavedPasswords_: {
       type: Boolean,
-      value: false,
+      computed:
+          'computeHasSavedPasswords_(savedPasswords, savedPasswords.splices)',
+    },
+
+    /** @private */
+    hasPasswordExceptions_: {
+      type: Boolean,
+      computed: 'computeHasPasswordExceptions_(passwordExceptions)',
     },
 
     shouldShowBanner_: {
       type: Boolean,
       value: true,
       computed: 'computeShouldShowBanner_(hasLeakedCredentials_,' +
-          'signedIn_, hasNeverCheckedPasswords_, hasStoredPasswords_)',
+          'signedIn_, hasNeverCheckedPasswords_, hasSavedPasswords_)',
     },
 
     /**
@@ -186,12 +193,6 @@ Polymer({
     hidePasswordsLink_: {
       type: Boolean,
       computed: 'computeHidePasswordsLink_(syncPrefs_, syncStatus_)',
-    },
-
-    /** @private */
-    showExportPasswords_: {
-      type: Boolean,
-      computed: 'hasPasswords_(savedPasswords.splices)',
     },
 
     /** @private */
@@ -464,8 +465,24 @@ Polymer({
    * @return {boolean}
    * @private
    */
+  computeHasSavedPasswords_() {
+    return this.savedPasswords.length > 0;
+  },
+
+  /**
+   * @return {boolean}
+   * @private
+   */
+  computeHasPasswordExceptions_() {
+    return this.passwordExceptions.length > 0;
+  },
+
+  /**
+   * @return {boolean}
+   * @private
+   */
   computeShouldShowBanner_() {
-    return this.signedIn_ && this.hasStoredPasswords_ &&
+    return this.signedIn_ && this.hasSavedPasswords_ &&
         this.hasNeverCheckedPasswords_ && !this.hasLeakedCredentials_;
   },
 
@@ -588,28 +605,11 @@ Polymer({
   },
 
   /**
-   * Returns true if the list exists and is not empty.
-   * @param {Array<Object>} list
-   * @return {boolean}
    * @private
-   */
-  hasSome_(list) {
-    return !!(list && list.length);
-  },
-
-  /** @private */
-  hasPasswords_() {
-    return this.savedPasswords.length > 0;
-  },
-
-  /**
-   * @private
-   * @param {boolean} showExportPasswords
-   * @param {boolean} showImportPasswords
    * @return {boolean}
    */
-  showImportOrExportPasswords_(showExportPasswords, showImportPasswords) {
-    return showExportPasswords || showImportPasswords;
+  showImportOrExportPasswords_() {
+    return this.hasSavedPasswords_ || this.showImportPasswords_;
   },
 
   /**
