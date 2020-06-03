@@ -242,6 +242,52 @@ suite('TabList', () => {
     assertEquals('TABSTRIP-TAB-GROUP', groupedTab.parentElement.tagName);
   });
 
+  test('PlaceTabElementAnimatesTabMoved', async () => {
+    await tabList.animationPromises;
+    let unpinnedTabs = getUnpinnedTabs();
+
+    function testAnimationParams(element, scale) {
+      const animations = element.getAnimations();
+      assertEquals(1, animations.length);
+      assertEquals('running', animations[0].playState);
+      assertEquals(120, animations[0].effect.getTiming().duration);
+      assertEquals('ease-out', animations[0].effect.getTiming().easing);
+
+      const keyframes = animations[0].effect.getKeyframes();
+      const tabSpacingVars =
+          '(var(--tabstrip-tab-width) + var(--tabstrip-tab-spacing))';
+      assertEquals(2, keyframes.length);
+      assertEquals(
+          `translateX(calc(${scale} * ${tabSpacingVars}))`,
+          keyframes[0].transform);
+      assertEquals('translateX(0px)', keyframes[1].transform);
+
+      animations[0].finish();
+    }
+
+    // Move the last tab to the first tab to test right to left animations.
+    const movedTab = unpinnedTabs[unpinnedTabs.length - 1];
+    tabList.placeTabElement(movedTab, 0, false, undefined);
+    testAnimationParams(movedTab, unpinnedTabs.length - 1);
+
+    // All other tabs should animate a space of 1 TabElement to the right.
+    Array.from(unpinnedTabs)
+        .filter(tabElement => tabElement !== movedTab)
+        .forEach(tabElement => testAnimationParams(tabElement, -1));
+
+    // Move the first tab to the last tab to test left to right animations.
+    unpinnedTabs = getUnpinnedTabs();
+    const movedTab2 = unpinnedTabs[0];
+    tabList.placeTabElement(
+        movedTab2, unpinnedTabs.length - 1, false, undefined);
+    testAnimationParams(movedTab2, -1 * (unpinnedTabs.length - 1));
+
+    // All other tabs should animate a space of 1 TabElement to the left.
+    Array.from(unpinnedTabs)
+        .filter(tabElement => tabElement !== movedTab2)
+        .forEach(tabElement => testAnimationParams(tabElement, 1));
+  });
+
   test('PlacesTabGroupElement', () => {
     const tabGroupElement = document.createElement('tabstrip-tab-group');
     tabList.placeTabGroupElement(tabGroupElement, 2);
