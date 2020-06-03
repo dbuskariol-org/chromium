@@ -688,4 +688,10 @@ void WebRuntimeFeatures::EnableTransformInterop(bool enable) {
   RuntimeEnabledFeatures::SetTransformInteropEnabled(enable);
 }
 
+void WebRuntimeFeatures::EnableVideoWakeLockOptimisationHiddenMuted(
+    bool enable) {
+  RuntimeEnabledFeatures::SetVideoWakeLockOptimisationHiddenMutedEnabled(
+      enable);
+}
+
 }  // namespace blink
