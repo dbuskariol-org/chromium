@@ -119,6 +119,11 @@
            file="${root_gen_dir}/chrome/browser/resources/settings/autofill_page/password_list_item.js"
            use_base_dir="false"
            compress="false" type="BINDATA" />
+  <include name="IDR_SETTINGS_AUTOFILL_PAGE_PASSWORDS_LIST_HANDLER_JS"
+           file="${root_gen_dir}/chrome/browser/resources/settings/autofill_page/passwords_list_handler.js"
+           use_base_dir="false"
+           compress="false" type="BINDATA"
+           preprocess="true"/>
   <include name="IDR_SETTINGS_AUTOFILL_PAGE_PASSWORD_MANAGER_PROXY_JS"
            file="autofill_page/password_manager_proxy.js"
            compress="false" type="BINDATA" />
