@@ -780,6 +780,11 @@ scoped_refptr<StaticBitmapImage> WebGLRenderingContextBase::GetImage(
           GetDrawingBuffer()->FilterQuality(), color_params,
           is_origin_top_left_, CanvasResourceProvider::RasterMode::kGPU,
           0u /*shared_image_usage_flags*/);
+  // todo(bug 1035589) Check if this cpu fallback is really needed here
+  if (!resource_provider || !resource_provider->IsValid()) {
+    resource_provider = CanvasResourceProvider::CreateBitmapProvider(
+        size, GetDrawingBuffer()->FilterQuality(), color_params);
+  }
 
   if (!resource_provider || !resource_provider->IsValid())
     return nullptr;
