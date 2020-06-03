@@ -2830,6 +2830,21 @@
             ]
         }
     ],
+    "IOSCrashReportBreadcrumbs": [
+        {
+            "platforms": [
+                "ios"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "LogBreadcrumbs"
+                    ]
+                }
+            ]
+        }
+    ],
     "IOSEmbedderBlockRestoreUrl": [
         {
             "platforms": [
