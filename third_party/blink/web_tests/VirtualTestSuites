@@ -416,12 +416,6 @@
              "--disable-blink-features=RestrictAutomaticLazyImageLoadingToDataSaver"]
   },
   {
-    "prefix" : "lazyload-policy",
-    "bases": ["external/wpt/feature-policy/experimental-features/lazyload"],
-    "args": ["--enable-blink-features=LazyFrameLoading,AutomaticLazyFrameLoading,LazyImageLoading,AutomaticLazyImageLoading",
-             "--disable-blink-features=RestrictAutomaticLazyFrameLoadingToDataSaver,RestrictAutomaticLazyImageLoadingToDataSaver"]
-  },
-  {
     "prefix" : "autoupgrade-optionally-blockable-mixed-content",
     "bases": ["http/tests/mixed-autoupgrade/optionally"],
     "args": ["--enable-features=AutoupgradeMixedContent"]
