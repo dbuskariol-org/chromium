@@ -50,12 +50,14 @@ EmbeddedSharedWorkerStub::EmbeddedSharedWorkerStub(
     mojo::PendingRemote<blink::mojom::SharedWorkerHost> host,
     mojo::PendingReceiver<blink::mojom::SharedWorker> receiver,
     mojo::PendingRemote<blink::mojom::BrowserInterfaceBroker>
-        browser_interface_broker)
+        browser_interface_broker,
+    const std::vector<std::string>& cors_exempt_header_list)
     : receiver_(this, std::move(receiver)),
       host_(std::move(host)),
       url_(info->url),
       renderer_preferences_(renderer_preferences),
-      preference_watcher_receiver_(std::move(preference_watcher_receiver)) {
+      preference_watcher_receiver_(std::move(preference_watcher_receiver)),
+      cors_exempt_header_list_(cors_exempt_header_list) {
   DCHECK(main_script_load_params);
   DCHECK(pending_subresource_loader_factory_bundle);
 
@@ -178,7 +180,8 @@ EmbeddedSharedWorkerStub::CreateWorkerFetchContext() {
           std::move(preference_watcher_receiver_),
           subresource_loader_factory_bundle_->Clone(),
           std::move(fallback_factory),
-          /*pending_subresource_loader_updater*/ mojo::NullReceiver());
+          /*pending_subresource_loader_updater*/ mojo::NullReceiver(),
+          cors_exempt_header_list_);
 
   // TODO(horo): To get the correct first_party_to_cookies for the shared
   // worker, we need to check the all documents bounded by the shared worker.

@@ -78,7 +78,8 @@ class EmbeddedSharedWorkerStub : public blink::WebSharedWorkerClient,
       mojo::PendingRemote<blink::mojom::SharedWorkerHost> host,
       mojo::PendingReceiver<blink::mojom::SharedWorker> receiver,
       mojo::PendingRemote<blink::mojom::BrowserInterfaceBroker>
-          browser_interface_broker);
+          browser_interface_broker,
+      const std::vector<std::string>& cors_exempt_header_list);
   ~EmbeddedSharedWorkerStub() override;
 
   // blink::WebSharedWorkerClient implementation.
@@ -113,6 +114,8 @@ class EmbeddedSharedWorkerStub : public blink::WebSharedWorkerClient,
   mojo::PendingReceiver<blink::mojom::RendererPreferenceWatcher>
       preference_watcher_receiver_;
   std::unique_ptr<blink::WebSharedWorker> impl_;
+
+  std::vector<std::string> cors_exempt_header_list_;
 
   using PendingChannel =
       std::pair<int /* connection_request_id */, blink::MessagePortChannel>;
