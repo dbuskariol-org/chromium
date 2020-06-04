@@ -5959,3 +5959,4 @@ crbug.com/1083293 [ Linux ] media/video-aspect-ratio.html [ Pass Failure ]
 # Sheriff 2020-06-04
 crbug.com/1041973 virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/constraints/form-validation-reportValidity.html [ Pass Failure Timeout ]
 crbug.com/1090087 transforms/2d/transform-2d.html [ Pass Timeout ]
+crbug.com/1057060 fast/scrolling/scrollbars/mouse-autoscrolling-on-scrollbar.html [ Pass Failure Timeout ]
