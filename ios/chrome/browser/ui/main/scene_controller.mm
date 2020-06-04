@@ -18,6 +18,7 @@
 #import "ios/chrome/app/application_delegate/url_opener_params.h"
 #import "ios/chrome/app/application_delegate/user_activity_handler.h"
 #include "ios/chrome/app/application_mode.h"
+#import "ios/chrome/app/blocking_scene_commands.h"
 #import "ios/chrome/app/chrome_overlay_window.h"
 #import "ios/chrome/app/deferred_initialization_runner.h"
 #import "ios/chrome/app/main_controller_guts.h"
@@ -386,12 +387,16 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
 - (void)sceneStateWillHideModalOverlay:(SceneState*)sceneState {
   [self.blockingOverlayViewController.view removeFromSuperview];
+  self.blockingOverlayViewController = nil;
 }
 
 // TODO(crbug.com/1072408): factor out into a new class.
 - (void)displayBlockingOverlay {
   self.blockingOverlayViewController =
       [[BlockingOverlayViewController alloc] init];
+  self.blockingOverlayViewController.blockingSceneCommandHandler =
+      HandlerForProtocol(self.mainController.appState.appCommandDispatcher,
+                         BlockingSceneCommands);
   UIView* overlayView = self.blockingOverlayViewController.view;
   [self.sceneState.window addSubview:overlayView];
   overlayView.translatesAutoresizingMaskIntoConstraints = NO;
