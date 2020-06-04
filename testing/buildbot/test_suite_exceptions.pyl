@@ -1155,6 +1155,14 @@
   'headless_browsertests': {
     'remove_from': [
       'CrWinAsan(dll)', # https://crbug.com/935598
+      'Fuchsia ARM64',  # https://crbug.com/757053
+      'Fuchsia x64', # https://crbug.com/757053
+    ],
+  },
+  'headless_unittests': {
+    'remove_from': [
+      'Fuchsia ARM64',  # https://crbug.com/757053
+      'Fuchsia x64', # https://crbug.com/757053
     ],
   },
   'info_collection_tests': {

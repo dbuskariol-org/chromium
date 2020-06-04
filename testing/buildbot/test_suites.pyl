@@ -1319,6 +1319,12 @@
       'gin_unittests': {},
       'google_apis_unittests': {},
       'gpu_unittests': {},
+      'headless_browsertests': {
+        'args': [
+          '--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.headless_browsertests.filter',
+        ],
+      },
+      'headless_unittests': {},
       'http_service_tests': {},
       'ipc_tests': {},
       'latency_unittests': {},
