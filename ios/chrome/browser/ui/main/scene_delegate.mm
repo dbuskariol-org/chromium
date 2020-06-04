@@ -117,4 +117,12 @@ NSString* const kOriginDetectedKey = @"OriginDetectedKey";
   self.sceneState.URLContextsToOpen = URLContexts;
 }
 
+- (void)windowScene:(UIWindowScene*)windowScene
+    performActionForShortcutItem:(UIApplicationShortcutItem*)shortcutItem
+               completionHandler:(void (^)(BOOL succeeded))completionHandler
+    API_AVAILABLE(ios(13)) {
+  [_sceneController performActionForShortcutItem:shortcutItem
+                               completionHandler:completionHandler];
+}
+
 @end
