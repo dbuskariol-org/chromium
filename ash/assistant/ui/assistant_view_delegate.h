@@ -85,6 +85,9 @@ class COMPONENT_EXPORT(ASSISTANT_UI) AssistantViewDelegate {
   // Returns the cursor_manager.
   virtual ::wm::CursorManager* GetCursorManager() = 0;
 
+  // Returns the given name of the primary user.
+  virtual std::string GetPrimaryUserGivenName() const = 0;
+
   // Returns the root window for the specified |display_id|.
   virtual aura::Window* GetRootWindowForDisplayId(int64_t display_id) = 0;
 

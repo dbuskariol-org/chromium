@@ -27,6 +27,7 @@ class AssistantViewDelegateImpl : public AssistantViewDelegate {
   void DownloadImage(const GURL& url,
                      ImageDownloader::DownloadCallback callback) override;
   ::wm::CursorManager* GetCursorManager() override;
+  std::string GetPrimaryUserGivenName() const override;
   aura::Window* GetRootWindowForDisplayId(int64_t display_id) override;
   aura::Window* GetRootWindowForNewWindows() override;
   bool IsTabletMode() const override;
