@@ -39,3 +39,23 @@ source_set("blocked_content") {
     "//third_party/blink/public/common",
   ]
 }
+
+source_set("unit_tests") {
+  testonly = true
+  sources = [ "safe_browsing_triggered_popup_blocker_unittest.cc" ]
+  deps = [
+    ":blocked_content",
+    "//base",
+    "//base/test:test_support",
+    "//components/content_settings/browser",
+    "//components/content_settings/core/browser",
+    "//components/subresource_filter/content/browser",
+    "//components/subresource_filter/content/browser:test_support",
+    "//components/subresource_filter/core/browser",
+    "//components/sync_preferences:test_support",
+    "//components/user_prefs",
+    "//content/test:test_support",
+    "//net:test_support",
+    "//testing/gtest",
+  ]
+}
