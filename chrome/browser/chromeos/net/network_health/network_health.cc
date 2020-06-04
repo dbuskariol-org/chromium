@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/net/network_health.h"
+#include "chrome/browser/chromeos/net/network_health/network_health.h"
 
+#include <map>
 #include <vector>
 
-#include "chrome/browser/chromeos/net/mojom/network_health.mojom.h"
+#include "chrome/browser/chromeos/net/network_health/public/mojom/network_health.mojom.h"
 #include "chromeos/network/network_event_log.h"
 #include "chromeos/services/network_config/in_process_instance.h"
 #include "chromeos/services/network_config/public/mojom/cros_network_config.mojom.h"
@@ -84,18 +85,18 @@ NetworkHealth::NetworkHealth() {
   RefreshNetworkHealthState();
 }
 
-NetworkHealth::~NetworkHealth() {}
+NetworkHealth::~NetworkHealth() = default;
 
 void NetworkHealth::CreateNetworkHealthState() {
   // If the device information has not been collected, the NetworkHealthState
   // cannot be created.
-  if (device_properties_.size() == 0)
+  if (device_properties_.empty())
     return;
 
   network_health_state_.networks.clear();
 
-  std::unordered_map<network_config::mojom::NetworkType,
-                     network_config::mojom::DeviceStatePropertiesPtr>
+  std::map<network_config::mojom::NetworkType,
+           network_config::mojom::DeviceStatePropertiesPtr>
       device_type_map;
 
   // This function only supports one Network structure per underlying device. If
@@ -123,8 +124,8 @@ void NetworkHealth::CreateNetworkHealthState() {
     // Devices that have an kUnavailable state are not valid.
     if (device_prop.second->device_state ==
         network_config::mojom::DeviceStateType::kUnavailable) {
-      NET_LOG(ERROR) << "Device in unexpected state: "
-                     << device_prop.second->device_state;
+      NET_LOG(ERROR) << "Device in unexpected unavailable state: "
+                     << device_prop.second->type;
       continue;
     }
 
@@ -133,14 +134,19 @@ void NetworkHealth::CreateNetworkHealthState() {
   }
 }
 
-void NetworkHealth::RefreshNetworkHealthState() {
-  RequestNetworkStateList();
-  RequestDeviceStateList();
+void NetworkHealth::BindRemote(
+    mojo::PendingReceiver<mojom::NetworkHealthService> receiver) {
+  receivers_.Add(this, std::move(receiver));
 }
 
 const mojom::NetworkHealthStatePtr NetworkHealth::GetNetworkHealthState() {
   NET_LOG(EVENT) << "Network Health State Requested";
   return network_health_state_.Clone();
+}
+
+void NetworkHealth::RefreshNetworkHealthState() {
+  RequestNetworkStateList();
+  RequestDeviceStateList();
 }
 
 void NetworkHealth::GetNetworkList(GetNetworkListCallback callback) {

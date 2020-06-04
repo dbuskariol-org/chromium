@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/net/network_health.h"
+#include "chrome/browser/chromeos/net/network_health/network_health.h"
 
 #include "base/strings/string_number_conversions.h"
-#include "chrome/browser/chromeos/net/mojom/network_health.mojom.h"
+#include "chrome/browser/chromeos/net/network_health/public/mojom/network_health.mojom.h"
 #include "chromeos/services/network_config/public/cpp/cros_network_config_test_helper.h"
 #include "chromeos/services/network_config/public/mojom/cros_network_config.mojom.h"
 #include "content/public/test/browser_task_environment.h"

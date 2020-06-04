@@ -2,14 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_NET_NETWORK_HEALTH_H_
-#define CHROME_BROWSER_CHROMEOS_NET_NETWORK_HEALTH_H_
+#ifndef CHROME_BROWSER_CHROMEOS_NET_NETWORK_HEALTH_NETWORK_HEALTH_H_
+#define CHROME_BROWSER_CHROMEOS_NET_NETWORK_HEALTH_NETWORK_HEALTH_H_
 
 #include <string>
 #include <vector>
 
-#include "chrome/browser/chromeos/net/mojom/network_health.mojom.h"
+#include "chrome/browser/chromeos/net/network_health/public/mojom/network_health.mojom.h"
 #include "chromeos/services/network_config/public/mojom/cros_network_config.mojom.h"
+#include "mojo/public/cpp/bindings/pending_receiver.h"
+#include "mojo/public/cpp/bindings/receiver_set.h"
 #include "mojo/public/cpp/bindings/remote.h"
 
 namespace chromeos {
@@ -21,6 +23,9 @@ class NetworkHealth : public mojom::NetworkHealthService,
   NetworkHealth();
 
   ~NetworkHealth() override;
+
+  // Function to bind a NetworkHealthService |receiver|.
+  void BindRemote(mojo::PendingReceiver<mojom::NetworkHealthService> receiver);
 
   // Returns the current NetworkHealthState.
   const mojom::NetworkHealthStatePtr GetNetworkHealthState();
@@ -62,6 +67,10 @@ class NetworkHealth : public mojom::NetworkHealthService,
       remote_cros_network_config_;
   mojo::Receiver<network_config::mojom::CrosNetworkConfigObserver>
       cros_network_config_observer_receiver_{this};
+  mojo::Receiver<network_health::mojom::NetworkHealthService>
+      network_health_receiver_{this};
+
+  mojo::ReceiverSet<mojom::NetworkHealthService> receivers_;
 
   mojom::NetworkHealthState network_health_state_;
 
@@ -74,4 +83,4 @@ class NetworkHealth : public mojom::NetworkHealthService,
 }  // namespace network_health
 }  // namespace chromeos
 
-#endif  // CHROME_BROWSER_CHROMEOS_NET_NETWORK_HEALTH_H_
+#endif  // CHROME_BROWSER_CHROMEOS_NET_NETWORK_HEALTH_NETWORK_HEALTH_H_
