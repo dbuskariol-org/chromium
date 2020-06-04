@@ -4131,6 +4131,7 @@
                         "ZeroSuggestVariant:8:*": "RemoteNoUrl"
                     },
                     "enable_features": [
+                        "OmniboxDisableInstantExtendedLimit",
                         "OmniboxHistoryQuickProviderAllowButDoNotScoreMidwordTerms",
                         "OmniboxHistoryQuickProviderAllowMidwordContinuations",
                         "OmniboxOnFocusSuggestions"
