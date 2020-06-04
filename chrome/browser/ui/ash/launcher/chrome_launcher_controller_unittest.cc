@@ -4013,7 +4013,36 @@ TEST_P(ChromeLauncherControllerTest, PersistPinned) {
   EXPECT_EQ(ash::TYPE_PINNED_APP, model_->items()[app_index].type);
 
   launcher_controller_->UnpinAppWithID("1");
-  ASSERT_EQ(initial_size, model_->items().size());
+  EXPECT_EQ(initial_size + 1, model_->items().size());
+
+  tab_strip_model->CloseWebContentsAt(0, 0);
+  EXPECT_EQ(initial_size, model_->items().size());
+}
+
+// Verifies that ShelfID property is updated for browsers that are present when
+// ChromeLauncherController is created.
+TEST_P(ChromeLauncherControllerTest, ExistingBrowserWindowShelfIDSet) {
+  InitLauncherControllerWithBrowser();
+  launcher_controller_->PinAppWithID("1");
+
+  TabStripModel* tab_strip_model = browser()->tab_strip_model();
+  ASSERT_EQ(1, tab_strip_model->count());
+
+  TestLauncherControllerHelper* helper = new TestLauncherControllerHelper;
+  helper->SetAppID(tab_strip_model->GetWebContentsAt(0), "0");
+  SetLauncherControllerHelper(helper);
+
+  RecreateLauncherController();
+  helper = new TestLauncherControllerHelper(profile());
+  helper->SetAppID(tab_strip_model->GetWebContentsAt(0), "1");
+  SetLauncherControllerHelper(helper);
+  launcher_controller_->Init();
+
+  EXPECT_TRUE(launcher_controller_->GetItem(ash::ShelfID("1")));
+  EXPECT_EQ(ash::ShelfID("1"),
+            ash::ShelfID::Deserialize(
+                browser()->window()->GetNativeWindow()->GetProperty(
+                    ash::kShelfIDKey)));
 }
 
 TEST_P(ChromeLauncherControllerTest, MultipleAppIconLoaders) {
