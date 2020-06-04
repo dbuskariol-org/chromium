@@ -1437,8 +1437,12 @@ void RenderWidget::UpdateTextInputStateInternal(bool show_virtual_keyboard,
     text_input_flags_ = new_info.flags;
     // Reset the show/hide state in the InputMethodController.
     if (auto* controller = GetInputMethodController()) {
-      controller->SetVirtualKeyboardVisibilityRequest(
-          ui::mojom::VirtualKeyboardVisibilityRequest::NONE);
+      if (last_vk_visibility_request !=
+          ui::mojom::VirtualKeyboardVisibilityRequest::NONE) {
+        // Reset the visibility state.
+        controller->SetVirtualKeyboardVisibilityRequest(
+            ui::mojom::VirtualKeyboardVisibilityRequest::NONE);
+      }
     }
 
 #if defined(OS_ANDROID)
