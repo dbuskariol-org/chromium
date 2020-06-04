@@ -3515,7 +3515,7 @@
   {
     "name": "password-change-support",
     "owners": [ "selakovic" ],
-    "expiry_milestone": 85
+    "expiry_milestone": 87
   },
   {
     "name": "password-check",
