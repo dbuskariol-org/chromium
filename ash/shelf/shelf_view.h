@@ -253,6 +253,10 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
   // Returns the size of the shelf item ripple ring.
   int GetShelfItemRippleSize() const;
 
+  // If |app_icons_layout_offset_| is outdated, re-layout children to ideal
+  // bounds.
+  void LayoutIfAppIconsOffsetUpdates();
+
   // Return the view model for test purposes.
   const views::ViewModel* view_model_for_test() const {
     return view_model_.get();
@@ -260,10 +264,6 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
 
   void set_default_last_focusable_child(bool default_last_focusable_child) {
     default_last_focusable_child_ = default_last_focusable_child;
-  }
-
-  void set_app_icons_layout_offset(int app_icons_layout_offset) {
-    app_icons_layout_offset_ = app_icons_layout_offset;
   }
 
   ShelfAppButton* drag_view() { return drag_view_; }
@@ -499,6 +499,8 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
 
   // Different from GetTitleForView, |view| here must be a child view.
   base::string16 GetTitleForChildView(const views::View* view) const;
+
+  int CalculateAppIconsLayoutOffset() const;
 
   // The model; owned by Launcher.
   ShelfModel* model_;

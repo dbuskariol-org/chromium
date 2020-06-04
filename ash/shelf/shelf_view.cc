@@ -472,6 +472,11 @@ int ShelfView::GetShelfItemRippleSize() const {
          2 * ShelfConfig::Get()->scrollable_shelf_ripple_padding();
 }
 
+void ShelfView::LayoutIfAppIconsOffsetUpdates() {
+  if (app_icons_layout_offset_ != CalculateAppIconsLayoutOffset())
+    LayoutToIdealBounds();
+}
+
 bool ShelfView::ShouldHideTooltip(const gfx::Point& cursor_location) const {
   // There are thin gaps between launcher buttons but the tooltip shouldn't hide
   // in the gaps, but the tooltip should hide if the mouse moved totally outside
@@ -943,6 +948,7 @@ void ShelfView::CalculateIdealBounds() {
   separator_->SetVisible(separator_index != -1 &&
                          separator_index < last_visible_index());
 
+  app_icons_layout_offset_ = CalculateAppIconsLayoutOffset();
   int x = shelf()->PrimaryAxisValue(app_icons_layout_offset_, 0);
   int y = shelf()->PrimaryAxisValue(0, app_icons_layout_offset_);
 
@@ -2203,6 +2209,23 @@ void ShelfView::UpdateVisibleIndices() {
 
 void ShelfView::DestroyScopedDisplay() {
   scoped_display_for_new_windows_.reset();
+}
+
+int ShelfView::CalculateAppIconsLayoutOffset() const {
+  const ScrollableShelfView* scrollable_shelf_view =
+      shelf_->hotseat_widget()->scrollable_shelf_view();
+  const gfx::Insets& extra_padding_insets =
+      scrollable_shelf_view->extra_padding_insets();
+
+  // Paddings are within the shelf view. It makes sure that |shelf_view_|'s
+  // bounds are not changed by adding/removing the shelf icon under the same
+  // layout strategy.
+  const int horizontal_inset = scrollable_shelf_view->ShouldAdaptToRTL()
+                                   ? extra_padding_insets.right()
+                                   : extra_padding_insets.left();
+
+  return shelf_->IsHorizontalAlignment() ? horizontal_inset
+                                         : extra_padding_insets.top();
 }
 
 }  // namespace ash

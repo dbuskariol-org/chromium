@@ -2096,17 +2096,6 @@ void ScrollableShelfView::UpdateAvailableSpace() {
     GetShelf()->hotseat_widget()->SetTranslucentBackground(
         GetHotseatBackgroundBounds());
   }
-
-  // Paddings are within the shelf view. It makes sure that |shelf_view_|'s
-  // bounds are not changed by adding/removing the shelf icon under the same
-  // layout strategy.
-  const int horizontal_inset = ShouldAdaptToRTL()
-                                   ? extra_padding_insets_.right()
-                                   : extra_padding_insets_.left();
-
-  shelf_view_->set_app_icons_layout_offset(GetShelf()->IsHorizontalAlignment()
-                                               ? horizontal_inset
-                                               : extra_padding_insets_.top());
 }
 
 gfx::Rect ScrollableShelfView::CalculateVisibleSpace(
