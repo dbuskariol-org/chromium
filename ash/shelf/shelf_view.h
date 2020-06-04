@@ -233,8 +233,7 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
   // Returns the ShelfAppButton associated with |id|.
   ShelfAppButton* GetShelfAppButton(const ShelfID& id);
 
-  // Updates |first_visible_index_| and |last_visible_index_| when the
-  // scrollable shelf is enabled.
+  // Updates |visible_views_indices_| when the scrollable shelf is enabled.
   void UpdateVisibleIndices();
 
   // If there is animation associated with |view| in |bounds_animator_|,
@@ -268,11 +267,10 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
 
   ShelfAppButton* drag_view() { return drag_view_; }
 
-  int first_visible_index() const { return first_visible_index_; }
-  int last_visible_index() const { return last_visible_index_; }
-  int number_of_visible_apps() const {
-    return std::max(0, last_visible_index_ + 1);
+  const std::vector<int>& visible_views_indices() const {
+    return visible_views_indices_;
   }
+  int number_of_visible_apps() const { return visible_views_indices_.size(); }
   ShelfWidget* shelf_widget() const { return shelf_->shelf_widget(); }
   views::ViewModel* view_model() { return view_model_.get(); }
   const views::ViewModel* view_model() const { return view_model_.get(); }
@@ -280,7 +278,8 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
   ShelfID drag_and_drop_shelf_id() const { return drag_and_drop_shelf_id_; }
 
   views::View* first_visible_button_for_testing() {
-    return view_model_->view_at(first_visible_index());
+    DCHECK(!visible_views_indices_.empty());
+    return view_model_->view_at(visible_views_indices_[0]);
   }
 
   ShelfMenuModelAdapter* shelf_menu_model_adapter_for_testing() {
@@ -512,16 +511,8 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
   // item in |model_|.
   std::unique_ptr<views::ViewModel> view_model_;
 
-  // Index of the first visible app item. This is either:
-  // * -1 if there are no apps.
-  // * 0 if there is at least one app.
-  // > 0 when this shelf view is the overflow shelf view and only shows a
-  //   subset of items.
-  int first_visible_index_ = -1;
-
-  // Last index of an app launcher button that is visible, or -1 if there
-  // are no apps.
-  int last_visible_index_ = -1;
+  // The indices of the views in |view_model_| that are visible.
+  std::vector<int> visible_views_indices_;
 
   std::unique_ptr<views::BoundsAnimator> bounds_animator_;
 
