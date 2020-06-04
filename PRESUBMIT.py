@@ -5200,8 +5200,9 @@ def _CheckTranslationExpectations(input_api, output_api,
 
 def _CheckStableMojomChanges(input_api, output_api):
   """Changes to [Stable] mojom types must preserve backward-compatibility."""
-  changed_mojoms = [f for f in input_api.AffectedSourceFiles(None)
-                    if f.LocalPath().endswith('.mojom')]
+  changed_mojoms = input_api.AffectedFiles(
+      include_deletes=True,
+      file_filter=lambda f: f.LocalPath().endswith(('.mojom')))
   delta = []
   for mojom in changed_mojoms:
     old_contents = ''.join(mojom.OldContents()) or None
