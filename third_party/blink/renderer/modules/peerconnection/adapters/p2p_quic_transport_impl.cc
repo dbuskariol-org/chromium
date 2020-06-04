@@ -610,7 +610,7 @@ void P2PQuicTransportImpl::OnConnectionClosed(
 }
 
 bool P2PQuicTransportImpl::ShouldKeepConnectionAlive() const {
-  return GetNumOpenDynamicStreams() > 0;
+  return GetNumActiveStreams() > 0;
 }
 
 bool P2PQuicTransportImpl::IsClosed() {
