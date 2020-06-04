@@ -27618,6 +27618,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3309" label="PluginInstanceAccessSuccessful"/>
   <int value="3310" label="StorageAccessAPI_HasStorageAccess_Method"/>
   <int value="3311" label="StorageAccessAPI_requestStorageAccess_Method"/>
+  <int value="3312" label="WebBluetoothWatchAdvertisements"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">

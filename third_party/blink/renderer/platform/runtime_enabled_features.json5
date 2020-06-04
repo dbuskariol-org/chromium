@@ -1938,6 +1938,10 @@
       status: "experimental",
     },
     {
+      name: "WebBluetoothWatchAdvertisements",
+      status: "experimental",
+    },
+    {
       name: "WebCodecs",
       status: "test",
     },
