@@ -67,6 +67,14 @@ interface DriveFs {
   // encoded proto message.
   SendNativeMessageRequest(string request) => (
       FileError error, string response);
+
+  // Sets the arguments to be parsed by DriveFS on startup. Should only be
+  // called in developer mode.
+  SetStartupArguments(string arguments) => (bool success);
+
+  // Gets the currently set arguments parsed by DriveFS on startup. Should only
+  // be called in developer mode.
+  GetStartupArguments() => (string arguments);
 };
 
 // Implemented by Chrome, used from DriveFS.

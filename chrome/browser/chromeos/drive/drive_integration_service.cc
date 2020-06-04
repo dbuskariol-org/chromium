@@ -1058,6 +1058,25 @@ void DriveIntegrationService::RestartDrive() {
   MaybeRemountFileSystem(base::TimeDelta(), false);
 }
 
+void DriveIntegrationService::SetStartupArguments(
+    std::string arguments,
+    base::OnceCallback<void(bool)> callback) {
+  if (!GetDriveFsInterface()) {
+    std::move(callback).Run(false);
+    return;
+  }
+  GetDriveFsInterface()->SetStartupArguments(arguments, std::move(callback));
+}
+
+void DriveIntegrationService::GetStartupArguments(
+    base::OnceCallback<void(const std::string&)> callback) {
+  if (!GetDriveFsInterface()) {
+    std::move(callback).Run("");
+    return;
+  }
+  GetDriveFsInterface()->GetStartupArguments(std::move(callback));
+}
+
 //===================== DriveIntegrationServiceFactory =======================
 
 DriveIntegrationServiceFactory::FactoryCallback*
