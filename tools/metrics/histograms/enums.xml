@@ -38872,6 +38872,8 @@ from previous Chrome versions.
   <int value="-1808576075" label="SystemTrayUnified:enabled"/>
   <int value="-1808477331" label="MidiManagerCros:disabled"/>
   <int value="-1807797669" label="google-doodle-url"/>
+  <int value="-1806739839"
+      label="UseLookalikesForNavigationSuggestions:disabled"/>
   <int value="-1804485171" label="disable-fullscreen-tab-detaching"/>
   <int value="-1802502753" label="enable-manual-password-generation:enabled"/>
   <int value="-1799801575" label="CookieDeprecationMessages:enabled"/>
@@ -39390,6 +39392,8 @@ from previous Chrome versions.
   <int value="-1232629319" label="ResamplingScrollEvents:disabled"/>
   <int value="-1231507397" label="NtpZeroSuggest:enabled"/>
   <int value="-1230610048" label="SyncWifiConfigurations:disabled"/>
+  <int value="-1228546373"
+      label="UseLookalikesForNavigationSuggestions:enabled"/>
   <int value="-1228035246" label="PasswordEditingAndroid:enabled"/>
   <int value="-1227660915" label="WebContentsOcclusion:disabled"/>
   <int value="-1225772151" label="OfflineHome:disabled"/>

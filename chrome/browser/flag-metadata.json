@@ -4342,6 +4342,11 @@
     "expiry_milestone": 89
   },
   {
+    "name": "use-lookalikes-for-navigation-suggestions",
+    "owners": ["jdeblasio", "meacer"],
+    "expiry_milestone": 86
+  },
+  {
     "name": "use_messages_staging_url",
     "owners": [ "azeemarshad", "khorimoto", "jonmann" ],
     // This flag is required for QA and dogfood testing.

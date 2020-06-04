@@ -100,6 +100,9 @@ extern const char kAudioWorkletRealtimeThreadDescription[];
 extern const char kUpdatedCellularActivationUiName[];
 extern const char kUpdatedCellularActivationUiDescription[];
 
+extern const char kUseLookalikesForNavigationSuggestionsName[];
+extern const char kUseLookalikesForNavigationSuggestionsDescription[];
+
 extern const char kUseMessagesStagingUrlName[];
 extern const char kUseMessagesStagingUrlDescription[];
 

@@ -132,6 +132,12 @@ const char kUpdatedCellularActivationUiName[] =
 const char kUpdatedCellularActivationUiDescription[] =
     "Enables the updated cellular activation UI.";
 
+const char kUseLookalikesForNavigationSuggestionsName[] =
+    "Use lookalike URL suggestions for navigation suggestions";
+const char kUseLookalikesForNavigationSuggestionsDescription[] =
+    "Use lookalike URL suggestions to suggest navigations to users who "
+    "face domain not found error.";
+
 const char kUseMessagesStagingUrlName[] = "Use Messages staging URL";
 const char kUseMessagesStagingUrlDescription[] =
     "Use the staging server as part of the \"Messages\" feature under "
