@@ -446,6 +446,8 @@ source_set("chromeos") {
     "app_mode/kiosk_app_manager_base.cc",
     "app_mode/kiosk_app_manager_base.h",
     "app_mode/kiosk_app_manager_observer.h",
+    "app_mode/kiosk_app_types.cc",
+    "app_mode/kiosk_app_types.h",
     "app_mode/kiosk_app_update_install_gate.cc",
     "app_mode/kiosk_app_update_install_gate.h",
     "app_mode/kiosk_app_update_service.cc",
