@@ -2242,7 +2242,7 @@
   {
     "name": "enable-tls13-early-data",
     "owners": [ "svaldez" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 90
   },
   {
     "name": "enable-touch-drag-drop",
