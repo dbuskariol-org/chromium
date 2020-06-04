@@ -5437,7 +5437,6 @@ crbug.com/1034492 http/tests/devtools/unit/filtered-list-widget-providers.js [ P
 # Sheriff 2019-12-17
 crbug.com/1034789 [ Mac ] http/tests/security/frameNavigation/xss-ALLOWED-parent-navigation-change-async.html [ Pass Timeout ]
 crbug.com/1034789 virtual/threaded/fast/scroll-snap/snap-to-target-on-layout-change.html [ Pass Timeout ]
-crbug.com/1034789 [ Mac10.13 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
 
 # Sheriff 2019-12-23
 crbug.com/1036626 http/tests/devtools/tracing/tracing-record-input-events.js [ Pass Failure ]
@@ -5788,7 +5787,7 @@ crbug.com/1059262 http/tests/worklet/webexposed/global-interface-listing-paint-w
 crbug.com/1058244 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/scrollbars/scrollbar-rtl-manipulation.html [ Pass Failure ]
 
 # Sheriff 2020-03-08
-crbug.com/1059645 [ Mac10.14 ] external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
+crbug.com/1059645 external/wpt/pointerevents/pointerevent_coalesced_events_attributes.html [ Pass Failure ]
 
 # Failing on Fuchsia due to dependency on FuchsiaMediaResourceProvider, which is not implemented in content_shell.
 crbug.com/1061226 [ Fuchsia ] fast/mediastream/MediaStream-onactive-oninactive.html [ Crash ]
