@@ -1122,32 +1122,6 @@ IN_PROC_BROWSER_TEST_F(SSLUITest, TestBrokenHTTPSWithActiveInsecureContent) {
       tab, net::CERT_STATUS_DATE_INVALID, AuthState::RAN_INSECURE_CONTENT);
 }
 
-// Tests that when a subframe commits a main resource with a certificate error,
-// the navigation entry is marked as insecure.
-IN_PROC_BROWSER_TEST_F(SSLUITestIgnoreCertErrors, SubframeHasCertError) {
-  ASSERT_TRUE(https_server_mismatched_.Start());
-  GURL main_frame_url =
-      https_server_mismatched_.GetURL("a.test", "/title1.html");
-  EXPECT_TRUE(ui_test_utils::NavigateToURL(browser(), main_frame_url));
-  WebContents* tab = browser()->tab_strip_model()->GetActiveWebContents();
-  ASSERT_TRUE(tab);
-  EXPECT_FALSE(
-      tab->GetController().GetLastCommittedEntry()->GetSSL().content_status &
-      content::SSLStatus::RAN_CONTENT_WITH_CERT_ERRORS);
-
-  GURL subframe_url = https_server_mismatched_.GetURL("b.test", "/title1.html");
-  content::TestNavigationObserver iframe_observer(tab);
-  EXPECT_TRUE(content::ExecJs(
-      tab, content::JsReplace("var i = document.createElement('iframe');"
-                              "i.src = $1;"
-                              "document.body.appendChild(i);",
-                              subframe_url.spec())));
-  iframe_observer.Wait();
-  EXPECT_TRUE(
-      tab->GetController().GetLastCommittedEntry()->GetSSL().content_status &
-      content::SSLStatus::RAN_CONTENT_WITH_CERT_ERRORS);
-}
-
 namespace {
 
 // A WebContentsObserver that allows the user to wait for a same-document
