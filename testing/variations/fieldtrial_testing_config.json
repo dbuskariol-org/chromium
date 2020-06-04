@@ -7490,8 +7490,7 @@
                 {
                     "name": "Enabled",
                     "enable_features": [
-                        "WinUseBrowserSpellChecker",
-                        "WinUseHybridSpellChecker"
+                        "WinUseBrowserSpellChecker"
                     ]
                 }
             ]
