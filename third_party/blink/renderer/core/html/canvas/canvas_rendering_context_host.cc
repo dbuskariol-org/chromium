@@ -163,8 +163,7 @@ void CanvasRenderingContextHost::CreateCanvasResourceProvider3D(
   // provider.
   if (!provider) {
     provider = CanvasResourceProvider::CreateSharedBitmapProvider(
-        Size(), SharedGpuContext::ContextProviderWrapper(), FilterQuality(),
-        ColorParams(), std::move(dispatcher));
+        Size(), FilterQuality(), ColorParams(), std::move(dispatcher));
   }
   if (!provider) {
     provider = CanvasResourceProvider::CreateBitmapProvider(
@@ -247,8 +246,7 @@ void CanvasRenderingContextHost::CreateCanvasResourceProvider2D(
   // provider.
   if (!provider) {
     provider = CanvasResourceProvider::CreateSharedBitmapProvider(
-        Size(), SharedGpuContext::ContextProviderWrapper(), FilterQuality(),
-        ColorParams(), std::move(dispatcher));
+        Size(), FilterQuality(), ColorParams(), std::move(dispatcher));
   }
   if (!provider) {
     provider = CanvasResourceProvider::CreateBitmapProvider(
