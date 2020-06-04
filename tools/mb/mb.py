@@ -1532,6 +1532,7 @@ class MetaBuildWrapper(object):
       ]
     elif use_xvfb and test_type == 'windowed_test_launcher':
       extra_files.append('../../testing/xvfb.py')
+      extra_files.append('xwmstartupcheck')
       cmdline += [
           '../../testing/xvfb.py',
           './' + str(executable) + executable_suffix,
@@ -1545,6 +1546,8 @@ class MetaBuildWrapper(object):
           '--msan=%d' % msan,
           '--tsan=%d' % tsan,
           '--cfi-diag=%d' % cfi_diag,
+          # Bringing up openbox is racy. See xvfb.py
+          '--wait-for-openbox',
       ]
     elif test_type in ('windowed_test_launcher', 'console_test_launcher'):
       cmdline += [
