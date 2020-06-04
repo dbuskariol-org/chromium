@@ -3162,8 +3162,9 @@ void RenderFrameHostImpl::OnContextMenu(
   // Validate the URLs in |params|.  If the renderer can't request the URLs
   // directly, don't show them in the context menu.
   ContextMenuParams validated_params(params);
-  validated_params.frame_url = GetLastCommittedURL();
   validated_params.page_url = GetMainFrame()->GetLastCommittedURL();
+  if (GetParent())  // Only populate |frame_url| for subframes.
+    validated_params.frame_url = GetLastCommittedURL();
 
   // We don't validate |unfiltered_link_url| so that this field can be used
   // when users want to copy the original link URL.
