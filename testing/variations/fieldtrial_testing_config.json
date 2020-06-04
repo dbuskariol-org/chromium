@@ -4965,8 +4965,9 @@
                 {
                     "name": "Enabled",
                     "params": {
-                        "connection_options": "5RTO,ACKD",
-                        "enable_quic": "true"
+                        "connection_options": "5RTO",
+                        "enable_quic": "true",
+                        "quic_version": "h3-Q050"
                     },
                     "enable_features": [
                         "QuicDoesNotUseFeatures"
