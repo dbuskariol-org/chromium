@@ -57,3 +57,6 @@
 
 # crbug.com/1077316
 -org.chromium.chrome.browser.ntp.cards.promo.HomepagePromoTest.testChangeHomepageAndUndo_*
+
+# crbug.com/1090942
+-org.chromium.chrome.browser.autofill.settings.AutofillPaymentMethodsFragmentTest.*
