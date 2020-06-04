@@ -1273,6 +1273,7 @@ static_library("browser") {
     "policy/messaging_layer/util/status_macros.h",
     "policy/messaging_layer/util/statusor.cc",
     "policy/messaging_layer/util/statusor.h",
+    "policy/messaging_layer/util/task_runner_context.h",
     "policy/network_prediction_policy_handler.cc",
     "policy/network_prediction_policy_handler.h",
     "policy/profile_policy_connector.cc",
