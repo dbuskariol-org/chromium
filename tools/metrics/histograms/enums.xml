@@ -23241,6 +23241,7 @@ Called by update_extension_histograms.py.-->
   <int value="2" label="MISS"/>
   <int value="3" label="OUTDATED"/>
   <int value="4" label="HIT"/>
+  <int value="5" label="HIT_ON_MANIFEST_FETCH_FAILURE"/>
 </enum>
 
 <enum name="ExtensionInstallationDownloadingStage">
