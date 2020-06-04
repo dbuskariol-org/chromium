@@ -1386,7 +1386,7 @@ bool WebLocalFrameImpl::SetEditableSelectionOffsets(int start, int end) {
 bool WebLocalFrameImpl::SetCompositionFromExistingText(
     int composition_start,
     int composition_end,
-    const WebVector<WebImeTextSpan>& ime_text_spans) {
+    const WebVector<ui::ImeTextSpan>& ime_text_spans) {
   TRACE_EVENT0("blink", "WebLocalFrameImpl::setCompositionFromExistingText");
   if (EditContext* edit_context =
           GetFrame()->GetInputMethodController().GetActiveEditContext()) {

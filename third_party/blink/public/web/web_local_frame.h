@@ -38,13 +38,16 @@
 #include "third_party/blink/public/web/web_document_loader.h"
 #include "third_party/blink/public/web/web_frame.h"
 #include "third_party/blink/public/web/web_frame_load_type.h"
-#include "third_party/blink/public/web/web_ime_text_span.h"
 #include "third_party/blink/public/web/web_navigation_params.h"
 #include "v8/include/v8.h"
 
 namespace gfx {
 class Point;
 }  // namespace gfx
+
+namespace ui {
+struct ImeTextSpan;
+}  // namespace ui
 
 namespace blink {
 
@@ -481,7 +484,7 @@ class WebLocalFrame : public WebFrame {
   virtual bool SetCompositionFromExistingText(
       int composition_start,
       int composition_end,
-      const WebVector<WebImeTextSpan>& ime_text_spans) = 0;
+      const WebVector<ui::ImeTextSpan>& ime_text_spans) = 0;
   virtual void ExtendSelectionAndDelete(int before, int after) = 0;
 
   // Moves the selection extent point. This function does not allow the

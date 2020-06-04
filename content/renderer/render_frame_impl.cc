@@ -2100,7 +2100,7 @@ void RenderFrameImpl::PluginCrashed(const base::FilePath& plugin_path,
 
 void RenderFrameImpl::SimulateImeSetComposition(
     const base::string16& text,
-    const std::vector<blink::WebImeTextSpan>& ime_text_spans,
+    const std::vector<ui::ImeTextSpan>& ime_text_spans,
     int selection_start,
     int selection_end) {
   GetMainFrameRenderWidget()->OnImeSetComposition(
@@ -2110,7 +2110,7 @@ void RenderFrameImpl::SimulateImeSetComposition(
 
 void RenderFrameImpl::SimulateImeCommitText(
     const base::string16& text,
-    const std::vector<blink::WebImeTextSpan>& ime_text_spans,
+    const std::vector<ui::ImeTextSpan>& ime_text_spans,
     const gfx::Range& replacement_range) {
   GetMainFrameRenderWidget()->OnImeCommitText(text, ime_text_spans,
                                               replacement_range, 0);
@@ -2118,7 +2118,7 @@ void RenderFrameImpl::SimulateImeCommitText(
 
 void RenderFrameImpl::OnImeSetComposition(
     const base::string16& text,
-    const std::vector<blink::WebImeTextSpan>& ime_text_spans,
+    const std::vector<ui::ImeTextSpan>& ime_text_spans,
     int selection_start,
     int selection_end) {
   // When a PPAPI plugin has focus, we bypass WebKit.

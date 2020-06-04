@@ -220,7 +220,7 @@ class CORE_EXPORT WebLocalFrameImpl final
   bool SetCompositionFromExistingText(
       int composition_start,
       int composition_end,
-      const WebVector<WebImeTextSpan>& ime_text_spans) override;
+      const WebVector<ui::ImeTextSpan>& ime_text_spans) override;
   void ExtendSelectionAndDelete(int before, int after) override;
   void MoveRangeSelectionExtent(const gfx::Point&) override;
   void ReplaceSelection(const WebString&) override;
