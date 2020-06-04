@@ -2210,7 +2210,8 @@ void WebLocalFrameImpl::DidDropNavigation() {
 void WebLocalFrameImpl::DownloadURL(
     const WebURLRequest& request,
     network::mojom::blink::RedirectMode cross_origin_redirect_behavior,
-    mojo::ScopedMessagePipeHandle blob_url_token) {
+    CrossVariantMojoRemote<mojom::blink::BlobURLTokenInterfaceBase>
+        blob_url_token) {
   GetFrame()->DownloadURL(request.ToResourceRequest(),
                           cross_origin_redirect_behavior,
                           std::move(blob_url_token));

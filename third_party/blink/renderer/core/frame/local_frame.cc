@@ -46,6 +46,7 @@
 #include "third_party/blink/public/common/features.h"
 #include "third_party/blink/public/common/thread_safe_browser_interface_broker_proxy.h"
 #include "third_party/blink/public/mojom/ad_tagging/ad_frame.mojom-blink.h"
+#include "third_party/blink/public/mojom/blob/blob_url_store.mojom-blink.h"
 #include "third_party/blink/public/mojom/favicon/favicon_url.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/blocked_navigation_types.mojom-blink.h"
 #include "third_party/blink/public/mojom/frame/frame.mojom-blink.h"
@@ -2555,13 +2556,13 @@ void LocalFrame::DownloadURL(
   }
 
   DownloadURL(request, cross_origin_redirect_behavior,
-              blob_url_token.PassPipe());
+              std::move(blob_url_token));
 }
 
 void LocalFrame::DownloadURL(
     const ResourceRequest& request,
     network::mojom::blink::RedirectMode cross_origin_redirect_behavior,
-    mojo::ScopedMessagePipeHandle blob_url_token) {
+    mojo::PendingRemote<mojom::blink::BlobURLToken> blob_url_token) {
   if (ShouldThrottleDownload())
     return;
 

@@ -15,6 +15,7 @@ import "services/network/public/mojom/fetch_api.mojom";
 import "services/network/public/mojom/web_sandbox_flags.mojom";
 import "skia/public/mojom/skcolor.mojom";
 import "third_party/blink/public/mojom/ad_tagging/ad_frame.mojom";
+import "third_party/blink/public/mojom/blob/blob_url_store.mojom";
 import "third_party/blink/public/mojom/messaging/transferable_message.mojom";
 import "third_party/blink/public/mojom/choosers/popup_menu.mojom";
 import "third_party/blink/public/mojom/devtools/console_message.mojom";
@@ -92,7 +93,7 @@ struct DownloadURLParams {
   network.mojom.RedirectMode cross_origin_redirects;
 
   // Non-null when |url| is for "blob:".
-  handle<message_pipe>? blob_url_token;
+  pending_remote<BlobURLToken>? blob_url_token;
 
   // Non-null when |url| is for "data:", eg. when saving an image.
   handle<message_pipe>? data_url_blob;

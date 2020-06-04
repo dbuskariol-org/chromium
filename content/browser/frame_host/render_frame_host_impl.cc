@@ -3416,9 +3416,7 @@ void RenderFrameHostImpl::UpdateFaviconURL(
 
 void RenderFrameHostImpl::DownloadURL(
     blink::mojom::DownloadURLParamsPtr blink_parameters) {
-  mojo::PendingRemote<blink::mojom::BlobURLToken> blob_url_token;
-  if (!VerifyDownloadUrlParams(GetSiteInstance(), blink_parameters.get(),
-                               &blob_url_token))
+  if (!VerifyDownloadUrlParams(GetSiteInstance(), *blink_parameters))
     return;
 
   mojo::PendingRemote<blink::mojom::Blob> blob_data_remote(
@@ -3476,7 +3474,8 @@ void RenderFrameHostImpl::DownloadURL(
     return;
   }
 
-  StartDownload(std::move(parameters), std::move(blob_url_token));
+  StartDownload(std::move(parameters),
+                std::move(blink_parameters->blob_url_token));
 }
 
 void RenderFrameHostImpl::ReportNoBinderForInterface(const std::string& error) {
