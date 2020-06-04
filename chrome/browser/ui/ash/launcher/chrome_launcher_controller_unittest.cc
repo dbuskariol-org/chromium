@@ -422,19 +422,6 @@ class ChromeLauncherControllerTest
         base::FilePath(), Manifest::UNPACKED, manifest, Extension::NO_FLAGS,
         extension_misc::kYoutubeAppId, &error);
 
-    // Fake Web App.
-    base::DictionaryValue manifest_web_app;
-    manifest_web_app.SetString(extensions::manifest_keys::kName,
-                               "Test Web App");
-    manifest_web_app.SetString(extensions::manifest_keys::kVersion, "1");
-    manifest_web_app.SetInteger(extensions::manifest_keys::kManifestVersion, 2);
-    manifest_web_app.SetString(extensions::manifest_keys::kDescription,
-                               "For testing");
-    // AppService checks the app's type. So set the
-    // manifest_keys::kLaunchWebURL, so that the extension can get the type
-    // from manifest value, and then AppService can get the extension's type.
-    manifest_web_app.SetString(extensions::manifest_keys::kLaunchWebURL,
-                               kLaunchURL);
     MaybeStartWebAppProvider();
   }
 
