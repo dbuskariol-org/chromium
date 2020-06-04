@@ -3211,6 +3211,7 @@
           'chromeos-amd64-generic',
         ],
         'test_suites': {
+          'gtest_tests': 'gpu_fyi_chromeos_release_gtests',
           'gpu_telemetry_tests': 'gpu_fyi_chromeos_release_telemetry_tests',
         },
       },
@@ -3226,6 +3227,7 @@
           'limited_capacity_bot',
         ],
         'test_suites': {
+          'gtest_tests': 'gpu_fyi_chromeos_release_gtests',
           'gpu_telemetry_tests': 'gpu_fyi_chromeos_release_telemetry_tests',
         },
       },

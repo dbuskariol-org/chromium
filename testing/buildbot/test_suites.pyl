@@ -4618,6 +4618,27 @@
     ],
 
     # TODO(crbug.com/1080424): Merge with an existing set of tests such as
+    # gpu_fyi_linux_release_gtests once all CrOS tests have been enabled.
+    'gpu_fyi_chromeos_release_gtests': [
+      # TODO(crbug.com/1087552): Enable once these stop crashing.
+      # 'gpu_angle_end2end_gtests',
+      'gpu_angle_unit_gtests',
+      # TODO(crbug.com/1087558): Decide if we want to actually fix/enable these
+      # tests on CrOS.
+      # 'gpu_angle_white_box_gtests',
+      # TODO(crbug.com/1087567, crbug.com/1087590): Enable once there are tests
+      # that actually pass.
+      # 'gpu_common_gtests',
+      # TODO(crbug.com/1087563): Enable once tab_capture_end2end_tests passes
+      # on CrOS.
+      # 'gpu_desktop_specific_gtests',
+      # CrOS should always have GL, and thus not fall back to SwiftShader. It's
+      # currently unclear if we want to bother running any SwiftShader tests on
+      # CrOS since it should never actually get used.
+      # 'gpu_swiftshader_gtests',
+    ],
+
+    # TODO(crbug.com/1080424): Merge with an existing set of tests such as
     # gpu_fyi_linux_intel_and_nvidia_release_telemetry_tests once all CrOS tests
     # have been enabled.
     'gpu_fyi_chromeos_release_telemetry_tests': [
