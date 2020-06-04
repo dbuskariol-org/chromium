@@ -1782,8 +1782,11 @@ chrome_java_sources = [
   "java/src/org/chromium/chrome/browser/widget/ScrimView.java",
   "java/src/org/chromium/chrome/browser/widget/bottomsheet/BottomSheet.java",
   "java/src/org/chromium/chrome/browser/widget/bottomsheet/BottomSheetController.java",
+  "java/src/org/chromium/chrome/browser/widget/bottomsheet/BottomSheetControllerImpl.java",
+  "java/src/org/chromium/chrome/browser/widget/bottomsheet/BottomSheetControllerInternal.java",
   "java/src/org/chromium/chrome/browser/widget/bottomsheet/BottomSheetObserver.java",
   "java/src/org/chromium/chrome/browser/widget/bottomsheet/BottomSheetSwipeDetector.java",
+  "java/src/org/chromium/chrome/browser/widget/bottomsheet/BottomSheetTestSupport.java",
   "java/src/org/chromium/chrome/browser/widget/bottomsheet/EmptyBottomSheetObserver.java",
   "java/src/org/chromium/chrome/browser/widget/bottomsheet/TouchRestrictingFrameLayout.java",
 ]
