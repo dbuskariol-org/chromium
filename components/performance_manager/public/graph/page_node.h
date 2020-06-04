@@ -175,7 +175,8 @@ class PageNodeObserver {
   // Invoked when this page has been assigned an opener, had the opener change,
   // or had the opener removed. This can happen if a page is opened via
   // window.open, webviews, portals, etc, or when that relationship is
-  // subsequently severed or reparented.
+  // subsequently severed or reparented. Note that this can be invoked *after*
+  // OnBeforePageNodeRemoved() if a page disappears while still attached.
   virtual void OnOpenerFrameNodeChanged(const PageNode* page_node,
                                         const FrameNode* previous_opener,
                                         OpenedType previous_opened_type) = 0;
