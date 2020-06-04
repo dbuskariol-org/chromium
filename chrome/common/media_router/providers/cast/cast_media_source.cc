@@ -353,7 +353,7 @@ CastAppInfo::CastAppInfo(const CastAppInfo& other) = default;
 // static
 std::unique_ptr<CastMediaSource> CastMediaSource::FromMediaSource(
     const MediaSource& source) {
-  if (source.IsTabMirroringSource())
+  if (source.IsTabMirroringSource() || source.IsLocalFileSource())
     return CastMediaSourceForTabMirroring(source.id());
 
   if (source.IsDesktopMirroringSource())

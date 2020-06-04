@@ -82,7 +82,7 @@ base::Optional<MirroringActivityRecord::MirroringType> GetMirroringType(
     return base::nullopt;
 
   const auto source = route.media_source();
-  if (source.IsTabMirroringSource())
+  if (source.IsTabMirroringSource() || source.IsLocalFileSource())
     return MirroringActivityRecord::MirroringType::kTab;
   if (source.IsDesktopMirroringSource())
     return MirroringActivityRecord::MirroringType::kDesktop;
