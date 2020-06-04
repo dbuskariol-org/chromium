@@ -2888,21 +2888,6 @@
             ]
         }
     ],
-    "IOSChangeTabSwitcherPosition": [
-        {
-            "platforms": [
-                "ios"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "ChangeTabSwitcherPosition"
-                    ]
-                }
-            ]
-        }
-    ],
     "IOSCrashReportBreadcrumbs": [
         {
             "platforms": [
