@@ -1021,7 +1021,7 @@ TEST_F(StyleEngineTest, VisitedExplicitInheritanceMatchedPropertiesCache) {
 
   Element* span = GetDocument().getElementById("span");
   const ComputedStyle* style = span->GetComputedStyle();
-  EXPECT_FALSE(style->HasExplicitlyInheritedProperties());
+  EXPECT_FALSE(style->ChildHasExplicitInheritance());
 
   style = span->firstChild()->GetComputedStyle();
   EXPECT_TRUE(MatchedPropertiesCache::IsStyleCacheable(*style));
