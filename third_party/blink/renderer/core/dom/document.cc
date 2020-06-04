@@ -857,12 +857,6 @@ Document::Document(const DocumentInit& initializer,
   PoliciesInitialized(initializer);
   InitDNSPrefetch();
 
-  // Documents associated with a dom_window_ need to BindContentSecurityPolicy()
-  // later, because they depend on state that isn't fully initialized until this
-  // constructor exits.
-  if (!dom_window_ && GetExecutionContext())
-    BindContentSecurityPolicy();
-
   InstanceCounters::IncrementCounter(InstanceCounters::kDocumentCounter);
 
   lifecycle_.AdvanceTo(DocumentLifecycle::kInactive);
