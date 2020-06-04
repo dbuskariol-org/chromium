@@ -104,22 +104,6 @@ void AssistantViewDelegateImpl::OnOptInButtonPressed() {
     observer.OnOptInButtonPressed();
 }
 
-void AssistantViewDelegateImpl::OnProactiveSuggestionsCloseButtonPressed() {
-  for (auto& observer : view_delegate_observers_)
-    observer.OnProactiveSuggestionsCloseButtonPressed();
-}
-
-void AssistantViewDelegateImpl::OnProactiveSuggestionsViewHoverChanged(
-    bool is_hovering) {
-  for (auto& observer : view_delegate_observers_)
-    observer.OnProactiveSuggestionsViewHoverChanged(is_hovering);
-}
-
-void AssistantViewDelegateImpl::OnProactiveSuggestionsViewPressed() {
-  for (auto& observer : view_delegate_observers_)
-    observer.OnProactiveSuggestionsViewPressed();
-}
-
 void AssistantViewDelegateImpl::OnSuggestionChipPressed(
     const AssistantSuggestion* suggestion) {
   for (AssistantViewDelegateObserver& observer : view_delegate_observers_)

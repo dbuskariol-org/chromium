@@ -78,12 +78,6 @@ class COMPONENT_EXPORT(ASSISTANT_UI) MockAssistantViewDelegate
 
   MOCK_METHOD(void, OnOptInButtonPressed, (), (override));
 
-  MOCK_METHOD(void, OnProactiveSuggestionsCloseButtonPressed, (), (override));
-
-  MOCK_METHOD(void, OnProactiveSuggestionsViewHoverChanged, (bool), (override));
-
-  MOCK_METHOD(void, OnProactiveSuggestionsViewPressed, (), (override));
-
   MOCK_METHOD(void,
               OnSuggestionChipPressed,
               (const AssistantSuggestion*),
