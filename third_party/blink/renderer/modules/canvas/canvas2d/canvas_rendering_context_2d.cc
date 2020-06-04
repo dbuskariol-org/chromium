@@ -946,7 +946,7 @@ void CanvasRenderingContext2D::DrawTextInternal(
       },
       [](const SkIRect& rect)  // overdraw test lambda
       { return false; },
-      bounds, paint_type);
+      bounds, paint_type, CanvasRenderingContext2DState::kNoImage);
 }
 
 const Font& CanvasRenderingContext2D::AccessFont() {
