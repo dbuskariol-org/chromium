@@ -557,6 +557,14 @@
       status: "stable",
       depends_on: ["CSSCascade"],
     },
+    // Support for declarative parts of scroll-animations-1, i.e.
+    // the animation-timeline property and the @scroll-timeline rule.
+    //
+    // https://drafts.csswg.org/scroll-animations-1/#animation-timeline
+    // https://drafts.csswg.org/scroll-animations-1/#scroll-timeline-at-rule
+    {
+      name: "CSSScrollTimeline"
+    },
     {
       name: "CSSSnapSize",
       status: "experimental",
@@ -1604,7 +1612,7 @@
     {
       name: "ScrollTimeline",
       status: "experimental",
-      implied_by: ['AnimationWorklet']
+      implied_by: ['AnimationWorklet', 'CSSScrollTimeline']
     },
     // Implements documentElement.scrollTop/Left and bodyElement.scrollTop/Left
     // as per the spec, matching other Web engines.

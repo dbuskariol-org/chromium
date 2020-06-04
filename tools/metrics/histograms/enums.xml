@@ -43784,6 +43784,7 @@ Called by update_use_counter_css.py.-->
   <int value="662" label="content-visibility"/>
   <int value="663" label="text-decoration-thickness"/>
   <int value="664" label="page-orientation"/>
+  <int value="665" label="animation-timeline"/>
 </enum>
 
 <enum name="MappedEditingCommands">
