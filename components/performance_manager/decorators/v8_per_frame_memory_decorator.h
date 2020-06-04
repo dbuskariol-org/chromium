@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
-#define CHROME_BROWSER_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
+#ifndef COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
+#define COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
 
 #include "base/time/time.h"
-#include "chrome/common/performance_manager/mojom/v8_per_frame_memory.mojom.h"
 #include "components/performance_manager/public/graph/graph.h"
 #include "components/performance_manager/public/graph/node_data_describer.h"
 #include "components/performance_manager/public/graph/process_node.h"
+#include "content/public/common/performance_manager/v8_per_frame_memory.mojom.h"
 
 namespace performance_manager {
 
@@ -64,4 +64,4 @@ class V8PerFrameMemoryDecorator : public GraphOwned,
 
 }  // namespace performance_manager
 
-#endif  // CHROME_BROWSER_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
+#endif  // COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_

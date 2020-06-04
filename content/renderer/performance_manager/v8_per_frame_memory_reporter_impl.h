@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_RENDERER_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_REPORTER_IMPL_H_
-#define CHROME_RENDERER_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_REPORTER_IMPL_H_
+#ifndef CONTENT_RENDERER_PERFORMANCE_MANAGER_V8_PER_FRAME_MEMORY_REPORTER_IMPL_H_
+#define CONTENT_RENDERER_PERFORMANCE_MANAGER_V8_PER_FRAME_MEMORY_REPORTER_IMPL_H_
 
-#include "chrome/common/performance_manager/mojom/v8_per_frame_memory.mojom.h"
+#include "content/public/common/performance_manager/v8_per_frame_memory.mojom.h"
 
 namespace performance_manager {
 
@@ -21,4 +21,4 @@ class V8PerFrameMemoryReporterImpl : public mojom::V8PerFrameMemoryReporter {
 
 }  // namespace performance_manager
 
-#endif  // CHROME_RENDERER_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_REPORTER_IMPL_H_
+#endif  // CONTENT_RENDERER_PERFORMANCE_MANAGER_V8_PER_FRAME_MEMORY_REPORTER_IMPL_H_

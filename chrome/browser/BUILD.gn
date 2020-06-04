@@ -1160,8 +1160,6 @@ static_library("browser") {
     "performance_manager/decorators/process_metrics_decorator.h",
     "performance_manager/decorators/process_priority_aggregator.cc",
     "performance_manager/decorators/process_priority_aggregator.h",
-    "performance_manager/decorators/v8_per_frame_memory_decorator.cc",
-    "performance_manager/decorators/v8_per_frame_memory_decorator.h",
     "performance_manager/mechanisms/high_pmf_memory_pressure_signals.cc",
     "performance_manager/mechanisms/high_pmf_memory_pressure_signals.h",
     "performance_manager/mechanisms/working_set_trimmer.cc",

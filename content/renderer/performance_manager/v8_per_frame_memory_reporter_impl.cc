@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/renderer/performance_manager/decorators/v8_per_frame_memory_reporter_impl.h"
+#include "content/renderer/performance_manager/v8_per_frame_memory_reporter_impl.h"
 
 #include "content/public/common/isolated_world_ids.h"
-#include "extensions/renderer/script_injection.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
 #include "third_party/blink/public/web/web_local_frame.h"
 #include "third_party/blink/public/web/web_local_frame_client.h"
@@ -53,9 +52,9 @@ class FrameAssociatedMeasurementDelegate : public v8::MeasureMemoryDelegate {
           blink::WebLocalFrame::FrameForContext(context);
 
       if (!frame) {
-        // TODO(siggi): It would be prefereable to count the V8SchemaRegistry
-        //     context's overhead with unassociated_bytes, but at present there
-        //     isn't a public API that allows this distinction.
+        // TODO(crbug.com/1080672): It would be prefereable to count the
+        // V8SchemaRegistry context's overhead with unassociated_bytes, but at
+        // present there isn't a public API that allows this distinction.
         ++(result->num_unassociated_contexts);
         result->unassociated_context_bytes_used += size;
       } else {
@@ -73,8 +72,12 @@ class FrameAssociatedMeasurementDelegate : public v8::MeasureMemoryDelegate {
             mojom::V8IsolatedWorldMemoryUsage::New();
         isolated_world_usage->bytes_used = size;
         int32_t world_id = frame->GetScriptContextWorldId(context);
-        isolated_world_usage->host_id =
-            extensions::ScriptInjection::GetHostIdForIsolatedWorld(world_id);
+
+        // TODO(crbug.com/1080672): Populate isolated_world_usage->host_id.
+        // This will need a delegate to plumb through the value from
+        // extensions::ScriptInjection::GetHostIdForIsolatedWorld for embedders
+        // that support extensions.
+
         DCHECK(
             !base::Contains(per_frame_resources->associated_bytes, world_id));
         per_frame_resources->associated_bytes[world_id] =

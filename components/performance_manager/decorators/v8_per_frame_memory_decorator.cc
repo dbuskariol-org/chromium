@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/performance_manager/decorators/v8_per_frame_memory_decorator.h"
+#include "components/performance_manager/decorators/v8_per_frame_memory_decorator.h"
 
 #include "base/bind.h"
 #include "base/check.h"
@@ -153,6 +153,7 @@ void V8PerFrameMemoryDecorator::ProcessData::EnsureRemote() {
   if (resource_usage_reporter_.is_bound())
     return;
 
+  // This interface is implemented in //content/renderer/performance_manager.
   mojo::PendingReceiver<performance_manager::mojom::V8PerFrameMemoryReporter>
       pending_receiver = resource_usage_reporter_.BindNewPipeAndPassReceiver();
 
