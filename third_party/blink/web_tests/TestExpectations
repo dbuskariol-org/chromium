@@ -5911,3 +5911,6 @@ crbug.com/1088441 [ Mac ] http/tests/loading/bad-server-subframe.html [ Pass Fai
 crbug.com/1090822 [ Mac10.10 ] virtual/cascade/fast/forms/month/month-appearance-basic.html [ Pass Failure ]
 crbug.com/1083293 [ Linux ] media/video-aspect-ratio.html [ Pass Failure ]
 crbug.com/1027434 [ Mac10.13 ] virtual/not-site-per-process/external/wpt/html/browsers/origin/cross-origin-objects/cross-origin-objects.html [ Pass Timeout ]
+
+# Sheriff 2020-06-04
+crbug.com/1041973 virtual/web-components-v0-disabled/external/wpt/html/semantics/forms/constraints/form-validation-reportValidity.html [ Pass Failure Timeout ]
