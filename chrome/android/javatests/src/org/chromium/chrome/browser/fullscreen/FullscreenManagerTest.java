@@ -35,7 +35,6 @@ import org.chromium.chrome.browser.compositor.layouts.OverviewModeController;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
 import org.chromium.chrome.browser.omnibox.UrlBar;
-import org.chromium.chrome.browser.prerender.PrerenderTestHelper;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabStateBrowserControlsVisibilityDelegate;
 import org.chromium.chrome.browser.tab.TabTestUtils;
@@ -43,7 +42,6 @@ import org.chromium.chrome.browser.tab.TabWebContentsDelegateAndroid;
 import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.chrome.test.ChromeTabbedActivityTestRule;
 import org.chromium.chrome.test.util.FullscreenTestUtils;
-import org.chromium.chrome.test.util.OmniboxTestUtils;
 import org.chromium.chrome.test.util.browser.Features;
 import org.chromium.content_public.browser.GestureListenerManager;
 import org.chromium.content_public.browser.GestureStateListener;
@@ -57,7 +55,6 @@ import org.chromium.content_public.browser.test.util.TestTouchUtils;
 import org.chromium.content_public.browser.test.util.TouchCommon;
 import org.chromium.content_public.browser.test.util.UiUtils;
 import org.chromium.content_public.browser.test.util.WebContentsUtils;
-import org.chromium.net.test.EmbeddedTestServer;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -455,38 +452,6 @@ public class FullscreenManagerTest {
         FullscreenManagerTestUtils.waitForBrowserControlsPosition(mActivityTestRule, 0);
 
         PostTask.runOrPostTask(UiThreadTaskTraits.DEFAULT, delegate::rendererResponsive);
-    }
-
-    /*
-    @LargeTest
-    @Feature({"Fullscreen"})
-    @Restriction(RESTRICTION_TYPE_NON_LOW_END_DEVICE)
-    */
-    @Test
-    @DisabledTest(message = "crbug.com/642336")
-    public void testPrerenderedPageSupportsManualHiding() throws InterruptedException {
-        FullscreenManagerTestUtils.disableBrowserOverrides();
-        mActivityTestRule.startMainActivityOnBlankPage();
-
-        EmbeddedTestServer testServer =
-                EmbeddedTestServer.createAndStartServer(InstrumentationRegistry.getContext());
-        try {
-            final Tab tab = mActivityTestRule.getActivity().getActivityTab();
-            final String testUrl = testServer.getURL(
-                    "/chrome/test/data/android/very_long_google.html");
-            PrerenderTestHelper.prerenderUrl(testUrl, tab);
-            Assert.assertTrue("loadUrl did not use pre-rendered page.",
-                    PrerenderTestHelper.isLoadUrlResultPrerendered(
-                            mActivityTestRule.loadUrl(testUrl)));
-
-            UrlBar urlBar = (UrlBar) mActivityTestRule.getActivity().findViewById(R.id.url_bar);
-            OmniboxTestUtils.toggleUrlBarFocus(urlBar, false);
-            OmniboxTestUtils.waitForFocusAndKeyboardActive(urlBar, false);
-
-            FullscreenManagerTestUtils.waitForBrowserControlsToBeMoveable(mActivityTestRule, tab);
-        } finally {
-            testServer.stopAndDestroyServer();
-        }
     }
 
     /* @LargeTest
