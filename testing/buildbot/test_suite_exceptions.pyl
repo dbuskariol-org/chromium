@@ -671,7 +671,7 @@
         'args': [
           '--avd-config=../../tools/android/avd/proto/generic_playstore_android28.textpb',
           # https://crbug.com/1046059
-          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator_m.chrome_public_test_apk.filter',
+          '--test-launcher-filter-file=../../testing/buildbot/filters/android.emulator_p.chrome_public_test_apk.filter',
         ],
         'swarming': {
           'named_caches': [
