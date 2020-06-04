@@ -2,19 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_BLOCKER_H_
-#define CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_BLOCKER_H_
+#ifndef COMPONENTS_BLOCKED_CONTENT_POPUP_BLOCKER_H_
+#define COMPONENTS_BLOCKED_CONTENT_POPUP_BLOCKER_H_
 
+#include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "third_party/blink/public/mojom/window_features/window_features.mojom-forward.h"
 #include "ui/base/window_open_disposition.h"
 #include "url/gurl.h"
+
+class HostContentSettingsMap;
 
 namespace content {
 class WebContents;
 struct OpenURLParams;
 }  // namespace content
 
-struct NavigateParams;
+namespace blocked_content {
+class PopupNavigationDelegate;
 
 // Classifies what caused a popup to be blocked.
 enum class PopupBlockType {
@@ -31,7 +35,7 @@ enum class PopupBlockType {
 // NEW_POPUP since the popup blocker targets all new windows and tabs.
 bool ConsiderForPopupBlocking(WindowOpenDisposition disposition);
 
-// Returns true if the popup request defined by |params| and the optional
+// Returns null if the popup request defined by |delegate| and the optional
 // |open_url_params| should be blocked. In that case, it is also added to the
 // |blocked_popups_| container.
 //
@@ -39,12 +43,16 @@ bool ConsiderForPopupBlocking(WindowOpenDisposition disposition);
 // permission will behave. If it is nullptr, the current committed URL will be
 // used instead.
 //
-// If this function returns true, then the contents of |params| is moved to
-// |blocked_popups_|.
-bool MaybeBlockPopup(content::WebContents* web_contents,
-                     const GURL* opener_url,
-                     NavigateParams* params,
-                     const content::OpenURLParams* open_url_params,
-                     const blink::mojom::WindowFeatures& window_features);
+// If this function returns a non-null unique_ptr, the navigation was not
+// blocked and should be continued.
+std::unique_ptr<PopupNavigationDelegate> MaybeBlockPopup(
+    content::WebContents* web_contents,
+    const GURL* opener_url,
+    std::unique_ptr<PopupNavigationDelegate> delegate,
+    const content::OpenURLParams* open_url_params,
+    const blink::mojom::WindowFeatures& window_features,
+    HostContentSettingsMap* settings_map);
 
-#endif  // CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_BLOCKER_H_
+}  // namespace blocked_content
+
+#endif  // COMPONENTS_BLOCKED_CONTENT_POPUP_BLOCKER_H_

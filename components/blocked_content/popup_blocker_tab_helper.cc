@@ -2,20 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/blocked_content/popup_blocker_tab_helper.h"
+#include "components/blocked_content/popup_blocker_tab_helper.h"
 
 #include <iterator>
 #include <string>
 
 #include "base/metrics/histogram_macros.h"
 #include "build/build_config.h"
-#include "chrome/browser/ui/android/content_settings/popup_blocked_infobar_delegate.h"
-#include "chrome/browser/ui/blocked_content/blocked_window_params.h"
-#include "chrome/browser/ui/browser_navigator.h"
-#include "chrome/browser/ui/browser_navigator_params.h"
-#include "chrome/common/chrome_render_frame.mojom.h"
-#include "chrome/common/render_messages.h"
 #include "components/blocked_content/list_item_position.h"
+#include "components/blocked_content/popup_navigation_delegate.h"
 #include "components/blocked_content/popup_tracker.h"
 #include "components/blocked_content/safe_browsing_triggered_popup_blocker.h"
 #include "components/content_settings/browser/tab_specific_content_settings.h"
@@ -26,24 +21,20 @@
 #include "content/public/browser/render_frame_host.h"
 #include "content/public/browser/render_view_host.h"
 #include "content/public/browser/web_contents.h"
-#include "mojo/public/cpp/bindings/associated_remote.h"
-#include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
+#include "third_party/blink/public/mojom/window_features/window_features.mojom.h"
 
-#if defined(OS_ANDROID)
-#include "chrome/browser/ui/android/tab_model/tab_model_list.h"
-#endif
-
+namespace blocked_content {
 const size_t kMaximumNumberOfPopups = 25;
 
 struct PopupBlockerTabHelper::BlockedRequest {
-  BlockedRequest(NavigateParams&& params,
+  BlockedRequest(std::unique_ptr<PopupNavigationDelegate> delegate,
                  const blink::mojom::WindowFeatures& window_features,
                  PopupBlockType block_type)
-      : params(std::move(params)),
+      : delegate(std::move(delegate)),
         window_features(window_features),
         block_type(block_type) {}
 
-  NavigateParams params;
+  std::unique_ptr<PopupNavigationDelegate> delegate;
   blink::mojom::WindowFeatures window_features;
   PopupBlockType block_type;
 };
@@ -53,8 +44,7 @@ PopupBlockerTabHelper::PopupBlockerTabHelper(content::WebContents* web_contents)
   blocked_content::SafeBrowsingTriggeredPopupBlocker::MaybeCreate(web_contents);
 }
 
-PopupBlockerTabHelper::~PopupBlockerTabHelper() {
-}
+PopupBlockerTabHelper::~PopupBlockerTabHelper() = default;
 
 void PopupBlockerTabHelper::DidFinishNavigation(
     content::NavigationHandle* navigation_handle) {
@@ -93,7 +83,7 @@ void PopupBlockerTabHelper::HidePopupNotification() {
 }
 
 void PopupBlockerTabHelper::AddBlockedPopup(
-    NavigateParams* params,
+    std::unique_ptr<PopupNavigationDelegate> delegate,
     const blink::mojom::WindowFeatures& window_features,
     PopupBlockType block_type) {
   LogAction(Action::kBlocked);
@@ -103,16 +93,13 @@ void PopupBlockerTabHelper::AddBlockedPopup(
   int id = next_id_;
   next_id_++;
   blocked_popups_[id] = std::make_unique<BlockedRequest>(
-      std::move(*params), window_features, block_type);
+      std::move(delegate), window_features, block_type);
   content_settings::TabSpecificContentSettings::FromWebContents(web_contents())
       ->OnContentBlocked(ContentSettingsType::POPUPS);
-  manager_.NotifyObservers(id, blocked_popups_[id]->params.url);
+  auto* raw_delegate = blocked_popups_[id]->delegate.get();
+  manager_.NotifyObservers(id, raw_delegate->GetURL());
 
-#if defined(OS_ANDROID)
-  // Should replace existing popup infobars, with an updated count of how many
-  // popups have been blocked.
-  PopupBlockedInfoBarDelegate::Create(web_contents(), GetBlockedPopupsCount());
-#endif
+  raw_delegate->OnPopupBlocked(web_contents(), GetBlockedPopupsCount());
 }
 
 void PopupBlockerTabHelper::ShowBlockedPopup(
@@ -131,30 +118,18 @@ void PopupBlockerTabHelper::ShowBlockedPopup(
 
   BlockedRequest* popup = it->second.get();
 
-  // We set user_gesture to true here, so the new popup gets correctly focused.
-  popup->params.user_gesture = true;
+  base::Optional<WindowOpenDisposition> updated_disposition;
   if (disposition != WindowOpenDisposition::CURRENT_TAB)
-    popup->params.disposition = disposition;
+    updated_disposition = disposition;
 
-#if defined(OS_ANDROID)
-  TabModelList::HandlePopupNavigation(&popup->params);
-#else
-  Navigate(&popup->params);
-#endif
-  if (popup->params.navigated_or_inserted_contents) {
+  PopupNavigationDelegate::NavigateResult result =
+      popup->delegate->NavigateWithGesture(popup->window_features,
+                                           updated_disposition);
+  if (result.navigated_or_inserted_contents) {
     auto* tracker = blocked_content::PopupTracker::CreateForWebContents(
-        popup->params.navigated_or_inserted_contents, web_contents(),
-        popup->params.disposition);
+        result.navigated_or_inserted_contents, web_contents(),
+        result.disposition);
     tracker->set_is_trusted(true);
-
-    if (popup->params.disposition == WindowOpenDisposition::NEW_POPUP) {
-      content::RenderFrameHost* host =
-          popup->params.navigated_or_inserted_contents->GetMainFrame();
-      DCHECK(host);
-      mojo::AssociatedRemote<chrome::mojom::ChromeRenderFrame> client;
-      host->GetRemoteAssociatedInterfaces()->GetInterface(&client);
-      client->SetWindowFeatures(popup->window_features.Clone());
-    }
   }
 
   switch (popup->block_type) {
@@ -179,10 +154,10 @@ size_t PopupBlockerTabHelper::GetBlockedPopupsCount() const {
 }
 
 PopupBlockerTabHelper::PopupIdMap
-    PopupBlockerTabHelper::GetBlockedPopupRequests() {
+PopupBlockerTabHelper::GetBlockedPopupRequests() {
   PopupIdMap result;
   for (const auto& it : blocked_popups_) {
-    result[it.first] = it.second->params.url;
+    result[it.first] = it.second->delegate->GetURL();
   }
   return result;
 }
@@ -193,3 +168,5 @@ void PopupBlockerTabHelper::LogAction(Action action) {
 }
 
 WEB_CONTENTS_USER_DATA_KEY_IMPL(PopupBlockerTabHelper)
+
+}  // namespace blocked_content

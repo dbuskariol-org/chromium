@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_BLOCKER_TAB_HELPER_H_
-#define CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_BLOCKER_TAB_HELPER_H_
+#ifndef COMPONENTS_BLOCKED_CONTENT_POPUP_BLOCKER_TAB_HELPER_H_
+#define COMPONENTS_BLOCKED_CONTENT_POPUP_BLOCKER_TAB_HELPER_H_
 
 #include <stddef.h>
 #include <stdint.h>
@@ -12,15 +12,15 @@
 #include <memory>
 
 #include "base/macros.h"
-#include "chrome/browser/ui/blocked_content/blocked_window_params.h"
-#include "chrome/browser/ui/blocked_content/popup_blocker.h"
+#include "components/blocked_content/popup_blocker.h"
 #include "components/blocked_content/url_list_manager.h"
 #include "content/public/browser/web_contents_observer.h"
 #include "content/public/browser/web_contents_user_data.h"
 #include "ui/base/window_open_disposition.h"
 #include "url/gurl.h"
 
-struct NavigateParams;
+namespace blocked_content {
+class PopupNavigationDelegate;
 
 // Per-tab class to manage blocked popups.
 class PopupBlockerTabHelper
@@ -65,7 +65,7 @@ class PopupBlockerTabHelper
   void ShowBlockedPopup(int32_t popup_id, WindowOpenDisposition disposition);
 
   // Adds a new blocked popup to the UI.
-  void AddBlockedPopup(NavigateParams* params,
+  void AddBlockedPopup(std::unique_ptr<PopupNavigationDelegate> delegate,
                        const blink::mojom::WindowFeatures& window_features,
                        PopupBlockType block_type);
 
@@ -100,4 +100,6 @@ class PopupBlockerTabHelper
   DISALLOW_COPY_AND_ASSIGN(PopupBlockerTabHelper);
 };
 
-#endif  // CHROME_BROWSER_UI_BLOCKED_CONTENT_POPUP_BLOCKER_TAB_HELPER_H_
+}  // namespace blocked_content
+
+#endif  // COMPONENTS_BLOCKED_CONTENT_POPUP_BLOCKER_TAB_HELPER_H_

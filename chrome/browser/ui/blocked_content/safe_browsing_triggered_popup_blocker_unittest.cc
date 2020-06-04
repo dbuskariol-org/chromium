@@ -14,16 +14,18 @@
 #include "base/task/post_task.h"
 #include "base/test/metrics/histogram_tester.h"
 #include "base/test/scoped_feature_list.h"
+#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
 #include "chrome/browser/content_settings/tab_specific_content_settings_delegate.h"
 #include "chrome/browser/infobars/infobar_service.h"
 #include "chrome/browser/safe_browsing/test_safe_browsing_service.h"
 #include "chrome/browser/subresource_filter/chrome_subresource_filter_client.h"
-#include "chrome/browser/ui/blocked_content/popup_blocker.h"
-#include "chrome/browser/ui/blocked_content/popup_blocker_tab_helper.h"
+#include "chrome/browser/ui/blocked_content/chrome_popup_navigation_delegate.h"
 #include "chrome/browser/ui/browser_navigator_params.h"
 #include "chrome/test/base/chrome_render_view_host_test_harness.h"
 #include "chrome/test/base/testing_browser_process.h"
 #include "chrome/test/base/testing_profile.h"
+#include "components/blocked_content/popup_blocker.h"
+#include "components/blocked_content/popup_blocker_tab_helper.h"
 #include "components/content_settings/browser/tab_specific_content_settings.h"
 #include "components/safe_browsing/core/db/v4_protocol_manager_util.h"
 #include "components/subresource_filter/content/browser/fake_safe_browsing_database_manager.h"
@@ -36,6 +38,7 @@
 #include "net/url_request/url_request_test_util.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "third_party/blink/public/common/navigation/triggering_event_info.h"
+#include "third_party/blink/public/mojom/window_features/window_features.mojom.h"
 #include "ui/base/page_transition_types.h"
 #include "ui/base/window_open_disposition.h"
 #include "url/gurl.h"
@@ -74,7 +77,8 @@ class SafeBrowsingTriggeredPopupBlockerTest
     ChromeSubresourceFilterClient::CreateForWebContents(web_contents());
 
     scoped_feature_list_ = DefaultFeatureList();
-    PopupBlockerTabHelper::CreateForWebContents(web_contents());
+    blocked_content::PopupBlockerTabHelper::CreateForWebContents(
+        web_contents());
     InfoBarService::CreateForWebContents(web_contents());
     content_settings::TabSpecificContentSettings::CreateForWebContents(
         web_contents(),
@@ -220,10 +224,14 @@ TEST_F(SafeBrowsingTriggeredPopupBlockerTest,
   nav_params.FillNavigateParamsFromOpenURLParams(params);
   nav_params.source_contents = web_contents();
   nav_params.user_gesture = true;
-  MaybeBlockPopup(web_contents(), nullptr, &nav_params, &params,
-                  blink::mojom::WindowFeatures());
+  blocked_content::MaybeBlockPopup(
+      web_contents(), nullptr,
+      std::make_unique<ChromePopupNavigationDelegate>(std::move(nav_params)),
+      &params, blink::mojom::WindowFeatures(),
+      HostContentSettingsMapFactory::GetForProfile(profile()));
 
-  EXPECT_EQ(1u, PopupBlockerTabHelper::FromWebContents(web_contents())
+  EXPECT_EQ(1u, blocked_content::PopupBlockerTabHelper::FromWebContents(
+                    web_contents())
                     ->GetBlockedPopupsCount());
 }
 
@@ -247,10 +255,14 @@ TEST_F(SafeBrowsingTriggeredPopupBlockerTest,
   nav_params.FillNavigateParamsFromOpenURLParams(params);
   nav_params.source_contents = web_contents();
   nav_params.user_gesture = true;
-  MaybeBlockPopup(web_contents(), nullptr, &nav_params, &params,
-                  blink::mojom::WindowFeatures());
+  blocked_content::MaybeBlockPopup(
+      web_contents(), nullptr,
+      std::make_unique<ChromePopupNavigationDelegate>(std::move(nav_params)),
+      &params, blink::mojom::WindowFeatures(),
+      HostContentSettingsMapFactory::GetForProfile(profile()));
 
-  EXPECT_EQ(0u, PopupBlockerTabHelper::FromWebContents(web_contents())
+  EXPECT_EQ(0u, blocked_content::PopupBlockerTabHelper::FromWebContents(
+                    web_contents())
                     ->GetBlockedPopupsCount());
 }
 
