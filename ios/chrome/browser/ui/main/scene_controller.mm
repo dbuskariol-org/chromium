@@ -338,6 +338,15 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
       [self finishDismissingTabSwitcher];
     }
   }
+
+  if (sceneState.currentOrigin != WindowActivityRestoredOrigin) {
+    if (IsMultiwindowSupported()) {
+      if (@available(iOS 13, *)) {
+        // TODO(crbug.com/1084905): log metrics for open in window.
+        LOG(WARNING) << "New scene origin: " << (int)sceneState.currentOrigin;
+      }
+    }
+  }
 }
 
 - (void)sceneStateWillShowModalOverlay:(SceneState*)sceneState {
