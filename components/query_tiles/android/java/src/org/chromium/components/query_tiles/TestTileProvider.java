@@ -2,11 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.query_tiles;
+package org.chromium.components.query_tiles;
 
 import org.chromium.base.Callback;
-import org.chromium.components.query_tiles.QueryTile;
-import org.chromium.components.query_tiles.TileProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
 /**
  * Helper implementation of {@link TileProvider} for tests.
  */
-class TestTileProvider implements TileProvider {
+public class TestTileProvider implements TileProvider {
     private List<QueryTile> mTiles = new ArrayList<>();
 
     /**
