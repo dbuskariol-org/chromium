@@ -734,8 +734,22 @@ crbug.com/1067242 [ Mac10.11 ] external/wpt/css/css-text-decor/text-underline-po
 crbug.com/1067242 [ Mac10.12 ] external/wpt/css/css-text-decor/text-underline-position-from-font-variable.html [ Failure ]
 crbug.com/1067242 [ Mac10.13 ] external/wpt/css/css-text-decor/text-underline-position-from-font-variable.html [ Failure ]
 crbug.com/1067242 [ Retina ] external/wpt/css/css-text-decor/text-underline-position-from-font-variable.html [ Failure ]
+crbug.com/785230 [ Win7 ] external/wpt/css/css-text-decor/text-decoration-thickness-fixed.html [ Failure ]
+crbug.com/785230 [ Mac10.10 ] external/wpt/css/css-text-decor/text-decoration-thickness-fixed.html [ Failure ]
+crbug.com/785230 [ Mac10.11 ] external/wpt/css/css-text-decor/text-decoration-thickness-fixed.html [ Failure ]
+crbug.com/785230 [ Mac10.12 ] external/wpt/css/css-text-decor/text-decoration-thickness-fixed.html [ Failure ]
+crbug.com/785230 [ Mac10.13 ] external/wpt/css/css-text-decor/text-decoration-thickness-fixed.html [ Failure ]
+crbug.com/785230 [ Retina ] external/wpt/css/css-text-decor/text-decoration-thickness-fixed.html [ Failure ]
+crbug.com/785230 [ Win7 ] external/wpt/css/css-text-decor/text-decoration-thickness-from-font-variable.html [ Failure ]
+crbug.com/785230 [ Mac10.10 ] external/wpt/css/css-text-decor/text-decoration-thickness-from-font-variable.html [ Failure ]
+crbug.com/785230 [ Mac10.11 ] external/wpt/css/css-text-decor/text-decoration-thickness-from-font-variable.html [ Failure ]
+crbug.com/785230 [ Mac10.12 ] external/wpt/css/css-text-decor/text-decoration-thickness-from-font-variable.html [ Failure ]
+crbug.com/785230 [ Mac10.13 ] external/wpt/css/css-text-decor/text-decoration-thickness-from-font-variable.html [ Failure ]
+crbug.com/785230 [ Retina ] external/wpt/css/css-text-decor/text-decoration-thickness-from-font-variable.html [ Failure ]
 # Windows 10 bots are not on high enough a Windows version to render variable fonts in DirectWrite
 crbug.com/1068947 [ Win10 ] external/wpt/css/css-text-decor/text-underline-position-from-font-variable.html [ Failure ]
+crbug.com/1068947 [ Win10 ] external/wpt/css/css-text-decor/text-decoration-thickness-fixed.html [ Failure ]
+crbug.com/1068947 [ Win10 ] external/wpt/css/css-text-decor/text-decoration-thickness-from-font-variable.html [ Failure ]
 
 # Tentative mansonry tests
 crbug.com/1076027 external/wpt/css/css-grid/masonry.tentative/* [ Skip ]
@@ -2584,14 +2598,15 @@ crbug.com/1012242 external/wpt/webvtt/rendering/cues-with-video/processing-model
 crbug.com/965409 external/wpt/css/css-font-loading/fontface-descriptor-updates.html [ Failure ]
 
 # Implement text-decoration-thickness and text-decoration-offset
-crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-001.html [ Failure ]
-crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-linethrough-001.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-overline-001.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-scroll-001.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-underline-001.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-vertical-001.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-decoration-thickness-vertical-002.html [ Failure ]
 crbug.com/785230 external/wpt/css/css-text-decor/text-underline-offset-002.html [ Failure ]
+
+# Linux draws antialiasing differently when overlaying two text layers.
+crbug.com/785230 [ Linux ] external/wpt/css/css-text-decor/text-decoration-thickness-ink-skip-dilation.html [ Failure ]
 
 # Implement support for percentage values in scale
 crbug.com/1029997 external/wpt/css/css-transforms/transform-scale-percent-001.html [ Failure ]
