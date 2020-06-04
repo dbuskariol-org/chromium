@@ -1382,10 +1382,6 @@
       status: "experimental",
     },
     {
-      name: "PaymentRequestOptionalTotal",
-      status: "experimental",
-    },
-    {
       name: "PaymentRetry",
       status: "stable",
     },

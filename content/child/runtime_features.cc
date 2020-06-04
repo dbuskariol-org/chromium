@@ -228,8 +228,6 @@ void SetRuntimeFeaturesFromChromiumFeatures() {
     {wf::EnablePaymentRequest, features::kWebPayments, kUseFeatureState},
     {wf::EnablePaymentHandlerMinimalUI, features::kWebPaymentsMinimalUI,
      kEnableOnly},
-    {wf::EnablePaymentRequestOptionalTotal,
-     features::kPaymentRequestOptionalTotal, kEnableOnly},
     {wf::EnablePaymentApp, features::kServiceWorkerPaymentApps, kEnableOnly},
     {wf::EnableGenericSensorExtraClasses, features::kGenericSensorExtraClasses,
      kEnableOnly},

@@ -136,7 +136,6 @@ class WebRuntimeFeatures {
   BLINK_PLATFORM_EXPORT static void EnablePagePopup(bool);
   BLINK_PLATFORM_EXPORT static void EnablePaymentApp(bool);
   BLINK_PLATFORM_EXPORT static void EnablePaymentHandlerMinimalUI(bool);
-  BLINK_PLATFORM_EXPORT static void EnablePaymentRequestOptionalTotal(bool);
   BLINK_PLATFORM_EXPORT static void EnablePaymentRequest(bool);
   BLINK_PLATFORM_EXPORT static void EnablePercentBasedScrolling(bool);
   BLINK_PLATFORM_EXPORT static void EnablePerformanceManagerInstrumentation(
