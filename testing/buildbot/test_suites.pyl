@@ -2325,10 +2325,10 @@
         'linux_args': ['--no-xvfb'],
       },
       'viz_unittests': {
-        'args': [
-          '--test-launcher-filter-file=../../testing/buildbot/filters/gpu.skiarenderer_dawn_viz_unittests.filter',
+        'linux_args': [
+          '--no-xvfb',
+          '--test-launcher-filter-file=../../testing/buildbot/filters/gpu.linux.skiarenderer_dawn_viz_unittests.filter',
         ],
-        'linux_args': ['--no-xvfb'],
       },
     },
 

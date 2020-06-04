@@ -11415,8 +11415,8 @@
       },
       {
         "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/gpu.skiarenderer_dawn_viz_unittests.filter",
-          "--no-xvfb"
+          "--no-xvfb",
+          "--test-launcher-filter-file=../../testing/buildbot/filters/gpu.linux.skiarenderer_dawn_viz_unittests.filter"
         ],
         "merge": {
           "args": [],
@@ -27383,9 +27383,6 @@
         "test_id_prefix": "ninja://cc:cc_unittests/"
       },
       {
-        "args": [
-          "--test-launcher-filter-file=../../testing/buildbot/filters/gpu.skiarenderer_dawn_viz_unittests.filter"
-        ],
         "merge": {
           "args": [],
           "script": "//testing/merge_scripts/standard_gtest_merge.py"

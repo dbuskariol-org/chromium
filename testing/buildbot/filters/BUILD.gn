@@ -205,7 +205,7 @@ source_set("viz_unittests_filters") {
 
   data = [
     "//testing/buildbot/filters/android.emulator.viz_unittests.filter",
-    "//testing/buildbot/filters/gpu.skiarenderer_dawn_viz_unittests.filter",
+    "//testing/buildbot/filters/gpu.linux.skiarenderer_dawn_viz_unittests.filter",
   ]
 }
 
