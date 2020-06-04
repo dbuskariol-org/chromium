@@ -3993,17 +3993,12 @@ crbug.com/930297 external/wpt/html/infrastructure/urls/resolving-urls/query-enco
 crbug.com/930297 external/wpt/html/infrastructure/urls/resolving-urls/query-encoding/utf-16le.html?include=workers [ Timeout ]
 
 # RubyNG TODOs
-crbug.com/1069817 external/wpt/css/css-ruby/empty-ruby-base-container-abs.html [ Failure ]
-crbug.com/1069817 external/wpt/css/css-ruby/empty-ruby-base-container-float.html [ Failure ]
-crbug.com/1069817 external/wpt/css/css-ruby/empty-ruby-base-container.html [ Failure ]
 crbug.com/1069817 external/wpt/css/css-ruby/line-break-around-ruby-001.html [ Failure ]
 crbug.com/1069817 fast/ruby/base-shorter-than-text.html [ Failure ]
 crbug.com/1069817 fast/ruby/float-overhang-from-ruby-text.html [ Failure ]
 crbug.com/1069817 fast/ruby/line-break-ruby.html [ Failure ]
 crbug.com/1069817 fast/ruby/position-after.html [ Failure ]
-crbug.com/1069817 fast/ruby/ruby-empty-rt.html [ Failure ]
 crbug.com/1069817 fast/ruby/ruby-run-break.html [ Failure ]
-crbug.com/1069817 fast/ruby/rubyDOM-remove-text2.html [ Failure ]
 crbug.com/1069817 fast/ruby/select-ruby.html [ Failure ]
 crbug.com/1069817 [ Linux ] fast/writing-mode/Kusa-Makura-background-canvas.html [ Failure ]
 crbug.com/1069817 [ Mac ] fast/writing-mode/Kusa-Makura-background-canvas.html [ Failure ]
