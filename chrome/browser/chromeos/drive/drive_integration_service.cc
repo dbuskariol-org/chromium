@@ -518,6 +518,11 @@ class DriveIntegrationService::DriveFsHolder
         IDS_FILE_BROWSER_RECOVERED_FILES_FROM_GOOGLE_DRIVE_DIRECTORY_NAME);
   }
 
+  bool IsVerboseLoggingEnabled() override {
+    return profile_->GetPrefs()->GetBoolean(
+        prefs::kDriveFsEnableVerboseLogging);
+  }
+
   Profile* const profile_;
   drivefs::DriveFsHost::MountObserver* const mount_observer_;
 
