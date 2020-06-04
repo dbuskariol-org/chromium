@@ -2418,11 +2418,6 @@ extern const char kPaintPreviewDemoDescription[];
 #endif  // ENABLE_PAINT_PREVIEW && defined(OS_ANDROID)
 
 #if BUILDFLAG(ENABLE_PLUGINS)
-#if defined(OS_CHROMEOS)
-extern const char kPdfAnnotations[];
-extern const char kPdfAnnotationsDescription[];
-#endif  // defined(OS_CHROMEOS)
-
 extern const char kPdfFormSaveName[];
 extern const char kPdfFormSaveDescription[];
 

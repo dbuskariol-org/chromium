@@ -3548,11 +3548,6 @@
     "expiry_milestone": 85
   },
   {
-    "name": "pdf-annotations",
-    "owners": [ "dstockwell@google.com" ],
-    "expiry_milestone": 76
-  },
-  {
     "name": "pdf-form-save",
     "owners": [ "thestig" ],
     "expiry_milestone": 89

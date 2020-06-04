@@ -4089,11 +4089,6 @@ const char kPaintPreviewDemoDescription[] =
 
 #if BUILDFLAG(ENABLE_PLUGINS)
 
-#if defined(OS_CHROMEOS)
-const char kPdfAnnotations[] = "PDF Annotations";
-const char kPdfAnnotationsDescription[] = "Enable annotating PDF documents.";
-#endif  // defined(OS_CHROMEOS)
-
 const char kPdfFormSaveName[] = "Save PDF Forms";
 const char kPdfFormSaveDescription[] =
     "Enable saving PDFs with filled form data.";
