@@ -758,7 +758,7 @@
 <translation id="1936931585862840749">Канча көчүрмө басылып чыга турганын сан менен көрсөтүңүз (1–<ph name="MAX_COPIES" />).</translation>
 <translation id="1937774647013465102"><ph name="ARCHITECTURE_DEVICE" /> түзмөгү менен контейнердин <ph name="ARCHITECTURE_CONTAINER" /> түрүн импорттоого болбойт. Ал контейнерди башка түзмөктө калыбына келтирүүгө аракет кылып көрүңүз же болбосо, контейнердеги файлдарды Files колдонмосунда көрө аласыз.</translation>
 <translation id="1938351510777341717">Тышкы буйрук</translation>
-<translation id="1940546824932169984">Туташкан түзмөктөр</translation>
+<translation id="1940546824932169984">Байланышкан түзмөктөр</translation>
 <translation id="1942600407708803723">Капкагы жабылып турганда өчүрүлсүн</translation>
 <translation id="1944528062465413897">Bluetooth жупташтыруу коду:</translation>
 <translation id="1944921356641260203">Жаңыртуу табылды</translation>
@@ -4752,7 +4752,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7110644433780444336">{NUM_TABS,plural, =1{Өтмөктү топто кошуу}other{Өтмөктөрдү топто кошуу}}</translation>
 <translation id="7113502843173351041">Электрондук почта дарегиңизди билүү</translation>
 <translation id="7114054701490058191">Сырсөздөр дал келген жок</translation>
-<translation id="7114648273807173152">Google аккаунтуңузга кирүүгө Smart Lock'ту колдонуу үчүн, Жөндөөлөр &gt; Туташкан түзмөктөр &gt; Телефонуңуз &gt; Smart Lock'ко өтүңүз.</translation>
+<translation id="7114648273807173152">Google аккаунтуңузга кирүүгө Smart Lock'ту колдонуу үчүн, Жөндөөлөр &gt; Байланышкан түзмөктөр &gt; Телефонуңуз &gt; Smart Lock'ко өтүңүз.</translation>
 <translation id="7117228822971127758">Бир аздан кийин кайталап көрүңүз</translation>
 <translation id="7117247127439884114">Кайра кириңиз…</translation>
 <translation id="711840821796638741">Башкарылган кыстармаларды көрсөтүү</translation>
