@@ -69094,6 +69094,13 @@ Full version information for the fingerprint enum values:
   <int value="4" label="Valid Signature for Seed"/>
 </enum>
 
+<enum name="VariationsFirstRunPrefEvents">
+  <int value="0" label="Prefs stored"/>
+  <int value="1" label="Prefs cleared"/>
+  <int value="2" label="Prefs retrieved - empty"/>
+  <int value="3" label="Prefs retrieved - non-empty"/>
+</enum>
+
 <enum name="VariationsFirstRunResult">
   <int value="0" label="Seed imported successfully"/>
   <int value="1" label="Seed import failed - no callback (Obsolete)"/>
