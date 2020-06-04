@@ -46,6 +46,22 @@ import "url/mojom/url.mojom";
 [EnableIf=is_mac]
 import "ui/gfx/range/mojom/range.mojom";
 
+// Information about a subframe being saved as "complete html".
+struct SavableSubframe {
+  // Original url of the subframe (i.e. based the parent's html sources).
+  url.mojom.Url original_url;
+
+  // The unique identifier of the RenderFrameHost or RenderFrameProxy for the
+  // subframe.
+  mojo_base.mojom.UnguessableToken subframe_token;
+};
+
+struct GetSavableResourceLinksReply {
+  array<url.mojom.Url> resources_list;
+  blink.mojom.Referrer referrer;
+  array<SavableSubframe> subframes;
+};
+
 struct FindInPageResultAXParams {
   // The find in page request id.
   int32 request_id;
@@ -549,6 +565,10 @@ interface LocalFrame {
   // Requests that the blink::LocalFrame updates its opener to the specified
   // frame. The frame token may be "empty" if the opener was disowned.
   UpdateOpener(mojo_base.mojom.UnguessableToken? opener_frame_token);
+
+  // Request to enumerate and return links to all savable resources in the frame
+  // Note: this covers only the immediate frame / doesn't cover subframes.
+  GetSavableResourceLinks() => (GetSavableResourceLinksReply? reply);
 };
 
 // Implemented in Browser, this interface defines frame-specific methods that

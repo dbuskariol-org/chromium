@@ -63,7 +63,6 @@
 #include "content/common/page_messages.h"
 #include "content/common/render_accessibility.mojom.h"
 #include "content/common/renderer_host.mojom.h"
-#include "content/common/savable_subframe.h"
 #include "content/common/unfreezable_frame_messages.h"
 #include "content/common/view_messages.h"
 #include "content/common/web_package/signed_exchange_utils.h"
@@ -128,7 +127,6 @@
 #include "content/renderer/render_view_impl.h"
 #include "content/renderer/render_widget_fullscreen_pepper.h"
 #include "content/renderer/renderer_blink_platform_impl.h"
-#include "content/renderer/savable_resources.h"
 #include "content/renderer/service_worker/service_worker_network_provider_for_frame.h"
 #include "content/renderer/service_worker/web_service_worker_provider_impl.h"
 #include "content/renderer/skia_benchmarking_extension.h"
@@ -208,6 +206,7 @@
 #include "third_party/blink/public/web/web_plugin_document.h"
 #include "third_party/blink/public/web/web_plugin_params.h"
 #include "third_party/blink/public/web/web_range.h"
+#include "third_party/blink/public/web/web_savable_resources_test_support.h"
 #include "third_party/blink/public/web/web_script_source.h"
 #include "third_party/blink/public/web/web_searchable_form_data.h"
 #include "third_party/blink/public/web/web_security_policy.h"
@@ -2208,8 +2207,6 @@ bool RenderFrameImpl::OnMessageReceived(const IPC::Message& msg) {
     IPC_MESSAGE_HANDLER(FrameMsg_VisualStateRequest,
                         OnVisualStateRequest)
     IPC_MESSAGE_HANDLER(FrameMsg_Reload, OnReload)
-    IPC_MESSAGE_HANDLER(FrameMsg_GetSavableResourceLinks,
-                        OnGetSavableResourceLinks)
     IPC_MESSAGE_HANDLER(FrameMsg_MixedContentFound, OnMixedContentFound)
     IPC_MESSAGE_HANDLER(UnfreezableFrameMsg_Delete, OnDeleteFrame)
   IPC_END_MESSAGE_MAP()
@@ -5573,23 +5570,6 @@ void RenderFrameImpl::CommitSyncNavigation(
   navigation_params->service_worker_network_provider =
       ServiceWorkerNetworkProviderForFrame::CreateInvalidInstance();
   frame_->CommitNavigation(std::move(navigation_params), BuildDocumentState());
-}
-
-void RenderFrameImpl::OnGetSavableResourceLinks() {
-  std::vector<GURL> resources_list;
-  std::vector<SavableSubframe> subframes;
-  SavableResourcesResult result(&resources_list, &subframes);
-
-  if (!GetSavableResourceLinksForFrame(frame_, &result)) {
-    Send(new FrameHostMsg_SavableResourceLinksError(routing_id_));
-    return;
-  }
-
-  Referrer referrer = Referrer(frame_->GetDocument().Url(),
-                               frame_->GetDocument().GetReferrerPolicy());
-
-  Send(new FrameHostMsg_SavableResourceLinksResponse(
-      routing_id_, resources_list, referrer, subframes));
 }
 
 // mojom::MhtmlFileWriter implementation

@@ -4669,6 +4669,18 @@ void RenderFrameHostImpl::RequestOverlayRoutingToken(
   std::move(callback).Run(frame_token_);
 }
 
+void RenderFrameHostImpl::GetSavableResourceLinksCallback(
+    blink::mojom::GetSavableResourceLinksReplyPtr reply) {
+  if (!reply) {
+    delegate_->SavableResourceLinksError(this);
+    return;
+  }
+
+  delegate_->SavableResourceLinksResponse(this, reply->resources_list,
+                                          std::move(reply->referrer),
+                                          reply->subframes);
+}
+
 void RenderFrameHostImpl::DomOperationResponse(const std::string& json_string) {
   delegate_->DomOperationResponse(json_string);
 }
@@ -6616,6 +6628,15 @@ void RenderFrameHostImpl::RequestAXTreeSnapshot(AXTreeSnapshotCallback callback,
       ax_mode.mode(),
       base::BindOnce(&RenderFrameHostImpl::RequestAXTreeSnapshotCallback,
                      weak_ptr_factory_.GetWeakPtr(), std::move(callback)));
+}
+
+void RenderFrameHostImpl::GetSavableResourceLinksFromRenderer() {
+  if (!IsRenderFrameLive())
+    return;
+
+  GetAssociatedLocalFrame()->GetSavableResourceLinks(
+      base::BindOnce(&RenderFrameHostImpl::GetSavableResourceLinksCallback,
+                     weak_ptr_factory_.GetWeakPtr()));
 }
 
 void RenderFrameHostImpl::SetAccessibilityCallbackForTesting(

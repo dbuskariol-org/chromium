@@ -1018,7 +1018,6 @@ class CONTENT_EXPORT RenderFrameImpl
   void OnVisualStateRequest(uint64_t key);
   // TODO(https://crbug.com/995428): Deprecated.
   void OnReload();
-  void OnGetSavableResourceLinks();
   void OnSuppressFurtherDialogs();
   void OnMixedContentFound(const FrameMsg_MixedContentFound_Params& params);
 

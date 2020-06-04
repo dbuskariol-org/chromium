@@ -582,6 +582,7 @@ class CORE_EXPORT LocalFrame final : public Frame,
       mojo::PendingReceiver<mojom::blink::ReportingObserver> receiver) final;
   void UpdateOpener(
       const base::Optional<base::UnguessableToken>& opener_routing_id) final;
+  void GetSavableResourceLinks(GetSavableResourceLinksCallback callback) final;
 
   // blink::mojom::LocalMainFrame overrides:
   void AnimateDoubleTapZoom(const gfx::Point& point,
