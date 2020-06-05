@@ -172,14 +172,15 @@ Polymer({
       callbackRouter.onInstallFinished.addListener(error => {
         if (error === InstallerError.kNone) {
           // Install succeeded.
-          this.closeDialog_();
+          this.closePage_();
         } else {
           assert(this.state_ === State.INSTALLING);
           this.errorMessage_ = this.getErrorMessage_(error);
           this.state_ = State.ERROR;
         }
       }),
-      callbackRouter.onCanceled.addListener(() => this.closeDialog_()),
+      callbackRouter.onCanceled.addListener(() => this.closePage_()),
+      callbackRouter.requestClose.addListener(() => this.cancelOrBack_(true)),
     ];
 
     // TODO(lxj): The listener should only be invoked once, so it is fine to use
@@ -208,7 +209,7 @@ Polymer({
 
     document.addEventListener('keyup', event => {
       if (event.key == 'Escape') {
-        this.onCancelButtonClick_();
+        this.cancelOrBack_();
         event.preventDefault();
       }
     });
@@ -266,15 +267,29 @@ Polymer({
     BrowserProxy.getInstance().handler.install(diskSize, this.username_);
   },
 
-  /** @private */
+  /**
+   * This is used in app.html so that the event argument is not passed to
+   * cancelOrBack_().
+   *
+   * @private
+   */
   onCancelButtonClick_() {
+    this.cancelOrBack_();
+  },
+
+  /** @private */
+  cancelOrBack_(forceCancel = false) {
     switch (this.state_) {
       case State.PROMPT:
         BrowserProxy.getInstance().handler.cancelBeforeStart();
-        this.closeDialog_();
+        this.closePage_();
         break;
       case State.CONFIGURE:
-        this.state_ = State.PROMPT;
+        if (forceCancel) {
+          this.closePage_();
+        } else {
+          this.state_ = State.PROMPT;
+        }
         break;
       case State.INSTALLING:
         this.state_ = State.CANCELING;
@@ -282,11 +297,11 @@ Polymer({
         break;
       case State.ERROR:
       case State.ERROR_NO_RETRY:
-        this.closeDialog_();
+        this.closePage_();
         break;
       case State.CANCELING:
         // Although cancel button has been disabled, we can reach here if users
-        // press <esc> key.
+        // press <esc> key or from mojom "RequestClose()".
         break;
       default:
         assertNotReached();
@@ -294,8 +309,8 @@ Polymer({
   },
 
   /** @private */
-  closeDialog_() {
-    BrowserProxy.getInstance().handler.close();
+  closePage_() {
+    BrowserProxy.getInstance().handler.onPageClosed();
   },
 
   /**

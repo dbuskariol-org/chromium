@@ -14,7 +14,7 @@ const InstallerError = crostini.mojom.InstallerError;
 class FakePageHandler extends TestBrowserProxy {
   constructor() {
     super([
-      'install', 'cancel', 'cancelBeforeStart', 'close',
+      'install', 'cancel', 'cancelBeforeStart', 'onPageClosed',
       'requestAmountOfFreeDiskSpace'
     ]);
   }
@@ -35,8 +35,8 @@ class FakePageHandler extends TestBrowserProxy {
   }
 
   /** @override */
-  close() {
-    this.methodCalled('close');
+  onPageClosed() {
+    this.methodCalled('onPageClosed');
   }
 
   /** @override */
@@ -158,10 +158,10 @@ suite('<crostini-installer-app>', () => {
         app.$$('#installing-message > paper-progress').getAttribute('value'),
         '50');
 
-    expectEquals(fakeBrowserProxy.handler.getCallCount('close'), 0);
+    expectEquals(fakeBrowserProxy.handler.getCallCount('onPageClosed'), 0);
     fakeBrowserProxy.page.onInstallFinished(InstallerError.kNone);
     await flushTasks();
-    expectEquals(fakeBrowserProxy.handler.getCallCount('close'), 1);
+    expectEquals(fakeBrowserProxy.handler.getCallCount('onPageClosed'), 1);
   });
 
   // We only proceed to the config page if disk info is available. Let's make
@@ -322,7 +322,7 @@ suite('<crostini-installer-app>', () => {
         'error message should be set');
 
     await clickCancel();
-    expectEquals(fakeBrowserProxy.handler.getCallCount('close'), 1);
+    expectEquals(fakeBrowserProxy.handler.getCallCount('onPageClosed'), 1);
     expectEquals(fakeBrowserProxy.handler.getCallCount('cancelBeforeStart'), 0);
     expectEquals(fakeBrowserProxy.handler.getCallCount('cancel'), 0);
   });
@@ -342,27 +342,51 @@ suite('<crostini-installer-app>', () => {
     expectEquals(fakeBrowserProxy.handler.getCallCount('install'), 2);
   });
 
-  test('cancelBeforeStart', async () => {
-    await clickCancel();
+  [clickCancel,
+   () => fakeBrowserProxy.page.requestClose(),
+  ].forEach((canceller, i) => test(`cancelBeforeStart-{i}`, async () => {
+              await canceller();
+              await flushTasks();
+              expectEquals(
+                  fakeBrowserProxy.handler.getCallCount('cancelBeforeStart'),
+                  1);
+              expectEquals(
+                  fakeBrowserProxy.handler.getCallCount('onPageClosed'), 1);
+              expectEquals(fakeBrowserProxy.handler.getCallCount('cancel'), 0);
+            }));
+
+  // This is a special case that requestClose is different from clicking cancel
+  // --- instead of going back to the previous page, requestClose should close
+  // the page immediately.
+  test('requestCloseAtConfigPage', async () => {
+    await clickNext();  // Progress to config page.
+    await fakeBrowserProxy.page.requestClose();
+    await flushTasks();
     expectEquals(fakeBrowserProxy.handler.getCallCount('cancelBeforeStart'), 1);
-    expectEquals(fakeBrowserProxy.handler.getCallCount('close'), 1);
+    expectEquals(fakeBrowserProxy.handler.getCallCount('onPageClosed'), 1);
     expectEquals(fakeBrowserProxy.handler.getCallCount('cancel'), 0);
   });
 
-  test('cancelAfterStart', async () => {
-    fakeBrowserProxy.page.onAmountOfFreeDiskSpace(diskTicks, 0, false);
-    await clickNext();
-    await clickInstall();
-    await clickCancel();
-    expectEquals(fakeBrowserProxy.handler.getCallCount('cancel'), 1);
-    expectEquals(
-        fakeBrowserProxy.handler.getCallCount('close'), 0,
-        'should not close until onCanceled is called');
-    expectTrue(getInstallButton().hidden);
-    expectTrue(getCancelButton().disabled);
 
-    fakeBrowserProxy.page.onCanceled();
-    await flushTasks();
-    expectEquals(fakeBrowserProxy.handler.getCallCount('close'), 1);
-  });
+  [clickCancel,
+   () => fakeBrowserProxy.page.requestClose(),
+  ].forEach((canceller, i) => test(`cancelAfterStart-{i}`, async () => {
+              fakeBrowserProxy.page.onAmountOfFreeDiskSpace(
+                  diskTicks, 0, false);
+              await clickNext();
+              await clickInstall();
+              await canceller();
+              await flushTasks();
+              expectEquals(fakeBrowserProxy.handler.getCallCount('cancel'), 1);
+              expectEquals(
+                  fakeBrowserProxy.handler.getCallCount('onPageClosed'), 0,
+                  'should not close until onCanceled is called');
+              expectTrue(getInstallButton().hidden);
+              expectTrue(getCancelButton().disabled);
+
+              fakeBrowserProxy.page.onCanceled();
+              await flushTasks();
+              expectEquals(
+                  fakeBrowserProxy.handler.getCallCount('onPageClosed'), 1);
+            }));
 });

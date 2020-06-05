@@ -170,8 +170,13 @@ CrostiniInstallerUI::CrostiniInstallerUI(content::WebUI* web_ui)
 
 CrostiniInstallerUI::~CrostiniInstallerUI() = default;
 
-bool CrostiniInstallerUI::can_close() {
-  return can_close_;
+bool CrostiniInstallerUI::RequestClosePage() {
+  if (page_closed_ || !page_handler_) {
+    return true;
+  }
+
+  page_handler_->RequestClosePage();
+  return false;
 }
 
 void CrostiniInstallerUI::ClickInstallForTesting() {
@@ -208,12 +213,12 @@ void CrostiniInstallerUI::CreatePageHandler(
       std::move(pending_page_handler), std::move(pending_page),
       // Using Unretained(this) because |page_handler_| will not out-live
       // |this|.
-      base::BindOnce(&CrostiniInstallerUI::OnWebUICloseDialog,
+      base::BindOnce(&CrostiniInstallerUI::OnPageClosed,
                      base::Unretained(this)));
 }
 
-void CrostiniInstallerUI::OnWebUICloseDialog() {
-  can_close_ = true;
+void CrostiniInstallerUI::OnPageClosed() {
+  page_closed_ = true;
   // CloseDialog() is a no-op if we are not in a dialog (e.g. user
   // access the page using the URL directly, which is not supported).
   ui::MojoWebDialogUI::CloseDialog(nullptr);
