@@ -1360,7 +1360,6 @@ crbug.com/891427 virtual/android/fullscreen/rendering/backdrop-video.html [ Fail
 crbug.com/891427 virtual/android/url-bar/bottom-and-top-fixed-sticks-to-top.html [ Failure ]
 ## Next 4 here: https://ci.chromium.org/p/chromium/builders/luci.chromium.try/linux_chromium_rel_ng/216317
 crbug.com/891427 virtual/threaded-no-composited-antialiasing/animations/timing/animation-duration-infinite.html [ Failure ]
-crbug.com/891427 fast/overflow/transformed-frame-scrollIntoView.html [ Crash ]
 
 ### Flaky on trybots:
 ### Note: this list includes anything that flaked even once during my (many)
