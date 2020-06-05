@@ -264,6 +264,8 @@ crbug.com/887000 virtual/prefer_compositing_to_lcd_text/scrollbars/hidden-scroll
 crbug.com/882975 virtual/threaded/fast/events/pinch/gesture-pinch-zoom-prevent-in-handler.html [ Failure Pass ]
 crbug.com/882975 virtual/threaded/fast/events/pinch/scroll-visual-viewport-send-boundary-events.html [ Failure Pass ]
 
+crbug.com/898394 virtual/android/url-bar/bottom-and-top-fixed-sticks-to-top.html [ Failure ]
+
 crbug.com/1024151 http/tests/devtools/tracing/timeline-style/timeline-style-recalc-all-invalidator-types.js [ Failure Pass ]
 
 # Subpixel rounding differences that are incorrect.
@@ -1357,7 +1359,6 @@ crbug.com/1058822 virtual/dark-color-scheme/external/wpt/css/css-color-adjust/re
 crbug.com/891427 virtual/threaded-no-composited-antialiasing/animations/responsive/viewport-unit-transform-responsive.html [ Timeout ]
 crbug.com/891427 virtual/threaded-no-composited-antialiasing/animations/responsive/viewport-unit-translate-responsive.html [ Timeout ]
 crbug.com/891427 virtual/android/fullscreen/rendering/backdrop-video.html [ Failure ]
-crbug.com/891427 virtual/android/url-bar/bottom-and-top-fixed-sticks-to-top.html [ Failure ]
 ## Next 4 here: https://ci.chromium.org/p/chromium/builders/luci.chromium.try/linux_chromium_rel_ng/216317
 crbug.com/891427 virtual/threaded-no-composited-antialiasing/animations/timing/animation-duration-infinite.html [ Failure ]
 
@@ -4700,10 +4701,6 @@ crbug.com/895257 [ Mac ] external/wpt/css/css-fonts/variations/at-font-face-font
 
 #Sheriff 2018-10-23
 crbug.com/898378 [ Mac10.13 ] fast/scroll-behavior/smooth-scroll/keyboard-scroll.html [ Timeout ]
-
-# Sheriff 2018-10-24
-### See crbug.com/891427 comment near the top of this file:
-####crbug.com/898394 [ Linux ] virtual/android/url-bar/bottom-and-top-fixed-sticks-to-top.html [ Failure ]
 
 # Sheriff 2018-10-26
 ### See crbug.com/891427 comment near the top of this file:
