@@ -66134,25 +66134,6 @@ would be helpful to identify which type is being sent.
   <int value="3" label="Use new"/>
 </enum>
 
-<enum name="SyncConsentBehavior">
-  <summary>
-    Behavior of the out-of-box experience (OOBE) sync consent screen.
-  </summary>
-  <int value="0" label="Unknown"/>
-  <int value="1" label="Show"/>
-  <int value="2" label="Skip"/>
-  <int value="3" label="Skip and enable sync"/>
-</enum>
-
-<enum name="SyncConsentUserChoice">
-  <summary>
-    Which button the user clicked in the out-of-box experience (OOBE) sync
-    consent screen.
-  </summary>
-  <int value="0" label="Declined"/>
-  <int value="1" label="Accepted"/>
-</enum>
-
 <enum name="SyncCryptographerPendingKeysState">
   <int value="0" label="Does not have pending keys"/>
   <int value="1" label="Has pending keys"/>
