@@ -2040,12 +2040,12 @@
       status: "experimental"
     },
     {
-      name: "WebXRIncubations",
+      name: "WebXRLightEstimation",
       depends_on: ["WebXRARModule"],
       status: "experimental",
     },
     {
-      name: "WebXRLightEstimation",
+      name: "WebXRPlaneDetection",
       depends_on: ["WebXRARModule"],
       status: "experimental",
     },
