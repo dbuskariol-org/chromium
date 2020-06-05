@@ -545,6 +545,7 @@ initWithBrowserLauncher:(id<BrowserLauncher>)browserLauncher
 #pragma mark - SafeModeCoordinatorDelegate Implementation
 
 - (void)coordinatorDidExitSafeMode:(nonnull SafeModeCoordinator*)coordinator {
+  self.sceneShowingBlockingUI = nil;
   self.safeModeCoordinator = nil;
   self.inSafeMode = NO;
   [_browserLauncher startUpBrowserToStage:INITIALIZATION_STAGE_FOREGROUND];
@@ -568,6 +569,8 @@ initWithBrowserLauncher:(id<BrowserLauncher>)browserLauncher
   [self.foregroundActiveScene.window makeKeyAndVisible];
 
   [self.safeModeCoordinator start];
+
+  self.sceneShowingBlockingUI = self.foregroundActiveScene;
 }
 
 - (void)initializeUI {
@@ -612,13 +615,14 @@ initWithBrowserLauncher:(id<BrowserLauncher>)browserLauncher
 - (void)sceneDidActivate:(NSNotification*)notification {
   DCHECK(IsSceneStartupSupported());
   if (@available(iOS 13, *)) {
+    UIWindowScene* scene =
+        base::mac::ObjCCastStrict<UIWindowScene>(notification.object);
+    SceneDelegate* sceneDelegate =
+        base::mac::ObjCCastStrict<SceneDelegate>(scene.delegate);
+
     if (!self.firstSceneHasActivated) {
       self.firstSceneHasActivated = YES;
 
-      UIWindowScene* scene =
-          base::mac::ObjCCastStrict<UIWindowScene>(notification.object);
-      SceneDelegate* sceneDelegate =
-          base::mac::ObjCCastStrict<SceneDelegate>(scene.delegate);
       [self.observers appState:self
            firstSceneActivated:sceneDelegate.sceneState];
 
@@ -627,10 +631,10 @@ initWithBrowserLauncher:(id<BrowserLauncher>)browserLauncher
         // safe mode has been postponed until now.
         [self startSafeMode];
       }
-      sceneDelegate.sceneState.presentingModalOverlay =
-          self.sceneShowingBlockingUI &&
-          (self.sceneShowingBlockingUI != sceneDelegate.sceneState);
     }
+    sceneDelegate.sceneState.presentingModalOverlay =
+        self.sceneShowingBlockingUI &&
+        (self.sceneShowingBlockingUI != sceneDelegate.sceneState);
   }
 }
 

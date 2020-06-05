@@ -428,6 +428,11 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
 // TODO(crbug.com/1072408): factor out into a new class.
 - (void)displayBlockingOverlay {
+  // Make the window visible. This is because in safe mode it's not visible yet.
+  if (self.sceneState.window.hidden) {
+    [self.sceneState.window makeKeyAndVisible];
+  }
+
   self.blockingOverlayViewController =
       [[BlockingOverlayViewController alloc] init];
   self.blockingOverlayViewController.blockingSceneCommandHandler =

@@ -649,6 +649,9 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
 #pragma mark - Property implementation.
 
 - (id<BrowserInterfaceProvider>)interfaceProvider {
+  if (self.appState.foregroundActiveScene) {
+    return self.appState.foregroundActiveScene.interfaceProvider;
+  }
   return self.appState.connectedScenes[0].interfaceProvider;
 }
 
