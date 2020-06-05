@@ -3796,6 +3796,12 @@
     "expiry_milestone": 88
   },
   {
+    "name": "safety-check-chrome-cleaner-child",
+    "owners": ["rainhard", "msramek",
+      "chrome-friendly-settings@google.com"],
+    "expiry_milestone": 88
+  },
+  {
     "name": "safety-check-ios",
     "owners": [ "andzaytsev", "harrisonsean", "msramek",
       "chrome-friendly-settings@google.com"],
