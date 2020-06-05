@@ -90,7 +90,11 @@ public class WebXrVrPermissionTest {
     @Test
     @MediumTest
     @XrActivityRestriction({XrActivityRestriction.SupportedActivity.ALL})
-    public void testVrPermissionPersistance() {
+    @DisabledTest(
+            message =
+                    "https://crbug.com/1091482, https://crbug.com/1091465, https://crbug.com/1091433")
+    public void
+    testVrPermissionPersistance() {
         mWebXrVrPermissionTestFramework.loadFileAndAwaitInitialization(
                 "generic_webxr_page", PAGE_LOAD_TIMEOUT_S);
         mWebXrVrPermissionTestFramework.enterSessionWithUserGestureOrFail();
