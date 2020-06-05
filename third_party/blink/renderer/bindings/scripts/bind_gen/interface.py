@@ -6060,15 +6060,6 @@ def generate_interface(interface):
     api_class_def.set_base_template_vars(cg_context.template_bindings())
     api_class_def.bottom_section.append(
         TextNode("friend class {};".format(blink_class_name(interface))))
-    api_base_class_def = CxxNamespaceNode(
-        name="bindings",
-        body=TextNode(
-            _format(
-                "template class {export} "
-                "V8InterfaceBridge<{class_name}, {blink_impl_class}>;",
-                export=component_export(api_component),
-                class_name=cg_context.class_name,
-                blink_impl_class=blink_class_name(interface))))
     if is_cross_components:
         impl_class_def = CxxClassDefNode(
             impl_class_name,
@@ -6418,8 +6409,6 @@ def generate_interface(interface):
     # Assemble the parts.
     api_header_blink_ns.body.extend([
         api_class_def,
-        EmptyNode(),
-        api_base_class_def,
         EmptyNode(),
     ])
     if is_cross_components:
