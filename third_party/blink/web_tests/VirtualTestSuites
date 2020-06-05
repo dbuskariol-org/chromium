@@ -567,7 +567,7 @@
   },
   {
     "prefix": "appcache-origin-trial",
-    "bases": ["http/tests/appcache/origin-trial"],
+    "bases": ["http/tests/appcache"],
     "args": ["--enable-features=AppCacheRequireOriginTrial"]
   },
   {
