@@ -70021,6 +70021,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRAssetsComponentUpdateStatus">
+  <obsolete>
+    Removed 06/2020.
+  </obsolete>
   <int value="1"
       label="Failed to verify component (component version not known)."/>
   <int value="2"
@@ -70035,6 +70038,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRAssetsLoadStatus">
+  <obsolete>
+    Removed 06/2020.
+  </obsolete>
   <int value="1000"
       label="Successfully loaded assets (component version 0.1)."/>
   <int value="1001"
@@ -70046,6 +70052,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRComponentStatus">
+  <obsolete>
+    Removed 06/2020.
+  </obsolete>
   <int value="0" label="Component is ready to use"/>
   <int value="1" label="Component is not ready to use. Reason unknown."/>
 </enum>
@@ -70071,6 +70080,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRPresentationStartAction">
+  <obsolete>
+    Removed as of 06/2020.
+  </obsolete>
   <int value="0" label="Other">
     A catch all for presentation sources that are unknown or cannot be specified
     for other reasons.
@@ -70094,6 +70106,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRSessionStartAction">
+  <obsolete>
+    Removed as of 06/2020.
+  </obsolete>
   <int value="1" label="Headset Activation">
     The user activated a headset. For example, inserted phone in Daydream, or
     put on an Occulus or Vive.
@@ -70112,6 +70127,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRStartReason">
+  <obsolete>
+    Removed as of 06/2020.
+  </obsolete>
   <int value="1" label="Headset Activation"/>
   <int value="2" label="Presentation Requset"/>
   <int value="3" label="(obsolete) Deep linked app"/>
@@ -70119,6 +70137,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRSuppressedElement">
+  <obsolete>
+    Removed 06/2020.
+  </obsolete>
   <int value="0" label="File chooser was suppressed in VR"/>
   <int value="1" label="Bluetooth picker was suppressed in VR"/>
   <int value="2" label="JS dialog was suppressed in VR (obsolete in M71)"/>
@@ -70144,6 +70165,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRUnsupportedMode">
+  <obsolete>
+    Removed 06/2020.
+  </obsolete>
   <int value="0" label="Unhandled code point in URL"/>
   <int value="1" label="Could not elide URL (obsolete)"/>
   <int value="2" label="Unhandled PageInfo"/>
@@ -70172,6 +70196,9 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="VRVoiceSearchEndState">
+  <obsolete>
+    Removed 06/2020.
+  </obsolete>
   <int value="0" label="Voice search in VR opened a search page"/>
   <int value="1" label="Voice search in VR cancelled"/>
   <int value="2" label="Voice search in VR didn't catch phrase or timed out"/>
@@ -74146,6 +74173,9 @@ Called by update_scheduler_enums.py.-->
 </enum>
 
 <enum name="XRSessionRequestDialogAction">
+  <obsolete>
+    Removed as of 06/2020.
+  </obsolete>
   <int value="0" label="UserConsented"/>
   <int value="1" label="UserDenied"/>
   <int value="2" label="UserAbortedConsentFlow"/>
