@@ -1380,9 +1380,6 @@ crbug.com/891427 virtual/threaded/external/wpt/css/css-scroll-snap/snap-at-user-
 # Next 1 here: https://ci.chromium.org/p/chromium/builders/luci.chromium.try/win7-blink-rel/1504
 crbug.com/891427 tables/mozilla_expected_failures/marvin/table_overflow_dirty_reflow_tbody.html [ Pass Failure Timeout Crash ]
 
-# The following fail only on Mac.
-crbug.com/891427 [ Mac ] fast/events/touch/gesture/touch-gesture-scroll-listbox.html [ Pass Failure Timeout Crash ]
-
 crbug.com/891427 paint/invalidation/scroll/fixed-img-src-change-after-scroll.html [ Pass Failure Timeout Crash ]
 # ====== OOPIF-mode failures until here ======
 
@@ -1965,8 +1962,6 @@ crbug.com/613672 [ Mac ] fast/events/touch/gesture/touch-gesture-scroll-input-fi
 crbug.com/613672 [ Mac ] fast/events/touch/gesture/touch-gesture-scroll-page-past-extent.html [ Skip ]
 crbug.com/613672 [ Mac ] fast/events/touch/gesture/touch-gesture-scroll-page-zoomed.html [ Skip ]
 crbug.com/613672 [ Mac ] fast/events/touch/gesture/touch-gesture-scroll-page.html [ Skip ]
-### See crbug.com/891427 comment near the top of this file:
-####crbug.com/613672 [ Mac ] fast/events/touch/gesture/touch-gesture-scroll-listbox.html [ Skip ]
 
 # Since there is no compositor thread when running tests then there is no main thread event queue. Hence the
 # logic for this test will be skipped when running Layout tests.
