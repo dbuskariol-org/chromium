@@ -15428,6 +15428,12 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="7" label="Periodic Background Sync"/>
 </enum>
 
+<enum name="DevToolsDualScreenDeviceEmulated">
+  <int value="0" label="Dual-screen or fold device selected"/>
+  <int value="1" label="Dual-screen span mode selected"/>
+  <int value="2" label="Platform dual-screen support used"/>
+</enum>
+
 <enum name="DevToolsIssuesPanelOpenedFrom">
   <int value="0" label="Console Info Bar"/>
   <int value="1" label="Learn More Link COEP"/>
