@@ -252,12 +252,8 @@ CompositingReasons LayoutEmbeddedContent::AdditionalCompositingReasons() const {
     return CompositingReason::kPlugin;
   if (auto* element = GetFrameOwnerElement()) {
     if (Frame* content_frame = element->ContentFrame()) {
-      if (content_frame->IsRemoteFrame() ||
-          (base::FeatureList::IsEnabled(
-               blink::features::kCompositeCrossOriginIframes) &&
-           content_frame->IsCrossOriginToParentFrame())) {
+      if (content_frame->IsRemoteFrame())
         return CompositingReason::kIFrame;
-      }
     }
   }
   return CompositingReason::kNone;
