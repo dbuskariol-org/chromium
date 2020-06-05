@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/download/android/download_dialog_bridge_impl.h"
+#include "chrome/browser/download/android/download_dialog_bridge.h"
 
 #include "base/android/jni_android.h"
 #include "base/android/jni_string.h"
@@ -14,8 +14,18 @@
 #include "components/prefs/pref_service.h"
 #include "ui/android/window_android.h"
 
-DownloadDialogBridgeImpl::DownloadDialogBridgeImpl()
-    : is_dialog_showing_(false) {
+// -----------------------------------------------------------------------------
+// DownloadDialogResult
+DownloadDialogResult::DownloadDialogResult() = default;
+
+DownloadDialogResult::DownloadDialogResult(const DownloadDialogResult&) =
+    default;
+
+DownloadDialogResult::~DownloadDialogResult() = default;
+
+// -----------------------------------------------------------------------------
+// DownloadDialogBridge.
+DownloadDialogBridge::DownloadDialogBridge() : is_dialog_showing_(false) {
   JNIEnv* env = base::android::AttachCurrentThread();
   java_obj_.Reset(env, Java_DownloadDialogBridge_create(
                            env, reinterpret_cast<intptr_t>(this))
@@ -23,36 +33,39 @@ DownloadDialogBridgeImpl::DownloadDialogBridgeImpl()
   DCHECK(!java_obj_.is_null());
 }
 
-DownloadDialogBridgeImpl::~DownloadDialogBridgeImpl() {
+DownloadDialogBridge::~DownloadDialogBridge() {
   JNIEnv* env = base::android::AttachCurrentThread();
   Java_DownloadDialogBridge_destroy(env, java_obj_);
 }
 
-void DownloadDialogBridgeImpl::ShowDialog(
-    gfx::NativeWindow native_window,
-    int64_t total_bytes,
-    DownloadLocationDialogType dialog_type,
-    const base::FilePath& suggested_path,
-    LocationCallback location_callback) {
+void DownloadDialogBridge::ShowDialog(gfx::NativeWindow native_window,
+                                      int64_t total_bytes,
+                                      DownloadLocationDialogType dialog_type,
+                                      const base::FilePath& suggested_path,
+                                      DialogCallback dialog_callback) {
   if (!native_window)
     return;
 
   UMA_HISTOGRAM_ENUMERATION("MobileDownload.Location.Dialog.Type", dialog_type);
 
-  location_callback_ = std::move(location_callback);
+  dialog_callback_ = std::move(dialog_callback);
 
   // This shouldn't happen, but if it does, cancel download.
   if (dialog_type == DownloadLocationDialogType::NO_DIALOG) {
     NOTREACHED();
-    CompleteLocationSelection(DownloadLocationDialogResult::USER_CANCELED,
-                              base::FilePath());
+    DownloadDialogResult dialog_result;
+    dialog_result.location_result = DownloadLocationDialogResult::USER_CANCELED;
+    CompleteSelection(std::move(dialog_result));
     return;
   }
 
   // If dialog is showing, run the callback to continue without confirmation.
   if (is_dialog_showing_) {
-    CompleteLocationSelection(DownloadLocationDialogResult::DUPLICATE_DIALOG,
-                              std::move(suggested_path));
+    DownloadDialogResult dialog_result;
+    dialog_result.location_result =
+        DownloadLocationDialogResult::DUPLICATE_DIALOG;
+    dialog_result.file_path = suggested_path;
+    CompleteSelection(std::move(dialog_result));
     return;
   }
 
@@ -66,39 +79,42 @@ void DownloadDialogBridgeImpl::ShowDialog(
                                              suggested_path.AsUTF8Unsafe()));
 }
 
-void DownloadDialogBridgeImpl::OnComplete(
+void DownloadDialogBridge::OnComplete(
     JNIEnv* env,
     const base::android::JavaParamRef<jobject>& obj,
     const base::android::JavaParamRef<jstring>& returned_path) {
-  base::FilePath path(
+  DownloadDialogResult dialog_result;
+  dialog_result.location_result = DownloadLocationDialogResult::USER_CONFIRMED;
+  dialog_result.file_path = base::FilePath(
       base::android::ConvertJavaStringToUTF8(env, returned_path));
 
-  CompleteLocationSelection(DownloadLocationDialogResult::USER_CONFIRMED, path);
-
+  CompleteSelection(std::move(dialog_result));
   is_dialog_showing_ = false;
 }
 
-void DownloadDialogBridgeImpl::OnCanceled(
+void DownloadDialogBridge::OnCanceled(
     JNIEnv* env,
     const base::android::JavaParamRef<jobject>& obj) {
-  if (location_callback_) {
-    CompleteLocationSelection(DownloadLocationDialogResult::USER_CANCELED,
-                              base::FilePath());
+  if (dialog_callback_) {
+    DownloadDialogResult dialog_result;
+    dialog_result.location_result = DownloadLocationDialogResult::USER_CANCELED;
+    CompleteSelection(std::move(dialog_result));
   }
 
   is_dialog_showing_ = false;
 }
 
-void DownloadDialogBridgeImpl::CompleteLocationSelection(
-    DownloadLocationDialogResult result,
-    base::FilePath file_path) {
-  if (location_callback_) {
-    UMA_HISTOGRAM_ENUMERATION("MobileDownload.Location.Dialog.Result", result);
-    std::move(location_callback_).Run(result, std::move(file_path));
-  }
+void DownloadDialogBridge::CompleteSelection(DownloadDialogResult result) {
+  if (!dialog_callback_)
+    return;
+
+  UMA_HISTOGRAM_ENUMERATION("MobileDownload.Location.Dialog.Result",
+                            result.location_result);
+  std::move(dialog_callback_).Run(std::move(result));
 }
 
-static base::android::ScopedJavaLocalRef<jstring>
+// static
+base::android::ScopedJavaLocalRef<jstring>
 JNI_DownloadDialogBridge_GetDownloadDefaultDirectory(JNIEnv* env) {
   PrefService* pref_service =
       ProfileManager::GetActiveUserProfile()->GetOriginalProfile()->GetPrefs();
@@ -107,7 +123,8 @@ JNI_DownloadDialogBridge_GetDownloadDefaultDirectory(JNIEnv* env) {
       env, pref_service->GetString(prefs::kDownloadDefaultDirectory));
 }
 
-static void JNI_DownloadDialogBridge_SetDownloadAndSaveFileDefaultDirectory(
+// static
+void JNI_DownloadDialogBridge_SetDownloadAndSaveFileDefaultDirectory(
     JNIEnv* env,
     const base::android::JavaParamRef<jstring>& directory) {
   PrefService* pref_service =
