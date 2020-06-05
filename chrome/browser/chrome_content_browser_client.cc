@@ -5676,3 +5676,12 @@ bool ChromeContentBrowserClient::IsOriginTrialRequiredForAppCache(
 
   return false;
 }
+
+bool ChromeContentBrowserClient::
+    ShouldInheritCrossOriginEmbedderPolicyImplicitly(const GURL& url) {
+#if BUILDFLAG(ENABLE_EXTENSIONS)
+  return url.SchemeIs(extensions::kExtensionScheme);
+#else
+  return false;
+#endif
+}

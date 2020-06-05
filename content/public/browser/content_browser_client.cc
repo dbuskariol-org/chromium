@@ -1089,4 +1089,9 @@ bool ContentBrowserClient::IsOriginTrialRequiredForAppCache(
       blink::features::kAppCacheRequireOriginTrial);
 }
 
+bool ContentBrowserClient::ShouldInheritCrossOriginEmbedderPolicyImplicitly(
+    const GURL& url) {
+  return false;
+}
+
 }  // namespace content
