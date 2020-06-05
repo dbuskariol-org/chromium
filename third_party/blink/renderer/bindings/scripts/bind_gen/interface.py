@@ -4013,6 +4013,19 @@ def bind_installer_local_vars(code_node, cg_context):
            "${class_name}::GetWrapperTypeInfo();")),
     ])
 
+    # context_feature_settings
+    node = S("context_feature_settings",
+             ("const ContextFeatureSettings* ${context_feature_settings} = "
+              "ContextFeatureSettings::From("
+              "${execution_context}, "
+              "ContextFeatureSettings::CreationMode::kDontCreateIfNotExists"
+              ");"))
+    node.accumulate(
+        CodeGenAccumulator.require_include_headers([
+            "third_party/blink/renderer/core/context_features/context_feature_settings.h"
+        ]))
+    local_vars.append(node)
+
     # execution_context
     node = S("execution_context", ("ExecutionContext* ${execution_context} = "
                                    "ExecutionContext::From(${script_state});"))
