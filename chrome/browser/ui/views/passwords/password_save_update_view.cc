@@ -466,7 +466,7 @@ void PasswordSaveUpdateView::ReplaceWithPromo() {
     NOTREACHED();
   }
   GetWidget()->UpdateWindowIcon();
-  GetWidget()->UpdateWindowTitle();
+  SetTitle(controller_.GetTitle());
   UpdateDialogButtons();
   DialogModelChanged();
 

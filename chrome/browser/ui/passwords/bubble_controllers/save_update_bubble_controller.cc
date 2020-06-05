@@ -233,6 +233,10 @@ bool SaveUpdateBubbleController::RevealPasswords() {
   return reveal_immediately;
 }
 
+base::string16 SaveUpdateBubbleController::GetTitle() const {
+  return title_;
+}
+
 void SaveUpdateBubbleController::ReportInteractions() {
   if (state_ == password_manager::ui::CHROME_SIGN_IN_PROMO_STATE)
     return;
@@ -277,8 +281,4 @@ void SaveUpdateBubbleController::ReportInteractions() {
   // Record UKM statistics on dismissal reason.
   if (metrics_recorder_)
     metrics_recorder_->RecordUIDismissalReason(dismissal_reason_);
-}
-
-base::string16 SaveUpdateBubbleController::GetTitle() const {
-  return title_;
 }

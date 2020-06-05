@@ -61,6 +61,9 @@ class SaveUpdateBubbleController : public PasswordBubbleControllerBase {
   // re-authentication is successful.
   bool RevealPasswords();
 
+  // PasswordBubbleControllerBase methods:
+  base::string16 GetTitle() const override;
+
   password_manager::ui::State state() const { return state_; }
 
   const autofill::PasswordForm& pending_password() const {
@@ -87,7 +90,6 @@ class SaveUpdateBubbleController : public PasswordBubbleControllerBase {
 
  private:
   // PasswordBubbleControllerBase methods:
-  base::string16 GetTitle() const override;
   void ReportInteractions() override;
 
   // Origin of the page from where this bubble was triggered.
