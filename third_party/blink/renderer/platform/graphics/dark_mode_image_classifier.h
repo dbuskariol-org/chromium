@@ -29,9 +29,6 @@ class PLATFORM_EXPORT DarkModeImageClassifier {
     // True if the image is in color, false if it is grayscale.
     bool is_colorful;
 
-    // Whether the image was originally an SVG.
-    bool is_svg;
-
     // Ratio of the number of bucketed colors used in the image to all
     // possibilities. Color buckets are represented with 4 bits per color
     // channel.
@@ -39,8 +36,8 @@ class PLATFORM_EXPORT DarkModeImageClassifier {
 
     // How much of the image is transparent or considered part of the
     // background.
-    float background_ratio;
     float transparency_ratio;
+    float background_ratio;
   };
 
   DarkModeImageClassifier();

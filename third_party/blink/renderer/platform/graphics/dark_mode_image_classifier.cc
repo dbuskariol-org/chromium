@@ -216,7 +216,6 @@ DarkModeImageClassifier::Features DarkModeImageClassifier::ComputeFeatures(
       ComputeColorBucketsRatio(sampled_pixels, color_mode);
   features.transparency_ratio = transparency_ratio;
   features.background_ratio = background_ratio;
-  features.is_svg = image_type_ == ImageType::kSvg;
 
   return features;
 }
@@ -268,8 +267,8 @@ DarkModeClassification DarkModeImageClassifier::ClassifyWithFeatures(
     // within float array. Do not change the order here without also changing
     // the neural network code!
     float feature_list[]{features.is_colorful, features.color_buckets_ratio,
-                         features.transparency_ratio, features.background_ratio,
-                         features.is_svg};
+                         features.transparency_ratio,
+                         features.background_ratio};
 
     darkmode_tfnative_model::Inference(feature_list, &nn_out, &nn_temp);
     result = nn_out > 0 ? DarkModeClassification::kApplyFilter

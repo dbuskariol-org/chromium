@@ -267,7 +267,6 @@ TEST_F(SVGImageTest, DarkModeClassification) {
   EXPECT_EQ(classifier()->ClassifyUsingDecisionTree(features),
             DarkModeClassification::kApplyFilter);
   EXPECT_FALSE(features.is_colorful);
-  EXPECT_TRUE(features.is_svg);
   EXPECT_NEAR(0.0625f, features.color_buckets_ratio, kEpsilon);
   EXPECT_NEAR(0.968889f, features.transparency_ratio, kEpsilon);
   EXPECT_NEAR(0.02f, features.background_ratio, kEpsilon);
@@ -290,7 +289,6 @@ TEST_F(SVGImageTest, DarkModeClassification) {
   EXPECT_EQ(classifier()->ClassifyUsingDecisionTree(features),
             DarkModeClassification::kApplyFilter);
   EXPECT_TRUE(features.is_colorful);
-  EXPECT_TRUE(features.is_svg);
   EXPECT_NEAR(0.00170898f, features.color_buckets_ratio, kEpsilon);
   EXPECT_NEAR(0.0f, features.transparency_ratio, kEpsilon);
   EXPECT_NEAR(0.0f, features.background_ratio, kEpsilon);
@@ -312,7 +310,6 @@ TEST_F(SVGImageTest, DarkModeClassification) {
   EXPECT_EQ(classifier()->ClassifyUsingDecisionTree(features),
             DarkModeClassification::kApplyFilter);
   EXPECT_TRUE(features.is_colorful);
-  EXPECT_TRUE(features.is_svg);
   EXPECT_NEAR(0.000244141f, features.color_buckets_ratio, kEpsilon);
   EXPECT_NEAR(0.777778f, features.transparency_ratio, kEpsilon);
   EXPECT_NEAR(0.0f, features.background_ratio, kEpsilon);
@@ -334,7 +331,6 @@ TEST_F(SVGImageTest, DarkModeClassification) {
   EXPECT_EQ(classifier()->ClassifyUsingDecisionTree(features),
             DarkModeClassification::kApplyFilter);
   EXPECT_FALSE(features.is_colorful);
-  EXPECT_TRUE(features.is_svg);
   EXPECT_NEAR(0.0625f, features.color_buckets_ratio, kEpsilon);
   EXPECT_NEAR(0.888889f, features.transparency_ratio, kEpsilon);
   EXPECT_NEAR(0.11f, features.background_ratio, kEpsilon);
