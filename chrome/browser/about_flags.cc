@@ -4753,10 +4753,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kDisplayChangeModalDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(ash::features::kDisplayChangeModal)},
 
-    {"corner-shortcuts", flag_descriptions::kCornerShortcutsName,
-     flag_descriptions::kCornerShortcutsDescription, kOsCrOS,
-     FEATURE_VALUE_TYPE(ash::features::kCornerShortcuts)},
-
     {"printer-status", flag_descriptions::kPrinterStatusName,
      flag_descriptions::kPrinterStatusDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kPrinterStatus)},
