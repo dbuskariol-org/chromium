@@ -60,6 +60,7 @@ enum XRSessionFeature {
   HIT_TEST = 7,
   LIGHT_ESTIMATION = 8, // Experimental feature.
   ANCHORS = 9,  // Experimental feature.
+  CAMERA_ACCESS = 10, // Experimental feature.
 };
 
 // These values are persisted to logs. Entries should not be renumbered and

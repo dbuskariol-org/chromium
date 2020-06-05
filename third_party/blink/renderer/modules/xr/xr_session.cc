@@ -306,6 +306,7 @@ void XRSession::MetricsReporter::ReportFeatureUsed(
     case XRSessionFeature::HIT_TEST:
     case XRSessionFeature::LIGHT_ESTIMATION:
     case XRSessionFeature::ANCHORS:
+    case XRSessionFeature::CAMERA_ACCESS:
       // Not recording metrics for these features currently.
       break;
   }

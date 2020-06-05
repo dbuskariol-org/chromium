@@ -131,6 +131,9 @@ base::Optional<device::mojom::XRSessionFeature> StringToXRSessionFeature(
   } else if (RuntimeEnabledFeatures::WebXRLightEstimationEnabled(doc) &&
              feature_string == "light-estimation") {
     return device::mojom::XRSessionFeature::LIGHT_ESTIMATION;
+  } else if (RuntimeEnabledFeatures::WebXRCameraAccessEnabled(doc) &&
+             feature_string == "camera-access") {
+    return device::mojom::XRSessionFeature::CAMERA_ACCESS;
   }
 
   return base::nullopt;
@@ -164,6 +167,7 @@ bool IsFeatureValidForMode(device::mojom::XRSessionFeature feature,
       }
       return true;
     case device::mojom::XRSessionFeature::LIGHT_ESTIMATION:
+    case device::mojom::XRSessionFeature::CAMERA_ACCESS:
       return mode == device::mojom::blink::XRSessionMode::kImmersiveAr;
   }
 }
@@ -184,6 +188,7 @@ bool HasRequiredFeaturePolicy(const ExecutionContext* context,
     case device::mojom::XRSessionFeature::HIT_TEST:
     case device::mojom::XRSessionFeature::LIGHT_ESTIMATION:
     case device::mojom::XRSessionFeature::ANCHORS:
+    case device::mojom::XRSessionFeature::CAMERA_ACCESS:
       return context->IsFeatureEnabled(
           mojom::blink::FeaturePolicyFeature::kWebXr,
           ReportOptions::kReportOnFailure);
