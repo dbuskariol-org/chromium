@@ -676,6 +676,20 @@
 -keep public class androidx.versionedparcelable.ParcelImpl
 
 ################################################################################
+# obj/third_party/android_deps/com_android_support_support_compat_java/proguard.txt
+################################################################################
+# aapt2 is not (yet) keeping FQCNs defined in the appComponentFactory <application> attribute
+-keep class android.support.v4.app.CoreComponentFactory
+
+################################################################################
+# obj/third_party/android_deps/com_android_support_versionedparcelable_java/proguard.txt
+################################################################################
+-keep public class * extends androidx.versionedparcelable.VersionedParcelable
+-keep public class android.support.**Parcelizer { *; }
+-keep public class androidx.**Parcelizer { *; }
+-keep public class androidx.versionedparcelable.ParcelImpl
+
+################################################################################
 # obj/third_party/android_deps/google_play_services_base_java/proguard.txt
 ################################################################################
 # b/35135904 Ensure that proguard will not strip the mResultGuardian.

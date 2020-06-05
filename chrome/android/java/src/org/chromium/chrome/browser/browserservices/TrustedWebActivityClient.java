@@ -172,7 +172,7 @@ public class TrustedWebActivityClient {
                     }
                 };
 
-                Bundle executionResult = service.sendExtraCommand(
+                Bundle executionResult = service.extraCommand(
                         CHECK_LOCATION_PERMISSION_COMMAND_NAME, Bundle.EMPTY, resultCallback);
                 // Set permission to false if the service does not know how to handle the
                 // extraCommand.
