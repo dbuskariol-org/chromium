@@ -5053,6 +5053,9 @@ bool Document::CanAcceptChild(const Node& new_child,
 Node* Document::Clone(Document& factory, CloneChildrenFlag flag) const {
   DCHECK_EQ(this, &factory)
       << "Document::Clone() doesn't support importNode mode.";
+
+  if (!execution_context_)
+    return nullptr;
   Document* clone = CloneDocumentWithoutChildren();
   clone->CloneDataFromDocument(*this);
   if (flag != CloneChildrenFlag::kSkip)
