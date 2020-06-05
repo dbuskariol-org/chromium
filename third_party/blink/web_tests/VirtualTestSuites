@@ -499,7 +499,8 @@
   },
   {
     "prefix": "no-auto-wpt-origin-isolation",
-    "bases": ["external/wpt/origin-isolation"],
+    "bases": ["external/wpt/origin-isolation",
+              "wpt_internal/origin-isolation"],
     "args": ["--disable-auto-wpt-origin-isolation"]
   },
   {
