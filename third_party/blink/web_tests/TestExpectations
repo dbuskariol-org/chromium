@@ -5935,3 +5935,4 @@ crbug.com/1057060 fast/scrolling/scrollbars/mouse-autoscrolling-on-scrollbar.htm
 # Sheriff 2020-06-05
 crbug.com/1091829 [ Mac ] fast/scrolling/scroll-non-composited-scroller.html [ Pass Failure ]
 crbug.com/1091829 [ Linux ] virtual/threaded-prefer-compositing/fast/scrolling/scroll-non-composited-scroller.html [ Pass Failure ]
+crbug.com/1091885 fast/peerconnection/RTCPeerConnection-iframe-gc.html [ Pass Failure ]
