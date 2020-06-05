@@ -18094,6 +18094,26 @@
       The policy should be specified as a string that expresses the URL and hash in the JSON format.''',
     },
     {
+      'name': 'PluginVmDataCollectionAllowed',
+      'owners': ['okalitova@chromium.org', 'janagrill@chromium.org'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': ['chrome_os:85-'],
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': False,
+      },
+      'future': True,
+      'example_value': False,
+      'id': 712,
+      'caption': '''Allow <ph name="PLUGIN_VM_NAME">PluginVm</ph> Product Analytics''',
+      'tags': [],
+      'desc': '''Allow <ph name="PLUGIN_VM_NAME">PluginVm</ph> to collect <ph name="PLUGIN_VM_NAME">PluginVm</ph> usage data.
+
+      If the policy is set to false or left unset, <ph name="PLUGIN_VM_NAME">PluginVm</ph> is not allowed to collect data.
+      If set to true, <ph name="PLUGIN_VM_NAME">PluginVm</ph> might collect <ph name="PLUGIN_VM_NAME">PluginVm</ph> usage data that is then combined and thoroughly analyzed to improve <ph name="PLUGIN_VM_NAME">PluginVm</ph> experience.''',
+    },
+    {
       'name': 'ParentAccessCodeConfig',
       'owners': ['file://src/chrome/browser/chromeos/child_accounts/OWNERS'],
       'type': 'dict',
@@ -22003,10 +22023,11 @@ The recommended way to configure policy on Windows is via GPO, although provisio
       'caption': '''PluginVm''',
       'policies': [
         'PluginVmAllowed',
-        'UserPluginVmAllowed',
+        'PluginVmDataCollectionAllowed',
         'PluginVmLicenseKey',
         'PluginVmImage',
         'PluginVmUserId',
+        'UserPluginVmAllowed',
       ],
     },
     {
@@ -22125,6 +22146,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 476, 546, 562, 569, 578],
-  'highest_id_currently_used': 711,
+  'highest_id_currently_used': 712,
   'highest_atomic_group_id_currently_used': 38
 }

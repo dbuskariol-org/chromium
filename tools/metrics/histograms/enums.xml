@@ -20459,6 +20459,7 @@ Called by update_document_policy_enum.py.-->
   <int value="709" label="ReportDeviceFanInfo"/>
   <int value="710" label="ReportDeviceVpdInfo"/>
   <int value="711" label="EnableExperimentalPolicies"/>
+  <int value="712" label="PluginVmDataCollectionAllowed"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
