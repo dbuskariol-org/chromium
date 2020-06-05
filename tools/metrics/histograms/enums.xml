@@ -71899,8 +71899,11 @@ Called by update_scheduler_enums.py.-->
 
 <enum name="WebUITabStripCloseActions">
   <int value="0" label="Tap on tab counter"/>
-  <int value="1" label="Tap outside tab strip"/>
+  <int value="1" label="Tap outside tab strip (deprecated)"/>
   <int value="2" label="Tab selected in tab strip"/>
+  <int value="3" label="Tap in tab's content area"/>
+  <int value="4"
+      label="Omnibox focused (either by tap or by creating a new tab)"/>
 </enum>
 
 <enum name="WebUITabStripCloseTabActions">
