@@ -2362,7 +2362,13 @@ This file contains the strings for ash.
         <ph name="TOTAL_TIME">{0}<ex>10m</ex></ph> timer
       </message>
       <message name="IDS_ASSISTANT_TIMER_NOTIFICATION_MESSAGE_WITH_LABEL" desc="Message for Assistant timer notification. Example: 10m timer · Eggs.">
-        <ph name="TOTAL_TIME">{0}<ex>10m</ex></ph> timer · <ph name="LABEL">{1}<ex>Eggs</ex></ph>
+        <ph name="TOTAL_TIME">{0}<ex>10m</ex></ph> timer &#x00B7; <ph name="LABEL">{1}<ex>Eggs</ex></ph>
+      </message>
+      <message name="IDS_ASSISTANT_TIMER_NOTIFICATION_MESSAGE_WHEN_FIRED" desc="Message for Assistant timer notification once the timer has fired.">
+        Time's up
+      </message>
+      <message name="IDS_ASSISTANT_TIMER_NOTIFICATION_MESSAGE_WHEN_FIRED_WITH_LABEL" desc="Message for Assistant timer notification once the timer has fired. Example: Time's up · Eggs.">
+        Time's up &#x00B7; <ph name="LABEL">{1}<ex>Eggs</ex></ph>
       </message>
       <message name="IDS_ASSISTANT_TIMER_NOTIFICATION_FORMATTED_TIME_NEGATE" desc="Negates a formatted time string. Example: -10:27.">
         -<ph name="FORMATTED_TIME">{0}<ex>10:27</ex></ph>
