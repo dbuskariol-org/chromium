@@ -643,7 +643,7 @@ class SyncConsentActiveDirectoryTest : public OobeBaseTest {
 
 IN_PROC_BROWSER_TEST_F(SyncConsentActiveDirectoryTest, LoginDoesNotStartSync) {
   // Sign in Active Directory user.
-  ad_login_.TestLoginVisible();
+  OobeBaseTest::WaitForSigninScreen();
   ad_login_.SubmitActiveDirectoryCredentials(
       "test-user@locally-managed.localhost", "password");
   test::WaitForLastScreenAndTapGetStarted();
