@@ -475,8 +475,9 @@ class FileTasks {
    * @return {boolean} True if the entry is from crostini.
    */
   static isCrostiniEntry(entry, volumeManager) {
-    return volumeManager.getLocationInfo(entry).rootType ===
-        VolumeManagerCommon.RootType.CROSTINI;
+    const location = volumeManager.getLocationInfo(entry);
+    return !!location &&
+        location.rootType === VolumeManagerCommon.RootType.CROSTINI;
   }
 
   /**
