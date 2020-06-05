@@ -767,6 +767,18 @@ IN_PROC_BROWSER_TEST_F(WebControllerBrowserTest, PseudoTypeThenInnerText) {
   RunLaxElementCheck(selector, false);
 }
 
+IN_PROC_BROWSER_TEST_F(WebControllerBrowserTest, PseudoTypeContent) {
+  Selector selector({"#with_inner_text span"});
+  auto* content =
+      selector.proto.add_filters()->mutable_pseudo_element_content();
+  content->set_pseudo_type(PseudoType::BEFORE);
+  content->mutable_content()->set_re2("before");
+  RunLaxElementCheck(selector, true);
+
+  content->mutable_content()->set_re2("nomatch");
+  RunLaxElementCheck(selector, false);
+}
+
 IN_PROC_BROWSER_TEST_F(WebControllerBrowserTest, InnerTextThenCss) {
   // There are two divs containing "Section with text", but only one has a
   // button, which removes #button.

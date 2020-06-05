@@ -140,6 +140,24 @@ bool ElementFinder::JsFilterBuilder::AddFilter(
           "elements = elements.filter((e) => e.getClientRects().length > 0);");
       return true;
 
+    case SelectorProto::Filter::kPseudoElementContent: {
+      // When a content is set, window.getComputedStyle().content contains a
+      // double-quoted string with the content, unquoted here by JSON.parse().
+      std::string re_var =
+          AddRegexpInstance(filter.pseudo_element_content().content());
+      std::string pseudo_type =
+          PseudoTypeName(filter.pseudo_element_content().pseudo_type());
+
+      AddLine("elements = elements.filter((e) => {");
+      AddLine({"  var s = window.getComputedStyle(e, '", pseudo_type, "');"});
+      AddLine("  if (!s || !s.content || !s.content.startsWith('\"')) {");
+      AddLine("    return false;");
+      AddLine("  }");
+      AddLine({"  return ", re_var, ".test(JSON.parse(s.content));"});
+      AddLine("});");
+      return true;
+    }
+
     case SelectorProto::Filter::kLabelled:
       AddLine(R"(elements = elements.flatMap((e) => {
   if (e.tagName != 'LABEL') return [];
@@ -170,13 +188,19 @@ bool ElementFinder::JsFilterBuilder::AddFilter(
   }
 }
 
-void ElementFinder::JsFilterBuilder::AddRegexpFilter(
-    const SelectorProto::TextFilter& filter,
-    const std::string& property) {
+std::string ElementFinder::JsFilterBuilder::AddRegexpInstance(
+    const SelectorProto::TextFilter& filter) {
   std::string re_flags = filter.case_sensitive() ? "" : "i";
   std::string re_var = DeclareVariable();
   AddLine({"var ", re_var, " = RegExp(", AddArgument(filter.re2()), ", '",
            re_flags, "');"});
+  return re_var;
+}
+
+void ElementFinder::JsFilterBuilder::AddRegexpFilter(
+    const SelectorProto::TextFilter& filter,
+    const std::string& property) {
+  std::string re_var = AddRegexpInstance(filter);
   AddLine({"elements = elements.filter((e) => ", re_var, ".test(e.", property,
            "));"});
 }
@@ -302,6 +326,7 @@ void ElementFinder::ExecuteNextTask() {
     case SelectorProto::Filter::kInnerText:
     case SelectorProto::Filter::kValue:
     case SelectorProto::Filter::kBoundingBox:
+    case SelectorProto::Filter::kPseudoElementContent:
     case SelectorProto::Filter::kLabelled: {
       std::vector<std::string> matches;
       if (!ConsumeAllMatchesOrFail(matches))

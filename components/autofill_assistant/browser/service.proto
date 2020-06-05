@@ -741,6 +741,14 @@ message SelectorProto {
       // be put before enter_frame.
       EmptyFilter pick_one = 7;
 
+      // Only keep elements that have a pseudo-element with the given content.
+      //
+      // This only works with BEFORE and AFTER.
+      //
+      // Note that this just filters out elements. It doesn't select the
+      // pseudo-element; use pseudo_type for that.
+      PseudoElementContent pseudo_element_content = 8;
+
       // Go from label to the labelled control. Only works starting with current
       // elements that are LABEL.
       //
@@ -769,6 +777,12 @@ message SelectorProto {
 
     // If true, the regular expression is case-sensitive.
     optional bool case_sensitive = 2;
+  }
+
+  // A way of filtering elements by their pseudo-element content.
+  message PseudoElementContent {
+    optional PseudoType pseudo_type = 1;
+    optional TextFilter content = 2;
   }
 
   message EmptyFilter {}
