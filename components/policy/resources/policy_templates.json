@@ -16455,7 +16455,8 @@
           'caption': '''Authentication based on client certificates''',
         },
       ],
-      'future_on': ['chrome_os'],
+      'supported_on':[],
+      'future': True,
       'device_only': True,
       'features': {
         'dynamic_refresh': True,
