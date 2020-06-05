@@ -15,11 +15,7 @@ namespace autofill_assistant {
 namespace {
 // Javascript code to get document root element.
 const char kGetDocumentElement[] =
-    R"(
-    (function() {
-      return document.documentElement;
-    }())
-    )";
+    "(function() { return document.documentElement; }())";
 
 const char kGetArrayElement[] = "function(index) { return this[index]; }";
 
@@ -94,32 +90,41 @@ ElementFinder::JsFilterBuilder::BuildArgumentList() const {
   return arguments;
 }
 
+// clang-format off
 std::string ElementFinder::JsFilterBuilder::BuildFunction() const {
-  return base::StrCat({R"(function(args) {
-  var elements = [this];
-)",
-                       base::JoinString(lines_, "\n"), R"(
-  if (elements.length == 0) return null;
-  if (elements.length == 1) { return elements[0] }
-  return elements;
-})"});
+  return base::StrCat({
+    R"(
+    function(args) {
+      var elements = [this];
+    )",
+    base::JoinString(lines_, "\n"),
+    R"(
+      if (elements.length == 0) return null;
+      if (elements.length == 1) { return elements[0] }
+      return elements;
+    })"
+  });
 }
+// clang-format on
 
 bool ElementFinder::JsFilterBuilder::AddFilter(
     const SelectorProto::Filter& filter) {
   switch (filter.filter_case()) {
     case SelectorProto::Filter::kCssSelector:
-      AddLine(
-          {"elements = elements.flatMap((e) => "
-           "Array.from(e.querySelectorAll(",
-           AddArgument(filter.css_selector()), ")));"});
+      // clang-format off
+      AddLine({
+        "elements = elements.flatMap((e) => Array.from(e.querySelectorAll(",
+        AddArgument(filter.css_selector()),
+        ")));"
+      });
 
       // Elements are temporarily put into a set to get rid of duplicates, which
       // are likely when using inner text before CSS selector filters. We must
       // not return duplicates as they cause incorrect TOO_MANY_ELEMENTS errors.
       AddLine(R"(if (elements.length > 1) {
-  elements = Array.from(new Set(elements));
-})");
+        elements = Array.from(new Set(elements));
+      })");
+      // clang-format on
       return true;
 
     case SelectorProto::Filter::kInnerText:
