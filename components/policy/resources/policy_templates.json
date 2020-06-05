@@ -7351,13 +7351,13 @@
       'id': 711,
       'caption': '''Enables experimental policies''',
       'tags': [],
-      'desc': '''Allows <ph name="PRODUCT_NAME">$1<ex>google Chrome</ex></ph>load experimental policies.
+      'desc': '''Allows <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> load experimental policies.
 
         WARNING: Experimental policies are unsupported and subject to change or be removed without notice in future version of the browser!
 
         An experimental policy may not be finished or still have known or unknown defects. It may be changed or even removed without any notification. By enabling experimental policies, you could lose browser data or compromise your security or privacy.
 
-        If a policy is not in the list and it's not officially released, its value will be ignored on Chrome Beta and Chrome Stable.
+        If a policy is not in the list and it's not officially released, its value will be ignored on Beta and Stable channel.
 
         If a policy is in the list and it's not officially released, its value will be applied.
 
