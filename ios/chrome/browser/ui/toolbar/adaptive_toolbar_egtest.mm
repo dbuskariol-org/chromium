@@ -460,11 +460,7 @@ UIViewController* TopPresentedViewController() {
 
 // Check the button visibility of the toolbar when the omnibox is focused from a
 // different orientation than the default one.
-
-// Test failed consistently on ios_chrome_ui_eg2tests_module_iPad Air 2 13.4 and
-// ios_chrome_ui_eg2tests_module_iPad Air 2 12.4, disable it for now.
-// http://crbug.com/1091589
-- (void)DISABLED_testFocusOmniboxFromOtherOrientation {
+- (void)testFocusOmniboxFromOtherOrientation {
   // Load a page to have the toolbar visible (hidden on NTP).
   [ChromeEarlGrey loadURL:GURL("chrome://version")];
 
@@ -501,11 +497,7 @@ UIViewController* TopPresentedViewController() {
 
 // Check the button visibility of the toolbar when the omnibox is focused from
 // the default orientation.
-
-// Test failed consistently on ios_chrome_ui_eg2tests_module_iPad Air 2 13.4 and
-// ios_chrome_ui_eg2tests_module_iPad Air 2 12.4, disable it for now.
-// http://crbug.com/1091589
-- (void)DISABLED_testFocusOmniboxFromPortrait {
+- (void)testFocusOmniboxFromPortrait {
   // Load a page to have the toolbar visible (hidden on NTP).
   [ChromeEarlGrey loadURL:GURL("chrome://version")];
 
@@ -672,11 +664,7 @@ UIViewController* TopPresentedViewController() {
 }
 
 // Verifies the existence and state of toolbar UI elements.
-
-// Test failed consistently on ios_chrome_ui_eg2tests_module_iPad Air 2 13.4 and
-// ios_chrome_ui_eg2tests_module_iPad Air 2 12.4, disable it for now.
-// http://crbug.com/1091589
-- (void)DISABLED_testToolbarUI {
+- (void)testToolbarUI {
   // Load a page to have the toolbar visible (hidden on NTP).
   [ChromeEarlGrey loadURL:GURL("chrome://version")];
 
