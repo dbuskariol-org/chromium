@@ -740,6 +740,22 @@ message SelectorProto {
       // For backward-compatibility with older element references, pick_one can
       // be put before enter_frame.
       EmptyFilter pick_one = 7;
+
+      // Go from label to the labelled control. Only works starting with current
+      // elements that are LABEL.
+      //
+      // For example if we have:
+      //  <label for="someid">First Name</label>...<input id="someid" ...>
+      // then labelled, goes from the label to the form element.
+      //
+      // So, the form element can be accessed as "label~=/FirstName/ labelled".
+      // This is especially useful in situations where someid can change.
+      //
+      // The same selector also works in the case where the element is inside of
+      // the label, so we don't need to worry which implementation is used when
+      // building the selector:
+      //   <label>First Name <input ...></label>
+      EmptyFilter labelled = 9;
     }
   }
 

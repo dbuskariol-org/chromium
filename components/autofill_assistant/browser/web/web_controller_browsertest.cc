@@ -779,6 +779,54 @@ IN_PROC_BROWSER_TEST_F(WebControllerBrowserTest, InnerTextThenCss) {
   WaitForElementRemove(Selector({"#button"}));
 }
 
+IN_PROC_BROWSER_TEST_F(WebControllerBrowserTest, FindFormInputByLabel) {
+  // #option1_label refers to the labelled control by id.
+  Selector option1;
+  option1.proto.add_filters()->set_css_selector("#option1_label");
+  option1.proto.add_filters()->mutable_labelled();
+
+  const std::string option1_checked = R"(
+    document.querySelector("#option1").checked;
+  )";
+  EXPECT_FALSE(content::EvalJs(shell(), option1_checked).ExtractBool());
+  ClickOrTapElement(option1, ClickType::CLICK);
+  EXPECT_TRUE(content::EvalJs(shell(), option1_checked).ExtractBool());
+
+  // #option2 contains the labelled control.
+  Selector option2;
+  option2.proto.add_filters()->set_css_selector("#option2_label");
+  option2.proto.add_filters()->mutable_labelled();
+
+  const std::string option2_checked = R"(
+    document.querySelector("#option2").checked;
+  )";
+  EXPECT_FALSE(content::EvalJs(shell(), option2_checked).ExtractBool());
+  ClickOrTapElement(option2, ClickType::CLICK);
+  EXPECT_TRUE(content::EvalJs(shell(), option2_checked).ExtractBool());
+
+  // #button is not a label.
+  Selector not_a_label;
+  not_a_label.proto.add_filters()->set_css_selector("#button");
+  not_a_label.proto.add_filters()->mutable_labelled();
+
+  // #bad_label1 and #bad_label2 are labels that don't reference a valid
+  // element. They must not cause JavaScript errors.
+  Selector bad_label1;
+  bad_label1.proto.add_filters()->set_css_selector("#bad_label1");
+  bad_label1.proto.add_filters()->mutable_labelled();
+
+  ClientStatus status;
+  FindElement(bad_label1, &status, nullptr);
+  EXPECT_EQ(ELEMENT_RESOLUTION_FAILED, status.proto_status());
+
+  Selector bad_label2;
+  bad_label2.proto.add_filters()->set_css_selector("#bad_label2");
+  bad_label2.proto.add_filters()->mutable_labelled();
+
+  FindElement(bad_label2, &status, nullptr);
+  EXPECT_EQ(ELEMENT_RESOLUTION_FAILED, status.proto_status());
+}
+
 IN_PROC_BROWSER_TEST_F(WebControllerBrowserTest, ValueCondition) {
   // One match
   RunLaxElementCheck(Selector({"#input1"}).MatchingValue("helloworld1"), true);

@@ -44,6 +44,7 @@ bool operator<(const SelectorProto::Filter& a, const SelectorProto::Filter& b) {
     case SelectorProto::Filter::kBoundingBox:
     case SelectorProto::Filter::kEnterFrame:
     case SelectorProto::Filter::kPickOne:
+    case SelectorProto::Filter::kLabelled:
       return false;
 
     case SelectorProto::Filter::FILTER_NOT_SET:
@@ -148,6 +149,10 @@ std::ostream& operator<<(std::ostream& out, const SelectorProto::Filter& f) {
 
     case SelectorProto::Filter::kPickOne:
       out << "pick_one";
+      return out;
+
+    case SelectorProto::Filter::kLabelled:
+      out << "labelled";
       return out;
 
     case SelectorProto::Filter::FILTER_NOT_SET:
@@ -279,6 +284,7 @@ base::Optional<std::string> Selector::ExtractSingleCssSelectorForAutofill()
       case SelectorProto::Filter::kInnerText:
       case SelectorProto::Filter::kValue:
       case SelectorProto::Filter::kPseudoType:
+      case SelectorProto::Filter::kLabelled:
         VLOG(1) << __func__
                 << " Selector feature not supported by autofill: " << *this;
         return base::nullopt;

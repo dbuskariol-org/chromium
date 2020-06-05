@@ -135,6 +135,28 @@ bool ElementFinder::JsFilterBuilder::AddFilter(
           "elements = elements.filter((e) => e.getClientRects().length > 0);");
       return true;
 
+    case SelectorProto::Filter::kLabelled:
+      AddLine(R"(elements = elements.flatMap((e) => {
+  if (e.tagName != 'LABEL') return [];
+  var element = null;
+  var id = e.getAttribute('for');
+  if (id) {
+    element = document.getElementById(id)
+  }
+  if (!element) {
+    element = e.querySelector(
+      'button,input,keygen,meter,output,progress,select,textarea');
+  }
+  if (element) return [element];
+  return [];
+});
+)");
+      // The selector above for the case where there's no "for" corresponds to
+      // the list of labelable elements listed on "W3C's HTML5: Edition for Web
+      // Authors":
+      // https://www.w3.org/TR/2011/WD-html5-author-20110809/forms.html#category-label
+      return true;
+
     case SelectorProto::Filter::kEnterFrame:
     case SelectorProto::Filter::kPseudoType:
     case SelectorProto::Filter::kPickOne:
@@ -274,7 +296,8 @@ void ElementFinder::ExecuteNextTask() {
     case SelectorProto::Filter::kCssSelector:
     case SelectorProto::Filter::kInnerText:
     case SelectorProto::Filter::kValue:
-    case SelectorProto::Filter::kBoundingBox: {
+    case SelectorProto::Filter::kBoundingBox:
+    case SelectorProto::Filter::kLabelled: {
       std::vector<std::string> matches;
       if (!ConsumeAllMatchesOrFail(matches))
         return;
