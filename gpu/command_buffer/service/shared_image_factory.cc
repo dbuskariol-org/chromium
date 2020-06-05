@@ -213,6 +213,7 @@ bool SharedImageFactory::CreateSharedImage(const Mailbox& mailbox,
     return false;
   auto backing = factory->CreateSharedImage(mailbox, format, size, color_space,
                                             usage, data);
+  backing->OnWriteSucceeded();
   return RegisterBacking(std::move(backing), allow_legacy_mailbox);
 }
 
@@ -235,6 +236,7 @@ bool SharedImageFactory::CreateSharedImage(const Mailbox& mailbox,
   auto backing =
       factory->CreateSharedImage(mailbox, client_id, std::move(handle), format,
                                  surface_handle, size, color_space, usage);
+  backing->OnWriteSucceeded();
   return RegisterBacking(std::move(backing), allow_legacy_mailbox);
 }
 
