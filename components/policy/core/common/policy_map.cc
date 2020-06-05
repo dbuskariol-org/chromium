@@ -284,6 +284,8 @@ void PolicyMap::Swap(PolicyMap* other) {
 }
 
 void PolicyMap::CopyFrom(const PolicyMap& other) {
+  DCHECK_NE(this, &other);
+
   Clear();
   for (const auto& it : other)
     Set(it.first, it.second.DeepCopy());
@@ -296,6 +298,8 @@ std::unique_ptr<PolicyMap> PolicyMap::DeepCopy() const {
 }
 
 void PolicyMap::MergeFrom(const PolicyMap& other) {
+  DCHECK_NE(this, &other);
+
   for (const auto& policy_and_entry : other) {
     Entry* current_policy = GetMutableUntrusted(policy_and_entry.first);
     Entry other_policy = policy_and_entry.second.DeepCopy();
