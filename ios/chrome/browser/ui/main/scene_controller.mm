@@ -414,6 +414,16 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 - (void)sceneStateWillHideModalOverlay:(SceneState*)sceneState {
   [self.blockingOverlayViewController.view removeFromSuperview];
   self.blockingOverlayViewController = nil;
+
+  // When the scene has displayed the blocking overlay and isn't in foreground
+  // when it exits it, the cached app switcher snapshot will have the overlay on
+  // it, and therefore needs updating.
+  if (sceneState.activationLevel < SceneActivationLevelForegroundInactive) {
+    if (@available(iOS 13, *)) {
+      [[UIApplication sharedApplication]
+          requestSceneSessionRefresh:sceneState.scene.session];
+    }
+  }
 }
 
 // TODO(crbug.com/1072408): factor out into a new class.

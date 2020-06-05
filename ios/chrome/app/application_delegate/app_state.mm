@@ -184,6 +184,15 @@ initWithBrowserLauncher:(id<BrowserLauncher>)browserLauncher
   _safeModeCoordinator = safeModeCoordinator;
 }
 
+- (void)setSceneShowingBlockingUI:(SceneState*)newScene {
+  _sceneShowingBlockingUI = newScene;
+  if (!newScene) {
+    for (SceneState* scene in self.connectedScenes) {
+      scene.presentingModalOverlay = false;
+    }
+  }
+}
+
 #pragma mark - Public methods.
 
 - (void)applicationDidEnterBackground:(UIApplication*)application
