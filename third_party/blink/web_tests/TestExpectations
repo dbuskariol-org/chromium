@@ -1383,16 +1383,7 @@ crbug.com/891427 tables/mozilla_expected_failures/marvin/table_overflow_dirty_re
 # The following fail only on Mac.
 crbug.com/891427 [ Mac ] fast/events/touch/gesture/touch-gesture-scroll-listbox.html [ Pass Failure Timeout Crash ]
 
-# These 6 are special. They are tied to both of these CLs:
-#   - https://chromium-review.googlesource.com/c/chromium/src/+/1213864
-#   - https://chromium-review.googlesource.com/c/chromium/src/+/1308038
-# and they only seem (really) flaky when the second CL is in place. But I believe
-# they are related to timing and to the same issues as above.
-# Here is an example: https://ci.chromium.org/p/chromium/builders/luci.chromium.try/linux_chromium_rel_ng/221340
 crbug.com/891427 paint/invalidation/scroll/fixed-img-src-change-after-scroll.html [ Pass Failure Timeout Crash ]
-crbug.com/891427 virtual/prefer_compositing_to_lcd_text/scrollbars/custom-scrollbar-changing-style-relayout-body-scrollablearea.html [ Pass Failure Timeout Crash ]
-crbug.com/891427 virtual/prefer_compositing_to_lcd_text/scrollbars/custom-scrollbar-changing-style-relayout-div-body-scrollablearea.html [ Pass Failure Timeout Crash ]
-
 # ====== OOPIF-mode failures until here ======
 
 # ====== Form Controls Refresh (chrome://flags/#form-controls-refresh) failures from here ======
