@@ -228,7 +228,7 @@ TEST_F(SearchHandlerTest, DefaultRank) {
 }
 
 // Regression test for https://crbug.com/1090184.
-TEST_F(SearchHandlerTest, CompareIdenticalResults) {
+TEST_F(SearchHandlerTest, CompareSearchResults) {
   // Create two equal dummy results.
   mojom::SearchResultPtr a = CreateDummyResult();
   mojom::SearchResultPtr b = CreateDummyResult();
@@ -237,6 +237,36 @@ TEST_F(SearchHandlerTest, CompareIdenticalResults) {
   // should return false regardless of the order of parameters.
   EXPECT_FALSE(SearchHandler::CompareSearchResults(a, b));
   EXPECT_FALSE(SearchHandler::CompareSearchResults(b, a));
+
+  // Differ only on default rank.
+  a = CreateDummyResult();
+  a->default_rank = mojom::SearchResultDefaultRank::kLow;
+  b = CreateDummyResult();
+  b->default_rank = mojom::SearchResultDefaultRank::kHigh;
+
+  // Comparison value should differ.
+  EXPECT_NE(SearchHandler::CompareSearchResults(b, a),
+            SearchHandler::CompareSearchResults(a, b));
+
+  // Differ only on relevance score.
+  a = CreateDummyResult();
+  a->relevance_score = 0;
+  b = CreateDummyResult();
+  b->relevance_score = 1;
+
+  // Comparison value should differ.
+  EXPECT_NE(SearchHandler::CompareSearchResults(b, a),
+            SearchHandler::CompareSearchResults(a, b));
+
+  // Differ only on type.
+  a = CreateDummyResult();
+  a->type = mojom::SearchResultType::kSection;
+  b = CreateDummyResult();
+  b->type = mojom::SearchResultType::kSubpage;
+
+  // Comparison value should differ.
+  EXPECT_NE(SearchHandler::CompareSearchResults(b, a),
+            SearchHandler::CompareSearchResults(a, b));
 }
 
 }  // namespace settings

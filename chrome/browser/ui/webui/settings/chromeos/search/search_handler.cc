@@ -296,7 +296,7 @@ bool SearchHandler::CompareSearchResults(const mojom::SearchResultPtr& first,
   // declared before kSetting, so follow the same pattern from default ranks
   // above. Note that if the types are equal, this will return false, which
   // induces a strict weak ordering.
-  return static_cast<int32_t>(first->type) - static_cast<int32_t>(second->type);
+  return static_cast<int32_t>(first->type) < static_cast<int32_t>(second->type);
 }
 
 }  // namespace settings
