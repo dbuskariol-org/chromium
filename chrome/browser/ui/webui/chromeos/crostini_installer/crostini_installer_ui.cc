@@ -84,6 +84,7 @@ void AddStringResources(content::WebUIDataSource* source) {
        IDS_CROSTINI_INSTALLER_USERNAME_INVALID_CHARACTERS_ERROR},
       {"usernameNotAvailableError",
        IDS_CROSTINI_INSTALLER_USERNAME_NOT_AVAILABLE_ERROR},
+      {"customDiskSizeLabel", IDS_CROSTINI_INSTALLER_CUSTOM_DISK_SIZE_LABEL},
   };
   AddLocalizedStringsBulk(source, kStrings);
 
@@ -114,6 +115,13 @@ void AddStringResources(content::WebUIDataSource* source) {
       "lowSpaceAvailableWarning",
       l10n_util::GetStringFUTF8(
           IDS_CROSTINI_INSTALLER_DISK_RESIZE_RECOMMENDED_WARNING,
+          ui::FormatBytesWithUnits(crostini::disk::kRecommendedDiskSizeBytes,
+                                   ui::DATA_UNITS_GIBIBYTE,
+                                   /*show_units=*/true)));
+  source->AddString(
+      "recommendedDiskSizeLabel",
+      l10n_util::GetStringFUTF8(
+          IDS_CROSTINI_INSTALLER_RECOMMENDED_DISK_SIZE_LABEL,
           ui::FormatBytesWithUnits(crostini::disk::kRecommendedDiskSizeBytes,
                                    ui::DATA_UNITS_GIBIBYTE,
                                    /*show_units=*/true)));

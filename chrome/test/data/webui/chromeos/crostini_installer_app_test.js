@@ -101,6 +101,21 @@ suite('<crostini-installer-app>', () => {
     await clickButton(getCancelButton());
   };
 
+  const clickCustomSize = async () => {
+    await clickButton(app.$$('#custom-size'));
+  };
+
+  /**
+   * Checks whether a given element is hidden.
+   * @param {!Element} element
+   * @returns {boolean}
+   */
+  function isHidden(element) {
+    return (
+        !element || element.getBoundingClientRect().width <= 0 ||
+        element.hidden);
+  }
+
   const diskTicks = [
     {value: 1000, ariaValue: '1', label: '1'},
     {value: 2000, ariaValue: '2', label: '2'}
@@ -215,6 +230,7 @@ suite('<crostini-installer-app>', () => {
 
       expectFalse(app.$$('#configure-message').hidden);
       expectTrue(app.$$('#low-free-space-warning').hidden);
+      expectTrue(isHidden(app.$$('#diskSlider')));
 
       await clickInstall();
       await fakeBrowserProxy.handler.whenCalled('install').then(
@@ -232,9 +248,12 @@ suite('<crostini-installer-app>', () => {
 
     await clickNext();
     await flushTasks();
+    await clickCustomSize();
+    await flushTasks();
 
     expectFalse(app.$$('#configure-message').hidden);
     expectTrue(app.$$('#low-free-space-warning').hidden);
+    expectFalse(isHidden(app.$$('#diskSlider')));
 
     app.$$('#diskSlider').value = 1;
 

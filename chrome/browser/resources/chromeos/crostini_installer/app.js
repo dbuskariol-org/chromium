@@ -5,6 +5,8 @@
 import 'chrome://resources/cr_elements/cr_button/cr_button.m.js';
 import 'chrome://resources/cr_elements/cr_input/cr_input.m.js';
 import 'chrome://resources/cr_elements/cr_slider/cr_slider.m.js';
+import 'chrome://resources/cr_elements/cr_radio_group/cr_radio_group.m.js';
+import 'chrome://resources/cr_elements/cr_radio_button/cr_radio_button.m.js';
 import 'chrome://resources/cr_elements/icons.m.js';
 import 'chrome://resources/cr_elements/shared_vars_css.m.js';
 import 'chrome://resources/polymer/v3_0/iron-icon/iron-icon.js';
@@ -137,6 +139,11 @@ Polymer({
       type: Boolean,
     },
 
+    showDiskSlider_: {
+      type: Boolean,
+      value: false,
+    },
+
     username_: {
       type: String,
       value: loadTimeData.getString('defaultContainerUsername')
@@ -191,6 +198,9 @@ Polymer({
               this.maxDisk_ = ticks[ticks.length - 1].label;
 
               this.isLowSpaceAvailable_ = isLowSpaceAvailable;
+              if (isLowSpaceAvailable) {
+                this.showDiskSlider_ = true;
+              }
               resolve();
             }
           }));
@@ -244,7 +254,11 @@ Polymer({
     assert(this.showInstallButton_(this.state_));
     var diskSize = 0;
     if (loadTimeData.getBoolean('diskResizingEnabled')) {
-      diskSize = this.diskSizeTicks_[this.$.diskSlider.value].value;
+      if (this.showDiskSlider_) {
+        diskSize = this.diskSizeTicks_[this.$$('#diskSlider').value].value;
+      } else {
+        diskSize = this.diskSizeTicks_[this.defaultDiskSizeTick_].value;
+      }
     }
     this.installerState_ = InstallerState.kStart;
     this.installerProgress_ = 0;
@@ -542,4 +556,13 @@ Polymer({
   showErrorMessage_(state) {
     return state === State.ERROR || state === State.ERROR_NO_RETRY;
   },
+
+  /** @private */
+  onDiskSizeRadioChanged_(event) {
+    if (this.$$('#diskSizeRadio')) {
+      this.showDiskSlider_ =
+          (this.$$('#diskSizeRadio').selected !== 'recommended' ||
+           !!this.isLowSpaceAvailable_);
+    }
+  }
 });
