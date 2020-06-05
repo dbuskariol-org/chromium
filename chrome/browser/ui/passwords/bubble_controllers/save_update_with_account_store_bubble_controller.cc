@@ -147,8 +147,8 @@ SaveUpdateWithAccountStoreBubbleController::
           : (pending_password_.federation_origin.opaque()
                  ? PasswordTitleType::SAVE_PASSWORD
                  : PasswordTitleType::SAVE_ACCOUNT);
-  GetSavePasswordDialogTitleTextAndLinkRange(GetWebContents()->GetVisibleURL(),
-                                             origin_, type, &title_);
+  title_ = GetSavePasswordDialogTitleText(GetWebContents()->GetVisibleURL(),
+                                          origin_, type);
 }
 
 SaveUpdateWithAccountStoreBubbleController::
