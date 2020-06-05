@@ -654,7 +654,7 @@ ScriptPromise HTMLVideoElement::CreateImageBitmap(
         "The provided element has not retrieved data.");
     return ScriptPromise();
   }
-  if (getReadyState() <= HTMLMediaElement::kHaveMetadata) {
+  if (!HasAvailableVideoFrame()) {
     exception_state.ThrowDOMException(
         DOMExceptionCode::kInvalidStateError,
         "The provided element's player has no current data.");
