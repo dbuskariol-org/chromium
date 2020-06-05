@@ -31,6 +31,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import org.chromium.base.test.util.CommandLineFlags;
+import org.chromium.base.test.util.DisabledTest;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
@@ -130,6 +131,7 @@ public class QueryTileSectionToOmniboxTest {
     /** Test that clicking on a tile to open the omnibox and pressing back shows the right tiles. */
     @Test
     @SmallTest
+    @DisabledTest(message = "https://crbug.com/1091225")
     public void testBackOutOfOmniboxRestoresTilePosition() throws Exception {
         setUp(1 /* levels */);
         Matcher<View> recyclerViewMatcher = withParent(withId(R.id.query_tiles));
