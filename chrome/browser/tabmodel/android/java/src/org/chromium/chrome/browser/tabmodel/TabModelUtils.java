@@ -15,7 +15,7 @@ import java.util.List;
  * A set of convenience methods used for interacting with {@link TabList}s and {@link TabModel}s.
  */
 public class TabModelUtils {
-    private TabModelUtils() { }
+    private TabModelUtils() {}
 
     /**
      * @param model The {@link TabModel} to act on.
