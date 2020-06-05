@@ -57067,9 +57067,9 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
 </enum>
 
 <enum name="QuickAnswersLoadStatus">
-  <int value="0" label="kNetworkError"/>
-  <int value="1" label="kNoResult"/>
-  <int value="2" label="kSuccess"/>
+  <int value="0" label="kSuccess"/>
+  <int value="1" label="kNetworkError"/>
+  <int value="2" label="kNoResult"/>
 </enum>
 
 <enum name="QuickAnswersResultType">
