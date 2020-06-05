@@ -3581,9 +3581,11 @@ if (use_libfuzzer) {
 
     deps = [
       ":policy_fuzzer_proto",
+      "//base/test:test_support",
       "//chrome/browser",
       "//chrome/browser/chromeos",
       "//chromeos/dbus:dbus",
+      "//chromeos/tpm",
       "//third_party/libprotobuf-mutator",
     ]
   }
