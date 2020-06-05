@@ -51,6 +51,8 @@
 #include "ios/chrome/browser/crash_report/crash_keys_helper.h"
 #include "ios/chrome/browser/crash_report/crash_loop_detection_util.h"
 #include "ios/chrome/browser/crash_report/crash_report_helper.h"
+#include "ios/chrome/browser/credential_provider/credential_provider_service_factory.h"
+#include "ios/chrome/browser/credential_provider/credential_provider_support.h"
 #include "ios/chrome/browser/download/download_directory_util.h"
 #import "ios/chrome/browser/external_files/external_file_remover_factory.h"
 #import "ios/chrome/browser/external_files/external_file_remover_impl.h"
@@ -512,6 +514,10 @@ void MainControllerAuthenticationServiceDelegate::ClearBrowsingData(
   ShareExtensionService* service =
       ShareExtensionServiceFactory::GetForBrowserState(self.mainBrowserState);
   service->Initialize();
+
+  if (IsCredentialProviderExtensionSupported()) {
+    CredentialProviderServiceFactory::GetForBrowserState(self.mainBrowserState);
+  }
 
   if ([PreviousSessionInfo sharedInstance].isFirstSessionAfterLanguageChange) {
     IOSChromeContentSuggestionsServiceFactory::GetForBrowserState(
