@@ -6418,6 +6418,23 @@ crbug.com/1047208 http/tests/serviceworker/update-served-from-cache.html [ Pass 
 crbug.com/1047293 [ Mac ] editing/pasteboard/pasteboard_with_unfocused_selection.html [ Pass Failure ]
 crbug.com/1047420 [ Mac ] http/tests/devtools/persistence/persistence-move-breakpoints-on-reload.js [ Pass Failure ]
 
+crbug.com/1008483 external/wpt/css/css-transforms/3d-rendering-context-behavior.tentative.html [ Failure ]
+crbug.com/1008483 external/wpt/css/css-transforms/backface-visibility-hidden-004.tentative.html [ Failure ]
+crbug.com/1008483 external/wpt/css/css-transforms/backface-visibility-hidden-005.tentative.html [ Failure ]
+crbug.com/1008483 external/wpt/css/css-transforms/backface-visibility-hidden-animated-002.html [ Failure ]
+crbug.com/1008483 external/wpt/css/css-transforms/preserve-3d-flat-grouping-properties.tentative.html [ Failure ]
+
+crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/3d-rendering-context-behavior.tentative.html [ Pass ]
+crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/backface-visibility-hidden-004.tentative.html [ Pass ]
+crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/backface-visibility-hidden-005.tentative.html [ Pass ]
+crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/backface-visibility-hidden-animated-002.html [ Pass ]
+crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/preserve-3d-flat-grouping-properties.tentative.html [ Pass ]
+crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/subpixel-perspective-backface-hidden.html [ Failure ]
+
+# Fails due to anonymous layout objects causing flattening
+crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/transform-table-010.html [ Failure ]
+crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/transform-table-011.html [ Failure ]
+
 # Swiftshader issue.
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-innerwidth.html [ Crash Timeout ]
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-screeny.html [ Crash Timeout ]

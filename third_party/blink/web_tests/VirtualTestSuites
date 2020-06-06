@@ -809,5 +809,10 @@
     "prefix": "subresource-web-bundles",
     "bases": [ "external/wpt/web-bundle/subresource-loading" ],
     "args": [ "--enable-blink-features=SubresourceWebBundles" ]
+  },
+  {
+    "prefix": "transform-interop",
+    "bases": [ "external/wpt/css/css-transforms" ],
+    "args": [ "--enable-features=TransformInterop" ]
   }
 ]
