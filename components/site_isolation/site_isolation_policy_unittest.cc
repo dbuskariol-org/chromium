@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/site_isolation/site_isolation_policy.h"
+#include "components/site_isolation/site_isolation_policy.h"
 
 #include "base/base_switches.h"
 #include "base/system/sys_info.h"
@@ -10,30 +10,29 @@
 #include "base/test/mock_entropy_provider.h"
 #include "base/test/scoped_feature_list.h"
 #include "base/test/scoped_field_trial_list_resetter.h"
+#include "build/branding_buildflags.h"
 #include "build/build_config.h"
-#include "chrome/common/chrome_features.h"
-#include "chrome/common/pref_names.h"
-#include "chrome/test/base/testing_browser_process.h"
-#include "chrome/test/base/testing_profile.h"
-#include "chrome/test/base/testing_profile_manager.h"
+#include "components/prefs/pref_registry_simple.h"
 #include "components/prefs/scoped_user_pref_update.h"
+#include "components/prefs/testing_pref_service.h"
+#include "components/site_isolation/features.h"
+#include "components/site_isolation/pref_names.h"
 #include "components/site_isolation/preloaded_isolated_origins.h"
+#include "components/user_prefs/user_prefs.h"
 #include "components/variations/variations_switches.h"
 #include "content/public/browser/child_process_security_policy.h"
 #include "content/public/browser/site_instance.h"
 #include "content/public/browser/site_isolation_policy.h"
+#include "content/public/common/content_client.h"
 #include "content/public/common/content_features.h"
 #include "content/public/common/content_switches.h"
 #include "content/public/test/browser_task_environment.h"
+#include "content/public/test/test_browser_context.h"
 #include "content/public/test/test_utils.h"
-#include "google_apis/gaia/gaia_urls.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-#include "extensions/common/extension_urls.h"
-#endif
-
+namespace site_isolation {
 namespace {
 
 // Some command-line switches override field trials - the tests need to be
@@ -52,18 +51,65 @@ bool ShouldSkipBecauseOfConflictingCommandLineSwitches() {
 
 }  // namespace
 
-class SiteIsolationPolicyTest : public testing::Test {
+// Base class for site isolation tests which handles setting a
+// ContentBrowserClient with logic for enabling/disabling site isolation.
+class BaseSiteIsolationTest : public testing::Test {
  public:
-  SiteIsolationPolicyTest() : manager_(TestingBrowserProcess::GetGlobal()) {}
+  BaseSiteIsolationTest() {
+    original_client_ = content::SetBrowserClientForTesting(&browser_client_);
+    SetEnableStrictSiteIsolation(
+        original_client_->ShouldEnableStrictSiteIsolation());
+  }
+
+  ~BaseSiteIsolationTest() override {
+    content::SetBrowserClientForTesting(original_client_);
+  }
 
  protected:
-  void SetUp() override { ASSERT_TRUE(manager_.SetUp()); }
+  void SetEnableStrictSiteIsolation(bool enable) {
+    browser_client_.strict_isolation_enabled_ = enable;
+  }
 
-  TestingProfileManager* manager() { return &manager_; }
+ private:
+  class SiteIsolationContentBrowserClient
+      : public content::ContentBrowserClient {
+   public:
+    bool ShouldEnableStrictSiteIsolation() override {
+      return strict_isolation_enabled_;
+    }
+
+    bool ShouldDisableSiteIsolation() override {
+      return SiteIsolationPolicy::
+          ShouldDisableSiteIsolationDueToMemoryThreshold();
+    }
+
+    std::vector<url::Origin> GetOriginsRequiringDedicatedProcess() override {
+      return GetBrowserSpecificBuiltInIsolatedOrigins();
+    }
+
+    bool strict_isolation_enabled_ = false;
+  };
+
+  SiteIsolationContentBrowserClient browser_client_;
+  content::ContentBrowserClient* original_client_ = nullptr;
+};
+
+class SiteIsolationPolicyTest : public BaseSiteIsolationTest {
+ public:
+  SiteIsolationPolicyTest() {
+    prefs_.registry()->RegisterListPref(prefs::kUserTriggeredIsolatedOrigins);
+    user_prefs::UserPrefs::Set(&browser_context_, &prefs_);
+  }
+
+ protected:
+  content::BrowserContext* browser_context() { return &browser_context_; }
+
+  PrefService* prefs() { return &prefs_; }
 
  private:
   content::BrowserTaskEnvironment task_environment_;
-  TestingProfileManager manager_;
+  content::TestBrowserContext browser_context_;
+  TestingPrefServiceSimple prefs_;
 
   DISALLOW_COPY_AND_ASSIGN(SiteIsolationPolicyTest);
 };
@@ -71,12 +117,13 @@ class SiteIsolationPolicyTest : public testing::Test {
 // Helper class that enables site isolation for password sites.
 class PasswordSiteIsolationPolicyTest : public SiteIsolationPolicyTest {
  public:
-  PasswordSiteIsolationPolicyTest() {}
+  PasswordSiteIsolationPolicyTest() = default;
 
  protected:
   void SetUp() override {
-    feature_list_.InitWithFeatures({features::kSiteIsolationForPasswordSites},
-                                   {features::kSitePerProcess});
+    feature_list_.InitAndEnableFeature(
+        features::kSiteIsolationForPasswordSites);
+    SetEnableStrictSiteIsolation(false);
     SiteIsolationPolicyTest::SetUp();
   }
 
@@ -91,12 +138,10 @@ class PasswordSiteIsolationPolicyTest : public SiteIsolationPolicyTest {
 // sites.
 TEST_F(PasswordSiteIsolationPolicyTest, ApplyPersistedIsolatedOrigins) {
   EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
-  TestingProfile* profile = manager()->CreateTestingProfile("Test");
 
   // Add foo.com and bar.com to stored isolated origins.
   {
-    ListPrefUpdate update(profile->GetPrefs(),
-                          prefs::kUserTriggeredIsolatedOrigins);
+    ListPrefUpdate update(prefs(), prefs::kUserTriggeredIsolatedOrigins);
     base::ListValue* list = update.Get();
     list->Append("http://foo.com");
     list->Append("https://bar.com");
@@ -110,11 +155,12 @@ TEST_F(PasswordSiteIsolationPolicyTest, ApplyPersistedIsolatedOrigins) {
   if (!base::CommandLine::ForCurrentProcess()->HasSwitch(
           switches::kSitePerProcess)) {
     scoped_refptr<content::SiteInstance> foo_instance =
-        content::SiteInstance::CreateForURL(profile, GURL("http://foo.com/1"));
+        content::SiteInstance::CreateForURL(browser_context(),
+                                            GURL("http://foo.com/1"));
     EXPECT_FALSE(foo_instance->RequiresDedicatedProcess());
 
     scoped_refptr<content::SiteInstance> bar_instance =
-        content::SiteInstance::CreateForURL(profile,
+        content::SiteInstance::CreateForURL(browser_context(),
                                             GURL("https://baz.bar.com/2"));
     EXPECT_FALSE(bar_instance->RequiresDedicatedProcess());
   }
@@ -122,16 +168,17 @@ TEST_F(PasswordSiteIsolationPolicyTest, ApplyPersistedIsolatedOrigins) {
   // Apply isolated origins and ensure that they take effect for SiteInstances
   // in new BrowsingInstances.
   base::HistogramTester histograms;
-  SiteIsolationPolicy::ApplyPersistedIsolatedOrigins(profile);
+  SiteIsolationPolicy::ApplyPersistedIsolatedOrigins(browser_context());
   histograms.ExpectUniqueSample(
       "SiteIsolation.SavedUserTriggeredIsolatedOrigins.Size", 2, 1);
   {
     scoped_refptr<content::SiteInstance> foo_instance =
-        content::SiteInstance::CreateForURL(profile, GURL("http://foo.com/1"));
+        content::SiteInstance::CreateForURL(browser_context(),
+                                            GURL("http://foo.com/1"));
     EXPECT_TRUE(foo_instance->RequiresDedicatedProcess());
 
     scoped_refptr<content::SiteInstance> bar_instance =
-        content::SiteInstance::CreateForURL(profile,
+        content::SiteInstance::CreateForURL(browser_context(),
                                             GURL("https://baz.bar.com/2"));
     EXPECT_TRUE(bar_instance->RequiresDedicatedProcess());
   }
@@ -141,13 +188,13 @@ TEST_F(PasswordSiteIsolationPolicyTest, ApplyPersistedIsolatedOrigins) {
 // for password sites.
 class NoPasswordSiteIsolationPolicyTest : public SiteIsolationPolicyTest {
  public:
-  NoPasswordSiteIsolationPolicyTest() {}
+  NoPasswordSiteIsolationPolicyTest() = default;
 
  protected:
   void SetUp() override {
-    feature_list_.InitWithFeatures(
-        {},
-        {features::kSiteIsolationForPasswordSites, features::kSitePerProcess});
+    feature_list_.InitAndDisableFeature(
+        features::kSiteIsolationForPasswordSites);
+    SetEnableStrictSiteIsolation(false);
     SiteIsolationPolicyTest::SetUp();
   }
 
@@ -169,21 +216,20 @@ TEST_F(NoPasswordSiteIsolationPolicyTest,
     return;
 
   EXPECT_FALSE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
-  TestingProfile* profile = manager()->CreateTestingProfile("Test");
 
   // Add foo.com to stored isolated origins.
   {
-    ListPrefUpdate update(profile->GetPrefs(),
-                          prefs::kUserTriggeredIsolatedOrigins);
+    ListPrefUpdate update(prefs(), prefs::kUserTriggeredIsolatedOrigins);
     base::ListValue* list = update.Get();
     list->Append("http://foo.com");
   }
 
   // Applying saved isolated origins should have no effect, since site
   // isolation for password sites is off.
-  SiteIsolationPolicy::ApplyPersistedIsolatedOrigins(profile);
+  SiteIsolationPolicy::ApplyPersistedIsolatedOrigins(browser_context());
   scoped_refptr<content::SiteInstance> foo_instance =
-      content::SiteInstance::CreateForURL(profile, GURL("http://foo.com/"));
+      content::SiteInstance::CreateForURL(browser_context(),
+                                          GURL("http://foo.com/"));
   EXPECT_FALSE(foo_instance->RequiresDedicatedProcess());
 }
 
@@ -212,7 +258,7 @@ const url::Origin& GetTrialOrigin() {
 
 // Helper class to run tests on a simulated 512MB low-end device.
 class SitePerProcessMemoryThresholdBrowserTest
-    : public testing::Test,
+    : public BaseSiteIsolationTest,
       public ::testing::WithParamInterface<
           SitePerProcessMemoryThresholdBrowserTestParams> {
  public:
@@ -236,15 +282,15 @@ class SitePerProcessMemoryThresholdBrowserTest
 
     switch (GetParam().mode) {
       case SitePerProcessMode::kDisabled:
-        mode_feature_.InitAndDisableFeature(features::kSitePerProcess);
+        SetEnableStrictSiteIsolation(false);
         break;
       case SitePerProcessMode::kEnabled:
-        mode_feature_.InitAndEnableFeature(features::kSitePerProcess);
+        SetEnableStrictSiteIsolation(true);
         break;
       case SitePerProcessMode::kIsolatedOrigin:
         mode_feature_.InitAndEnableFeatureWithParameters(
-            features::kIsolateOrigins,
-            {{features::kIsolateOriginsFieldTrialParamName,
+            ::features::kIsolateOrigins,
+            {{::features::kIsolateOriginsFieldTrialParamName,
               GetTrialOrigin().Serialize()}});
         break;
     }
@@ -258,23 +304,9 @@ class SitePerProcessMemoryThresholdBrowserTest
         switches::kEnableLowEndDeviceMode);
     EXPECT_EQ(512, base::SysInfo::AmountOfPhysicalMemoryMB());
 
-    // Initializing the expected embedder origins at runtime is required for
-    // GetWebstoreLaunchURL(), which needs to have a proper ExtensionsClient
-    // initialized.
-#if !defined(OS_ANDROID)
-    expected_embedder_origins_.push_back(
-        url::Origin::Create(GaiaUrls::GetInstance()->gaia_url()));
-#endif
-#if BUILDFLAG(ENABLE_EXTENSIONS)
-    expected_embedder_origins_.push_back(
-        url::Origin::Create(extension_urls::GetWebstoreLaunchURL()));
-#endif
     // On Android official builds, we expect to isolate an additional set of
     // built-in origins.
-    auto built_in_origins =
-        site_isolation::GetBrowserSpecificBuiltInIsolatedOrigins();
-    std::move(std::begin(built_in_origins), std::end(built_in_origins),
-              std::back_inserter(expected_embedder_origins_));
+    expected_embedder_origins_ = GetBrowserSpecificBuiltInIsolatedOrigins();
   }
 
  protected:
@@ -441,7 +473,7 @@ INSTANTIATE_TEST_SUITE_P(
 // initializes the test class's ScopedFeatureList using it.  Two derived
 // classes below control are used to initialize the feature to either enabled
 // or disabled state.
-class PasswordSiteIsolationFieldTrialTest : public testing::Test {
+class PasswordSiteIsolationFieldTrialTest : public BaseSiteIsolationTest {
  public:
   explicit PasswordSiteIsolationFieldTrialTest(bool should_enable)
       : field_trial_list_(std::make_unique<base::MockEntropyProvider>()) {
@@ -514,9 +546,9 @@ TEST_F(EnabledPasswordSiteIsolationFieldTrialTest, BelowThreshold) {
   // defaults to a 1900MB memory threshold, which is above the 512MB physical
   // memory that this test simulates.
 #if defined(OS_ANDROID)
-  EXPECT_FALSE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_FALSE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 #else
-  EXPECT_TRUE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 #endif
 
   // Define a memory threshold at 768MB.  Since this is above the 512MB of
@@ -527,7 +559,7 @@ TEST_F(EnabledPasswordSiteIsolationFieldTrialTest, BelowThreshold) {
       features::kSitePerProcessOnlyForHighMemoryClients,
       {{features::kSitePerProcessOnlyForHighMemoryClientsParamName, "768"}});
 
-  EXPECT_FALSE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_FALSE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 
   // Simulate enabling password site isolation from command line.  (Note that
   // InitAndEnableFeature uses ScopedFeatureList::InitFromCommandLine
@@ -539,7 +571,7 @@ TEST_F(EnabledPasswordSiteIsolationFieldTrialTest, BelowThreshold) {
 
   // This should override the memory threshold and enable password site
   // isolation.
-  EXPECT_TRUE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 }
 
 TEST_F(EnabledPasswordSiteIsolationFieldTrialTest, AboveThreshold) {
@@ -551,9 +583,9 @@ TEST_F(EnabledPasswordSiteIsolationFieldTrialTest, AboveThreshold) {
   // defaults to a 1900MB memory threshold, which is above the 512MB physical
   // memory that this test simulates.
 #if defined(OS_ANDROID)
-  EXPECT_FALSE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_FALSE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 #else
-  EXPECT_TRUE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 #endif
 
   // Define a memory threshold at 128MB.  Since this is below the 512MB of
@@ -564,7 +596,7 @@ TEST_F(EnabledPasswordSiteIsolationFieldTrialTest, AboveThreshold) {
       features::kSitePerProcessOnlyForHighMemoryClients,
       {{features::kSitePerProcessOnlyForHighMemoryClientsParamName, "128"}});
 
-  EXPECT_TRUE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 
   // Simulate disabling password site isolation from command line.  (Note that
   // InitAndEnableFeature uses ScopedFeatureList::InitFromCommandLine
@@ -574,7 +606,7 @@ TEST_F(EnabledPasswordSiteIsolationFieldTrialTest, AboveThreshold) {
   base::test::ScopedFeatureList password_site_isolation_feature;
   password_site_isolation_feature.InitAndDisableFeature(
       features::kSiteIsolationForPasswordSites);
-  EXPECT_FALSE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_FALSE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 }
 
 // This test verifies that when password-triggered site isolation is disabled
@@ -586,7 +618,7 @@ TEST_F(DisabledPasswordSiteIsolationFieldTrialTest,
     return;
 
   // Password site isolation should be disabled at this point.
-  EXPECT_FALSE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_FALSE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 
   // Simulate enabling password site isolation from command line.  (Note that
   // InitAndEnableFeature uses ScopedFeatureList::InitFromCommandLine
@@ -598,7 +630,7 @@ TEST_F(DisabledPasswordSiteIsolationFieldTrialTest,
 
   // If no memory threshold is defined, password site isolation should be
   // enabled.
-  EXPECT_TRUE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 
   // Define a memory threshold at 768MB.  This is above the 512MB of physical
   // memory that this test simulates, but password site isolation should still
@@ -609,7 +641,7 @@ TEST_F(DisabledPasswordSiteIsolationFieldTrialTest,
       features::kSitePerProcessOnlyForHighMemoryClients,
       {{features::kSitePerProcessOnlyForHighMemoryClientsParamName, "768"}});
 
-  EXPECT_TRUE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 }
 
 // Similar to the test above, but with device memory being above memory
@@ -619,7 +651,7 @@ TEST_F(DisabledPasswordSiteIsolationFieldTrialTest,
   if (ShouldSkipBecauseOfConflictingCommandLineSwitches())
     return;
 
-  EXPECT_FALSE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_FALSE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 
   base::test::ScopedFeatureList password_site_isolation_feature;
   password_site_isolation_feature.InitAndEnableFeature(
@@ -627,14 +659,14 @@ TEST_F(DisabledPasswordSiteIsolationFieldTrialTest,
 
   // If no memory threshold is defined, password site isolation should be
   // enabled.
-  EXPECT_TRUE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 
   base::test::ScopedFeatureList memory_feature;
   memory_feature.InitAndEnableFeatureWithParameters(
       features::kSitePerProcessOnlyForHighMemoryClients,
       {{features::kSitePerProcessOnlyForHighMemoryClientsParamName, "128"}});
 
-  EXPECT_TRUE(::SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
+  EXPECT_TRUE(SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled());
 }
 
 // Helper class to run tests with strict origin isolation initialized via
@@ -643,7 +675,7 @@ TEST_F(DisabledPasswordSiteIsolationFieldTrialTest,
 // initializes the test class's ScopedFeatureList using it.  Two derived
 // classes below control are used to initialize the feature to either enabled
 // or disabled state.
-class StrictOriginIsolationFieldTrialTest : public testing::Test {
+class StrictOriginIsolationFieldTrialTest : public BaseSiteIsolationTest {
  public:
   explicit StrictOriginIsolationFieldTrialTest(bool should_enable)
       : field_trial_list_(std::make_unique<base::MockEntropyProvider>()) {
@@ -654,7 +686,7 @@ class StrictOriginIsolationFieldTrialTest : public testing::Test {
 
     std::unique_ptr<base::FeatureList> feature_list(new base::FeatureList);
     feature_list->RegisterFieldTrialOverride(
-        features::kStrictOriginIsolation.name,
+        ::features::kStrictOriginIsolation.name,
         should_enable
             ? base::FeatureList::OverrideState::OVERRIDE_ENABLE_FEATURE
             : base::FeatureList::OverrideState::OVERRIDE_DISABLE_FEATURE,
@@ -740,7 +772,7 @@ TEST_F(EnabledStrictOriginIsolationFieldTrialTest,
   // same override path as well.)
   base::test::ScopedFeatureList strict_origin_isolation_feature;
   strict_origin_isolation_feature.InitAndDisableFeature(
-      features::kStrictOriginIsolation);
+      ::features::kStrictOriginIsolation);
   EXPECT_FALSE(content::SiteIsolationPolicy::IsStrictOriginIsolationEnabled());
 }
 
@@ -761,7 +793,7 @@ TEST_F(DisabledStrictOriginIsolationFieldTrialTest,
   // same override path as well.)
   base::test::ScopedFeatureList strict_origin_isolation_feature;
   strict_origin_isolation_feature.InitAndEnableFeature(
-      features::kStrictOriginIsolation);
+      ::features::kStrictOriginIsolation);
 
   // If no memory threshold is defined, strict origin isolation should be
   // enabled.
@@ -785,7 +817,7 @@ TEST_F(DisabledStrictOriginIsolationFieldTrialTest,
 #if BUILDFLAG(GOOGLE_CHROME_BRANDING) && defined(OS_ANDROID)
 class BuiltInIsolatedOriginsTest : public SiteIsolationPolicyTest {
  public:
-  BuiltInIsolatedOriginsTest() {}
+  BuiltInIsolatedOriginsTest() = default;
 
  protected:
   void SetUp() override {
@@ -902,3 +934,5 @@ TEST_F(BuiltInIsolatedOriginsTest, NotAppliedWithFullSiteIsolation) {
   EXPECT_EQ(isolated_origins.size(), 0u);
 }
 #endif
+
+}  // namespace site_isolation

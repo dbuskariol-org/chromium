@@ -2,17 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/site_isolation/site_isolation_policy.h"
+#include "components/site_isolation/site_isolation_policy.h"
 
+#include "base/metrics/field_trial_params.h"
 #include "base/metrics/histogram_macros.h"
 #include "base/system/sys_info.h"
 #include "build/build_config.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/common/chrome_features.h"
-#include "chrome/common/pref_names.h"
 #include "components/prefs/pref_service.h"
+#include "components/site_isolation/features.h"
+#include "components/site_isolation/pref_names.h"
+#include "components/user_prefs/user_prefs.h"
+#include "content/public/browser/browser_context.h"
 #include "content/public/browser/child_process_security_policy.h"
 #include "content/public/browser/site_isolation_policy.h"
+
+namespace site_isolation {
 
 // static
 bool SiteIsolationPolicy::IsIsolationForPasswordSitesEnabled() {
@@ -99,7 +103,8 @@ bool SiteIsolationPolicy::ShouldDisableSiteIsolationDueToMemoryThreshold() {
 }
 
 // static
-void SiteIsolationPolicy::ApplyPersistedIsolatedOrigins(Profile* profile) {
+void SiteIsolationPolicy::ApplyPersistedIsolatedOrigins(
+    content::BrowserContext* browser_context) {
   // If the user turned off password-triggered isolation, don't apply any
   // stored isolated origins, but also don't clear them from prefs, so that
   // they can be used if password-triggered isolation is re-enabled later.
@@ -108,7 +113,8 @@ void SiteIsolationPolicy::ApplyPersistedIsolatedOrigins(Profile* profile) {
 
   std::vector<url::Origin> origins;
   for (const auto& value :
-       *profile->GetPrefs()->GetList(prefs::kUserTriggeredIsolatedOrigins)) {
+       *user_prefs::UserPrefs::Get(browser_context)
+            ->GetList(prefs::kUserTriggeredIsolatedOrigins)) {
     origins.push_back(url::Origin::Create(GURL(value.GetString())));
   }
 
@@ -117,9 +123,11 @@ void SiteIsolationPolicy::ApplyPersistedIsolatedOrigins(Profile* profile) {
     using IsolatedOriginSource =
         content::ChildProcessSecurityPolicy::IsolatedOriginSource;
     policy->AddIsolatedOrigins(origins, IsolatedOriginSource::USER_TRIGGERED,
-                               /* browser_context = */ profile);
+                               browser_context);
   }
 
   UMA_HISTOGRAM_COUNTS_1000(
       "SiteIsolation.SavedUserTriggeredIsolatedOrigins.Size", origins.size());
 }
+
+}  // namespace site_isolation

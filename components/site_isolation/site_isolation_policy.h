@@ -2,16 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_SITE_ISOLATION_SITE_ISOLATION_POLICY_H_
-#define CHROME_BROWSER_SITE_ISOLATION_SITE_ISOLATION_POLICY_H_
+#ifndef COMPONENTS_SITE_ISOLATION_SITE_ISOLATION_POLICY_H_
+#define COMPONENTS_SITE_ISOLATION_SITE_ISOLATION_POLICY_H_
 
 #include "base/macros.h"
 
-class Profile;
+namespace content {
+class BrowserContext;
+}
+
+namespace site_isolation {
 
 // A centralized place for making policy decisions about site isolation modes
-// at the chrome/ layer.  This supplements content::SiteIsolationPolicy with
-// features that are specific to chrome/.
+// which can be shared between content embedders. This supplements
+// content::SiteIsolationPolicy with features that may be useful to embedders.
 //
 // These methods can be called from any thread.
 class SiteIsolationPolicy {
@@ -26,10 +30,11 @@ class SiteIsolationPolicy {
   // Spectre-like attacks on such devices).
   static bool IsEnterprisePolicyApplicable();
 
-  // Reads and applies any isolated origins stored in user prefs associated
-  // with |profile|.  This is expected to be called on startup after user prefs
-  // have been loaded.
-  static void ApplyPersistedIsolatedOrigins(Profile* profile);
+  // Reads and applies any isolated origins stored in user prefs associated with
+  // |browser_context|.  This is expected to be called on startup after user
+  // prefs have been loaded.
+  static void ApplyPersistedIsolatedOrigins(
+      content::BrowserContext* browser_context);
 
   // Determines whether Site Isolation should be disabled because the device
   // does not have the minimum required amount of memory.
@@ -44,4 +49,6 @@ class SiteIsolationPolicy {
   DISALLOW_IMPLICIT_CONSTRUCTORS(SiteIsolationPolicy);
 };
 
-#endif  // CHROME_BROWSER_SITE_ISOLATION_SITE_ISOLATION_POLICY_H_
+}  // namespace site_isolation
+
+#endif  // COMPONENTS_SITE_ISOLATION_SITE_ISOLATION_POLICY_H_

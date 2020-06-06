@@ -1741,8 +1741,6 @@ static_library("browser") {
     "site_isolation/prefs_observer.h",
     "site_isolation/site_details.cc",
     "site_isolation/site_details.h",
-    "site_isolation/site_isolation_policy.cc",
-    "site_isolation/site_isolation_policy.h",
     "speech/chrome_speech_recognition_manager_delegate.cc",
     "speech/chrome_speech_recognition_manager_delegate.h",
     "speech/speech_recognizer.cc",
