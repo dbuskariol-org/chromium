@@ -398,14 +398,6 @@ public class PickerVideoPlayer
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
         if (fromUser) {
-            final boolean seekDuringPlay = mVideoView.isPlaying();
-            mMediaPlayer.setOnSeekCompleteListener(mp -> {
-                mMediaPlayer.setOnSeekCompleteListener(null);
-                if (seekDuringPlay) {
-                    startVideoPlayback();
-                }
-            });
-
             float percentage = progress / 100f;
             int position = Math.round(percentage * mVideoView.getDuration());
             videoSeekTo(position);
@@ -416,7 +408,10 @@ public class PickerVideoPlayer
     @Override
     public void onStartTrackingTouch(SeekBar seekBar) {
         showAndMaybeHideVideoControls(/* animateIn= */ false, FadeOut.NO_FADE_OUT);
-        mSeekDuringPlayback = mVideoView.isPlaying();
+        if (mVideoView.isPlaying()) {
+            stopVideoPlayback();
+            mSeekDuringPlayback = true;
+        }
         mFastForwardMessage.setVisibility(View.VISIBLE);
         mLargePlayButton.setVisibility(View.GONE);
     }
@@ -425,6 +420,10 @@ public class PickerVideoPlayer
     public void onStopTrackingTouch(SeekBar seekBar) {
         fadeAwayVideoControls(
                 mSeekDuringPlayback ? FadeOut.FADE_OUT_PLAY_QUICKLY : FadeOut.FADE_OUT_ALL_SLOWLY);
+        if (mSeekDuringPlayback) {
+            startVideoPlayback();
+            mSeekDuringPlayback = false;
+        }
         mFastForwardMessage.setVisibility(View.GONE);
         mLargePlayButton.setVisibility(View.VISIBLE);
     }
