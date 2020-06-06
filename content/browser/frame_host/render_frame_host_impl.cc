@@ -4963,6 +4963,15 @@ void RenderFrameHostImpl::CreatePortal(
     return;
   }
 
+  // TODO(crbug.com/1051639): We need to find a long term solution to when/how
+  // portals should work in sandboxed documents.
+  if (active_sandbox_flags_ != network::mojom::WebSandboxFlags::kNone) {
+    mojo::ReportBadMessage(
+        "RFHI::CreatePortal called in a sandboxed browsing context");
+    frame_host_associated_receiver_.reset();
+    return;
+  }
+
   // Note that we don't check |GetLastCommittedOrigin|, since that is inherited
   // by the initial empty document of a new frame.
   // TODO(1008989): Once issue 1008989 is fixed we could move this check into
