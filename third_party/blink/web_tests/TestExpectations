@@ -1377,8 +1377,6 @@ crbug.com/891427 animations/responsive/viewport-unit-translate-responsive.html [
 crbug.com/891427 virtual/threaded/external/wpt/css/css-scroll-snap/snap-at-user-scroll-end-manual.html [ Pass Failure Timeout Crash ]
 # Next 1 here: https://ci.chromium.org/p/chromium/builders/luci.chromium.try/win7-blink-rel/1504
 crbug.com/891427 tables/mozilla_expected_failures/marvin/table_overflow_dirty_reflow_tbody.html [ Pass Failure Timeout Crash ]
-
-crbug.com/891427 paint/invalidation/scroll/fixed-img-src-change-after-scroll.html [ Pass Failure Timeout Crash ]
 # ====== OOPIF-mode failures until here ======
 
 # ====== Form Controls Refresh (chrome://flags/#form-controls-refresh) failures from here ======
