@@ -3410,9 +3410,6 @@ void RenderFrameHostImpl::DownloadURL(
   if (!VerifyDownloadUrlParams(GetSiteInstance(), *blink_parameters))
     return;
 
-  mojo::PendingRemote<blink::mojom::Blob> blob_data_remote(
-      std::move(blink_parameters->data_url_blob), blink::mojom::Blob::Version_);
-
   net::NetworkTrafficAnnotationTag traffic_annotation =
       net::DefineNetworkTrafficAnnotation("renderer_initiated_download", R"(
         semantics {
@@ -3458,9 +3455,9 @@ void RenderFrameHostImpl::DownloadURL(
       blink_parameters->initiator_origin.value_or(url::Origin()));
   parameters->set_download_source(download::DownloadSource::FROM_RENDERER);
 
-  if (blob_data_remote) {
+  if (blink_parameters->data_url_blob) {
     DataURLBlobReader::ReadDataURLFromBlob(
-        std::move(blob_data_remote),
+        std::move(blink_parameters->data_url_blob),
         base::BindOnce(&OnDataURLRetrieved, std::move(parameters)));
     return;
   }
