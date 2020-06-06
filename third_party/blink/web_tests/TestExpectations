@@ -239,6 +239,16 @@ crbug.com/1007134 external/wpt/intersection-observer/v2/delay-test.html [ Pass F
 crbug.com/1004547 external/wpt/intersection-observer/cross-origin-iframe.sub.html [ Pass Failure ]
 crbug.com/1007229 external/wpt/intersection-observer/same-origin-grand-child-iframe.sub.html [ Pass Failure ]
 
+# abspos is not implemented yet for aspect-ratio
+crbug.com/1045668 external/wpt/css/css-sizing/aspect-ratio/abspos-001.tentative.html [ Failure ]
+crbug.com/1045668 external/wpt/css/css-sizing/aspect-ratio/abspos-002.tentative.html [ Failure ]
+crbug.com/1045668 external/wpt/css/css-sizing/aspect-ratio/abspos-003.tentative.html [ Failure ]
+crbug.com/1045668 external/wpt/css/css-sizing/aspect-ratio/abspos-005.tentative.html [ Failure ]
+crbug.com/1045668 external/wpt/css/css-sizing/aspect-ratio/abspos-006.tentative.html [ Failure ]
+
+# It is not clear if this test is correct. https://github.com/w3c/csswg-drafts/issues/5151
+crbug.com/1045668 external/wpt/css/css-sizing/aspect-ratio/abspos-004.tentative.html [ Failure ]
+
 # Display locking failures
 
 crbug.com/849459 fragmentation/repeating-thead-under-repeating-thead.html [ Failure ]
