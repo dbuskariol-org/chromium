@@ -4814,6 +4814,21 @@
             ]
         }
     ],
+    "PreventMessagePumpHangs": [
+        {
+            "platforms": [
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "PreventMessagePumpHangs",
+                    "enable_features": [
+                        "PreventMessagePumpHangs"
+                    ]
+                }
+            ]
+        }
+    ],
     "PreviewsLitePageRedirect": [
         {
             "platforms": [
