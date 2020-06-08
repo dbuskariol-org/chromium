@@ -134,7 +134,7 @@ class BinaryUploadService : public KeyedService {
     void set_request_malware_scan(
         MalwareDeepScanningClientRequest malware_request);
     void set_fcm_token(const std::string& token);
-    void set_dm_token(const std::string& token);
+    void set_device_token(const std::string& token);
     void set_request_token(const std::string& token);
     void set_filename(const std::string& filename);
     void set_digest(const std::string& digest);

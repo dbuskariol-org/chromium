@@ -438,7 +438,7 @@ void BinaryUploadService::Request::set_fcm_token(const std::string& token) {
   deep_scanning_request_.set_fcm_notification_token(token);
 }
 
-void BinaryUploadService::Request::set_dm_token(const std::string& token) {
+void BinaryUploadService::Request::set_device_token(const std::string& token) {
   deep_scanning_request_.set_dm_token(token);
 }
 
@@ -510,7 +510,7 @@ void BinaryUploadService::IsAuthorized(AuthorizationCallback callback) {
       auto request = std::make_unique<ValidateDataUploadRequest>(base::BindOnce(
           &BinaryUploadService::ValidateDataUploadRequestCallback,
           weakptr_factory_.GetWeakPtr()));
-      request->set_dm_token(dm_token.value());
+      request->set_device_token(dm_token.value());
       UploadForDeepScanning(std::move(request));
     }
     return;
