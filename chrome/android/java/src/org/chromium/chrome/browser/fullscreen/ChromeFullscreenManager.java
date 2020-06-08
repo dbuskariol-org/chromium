@@ -220,6 +220,12 @@ public class ChromeFullscreenManager implements ActivityStateListener, WindowFoc
             protected void onObservingDifferentTab(Tab tab) {
                 setTab(tab);
             }
+
+            @Override
+            public void onContentViewScrollingStateChanged(boolean scrolling) {
+                mContentViewScrolling = scrolling;
+                if (!scrolling) updateVisuals();
+            }
         };
 
         mTabFullscreenObserver = new TabModelSelectorTabObserver(modelSelector) {
@@ -319,14 +325,10 @@ public class ChromeFullscreenManager implements ActivityStateListener, WindowFoc
         Tab previousTab = getTab();
         mTab = tab;
         if (previousTab != tab) {
-            if (previousTab != null) {
-                TabGestureStateListener.from(previousTab).setFullscreenManager(null);
-            }
             updateViewStateListener();
             if (tab != null) {
                 mBrowserVisibilityDelegate.showControlsTransient();
                 updateMultiTouchZoomSupport(!getPersistentFullscreenMode());
-                TabGestureStateListener.from(tab).setFullscreenManager(this);
                 if (tab.isUserInteractable()) restoreControlsPositions();
             }
         }
@@ -994,14 +996,6 @@ public class ChromeFullscreenManager implements ActivityStateListener, WindowFoc
             mInGesture = false;
             updateVisuals();
         }
-    }
-
-    /**
-     * Called when scrolling state of the ContentView changed.
-     */
-    public void onContentViewScrollingStateChanged(boolean scrolling) {
-        mContentViewScrolling = scrolling;
-        if (!scrolling) updateVisuals();
     }
 
     /**
