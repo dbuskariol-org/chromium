@@ -35,6 +35,7 @@
 #include "third_party/blink/renderer/bindings/core/v8/v8_binding_for_core.h"
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/qualified_name.h"
+#include "third_party/blink/renderer/core/frame/local_dom_window.h"
 #include "third_party/blink/renderer/core/frame/local_frame.h"
 #include "v8/include/v8.h"
 
@@ -57,7 +58,7 @@ EventListener* CreateAttributeEventListener(Node* node,
 
   if (LocalFrame* frame = node->GetDocument().GetFrame()) {
     ScriptController& script_controller = frame->GetScriptController();
-    if (!node->GetDocument().CanExecuteScripts(kAboutToExecuteScript))
+    if (!node->GetExecutionContext()->CanExecuteScripts(kAboutToExecuteScript))
       return nullptr;
     position = script_controller.EventHandlerPosition();
     source_url = node->GetDocument().Url().GetString();
@@ -85,7 +86,7 @@ EventListener* CreateAttributeEventListener(LocalFrame* frame,
   if (value.IsNull())
     return nullptr;
 
-  if (!frame->GetDocument()->CanExecuteScripts(kAboutToExecuteScript))
+  if (!frame->DomWindow()->CanExecuteScripts(kAboutToExecuteScript))
     return nullptr;
 
   TextPosition position = frame->GetScriptController().EventHandlerPosition();

@@ -322,7 +322,6 @@ class CORE_EXPORT Document : public ContainerNode,
   // should move to LocalDOMWindow.
   ContentSecurityPolicy* GetContentSecurityPolicyForWorld();
   LocalDOMWindow* ExecutingWindow() const;
-  bool CanExecuteScripts(ReasonForCallingCanExecuteScripts);
   String OutgoingReferrer() const;
   network::mojom::ReferrerPolicy GetReferrerPolicy() const;
 
