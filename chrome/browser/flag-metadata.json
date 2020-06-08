@@ -1864,8 +1864,8 @@
   },
   {
     "name": "enable-notification-indicator",
-    "owners": [ "newcomer" ],
-    "expiry_milestone": 83
+    "owners": [ "mmourgos", "newcomer" ],
+    "expiry_milestone": 88
   },
   {
     "name": "enable-offer-store-unmasked-wallet-cards",
