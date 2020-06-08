@@ -4379,12 +4379,14 @@ void OnDangerPromptCreated(DownloadDangerPrompt* prompt) {
   prompt->InvokeActionForTesting(DownloadDangerPrompt::ACCEPT);
 }
 
-#if defined(OS_MACOSX)
-// Flakily triggers and assert on Mac.
+#if defined(OS_MACOSX) && !defined(NDEBUG)
+// Flaky on Mac debug, failing with a timeout.
 // http://crbug.com/180759
-#define MAYBE_DownloadExtensionTest_AcceptDanger DISABLED_DownloadExtensionTest_AcceptDanger
+#define MAYBE_DownloadExtensionTest_AcceptDanger \
+  DISABLED_DownloadExtensionTest_AcceptDanger
 #else
-#define MAYBE_DownloadExtensionTest_AcceptDanger DownloadExtensionTest_AcceptDanger
+#define MAYBE_DownloadExtensionTest_AcceptDanger \
+  DownloadExtensionTest_AcceptDanger
 #endif
 IN_PROC_BROWSER_TEST_F(DownloadExtensionTest,
                        MAYBE_DownloadExtensionTest_AcceptDanger) {
