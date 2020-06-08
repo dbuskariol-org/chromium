@@ -190,6 +190,8 @@ static_library("extensions") {
     "api/identity/identity_constants.h",
     "api/identity/identity_get_accounts_function.cc",
     "api/identity/identity_get_accounts_function.h",
+    "api/identity/identity_get_auth_token_error.cc",
+    "api/identity/identity_get_auth_token_error.h",
     "api/identity/identity_get_auth_token_function.cc",
     "api/identity/identity_get_auth_token_function.h",
     "api/identity/identity_get_profile_user_info_function.cc",
