@@ -315,6 +315,10 @@ class CORE_EXPORT NGInlineCursor {
   PositionWithAffinity PositionForPointInInlineBox(
       const PhysicalOffset& point) const;
 
+  // Returns first/last position of |this| line. |this| should be line box.
+  PositionWithAffinity PositionForStartOfLine() const;
+  PositionWithAffinity PositionForEndOfLine() const;
+
   //
   // Functions to move the current position.
   //

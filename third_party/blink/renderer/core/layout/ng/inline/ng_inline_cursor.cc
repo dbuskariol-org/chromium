@@ -899,6 +899,16 @@ PositionWithAffinity NGInlineCursor::PositionForPointInChild(
   return PositionWithAffinity();
 }
 
+PositionWithAffinity NGInlineCursor::PositionForStartOfLine() const {
+  DCHECK(Current().IsLineBox());
+  return PositionForPointInInlineBox(Current().LineStartPoint());
+}
+
+PositionWithAffinity NGInlineCursor::PositionForEndOfLine() const {
+  DCHECK(Current().IsLineBox());
+  return PositionForPointInInlineBox(Current().LineEndPoint());
+}
+
 void NGInlineCursor::MoveTo(const NGInlineCursorPosition& position) {
   CheckValid(position);
   current_ = position;
