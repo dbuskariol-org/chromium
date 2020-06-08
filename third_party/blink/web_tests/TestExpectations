@@ -4501,6 +4501,12 @@ crbug.com/1045599 virtual/layout-ng-grid/fast/css-grid-layout/scrolled-grid-pain
 crbug.com/1045599 virtual/layout-ng-grid/fast/css-grid-layout/scrolled-grid-painting.html [ Failure ]
 crbug.com/1045599 virtual/layout-ng-grid/fast/css-grid-layout/mozilla/grid-repeat-auto-fill-fit-005-part-1.html [ Failure ]
 crbug.com/1045599 virtual/layout-ng-grid/fast/css-grid-layout/mozilla/grid-repeat-auto-fill-fit-005-part-2.html [ Failure ]
+crbug.com/1045599 virtual/layout-ng-grid/external/wpt/css/css-grid/layout-algorithm/baseline-alignment-affects-intrinsic-size-001.html [ Failure ]
+crbug.com/1045599 virtual/layout-ng-grid/external/wpt/css/css-grid/layout-algorithm/baseline-alignment-affects-intrinsic-size-002.html [ Failure ]
+crbug.com/1045599 virtual/layout-ng-grid/external/wpt/css/css-grid/layout-algorithm/baseline-alignment-affects-intrinsic-size-003.html [ Failure ]
+crbug.com/1045599 virtual/layout-ng-grid/external/wpt/css/css-grid/layout-algorithm/baseline-alignment-affects-intrinsic-size-004.html [ Failure ]
+crbug.com/1045599 virtual/layout-ng-grid/external/wpt/css/css-grid/layout-algorithm/baseline-alignment-affects-intrinsic-size-005.html [ Failure ]
+crbug.com/1045599 virtual/layout-ng-grid/external/wpt/css/css-grid/layout-algorithm/baseline-alignment-affects-intrinsic-size-006.html [ Failure ]
 
 # [css-logical]
 crbug.com/865579 external/wpt/css/css-logical/animation-001.html [ Failure Pass ]
