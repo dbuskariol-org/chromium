@@ -4223,7 +4223,7 @@ const FeatureEntry kFeatureEntries[] = {
     {"enable-resampling-input-events",
      flag_descriptions::kEnableResamplingInputEventsName,
      flag_descriptions::kEnableResamplingInputEventsDescription, kOsAll,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(features::kResamplingInputEvents,
+     FEATURE_WITH_PARAMS_VALUE_TYPE(blink::features::kResamplingInputEvents,
                                     kResamplingInputEventsFeatureVariations,
                                     "ResamplingInputEvents")},
 

@@ -81,6 +81,7 @@
 #include "third_party/blink/public/common/input/web_input_event_attribution.h"
 #include "third_party/blink/public/common/input/web_mouse_event.h"
 #include "third_party/blink/public/common/page/web_drag_operation.h"
+#include "third_party/blink/public/common/switches.h"
 #include "third_party/blink/public/platform/file_path_conversion.h"
 #include "third_party/blink/public/platform/platform.h"
 #include "third_party/blink/public/platform/scheduler/web_render_widget_scheduling_state.h"
@@ -1714,7 +1715,7 @@ void RenderWidget::InitCompositing(const ScreenInfo& screen_info) {
       main_thread_scheduler, uses_input_handler);
   const base::CommandLine& command_line =
       *base::CommandLine::ForCurrentProcess();
-  if (command_line.HasSwitch(switches::kAllowPreCommitInput))
+  if (command_line.HasSwitch(blink::switches::kAllowPreCommitInput))
     widget_input_handler_manager_->AllowPreCommitInput();
 }
 
