@@ -357,7 +357,6 @@ class CORE_EXPORT Document : public ContainerNode,
   bool IsSecureContext(String& error_message) const;
   void SetSecureContextModeForTesting(SecureContextMode);
   void SetReferrerPolicy(network::mojom::ReferrerPolicy);
-  v8::Isolate* GetIsolate() const;
   Agent* GetAgent() const;
   OriginTrialContext* GetOriginTrialContext() const;
 

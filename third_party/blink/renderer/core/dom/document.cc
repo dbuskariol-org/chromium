@@ -978,9 +978,9 @@ Location* Document::location() const {
 }
 
 ContentSecurityPolicy* Document::GetContentSecurityPolicyForWorld() {
-  v8::Isolate* isolate = GetIsolate();
-  if (!isolate)
+  if (!GetExecutionContext())
     return GetContentSecurityPolicy();
+  v8::Isolate* isolate = GetExecutionContext()->GetIsolate();
   v8::HandleScope handle_scope(isolate);
   v8::Local<v8::Context> v8_context = isolate->GetCurrentContext();
 
@@ -1087,10 +1087,6 @@ bool Document::IsSecureContext(String& error_message) const {
 
 void Document::SetReferrerPolicy(network::mojom::ReferrerPolicy policy) {
   GetExecutionContext()->SetReferrerPolicy(policy);
-}
-
-v8::Isolate* Document::GetIsolate() const {
-  return GetExecutionContext() ? GetExecutionContext()->GetIsolate() : nullptr;
 }
 
 Agent* Document::GetAgent() const {

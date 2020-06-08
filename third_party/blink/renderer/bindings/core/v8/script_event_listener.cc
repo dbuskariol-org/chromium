@@ -47,15 +47,13 @@ EventListener* CreateAttributeEventListener(Node* node,
                                             const AtomicString& value,
                                             JSEventHandler::HandlerType type) {
   DCHECK(node);
-  if (value.IsNull() || !node->GetDocument().GetExecutionContext())
+  if (value.IsNull() || !node->GetExecutionContext())
     return nullptr;
 
   // FIXME: Very strange: we initialize zero-based number with '1'.
   TextPosition position(OrdinalNumber::FromZeroBasedInt(1),
                         OrdinalNumber::First());
   String source_url;
-
-  v8::Isolate* isolate = node->GetDocument().GetIsolate();
 
   if (LocalFrame* frame = node->GetDocument().GetFrame()) {
     ScriptController& script_controller = frame->GetScriptController();
@@ -72,6 +70,7 @@ EventListener* CreateAttributeEventListener(Node* node,
   // of the isolated world for the content script by design.
   DOMWrapperWorld& world = DOMWrapperWorld::MainWorld();
 
+  v8::Isolate* isolate = node->GetExecutionContext()->GetIsolate();
   return MakeGarbageCollected<JSEventHandlerForContentAttribute>(
       isolate, world, name.LocalName(), value, source_url, position, type);
 }
