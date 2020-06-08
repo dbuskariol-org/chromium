@@ -2005,11 +2005,25 @@ void WebViewImpl::DidAttachLocalMainFrame() {
   }
 }
 
+void WebViewImpl::DidAttachRemoteMainFrame() {
+  DCHECK(!MainFrameImpl());
+
+  RemoteFrame* remote_frame = DynamicTo<RemoteFrame>(GetPage()->MainFrame());
+  DCHECK(remote_frame);
+
+  remote_frame->GetRemoteAssociatedInterfaces()->GetInterface(
+      remote_main_frame_host_remote_.BindNewEndpointAndPassReceiver());
+}
+
 void WebViewImpl::DidDetachLocalMainFrame() {
   // The WebWidgetClient that generated the |scoped_defer_main_frame_update_|
   // for a local main frame is going away.
   scoped_defer_main_frame_update_ = nullptr;
   local_main_frame_host_remote_.reset();
+}
+
+void WebViewImpl::DidDetachRemoteMainFrame() {
+  remote_main_frame_host_remote_.reset();
 }
 
 WebLocalFrame* WebViewImpl::FocusedFrame() {
@@ -2731,6 +2745,16 @@ void WebViewImpl::EnablePreferredSizeChangedMode() {
   // We explicitly update the preferred size here to ensure the preferred size
   // notification is sent.
   UpdatePreferredSize();
+}
+
+void WebViewImpl::Focus() {
+  if (GetPage()->MainFrame()->IsLocalFrame()) {
+    DCHECK(local_main_frame_host_remote_);
+    local_main_frame_host_remote_->FocusPage();
+  } else {
+    DCHECK(remote_main_frame_host_remote_);
+    remote_main_frame_host_remote_->FocusPage();
+  }
 }
 
 float WebViewImpl::DefaultMinimumPageScaleFactor() const {
