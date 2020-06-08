@@ -139,7 +139,8 @@ std::wstring ExpandPathVariables(const std::wstring& untranslated_string) {
   position = result.find(kMachineNamePolicyVarName);
   if (position != std::wstring::npos) {
     DWORD return_length = 0;
-    ::GetComputerNameEx(ComputerNamePhysicalDnsHostname, NULL, &return_length);
+    ::GetComputerNameEx(ComputerNamePhysicalDnsHostname, nullptr,
+                        &return_length);
     if (return_length != 0) {
       std::unique_ptr<WCHAR[]> machinename(new WCHAR[return_length]);
       ::GetComputerNameEx(ComputerNamePhysicalDnsHostname, machinename.get(),
@@ -154,7 +155,7 @@ std::wstring ExpandPathVariables(const std::wstring& untranslated_string) {
   auto wts_free_memory = SCOPED_LOAD_FUNCTION(L"wtsapi32.dll", ::WTSFreeMemory);
   position = result.find(kWinClientName);
   if (position != std::wstring::npos) {
-    LPWSTR buffer = NULL;
+    LPWSTR buffer = nullptr;
     DWORD buffer_length = 0;
     if (wts_query_session_information(WTS_CURRENT_SERVER, WTS_CURRENT_SESSION,
                                       WTSClientName, &buffer, &buffer_length)) {
@@ -165,7 +166,7 @@ std::wstring ExpandPathVariables(const std::wstring& untranslated_string) {
   }
   position = result.find(kWinSessionName);
   if (position != std::wstring::npos) {
-    LPWSTR buffer = NULL;
+    LPWSTR buffer = nullptr;
     DWORD buffer_length = 0;
     if (wts_query_session_information(WTS_CURRENT_SERVER, WTS_CURRENT_SESSION,
                                       WTSWinStationName, &buffer,
