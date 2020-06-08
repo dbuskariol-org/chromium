@@ -2176,11 +2176,12 @@ void SetCookieCallback(base::RunLoop* run_loop,
   run_loop->Quit();
 }
 
-void GetCookieListCallback(base::RunLoop* run_loop,
-                           net::CookieList* result_out,
-                           const net::CookieStatusList& result,
-                           const net::CookieStatusList& excluded_cookies) {
-  *result_out = net::cookie_util::StripStatuses(result);
+void GetCookieListCallback(
+    base::RunLoop* run_loop,
+    net::CookieList* result_out,
+    const net::CookieAccessResultList& result,
+    const net::CookieAccessResultList& excluded_cookies) {
+  *result_out = net::cookie_util::StripAccessResults(result);
   run_loop->Quit();
 }
 
