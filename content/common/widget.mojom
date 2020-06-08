@@ -6,14 +6,7 @@ module content.mojom;
 
 import "third_party/blink/public/mojom/input/input_handler.mojom";
 
+// TODO(dtapuska): Remove this interface it is no longer used.
 // Interface exposed by the renderer for Widgets.
 interface Widget {
-  // Setup the input channel for this widget. If the widget is a frame,
-  // then it will have a FrameInputHandler and the WidgetInputHandler should
-  // be obtained using that interface instead. The frame's FrameInputHandler
-  // uses associated receivers to ensure serial ordering with the frame
-  // input messages.
-  SetupWidgetInputHandler(
-    pending_receiver<blink.mojom.WidgetInputHandler> request,
-    pending_remote<blink.mojom.WidgetInputHandlerHost> host);
 };

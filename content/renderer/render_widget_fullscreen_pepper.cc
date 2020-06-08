@@ -162,6 +162,16 @@ class PepperExternalWidgetClient : public blink::WebExternalWidgetClient {
     widget_->DidInitiatePaint();
   }
 
+  void GetWidgetInputHandler(
+      blink::CrossVariantMojoReceiver<
+          blink::mojom::WidgetInputHandlerInterfaceBase> widget_input_receiver,
+      blink::CrossVariantMojoRemote<
+          blink::mojom::WidgetInputHandlerHostInterfaceBase>
+          widget_input_host_remote) override {
+    widget_->GetWidgetInputHandler(std::move(widget_input_receiver),
+                                   std::move(widget_input_host_remote));
+  }
+
  private:
   RenderWidgetFullscreenPepper* widget_;
 };

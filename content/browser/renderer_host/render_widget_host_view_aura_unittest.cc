@@ -374,8 +374,10 @@ class MockRenderWidgetHostImpl : public RenderWidgetHostImpl {
   }
   ui::LatencyInfo lastWheelOrTouchEventLatencyInfo;
 
-  MockWidgetInputHandler* input_handler() {
-    return widget_impl_->input_handler();
+  MockWidgetInputHandler* input_handler() { return &input_handler_; }
+
+  blink::mojom::WidgetInputHandler* GetWidgetInputHandler() override {
+    return &input_handler_;
   }
 
   void reset_new_content_rendering_timeout_fired() {
@@ -397,8 +399,7 @@ class MockRenderWidgetHostImpl : public RenderWidgetHostImpl {
                              routing_id,
                              std::move(widget),
                              /*hidden=*/false,
-                             std::make_unique<FrameTokenMessageQueue>()),
-        widget_impl_(std::move(widget_impl)) {
+                             std::make_unique<FrameTokenMessageQueue>()) {
     lastWheelOrTouchEventLatencyInfo = ui::LatencyInfo();
     mojo::AssociatedRemote<blink::mojom::WidgetHost> blink_widget_host;
     mojo::AssociatedRemote<blink::mojom::Widget> blink_widget;
@@ -414,7 +415,7 @@ class MockRenderWidgetHostImpl : public RenderWidgetHostImpl {
   }
 
   bool new_content_rendering_timeout_fired_ = false;
-  std::unique_ptr<MockWidgetImpl> widget_impl_;
+  MockWidgetInputHandler input_handler_;
   base::Optional<WebGestureEvent> last_forwarded_gesture_event_;
 };
 

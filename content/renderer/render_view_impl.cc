@@ -65,7 +65,6 @@
 #include "content/public/renderer/window_features_converter.h"
 #include "content/renderer/drop_data_builder.h"
 #include "content/renderer/history_serialization.h"
-#include "content/renderer/ime_event_guard.h"
 #include "content/renderer/internal_document_state_data.h"
 #include "content/renderer/loader/request_extra_data.h"
 #include "content/renderer/media/audio/audio_device_factory.h"

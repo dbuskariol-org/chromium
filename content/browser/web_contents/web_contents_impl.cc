@@ -3495,7 +3495,7 @@ BrowserAccessibilityManager*
 void WebContentsImpl::ExecuteEditCommand(
     const std::string& command,
     const base::Optional<base::string16>& value) {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3503,7 +3503,7 @@ void WebContentsImpl::ExecuteEditCommand(
 }
 
 void WebContentsImpl::MoveRangeSelectionExtent(const gfx::Point& extent) {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3512,7 +3512,7 @@ void WebContentsImpl::MoveRangeSelectionExtent(const gfx::Point& extent) {
 
 void WebContentsImpl::SelectRange(const gfx::Point& base,
                                   const gfx::Point& extent) {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3520,7 +3520,7 @@ void WebContentsImpl::SelectRange(const gfx::Point& base,
 }
 
 void WebContentsImpl::MoveCaret(const gfx::Point& extent) {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3531,7 +3531,7 @@ void WebContentsImpl::AdjustSelectionByCharacterOffset(
     int start_adjust,
     int end_adjust,
     bool show_selection_menu) {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3622,7 +3622,7 @@ void WebContentsImpl::ReloadFocusedFrame() {
 }
 
 void WebContentsImpl::Undo() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3631,7 +3631,7 @@ void WebContentsImpl::Undo() {
 }
 
 void WebContentsImpl::Redo() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3640,7 +3640,7 @@ void WebContentsImpl::Redo() {
 }
 
 void WebContentsImpl::Cut() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3649,7 +3649,7 @@ void WebContentsImpl::Cut() {
 }
 
 void WebContentsImpl::Copy() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3659,7 +3659,7 @@ void WebContentsImpl::Copy() {
 
 void WebContentsImpl::CopyToFindPboard() {
 #if defined(OS_MACOSX)
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3670,7 +3670,7 @@ void WebContentsImpl::CopyToFindPboard() {
 }
 
 void WebContentsImpl::Paste() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3681,7 +3681,7 @@ void WebContentsImpl::Paste() {
 }
 
 void WebContentsImpl::PasteAndMatchStyle() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3692,7 +3692,7 @@ void WebContentsImpl::PasteAndMatchStyle() {
 }
 
 void WebContentsImpl::Delete() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3701,7 +3701,7 @@ void WebContentsImpl::Delete() {
 }
 
 void WebContentsImpl::SelectAll() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3710,7 +3710,7 @@ void WebContentsImpl::SelectAll() {
 }
 
 void WebContentsImpl::CollapseSelection() {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3718,7 +3718,7 @@ void WebContentsImpl::CollapseSelection() {
 }
 
 void WebContentsImpl::Replace(const base::string16& word) {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -3726,7 +3726,7 @@ void WebContentsImpl::Replace(const base::string16& word) {
 }
 
 void WebContentsImpl::ReplaceMisspelling(const base::string16& word) {
-  auto* input_handler = GetFocusedFrameInputHandler();
+  auto* input_handler = GetFocusedFrameWidgetInputHandler();
   if (!input_handler)
     return;
 
@@ -7463,12 +7463,13 @@ void WebContentsImpl::OnNativeThemeUpdated(ui::NativeTheme* observed_theme) {
     NotifyPreferencesChanged();
 }
 
-blink::mojom::FrameInputHandler*
-WebContentsImpl::GetFocusedFrameInputHandler() {
-  auto* focused_frame = GetFocusedFrame();
-  if (!focused_frame)
+blink::mojom::FrameWidgetInputHandler*
+WebContentsImpl::GetFocusedFrameWidgetInputHandler() {
+  auto* focused_render_widget_host =
+      GetFocusedRenderWidgetHost(GetMainFrame()->GetRenderWidgetHost());
+  if (!focused_render_widget_host)
     return nullptr;
-  return focused_frame->GetFrameInputHandler();
+  return focused_render_widget_host->GetFrameWidgetInputHandler();
 }
 
 ukm::SourceId WebContentsImpl::GetCurrentPageUkmSourceId() {

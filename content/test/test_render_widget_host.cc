@@ -36,8 +36,7 @@ TestRenderWidgetHost::TestRenderWidgetHost(
                            routing_id,
                            std::move(widget),
                            hidden,
-                           std::make_unique<FrameTokenMessageQueue>()),
-      widget_impl_(std::move(widget_impl)) {
+                           std::make_unique<FrameTokenMessageQueue>()) {
   mojo::AssociatedRemote<blink::mojom::WidgetHost> blink_widget_host;
   mojo::AssociatedRemote<blink::mojom::Widget> blink_widget;
   auto blink_widget_receiver =
@@ -50,11 +49,11 @@ TestRenderWidgetHost::TestRenderWidgetHost(
 TestRenderWidgetHost::~TestRenderWidgetHost() {}
 blink::mojom::WidgetInputHandler*
 TestRenderWidgetHost::GetWidgetInputHandler() {
-  return widget_impl_->input_handler();
+  return &input_handler_;
 }
 
 MockWidgetInputHandler* TestRenderWidgetHost::GetMockWidgetInputHandler() {
-  return widget_impl_->input_handler();
+  return &input_handler_;
 }
 
 }  // namespace content

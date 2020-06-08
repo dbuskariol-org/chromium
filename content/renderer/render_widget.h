@@ -365,6 +365,12 @@ class CONTENT_EXPORT RenderWidget
   bool WillHandleMouseEvent(const blink::WebMouseEvent& event) override;
   void QueueSyntheticEvent(
       std::unique_ptr<blink::WebCoalescedInputEvent>) override;
+  void GetWidgetInputHandler(
+      blink::CrossVariantMojoReceiver<
+          blink::mojom::WidgetInputHandlerInterfaceBase> widget_input_receiver,
+      blink::CrossVariantMojoRemote<
+          blink::mojom::WidgetInputHandlerHostInterfaceBase>
+          widget_input_host_remote) override;
 
   // Returns the scale being applied to the document in blink by the device
   // emulator. Returns 1 if there is no emulation active. Use this to position
@@ -472,11 +478,6 @@ class CONTENT_EXPORT RenderWidget
   viz::FrameSinkId GetFrameSinkIdAtPoint(const gfx::PointF& point,
                                          gfx::PointF* local_point);
 
-  // Widget mojom overrides.
-  void SetupWidgetInputHandler(
-      mojo::PendingReceiver<blink::mojom::WidgetInputHandler> receiver,
-      mojo::PendingRemote<blink::mojom::WidgetInputHandlerHost> host) override;
-
   blink::mojom::WidgetInputHandlerHost* GetInputHandlerHost();
 
   scoped_refptr<MainThreadEventQueue> GetInputEventQueue();
@@ -510,7 +511,6 @@ class CONTENT_EXPORT RenderWidget
   // composition info (when in monitor mode).
   void OnRequestCompositionUpdates(bool immediate_request,
                                    bool monitor_updates);
-  void SetWidgetReceiver(mojo::PendingReceiver<mojom::Widget> receiver);
 
   void SetMouseCapture(bool capture);
 
@@ -539,6 +539,18 @@ class CONTENT_EXPORT RenderWidget
       PresentationTimeCallback callback);
 
   base::WeakPtr<RenderWidget> AsWeakPtr();
+
+  // This method returns the WebLocalFrame which is currently focused and
+  // belongs to the frame tree associated with this RenderWidget.
+  blink::WebLocalFrame* GetFocusedWebLocalFrameInWidget() const;
+
+  bool handling_select_range() const { return handling_select_range_; }
+
+  bool is_pasting() const { return is_pasting_; }
+
+  void set_is_pasting(bool value) { is_pasting_ = value; }
+
+  void set_handling_select_range(bool value) { handling_select_range_ = value; }
 
  protected:
   // Notify subclasses that we handled OnUpdateVisualProperties.
@@ -717,10 +729,6 @@ class CONTENT_EXPORT RenderWidget
   // local root associated with this RenderWidget.
   PepperPluginInstanceImpl* GetFocusedPepperPluginInsideWidget();
 #endif
-
-  // This method returns the WebLocalFrame which is currently focused and
-  // belongs to the frame tree associated with this RenderWidget.
-  blink::WebLocalFrame* GetFocusedWebLocalFrameInWidget() const;
 
   // Whether this widget is for a frame. This excludes widgets that are not for
   // a frame (eg popups, pepper), but includes both the main frame
@@ -969,12 +977,16 @@ class CONTENT_EXPORT RenderWidget
   bool is_pinch_gesture_active_from_mainframe_ = false;
 
   scoped_refptr<MainThreadEventQueue> input_event_queue_;
-
-  mojo::Receiver<mojom::Widget> widget_receiver_;
-
   gfx::Rect compositor_visible_rect_;
 
   uint32_t last_capture_sequence_number_ = 0u;
+
+  // Used to inform didChangeSelection() when it is called in the context
+  // of handling a FrameInputHandler::SelectRange IPC.
+  bool handling_select_range_ = false;
+
+  // Whether or not this RenderWidget is currently pasting.
+  bool is_pasting_ = false;
 
   std::unique_ptr<blink::scheduler::WebWidgetScheduler> widget_scheduler_;
 

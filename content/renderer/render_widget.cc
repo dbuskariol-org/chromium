@@ -444,8 +444,7 @@ RenderWidget::RenderWidget(int32_t widget_routing_id,
       is_hidden_(hidden),
       never_composited_(never_composited),
       next_previous_flags_(kInvalidNextPreviousFlagsValue),
-      frame_swap_message_queue_(new FrameSwapMessageQueue(routing_id_)),
-      widget_receiver_(this, std::move(widget_receiver)) {
+      frame_swap_message_queue_(new FrameSwapMessageQueue(routing_id_)) {
   DCHECK_NE(routing_id_, MSG_ROUTING_NONE);
   DCHECK(RenderThread::IsMainThread());
   DCHECK(compositor_deps_);
@@ -1322,6 +1321,16 @@ void RenderWidget::QueueSyntheticEvent(
       std::move(event), DISPATCH_TYPE_NON_BLOCKING,
       blink::mojom::InputEventResultState::kNotConsumed, attribution,
       HandledEventCallback());
+}
+
+void RenderWidget::GetWidgetInputHandler(
+    blink::CrossVariantMojoReceiver<
+        blink::mojom::WidgetInputHandlerInterfaceBase> widget_input_receiver,
+    blink::CrossVariantMojoRemote<
+        blink::mojom::WidgetInputHandlerHostInterfaceBase>
+        widget_input_host_remote) {
+  widget_input_handler_manager_->AddInterface(
+      std::move(widget_input_receiver), std::move(widget_input_host_remote));
 }
 
 void RenderWidget::ShowVirtualKeyboard() {
@@ -3169,21 +3178,6 @@ blink::WebInputMethodController* RenderWidget::GetInputMethodController()
     return frame_widget->GetActiveWebInputMethodController();
 
   return nullptr;
-}
-
-void RenderWidget::SetupWidgetInputHandler(
-    mojo::PendingReceiver<blink::mojom::WidgetInputHandler> receiver,
-    mojo::PendingRemote<blink::mojom::WidgetInputHandlerHost> host) {
-  widget_input_handler_manager_->AddInterface(std::move(receiver),
-                                              std::move(host));
-}
-
-void RenderWidget::SetWidgetReceiver(
-    mojo::PendingReceiver<mojom::Widget> recevier) {
-  // Close the old receiver if there was one.
-  // A RenderWidgetHost should not need more than one channel.
-  widget_receiver_.reset();
-  widget_receiver_.Bind(std::move(recevier));
 }
 
 blink::mojom::WidgetInputHandlerHost* RenderWidget::GetInputHandlerHost() {

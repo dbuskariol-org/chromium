@@ -11,11 +11,4 @@ MockWidgetImpl::MockWidgetImpl(mojo::PendingReceiver<mojom::Widget> request)
 
 MockWidgetImpl::~MockWidgetImpl() {}
 
-void MockWidgetImpl::SetupWidgetInputHandler(
-    mojo::PendingReceiver<blink::mojom::WidgetInputHandler> receiver,
-    mojo::PendingRemote<blink::mojom::WidgetInputHandlerHost> host) {
-  input_handler_ = std::make_unique<MockWidgetInputHandler>(std::move(receiver),
-                                                            std::move(host));
-}
-
 }  // namespace content

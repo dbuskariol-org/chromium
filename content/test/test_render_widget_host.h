@@ -36,8 +36,7 @@ class TestRenderWidgetHost : public RenderWidgetHostImpl {
                        std::unique_ptr<MockWidgetImpl> widget_impl,
                        mojo::PendingRemote<mojom::Widget> widget,
                        bool hidden);
-
-  std::unique_ptr<MockWidgetImpl> widget_impl_;
+  MockWidgetInputHandler input_handler_;
 };
 
 }  // namespace content

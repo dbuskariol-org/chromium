@@ -983,10 +983,6 @@ RenderFrameHostImpl::RenderFrameHostImpl(
       // owning the RenderWidgetHostImpl itself.
       DCHECK(GetLocalRenderWidgetHost());
       DCHECK(!GetLocalRenderWidgetHost()->owned_by_render_frame_host());
-
-      // Make the RenderWidgetHostImpl able to call the mojo Widget interface
-      // (implemented by the RenderWidgetImpl).
-      GetLocalRenderWidgetHost()->SetWidget(std::move(widget));
     } else {
       // For local child roots, the RenderFrameHost directly creates and owns
       // its RenderWidgetHost.
@@ -1006,8 +1002,6 @@ RenderFrameHostImpl::RenderFrameHostImpl(
     if (is_main_frame())
       GetLocalRenderWidgetHost()->SetIntersectsViewport(true);
     GetLocalRenderWidgetHost()->SetFrameDepth(frame_tree_node_->depth());
-    GetLocalRenderWidgetHost()->SetFrameInputHandler(
-        frame_input_handler_.get());
     GetLocalRenderWidgetHost()->input_router()->SetFrameTreeNodeId(
         frame_tree_node_->frame_tree_node_id());
   }
@@ -1151,9 +1145,6 @@ RenderFrameHostImpl::~RenderFrameHostImpl() {
   if (owned_render_widget_host_)
     owned_render_widget_host_->ShutdownAndDestroyWidget(false);
 
-  // This needs to be deleted before |frame_input_handler_| so associated
-  // remotes can send messages during shutdown. See crbug.com/1010478 for
-  // details.
   render_view_host_.reset();
 
   // If another frame is waiting for a beforeunload completion callback from
@@ -2055,12 +2046,6 @@ bool RenderFrameHostImpl::SchemeShouldBypassCSP(
   return base::Contains(bypassing_schemes, scheme);
 }
 
-blink::mojom::FrameInputHandler* RenderFrameHostImpl::GetFrameInputHandler() {
-  if (!frame_input_handler_)
-    return nullptr;
-  return frame_input_handler_.get();
-}
-
 bool RenderFrameHostImpl::CreateRenderFrame(
     int previous_routing_id,
     const base::Optional<base::UnguessableToken>& opener_frame_token,
@@ -2239,12 +2224,6 @@ void RenderFrameHostImpl::SetRenderFrameCreated(bool created) {
     CHECK(frame_);
 
   if (created && GetLocalRenderWidgetHost()) {
-    mojo::PendingRemote<mojom::Widget> widget;
-    GetRemoteInterfaces()->GetInterface(
-        widget.InitWithNewPipeAndPassReceiver());
-    GetLocalRenderWidgetHost()->SetWidget(std::move(widget));
-    GetLocalRenderWidgetHost()->SetFrameInputHandler(
-        frame_input_handler_.get());
     GetLocalRenderWidgetHost()->input_router()->SetFrameTreeNodeId(
         frame_tree_node_->frame_tree_node_id());
     mojo::Remote<viz::mojom::InputTargetClient> input_target_client;
@@ -6418,9 +6397,6 @@ void RenderFrameHostImpl::SetUpMojoIfNeeded() {
       remote_interfaces.InitWithNewPipeAndPassReceiver());
   remote_interfaces_.reset(new service_manager::InterfaceProvider);
   remote_interfaces_->Bind(std::move(remote_interfaces));
-
-  remote_interfaces_->GetInterface(
-      frame_input_handler_.BindNewPipeAndPassReceiver());
 }
 
 void RenderFrameHostImpl::InvalidateMojoConnection() {
@@ -6430,7 +6406,6 @@ void RenderFrameHostImpl::InvalidateMojoConnection() {
   local_frame_.reset();
   local_main_frame_.reset();
   navigation_control_.reset();
-  frame_input_handler_.reset();
   find_in_page_.reset();
   render_accessibility_.reset();
 

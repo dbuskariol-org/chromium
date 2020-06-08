@@ -2198,26 +2198,6 @@ TEST_F(RenderWidgetHostTest, FrameToken_DroppedFrame) {
   EXPECT_EQ(2u, host_->processed_frame_messages_count());
 }
 
-TEST_F(RenderWidgetHostTest, ForceEnableZoomShouldUpdateAfterRebind) {
-  SCOPED_TRACE("force_enable_zoom is false at start.");
-  host_->ExpectForceEnableZoom(false);
-
-  // Set force_enable_zoom true.
-  host_->SetForceEnableZoom(true);
-
-  SCOPED_TRACE("force_enable_zoom is true after set.");
-  host_->ExpectForceEnableZoom(true);
-
-  // Rebind should also update to the latest force_enable_zoom state.
-  mojo::PendingRemote<mojom::Widget> widget;
-  std::unique_ptr<MockWidgetImpl> widget_impl =
-      std::make_unique<MockWidgetImpl>(widget.InitWithNewPipeAndPassReceiver());
-  host_->SetWidget(std::move(widget));
-
-  SCOPED_TRACE("force_enable_zoom is true after rebind.");
-  host_->ExpectForceEnableZoom(true);
-}
-
 // If a navigation happens while the widget is hidden, we shouldn't show
 // contents of the previous page when we become visible.
 TEST_F(RenderWidgetHostTest, NavigateInBackgroundShowsBlank) {
