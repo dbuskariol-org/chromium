@@ -3438,14 +3438,17 @@ NSString* const kBrowserViewControllerSnackbarCategory =
                    didTriggerAction:(OverscrollAction)action {
   switch (action) {
     case OverscrollAction::NEW_TAB:
+      base::RecordAction(base::UserMetricsAction("MobilePullGestureNewTab"));
       [self.dispatcher
           openURLInNewTab:[OpenNewTabCommand
                               commandWithIncognito:self.isOffTheRecord]];
       break;
     case OverscrollAction::CLOSE_TAB:
+      base::RecordAction(base::UserMetricsAction("MobilePullGestureCloseTab"));
       [self.dispatcher closeCurrentTab];
       break;
     case OverscrollAction::REFRESH:
+      base::RecordAction(base::UserMetricsAction("MobilePullGestureReload"));
       // Instruct the SnapshotTabHelper to ignore the next load event.
       // Attempting to snapshot while the overscroll "bounce back" animation is
       // occurring will cut the animation short.
