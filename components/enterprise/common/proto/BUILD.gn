@@ -5,5 +5,8 @@
 import("//third_party/protobuf/proto_library.gni")
 
 proto_library("connectors_proto") {
+  proto_in_dir = "//"
   sources = [ "connectors.proto" ]
+
+  deps = [ "//components/safe_browsing/core:csd_proto" ]
 }
