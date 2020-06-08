@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PRERENDER_PRERENDER_TYPES_H_
-#define COMPONENTS_PRERENDER_PRERENDER_TYPES_H_
+#ifndef COMPONENTS_PRERENDER_COMMON_PRERENDER_TYPES_H_
+#define COMPONENTS_PRERENDER_COMMON_PRERENDER_TYPES_H_
 
 namespace prerender {
 
@@ -22,4 +22,4 @@ enum PrerenderMode {
 
 }  // namespace prerender
 
-#endif  // CHROME_COMMON_PRERCOMPONENTS_PRERENDER_PRERENDER_TYPES_H_ENDER_TYPES_H_
+#endif  // COMPONENTS_PRERENDER_COMMON_PRERENDER_TYPES_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/prerender/prerender_origin.h"
+#include "components/prerender/common/prerender_origin.h"
 
 #include "base/metrics/histogram_macros.h"
 #include "base/stl_util.h"

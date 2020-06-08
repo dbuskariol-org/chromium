@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PRERENDER_PRERENDER_FINAL_STATUS_H_
-#define COMPONENTS_PRERENDER_PRERENDER_FINAL_STATUS_H_
+#ifndef COMPONENTS_PRERENDER_COMMON_PRERENDER_FINAL_STATUS_H_
+#define COMPONENTS_PRERENDER_COMMON_PRERENDER_FINAL_STATUS_H_
 
-#include "components/prerender/prerender_origin.h"
+#include "components/prerender/common/prerender_origin.h"
 
 namespace prerender {
 
@@ -88,4 +88,4 @@ const char* NameFromFinalStatus(FinalStatus final_status);
 
 }  // namespace prerender
 
-#endif  // COMPONENTS_PRERENDER_PRERENDER_FINAL_STATUS_H_
+#endif  // COMPONENTS_PRERENDER_COMMON_PRERENDER_FINAL_STATUS_H_

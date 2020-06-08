@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_COMMON_PRERENDER_MESSAGES_H_
-#define CHROME_COMMON_PRERENDER_MESSAGES_H_
+#ifndef COMPONENTS_PRERENDER_COMMON_PRERENDER_MESSAGES_H_
+#define COMPONENTS_PRERENDER_COMMON_PRERENDER_MESSAGES_H_
 
-#include "components/prerender/prerender_types.h"
+#include "components/prerender/common/prerender_types.h"
 #include "ipc/ipc_message.h"
 #include "ipc/ipc_message_macros.h"
 #include "ipc/ipc_param_traits.h"
@@ -32,4 +32,4 @@ IPC_MESSAGE_ROUTED2(PrerenderMsg_SetIsPrerendering,
                     prerender::PrerenderMode,
                     std::string /* histogram_prefix */)
 
-#endif  // CHROME_COMMON_PRERENDER_MESSAGES_H_
+#endif  // COMPONENTS_PRERENDER_COMMON_PRERENDER_MESSAGES_H_

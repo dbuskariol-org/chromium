@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PRERENDER_PRERENDER_ORIGIN_H_
-#define COMPONENTS_PRERENDER_PRERENDER_ORIGIN_H_
+#ifndef COMPONENTS_PRERENDER_COMMON_PRERENDER_ORIGIN_H_
+#define COMPONENTS_PRERENDER_COMMON_PRERENDER_ORIGIN_H_
 
 namespace prerender {
 
@@ -40,4 +40,4 @@ const char* NameFromOrigin(Origin origin);
 
 }  // namespace prerender
 
-#endif  // COMPONENTS_PRERENDER_PRERENDER_ORIGIN_H_
+#endif  // COMPONENTS_PRERENDER_COMMON_PRERENDER_ORIGIN_H_

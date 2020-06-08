@@ -2134,7 +2134,7 @@ static_library("browser") {
     "//components/policy/proto",
     "//components/policy/proto:policy_record_constants",
     "//components/prefs",
-    "//components/prerender",
+    "//components/prerender/common",
     "//components/previews/content",
     "//components/previews/core",
     "//components/profile_metrics",
