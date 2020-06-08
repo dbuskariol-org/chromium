@@ -590,6 +590,19 @@ TEST_F(WebViewTest, SetBaseBackgroundColorWithColorScheme) {
   web_view->SetBaseBackgroundColor(SK_ColorBLUE);
   EXPECT_EQ(Color::kBlack, frame_view->BaseBackgroundColor());
 
+  color_scheme_helper.SetForcedColors(*(web_view->GetPage()),
+                                      ForcedColors::kActive);
+  UpdateAllLifecyclePhases();
+
+  Color system_background_color = LayoutTheme::GetTheme().SystemColor(
+      CSSValueID::kCanvas, WebColorScheme::kLight);
+  EXPECT_EQ(system_background_color, frame_view->BaseBackgroundColor());
+
+  color_scheme_helper.SetForcedColors(*(web_view->GetPage()),
+                                      ForcedColors::kNone);
+  UpdateAllLifecyclePhases();
+  EXPECT_EQ(Color::kBlack, frame_view->BaseBackgroundColor());
+
   color_scheme_helper.SetPreferredColorScheme(PreferredColorScheme::kLight);
   UpdateAllLifecyclePhases();
   EXPECT_EQ(Color(0, 0, 255), frame_view->BaseBackgroundColor());
