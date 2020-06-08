@@ -9595,15 +9595,11 @@
       'id': 158,
       'caption': '''Timezone''',
       'tags': [],
-      'desc': '''Specifies the enforced timezone to be used for the device. When this policy is set, users on the device cannot override the specified timezone. If an invalid value is provided, the policy is still activated using "GMT" instead. If an empty string is provided, the policy is ignored.
+      'desc': '''Setting the policy specifies a device's time zone and turns off location-based automatic time zone adjustment while overriding the <ph name="SYSTEM_TIMEZONE_AUTOMATIC_DETECTION_POLICY_NAME">SystemTimezoneAutomaticDetection</ph> policy. Users can't change the time zone.
 
-      If this policy is not used, the currently active timezone will remain in use however users can change the timezone.
+      New devices start with the time zone set to US Pacific. Value format follows the names in the IANA Time Zone Database ( https://en.wikipedia.org/wiki/Tz_database ). Entering an invalid value activates the policy using GMT.
 
-      New devices start out with the timezone set to "US/Pacific".
-
-      The format of the value follows the names of timezones in the "IANA Time Zone Database" (see "https://en.wikipedia.org/wiki/Tz_database"). In particular, most timezones can be referred to by "continent/large_city" or "ocean/large_city".
-
-      Setting this policy completely disables automatic timezone resolve by device location. It also overrides SystemTimezoneAutomaticDetection policy.''',
+      If not set or if you enter an empty string, the device uses the currently active time zone, but users can change it.''',
     },
     {
       'name': 'SystemUse24HourClock',
@@ -9619,13 +9615,9 @@
       'id': 236,
       'caption': '''Use 24 hour clock by default''',
       'tags': [],
-      'desc': '''Specifies the clock format be used for the device.
+      'desc': '''Setting the policy to True or leaving it unset gives a device's sign-in screen a 24-hour clock format. User sessions also default to this format, but users can change an account's clock format.
 
-      This policy configures the clock format to use on the login screen and as a default for user sessions. Users can still override the clock format for their account.
-
-      If the policy is set to true, the device will use a 24 hour clock format. If the policy is set to false, the device will use 12 hour clock format.
-
-      If this policy is not set, the device will default to a 24 hour clock format.''',
+      Setting the policy to False gives a device the 12-hour clock format.''',
     },
     {
       'name': 'TouchVirtualKeyboardEnabled',
@@ -13628,21 +13620,15 @@
       'id': 326,
       'caption': '''Configure the automatic timezone detection method''',
       'tags': ['google-sharing'],
-      'desc': '''When this policy is set, automatic timezone detection flow will be in one of the following ways depending on the value of the setting:
+      'desc': '''Unless the <ph name="SYSTEM_TIMEZONE_POLICY_NAME">SystemTimezone</ph> policy turns off automatic time zone detection, then setting the policy outlines the automatic time zone detection method, which users can't change.
 
-      If set to TimezoneAutomaticDetectionUsersDecide, users would be able to control automatic timezone detection using normal controls in chrome://settings.
+      Setting the policy to:
+       * <ph name="POLICY_ENUM_SYSTEMTIMEZONEAUTOMATICDETECTION_TIMEZONEAUTOMATICDETECTIONDISABLED">TimezoneAutomaticDetectionDisabled</ph> keeps automatic time zone detection off.
+       * <ph name="POLICY_ENUM_SYSTEMTIMEZONEAUTOMATICDETECTION_TTIMEZONEAUTOMATICDETECTIONIPONLY">TimezoneAutomaticDetectionIPOnly</ph> keeps automatic time zone detection on, using the IP-only method.
+       * <ph name="POLICY_ENUM_SYSTEMTIMEZONEAUTOMATICDETECTION_TIMEZONEAUTOMATICDETECTIONSENDWIFIACCESSPOINTS">TimezoneAutomaticDetectionSendWiFiAccessPoints</ph> keeps automatic time zone detection on, continually sending the list of visible Wi-Fi access-points to the Geolocation API server for finer-grained time zone detection.
+       * <ph name="POLICY_ENUM_SYSTEMTIMEZONEAUTOMATICDETECTION_TIMEZONEAUTOMATICDETECTIONSENDALLLOCATIONINFO">TimezoneAutomaticDetectionSendAllLocationInfo</ph> keeps automatic time zone detection on, continually sending location information (such as Wi-Fi access points, reachable cell towers, GPS) to a server for the most fine-grained time zone detection.
 
-      If set to TimezoneAutomaticDetectionDisabled, automatic timezone controls in chrome://settings will be disabled. Automatic timezone detection will be always off.
-
-      If set to TimezoneAutomaticDetectionIPOnly, timezone controls in chrome://settings will be disabled. Automatic timezone detection will be always on. Timezone detection will use IP-only method to resolve location.
-
-      If set to TimezoneAutomaticDetectionSendWiFiAccessPoints, timezone controls in chrome://settings will be disabled. Automatic timezone detection will be always on. The list of visible WiFi access-points will be always sent to Geolocation API server for fine-grained timezone detection.
-
-      If set to TimezoneAutomaticDetectionSendAllLocationInfo, timezone controls in chrome://settings will be disabled. Automatic timezone detection will be always on. Location information (such as WiFi access-points, reachable Cell Towers, GPS) will be sent to a server for fine-grained timezone detection.
-
-      If this policy is not set, it will behave as if TimezoneAutomaticDetectionUsersDecide is set.
-
-      If SystemTimezone policy is set, it overrides this policy. In this case automatic timezone detection is completely disabled.''',
+      If not set, set to Let users decide, or set to None, then users control automatic time zone detection using normal controls in chrome://settings.''',
     },
     {
       'name': 'TaskManagerEndProcessEnabled',
