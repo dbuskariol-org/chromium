@@ -27,7 +27,7 @@ namespace install_static {
 namespace {
 
 // A matcher that returns true if |arg| contains a character that is neither
-// alpha-numeric nor a period.
+// alphanumeric nor a period.
 MATCHER(ContainsIllegalProgIdChar, "") {
   const wchar_t* scan = arg;
   wint_t c;

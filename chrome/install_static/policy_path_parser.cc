@@ -81,7 +81,7 @@ struct ScopedFunctionHelper {
 
 namespace install_static {
 
-// Replaces all variable occurances in the policy string with the respective
+// Replaces all variable occurrences in the policy string with the respective
 // system settings values.
 // Note that this uses GetProcAddress to load DLLs that cannot be loaded before
 // the blacklist in the DllMain of chrome_elf has been applied. This function

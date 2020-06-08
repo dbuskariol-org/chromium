@@ -101,7 +101,7 @@ TEST(InstallStaticTest, GetSwitchValueFromCommandLineTest) {
   value = GetSwitchValueFromCommandLine(L"\"blah --type=\t\t\t", L"type");
   EXPECT_TRUE(value.empty());
 
-  // Anything following "--" should be considered args and therfore ignored.
+  // Anything following "--" should be considered args and therefore ignored.
   value = GetSwitchValueFromCommandLine(L"blah -- --type=bleh", L"type");
   EXPECT_TRUE(value.empty());
 }
