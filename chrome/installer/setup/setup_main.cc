@@ -224,9 +224,9 @@ std::unique_ptr<installer::ArchivePatchHelper> CreateChromeArchiveHelper(
   // Specify an empty path for the patch source since it isn't yet known that
   // one is needed. It will be supplied in UncompressAndPatchChromeArchive if it
   // is.
-  return std::unique_ptr<installer::ArchivePatchHelper>(
-      new installer::ArchivePatchHelper(working_directory, compressed_archive,
-                                        base::FilePath(), target, consumer));
+  return std::make_unique<installer::ArchivePatchHelper>(
+      working_directory, compressed_archive, base::FilePath(), target,
+      consumer);
 }
 
 // Returns the MSI product ID from the ClientState key that is populated for MSI
