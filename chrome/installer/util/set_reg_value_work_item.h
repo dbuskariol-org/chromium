@@ -6,6 +6,7 @@
 #define CHROME_INSTALLER_UTIL_SET_REG_VALUE_WORK_ITEM_H__
 
 #include <windows.h>
+
 #include <stdint.h>
 
 #include <string>

@@ -49,10 +49,7 @@ bool AdvancedFirewallManager::IsFirewallEnabled() {
     return false;
   // The most-restrictive active profile takes precedence.
   const NET_FW_PROFILE_TYPE2 kProfileTypes[] = {
-    NET_FW_PROFILE2_PUBLIC,
-    NET_FW_PROFILE2_PRIVATE,
-    NET_FW_PROFILE2_DOMAIN
-  };
+      NET_FW_PROFILE2_PUBLIC, NET_FW_PROFILE2_PRIVATE, NET_FW_PROFILE2_DOMAIN};
   for (size_t i = 0; i < base::size(kProfileTypes); ++i) {
     if ((profile_types & kProfileTypes[i]) != 0) {
       VARIANT_BOOL enabled = VARIANT_TRUE;

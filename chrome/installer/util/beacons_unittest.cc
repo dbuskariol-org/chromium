@@ -123,12 +123,15 @@ TEST_P(BeaconTest, Location) {
 
 #if BUILDFLAG(GOOGLE_CHROME_BRANDING)
   // Keys should not exist in the wrong root or in the right root but wrong key.
-  ASSERT_FALSE(base::win::RegKey(wrong_root, right_key.c_str(),
-                                 KEY_READ).Valid()) << right_key;
-  ASSERT_FALSE(base::win::RegKey(wrong_root, wrong_key.c_str(),
-                                 KEY_READ).Valid()) << wrong_key;
-  ASSERT_FALSE(base::win::RegKey(right_root, wrong_key.c_str(),
-                                 KEY_READ).Valid()) << wrong_key;
+  ASSERT_FALSE(
+      base::win::RegKey(wrong_root, right_key.c_str(), KEY_READ).Valid())
+      << right_key;
+  ASSERT_FALSE(
+      base::win::RegKey(wrong_root, wrong_key.c_str(), KEY_READ).Valid())
+      << wrong_key;
+  ASSERT_FALSE(
+      base::win::RegKey(right_root, wrong_key.c_str(), KEY_READ).Valid())
+      << wrong_key;
 #else
   // The tests above are skipped for Chromium builds because they fail for two
   // reasons:

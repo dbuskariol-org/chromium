@@ -2,18 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "chrome/installer/util/create_dir_work_item.h"
+
 #include "base/files/file_util.h"
 #include "base/logging.h"
-#include "chrome/installer/util/create_dir_work_item.h"
 #include "chrome/installer/util/logging_installer.h"
 
-CreateDirWorkItem::~CreateDirWorkItem() {
-}
+CreateDirWorkItem::~CreateDirWorkItem() {}
 
 CreateDirWorkItem::CreateDirWorkItem(const base::FilePath& path)
-    : path_(path),
-      rollback_needed_(false) {
-}
+    : path_(path), rollback_needed_(false) {}
 
 void CreateDirWorkItem::GetTopDirToCreate() {
   if (base::PathExists(path_)) {

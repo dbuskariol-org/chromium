@@ -19,7 +19,7 @@
 namespace base {
 class DictionaryValue;
 class FilePath;
-}
+}  // namespace base
 
 namespace installer {
 
@@ -163,9 +163,7 @@ class MasterPreferences {
   std::string GetVariationsSeedSignature() const;
 
   // Returns true iff the master preferences were successfully read from a file.
-  bool read_from_file() const {
-    return preferences_read_from_file_;
-  }
+  bool read_from_file() const { return preferences_read_from_file_; }
 
   // Returns a reference to this MasterPreferences' root dictionary of values.
   const base::DictionaryValue& master_dictionary() const {
