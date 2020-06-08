@@ -50,7 +50,7 @@ void CreateDirWorkItem::RollbackImpl() {
     return;
 
   // Delete all the directories we created to rollback.
-  // Note we can not recusively delete top_path_ since we don't want to
+  // Note we can not recursively delete top_path_ since we don't want to
   // delete non-empty directory. (We may have created a shared directory).
   // Instead we walk through path_ to top_path_ and delete directories
   // along the way.

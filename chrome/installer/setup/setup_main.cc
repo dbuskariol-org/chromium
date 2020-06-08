@@ -143,7 +143,7 @@ LONG OverwriteDisplayVersion(const base::string16& path,
 
 LONG OverwriteDisplayVersions(const base::string16& product,
                               const base::string16& value) {
-  // The version is held in two places.  Frist change it in the MSI Installer
+  // The version is held in two places.  First change it in the MSI Installer
   // registry entry.  It is held under a "squashed guid" key.
   base::string16 reg_path = base::StringPrintf(
       L"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Installer\\UserData\\"

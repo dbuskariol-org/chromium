@@ -16,7 +16,7 @@
 class PEResource {
  public:
   // This ctor takes the handle to the resource and the module where it was
-  // found. Ownership of the resource is transfered to this object.
+  // found. Ownership of the resource is transferred to this object.
   PEResource(HRSRC resource, HMODULE module);
 
   // This ctor takes the resource name, the resource type and the module where

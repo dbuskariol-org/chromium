@@ -141,7 +141,7 @@ class MasterPreferences {
   //           "ppflmjolhbonpkbkooiamcnenbmbjcbb": {
   //              "location": 1,
   //              "manifest": {
-  //                 "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4<rest of key ommited>",
+  //                 "key": "MIGfMA0GCSqGSIb3DQEBAQUAA4<rest of key omitted>",
   //                 "name": "Google XYZ (Installing...)",
   //                 "permissions": [ "tabs", "http://xyz.google.com/" ],
   //                 "update_url": "http://fixme.com/fixme/fixme/crx",

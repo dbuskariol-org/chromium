@@ -114,7 +114,7 @@ std::wstring GetCloudManagementPoliciesRegistryPath() {
   return key_path;
 }
 
-// Retruns the registry key path and value name where the cloud management
+// Reruns the registry key path and value name where the cloud management
 // enrollment option is stored.
 void GetCloudManagementBlockOnFailureRegistryPath(base::string16* key_path,
                                                   base::string16* value_name) {

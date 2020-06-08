@@ -80,7 +80,7 @@ enum RegistrationConfirmationLevel {
   // present.
   CONFIRM_PROGID_REGISTRATION = 0,
   // Confirm that Chrome is fully integrated with Windows (i.e. registered with
-  // Defaut Programs). These registrations can be in HKCU as of Windows 8.
+  // Default Programs). These registrations can be in HKCU as of Windows 8.
   // Note: Shell registration implies ProgId registration.
   CONFIRM_SHELL_REGISTRATION,
   // Same as CONFIRM_SHELL_REGISTRATION, but only look in HKLM (used when
@@ -230,7 +230,7 @@ base::string16 GetCapabilitiesKey(const base::string16& suffix) {
 }
 
 // DelegateExecute ProgId. Needed for Chrome Metro in Windows 8. This is only
-// needed for registring a web browser, not for general associations.
+// needed for registering a web browser, not for general associations.
 std::vector<std::unique_ptr<RegistryEntry>> GetChromeDelegateExecuteEntries(
     const base::FilePath& chrome_exe,
     const ApplicationInfo& app_info) {
@@ -2064,7 +2064,7 @@ bool ShellUtil::ShowMakeChromeDefaultSystemUI(
     switch (GetInteractiveSetDefaultMode()) {
       case INTENT_PICKER: {
         // On Windows 8, you can't set yourself as the default handler
-        // programatically. In other words IApplicationAssociationRegistration
+        // programmatically. In other words IApplicationAssociationRegistration
         // has been rendered useless. What you can do is to launch
         // "Set Program Associations" section of the "Default Programs"
         // control panel, which is a mess, or pop the concise "How you want to
@@ -2149,7 +2149,7 @@ bool ShellUtil::ShowMakeChromeDefaultProtocolClientSystemUI(
     switch (GetInteractiveSetDefaultMode()) {
       case INTENT_PICKER: {
         // On Windows 8, you can't set yourself as the default handler
-        // programatically. In other words IApplicationAssociationRegistration
+        // programmatically. In other words IApplicationAssociationRegistration
         // has been rendered useless. What you can do is to launch
         // "Set Program Associations" section of the "Default Programs"
         // control panel, which is a mess, or pop the concise "How you want to
@@ -2291,7 +2291,7 @@ bool ShellUtil::RegisterChromeForProtocol(const base::FilePath& chrome_exe,
     if (!RegisterChromeBrowser(chrome_exe, suffix, false))
       return false;
 
-    // Write in the capabillity for the protocol.
+    // Write in the capability for the protocol.
     std::vector<std::unique_ptr<RegistryEntry>> entries;
     GetProtocolCapabilityEntries(suffix, protocol, &entries);
     return AddRegistryEntries(root, entries);

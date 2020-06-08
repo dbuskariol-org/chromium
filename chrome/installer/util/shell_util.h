@@ -510,7 +510,7 @@ class ShellUtil {
   // best effort deal.
   // If write to HKLM is required, but fails, and:
   // - |elevate_if_not_admin| is true (and OS is Vista or above):
-  //   tries to launch setup.exe with admin priviledges (by prompting the user
+  //   tries to launch setup.exe with admin privileges (by prompting the user
   //   with a UAC) to do these tasks.
   // - |elevate_if_not_admin| is false (or OS is XP):
   //   adds the ProgId entries to HKCU. These entries will not make Chrome show

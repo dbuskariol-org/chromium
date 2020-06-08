@@ -67,7 +67,7 @@ class BeaconTest : public ::testing::TestWithParam<
 const base::char16 BeaconTest::kBeaconName[] = L"TestBeacon";
 
 // Nothing in the regsitry, so the beacon should not exist.
-TEST_P(BeaconTest, GetNonExistant) {
+TEST_P(BeaconTest, GetNonExistent) {
   ASSERT_TRUE(beacon()->Get().is_null());
 }
 

@@ -347,7 +347,8 @@ TEST_F(GoogleUpdateSettingsTest, UpdateInstallStatusTest) {
                                             kTestProductGuid);
   EXPECT_STREQ(ReadApKeyValue().c_str(), L"");
   // Now cleanup to leave the system in unchanged state.
-  // - Diff installer creates an ap key if it didnt exist, so delete this ap key
+  // - Diff installer creates an ap key if it didn't exist, so delete this ap
+  // key
   // - If we created any reg key path for ap, roll it back
   // - Finally restore the original value of ap key.
   key.Open(HKEY_CURRENT_USER, reg_key.c_str(), KEY_ALL_ACCESS);
@@ -666,7 +667,7 @@ TEST_F(GoogleUpdateSettingsTest, GetDownloadPreference) {
                 GoogleUpdateSettings::kDownloadPreferencePolicyValue, L"a b"));
   EXPECT_TRUE(GoogleUpdateSettings::GetDownloadPreference().empty());
 
-  // It contains non alpha-numeric characters.
+  // It contains non alphanumeric characters.
   EXPECT_EQ(ERROR_SUCCESS,
             policy_key.WriteValue(
                 GoogleUpdateSettings::kDownloadPreferencePolicyValue, L"<a>"));
