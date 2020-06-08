@@ -1444,6 +1444,22 @@ const char kOmniboxUIHideSteadyStateUrlPathQueryAndRefDescription[] =
     "In the omnibox, hide the path, query and ref from steady state displayed "
     "URLs. Hidden portions are restored during editing.";
 
+const char kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverName[] =
+    "Omnibox UI Reveal Steady-State URL Path, Query, and Ref On Hover";
+const char kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverDescription[] =
+    "In the omnibox, reveal the path, query and ref from steady state "
+    "displayed URLs on hover. Only has an effect when "
+    "omnibox-ui-hide-steady-state-url-path-query-and-ref is enabled.";
+
+const char kOmniboxUIHideSteadyStateUrlPathQueryAndRefOnInteractionName[] =
+    "Omnibox UI Hide Steady-State URL Path, Query, and Ref On Interaction";
+const char
+    kOmniboxUIHideSteadyStateUrlPathQueryAndRefOnInteractionDescription[] =
+        "In the omnibox, hide the path, query and ref from steady state "
+        "displayed URLs when the user interacts with the page. Only has an "
+        "effect when "
+        "omnibox-ui-hide-steady-state-url-path-query-and-ref is enabled.";
+
 const char kOmniboxUIMaxAutocompleteMatchesName[] =
     "Omnibox UI Max Autocomplete Matches";
 const char kOmniboxUIMaxAutocompleteMatchesDescription[] =

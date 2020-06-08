@@ -3576,6 +3576,23 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kOmniboxUIHideSteadyStateUrlPathQueryAndRefDescription,
      kOsAll, FEATURE_VALUE_TYPE(omnibox::kHideSteadyStateUrlPathQueryAndRef)},
 
+    {"omnibox-ui-reveal-steady-state-url-path-query-and-ref-on-hover",
+     flag_descriptions::
+         kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverName,
+     flag_descriptions::
+         kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverDescription,
+     kOsDesktop,
+     FEATURE_VALUE_TYPE(omnibox::kRevealSteadyStateUrlPathQueryAndRefOnHover)},
+
+    {"omnibox-ui-hide-steady-state-url-path-query-and-ref-on-interaction",
+     flag_descriptions::
+         kOmniboxUIHideSteadyStateUrlPathQueryAndRefOnInteractionName,
+     flag_descriptions::
+         kOmniboxUIHideSteadyStateUrlPathQueryAndRefOnInteractionDescription,
+     kOsDesktop,
+     FEATURE_VALUE_TYPE(
+         omnibox::kHideSteadyStateUrlPathQueryAndRefOnInteraction)},
+
     {"omnibox-ui-max-autocomplete-matches",
      flag_descriptions::kOmniboxUIMaxAutocompleteMatchesName,
      flag_descriptions::kOmniboxUIMaxAutocompleteMatchesDescription,

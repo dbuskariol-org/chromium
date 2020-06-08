@@ -306,14 +306,29 @@ class OmniboxViewViews : public OmniboxView,
   // TemplateURLServiceObserver:
   void OnTemplateURLServiceChanged() override;
 
+  // Returns the bounds from the end of the currently displayed URL's host to
+  // the end of the URL.
+  gfx::Range GetPathBounds();
+
+  // Returns true if the currently displayed URL's path is eligible for fading.
+  // This takes into account the omnibox's current state (e.g. the path
+  // shouldn't fade if the user is currently editing it) as well as properties
+  // of the current text (e.g. extension URLs or non-URLs shouldn't have their
+  // paths faded).
+  bool CanFadePath();
+
   // When true, the location bar view is read only and also is has a slightly
   // different presentation (smaller font size). This is used for popups.
   bool popup_window_mode_;
 
   std::unique_ptr<OmniboxPopupContentsView> popup_view_;
 
-  // Animation used to fade out the path under some elision settings.
-  std::unique_ptr<PathFadeAnimation> path_fade_animation_;
+  // Animation used to fade in/out the path under some elision settings.
+  std::unique_ptr<PathFadeAnimation> path_fade_in_animation_;
+  // Waits a few seconds and then fades the path out.
+  std::unique_ptr<PathFadeAnimation> path_fade_out_animation_;
+  // Fades the path out without a delay.
+  std::unique_ptr<PathFadeAnimation> path_fade_out_fast_animation_;
 
   // Selection persisted across temporary text changes, like popup suggestions.
   std::vector<gfx::Range> saved_temporary_selection_;

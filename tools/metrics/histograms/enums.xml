@@ -39149,6 +39149,8 @@ from previous Chrome versions.
   <int value="-1532014193" label="disable-encryption-migration"/>
   <int value="-1529907580" label="ImeServiceConnectable:disabled"/>
   <int value="-1528455406" label="OmniboxPedalSuggestions:enabled"/>
+  <int value="-1525129540"
+      label="OmniboxUIExperimentRevealSteadyStateUrlPathQueryAndRefOnHover:disabled"/>
   <int value="-1524323669" label="InstalledAppsInCbd:enabled"/>
   <int value="-1521296022"
       label="UpdateNotificationScheduleServiceImmediateShowOption:disabled"/>
@@ -39751,6 +39753,8 @@ from previous Chrome versions.
   <int value="-898594349" label="ash-enable-stable-overview-order"/>
   <int value="-898499262" label="ImprovedA2HS:enabled"/>
   <int value="-898005938" label="disable-pinch-virtual-viewport"/>
+  <int value="-897994913"
+      label="OmniboxUIExperimentRevealSteadyStateUrlPathQueryAndRefOnHover:enabled"/>
   <int value="-897069393"
       label="kAutofillRationalizeRepeatedServerPredictions:disabled"/>
   <int value="-894214299" label="fill-on-account-select:enabled"/>
@@ -40193,6 +40197,8 @@ from previous Chrome versions.
   <int value="-396046249" label="PhotoPickerVideoSupport:enabled"/>
   <int value="-395606844" label="enable-site-settings"/>
   <int value="-395454065" label="DisablePostScriptPrinting:disabled"/>
+  <int value="-389664522"
+      label="OmniboxUIExperimentHideSteadyStateUrlPathQueryAndRefOnInteraction:enabled"/>
   <int value="-387606010" label="ArcBootCompletedBroadcast:enabled"/>
   <int value="-386971711" label="ChromeSharingHubV15:disabled"/>
   <int value="-385337473" label="enable-fast-unload"/>
@@ -41164,6 +41170,8 @@ from previous Chrome versions.
   <int value="724427456" label="WebAuthenticationPINSupport:disabled"/>
   <int value="725067265" label="enable-experimental-cookie-features"/>
   <int value="725270017" label="ScrollAnchorSerialization:disabled"/>
+  <int value="725579946"
+      label="OmniboxUIExperimentHideSteadyStateUrlPathQueryAndRefOnInteraction:disabled"/>
   <int value="725870294" label="RequestUnbufferedDispatch:disabled"/>
   <int value="726764779" label="WebXRGamepadSupport:enabled"/>
   <int value="727270087" label="PromosOnLocalNtp:enabled"/>

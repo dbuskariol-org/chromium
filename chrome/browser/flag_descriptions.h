@@ -852,6 +852,15 @@ extern const char kOmniboxUIHideSteadyStateUrlTrivialSubdomainsDescription[];
 extern const char kOmniboxUIHideSteadyStateUrlPathQueryAndRefName[];
 extern const char kOmniboxUIHideSteadyStateUrlPathQueryAndRefDescription[];
 
+extern const char kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverName[];
+extern const char
+    kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverDescription[];
+
+extern const char
+    kOmniboxUIHideSteadyStateUrlPathQueryAndRefOnInteractionName[];
+extern const char
+    kOmniboxUIHideSteadyStateUrlPathQueryAndRefOnInteractionDescription[];
+
 extern const char kOmniboxUIMaxAutocompleteMatchesName[];
 extern const char kOmniboxUIMaxAutocompleteMatchesDescription[];
 
