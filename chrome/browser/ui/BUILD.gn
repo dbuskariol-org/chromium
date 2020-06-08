@@ -798,12 +798,6 @@ static_library("ui") {
       ]
     }
 
-    if (enable_password_change_in_leaked_dialog) {
-      sources += [
-        "android/passwords/credential_leak_dialog_password_change_view_android.cc",
-        "android/passwords/credential_leak_dialog_password_change_view_android.h",
-      ]
-    }
     deps += [
       "//chrome/android:jni_headers",
       "//chrome/android/features/dev_ui:buildflags",
