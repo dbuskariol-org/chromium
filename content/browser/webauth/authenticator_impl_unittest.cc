@@ -953,7 +953,7 @@ TEST_F(AuthenticatorImplTest, TestMakeCredentialOtherAlgorithms) {
     auto auth_data = device::AuthenticatorData::DecodeAuthenticatorData(
         auth_data_it->second.GetBytestring());
     EXPECT_EQ(static_cast<int32_t>(algorithm),
-              auth_data->attested_data()->public_key()->algorithm());
+              auth_data->attested_data()->public_key()->algorithm);
   }
 }
 
