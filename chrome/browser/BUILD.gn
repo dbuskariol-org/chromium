@@ -2380,6 +2380,8 @@ static_library("browser") {
       "android/autofill_assistant/ui_controller_android.h",
       "android/autofill_assistant/ui_controller_android_utils.cc",
       "android/autofill_assistant/ui_controller_android_utils.h",
+      "android/autofill_assistant/view_handler_android.cc",
+      "android/autofill_assistant/view_handler_android.h",
       "android/background_sync_launcher_android.cc",
       "android/background_sync_launcher_android.h",
       "android/background_tab_manager.cc",
