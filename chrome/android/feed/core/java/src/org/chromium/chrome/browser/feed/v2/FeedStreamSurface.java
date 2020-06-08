@@ -172,7 +172,7 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
             mSliceViewTracker = null;
         }
         mHybridListRenderer.unbind();
-        FeedStreamSurfaceJni.get().surfaceClosed(mNativeFeedStreamSurface, FeedStreamSurface.this);
+        surfaceClosed();
     }
 
     /**
@@ -388,6 +388,17 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
      */
     public void surfaceOpened() {
         FeedStreamSurfaceJni.get().surfaceOpened(mNativeFeedStreamSurface, FeedStreamSurface.this);
+    }
+
+    /**
+     * Informs that the surface is closed.
+     */
+    public void surfaceClosed() {
+        int feedCount = mContentManager.getItemCount() - mHeaderCount;
+        if (feedCount > 0) {
+            mContentManager.removeContents(mHeaderCount, feedCount);
+        }
+        FeedStreamSurfaceJni.get().surfaceClosed(mNativeFeedStreamSurface, FeedStreamSurface.this);
     }
 
     @NativeMethods
