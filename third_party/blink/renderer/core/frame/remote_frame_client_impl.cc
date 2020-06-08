@@ -7,6 +7,7 @@
 #include <memory>
 #include <utility>
 
+#include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/mojom/blob/blob_url_store.mojom-blink.h"
 #include "third_party/blink/public/web/web_remote_frame_client.h"
 #include "third_party/blink/renderer/core/events/keyboard_event.h"
@@ -135,6 +136,11 @@ void RemoteFrameClientImpl::UpdateRemoteViewportIntersection(
 uint32_t RemoteFrameClientImpl::Print(const IntRect& rect,
                                       cc::PaintCanvas* canvas) const {
   return web_frame_->Client()->Print(rect, canvas);
+}
+
+AssociatedInterfaceProvider*
+RemoteFrameClientImpl::GetRemoteAssociatedInterfaces() {
+  return web_frame_->Client()->GetRemoteAssociatedInterfaces();
 }
 
 }  // namespace blink

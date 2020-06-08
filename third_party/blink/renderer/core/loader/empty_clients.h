@@ -35,6 +35,7 @@
 #include "cc/paint/paint_canvas.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "mojo/public/cpp/bindings/remote.h"
+#include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/browser_interface_broker_proxy.h"
 #include "third_party/blink/public/common/input/web_menu_source_type.h"
 #include "third_party/blink/public/common/user_agent/user_agent_metadata.h"
@@ -418,6 +419,9 @@ class CORE_EXPORT EmptyRemoteFrameClient : public RemoteFrameClient {
       const ViewportIntersectionState& intersection_state) override {}
   uint32_t Print(const IntRect& rect, cc::PaintCanvas* canvas) const override {
     return 0;
+  }
+  AssociatedInterfaceProvider* GetRemoteAssociatedInterfaces() override {
+    return AssociatedInterfaceProvider::GetEmptyAssociatedInterfaceProvider();
   }
 
   // FrameClient implementation.
