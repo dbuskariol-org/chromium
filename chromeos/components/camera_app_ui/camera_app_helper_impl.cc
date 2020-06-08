@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/chromeos_camera/camera_app_helper_impl.h"
+#include "chromeos/components/camera_app_ui/camera_app_helper_impl.h"
 
 #include <utility>
 
