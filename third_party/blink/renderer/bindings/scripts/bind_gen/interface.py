@@ -5868,6 +5868,16 @@ static void InstallContextDependentPropertiesAdapter(
         wrapper_type_info_def.append(
             F(pattern, FN_INSTALL_CONTEXT_DEPENDENT_PROPS))
     pattern = """\
+// Construction of WrapperTypeInfo may require non-trivial initialization due
+// to cross-component address resolution in order to load the pointer to the
+// parent interface's WrapperTypeInfo.  We ignore this issue because the issue
+// happens only on component builds and the official release builds
+// (statically-linked builds) are never affected by this issue.
+#if defined(COMPONENT_BUILD) && defined(WIN32) && defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wglobal-constructors"
+#endif
+
 const WrapperTypeInfo ${class_name}::wrapper_type_info_{{
     gin::kEmbedderBlink,
     ${class_name}::DomTemplate,
@@ -5878,6 +5888,10 @@ const WrapperTypeInfo ${class_name}::wrapper_type_info_{{
     {wrapper_class_id},
     {active_script_wrappable_inheritance},
 }};
+
+#if defined(COMPONENT_BUILD) && defined(WIN32) && defined(__clang__)
+#pragma clang diagnostic pop
+#endif
 """
     class_like = cg_context.class_like
     if has_context_dependent_props:
@@ -6704,8 +6718,7 @@ using InstallFuncType =
         # simplify this implementation.
         helper_func_def.body.extend([
             ListNode([
-                TextNode("static constexpr const WrapperTypeInfo* "
-                         "globals_body[] = {"),
+                TextNode("static const WrapperTypeInfo* globals_body[] = {"),
                 ListNode(entries),
                 TextNode("};"),
             ]),
