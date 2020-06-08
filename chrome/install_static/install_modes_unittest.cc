@@ -66,8 +66,9 @@ TEST(InstallModes, VerifyModes) {
     else
       ASSERT_THAT(mode.logo_suffix, StrNe(L""));
 
-    // The modes must have an appguid if Google Update integration is supported.
 #if BUILDFLAG(USE_GOOGLE_UPDATE_INTEGRATION)
+    // The modes must have an appguid if Google Update integration is
+    // supported.
     ASSERT_THAT(mode.app_guid, StrNe(L""));
 #else
     ASSERT_THAT(mode.app_guid, StrEq(L""));
