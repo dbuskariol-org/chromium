@@ -1141,7 +1141,7 @@ const char* OmniboxViewViews::GetClassName() const {
 
 bool OmniboxViewViews::OnMousePressed(const ui::MouseEvent& event) {
   if (model()->popup_model()) {  // Can be null in tests.
-    model()->popup_model()->ClearSelectionState();
+    model()->popup_model()->SetSelectedLineState(OmniboxPopupModel::NORMAL);
   }
   is_mouse_pressed_ = true;
 
