@@ -6,9 +6,9 @@ syntax = "proto2";
 
 option optimize_for = LITE_RUNTIME;
 
-package reporting_messaging_layer;
+package reporting;
 
-import "components/policy/proto/record_constants.proto";
+import "record_constants.proto";
 
 // Record represents the data sent from the Reporting Client.
 message Record {
