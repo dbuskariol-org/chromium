@@ -2954,7 +2954,6 @@
         'chrome_os:83-',
         'ios:84-'
       ],
-      'future': True,
       'features': {
         'can_be_recommended': True,
         'dynamic_refresh': True,
