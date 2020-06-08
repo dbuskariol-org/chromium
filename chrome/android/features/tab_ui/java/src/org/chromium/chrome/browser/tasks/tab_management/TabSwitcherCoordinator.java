@@ -163,10 +163,12 @@ public class TabSwitcherCoordinator
         mContainerViewChangeProcessor = PropertyModelChangeProcessor.create(containerViewModel,
                 mTabListCoordinator.getContainerView(), TabListContainerViewBinder::bind);
 
-        mMessageCardProviderCoordinator = new MessageCardProviderCoordinator(context,
-                (identifier)
-                        -> mTabListCoordinator.removeSpecialListItem(
-                                TabProperties.UiType.MESSAGE, identifier));
+        mMessageCardProviderCoordinator =
+                new MessageCardProviderCoordinator(context, (identifier) -> {
+                    mTabListCoordinator.removeSpecialListItem(
+                            TabProperties.UiType.MESSAGE, identifier);
+                    appendNextMessage(identifier);
+                });
 
         if (TabUiFeatureUtilities.isTabGroupsAndroidEnabled()) {
             mTabGridDialogCoordinator = new TabGridDialogCoordinator(context, tabModelSelector,
@@ -439,6 +441,16 @@ public class TabSwitcherCoordinator
                     index + i, TabProperties.UiType.MESSAGE, messages.get(i).model);
         }
         if (messages.size() > 0) sAppendedMessagesForTesting = true;
+    }
+
+    private void appendNextMessage(@MessageService.MessageType int messageType) {
+        assert mMessageCardProviderCoordinator != null;
+
+        MessageCardProviderMediator.Message nextMessage =
+                mMessageCardProviderCoordinator.getNextMessageItemForType(messageType);
+        if (nextMessage == null) return;
+        mTabListCoordinator.addSpecialListItemToEnd(
+                TabProperties.UiType.MESSAGE, nextMessage.model);
     }
 
     private View getTabGridDialogAnimationSourceView(int tabId) {
