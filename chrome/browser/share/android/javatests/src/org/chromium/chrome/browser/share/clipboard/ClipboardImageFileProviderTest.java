@@ -18,7 +18,6 @@ import org.chromium.base.ContentUriUtils;
 import org.chromium.base.task.AsyncTask;
 import org.chromium.base.test.util.CallbackHelper;
 import org.chromium.base.test.util.CommandLineFlags;
-import org.chromium.base.test.util.DisabledTest;
 import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.FileProviderHelper;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
@@ -87,7 +86,6 @@ public class ClipboardImageFileProviderTest {
 
     @Test
     @SmallTest
-    @DisabledTest(message = "crbug.com/1076643")
     public void testClipboardSetImage() throws TimeoutException, IOException {
         Clipboard.getInstance().setImageFileProvider(new ClipboardImageFileProvider());
         Clipboard.getInstance().setImage(mTestImageData, TEST_PNG_IMAGE_FILE_EXTENSION);
