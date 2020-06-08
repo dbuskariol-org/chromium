@@ -8,13 +8,14 @@ import org.chromium.chrome.browser.ChromeActivity;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.multiwindow.MultiWindowUtils;
 import org.chromium.chrome.browser.paint_preview.services.PaintPreviewTabServiceFactory;
+import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tabmodel.EmptyTabModelSelectorObserver;
 import org.chromium.chrome.browser.tabmodel.TabModelSelector;
 
 /**
  * Handles initialization of the Paint Preview tab observers.
  */
-public class PaintPreviewInitializer {
+public class PaintPreviewHelper {
     /**
      * Observes a {@link TabModelSelector} to monitor for initialization completion.
      * @param activity The ChromeActivity that corresponds to the tabModelSelector.
@@ -38,5 +39,21 @@ public class PaintPreviewInitializer {
                 tabModelSelector.removeObserver(this);
             }
         });
+    }
+
+    /**
+     * Attemps to display the Paint Preview representation of for the given Tab.
+     * @param onShown The callback for when the Paint Preview is shown.
+     * @param onDismissed The callback for when the Paint Preview is dismissed.
+     * @return Whether the Paint Preview started to initialize or is already initializating.
+     * Note that if the Paint Preview is already showing, this will return false.
+     */
+    public static boolean showPaintPreviewOnRestore(
+            Tab tab, Runnable onShown, Runnable onDismissed) {
+        if (!ChromeFeatureList.isEnabled(ChromeFeatureList.PAINT_PREVIEW_SHOW_ON_STARTUP)) {
+            return false;
+        }
+
+        return TabbedPaintPreviewPlayer.get(tab).maybeShow(onShown, onDismissed);
     }
 }
