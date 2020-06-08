@@ -2,6 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#ifndef CHROME_INSTALLER_GCAPI_RESOURCE_H_
+#define CHROME_INSTALLER_GCAPI_RESOURCE_H_
+
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
 // Used by gcapi_test.rc
@@ -16,3 +19,5 @@
 #define _APS_NEXT_SYMED_VALUE 101
 #endif
 #endif
+
+#endif  // CHROME_INSTALLER_GCAPI_RESOURCE_H_
