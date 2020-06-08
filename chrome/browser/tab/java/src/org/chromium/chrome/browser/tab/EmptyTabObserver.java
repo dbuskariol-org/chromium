@@ -76,6 +76,9 @@ public class EmptyTabObserver implements TabObserver {
     public void onCrash(Tab tab) {}
 
     @Override
+    public void webContentsWillSwap(Tab tab) {}
+
+    @Override
     public void onWebContentsSwapped(Tab tab, boolean didStartLoad, boolean didFinishLoad) {}
 
     @Override
