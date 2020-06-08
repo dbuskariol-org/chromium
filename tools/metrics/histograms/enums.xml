@@ -53634,9 +53634,16 @@ Called by update_net_trust_anchors.py.-->
 
 <enum name="PerformanceHintsObserverHintForURLResult">
   <int value="0" label="Hint not found for URL"/>
-  <int value="1" label="Hint not yet processed"/>
+  <int value="1" label="One or more sources were not yet ready"/>
   <int value="2" label="Invalid URL"/>
   <int value="3" label="Hint found for URL"/>
+</enum>
+
+<enum name="PerformanceHintsObserverSourceLookupStatus">
+  <int value="0" label="Source was not queried (a hint was already found)"/>
+  <int value="1" label="Source was not ready in time"/>
+  <int value="2" label="Source did not have a hint for URL"/>
+  <int value="3" label="Source had a hint for the URL"/>
 </enum>
 
 <enum name="PerformanceHintsPerformanceClass">
