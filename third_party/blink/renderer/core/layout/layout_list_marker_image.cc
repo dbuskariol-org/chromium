@@ -1,8 +1,8 @@
-// Copyright 2017 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "third_party/blink/renderer/core/layout/ng/list/layout_ng_list_marker_image.h"
+#include "third_party/blink/renderer/core/layout/layout_list_marker_image.h"
 
 #include "third_party/blink/renderer/core/layout/intrinsic_sizing_info.h"
 #include "third_party/blink/renderer/core/layout/ng/list/layout_ng_list_item.h"
@@ -10,26 +10,25 @@
 
 namespace blink {
 
-LayoutNGListMarkerImage::LayoutNGListMarkerImage(Element* element)
+LayoutListMarkerImage::LayoutListMarkerImage(Element* element)
     : LayoutImage(element) {}
 
-LayoutNGListMarkerImage* LayoutNGListMarkerImage::CreateAnonymous(
+LayoutListMarkerImage* LayoutListMarkerImage::CreateAnonymous(
     Document* document) {
-  LayoutNGListMarkerImage* object = new LayoutNGListMarkerImage(nullptr);
+  LayoutListMarkerImage* object = new LayoutListMarkerImage(nullptr);
   object->SetDocumentForAnonymous(document);
   return object;
 }
 
-bool LayoutNGListMarkerImage::IsOfType(LayoutObjectType type) const {
-  return type == kLayoutObjectNGListMarkerImage || LayoutImage::IsOfType(type);
+bool LayoutListMarkerImage::IsOfType(LayoutObjectType type) const {
+  return type == kLayoutObjectListMarkerImage || LayoutImage::IsOfType(type);
 }
 
-LayoutSize LayoutNGListMarkerImage::DefaultSize() const {
+LayoutSize LayoutListMarkerImage::DefaultSize() const {
   const SimpleFontData* font_data = Style()->GetFont().PrimaryFont();
   DCHECK(font_data);
   if (!font_data)
     return LayoutSize(kDefaultWidth, kDefaultHeight);
-
   LayoutUnit bullet_width =
       font_data->GetFontMetrics().Ascent() / LayoutUnit(2);
   return LayoutSize(bullet_width, bullet_width);
@@ -38,7 +37,7 @@ LayoutSize LayoutNGListMarkerImage::DefaultSize() const {
 // Because ImageResource() is always LayoutImageResourceStyleImage. So we could
 // use StyleImage::ImageSize to determine the concrete object size with
 // default object size(ascent/2 x ascent/2).
-void LayoutNGListMarkerImage::ComputeIntrinsicSizingInfoByDefaultSize(
+void LayoutListMarkerImage::ComputeIntrinsicSizingInfoByDefaultSize(
     IntrinsicSizingInfo& intrinsic_sizing_info) const {
   FloatSize concrete_size = ImageResource()->ImageSizeWithDefaultSize(
       Style()->EffectiveZoom(), DefaultSize());
@@ -51,7 +50,7 @@ void LayoutNGListMarkerImage::ComputeIntrinsicSizingInfoByDefaultSize(
   intrinsic_sizing_info.has_height = true;
 }
 
-void LayoutNGListMarkerImage::ComputeIntrinsicSizingInfo(
+void LayoutListMarkerImage::ComputeIntrinsicSizingInfo(
     IntrinsicSizingInfo& intrinsic_sizing_info) const {
   LayoutImage::ComputeIntrinsicSizingInfo(intrinsic_sizing_info);
 
