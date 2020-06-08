@@ -1593,27 +1593,27 @@ void WebViewImpl::UpdateLifecycle(WebLifecycleUpdate requested_update,
 
   if (LocalFrameView* view = MainFrameImpl()->GetFrameView()) {
     LocalFrame* frame = MainFrameImpl()->GetFrame();
-    WebWidgetClient* client =
-        WebLocalFrameImpl::FromFrame(frame)->FrameWidgetImpl()->Client();
+    WebFrameWidgetBase* frame_widget =
+        WebLocalFrameImpl::FromFrame(frame)->LocalRootFrameWidget();
 
     if (should_dispatch_first_visually_non_empty_layout_ &&
         view->IsVisuallyNonEmpty()) {
       should_dispatch_first_visually_non_empty_layout_ = false;
       // TODO(esprehn): Move users of this callback to something
       // better, the heuristic for "visually non-empty" is bad.
-      client->DidMeaningfulLayout(WebMeaningfulLayout::kVisuallyNonEmpty);
+      frame_widget->DidMeaningfulLayout(WebMeaningfulLayout::kVisuallyNonEmpty);
     }
 
     if (should_dispatch_first_layout_after_finished_parsing_ &&
         frame->GetDocument()->HasFinishedParsing()) {
       should_dispatch_first_layout_after_finished_parsing_ = false;
-      client->DidMeaningfulLayout(WebMeaningfulLayout::kFinishedParsing);
+      frame_widget->DidMeaningfulLayout(WebMeaningfulLayout::kFinishedParsing);
     }
 
     if (should_dispatch_first_layout_after_finished_loading_ &&
         frame->GetDocument()->IsLoadCompleted()) {
       should_dispatch_first_layout_after_finished_loading_ = false;
-      client->DidMeaningfulLayout(WebMeaningfulLayout::kFinishedLoading);
+      frame_widget->DidMeaningfulLayout(WebMeaningfulLayout::kFinishedLoading);
     }
   }
 }

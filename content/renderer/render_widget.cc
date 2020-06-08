@@ -1596,11 +1596,6 @@ void RenderWidget::SetScreenRects(const gfx::Rect& widget_screen_rect,
 // WebWidgetClient
 
 void RenderWidget::DidMeaningfulLayout(blink::WebMeaningfulLayout layout_type) {
-  if (layout_type == blink::WebMeaningfulLayout::kVisuallyNonEmpty) {
-    QueueMessage(std::make_unique<WidgetHostMsg_DidFirstVisuallyNonEmptyPaint>(
-        routing_id_));
-  }
-
   for (auto& observer : render_frames_)
     observer.DidMeaningfulLayout(layout_type);
 }

@@ -4046,6 +4046,7 @@ class FakeFrameWidgetHost : public mojom::blink::FrameWidgetHost {
   void AutoscrollStart(const gfx::PointF& position) override {}
   void AutoscrollFling(const gfx::Vector2dF& position) override {}
   void AutoscrollEnd() override {}
+  void DidFirstVisuallyNonEmptyPaint() override {}
 
  private:
   mojo::AssociatedReceiver<mojom::blink::FrameWidgetHost>
