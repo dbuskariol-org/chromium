@@ -348,5 +348,5 @@ public interface TabObserver {
      * Called when scrolling state of Tab's content view changes.
      * @param scrolling {@code true} if scrolling started; {@code false} if stopped.
      */
-    void onContentViewScrollingStateChanged(boolean scrolling);
+    void onContentViewScrollingStateChanged(Tab tab, boolean scrolling);
 }
