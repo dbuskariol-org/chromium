@@ -24,6 +24,7 @@
 #include "base/message_loop/message_loop_current.h"
 #include "base/metrics/field_trial.h"
 #include "base/metrics/histogram_macros.h"
+#include "base/optional.h"
 #include "base/single_thread_task_runner.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
@@ -198,7 +199,7 @@ class RenderWidgetHostIteratorImpl : public RenderWidgetHostIterator {
 
 std::vector<DropData::Metadata> DropDataToMetaData(const DropData& drop_data) {
   std::vector<DropData::Metadata> metadata;
-  if (!drop_data.text.is_null()) {
+  if (drop_data.text) {
     metadata.push_back(DropData::Metadata::CreateForMimeType(
         DropData::Kind::STRING, base::ASCIIToUTF16(ui::kMimeTypeText)));
   }
@@ -208,7 +209,7 @@ std::vector<DropData::Metadata> DropDataToMetaData(const DropData& drop_data) {
         DropData::Kind::STRING, base::ASCIIToUTF16(ui::kMimeTypeURIList)));
   }
 
-  if (!drop_data.html.is_null()) {
+  if (drop_data.html) {
     metadata.push_back(DropData::Metadata::CreateForMimeType(
         DropData::Kind::STRING, base::ASCIIToUTF16(ui::kMimeTypeHTML)));
   }

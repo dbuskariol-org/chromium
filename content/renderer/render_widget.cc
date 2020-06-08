@@ -19,6 +19,7 @@
 #include "base/memory/ptr_util.h"
 #include "base/memory/singleton.h"
 #include "base/metrics/histogram_macros.h"
+#include "base/optional.h"
 #include "base/stl_util.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/utf_string_conversions.h"
@@ -275,11 +276,11 @@ WebDragData DropDataToWebDragData(const DropData& drop_data) {
   DCHECK(drop_data.file_contents.empty());
   DCHECK(drop_data.file_contents_content_disposition.empty());
 
-  if (!drop_data.text.is_null()) {
+  if (drop_data.text) {
     WebDragData::Item item;
     item.storage_type = WebDragData::Item::kStorageTypeString;
     item.string_type = WebString::FromUTF8(ui::kMimeTypeText);
-    item.string_data = WebString::FromUTF16(drop_data.text.string());
+    item.string_data = WebString::FromUTF16(*drop_data.text);
     item_list.push_back(item);
   }
 
@@ -292,11 +293,11 @@ WebDragData DropDataToWebDragData(const DropData& drop_data) {
     item_list.push_back(item);
   }
 
-  if (!drop_data.html.is_null()) {
+  if (drop_data.html) {
     WebDragData::Item item;
     item.storage_type = WebDragData::Item::kStorageTypeString;
     item.string_type = WebString::FromUTF8(ui::kMimeTypeHTML);
-    item.string_data = WebString::FromUTF16(drop_data.html.string());
+    item.string_data = WebString::FromUTF16(*drop_data.html);
     item.base_url = drop_data.html_base_url;
     item_list.push_back(item);
   }
