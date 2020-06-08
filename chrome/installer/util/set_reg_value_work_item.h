@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_INSTALLER_UTIL_SET_REG_VALUE_WORK_ITEM_H__
-#define CHROME_INSTALLER_UTIL_SET_REG_VALUE_WORK_ITEM_H__
+#ifndef CHROME_INSTALLER_UTIL_SET_REG_VALUE_WORK_ITEM_H_
+#define CHROME_INSTALLER_UTIL_SET_REG_VALUE_WORK_ITEM_H_
 
 #include <windows.h>
 
@@ -100,4 +100,4 @@ class SetRegValueWorkItem : public WorkItem {
   SettingStatus status_;
 };
 
-#endif  // CHROME_INSTALLER_UTIL_SET_REG_VALUE_WORK_ITEM_H__
+#endif  // CHROME_INSTALLER_UTIL_SET_REG_VALUE_WORK_ITEM_H_
