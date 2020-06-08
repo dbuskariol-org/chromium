@@ -368,10 +368,28 @@ void BinaryUploadService::FinishRequest(Request* request,
 
     // The BinaryFCMService will handle all recoverable errors. In case of
     // unrecoverable error, there's nothing we can do here.
-    binary_fcm_service_->UnregisterInstanceID(instance_id, base::DoNothing());
+    binary_fcm_service_->UnregisterInstanceID(
+        instance_id,
+        base::BindOnce(&BinaryUploadService::InstanceIDUnregisteredCallback,
+                       weakptr_factory_.GetWeakPtr()));
+  } else {
+    // |binary_fcm_service_| can be null in tests, but
+    // InstanceIDUnregisteredCallback should be called anyway so the requests
+    // waiting on authentication can complete.
+    InstanceIDUnregisteredCallback(true);
   }
 
   active_tokens_.erase(token_it);
+}
+
+void BinaryUploadService::InstanceIDUnregisteredCallback(bool) {
+  // Calling RunAuthorizationCallbacks after the instance ID of the initial
+  // authentication is unregistered avoids registration/unregistration conflicts
+  // with normal requests.
+  if (!authorization_callbacks_.empty() &&
+      can_upload_enterprise_data_.has_value()) {
+    RunAuthorizationCallbacks();
+  }
 }
 
 void BinaryUploadService::RecordRequestMetrics(
@@ -505,7 +523,6 @@ void BinaryUploadService::ValidateDataUploadRequestCallback(
     DeepScanningClientResponse response) {
   pending_validate_data_upload_request_ = false;
   can_upload_enterprise_data_ = result == BinaryUploadService::Result::SUCCESS;
-  RunAuthorizationCallbacks();
 }
 
 void BinaryUploadService::RunAuthorizationCallbacks() {

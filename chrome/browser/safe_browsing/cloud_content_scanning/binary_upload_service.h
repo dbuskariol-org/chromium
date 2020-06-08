@@ -173,6 +173,11 @@ class BinaryUploadService : public KeyedService {
   // different URL than scans for Advanced Protection users.
   static GURL GetUploadUrl(bool is_advanced_protection_request);
 
+ protected:
+  void FinishRequest(Request* request,
+                     Result result,
+                     DeepScanningClientResponse response);
+
  private:
   friend class BinaryUploadServiceTest;
 
@@ -197,10 +202,6 @@ class BinaryUploadService : public KeyedService {
 
   void OnTimeout(Request* request);
 
-  void FinishRequest(Request* request,
-                     Result result,
-                     DeepScanningClientResponse response);
-
   bool IsActive(Request* request);
 
   void MaybeUploadForDeepScanningCallback(std::unique_ptr<Request> request,
@@ -209,6 +210,9 @@ class BinaryUploadService : public KeyedService {
   // Callback once the response from the backend is received.
   void ValidateDataUploadRequestCallback(BinaryUploadService::Result result,
                                          DeepScanningClientResponse response);
+
+  // Callback once a request's instance ID is unregistered.
+  void InstanceIDUnregisteredCallback(bool);
 
   void RecordRequestMetrics(Request* request,
                             Result result,
