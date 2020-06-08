@@ -279,7 +279,7 @@ GoogleUpdateSettings::LoadMetricsClientInfo() {
   if (!ReadUserGoogleUpdateStrKey(google_update::kRegMetricsId,
                                   &client_id_16) ||
       client_id_16.empty()) {
-    return std::unique_ptr<metrics::ClientInfo>();
+    return nullptr;
   }
 
   std::unique_ptr<metrics::ClientInfo> client_info(new metrics::ClientInfo);

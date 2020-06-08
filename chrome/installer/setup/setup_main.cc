@@ -213,7 +213,7 @@ std::unique_ptr<installer::ArchivePatchHelper> CreateChromeArchiveHelper(
       LOG(ERROR) << installer::switches::kInstallArchive << "="
                  << compressed_archive.value() << " not found.";
     }
-    return std::unique_ptr<installer::ArchivePatchHelper>();
+    return nullptr;
   }
 
   // chrome.7z is either extracted directly from the compressed archive into the
