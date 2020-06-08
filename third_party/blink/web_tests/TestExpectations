@@ -5847,7 +5847,6 @@ crbug.com/971319 [ Mac ] media/audio-garbage-collect.html [ Pass Timeout ]
 
 # Sheriff 2019-06-13
 crbug.com/973692 [ Mac ] external/wpt/css/css-text/parsing/hyphens-computed.html [ Failure ]
-crbug.com/973726 [ Mac ] fast/css/large-list-of-rules-crash.html [ Pass Timeout ]
 
 # Sheriff 2019-06-20
 crbug.com/976045 fast/scrolling/unscrollable-layer-subpixel-size-with-negative-overflow.html [ Pass Failure ]
