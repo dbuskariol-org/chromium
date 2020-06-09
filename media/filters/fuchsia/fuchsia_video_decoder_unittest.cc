@@ -168,6 +168,10 @@ class TestSharedImageInterface : public gpu::SharedImageInterface {
                           gpu::CommandBufferId(33), 1);
   }
 
+  void WaitSyncToken(const gpu::SyncToken& sync_token) override {
+    NOTREACHED();
+  }
+
   void Flush() override { NOTREACHED(); }
 
   scoped_refptr<gfx::NativePixmap> GetNativePixmap(

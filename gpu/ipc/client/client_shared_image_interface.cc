@@ -58,6 +58,11 @@ SyncToken ClientSharedImageInterface::GenVerifiedSyncToken() {
   return proxy_->GenVerifiedSyncToken();
 }
 
+void ClientSharedImageInterface::WaitSyncToken(
+    const gpu::SyncToken& sync_token) {
+  proxy_->WaitSyncToken(sync_token);
+}
+
 void ClientSharedImageInterface::Flush() {
   proxy_->Flush();
 }

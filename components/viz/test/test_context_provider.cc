@@ -230,6 +230,10 @@ gpu::SyncToken TestSharedImageInterface::GenUnverifiedSyncToken() {
   return most_recent_generated_token_;
 }
 
+void TestSharedImageInterface::WaitSyncToken(const gpu::SyncToken& sync_token) {
+  NOTREACHED();
+}
+
 void TestSharedImageInterface::Flush() {
   // No need to flush in this implementation.
 }

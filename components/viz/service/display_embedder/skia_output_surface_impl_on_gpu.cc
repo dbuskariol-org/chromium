@@ -621,6 +621,10 @@ class DirectContextProviderDelegateImpl : public DirectContextProviderDelegate,
     return sync_token;
   }
 
+  void WaitSyncToken(const gpu::SyncToken& sync_token) override {
+    NOTREACHED();
+  }
+
   void Flush() override {
     // No need to flush in this implementation.
   }

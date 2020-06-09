@@ -41,6 +41,7 @@ class SharedImageInterfaceProxy {
   void DestroySharedImage(const SyncToken& sync_token, const Mailbox& mailbox);
   SyncToken GenVerifiedSyncToken();
   SyncToken GenUnverifiedSyncToken();
+  void WaitSyncToken(const SyncToken& sync_token);
   void Flush();
 
   SharedImageInterface::SwapChainMailboxes CreateSwapChain(
