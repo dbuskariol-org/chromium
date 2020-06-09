@@ -150,9 +150,6 @@ class CORE_EXPORT WebFrameWidgetBase
                       const gfx::PointF& point_in_viewport,
                       const gfx::PointF& screen_point,
                       int modifiers) override;
-  void DragSourceEndedAt(const gfx::PointF& point_in_viewport,
-                         const gfx::PointF& screen_point,
-                         WebDragOperation) override;
   void SendOverscrollEventFromImplSide(
       const gfx::Vector2dF& overscroll_delta,
       cc::ElementId scroll_latched_element_id) override;
@@ -242,6 +239,9 @@ class CORE_EXPORT WebFrameWidgetBase
   // mojom::blink::FrameWidget methods.
   void DragTargetDragLeave(const gfx::PointF& point_in_viewport,
                            const gfx::PointF& screen_point) override;
+  void DragSourceEndedAt(const gfx::PointF& point_in_viewport,
+                         const gfx::PointF& screen_point,
+                         WebDragOperation) override;
   void DragSourceSystemDragEnded() override;
   void SetBackgroundOpaque(bool opaque) override;
 

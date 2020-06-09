@@ -1040,6 +1040,12 @@ class CONTENT_EXPORT RenderWidgetHostImpl
 
   void CreateSyntheticGestureControllerIfNecessary();
 
+  // Converts the |window_point| from the coordinates in native window in DIP
+  // to Blink's Viewport coordinates. They're identical in tradional world,
+  // but will differ when use-zoom-for-dsf feature is enabled.
+  // TODO(oshima): Update the comment when the migration is completed.
+  gfx::PointF ConvertWindowPointToViewport(const gfx::PointF& window_point);
+
   // The following functions are used to keep track of pending user activation
   // events, which are input events (e.g., mousedown or keydown) that allow a
   // renderer to gain user activation.  AddPendingUserActivation() increments

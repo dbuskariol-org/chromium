@@ -595,7 +595,6 @@ bool RenderWidget::OnMessageReceived(const IPC::Message& message) {
     IPC_MESSAGE_HANDLER(DragMsg_TargetDragEnter, OnDragTargetDragEnter)
     IPC_MESSAGE_HANDLER(DragMsg_TargetDragOver, OnDragTargetDragOver)
     IPC_MESSAGE_HANDLER(DragMsg_TargetDrop, OnDragTargetDrop)
-    IPC_MESSAGE_HANDLER(DragMsg_SourceEnded, OnDragSourceEnded)
     IPC_MESSAGE_UNHANDLED(handled = false)
   IPC_END_MESSAGE_MAP()
   return handled;
@@ -2206,17 +2205,6 @@ void RenderWidget::OnDragTargetDrop(const DropData& drop_data,
   frame_widget->DragTargetDrop(DropDataToWebDragData(drop_data),
                                ConvertWindowPointToViewport(client_point),
                                screen_point, key_modifiers);
-}
-
-void RenderWidget::OnDragSourceEnded(const gfx::PointF& client_point,
-                                     const gfx::PointF& screen_point,
-                                     WebDragOperation op) {
-  blink::WebFrameWidget* frame_widget = GetFrameWidget();
-  if (!frame_widget)
-    return;
-
-  frame_widget->DragSourceEndedAt(ConvertWindowPointToViewport(client_point),
-                                  screen_point, op);
 }
 
 ui::TextInputType RenderWidget::GetTextInputType() {

@@ -40,12 +40,6 @@ IPC_MESSAGE_ROUTED4(DragMsg_TargetDrop,
                     gfx::PointF /* screen_pt */,
                     int /* key_modifiers */)
 
-// Notifies the renderer when and where the mouse-drag ended.
-IPC_MESSAGE_ROUTED3(DragMsg_SourceEnded,
-                    gfx::PointF /* client_pt */,
-                    gfx::PointF /* screen_pt */,
-                    blink::WebDragOperation /* drag_operation */)
-
 // Messages sent from the renderer to the browser.
 
 // Used to tell the parent the user started dragging in the content area. The
