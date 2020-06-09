@@ -6746,9 +6746,7 @@ crbug.com/1091948 [ Linux ] external/wpt/html/canvas/element/manual/fill-and-str
 crbug.com/1092091 [ Mac ] virtual/dark-color-scheme/datetimelocal-picker/datetimelocal-open.html [ Pass Failure ]
 
 # Test giving differing results on different build bots
-crbug.com/1092721 [ Mac ] virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-getStats.https.html [ Pass Failure ]
 crbug.com/1092721 [ Mac ] external/wpt/webrtc/RTCPeerConnection-getStats.https.html [ Pass Failure ]
-crbug.com/1092721 [ Linux ] virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCPeerConnection-getStats.https.html [ Pass Failure ]
 crbug.com/1092721 [ Linux ] external/wpt/webrtc/RTCPeerConnection-getStats.https.html [ Pass Failure ]
 
 # Sheriff 2020-06-06
