@@ -3992,7 +3992,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/org_robolectric_shadows_multidex',
-              'version': 'version:4.3.1-cr0',
+              'version': 'version:4.3.1-cr1',
           },
       ],
       'condition': 'checkout_android',
