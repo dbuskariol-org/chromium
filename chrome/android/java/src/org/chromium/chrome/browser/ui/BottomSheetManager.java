@@ -23,7 +23,7 @@ import org.chromium.chrome.browser.ui.messages.snackbar.SnackbarManager;
 import org.chromium.chrome.browser.vr.VrModuleProvider;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController.StateChangeReason;
-import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetControllerImpl;
+import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetControllerInternal;
 import org.chromium.chrome.browser.widget.bottomsheet.EmptyBottomSheetObserver;
 import org.chromium.components.browser_ui.bottomsheet.BottomSheetContent;
 import org.chromium.content_public.browser.SelectionPopupController;
@@ -70,8 +70,10 @@ class BottomSheetManager extends EmptyBottomSheetObserver implements Destroyable
     /** A token for suppressing tab modal dialogs. */
     private int mTabModalToken = TokenHolder.INVALID_TOKEN;
 
-    /** A handle to the {@link BottomSheetControllerImpl} this class manages interactions with. */
-    private BottomSheetControllerImpl mSheetController;
+    /**
+     * A handle to the {@link BottomSheetControllerInternal} this class manages interactions with.
+     */
+    private BottomSheetControllerInternal mSheetController;
 
     /** A mechanism for accessing the currently active tab. */
     private ActivityTabProvider mTabProvider;
@@ -104,8 +106,9 @@ class BottomSheetManager extends EmptyBottomSheetObserver implements Destroyable
     /** The token used to enable browser controls persistence. */
     private int mPersistentControlsToken;
 
-    public BottomSheetManager(BottomSheetControllerImpl controller, ActivityTabProvider tabProvider,
-            ChromeFullscreenManager fullscreenManager, Supplier<ModalDialogManager> dialogManager,
+    public BottomSheetManager(BottomSheetControllerInternal controller,
+            ActivityTabProvider tabProvider, ChromeFullscreenManager fullscreenManager,
+            Supplier<ModalDialogManager> dialogManager,
             Supplier<SnackbarManager> snackbarManagerSupplier,
             TabObscuringHandler obscuringDelegate,
             ObservableSupplier<Boolean> omniboxFocusStateSupplier,

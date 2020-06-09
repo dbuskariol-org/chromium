@@ -28,7 +28,7 @@ import java.util.PriorityQueue;
  * and call {@link #requestShowContent(BottomSheetContent, boolean)} which will return true if the
  * content was actually shown (see full doc on method).
  */
-public class BottomSheetControllerImpl implements BottomSheetControllerInternal {
+class BottomSheetControllerImpl implements BottomSheetControllerInternal {
     /** The initial capacity for the priority queue handling pending content show requests. */
     private static final int INITIAL_QUEUE_CAPACITY = 1;
 
@@ -192,7 +192,7 @@ public class BottomSheetControllerImpl implements BottomSheetControllerInternal 
         mSheetInitializer = null;
     }
 
-    /** @param ratio The hidden ratio of the browser controls. */
+    @Override
     public void setBrowserControlsHiddenRatio(float ratio) {
         if (mBottomSheet != null) mBottomSheet.setBrowserControlsHiddenRatio(ratio);
     }
