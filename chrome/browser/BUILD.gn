@@ -2137,6 +2137,7 @@ static_library("browser") {
     "//components/policy/proto:reporting_record_proto",
     "//components/prefs",
     "//components/prerender/common",
+    "//components/prerender/common:mojo_bindings",
     "//components/previews/content",
     "//components/previews/core",
     "//components/profile_metrics",
