@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
-#define COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
+#ifndef COMPONENTS_PERFORMANCE_MANAGER_PUBLIC_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
+#define COMPONENTS_PERFORMANCE_MANAGER_PUBLIC_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
 
 #include "base/time/time.h"
 #include "components/performance_manager/public/graph/graph.h"
@@ -64,4 +64,4 @@ class V8PerFrameMemoryDecorator : public GraphOwned,
 
 }  // namespace performance_manager
 
-#endif  // COMPONENTS_PERFORMANCE_MANAGER_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
+#endif  // COMPONENTS_PERFORMANCE_MANAGER_PUBLIC_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
