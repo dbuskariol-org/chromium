@@ -132,7 +132,7 @@ class ChromeRenderFrameObserver : public content::RenderFrameObserver,
 
   // Have the same lifetime as us.
   translate::TranslateAgent* translate_agent_;
-#if BUILDFLAG(SAFE_BROWSING_CSD)
+#if BUILDFLAG(FULL_SAFE_BROWSING)
   safe_browsing::PhishingClassifierDelegate* phishing_classifier_ = nullptr;
 #endif
 
