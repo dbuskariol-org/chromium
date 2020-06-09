@@ -40244,6 +40244,7 @@ from previous Chrome versions.
   <int value="-349437334" label="UseDdljsonApi:disabled"/>
   <int value="-349380607" label="AndroidNightMode:disabled"/>
   <int value="-349057743" label="extensions-on-chrome-urls"/>
+  <int value="-347654657" label="CSSColorSchemeUARendering:enabled"/>
   <int value="-346413328" label="UseNewAcceptLanguageHeader:disabled"/>
   <int value="-345838366" label="enable-hosted-apps-in-windows"/>
   <int value="-345324571" label="enable-quirks-client"/>
@@ -42272,6 +42273,7 @@ from previous Chrome versions.
   <int value="1949019439"
       label="AutofillRestrictUnownedFieldsToFormlessCheckout:disabled"/>
   <int value="1949908940" label="disable-zip-archiver-unpacker"/>
+  <int value="1949996482" label="CSSColorSchemeUARendering:disabled"/>
   <int value="1950191981" label="OverlayNewLayout:enabled"/>
   <int value="1951466218" label="enable-data-reduction-proxy-lite-page"/>
   <int value="1951645673" label="PasswordsKeyboardAccessory:disabled"/>

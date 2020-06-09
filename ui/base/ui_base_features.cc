@@ -161,6 +161,18 @@ bool IsEyeDropperEnabled() {
          base::FeatureList::IsEnabled(features::kEyeDropper);
 }
 
+// Enable the CSSColorSchemeUARendering feature for Windows, ChromeOS, Linux,
+// and Mac. This feature will be released for Android in later milestones. See
+// crbug.com/1086530 for the Desktop launch bug.
+const base::Feature kCSSColorSchemeUARendering = {
+    "CSSColorSchemeUARendering", base::FEATURE_DISABLED_BY_DEFAULT};
+
+bool IsCSSColorSchemeUARenderingEnabled() {
+  static const bool css_color_scheme_ua_rendering_enabled =
+      base::FeatureList::IsEnabled(features::kCSSColorSchemeUARendering);
+  return css_color_scheme_ua_rendering_enabled;
+}
+
 // Enable the FormControlsRefresh feature for Windows, ChromeOS, Linux, and Mac.
 // This feature will be released for Android in later milestones. See
 // crbug.com/1012106 for the Windows launch bug, and crbug.com/1012108 for the
