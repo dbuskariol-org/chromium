@@ -2,15 +2,15 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-static_library("opt_out_blacklist") {
+static_library("opt_out_blocklist") {
   sources = [
-    "opt_out_blacklist.cc",
-    "opt_out_blacklist.h",
-    "opt_out_blacklist_data.cc",
-    "opt_out_blacklist_data.h",
-    "opt_out_blacklist_delegate.h",
-    "opt_out_blacklist_item.cc",
-    "opt_out_blacklist_item.h",
+    "opt_out_blocklist.cc",
+    "opt_out_blocklist.h",
+    "opt_out_blocklist_data.cc",
+    "opt_out_blocklist_data.h",
+    "opt_out_blocklist_delegate.h",
+    "opt_out_blocklist_item.cc",
+    "opt_out_blocklist_item.h",
     "opt_out_store.h",
   ]
 
@@ -20,12 +20,12 @@ static_library("opt_out_blacklist") {
 source_set("unit_tests") {
   testonly = true
   sources = [
-    "opt_out_blacklist_item_unittest.cc",
-    "opt_out_blacklist_unittest.cc",
+    "opt_out_blocklist_item_unittest.cc",
+    "opt_out_blocklist_unittest.cc",
   ]
 
   deps = [
-    ":opt_out_blacklist",
+    ":opt_out_blocklist",
     "//base",
     "//base/test:test_support",
     "//testing/gmock",

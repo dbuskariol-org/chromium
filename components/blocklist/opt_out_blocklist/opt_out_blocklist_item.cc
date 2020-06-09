@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_item.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_item.h"
 
 #include <algorithm>
 #include <tuple>
 
-#include "components/blacklist/opt_out_blacklist/opt_out_store.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_store.h"
 
 namespace blocklist {
 

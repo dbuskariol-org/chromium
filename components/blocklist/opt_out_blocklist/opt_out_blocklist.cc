@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist.h"
 
 #include "base/bind.h"
 #include "base/memory/ptr_util.h"
@@ -10,9 +10,9 @@
 #include "base/optional.h"
 #include "base/strings/stringprintf.h"
 #include "base/time/clock.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_delegate.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_item.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_store.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_delegate.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_item.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_store.h"
 
 namespace blocklist {
 

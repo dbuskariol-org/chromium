@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/blacklist/opt_out_blacklist/sql/opt_out_store_sql.h"
+#include "components/blocklist/opt_out_blocklist/sql/opt_out_store_sql.h"
 
 #include <map>
 #include <memory>
@@ -20,9 +20,9 @@
 #include "base/test/task_environment.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "base/time/time.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_data.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_item.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_store.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_data.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_item.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_store.h"
 #include "sql/test/test_helpers.h"
 #include "testing/gtest/include/gtest/gtest.h"
 

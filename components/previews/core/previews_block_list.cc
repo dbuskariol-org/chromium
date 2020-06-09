@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/previews/core/previews_black_list.h"
+#include "components/previews/core/previews_block_list.h"
 
 #include "base/bind.h"
 #include "base/check.h"

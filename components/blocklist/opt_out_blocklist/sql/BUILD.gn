@@ -2,7 +2,7 @@
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
 
-static_library("opt_out_blacklist_sql") {
+static_library("opt_out_blocklist_sql") {
   sources = [
     "opt_out_store_sql.cc",
     "opt_out_store_sql.h",
@@ -10,7 +10,7 @@ static_library("opt_out_blacklist_sql") {
 
   deps = [
     "//base",
-    "//components/blacklist/opt_out_blacklist:opt_out_blacklist",
+    "//components/blocklist/opt_out_blocklist:opt_out_blocklist",
     "//sql",
   ]
 }
@@ -20,10 +20,10 @@ source_set("unit_tests") {
   sources = [ "opt_out_store_sql_unittest.cc" ]
 
   deps = [
-    ":opt_out_blacklist_sql",
+    ":opt_out_blocklist_sql",
     "//base",
     "//base/test:test_support",
-    "//components/blacklist/opt_out_blacklist:opt_out_blacklist",
+    "//components/blocklist/opt_out_blocklist:opt_out_blocklist",
     "//sql",
     "//sql:test_support",
     "//testing/gmock",

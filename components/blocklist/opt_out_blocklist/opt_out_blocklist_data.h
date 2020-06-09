@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_BLACKLIST_OPT_OUT_BLACKLIST_OPT_OUT_BLACKLIST_DATA_H_
-#define COMPONENTS_BLACKLIST_OPT_OUT_BLACKLIST_OPT_OUT_BLACKLIST_DATA_H_
+#ifndef COMPONENTS_BLOCKLIST_OPT_OUT_BLOCKLIST_OPT_OUT_BLOCKLIST_DATA_H_
+#define COMPONENTS_BLOCKLIST_OPT_OUT_BLOCKLIST_OPT_OUT_BLOCKLIST_DATA_H_
 
 #include <stdint.h>
 
@@ -15,7 +15,7 @@
 #include "base/macros.h"
 #include "base/optional.h"
 #include "base/time/time.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_item.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_item.h"
 
 namespace blocklist {
 
@@ -173,4 +173,4 @@ class BlocklistData {
 
 }  // namespace blocklist
 
-#endif  // COMPONENTS_BLACKLIST_OPT_OUT_BLACKLIST_OPT_OUT_BLACKLIST_DATA_H_
+#endif  // COMPONENTS_BLOCKLIST_OPT_OUT_BLOCKLIST_OPT_OUT_BLOCKLIST_DATA_H_

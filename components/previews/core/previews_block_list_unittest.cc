@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/previews/core/previews_black_list.h"
+#include "components/previews/core/previews_block_list.h"
 
 #include <algorithm>
 #include <map>
@@ -22,9 +22,9 @@
 #include "base/test/task_environment.h"
 #include "base/threading/thread_task_runner_handle.h"
 #include "base/time/time.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_delegate.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_item.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_store.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_delegate.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_item.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_store.h"
 #include "components/previews/core/previews_experiments.h"
 #include "components/variations/variations_associated_data.h"
 #include "testing/gmock/include/gmock/gmock.h"

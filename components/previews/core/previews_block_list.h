@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_PREVIEWS_CORE_PREVIEWS_BLACK_LIST_H_
-#define COMPONENTS_PREVIEWS_CORE_PREVIEWS_BLACK_LIST_H_
+#ifndef COMPONENTS_PREVIEWS_CORE_PREVIEWS_BLOCK_LIST_H_
+#define COMPONENTS_PREVIEWS_CORE_PREVIEWS_BLOCK_LIST_H_
 
 #include <stdint.h>
 
@@ -16,9 +16,9 @@
 #include "base/macros.h"
 #include "base/optional.h"
 #include "base/time/time.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_delegate.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_store.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_delegate.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_store.h"
 #include "components/previews/core/previews_experiments.h"
 
 class GURL;
@@ -160,4 +160,4 @@ class PreviewsBlockList : public blocklist::OptOutBlocklist {
 
 }  // namespace previews
 
-#endif  // COMPONENTS_PREVIEWS_CORE_PREVIEWS_BLACK_LIST_H_
+#endif  // COMPONENTS_PREVIEWS_CORE_PREVIEWS_BLOCK_LIST_H_

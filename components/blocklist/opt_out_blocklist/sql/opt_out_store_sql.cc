@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/blacklist/opt_out_blacklist/sql/opt_out_store_sql.h"
+#include "components/blocklist/opt_out_blocklist/sql/opt_out_store_sql.h"
 
 #include <map>
 #include <string>
@@ -20,7 +20,7 @@
 #include "base/single_thread_task_runner.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/threading/thread_task_runner_handle.h"
-#include "components/blacklist/opt_out_blacklist/opt_out_blacklist_data.h"
+#include "components/blocklist/opt_out_blocklist/opt_out_blocklist_data.h"
 #include "sql/database.h"
 #include "sql/recovery.h"
 #include "sql/statement.h"
