@@ -1928,21 +1928,6 @@
             ]
         }
     ],
-    "DefaultPassthroughCommandDecoder": [
-        {
-            "platforms": [
-                "linux"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled_20191004",
-                    "enable_features": [
-                        "DefaultPassthroughCommandDecoder"
-                    ]
-                }
-            ]
-        }
-    ],
     "DeprecateFtp": [
         {
             "platforms": [
