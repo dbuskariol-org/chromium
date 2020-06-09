@@ -33566,6 +33566,14 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="-2147417848" label="RPC_E_DISCONNECTED"/>
   <int value="-2147221232" label="CLASS_E_NOAGGREGATION"/>
   <int value="-2147221164" label="REGDB_E_CLASSNOTREG"/>
+  <int value="-2147220480"
+      label="custom error for abort setting badge for non app window"/>
+  <int value="-2147220479"
+      label="custom error for taskbar::CustomHresultCodes::kInvalidIcon"/>
+  <int value="-2147220478"
+      label="custom error for taskbar::CustomHresultCodes::kWindowsInvisible"/>
+  <int value="-2147220477"
+      label="custom error for taskbar::CustomHresultCodes::kImageLoading"/>
   <int value="-2147219455" label="GOOPDATE_E_NO_NETWORK"/>
   <int value="-2147219437" label="GOOPDATE_E_APP_UPDATE_DISABLED_BY_POLICY"/>
   <int value="-2147219198" label="GOOPDATEINSTALL_E_INSTALLER_FAILED"/>
