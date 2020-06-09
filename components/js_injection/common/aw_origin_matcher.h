@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ANDROID_WEBVIEW_COMMON_AW_ORIGIN_MATCHER_H_
-#define ANDROID_WEBVIEW_COMMON_AW_ORIGIN_MATCHER_H_
+#ifndef COMPONENTS_JS_INJECTION_COMMON_AW_ORIGIN_MATCHER_H_
+#define COMPONENTS_JS_INJECTION_COMMON_AW_ORIGIN_MATCHER_H_
 
 #include <string>
 
@@ -14,7 +14,7 @@ namespace url {
 class Origin;
 }  // namespace url
 
-namespace android_webview {
+namespace js_injection {
 
 // An url origin matcher allows wildcard subdomain matching. It supports two
 // types of rules.
@@ -65,6 +65,6 @@ class AwOriginMatcher {
   net::SchemeHostPortMatcher::RuleList rules_;
 };
 
-}  // namespace android_webview
+}  // namespace js_injection
 
-#endif  // ANDROID_WEBVIEW_COMMON_AW_ORIGIN_MATCHER_H_
+#endif  // COMPONENTS_JS_INJECTION_COMMON_AW_ORIGIN_MATCHER_H_

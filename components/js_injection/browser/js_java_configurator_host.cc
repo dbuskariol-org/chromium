@@ -2,20 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "android_webview/browser/js_java_interaction/js_java_configurator_host.h"
+#include "components/js_injection/browser/js_java_configurator_host.h"
 
-#include "android_webview/browser/js_java_interaction/js_to_java_messaging.h"
-#include "android_webview/browser/js_java_interaction/web_message_host.h"
-#include "android_webview/browser/js_java_interaction/web_message_host_factory.h"
-#include "android_webview/common/aw_origin_matcher.h"
-#include "android_webview/common/aw_origin_matcher_mojom_traits.h"
 #include "base/bind.h"
 #include "base/strings/utf_string_conversions.h"
+#include "components/js_injection/browser/js_to_java_messaging.h"
+#include "components/js_injection/browser/web_message_host.h"
+#include "components/js_injection/browser/web_message_host_factory.h"
+#include "components/js_injection/common/aw_origin_matcher.h"
+#include "components/js_injection/common/aw_origin_matcher_mojom_traits.h"
 #include "content/public/browser/web_contents.h"
 #include "mojo/public/cpp/bindings/pending_associated_remote.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 
-namespace android_webview {
+namespace js_injection {
 namespace {
 
 std::string ConvertToNativeAllowedOriginRulesWithSanityCheck(
@@ -225,4 +225,4 @@ void JsJavaConfiguratorHost::NotifyFrameForRemoveDocumentStartJavascript(
   configurator_remote->RemoveDocumentStartScript(script_id);
 }
 
-}  // namespace android_webview
+}  // namespace js_injection

@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-module android_webview.mojom;
+module js_injection.mojom;
 
-import "android_webview/common/aw_origin_matcher.mojom";
+import "components/js_injection/common/aw_origin_matcher.mojom";
 import "mojo/public/mojom/base/string16.mojom";
 import "third_party/blink/public/mojom/messaging/message_port_descriptor.mojom";
 
@@ -16,7 +16,7 @@ import "third_party/blink/public/mojom/messaging/message_port_descriptor.mojom";
 struct JsObject {
   mojo_base.mojom.String16 js_object_name;
   pending_associated_remote<JsToJavaMessaging> js_to_java_messaging;
-  android_webview.mojom.AwOriginMatcher origin_matcher;
+  js_injection.mojom.AwOriginMatcher origin_matcher;
 };
 
 // DocumentStartJavascript struct contains the JavaScript snippet |script| and
@@ -25,7 +25,7 @@ struct JsObject {
 struct DocumentStartJavascript {
   int32 script_id;
   mojo_base.mojom.String16 script;
-  android_webview.mojom.AwOriginMatcher origin_matcher;
+  js_injection.mojom.AwOriginMatcher origin_matcher;
 };
 
 // For JavaScript postMessage() API, implemented by browser.
@@ -53,12 +53,12 @@ interface JavaToJsMessaging {
 interface JsJavaConfigurator {
   // Called from browser, to tell renderer that if we need to inject
   // JavaScript objects to the frame based on the |js_objects| array.
-  SetJsObjects(array<android_webview.mojom.JsObject> js_objects);
+  SetJsObjects(array<js_injection.mojom.JsObject> js_objects);
 
   // Called from browser, to add a script for a frame to run at document start
   // stage. The script will run only if the frame's origin matches any of the
   // allowed_origin_rules.
-  AddDocumentStartScript(android_webview.mojom.DocumentStartJavascript script);
+  AddDocumentStartScript(js_injection.mojom.DocumentStartJavascript script);
 
   // Called from browser, to remove the script by the given script_id.
   RemoveDocumentStartScript(int32 script_id);

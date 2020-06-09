@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_WEB_MESSAGE_H_
-#define ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_WEB_MESSAGE_H_
+#ifndef COMPONENTS_JS_INJECTION_BROWSER_WEB_MESSAGE_H_
+#define COMPONENTS_JS_INJECTION_BROWSER_WEB_MESSAGE_H_
 
 #include <vector>
 
 #include "base/strings/string16.h"
 #include "third_party/blink/public/common/messaging/message_port_descriptor.h"
 
-namespace android_webview {
+namespace js_injection {
 
 // Represents a message to or from the page.
 struct WebMessage {
@@ -21,6 +21,6 @@ struct WebMessage {
   std::vector<blink::MessagePortDescriptor> ports;
 };
 
-}  // namespace android_webview
+}  // namespace js_injection
 
-#endif  // ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_WEB_MESSAGE_H_
+#endif  // COMPONENTS_JS_INJECTION_BROWSER_WEB_MESSAGE_H_

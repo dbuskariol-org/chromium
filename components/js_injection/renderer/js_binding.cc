@@ -2,17 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "android_webview/renderer/js_java_interaction/js_binding.h"
+#include "components/js_injection/renderer/js_binding.h"
 
 #include <vector>
 
-#include "android_webview/renderer/js_java_interaction/js_java_configurator.h"
 #include "base/strings/string_util.h"
+#include "components/js_injection/renderer/js_java_configurator.h"
 #include "content/public/renderer/render_frame.h"
 #include "gin/data_object_builder.h"
 #include "gin/handle.h"
 #include "gin/object_template_builder.h"
-#include "services/service_manager/public/cpp/interface_provider.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
 #include "third_party/blink/public/common/messaging/message_port_channel.h"
 #include "third_party/blink/public/platform/web_security_origin.h"
@@ -29,7 +28,7 @@ constexpr char kAddEventListener[] = "addEventListener";
 constexpr char kRemoveEventListener[] = "removeEventListener";
 }  // anonymous namespace
 
-namespace android_webview {
+namespace js_injection {
 
 gin::WrapperInfo JsBinding::kWrapperInfo = {gin::kEmbedderNativeGin};
 
@@ -244,4 +243,4 @@ void JsBinding::SetOnMessage(v8::Isolate* isolate, v8::Local<v8::Value> value) {
     on_message_.Reset();
 }
 
-}  // namespace android_webview
+}  // namespace js_injection

@@ -2,22 +2,22 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_JS_JAVA_CONFIGURATOR_HOST_H_
-#define ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_JS_JAVA_CONFIGURATOR_HOST_H_
+#ifndef COMPONENTS_JS_INJECTION_BROWSER_JS_JAVA_CONFIGURATOR_HOST_H_
+#define COMPONENTS_JS_INJECTION_BROWSER_JS_JAVA_CONFIGURATOR_HOST_H_
 
 #include <memory>
 #include <vector>
 
-#include "android_webview/common/js_java_interaction/interfaces.mojom.h"
 #include "base/optional.h"
 #include "base/strings/string16.h"
+#include "components/js_injection/common/interfaces.mojom.h"
 #include "content/public/browser/web_contents_observer.h"
 
 namespace content {
 class RenderFrameHost;
 }  // namespace content
 
-namespace android_webview {
+namespace js_injection {
 
 class AwOriginMatcher;
 struct DocumentStartJavascript;
@@ -105,6 +105,6 @@ class JsJavaConfiguratorHost : public content::WebContentsObserver {
   DISALLOW_COPY_AND_ASSIGN(JsJavaConfiguratorHost);
 };
 
-}  // namespace android_webview
+}  // namespace js_injection
 
-#endif  // ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_JS_JAVA_CONFIGURATOR_HOST_H_
+#endif  // COMPONENTS_JS_INJECTION_BROWSER_JS_JAVA_CONFIGURATOR_HOST_H_

@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_JS_TO_JAVA_MESSAGING_H_
-#define ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_JS_TO_JAVA_MESSAGING_H_
+#ifndef COMPONENTS_JS_INJECTION_BROWSER_JS_TO_JAVA_MESSAGING_H_
+#define COMPONENTS_JS_INJECTION_BROWSER_JS_TO_JAVA_MESSAGING_H_
 
 #include <vector>
 
-#include "android_webview/common/aw_origin_matcher.h"
-#include "android_webview/common/js_java_interaction/interfaces.mojom.h"
 #include "base/check.h"
 #include "base/strings/string16.h"
+#include "components/js_injection/common/aw_origin_matcher.h"
+#include "components/js_injection/common/interfaces.mojom.h"
 #include "mojo/public/cpp/bindings/associated_receiver_set.h"
 #include "mojo/public/cpp/bindings/associated_remote.h"
 #include "mojo/public/cpp/bindings/pending_associated_receiver.h"
@@ -21,7 +21,7 @@ namespace content {
 class RenderFrameHost;
 }
 
-namespace android_webview {
+namespace js_injection {
 
 class WebMessageHost;
 class WebMessageHostFactory;
@@ -61,6 +61,6 @@ class JsToJavaMessaging : public mojom::JsToJavaMessaging {
   DISALLOW_COPY_AND_ASSIGN(JsToJavaMessaging);
 };
 
-}  // namespace android_webview
+}  // namespace js_injection
 
-#endif  // ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_JS_TO_JAVA_MESSAGING_H_
+#endif  // COMPONENTS_JS_INJECTION_BROWSER_JS_TO_JAVA_MESSAGING_H_

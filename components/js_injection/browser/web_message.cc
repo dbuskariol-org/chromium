@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "android_webview/browser/js_java_interaction/web_message.h"
+#include "components/js_injection/browser/web_message.h"
 
-namespace android_webview {
+namespace js_injection {
 
 WebMessage::WebMessage() = default;
 
 WebMessage::~WebMessage() = default;
 
-}  // namespace android_webview
+}  // namespace js_injection

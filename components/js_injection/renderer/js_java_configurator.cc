@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "android_webview/renderer/js_java_interaction/js_java_configurator.h"
+#include "components/js_injection/renderer/js_java_configurator.h"
 
-#include "android_webview/common/aw_origin_matcher.h"
-#include "android_webview/common/aw_origin_matcher_mojom_traits.h"
-#include "android_webview/renderer/js_java_interaction/js_binding.h"
+#include "components/js_injection/common/aw_origin_matcher.h"
+#include "components/js_injection/common/aw_origin_matcher_mojom_traits.h"
+#include "components/js_injection/renderer/js_binding.h"
 #include "content/public/common/isolated_world_ids.h"
 #include "content/public/renderer/render_frame.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_registry.h"
@@ -16,7 +16,7 @@
 #include "url/gurl.h"
 #include "url/origin.h"
 
-namespace android_webview {
+namespace js_injection {
 
 struct JsJavaConfigurator::JsObjectInfo {
   AwOriginMatcher origin_matcher;
@@ -133,4 +133,4 @@ mojom::JsToJavaMessaging* JsJavaConfigurator::GetJsToJavaMessage(
   return iterator->second->js_to_java_messaging.get();
 }
 
-}  // namespace android_webview
+}  // namespace js_injection

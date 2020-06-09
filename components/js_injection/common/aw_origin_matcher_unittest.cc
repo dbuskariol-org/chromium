@@ -2,40 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "android_webview/common/aw_origin_matcher.h"
+#include "components/js_injection/common/aw_origin_matcher.h"
 
-#include "base/lazy_instance.h"
 #include "testing/gtest/include/gtest/gtest.h"
 #include "url/origin.h"
 #include "url/url_util.h"
 
-namespace android_webview {
-
-namespace {
-// WebView's special configuration for parsing custom scheme.
-class InitOnce {
- public:
-  InitOnce() {
-    // Non-standand schemes support for WebView.
-    url::EnableNonStandardSchemesForAndroidWebView();
-  }
-};
-
-base::LazyInstance<InitOnce>::Leaky g_once = LAZY_INSTANCE_INITIALIZER;
-
-void EnsureConfigured() {
-  g_once.Get();
-}
-
-}  // namespace
+namespace js_injection {
 
 class AwOriginMatcherTest : public testing::Test {
  public:
-  void SetUp() override { EnsureConfigured(); }
+  void SetUp() override {
+    scheme_registry_ = std::make_unique<url::ScopedSchemeRegistryForTests>();
+    url::EnableNonStandardSchemesForAndroidWebView();
+  }
 
   static url::Origin CreateOriginFromString(const std::string& url) {
     return url::Origin::Create(GURL(url));
   }
+
+ private:
+  std::unique_ptr<url::ScopedSchemeRegistryForTests> scheme_registry_;
 };
 
 TEST_F(AwOriginMatcherTest, InvalidInputs) {
@@ -286,4 +273,4 @@ TEST_F(AwOriginMatcherTest, CustomSchemeOrigin) {
   EXPECT_TRUE(matcher.Matches(CreateOriginFromString("x-mail://hostname")));
 }
 
-}  // namespace android_webview
+}  // namespace js_injection

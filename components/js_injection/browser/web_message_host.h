@@ -2,12 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_WEB_MESSAGE_HOST_H_
-#define ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_WEB_MESSAGE_HOST_H_
+#ifndef COMPONENTS_JS_INJECTION_BROWSER_WEB_MESSAGE_HOST_H_
+#define COMPONENTS_JS_INJECTION_BROWSER_WEB_MESSAGE_HOST_H_
 
 #include <memory>
 
-namespace android_webview {
+namespace js_injection {
 
 struct WebMessage;
 
@@ -19,6 +19,6 @@ class WebMessageHost {
   virtual void OnPostMessage(std::unique_ptr<WebMessage> message) = 0;
 };
 
-}  // namespace android_webview
+}  // namespace js_injection
 
-#endif  // ANDROID_WEBVIEW_BROWSER_JS_JAVA_INTERACTION_WEB_MESSAGE_HOST_H_
+#endif  // COMPONENTS_JS_INJECTION_BROWSER_WEB_MESSAGE_HOST_H_

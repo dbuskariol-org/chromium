@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ANDROID_WEBVIEW_RENDERER_JS_JAVA_INTERACTION_JS_JAVA_CONFIGURATOR_H_
-#define ANDROID_WEBVIEW_RENDERER_JS_JAVA_INTERACTION_JS_JAVA_CONFIGURATOR_H_
+#ifndef COMPONENTS_JS_INJECTION_RENDERER_JS_JAVA_CONFIGURATOR_H_
+#define COMPONENTS_JS_INJECTION_RENDERER_JS_JAVA_CONFIGURATOR_H_
 
 #include <vector>
 
-#include "android_webview/common/js_java_interaction/interfaces.mojom.h"
 #include "base/strings/string16.h"
+#include "components/js_injection/common/interfaces.mojom.h"
 #include "content/public/renderer/render_frame_observer.h"
 #include "content/public/renderer/render_frame_observer_tracker.h"
 #include "mojo/public/cpp/bindings/associated_receiver.h"
@@ -19,7 +19,7 @@ namespace content {
 class RenderFrame;
 }
 
-namespace android_webview {
+namespace js_injection {
 
 class JsBinding;
 
@@ -72,6 +72,6 @@ class JsJavaConfigurator
   DISALLOW_COPY_AND_ASSIGN(JsJavaConfigurator);
 };
 
-}  // namespace android_webview
+}  // namespace js_injection
 
-#endif  // ANDROID_WEBVIEW_RENDERER_JS_JAVA_INTERACTION_JS_JAVA_CONFIGURATOR_H_
+#endif  // COMPONENTS_JS_INJECTION_RENDERER_JS_JAVA_CONFIGURATOR_H_

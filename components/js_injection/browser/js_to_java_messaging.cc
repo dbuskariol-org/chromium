@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "android_webview/browser/js_java_interaction/js_to_java_messaging.h"
+#include "components/js_injection/browser/js_to_java_messaging.h"
 
-#include "android_webview/browser/js_java_interaction/web_message.h"
-#include "android_webview/browser/js_java_interaction/web_message_host.h"
-#include "android_webview/browser/js_java_interaction/web_message_host_factory.h"
-#include "android_webview/browser/js_java_interaction/web_message_reply_proxy.h"
 #include "base/stl_util.h"
+#include "components/js_injection/browser/web_message.h"
+#include "components/js_injection/browser/web_message_host.h"
+#include "components/js_injection/browser/web_message_host_factory.h"
+#include "components/js_injection/browser/web_message_reply_proxy.h"
 #include "content/public/browser/render_process_host.h"
 #include "content/public/browser/web_contents.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
@@ -16,7 +16,7 @@
 #include "url/origin.h"
 #include "url/url_util.h"
 
-namespace android_webview {
+namespace js_injection {
 namespace {
 
 // We want to pass a string "null" for local file schemes, to make it
@@ -126,4 +126,4 @@ void JsToJavaMessaging::SetJavaToJsMessaging(
       std::make_unique<ReplyProxyImpl>(std::move(java_to_js_messaging));
 }
 
-}  // namespace android_webview
+}  // namespace js_injection
