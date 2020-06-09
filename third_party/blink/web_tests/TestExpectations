@@ -6752,3 +6752,5 @@ crbug.com/1091843 fast/canvas/color-space/canvas-createImageBitmap-p3.html [ Pas
 
 # Sheriff 2020-06-09
 crbug.com/1092813 [ Retina ] virtual/text-antialias/emoticons.html [ Pass Failure ]
+
+crbug.com/1090180 virtual/gpu/fast/canvas/canvas-gpu-consistency.html [ Failure ]
