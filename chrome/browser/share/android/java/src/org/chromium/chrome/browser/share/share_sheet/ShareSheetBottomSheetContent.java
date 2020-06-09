@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 //
-package org.chromium.chrome.browser.share;
+package org.chromium.chrome.browser.share.share_sheet;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -31,7 +31,7 @@ import java.util.List;
 /**
  * Bottom sheet content to display a 2-row custom share sheet.
  */
-public class ShareSheetBottomSheetContent implements BottomSheetContent, OnItemClickListener {
+class ShareSheetBottomSheetContent implements BottomSheetContent, OnItemClickListener {
     private Context mContext;
     private ViewGroup mToolbarView;
     private ViewGroup mContentView;

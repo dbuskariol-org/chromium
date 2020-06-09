@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.share;
+package org.chromium.chrome.browser.share.share_sheet;
 
 import android.app.Activity;
 
@@ -15,6 +15,8 @@ import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.base.supplier.Supplier;
 import org.chromium.chrome.R;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
+import org.chromium.chrome.browser.share.ChromeShareExtras;
+import org.chromium.chrome.browser.share.ShareHelper;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController;
 import org.chromium.components.browser_ui.share.ShareParams;
@@ -27,7 +29,8 @@ import java.util.Set;
 /**
  * Coordinator for displaying the share sheet.
  */
-class ShareSheetCoordinator {
+// TODO(crbug/1022172): Should be package-protected once modularization is complete.
+public class ShareSheetCoordinator {
     private final BottomSheetController mBottomSheetController;
     private final Supplier<Tab> mTabProvider;
     private final ShareSheetPropertyModelBuilder mPropertyModelBuilder;
@@ -45,7 +48,8 @@ class ShareSheetCoordinator {
      * @param prefServiceBridge The {@link PrefServiceBridge} singleton. This provides preferences
      * for the Chrome-provided property models.
      */
-    ShareSheetCoordinator(BottomSheetController controller, Supplier<Tab> tabProvider,
+    // TODO(crbug/1022172): Should be package-protected once modularization is complete.
+    public ShareSheetCoordinator(BottomSheetController controller, Supplier<Tab> tabProvider,
             ShareSheetPropertyModelBuilder modelBuilder, PrefServiceBridge prefServiceBridge,
             Callback<Tab> printTab) {
         mBottomSheetController = controller;
@@ -56,7 +60,8 @@ class ShareSheetCoordinator {
         mPrintTabCallback = printTab;
     }
 
-    void showShareSheet(
+    // TODO(crbug/1022172): Should be package-protected once modularization is complete.
+    public void showShareSheet(
             ShareParams params, ChromeShareExtras chromeShareExtras, long shareStartTime) {
         Activity activity = params.getWindow().getActivity().get();
         if (activity == null) {

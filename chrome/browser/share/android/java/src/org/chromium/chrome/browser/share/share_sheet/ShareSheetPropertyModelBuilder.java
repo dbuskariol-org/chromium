@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.share;
+package org.chromium.chrome.browser.share.share_sheet;
 
 import android.content.ComponentName;
 import android.content.Intent;
@@ -18,6 +18,7 @@ import androidx.annotation.IntDef;
 import org.chromium.base.metrics.RecordHistogram;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
+import org.chromium.chrome.browser.share.ShareHelper;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController;
 import org.chromium.components.browser_ui.share.ShareParams;
 import org.chromium.ui.modelutil.PropertyModel;
@@ -37,7 +38,8 @@ import java.util.Set;
  * Android L+: system share sheet
  * #chrome-sharing-hub enabled: custom share sheet
  */
-class ShareSheetPropertyModelBuilder {
+// TODO(crbug/1022172): Should be package-protected once modularization is complete.
+public class ShareSheetPropertyModelBuilder {
     @IntDef({ContentType.LINK_PAGE_VISIBLE, ContentType.LINK_PAGE_NOT_VISIBLE, ContentType.TEXT,
             ContentType.IMAGE, ContentType.OTHER_FILE_TYPE})
     @Retention(RetentionPolicy.SOURCE)
@@ -77,7 +79,8 @@ class ShareSheetPropertyModelBuilder {
     private final BottomSheetController mBottomSheetController;
     private final PackageManager mPackageManager;
 
-    ShareSheetPropertyModelBuilder(
+    // TODO(crbug/1022172): Should be package-protected once modularization is complete.
+    public ShareSheetPropertyModelBuilder(
             BottomSheetController bottomSheetController, PackageManager packageManager) {
         mBottomSheetController = bottomSheetController;
         mPackageManager = packageManager;
@@ -86,9 +89,9 @@ class ShareSheetPropertyModelBuilder {
     /**
      * Returns a set of {@link ShareSheetCoordinator.ContentType}s for the current share.
      *
-     * <p>If {@link ChromeFeatureList.CHROME_SHARING_HUB_V15} is not enabled, this returns a set of
-     * all of the {@link ContentType}s. Otherwise, it adds {@link ContentType}s according to the
-     * following logic:
+     * <p>If {@link ChromeFeatureList.CHROME_SHARING_HUB_V15} is not enabled, this returns a set
+     * of all of the {@link ContentType}s. Otherwise, it adds {@link ContentType}s according to
+     * the following logic:
      *
      * <ul>
      *     <li>If a URL is present, {@code isUrlOfVisiblePage} determines whether to add
@@ -133,9 +136,9 @@ class ShareSheetPropertyModelBuilder {
         List<ResolveInfo> resolveInfoList = mPackageManager.queryIntentActivities(intent, 0);
         List<ResolveInfo> thirdPartyActivities = new ArrayList<>();
 
-        // Construct a list of 3P apps. The list should be sorted by the country-specific ranking
-        // when available or the fallback list defined above.  If less than MAX_NUM_APPS are
-        // available the list is filled with whatever else is available.
+        // Construct a list of 3P apps. The list should be sorted by the country-specific
+        // ranking when available or the fallback list defined above.  If less than MAX_NUM_APPS
+        // are available the list is filled with whatever else is available.
         for (String s : thirdPartyActivityNames) {
             for (ResolveInfo res : resolveInfoList) {
                 if (res.activityInfo.name.equals(s)) {

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.share;
+package org.chromium.chrome.browser.share.share_sheet;
 
 import android.app.Activity;
 import android.content.ClipData;
@@ -21,9 +21,9 @@ import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.preferences.Pref;
 import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.send_tab_to_self.SendTabToSelfShareActivity;
-import org.chromium.chrome.browser.share.ShareSheetPropertyModelBuilder.ContentType;
 import org.chromium.chrome.browser.share.qrcode.QrCodeCoordinator;
 import org.chromium.chrome.browser.share.screenshot.ScreenshotCoordinator;
+import org.chromium.chrome.browser.share.share_sheet.ShareSheetPropertyModelBuilder.ContentType;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController;
 import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetController.SheetState;
@@ -47,7 +47,8 @@ import java.util.Set;
 /**
  * Provides {@code PropertyModel}s of Chrome-provided sharing options.
  */
-class ChromeProvidedSharingOptionsProvider {
+// TODO(crbug/1022172): Should be package-protected once modularization is complete.
+public class ChromeProvidedSharingOptionsProvider {
     private final Activity mActivity;
     private final Supplier<Tab> mTabProvider;
     private final BottomSheetController mBottomSheetController;
