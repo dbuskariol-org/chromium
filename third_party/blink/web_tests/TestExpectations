@@ -6711,6 +6711,10 @@ crbug.com/1084637 compositing/video/video-reflection.html [ Pass Failure ]
 crbug.com/1083362 compositing/reflections/load-video-in-reflection.html [ Pass Failure ]
 crbug.com/1087471 [ Linux ] virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gesture-touchscreen-zoom-in-slow.html [ Pass Failure ]
 
+# Temporary disabling to allow landing https://webrtc-review.googlesource.com/c/src/+/176509
+crbug.com/webrtc/8787 external/wpt/webrtc/RTCPeerConnection-mandatory-getStats.https.html [ Pass Failure ]
+crbug.com/webrtc/8787 external/wpt/webrtc/RTCPeerConnection-getStats.https.html [ Pass Failure ]
+
 # Sheriff 2020-06-01
 # Also see crbug.com/626703, these timed-out before but now fail as well.
 crbug.com/1088220 [ Linux ] external/wpt/html/infrastructure/safe-passing-of-structured-data/shared-array-buffers/window-domain-failure.https.sub.html [ Pass Failure Timeout ]
