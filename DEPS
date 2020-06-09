@@ -1539,6 +1539,17 @@ deps = {
     'dep_type': 'cipd',
   },
 
+  'src/chromeos/components/media_app_ui/resources/prod': {
+    'packages': [
+      {
+        'package': 'chromeos_internal/apps/media_app/app',
+        'version': 'F-avF4Ri2hix7udnvUw4Kpy8yj3WwML3J-8znYT-jvYC',
+      },
+    ],
+    'condition': 'checkout_chromeos and checkout_src_internal',
+    'dep_type': 'cipd',
+  },
+
   'src/third_party/google_android_play_core': {
       'packages': [
           {
