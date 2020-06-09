@@ -2,22 +2,22 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/global_media_controls/overlay_media_notifications_manager.h"
+#include "chrome/browser/ui/global_media_controls/overlay_media_notifications_manager_impl.h"
 
 #include "chrome/browser/ui/global_media_controls/media_notification_service.h"
 #include "chrome/browser/ui/global_media_controls/overlay_media_notification.h"
 
-OverlayMediaNotificationsManager::OverlayMediaNotificationsManager(
+OverlayMediaNotificationsManagerImpl::OverlayMediaNotificationsManagerImpl(
     MediaNotificationService* service)
     : service_(service) {
   DCHECK(service_);
 }
 
-OverlayMediaNotificationsManager::~OverlayMediaNotificationsManager() {
+OverlayMediaNotificationsManagerImpl::~OverlayMediaNotificationsManagerImpl() {
   overlay_notifications_.clear();
 }
 
-void OverlayMediaNotificationsManager::ShowOverlayNotification(
+void OverlayMediaNotificationsManagerImpl::ShowOverlayNotification(
     const std::string& id,
     std::unique_ptr<OverlayMediaNotification> overlay_notification) {
   DCHECK(overlay_notification);
@@ -27,7 +27,7 @@ void OverlayMediaNotificationsManager::ShowOverlayNotification(
   notification->ShowNotification();
 }
 
-void OverlayMediaNotificationsManager::CloseOverlayNotification(
+void OverlayMediaNotificationsManagerImpl::CloseOverlayNotification(
     const std::string& id) {
   auto it = overlay_notifications_.find(id);
   if (it == overlay_notifications_.end())
@@ -35,7 +35,7 @@ void OverlayMediaNotificationsManager::CloseOverlayNotification(
   it->second->CloseNotification();
 }
 
-void OverlayMediaNotificationsManager::OnOverlayNotificationClosed(
+void OverlayMediaNotificationsManagerImpl::OnOverlayNotificationClosed(
     const std::string& id) {
   service_->OnOverlayNotificationClosed(id);
 
