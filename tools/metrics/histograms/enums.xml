@@ -72382,8 +72382,8 @@ Called by update_scheduler_enums.py.-->
 </enum>
 
 <enum name="WebViewVisibility">
-  <int value="0" label="NotVisible"/>
-  <int value="1" label="Visible"/>
+  <int value="0" label="Visible"/>
+  <int value="1" label="NotVisible"/>
 </enum>
 
 <enum name="WelcomeSignInPromptOutcome">
