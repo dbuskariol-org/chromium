@@ -190,7 +190,7 @@ bool IsUseCommonSelectPopupEnabled() {
 
 #if defined(OS_CHROMEOS)
 const base::Feature kHandwritingGesture = {"HandwritingGesture",
-                                           base::FEATURE_DISABLED_BY_DEFAULT};
+                                           base::FEATURE_ENABLED_BY_DEFAULT};
 #endif
 
 const base::Feature kSynchronousPageFlipTesting{
