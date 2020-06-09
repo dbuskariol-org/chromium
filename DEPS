@@ -1436,7 +1436,7 @@ deps = {
     Var('chromium_git') + '/external/github.com/SeleniumHQ/selenium/py.git' + '@' + 'd0045ec570c1a77612db35d1e92f05e1d27b4d53',
 
   'src/third_party/webgl/src':
-    Var('chromium_git') + '/external/khronosgroup/webgl.git' + '@' + '1b5de6a99a004ea1de500f7324a89dd4d3818cc5',
+    Var('chromium_git') + '/external/khronosgroup/webgl.git' + '@' + 'd0fcf3daa5f98402f63e0e99a48fc60a4be18cf1',
 
   'src/third_party/webgpu-cts/src':
     Var('chromium_git') + '/external/github.com/gpuweb/cts.git' + '@' + '550dfb76f2b4a363f46c02691c3d4480aae28ed1',
