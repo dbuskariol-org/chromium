@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROMEOS_COMPONENTS_CAMERA_APP_UI_CAMERA_APP_HELPER_IMPL_H_
-#define CHROMEOS_COMPONENTS_CAMERA_APP_UI_CAMERA_APP_HELPER_IMPL_H_
+#ifndef COMPONENTS_CHROMEOS_CAMERA_CAMERA_APP_HELPER_IMPL_H_
+#define COMPONENTS_CHROMEOS_CAMERA_CAMERA_APP_HELPER_IMPL_H_
 
 #include <vector>
 
 #include "ash/public/cpp/tablet_mode_observer.h"
 #include "base/macros.h"
-#include "chromeos/components/camera_app_ui/camera_app_helper.mojom.h"
+#include "components/chromeos_camera/common/camera_app_helper.mojom.h"
 #include "mojo/public/cpp/bindings/remote.h"
 
 namespace aura {
@@ -57,4 +57,4 @@ class CameraAppHelperImpl : public ash::TabletModeObserver,
 
 }  // namespace chromeos_camera
 
-#endif  // CHROMEOS_COMPONENTS_CAMERA_APP_UI_CAMERA_APP_HELPER_IMPL_H_
+#endif  // COMPONENTS_CHROMEOS_CAMERA_CAMERA_APP_HELPER_IMPL_H_
