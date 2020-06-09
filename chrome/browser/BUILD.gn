@@ -4749,6 +4749,10 @@ static_library("browser") {
       "signin/logout_tab_helper.h",
       "signin/process_dice_header_delegate_impl.cc",
       "signin/process_dice_header_delegate_impl.h",
+      "signin/signin_manager.cc",
+      "signin/signin_manager.h",
+      "signin/signin_manager_factory.cc",
+      "signin/signin_manager_factory.h",
       "signin/signin_util_win.cc",
       "signin/signin_util_win.h",
     ]
