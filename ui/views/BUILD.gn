@@ -1050,6 +1050,7 @@ test("views_unittests") {
     "controls/button/image_button_unittest.cc",
     "controls/button/label_button_label_unittest.cc",
     "controls/button/label_button_unittest.cc",
+    "controls/button/md_text_button_unittest.cc",
     "controls/button/menu_button_unittest.cc",
     "controls/button/radio_button_unittest.cc",
     "controls/button/toggle_button_unittest.cc",
