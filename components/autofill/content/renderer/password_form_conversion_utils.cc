@@ -9,7 +9,6 @@
 #include "base/no_destructor.h"
 #include "base/strings/string_piece.h"
 #include "base/strings/string_split.h"
-#include "components/autofill/content/renderer/form_autofill_util.h"
 #include "components/autofill/content/renderer/html_based_username_detector.h"
 #include "components/autofill/core/common/password_form.h"
 #include "components/autofill/core/common/renderer_id.h"
@@ -128,7 +127,8 @@ bool IsGaiaWithSkipSavePasswordForm(const blink::WebFormElement& form) {
 std::unique_ptr<FormData> CreateFormDataFromWebForm(
     const WebFormElement& web_form,
     const FieldDataManager* field_data_manager,
-    UsernameDetectorCache* username_detector_cache) {
+    UsernameDetectorCache* username_detector_cache,
+    form_util::ButtonTitlesCache* button_titles_cache) {
   if (web_form.IsNull())
     return nullptr;
 
@@ -153,6 +153,8 @@ std::unique_ptr<FormData> CreateFormDataFromWebForm(
   }
   form_data->username_predictions = GetUsernamePredictions(
       control_elements.ReleaseVector(), *form_data, username_detector_cache);
+  form_data->button_titles = form_util::GetButtonTitles(
+      web_form, web_form.GetDocument(), button_titles_cache);
 
   return form_data;
 }
@@ -160,7 +162,8 @@ std::unique_ptr<FormData> CreateFormDataFromWebForm(
 std::unique_ptr<FormData> CreateFormDataFromUnownedInputElements(
     const WebLocalFrame& frame,
     const FieldDataManager* field_data_manager,
-    UsernameDetectorCache* username_detector_cache) {
+    UsernameDetectorCache* username_detector_cache,
+    form_util::ButtonTitlesCache* button_titles_cache) {
   std::vector<WebElement> fieldsets;
   std::vector<WebFormControlElement> control_elements =
       form_util::GetUnownedFormFieldElements(frame.GetDocument().All(),
@@ -182,6 +185,9 @@ std::unique_ptr<FormData> CreateFormDataFromUnownedInputElements(
       form_util::GetDocumentUrlWithoutAuth(frame.GetDocument());
   form_data->username_predictions = GetUsernamePredictions(
       control_elements, *form_data, username_detector_cache);
+  form_data->button_titles = form_util::GetButtonTitles(
+      WebFormElement(), frame.GetDocument(), button_titles_cache);
+
   return form_data;
 }
 
