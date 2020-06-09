@@ -72648,6 +72648,17 @@ Called by update_scheduler_enums.py.-->
   <int value="3" label="Desktop Aura"/>
 </enum>
 
+<enum name="WindowActivityOrigin">
+  <int value="0" label="WindowActivityUnknwonOrigin"/>
+  <int value="1" label="WindowActivityExternalOrigin"/>
+  <int value="2" label="WindowActivityRestoredOrigin"/>
+  <int value="3" label="WindowActivityContextMenuOrigin"/>
+  <int value="4" label="WindowActivityReadingListOrigin"/>
+  <int value="5" label="WindowActivityBookmarksOrigin"/>
+  <int value="6" label="WindowActivityHistoryOrigin"/>
+  <int value="7" label="WindowActivityToolsOrigin"/>
+</enum>
+
 <enum name="WindowDragEndEventType">
   <int value="0" label="Drag ends with normal end event."/>
   <int value="1" label="Drag has been reverted."/>
