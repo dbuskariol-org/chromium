@@ -267,11 +267,13 @@ public class AutoFetchNotifier {
     @CalledByNative
     private static void showCompleteNotification(
             String pageTitle, String originalUrl, String finalUrl, int tabId, long offlineId) {
+        // Since offline pages are only available in regular mode, any downloaded content should be
+        // triggered by regular mode. Hence, it is correct to pass always regular profile.
         OfflinePageUtils.getLoadUrlParamsForOpeningOfflineVersion(
                 finalUrl, offlineId, LaunchLocation.NOTIFICATION, (params) -> {
                     showCompleteNotificationWithParams(
                             pageTitle, tabId, offlineId, originalUrl, finalUrl, params);
-                });
+                }, Profile.getLastUsedRegularProfile());
     }
 
     private static void showCompleteNotificationWithParams(String pageTitle, int tabId,
