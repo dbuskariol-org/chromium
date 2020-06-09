@@ -435,29 +435,21 @@ void MenuItemView::SetIcon(const gfx::ImageSkia& icon, int item_id) {
 void MenuItemView::SetIcon(const gfx::ImageSkia& icon) {
   vector_icon_.clear();
 
-  if (icon.isNull()) {
-    SetIconViewVisibilityAndInvalidate(false);
-    return;
-  }
-
   icon_view_->SetImage(icon);
-  SetIconViewVisibilityAndInvalidate(true);
+  SetIconViewVisibilityAndInvalidate(!icon.isNull());
 }
 
 void MenuItemView::SetIcon(const ui::ThemedVectorIcon& icon) {
   vector_icon_ = icon;
+  UpdateIconViewFromVectorIconAndTheme();
 }
 
 void MenuItemView::UpdateIconViewFromVectorIconAndTheme() {
   if (vector_icon_.empty())
     return;
 
+  icon_view_->SetImage(vector_icon_.GetImageSkia(GetNativeTheme()));
   SetIconViewVisibilityAndInvalidate(true);
-
-  const bool use_touchable_layout =
-      GetMenuController() && GetMenuController()->use_touchable_layout();
-  const int icon_size = use_touchable_layout ? 20 : 16;
-  icon_view_->SetImage(vector_icon_.GetImageSkia(GetNativeTheme(), icon_size));
 }
 
 void MenuItemView::SetIconViewVisibilityAndInvalidate(bool is_visible) {
