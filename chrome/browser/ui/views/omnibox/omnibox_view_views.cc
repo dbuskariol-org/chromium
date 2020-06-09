@@ -288,6 +288,8 @@ void OmniboxViewViews::Init() {
     // Initialize the popup view using the same font.
     popup_view_.reset(
         new OmniboxPopupContentsView(this, model(), location_bar_view_));
+    if (OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction())
+      Observe(location_bar_view_->GetWebContents());
   }
 
   // Override the default FocusableBorder from Textfield, since the
@@ -404,8 +406,19 @@ void OmniboxViewViews::EmphasizeURLComponents() {
     path_fade_out_animation_->Start(GetPathBounds());
   }
 
-  if (path_fade_in_animation_ && CanFadePath()) {
-    ApplyColor(SK_ColorTRANSPARENT, GetPathBounds());
+  if (OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction()) {
+    Observe(location_bar_view_->GetWebContents());
+    // Clear the fade-in animation (if it exists; it won't exist if
+    // reveal-on-hover is not enabled). If reveal-on-hover is enabled, it will
+    // be recreated after the path is faded out in DidGetUserInteraction().
+    // Creating it here would cause the path to unnecessarily fade in on hover
+    // before it's been faded out by user interaction.
+    path_fade_in_animation_.reset();
+  } else if (OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover()) {
+    // If reveal-on-hover is enabled and hide-on-interaction is disabled, hide
+    // the path now.
+    if (CanFadePath())
+      ApplyColor(SK_ColorTRANSPARENT, GetPathBounds());
   }
 }
 
@@ -640,17 +653,25 @@ void OmniboxViewViews::OnThemeChanged() {
 
     // In on-hover and on-interaction variations, the path fades in or out based
     // on user interactions, not automatically after a timeout.
-    if (!OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover() &&
-        !OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction()) {
-      path_fade_out_animation_ = std::make_unique<PathFadeAnimation>(
-          this, dimmed_text_color, SK_ColorTRANSPARENT, kPathFadeOutDelayMs);
-    }
-    if (OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover()) {
+    if (OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction()) {
+      // When hiding the path on interaction, don't create the fade-in animation
+      // yet. The hover fade-in animation (if enabled) will be created later in
+      // DidGetUserInteraction() after the path is faded out.
+      path_fade_out_fast_animation_ = std::make_unique<PathFadeAnimation>(
+          this, dimmed_text_color, SK_ColorTRANSPARENT, 0);
+    } else if (OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover()) {
+      // When reveal-on-hover is enabled but not hide-on-interaction, create
+      // both the fade-in and fade-out animations now.
       path_fade_in_animation_ = std::make_unique<PathFadeAnimation>(
           this, SK_ColorTRANSPARENT, dimmed_text_color,
           kExtendedHoverThresholdMs);
       path_fade_out_fast_animation_ = std::make_unique<PathFadeAnimation>(
           this, dimmed_text_color, SK_ColorTRANSPARENT, 0);
+    } else {
+      // When neither reveal-on-hover nor hide-on-interaction are enabled, fade
+      // out the path after a fixed delay.
+      path_fade_out_animation_ = std::make_unique<PathFadeAnimation>(
+          this, dimmed_text_color, SK_ColorTRANSPARENT, kPathFadeOutDelayMs);
     }
   }
 
@@ -717,7 +738,7 @@ base::string16 OmniboxViewViews::GetSelectedText() const {
   return views::Textfield::GetSelectedText();
 }
 
-void OmniboxViewViews::OnPaste() {
+void OmniboxViewViews::OnOmniboxPaste() {
   const base::string16 text(GetClipboardText());
 
   if (text.empty() ||
@@ -1144,7 +1165,7 @@ void OmniboxViewViews::OnMouseMoved(const ui::MouseEvent& event) {
   if (!CanFadePath())
     return;
   path_fade_out_fast_animation_->Stop();
-  if (!path_fade_in_animation_->IsAnimating())
+  if (path_fade_in_animation_ && !path_fade_in_animation_->IsAnimating())
     path_fade_in_animation_->Start(GetPathBounds());
 }
 
@@ -1158,10 +1179,16 @@ void OmniboxViewViews::OnMouseExited(const ui::MouseEvent& event) {
   }
   if (!CanFadePath())
     return;
-  path_fade_out_fast_animation_->ResetStartingColor(
-      path_fade_in_animation_->GetCurrentColor());
-  path_fade_in_animation_->Stop();
-  path_fade_out_fast_animation_->Start(GetPathBounds());
+  // When hide-on-interaction is enabled, we don't want to fade the path in or
+  // out until there's user interaction with the page. In this variation,
+  // |path_fade_in_animation_| is created in DidGetUserInteraction() so its
+  // existence signals that user interaction has taken place already.
+  if (path_fade_in_animation_) {
+    path_fade_out_fast_animation_->ResetStartingColor(
+        path_fade_in_animation_->GetCurrentColor());
+    path_fade_in_animation_->Stop();
+    path_fade_out_fast_animation_->Start(GetPathBounds());
+  }
 }
 
 bool OmniboxViewViews::IsItemForCommandIdDynamic(int command_id) const {
@@ -1586,6 +1613,27 @@ bool OmniboxViewViews::IsCommandIdEnabled(int command_id) const {
          location_bar_view_->command_updater()->IsCommandEnabled(command_id);
 }
 
+void OmniboxViewViews::DidGetUserInteraction(
+    const blink::WebInputEvent::Type type) {
+  if (!OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction())
+    return;
+
+  DCHECK(path_fade_out_fast_animation_);
+  path_fade_out_fast_animation_->Stop();
+  if (CanFadePath())
+    path_fade_out_fast_animation_->Start(GetPathBounds());
+  // Now that the path is fading out, create the animation to bring it back on
+  // hover (if enabled via field trial).
+  if (OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover()) {
+    path_fade_in_animation_ = std::make_unique<PathFadeAnimation>(
+        this, SK_ColorTRANSPARENT,
+        GetOmniboxColor(GetThemeProvider(),
+                        OmniboxPart::LOCATION_BAR_TEXT_DIMMED),
+        kExtendedHoverThresholdMs);
+  }
+  Observe(nullptr);
+}
+
 base::string16 OmniboxViewViews::GetSelectionClipboardText() const {
   return SanitizeTextForPaste(Textfield::GetSelectionClipboardText());
 }
@@ -1639,7 +1687,7 @@ void OmniboxViewViews::ExecuteTextEditCommand(ui::TextEditCommand command) {
       model()->OnUpOrDownKeyPressed(1);
       break;
     case ui::TextEditCommand::PASTE:
-      OnPaste();
+      OnOmniboxPaste();
       break;
     default:
       Textfield::ExecuteTextEditCommand(command);

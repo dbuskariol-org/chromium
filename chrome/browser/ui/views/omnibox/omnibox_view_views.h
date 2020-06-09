@@ -20,6 +20,7 @@
 #include "components/prefs/pref_change_registrar.h"
 #include "components/search_engines/template_url_service.h"
 #include "components/search_engines/template_url_service_observer.h"
+#include "content/public/browser/web_contents_observer.h"
 #include "ui/base/window_open_disposition.h"
 #include "ui/compositor/compositor.h"
 #include "ui/compositor/compositor_observer.h"
@@ -56,7 +57,8 @@ class OmniboxViewViews : public OmniboxView,
 #endif
                          public views::TextfieldController,
                          public ui::CompositorObserver,
-                         public TemplateURLServiceObserver {
+                         public TemplateURLServiceObserver,
+                         public content::WebContentsObserver {
  public:
   // The internal view class name.
   static const char kViewClassName[];
@@ -152,6 +154,9 @@ class OmniboxViewViews : public OmniboxView,
   base::string16 GetLabelForCommandId(int command_id) const override;
   bool IsCommandIdEnabled(int command_id) const override;
 
+  // content::WebContentsObserver:
+  void DidGetUserInteraction(const blink::WebInputEvent::Type type) override;
+
   // For testing only.
   OmniboxPopupContentsView* GetPopupContentsViewForTesting() const {
     return popup_view_.get();
@@ -195,7 +200,7 @@ class OmniboxViewViews : public OmniboxView,
   // as is. We want to strip whitespace and other things (see GetClipboardText()
   // for details). The function invokes OnBefore/AfterPossibleChange() as
   // necessary.
-  void OnPaste();
+  void OnOmniboxPaste();
 
   // Handle keyword hint tab-to-search and tabbing through dropdown results.
   bool HandleEarlyTabActions(const ui::KeyEvent& event);
@@ -323,7 +328,11 @@ class OmniboxViewViews : public OmniboxView,
 
   std::unique_ptr<OmniboxPopupContentsView> popup_view_;
 
-  // Animation used to fade in/out the path under some elision settings.
+  // Animations used to fade in/out the path under some elision settings.
+
+  // Fades the path in after a short delay. Under certain variations, this
+  // animation is not created until the user interacts with the page, so it's
+  // not always guaranteed to exist.
   std::unique_ptr<PathFadeAnimation> path_fade_in_animation_;
   // Waits a few seconds and then fades the path out.
   std::unique_ptr<PathFadeAnimation> path_fade_out_animation_;
