@@ -213,8 +213,9 @@ void LaunchApplication(
     base::FilePath path;
     if (!file_manager::util::ConvertFileSystemURLToPathInsideCrostini(
             profile, url, &path)) {
-      return std::move(callback).Run(false,
-                                     "Invalid file: " + url.DebugString());
+      OnLaunchFailed(app_id, crostini::CrostiniResult::UNKNOWN_ERROR);
+      return std::move(callback).Run(
+          false, "Cannot share file with crostini: " + url.DebugString());
     }
     if (url.mount_filesystem_id() !=
         file_manager::util::GetCrostiniMountPointName(profile)) {
