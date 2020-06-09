@@ -1935,18 +1935,26 @@ std::unique_ptr<WebContents> WebContentsImpl::DetachFromOuterWebContents() {
   DCHECK(outer_web_contents);
 
   RecursivelyUnregisterFrameSinkIds();
-  if (RenderWidgetHostViewBase* view =
-          static_cast<RenderWidgetHostViewBase*>(GetMainFrame()->GetView())) {
-    DCHECK(view->IsRenderWidgetHostViewChildFrame());
-    view->Destroy();
-  }
-  if (GetPendingMainFrame()) {
-    if (RenderWidgetHostViewBase* view = static_cast<RenderWidgetHostViewBase*>(
-            GetPendingMainFrame()->GetView())) {
-      DCHECK(view->IsRenderWidgetHostViewChildFrame());
-      view->Destroy();
+
+  // Each RenderViewHost has a RenderWidgetHost which can have a
+  // RenderWidgetHostView,  and it needs to be re-created with the appropriate
+  // platform view. It is important to re-create all child views, not only the
+  // current one, since the view can be swapped due to a cross-origin
+  // navigation.
+  std::set<RenderViewHostImpl*> render_view_hosts;
+  for (auto& render_view_host : GetFrameTree()->render_view_hosts()) {
+    if (render_view_host.second->GetWidget() &&
+        render_view_host.second->GetWidget()->GetView()) {
+      DCHECK(render_view_host.second->GetWidget()
+                 ->GetView()
+                 ->IsRenderWidgetHostViewChildFrame());
+      render_view_hosts.insert(render_view_host.second);
     }
   }
+
+  for (auto* render_view_host : render_view_hosts)
+    render_view_host->GetWidget()->GetView()->Destroy();
+
   GetRenderManager()->DeleteOuterDelegateProxy(
       node_.OuterContentsFrameTreeNode()
           ->current_frame_host()
@@ -1959,11 +1967,10 @@ std::unique_ptr<WebContents> WebContentsImpl::DetachFromOuterWebContents() {
       node_.DisconnectFromOuterWebContents();
   DCHECK_EQ(web_contents.get(), this);
   node_.SetFocusedWebContents(this);
-  CreateRenderWidgetHostViewForRenderManager(GetRenderViewHost());
-  if (GetPendingMainFrame()) {
-    CreateRenderWidgetHostViewForRenderManager(
-        GetPendingMainFrame()->render_view_host());
-  }
+
+  for (auto* render_view_host : render_view_hosts)
+    CreateRenderWidgetHostViewForRenderManager(render_view_host);
+
   RecursivelyRegisterFrameSinkIds();
   // TODO(adithyas): |browser_plugin_embedder_ax_tree_id| should either not be
   // used for portals, or it should get a different name.
