@@ -20,6 +20,7 @@
 #include "third_party/blink/renderer/platform/mediastream/media_stream_audio_source.h"
 #include "third_party/blink/renderer/platform/mediastream/media_stream_audio_track.h"
 #include "third_party/blink/renderer/platform/mediastream/media_stream_component.h"
+#include "third_party/blink/renderer/platform/mediastream/media_stream_source.h"
 
 namespace blink {
 
@@ -240,29 +241,29 @@ class FakeMediaStreamAudioSink : public WebMediaStreamAudioSink {
 class MediaStreamAudioTest : public ::testing::Test {
  protected:
   void SetUp() override {
-    blink_audio_source_.Initialize(
-        WebString::FromUTF8("audio_id"), WebMediaStreamSource::kTypeAudio,
-        WebString::FromUTF8("audio_track"), false /* remote */);
+    audio_source_ = MakeGarbageCollected<MediaStreamSource>(
+        String::FromUTF8("audio_id"), MediaStreamSource::kTypeAudio,
+        String::FromUTF8("audio_track"), false /* remote */);
     audio_component_ = MakeGarbageCollected<MediaStreamComponent>(
-        blink_audio_source_.Id(), blink_audio_source_);
+        audio_source_->Id(), audio_source_);
   }
 
   void TearDown() override {
     audio_component_ = nullptr;
-    blink_audio_source_.Reset();
+    audio_source_ = nullptr;
     WebHeap::CollectAllGarbageForTesting();
   }
 
   FakeMediaStreamAudioSource* source() const {
     return static_cast<FakeMediaStreamAudioSource*>(
-        MediaStreamAudioSource::From(blink_audio_source_));
+        MediaStreamAudioSource::From(audio_source_.Get()));
   }
 
   MediaStreamAudioTrack* track() const {
     return MediaStreamAudioTrack::From(audio_component_.Get());
   }
 
-  WebMediaStreamSource blink_audio_source_;
+  Persistent<MediaStreamSource> audio_source_;
   Persistent<MediaStreamComponent> audio_component_;
 
   base::test::TaskEnvironment task_environment_;
@@ -273,8 +274,9 @@ class MediaStreamAudioTest : public ::testing::Test {
 TEST_F(MediaStreamAudioTest, BasicUsage) {
   // Create the source, but it should not be started yet.
   ASSERT_FALSE(source());
-  blink_audio_source_.SetPlatformSource(
-      std::make_unique<FakeMediaStreamAudioSource>());
+  auto platform_audio_source = std::make_unique<FakeMediaStreamAudioSource>();
+  platform_audio_source->SetOwner(audio_source_.Get());
+  audio_source_->SetPlatformSource(std::move(platform_audio_source));
   ASSERT_TRUE(source());
   EXPECT_FALSE(source()->was_started());
   EXPECT_FALSE(source()->was_stopped());
@@ -318,8 +320,9 @@ TEST_F(MediaStreamAudioTest, BasicUsage) {
 TEST_F(MediaStreamAudioTest, ConnectTrackAfterSourceStopped) {
   // Create the source, connect one track, and stop it. This should
   // automatically stop the source.
-  blink_audio_source_.SetPlatformSource(
-      std::make_unique<FakeMediaStreamAudioSource>());
+  auto platform_audio_source = std::make_unique<FakeMediaStreamAudioSource>();
+  platform_audio_source->SetOwner(audio_source_.Get());
+  audio_source_->SetPlatformSource(std::move(platform_audio_source));
   ASSERT_TRUE(source());
   EXPECT_TRUE(source()->ConnectToTrack(audio_component_));
   track()->Stop();
@@ -330,7 +333,7 @@ TEST_F(MediaStreamAudioTest, ConnectTrackAfterSourceStopped) {
   // should be a MediaStreamAudioTrack instance created and owned by the
   // MediaStreamComponent.
   auto* another_component = MakeGarbageCollected<MediaStreamComponent>(
-      blink_audio_source_.Id(), blink_audio_source_);
+      audio_source_->Id(), audio_source_);
   EXPECT_FALSE(MediaStreamAudioTrack::From(another_component));
   EXPECT_FALSE(source()->ConnectToTrack(another_component));
   EXPECT_TRUE(MediaStreamAudioTrack::From(another_component));
@@ -355,8 +358,9 @@ TEST_F(MediaStreamAudioTest, AddSinkToStoppedTrack) {
 TEST_F(MediaStreamAudioTest, FormatChangesPropagate) {
   // Create a source, connect it to track, and connect the track to a
   // sink.
-  blink_audio_source_.SetPlatformSource(
-      std::make_unique<FakeMediaStreamAudioSource>());
+  auto platform_audio_source = std::make_unique<FakeMediaStreamAudioSource>();
+  platform_audio_source->SetOwner(audio_source_.Get());
+  audio_source_->SetPlatformSource(std::move(platform_audio_source));
   ASSERT_TRUE(source());
   EXPECT_TRUE(source()->ConnectToTrack(audio_component_));
   ASSERT_TRUE(track());
@@ -391,8 +395,9 @@ TEST_F(MediaStreamAudioTest, FormatChangesPropagate) {
 // OnEnabledChanged() method should be called.
 TEST_F(MediaStreamAudioTest, EnableAndDisableTracks) {
   // Create a source and connect it to track.
-  blink_audio_source_.SetPlatformSource(
-      std::make_unique<FakeMediaStreamAudioSource>());
+  auto platform_audio_source = std::make_unique<FakeMediaStreamAudioSource>();
+  platform_audio_source->SetOwner(audio_source_.Get());
+  audio_source_->SetPlatformSource(std::move(platform_audio_source));
   ASSERT_TRUE(source());
   EXPECT_TRUE(source()->ConnectToTrack(audio_component_));
   ASSERT_TRUE(track());
@@ -422,7 +427,7 @@ TEST_F(MediaStreamAudioTest, EnableAndDisableTracks) {
   // disabled. Expect the sink to be notified at the start that the track is
   // disabled.
   auto* another_component = MakeGarbageCollected<MediaStreamComponent>(
-      blink_audio_source_.Id(), blink_audio_source_);
+      audio_source_->Id(), audio_source_);
   EXPECT_TRUE(source()->ConnectToTrack(another_component));
   MediaStreamAudioTrack::From(another_component)->SetEnabled(false);
   FakeMediaStreamAudioSink another_sink;
