@@ -79,6 +79,22 @@
             ]
         }
     ],
+    "AndroidCopyImageAndClipboardImageSuggstions": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "AndroidCopyImageAndClipboardImageSuggstions",
+                    "enable_features": [
+                        "ContextMenuCopyImage",
+                        "OmniboxEnableClipboardProviderImageSuggestions"
+                    ]
+                }
+            ]
+        }
+    ],
     "AndroidDarkSearch": [
         {
             "platforms": [
