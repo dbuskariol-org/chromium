@@ -458,7 +458,7 @@ void NGPaintFragment::ClearAssociationWithLayoutObject() {
       }
     }
     if (fragment.IsLineBox() || fragment.IsInlineBox() ||
-        fragment.IsColumnBox()) {
+        fragment.IsFragmentainerBox()) {
       child->ClearAssociationWithLayoutObject();
     } else {
       DCHECK(fragment.IsText() || fragment.IsFormattingContextRoot());
