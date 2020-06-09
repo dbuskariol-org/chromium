@@ -2,14 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.download.home.list;
+package org.chromium.components.browser_ui.util.date;
 
 import java.util.Calendar;
 
 /** A set of utility methods meant to make interacting with a {@link Calendar} instance easier. */
 public final class CalendarUtils {
-    private static Calendar sCal1;
-    private static Calendar sCal2;
+    private static final class LazyHolder {
+        private static Calendar sCalendar1 = CalendarFactory.get();
+        private static Calendar sCalendar2 = CalendarFactory.get();
+    }
 
     private CalendarUtils() {}
 
@@ -22,16 +24,15 @@ public final class CalendarUtils {
      *          {@code t}.
      */
     public static Calendar getStartOfDay(long t) {
-        ensureCalendarsAreAvailable();
-        sCal1.setTimeInMillis(t);
+        LazyHolder.sCalendar1.setTimeInMillis(t);
 
-        int year = sCal1.get(Calendar.YEAR);
-        int month = sCal1.get(Calendar.MONTH);
-        int day = sCal1.get(Calendar.DATE);
-        sCal1.clear();
-        sCal1.set(year, month, day, 0, 0, 0);
+        int year = LazyHolder.sCalendar1.get(Calendar.YEAR);
+        int month = LazyHolder.sCalendar1.get(Calendar.MONTH);
+        int day = LazyHolder.sCalendar1.get(Calendar.DATE);
+        LazyHolder.sCalendar1.clear();
+        LazyHolder.sCalendar1.set(year, month, day, 0, 0, 0);
 
-        return sCal1;
+        return LazyHolder.sCalendar1;
     }
 
     /**
@@ -43,21 +44,14 @@ public final class CalendarUtils {
      *           calendar day.
      */
     public static boolean isSameDay(long t1, long t2) {
-        ensureCalendarsAreAvailable();
-
-        sCal1.setTimeInMillis(t1);
-        sCal2.setTimeInMillis(t2);
-        return isSameDay(sCal1, sCal2);
+        LazyHolder.sCalendar1.setTimeInMillis(t1);
+        LazyHolder.sCalendar2.setTimeInMillis(t2);
+        return isSameDay(LazyHolder.sCalendar1, LazyHolder.sCalendar2);
     }
 
     /** @return Whether {@code cal1} and {@code cal2} have the same localized calendar day. */
     public static boolean isSameDay(Calendar cal1, Calendar cal2) {
         return cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR)
                 && cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR);
-    }
-
-    private static void ensureCalendarsAreAvailable() {
-        if (sCal1 == null) sCal1 = CalendarFactory.get();
-        if (sCal2 == null) sCal2 = CalendarFactory.get();
     }
 }
