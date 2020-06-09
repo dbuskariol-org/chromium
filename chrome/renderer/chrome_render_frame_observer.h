@@ -73,8 +73,7 @@ class ChromeRenderFrameObserver : public content::RenderFrameObserver,
       blink::WebDocumentLoader* document_loader) override;
   void DidFinishLoad() override;
   void DidCreateNewDocument() override;
-  void DidCommitProvisionalLoad(bool is_same_document_navigation,
-                                ui::PageTransition transition) override;
+  void DidCommitProvisionalLoad(ui::PageTransition transition) override;
   void DidClearWindowObject() override;
   void DidMeaningfulLayout(blink::WebMeaningfulLayout layout_type) override;
   void OnDestruct() override;

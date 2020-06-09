@@ -254,7 +254,6 @@ void ChromeRenderFrameObserver::DidCreateNewDocument() {
 }
 
 void ChromeRenderFrameObserver::DidCommitProvisionalLoad(
-    bool is_same_document_navigation,
     ui::PageTransition transition) {
   WebLocalFrame* frame = render_frame()->GetWebFrame();
 
