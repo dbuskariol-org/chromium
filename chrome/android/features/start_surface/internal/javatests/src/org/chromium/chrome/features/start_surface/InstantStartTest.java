@@ -53,6 +53,7 @@ import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
 import org.chromium.chrome.browser.homepage.HomepageManager;
+import org.chromium.chrome.browser.ntp.cards.SignInPromo;
 import org.chromium.chrome.browser.tab.TabState;
 import org.chromium.chrome.browser.tabmodel.TabPersistentStore;
 import org.chromium.chrome.browser.tabmodel.TabPersistentStore.TabModelMetadata;
@@ -612,6 +613,7 @@ public class InstantStartTest {
         createThumbnailBitmapAndWriteToFile(0);
         TabAttributeCache.setTitleForTesting(0, "Google");
 
+        SignInPromo.setDisablePromoForTests(true);
         startMainActivityFromLauncher();
         CriteriaHelper.pollUiThread(
                 () -> mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
