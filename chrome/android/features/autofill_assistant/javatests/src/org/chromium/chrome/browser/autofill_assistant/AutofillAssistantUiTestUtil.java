@@ -22,7 +22,6 @@ import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.UiController;
 import android.support.test.espresso.ViewAction;
 import android.support.test.espresso.ViewAssertion;
-import android.support.test.espresso.core.deps.guava.base.Preconditions;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -238,7 +237,7 @@ class AutofillAssistantUiTestUtil {
     }
 
     static Matcher<View> isNextAfterSibling(final Matcher<View> siblingMatcher) {
-        Preconditions.checkNotNull(siblingMatcher);
+        assert siblingMatcher != null;
         return new TypeSafeMatcher<View>() {
             @Override
             public void describeTo(Description description) {

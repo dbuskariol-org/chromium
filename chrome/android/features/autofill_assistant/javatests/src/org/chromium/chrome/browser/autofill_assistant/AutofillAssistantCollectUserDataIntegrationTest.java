@@ -39,7 +39,6 @@ import static org.chromium.chrome.browser.autofill_assistant.AutofillAssistantUi
 import static org.chromium.chrome.browser.autofill_assistant.AutofillAssistantUiTestUtil.waitUntilViewMatchesCondition;
 
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.core.deps.guava.collect.Iterables;
 import android.support.test.espresso.matcher.ViewMatchers;
 import android.support.test.filters.MediumTest;
 import android.widget.DatePicker;
@@ -760,11 +759,12 @@ public class AutofillAssistantCollectUserDataIntegrationTest {
         testService.waitUntilGetNextActions(numNextActionsCalled + 1);
 
         List<ProcessedActionProto> processedActions = testService.getProcessedActions();
-        ViewMatchers.assertThat(Iterables.getOnlyElement(processedActions).getStatus(),
+        assertThat(processedActions.size(), equalTo(1));
+        ViewMatchers.assertThat(processedActions.get(0).getStatus(),
                 CoreMatchers.is(ProcessedActionStatusProto.ACTION_APPLIED));
-        CollectUserDataResultProto result =
-                Iterables.getOnlyElement(processedActions).getCollectUserDataResult();
-        assertThat(Iterables.getOnlyElement(result.getAdditionalSectionsValuesList()),
+        CollectUserDataResultProto result = processedActions.get(0).getCollectUserDataResult();
+        assertThat(result.getAdditionalSectionsValuesList().size(), equalTo(1));
+        assertThat(result.getAdditionalSectionsValuesList().get(0),
                 equalTo(ModelValue.newBuilder()
                                 .setIdentifier("field_1")
                                 .setValue(ValueProto.newBuilder().setStrings(
