@@ -99,7 +99,7 @@ bool AreFormContentsVisible(const blink::WebFormElement& form);
 // strip unnecessary data (e.g. query params and HTTP credentials).
 GURL GetCanonicalActionForForm(const blink::WebFormElement& form);
 GURL GetCanonicalOriginForDocument(const blink::WebDocument& document);
-GURL GetOriginWithoutAuthForDocument(const blink::WebDocument& document);
+GURL GetDocumentUrlWithoutAuth(const blink::WebDocument& document);
 
 // Returns true if |element| is a month input element.
 bool IsMonthInput(const blink::WebInputElement* element);

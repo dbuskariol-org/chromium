@@ -1611,7 +1611,7 @@ GURL GetCanonicalOriginForDocument(const WebDocument& document) {
   return StripAuthAndParams(full_origin);
 }
 
-GURL GetOriginWithoutAuthForDocument(const WebDocument& document) {
+GURL GetDocumentUrlWithoutAuth(const WebDocument& document) {
   GURL::Replacements rep;
   rep.ClearUsername();
   rep.ClearPassword();

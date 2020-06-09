@@ -1131,7 +1131,7 @@ void PasswordAutofillAgent::SendPasswordForms(bool only_visible) {
       password_forms_data.back().url =
           form_util::GetCanonicalOriginForDocument(frame->GetDocument());
       password_forms_data.back().full_url =
-          form_util::GetOriginWithoutAuthForDocument(frame->GetDocument());
+          form_util::GetDocumentUrlWithoutAuth(frame->GetDocument());
     }
     if (!password_forms_data.empty()) {
       sent_request_to_store_ = true;
