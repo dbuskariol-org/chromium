@@ -49110,6 +49110,9 @@ Called by update_net_trust_anchors.py.-->
 </enum>
 
 <enum name="NTPLoadType">
+  <obsolete>
+    Removed 2020-06.
+  </obsolete>
   <int value="0" label="Cold startup"/>
   <int value="1" label="Warm startup"/>
   <int value="2" label="Other, not at startup"/>
