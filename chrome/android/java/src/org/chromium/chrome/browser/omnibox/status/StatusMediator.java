@@ -573,7 +573,8 @@ class StatusMediator implements IncognitoStateProvider.IncognitoStateObserver {
     private void getNonGoogleSearchEngineIconBitmap(final Callback<StatusIconResource> callback) {
         mDelegate.getSearchEngineLogoFavicon(mResources, (favicon) -> {
             if (favicon == null || mShouldCancelCustomFavicon) {
-                callback.onResult(new StatusIconResource(R.drawable.ic_search, 0));
+                callback.onResult(new StatusIconResource(R.drawable.ic_search,
+                        getSecurityIconTintForSearchEngineIcon(R.drawable.ic_search)));
                 return;
             }
 
