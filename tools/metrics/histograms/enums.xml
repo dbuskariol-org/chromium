@@ -17924,6 +17924,13 @@ Called by update_document_policy_enum.py.-->
   <int value="2" label="Unknown"/>
 </enum>
 
+<enum name="DumpWithoutCrashingResult">
+  <int value="0" label="Failure from Crashpad"/>
+  <int value="1" label="Success from Crashpad"/>
+  <int value="2" label="Failure from Breakpad"/>
+  <int value="3" label="Success from Breakpad"/>
+</enum>
+
 <enum name="DuplicateBookmarkEntityOnRemoteUpdateCondition">
   <int value="0" label="Entity with server ID is a tombstone"/>
   <int value="1" label="Only entity with temporary ID is a tombstone"/>
