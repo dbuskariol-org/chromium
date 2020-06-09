@@ -287,8 +287,13 @@ public class StartSurfaceTest {
     @Test
     @MediumTest
     @Feature({"StartSurface"})
+    @DisableIf.Build(sdk_is_less_than = P, message = "1092642")
     @CommandLineFlags.Add({BASE_PARAMS + "/single"})
     public void testShow_SingleAsHomepage() {
+        if (StartSurfaceLayoutTest.isEmulator()) {
+            // TODO(crbug.com/1092642): Do not skip on emulator.
+            return;
+        }
         if (!mImmediateReturn) {
             onView(withId(org.chromium.chrome.tab_ui.R.id.home_button)).perform(click());
         }
@@ -344,10 +349,15 @@ public class StartSurfaceTest {
     @MediumTest
     @Feature({"StartSurface"})
     // clang-format off
+    @DisableIf.Build(sdk_is_less_than = P, message = "1092642")
     @CommandLineFlags.Add({BASE_PARAMS + "/single" +
         "/exclude_mv_tiles/true/hide_switch_when_no_incognito_tabs/true"})
     public void testShow_SingleAsHomepage_NoMVTiles() {
         // clang-format on
+        if (StartSurfaceLayoutTest.isEmulator()) {
+            // TODO(crbug.com/1092642): Do not skip on emulator.
+            return;
+        }
         if (!mImmediateReturn) {
             onView(withId(org.chromium.chrome.tab_ui.R.id.home_button)).perform(click());
         }
@@ -532,8 +542,13 @@ public class StartSurfaceTest {
     @Test
     @MediumTest
     @Feature({"StartSurface"})
+    @DisableIf.Build(sdk_is_less_than = P, message = "1092642")
     @CommandLineFlags.Add({BASE_PARAMS + "/single"})
     public void testShow_SingleAsTabSwitcher() {
+        if (StartSurfaceLayoutTest.isEmulator()) {
+            // TODO(crbug.com/1092642): Do not skip on emulator.
+            return;
+        }
         if (mImmediateReturn) {
             CriteriaHelper.pollUiThread(
                     ()
