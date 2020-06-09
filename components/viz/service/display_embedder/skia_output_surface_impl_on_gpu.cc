@@ -599,7 +599,9 @@ class DirectContextProviderDelegateImpl : public DirectContextProviderDelegate,
 
 #if defined(OS_FUCHSIA)
   void RegisterSysmemBufferCollection(gfx::SysmemBufferCollectionId id,
-                                      zx::channel token) override {
+                                      zx::channel token,
+                                      gfx::BufferFormat format,
+                                      gfx::BufferUsage usage) override {
     NOTREACHED();
   }
 

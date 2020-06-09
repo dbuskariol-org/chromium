@@ -412,9 +412,11 @@ void SharedImageInterfaceProxy::PresentSwapChain(const SyncToken& sync_token,
 #if defined(OS_FUCHSIA)
 void SharedImageInterfaceProxy::RegisterSysmemBufferCollection(
     gfx::SysmemBufferCollectionId id,
-    zx::channel token) {
-  host_->Send(
-      new GpuChannelMsg_RegisterSysmemBufferCollection(route_id_, id, token));
+    zx::channel token,
+    gfx::BufferFormat format,
+    gfx::BufferUsage usage) {
+  host_->Send(new GpuChannelMsg_RegisterSysmemBufferCollection(
+      route_id_, id, token, format, usage));
 }
 
 void SharedImageInterfaceProxy::ReleaseSysmemBufferCollection(

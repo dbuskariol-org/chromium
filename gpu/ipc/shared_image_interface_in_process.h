@@ -113,7 +113,9 @@ class GL_IN_PROCESS_CONTEXT_EXPORT SharedImageInterfaceInProcess
 #if defined(OS_FUCHSIA)
   // Registers a sysmem buffer collection. Not reached in this implementation.
   void RegisterSysmemBufferCollection(gfx::SysmemBufferCollectionId id,
-                                      zx::channel token) override;
+                                      zx::channel token,
+                                      gfx::BufferFormat format,
+                                      gfx::BufferUsage usage) override;
 
   // Not reached in this implementation.
   void ReleaseSysmemBufferCollection(gfx::SysmemBufferCollectionId id) override;

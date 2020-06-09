@@ -149,7 +149,9 @@ class GPU_EXPORT SharedImageInterface {
   // wrapping it in GpuMemoryBufferHandle and then creating GpuMemoryBuffer from
   // that handle.
   virtual void RegisterSysmemBufferCollection(gfx::SysmemBufferCollectionId id,
-                                              zx::channel token) = 0;
+                                              zx::channel token,
+                                              gfx::BufferFormat format,
+                                              gfx::BufferUsage usage) = 0;
 
   virtual void ReleaseSysmemBufferCollection(
       gfx::SysmemBufferCollectionId id) = 0;

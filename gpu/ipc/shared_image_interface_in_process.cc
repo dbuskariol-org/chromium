@@ -310,7 +310,9 @@ void SharedImageInterfaceInProcess::PresentSwapChain(
 #if defined(OS_FUCHSIA)
 void SharedImageInterfaceInProcess::RegisterSysmemBufferCollection(
     gfx::SysmemBufferCollectionId id,
-    zx::channel token) {
+    zx::channel token,
+    gfx::BufferFormat format,
+    gfx::BufferUsage usage) {
   NOTREACHED();
 }
 void SharedImageInterfaceInProcess::ReleaseSysmemBufferCollection(
