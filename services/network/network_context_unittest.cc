@@ -4306,6 +4306,10 @@ TEST_F(NetworkContextTest, FactoryParams_DisableSecureDns) {
 
 #if BUILDFLAG(IS_CT_SUPPORTED)
 TEST_F(NetworkContextTest, ExpectCT) {
+  base::test::ScopedFeatureList feature_list;
+  feature_list.InitAndEnableFeature(
+      net::features::kPartitionExpectCTStateByNetworkIsolationKey);
+
   std::unique_ptr<NetworkContext> network_context =
       CreateContextWithParams(CreateContextParams());
 
@@ -4315,12 +4319,15 @@ TEST_F(NetworkContextTest, ExpectCT) {
   const bool enforce = true;
   const GURL report_uri = GURL("https://example.com/foo/bar");
 
+  net::NetworkIsolationKey network_isolation_key =
+      net::NetworkIsolationKey::CreateTransient();
+
   // Assert we start with no data for the test host.
   {
     base::Value state;
     base::RunLoop run_loop;
     network_context->GetExpectCTState(
-        kTestDomain,
+        kTestDomain, network_isolation_key,
         base::BindOnce(&StoreValue, &state, run_loop.QuitClosure()));
     run_loop.Run();
     EXPECT_TRUE(state.is_dict());
@@ -4336,7 +4343,7 @@ TEST_F(NetworkContextTest, ExpectCT) {
     base::RunLoop run_loop;
     bool result = false;
     network_context->AddExpectCT(
-        kTestDomain, expiry, enforce, report_uri,
+        kTestDomain, expiry, enforce, report_uri, network_isolation_key,
         base::BindOnce(&StoreBool, &result, run_loop.QuitClosure()));
     run_loop.Run();
     EXPECT_TRUE(result);
@@ -4347,7 +4354,7 @@ TEST_F(NetworkContextTest, ExpectCT) {
     base::Value state;
     base::RunLoop run_loop;
     network_context->GetExpectCTState(
-        kTestDomain,
+        kTestDomain, network_isolation_key,
         base::BindOnce(&StoreValue, &state, run_loop.QuitClosure()));
     run_loop.Run();
     EXPECT_TRUE(state.is_dict());
@@ -4373,6 +4380,22 @@ TEST_F(NetworkContextTest, ExpectCT) {
     EXPECT_EQ(report_uri, value->GetString());
   }
 
+  // Using a different NetworkIsolationKey should return no result.
+  {
+    base::Value state;
+    base::RunLoop run_loop;
+    network_context->GetExpectCTState(
+        kTestDomain, net::NetworkIsolationKey::CreateTransient(),
+        base::BindOnce(&StoreValue, &state, run_loop.QuitClosure()));
+    run_loop.Run();
+    EXPECT_TRUE(state.is_dict());
+
+    const base::Value* result =
+        state.FindKeyOfType("result", base::Value::Type::BOOLEAN);
+    ASSERT_TRUE(result != nullptr);
+    EXPECT_FALSE(result->GetBool());
+  }
+
   // Delete host data.
   {
     bool result;
@@ -4389,7 +4412,7 @@ TEST_F(NetworkContextTest, ExpectCT) {
     base::Value state;
     base::RunLoop run_loop;
     network_context->GetExpectCTState(
-        kTestDomain,
+        kTestDomain, network_isolation_key,
         base::BindOnce(&StoreValue, &state, run_loop.QuitClosure()));
     run_loop.Run();
     EXPECT_TRUE(state.is_dict());
