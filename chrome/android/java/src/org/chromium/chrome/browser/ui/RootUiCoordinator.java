@@ -638,14 +638,15 @@ public class RootUiCoordinator
         Supplier<OverlayPanelManager> panelManagerSupplier = ()
                 -> mActivity.getCompositorViewHolder().getLayoutManager().getOverlayPanelManager();
 
-        mBottomSheetController = new BottomSheetControllerImpl(mActivityTabProvider,
-                () -> mScrimCoordinator, sheetViewSupplier, panelManagerSupplier,
-                mActivity.getFullscreenManager(), mActivity.getWindow(),
-                mActivity.getWindowAndroid().getKeyboardDelegate(), mOmniboxFocusStateSupplier);
+        mBottomSheetController = new BottomSheetControllerImpl(()
+                                                                       -> mScrimCoordinator,
+                sheetViewSupplier, mActivity.getWindow(),
+                mActivity.getWindowAndroid().getKeyboardDelegate());
 
         mBottomSheetManager = new BottomSheetManager(mBottomSheetController, mActivityTabProvider,
-                mActivity::getModalDialogManager, this::getBottomSheetSnackbarManager,
-                mTabObscuringHandler);
+                mActivity.getFullscreenManager(), mActivity::getModalDialogManager,
+                this::getBottomSheetSnackbarManager, mTabObscuringHandler,
+                mOmniboxFocusStateSupplier, panelManagerSupplier);
     }
 
     /**
