@@ -3859,8 +3859,8 @@
   },
   {
     "name": "scrollable-tabstrip",
-    "owners": ["chrome-desktop-ui-seattle@google.com", "tbergquist"],
-    "expiry_milestone": 82
+    "owners": ["chrome-desktop-ui-sea@google.com", "tbergquist"],
+    "expiry_milestone": 90
   },
   {
     "name": "search-icon-toggle",
