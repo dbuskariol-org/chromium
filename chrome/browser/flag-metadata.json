@@ -3598,6 +3598,11 @@
     "expiry_milestone": 83
   },
   {
+    "name": "pluginvm-show-camera-permissions",
+    "owners": [ "danielng"],
+    "expiry_milestone": 87
+  },
+  {
     "name": "pointer-support",
     "owners": [ "noyau" ],
     "expiry_milestone": 85

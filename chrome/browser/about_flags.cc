@@ -2641,6 +2641,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kTerminalSystemAppLegacySettingsName,
      flag_descriptions::kTerminalSystemAppLegacySettingsDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(features::kTerminalSystemAppLegacySettings)},
+    {"pluginvm-show-camera-permissions",
+     flag_descriptions::kPluginVmShowCameraPermissionsName,
+     flag_descriptions::kPluginVmShowCameraPermissionsDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(chromeos::features::kPluginVmShowCameraPermissions)},
 #endif  // OS_CHROMEOS
 #if defined(OS_CHROMEOS) || defined(OS_LINUX)
 #if BUILDFLAG(USE_TCMALLOC)

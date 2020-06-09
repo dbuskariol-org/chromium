@@ -3875,6 +3875,11 @@ const char kTerminalSystemAppLegacySettingsName[] =
 const char kTerminalSystemAppLegacySettingsDescription[] =
     "Use the legacy settings page for Terminal System App.";
 
+const char kPluginVmShowCameraPermissionsName[] =
+    "Show Plugin VM camera permissions";
+const char kPluginVmShowCameraPermissionsDescription[] =
+    "Displays camera permissions for Plugin VM in the app settings.";
+
 const char kTetherName[] = "Instant Tethering";
 const char kTetherDescription[] =
     "Enables Instant Tethering. Instant Tethering allows your nearby Google "

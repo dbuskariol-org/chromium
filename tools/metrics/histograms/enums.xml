@@ -40029,6 +40029,7 @@ from previous Chrome versions.
   <int value="-596337171" label="disable-ash-sidebar"/>
   <int value="-595819071"
       label="OmniboxUIExperimentBlueTitlesOnPageSuggestions:disabled"/>
+  <int value="-594076614" label="PluginVmShowCameraPermissions:disabled"/>
   <int value="-593536514" label="ExperimentalTabController:enabled"/>
   <int value="-589096918" label="ash-enable-fullscreen-app-list"/>
   <int value="-582870536" label="BluetoothNextHandsfreeProfile:enabled"/>
@@ -41527,6 +41528,7 @@ from previous Chrome versions.
   <int value="1129888794" label="ash-touch-hud"/>
   <int value="1133207726" label="MediaInspectorLogging:enabled"/>
   <int value="1133635187" label="force-gpu-rasterization"/>
+  <int value="1135728116" label="PluginVmShowCameraPermissions:enabled"/>
   <int value="1138349838" label="EnableMDRoundedCornersOnDialogs:disabled"/>
   <int value="1138690502" label="PreconnectToSearch:enabled"/>
   <int value="1139226452" label="enable-nacl-debug"/>

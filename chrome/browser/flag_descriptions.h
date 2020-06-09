@@ -2102,6 +2102,9 @@ extern const char kTerminalSystemAppDescription[];
 extern const char kTerminalSystemAppLegacySettingsName[];
 extern const char kTerminalSystemAppLegacySettingsDescription[];
 
+extern const char kPluginVmShowCameraPermissionsName[];
+extern const char kPluginVmShowCameraPermissionsDescription[];
+
 extern const char kTrimOnFreezeName[];
 extern const char kTrimOnFreezeDescription[];
 
