@@ -1541,7 +1541,7 @@ IN_PROC_BROWSER_TEST_F(DevToolsSanityTest,
 #if defined(OS_WIN) || defined(OS_LINUX)
 #define MAYBE_TestPauseWhenLoadingDevTools DISABLED_TestPauseWhenLoadingDevTools
 #else
-#define MAYBW_TestPauseWhenLoadingDevTools TestPauseWhenLoadingDevTools
+#define MAYBE_TestPauseWhenLoadingDevTools TestPauseWhenLoadingDevTools
 #endif
 IN_PROC_BROWSER_TEST_F(DevToolsSanityTest, MAYBE_TestPauseWhenLoadingDevTools) {
   RunTest("testPauseWhenLoadingDevTools", kPauseWhenLoadingDevTools);
