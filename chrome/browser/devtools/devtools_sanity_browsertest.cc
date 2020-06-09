@@ -1537,8 +1537,8 @@ IN_PROC_BROWSER_TEST_F(DevToolsSanityTest,
 
 // Tests that debugger works correctly if pause event occurs when DevTools
 // frontend is being loaded.
-// Flaky on win: crbug.com/1092924.
-#if defined(OS_WIN)
+// Flaky on win and linux: crbug.com/1092924.
+#if defined(OS_WIN) || defined(OS_LINUX)
 #define MAYBE_TestPauseWhenLoadingDevTools DISABLED_TestPauseWhenLoadingDevTools
 #else
 #define MAYBW_TestPauseWhenLoadingDevTools TestPauseWhenLoadingDevTools
