@@ -453,7 +453,7 @@ public class StartSurfaceLayoutTest {
     }
 
     // From https://stackoverflow.com/a/21505193
-    static boolean isEmulator() {
+    private static boolean isEmulator() {
         return Build.FINGERPRINT.startsWith("generic") || Build.FINGERPRINT.startsWith("unknown")
                 || Build.MODEL.contains("google_sdk") || Build.MODEL.contains("Emulator")
                 || Build.MODEL.contains("Android SDK built for x86")
