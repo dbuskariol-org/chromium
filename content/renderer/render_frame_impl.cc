@@ -2039,10 +2039,6 @@ RenderWidgetFullscreenPepper* RenderFrameImpl::CreatePepperFullscreenContainer(
   if (main_frame->IsWebLocalFrame())
     main_frame_url = main_frame->ToWebLocalFrame()->GetDocument().Url();
 
-  mojo::PendingRemote<mojom::Widget> widget_channel;
-  mojo::PendingReceiver<mojom::Widget> widget_channel_receiver =
-      widget_channel.InitWithNewPipeAndPassReceiver();
-
   mojo::PendingAssociatedRemote<blink::mojom::Widget> blink_widget;
   mojo::PendingAssociatedReceiver<blink::mojom::Widget> blink_widget_receiver =
       blink_widget.InitWithNewEndpointAndPassReceiver();
@@ -2055,8 +2051,8 @@ RenderWidgetFullscreenPepper* RenderFrameImpl::CreatePepperFullscreenContainer(
   // Synchronous IPC to obtain a routing id for the fullscreen widget.
   int32_t fullscreen_widget_routing_id = MSG_ROUTING_NONE;
   if (!GetFrameHost()->CreateNewFullscreenWidget(
-          std::move(widget_channel), std::move(blink_widget_host_receiver),
-          std::move(blink_widget), &fullscreen_widget_routing_id)) {
+          std::move(blink_widget_host_receiver), std::move(blink_widget),
+          &fullscreen_widget_routing_id)) {
     return nullptr;
   }
   RenderWidget::ShowCallback show_callback =
@@ -2067,8 +2063,8 @@ RenderWidgetFullscreenPepper* RenderFrameImpl::CreatePepperFullscreenContainer(
       fullscreen_widget_routing_id, std::move(show_callback),
       GetLocalRootRenderWidget()->compositor_deps(),
       GetLocalRootRenderWidget()->GetOriginalScreenInfo(), plugin,
-      std::move(main_frame_url), std::move(widget_channel_receiver),
-      std::move(blink_widget_host), std::move(blink_widget_receiver));
+      std::move(main_frame_url), std::move(blink_widget_host),
+      std::move(blink_widget_receiver));
   // TODO(nick): The show() handshake seems like unnecessary complexity here,
   // since there's no real delay between CreateFullscreenWidget and
   // ShowCreatedFullscreenWidget. Would it be simpler to have the

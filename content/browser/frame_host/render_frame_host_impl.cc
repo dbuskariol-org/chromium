@@ -137,7 +137,6 @@
 #include "content/common/render_message_filter.mojom.h"
 #include "content/common/renderer.mojom.h"
 #include "content/common/unfreezable_frame_messages.h"
-#include "content/common/widget.mojom.h"
 #include "content/public/browser/ax_event_notification_details.h"
 #include "content/public/browser/browser_accessibility_state.h"
 #include "content/public/browser/browser_context.h"
@@ -972,10 +971,6 @@ RenderFrameHostImpl::RenderFrameHostImpl(
   //
   // Local roots require a RenderWidget for input/layout/painting.
   if (!parent_ || IsCrossProcessSubframe()) {
-    mojo::PendingRemote<mojom::Widget> widget;
-    GetRemoteInterfaces()->GetInterface(
-        widget.InitWithNewPipeAndPassReceiver());
-
     if (!parent_) {
       // For main frames, the RenderWidgetHost is owned by the RenderViewHost.
       // TODO(https://crbug.com/545684): Once RenderViewHostImpl has-a
@@ -991,7 +986,7 @@ RenderFrameHostImpl::RenderFrameHostImpl(
       DCHECK_EQ(nullptr, GetLocalRenderWidgetHost());
       owned_render_widget_host_ = RenderWidgetHostFactory::Create(
           frame_tree_->render_widget_delegate(), GetProcess(),
-          widget_routing_id, std::move(widget), /*hidden=*/true);
+          widget_routing_id, /*hidden=*/true);
       owned_render_widget_host_->set_owned_by_render_frame_host(true);
 #if defined(OS_ANDROID)
       owned_render_widget_host_->SetForceEnableZoom(
@@ -5000,27 +4995,25 @@ void RenderFrameHostImpl::AdoptPortal(
 }
 
 void RenderFrameHostImpl::CreateNewWidget(
-    mojo::PendingRemote<mojom::Widget> widget,
     mojo::PendingAssociatedReceiver<blink::mojom::WidgetHost> blink_widget_host,
     mojo::PendingAssociatedRemote<blink::mojom::Widget> blink_widget,
     CreateNewWidgetCallback callback) {
   int32_t widget_route_id = GetProcess()->GetNextRoutingID();
   std::move(callback).Run(widget_route_id);
   delegate_->CreateNewWidget(GetProcess()->GetID(), widget_route_id,
-                             std::move(widget), std::move(blink_widget_host),
+                             std::move(blink_widget_host),
                              std::move(blink_widget));
 }
 
 void RenderFrameHostImpl::CreateNewFullscreenWidget(
-    mojo::PendingRemote<mojom::Widget> widget,
     mojo::PendingAssociatedReceiver<blink::mojom::WidgetHost> blink_widget_host,
     mojo::PendingAssociatedRemote<blink::mojom::Widget> blink_widget,
     CreateNewFullscreenWidgetCallback callback) {
   int32_t widget_route_id = GetProcess()->GetNextRoutingID();
   std::move(callback).Run(widget_route_id);
-  delegate_->CreateNewFullscreenWidget(
-      GetProcess()->GetID(), widget_route_id, std::move(widget),
-      std::move(blink_widget_host), std::move(blink_widget));
+  delegate_->CreateNewFullscreenWidget(GetProcess()->GetID(), widget_route_id,
+                                       std::move(blink_widget_host),
+                                       std::move(blink_widget));
 }
 
 void RenderFrameHostImpl::IssueKeepAliveHandle(

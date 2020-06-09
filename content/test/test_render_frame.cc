@@ -135,7 +135,6 @@ class MockFrameHost : public mojom::FrameHost {
   }
 
   bool CreateNewWidget(
-      mojo::PendingRemote<::content::mojom::Widget> widget,
       mojo::PendingAssociatedReceiver<blink::mojom::WidgetHost>
           blink_widget_host,
       mojo::PendingAssociatedRemote<blink::mojom::Widget> blink_widget,
@@ -147,7 +146,6 @@ class MockFrameHost : public mojom::FrameHost {
   }
 
   void CreateNewWidget(
-      mojo::PendingRemote<mojom::Widget> widget,
       mojo::PendingAssociatedReceiver<blink::mojom::WidgetHost>
           blink_widget_host,
       mojo::PendingAssociatedRemote<blink::mojom::Widget> blink_widget,
@@ -156,7 +154,6 @@ class MockFrameHost : public mojom::FrameHost {
   }
 
   void CreateNewFullscreenWidget(
-      mojo::PendingRemote<mojom::Widget> widget,
       mojo::PendingAssociatedReceiver<blink::mojom::WidgetHost>
           blink_widget_host,
       mojo::PendingAssociatedRemote<blink::mojom::Widget> blink_widget,

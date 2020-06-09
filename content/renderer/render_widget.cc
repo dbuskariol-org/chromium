@@ -416,30 +416,26 @@ std::unique_ptr<RenderWidget> RenderWidget::CreateForFrame(
     bool never_composited) {
   if (g_create_render_widget_for_frame) {
     return g_create_render_widget_for_frame(widget_routing_id, compositor_deps,
-                                            /*hidden=*/true, never_composited,
-                                            mojo::NullReceiver());
+                                            /*hidden=*/true, never_composited);
   }
 
   return std::make_unique<RenderWidget>(widget_routing_id, compositor_deps,
-                                        /*hidden=*/true, never_composited,
-                                        mojo::NullReceiver());
+                                        /*hidden=*/true, never_composited);
 }
 
 RenderWidget* RenderWidget::CreateForPopup(
     int32_t widget_routing_id,
     CompositorDependencies* compositor_deps,
     bool hidden,
-    bool never_composited,
-    mojo::PendingReceiver<mojom::Widget> widget_receiver) {
+    bool never_composited) {
   return new RenderWidget(widget_routing_id, compositor_deps, hidden,
-                          never_composited, std::move(widget_receiver));
+                          never_composited);
 }
 
 RenderWidget::RenderWidget(int32_t widget_routing_id,
                            CompositorDependencies* compositor_deps,
                            bool hidden,
-                           bool never_composited,
-                           mojo::PendingReceiver<mojom::Widget> widget_receiver)
+                           bool never_composited)
     : routing_id_(widget_routing_id),
       compositor_deps_(compositor_deps),
       is_hidden_(hidden),

@@ -322,7 +322,6 @@ RenderWidgetHostImpl::RenderWidgetHostImpl(
     RenderWidgetHostDelegate* delegate,
     RenderProcessHost* process,
     int32_t routing_id,
-    mojo::PendingRemote<mojom::Widget> widget,
     bool hidden,
     std::unique_ptr<FrameTokenMessageQueue> frame_token_message_queue)
     : delegate_(delegate),

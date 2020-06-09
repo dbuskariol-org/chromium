@@ -46,7 +46,6 @@
 #include "content/browser/renderer_host/render_widget_host_view_base.h"
 #include "content/common/drag_event_source_info.h"
 #include "content/common/render_frame_metadata.mojom.h"
-#include "content/common/widget.mojom.h"
 #include "content/public/browser/render_process_host_observer.h"
 #include "content/public/browser/render_widget_host.h"
 #include "content/public/common/page_zoom.h"
@@ -163,7 +162,6 @@ class CONTENT_EXPORT RenderWidgetHostImpl
       RenderWidgetHostDelegate* delegate,
       RenderProcessHost* process,
       int32_t routing_id,
-      mojo::PendingRemote<mojom::Widget> widget_interface,
       bool hidden,
       std::unique_ptr<FrameTokenMessageQueue> frame_token_message_queue);
 

@@ -34,7 +34,6 @@
 #include "content/common/content_export.h"
 #include "content/common/content_to_visible_time_reporter.h"
 #include "content/common/drag_event_source_info.h"
-#include "content/common/widget.mojom.h"
 #include "content/public/common/drop_data.h"
 #include "content/public/common/screen_info.h"
 #include "content/renderer/input/main_thread_event_queue.h"
@@ -135,15 +134,13 @@ class CONTENT_EXPORT RenderWidget
     : public IPC::Listener,
       public IPC::Sender,
       public blink::WebPagePopupClient,  // Is-a WebWidgetClient also.
-      public mojom::Widget,
       public RenderWidgetScreenMetricsEmulatorDelegate,
       public MainThreadEventQueueClient {
  public:
   RenderWidget(int32_t widget_routing_id,
                CompositorDependencies* compositor_deps,
                bool hidden,
-               bool never_composited,
-               mojo::PendingReceiver<mojom::Widget> widget_receiver);
+               bool never_composited);
 
   ~RenderWidget() override;
 
@@ -160,12 +157,11 @@ class CONTENT_EXPORT RenderWidget
 
   // Convenience type for creation method taken by InstallCreateForFrameHook().
   // The method signature matches the RenderWidget constructor.
-  using CreateRenderWidgetFunction = std::unique_ptr<RenderWidget> (*)(
-      int32_t routing_id,
-      CompositorDependencies*,
-      bool hidden,
-      bool never_composited,
-      mojo::PendingReceiver<mojom::Widget> widget_receiver);
+  using CreateRenderWidgetFunction =
+      std::unique_ptr<RenderWidget> (*)(int32_t routing_id,
+                                        CompositorDependencies*,
+                                        bool hidden,
+                                        bool never_composited);
   // Overrides the implementation of CreateForFrame() function below. Used by
   // web tests to return a partial fake of RenderWidget.
   static void InstallCreateForFrameHook(
@@ -184,12 +180,10 @@ class CONTENT_EXPORT RenderWidget
   // A RenderWidget popup is owned by the browser process. The object will be
   // destroyed by the WidgetMsg_Close message. The object can request its own
   // destruction via ClosePopupWidgetSoon().
-  static RenderWidget* CreateForPopup(
-      int32_t widget_routing_id,
-      CompositorDependencies* compositor_deps,
-      bool hidden,
-      bool never_composited,
-      mojo::PendingReceiver<mojom::Widget> widget_receiver);
+  static RenderWidget* CreateForPopup(int32_t widget_routing_id,
+                                      CompositorDependencies* compositor_deps,
+                                      bool hidden,
+                                      bool never_composited);
 
   // Initialize a new RenderWidget for a popup. The |show_callback| is called
   // when RenderWidget::Show() happens. The |opener_widget| is the local root
