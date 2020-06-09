@@ -1380,8 +1380,6 @@ crbug.com/891427 virtual/threaded-no-composited-antialiasing/animations/timing/a
 # Next 3 here: https://ci.chromium.org/buildbot/tryserver.blink/linux-blink-rel/1215
 crbug.com/891427 animations/responsive/viewport-unit-transform-responsive.html [ Pass Failure Timeout Crash ]
 crbug.com/891427 animations/responsive/viewport-unit-translate-responsive.html [ Pass Failure Timeout Crash ]
-# Next 1 here: https://ci.chromium.org/p/chromium/builders/luci.chromium.try/win7-blink-rel/1504
-crbug.com/891427 tables/mozilla_expected_failures/marvin/table_overflow_dirty_reflow_tbody.html [ Pass Failure Timeout Crash ]
 # ====== OOPIF-mode failures until here ======
 
 # ====== Form Controls Refresh (chrome://flags/#form-controls-refresh) failures from here ======
