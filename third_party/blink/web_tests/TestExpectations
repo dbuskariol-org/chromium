@@ -4743,9 +4743,6 @@ crbug.com/1069817 external/wpt/css/css-ruby/line-break-around-ruby-001.html [ Fa
 crbug.com/1069817 fast/ruby/float-overhang-from-ruby-text.html [ Failure ]
 crbug.com/1069817 fast/ruby/line-break-ruby.html [ Failure ]
 crbug.com/1069817 fast/ruby/position-after.html [ Failure ]
-crbug.com/1069817 [ Linux ] fast/writing-mode/Kusa-Makura-background-canvas.html [ Failure ]
-crbug.com/1069817 [ Mac ] fast/writing-mode/Kusa-Makura-background-canvas.html [ Failure ]
-crbug.com/1069817 [ Win10 ] fast/writing-mode/Kusa-Makura-background-canvas.html [ Failure ]
 crbug.com/1069817 virtual/text-antialias/emphasis-avoid-ruby.html [ Failure ]
 
 crbug.com/676229 plugins/mouse-click-plugin-clears-selection.html [ Failure Pass ]
