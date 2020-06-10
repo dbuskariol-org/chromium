@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_CHROMEOS_IME_ASSISTIVE_DELEGATE_H_
-#define UI_CHROMEOS_IME_ASSISTIVE_DELEGATE_H_
+#ifndef CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_ASSISTIVE_DELEGATE_H_
+#define CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_ASSISTIVE_DELEGATE_H_
 
 #include "ui/chromeos/ui_chromeos_export.h"
 
@@ -34,4 +34,4 @@ class UI_CHROMEOS_EXPORT AssistiveDelegate {
 }  // namespace ime
 }  // namespace ui
 
-#endif  //  UI_CHROMEOS_IME_ASSISTIVE_DELEGATE_H_
+#endif  //  CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_ASSISTIVE_DELEGATE_H_

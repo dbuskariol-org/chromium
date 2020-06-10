@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_CHROMEOS_IME_INFOLIST_WINDOW_H_
-#define UI_CHROMEOS_IME_INFOLIST_WINDOW_H_
+#ifndef CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_INFOLIST_WINDOW_H_
+#define CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_INFOLIST_WINDOW_H_
 
 #include <memory>
 #include <string>
@@ -66,4 +66,4 @@ class UI_CHROMEOS_EXPORT InfolistWindow
 }  // namespace ime
 }  // namespace ui
 
-#endif  // UI_CHROMEOS_IME_INFOLIST_WINDOW_H_
+#endif  // CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_INFOLIST_WINDOW_H_

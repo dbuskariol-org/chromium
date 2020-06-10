@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/chromeos/ime/infolist_window.h"
+#include "chrome/browser/chromeos/input_method/ui/infolist_window.h"
 
 #include <stddef.h>
 
@@ -11,8 +11,8 @@
 
 #include "base/logging.h"
 #include "base/macros.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_window_constants.h"
 #include "ui/base/l10n/l10n_util.h"
-#include "ui/chromeos/ime/candidate_window_constants.h"
 #include "ui/chromeos/strings/grit/ui_chromeos_strings.h"
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/geometry/insets.h"
@@ -65,8 +65,9 @@ InfolistBorder::~InfolistBorder() {}
 gfx::Rect InfolistBorder::GetBounds(const gfx::Rect& anchor_rect,
                                     const gfx::Size& contents_size) const {
   gfx::Rect bounds(contents_size);
-  bounds.set_x(is_arrow_on_left(arrow()) ?
-               anchor_rect.right() : anchor_rect.x() - contents_size.width());
+  bounds.set_x(is_arrow_on_left(arrow())
+                   ? anchor_rect.right()
+                   : anchor_rect.x() - contents_size.width());
   // InfolistBorder modifies the vertical position based on the arrow offset
   // although it doesn't draw the arrow. The arrow offset is the half of
   // |contents_size| by default but can be modified through the off-screen logic
@@ -202,20 +203,18 @@ InfolistWindow::InfolistWindow(views::View* candidate_window,
   AddChildView(caption_label);
 
   for (size_t i = 0; i < entries.size(); ++i) {
-    entry_views_.push_back(new InfolistEntryView(
-        entries[i], title_font_list_, description_font_list_));
+    entry_views_.push_back(new InfolistEntryView(entries[i], title_font_list_,
+                                                 description_font_list_));
     AddChildView(entry_views_.back());
   }
 }
 
-InfolistWindow::~InfolistWindow() {
-}
+InfolistWindow::~InfolistWindow() {}
 
 void InfolistWindow::InitWidget() {
   views::Widget* widget = views::BubbleDialogDelegateView::CreateBubble(this);
   wm::SetWindowVisibilityAnimationType(
-      widget->GetNativeView(),
-      wm::WINDOW_VISIBILITY_ANIMATION_TYPE_FADE);
+      widget->GetNativeView(), wm::WINDOW_VISIBILITY_ANIMATION_TYPE_FADE);
 
   // BubbleFrameView will be initialized through CreateBubble.
   GetBubbleFrameView()->SetBubbleBorder(std::make_unique<InfolistBorder>());
@@ -249,16 +248,14 @@ void InfolistWindow::ShowWithDelay() {
   show_hide_timer_.Start(
       FROM_HERE,
       base::TimeDelta::FromMilliseconds(kInfolistShowDelayMilliSeconds),
-      GetWidget(),
-      &views::Widget::Show);
+      GetWidget(), &views::Widget::Show);
 }
 
 void InfolistWindow::HideWithDelay() {
   show_hide_timer_.Start(
       FROM_HERE,
       base::TimeDelta::FromMilliseconds(kInfolistHideDelayMilliSeconds),
-      GetWidget(),
-      &views::Widget::Close);
+      GetWidget(), &views::Widget::Close);
 }
 
 void InfolistWindow::ShowImmediately() {

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/chromeos/ime/candidate_view.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_view.h"
 
 #include <stddef.h>
 
@@ -23,9 +23,9 @@ namespace ime {
 namespace {
 
 const char* const kDummyCandidates[] = {
-  "candidate1",
-  "candidate2",
-  "candidate3",
+    "candidate1",
+    "candidate2",
+    "candidate3",
 };
 
 }  // namespace
@@ -39,8 +39,8 @@ class CandidateViewTest : public views::ViewsTestBase,
   void SetUp() override {
     views::ViewsTestBase::SetUp();
 
-    views::Widget::InitParams init_params(CreateParams(
-        views::Widget::InitParams::TYPE_WINDOW));
+    views::Widget::InitParams init_params(
+        CreateParams(views::Widget::InitParams::TYPE_WINDOW));
 
     init_params.delegate = new views::WidgetDelegateView();
 
@@ -48,8 +48,8 @@ class CandidateViewTest : public views::ViewsTestBase,
     container_->SetLayoutManager(std::make_unique<views::BoxLayout>(
         views::BoxLayout::Orientation::kVertical));
     for (size_t i = 0; i < base::size(kDummyCandidates); ++i) {
-      CandidateView* candidate = new CandidateView(
-          this, ui::CandidateWindow::VERTICAL);
+      CandidateView* candidate =
+          new CandidateView(this, ui::CandidateWindow::VERTICAL);
       ui::CandidateWindow::Entry entry;
       entry.value = base::UTF8ToUTF16(kDummyCandidates[i]);
       candidate->SetEntry(entry);

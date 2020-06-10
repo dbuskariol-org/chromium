@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_CHROMEOS_IME_UNDO_WINDOW_H_
-#define UI_CHROMEOS_IME_UNDO_WINDOW_H_
+#ifndef CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_UNDO_WINDOW_H_
+#define CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_UNDO_WINDOW_H_
 
-#include "ui/chromeos/ime/assistive_delegate.h"
+#include "chrome/browser/chromeos/input_method/ui/assistive_delegate.h"
 #include "ui/chromeos/ui_chromeos_export.h"
 #include "ui/views/bubble/bubble_dialog_delegate_view.h"
 #include "ui/views/controls/button/label_button.h"
@@ -46,4 +46,4 @@ class UI_CHROMEOS_EXPORT UndoWindow : public views::BubbleDialogDelegateView,
 }  // namespace ime
 }  // namespace ui
 
-#endif  // UI_CHROMEOS_IME_UNDO_WINDOW_H_
+#endif  // CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_UNDO_WINDOW_H_

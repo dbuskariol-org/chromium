@@ -2,14 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/chromeos/ime/candidate_view.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_view.h"
 
 #include "base/macros.h"
 #include "base/strings/utf_string_conversions.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_window_constants.h"
 #include "ui/accessibility/ax_enums.mojom.h"
 #include "ui/accessibility/ax_node_data.h"
 #include "ui/base/ime/candidate_window.h"
-#include "ui/chromeos/ime/candidate_window_constants.h"
 #include "ui/gfx/color_utils.h"
 #include "ui/native_theme/native_theme.h"
 #include "ui/views/background.h"
@@ -66,10 +66,9 @@ std::unique_ptr<views::Label> CreateShortcutLabel(
   // Setup paddings.
   const gfx::Insets kVerticalShortcutLabelInsets(1, 6, 1, 6);
   const gfx::Insets kHorizontalShortcutLabelInsets(1, 3, 1, 0);
-  const gfx::Insets insets =
-      (orientation == ui::CandidateWindow::VERTICAL ?
-       kVerticalShortcutLabelInsets :
-       kHorizontalShortcutLabelInsets);
+  const gfx::Insets insets = (orientation == ui::CandidateWindow::VERTICAL
+                                  ? kVerticalShortcutLabelInsets
+                                  : kHorizontalShortcutLabelInsets);
   shortcut_label->SetBorder(views::CreateEmptyBorder(
       insets.top(), insets.left(), insets.bottom(), insets.right()));
 
@@ -251,8 +250,7 @@ void CandidateView::Layout() {
   if (infolist_icon_ && infolist_icon_->GetVisible()) {
     infolist_icon_->SetBounds(
         right - kInfolistIndicatorIconWidth - kInfolistIndicatorIconPadding,
-        kInfolistIndicatorIconPadding,
-        kInfolistIndicatorIconWidth,
+        kInfolistIndicatorIconPadding, kInfolistIndicatorIconWidth,
         height() - kInfolistIndicatorIconPadding * 2);
     right -= kInfolistIndicatorIconWidth + kInfolistIndicatorIconPadding * 2;
   }
@@ -279,8 +277,8 @@ gfx::Size CandidateView::CalculatePreferredSize() const {
   }
 
   // Reserves the margin for infolist_icon even if it's not visible.
-  size.Enlarge(
-      kInfolistIndicatorIconWidth + kInfolistIndicatorIconPadding * 2, 0);
+  size.Enlarge(kInfolistIndicatorIconWidth + kInfolistIndicatorIconPadding * 2,
+               0);
   return size;
 }
 

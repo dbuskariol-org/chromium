@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/chromeos/ime/input_method_menu_manager.h"
+#include "chrome/browser/chromeos/input_method/ui/input_method_menu_manager.h"
 
 #include <memory>
 
@@ -27,10 +27,9 @@ class MockObserver : public InputMethodMenuManager::Observer {
   int input_method_menu_item_changed_count_;
 };
 
-class InputMethodMenuManagerStatefulTest : public testing::Test{
+class InputMethodMenuManagerStatefulTest : public testing::Test {
  public:
-  InputMethodMenuManagerStatefulTest()
-      : observer_(new MockObserver()) {}
+  InputMethodMenuManagerStatefulTest() : observer_(new MockObserver()) {}
   ~InputMethodMenuManagerStatefulTest() override {}
   void SetUp() override {
     menu_manager_ = InputMethodMenuManager::GetInstance();
@@ -55,14 +54,12 @@ TEST_F(InputMethodMenuManagerStatefulTest, AddAndCheckExists) {
   list.push_back(InputMethodMenuItem("key2", "label2", false, false));
   menu_manager_->SetCurrentInputMethodMenuItemList(list);
   EXPECT_EQ(menu_manager_->GetCurrentInputMethodMenuItemList().size(), 2U);
-  EXPECT_EQ(
-      menu_manager_->GetCurrentInputMethodMenuItemList().at(0).ToString(),
-      "key=key1, label=label1, "
-      "is_selection_item=0, is_selection_item_checked=0");
-  EXPECT_EQ(
-      menu_manager_->GetCurrentInputMethodMenuItemList().at(1).ToString(),
-      "key=key2, label=label2, "
-      "is_selection_item=0, is_selection_item_checked=0");
+  EXPECT_EQ(menu_manager_->GetCurrentInputMethodMenuItemList().at(0).ToString(),
+            "key=key1, label=label1, "
+            "is_selection_item=0, is_selection_item_checked=0");
+  EXPECT_EQ(menu_manager_->GetCurrentInputMethodMenuItemList().at(1).ToString(),
+            "key=key2, label=label2, "
+            "is_selection_item=0, is_selection_item_checked=0");
 
   EXPECT_TRUE(menu_manager_->HasInputMethodMenuItemForKey("key1"));
   EXPECT_TRUE(menu_manager_->HasInputMethodMenuItemForKey("key2"));

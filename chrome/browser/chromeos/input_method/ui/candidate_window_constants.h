@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_CHROMEOS_IME_CANDIDATE_WINDOW_CONSTANTS_H_
-#define UI_CHROMEOS_IME_CANDIDATE_WINDOW_CONSTANTS_H_
+#ifndef CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_WINDOW_CONSTANTS_H_
+#define CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_WINDOW_CONSTANTS_H_
 
 namespace ui {
 namespace ime {
@@ -35,4 +35,4 @@ const int kInfolistIndicatorIconPadding = 2;
 }  // namespace ime
 }  // namespace ui
 
-#endif  // UI_CHROMEOS_IME_CANDIDATE_WINDOW_CONSTANTS_H_
+#endif  // CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_WINDOW_CONSTANTS_H_

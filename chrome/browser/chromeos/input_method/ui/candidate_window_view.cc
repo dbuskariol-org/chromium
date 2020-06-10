@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/chromeos/ime/candidate_window_view.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_window_view.h"
 
 #include <stddef.h>
 
@@ -10,10 +10,10 @@
 
 #include "base/macros.h"
 #include "base/strings/utf_string_conversions.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_view.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_window_constants.h"
 #include "ui/accessibility/ax_enums.mojom.h"
 #include "ui/accessibility/ax_node_data.h"
-#include "ui/chromeos/ime/candidate_view.h"
-#include "ui/chromeos/ime/candidate_window_constants.h"
 #include "ui/display/display.h"
 #include "ui/display/screen.h"
 #include "ui/display/types/display_constants.h"
@@ -55,8 +55,8 @@ class CandidateWindowBorder : public views::BubbleBorder {
     gfx::Rect bounds(content_size);
     bounds.set_origin(gfx::Point(
         anchor_rect.x() - offset_,
-        is_arrow_on_top(arrow()) ?
-        anchor_rect.bottom() : anchor_rect.y() - content_size.height()));
+        is_arrow_on_top(arrow()) ? anchor_rect.bottom()
+                                 : anchor_rect.y() - content_size.height()));
 
     // It cannot use the normal logic of arrow offset for horizontal offscreen,
     // because the arrow must be in the content's edge. But CandidateWindow has
@@ -93,10 +93,7 @@ class InformationTextArea : public views::View {
  public:
   // InformationTextArea's border is drawn as a separator, it should appear
   // at either top or bottom.
-  enum BorderPosition {
-    TOP,
-    BOTTOM
-  };
+  enum BorderPosition { TOP, BOTTOM };
 
   // Specify the alignment and initialize the control.
   InformationTextArea(gfx::HorizontalAlignment align, int min_width)
@@ -120,9 +117,7 @@ class InformationTextArea : public views::View {
   }
 
   // Sets the displayed text.
-  void SetText(const base::string16& text) {
-    label_->SetText(text);
-  }
+  void SetText(const base::string16& text) { label_->SetText(text); }
 
   // Sets the border thickness for top/bottom.
   void SetBorderFromPosition(BorderPosition position) {
@@ -188,8 +183,7 @@ CandidateWindowView::CandidateWindowView(gfx::NativeView parent)
   }
 }
 
-CandidateWindowView::~CandidateWindowView() {
-}
+CandidateWindowView::~CandidateWindowView() {}
 
 views::Widget* CandidateWindowView::InitWidget() {
   views::Widget* widget = BubbleDialogDelegateView::CreateBubble(this);
@@ -263,8 +257,8 @@ void CandidateWindowView::UpdateCandidates(
     // Initialize candidate views if necessary.
     MaybeInitializeCandidateViews(new_candidate_window);
 
-    should_show_at_composition_head_
-        = new_candidate_window.show_window_at_composition();
+    should_show_at_composition_head_ =
+        new_candidate_window.show_window_at_composition();
     // Compute the index of the current page.
     const int current_page_index = ComputePageIndex(new_candidate_window);
     if (current_page_index < 0)
@@ -296,8 +290,8 @@ void CandidateWindowView::UpdateCandidates(
       if (new_candidate_window.orientation() == ui::CandidateWindow::VERTICAL) {
         int shortcut_width = 0;
         int candidate_width = 0;
-        candidate_views_[i]->GetPreferredWidths(
-            &shortcut_width, &candidate_width);
+        candidate_views_[i]->GetPreferredWidths(&shortcut_width,
+                                                &candidate_width);
         max_shortcut_width = std::max(max_shortcut_width, shortcut_width);
         max_candidate_width = std::max(max_candidate_width, candidate_width);
       }
@@ -331,7 +325,7 @@ void CandidateWindowView::UpdateCandidates(
     // Unselect the currently selected candidate.
     if (0 <= selected_candidate_index_in_page_ &&
         static_cast<size_t>(selected_candidate_index_in_page_) <
-        candidate_views_.size()) {
+            candidate_views_.size()) {
       candidate_views_[selected_candidate_index_in_page_]->SetHighlighted(
           false);
       selected_candidate_index_in_page_ = -1;
@@ -340,8 +334,8 @@ void CandidateWindowView::UpdateCandidates(
 
   // Updates auxiliary text
   auxiliary_text_->SetVisible(candidate_window_.is_auxiliary_text_visible());
-  auxiliary_text_->SetText(base::UTF8ToUTF16(
-      candidate_window_.auxiliary_text()));
+  auxiliary_text_->SetText(
+      base::UTF8ToUTF16(candidate_window_.auxiliary_text()));
 }
 
 void CandidateWindowView::SetCursorBounds(const gfx::Rect& cursor_bounds,
@@ -384,7 +378,7 @@ void CandidateWindowView::SelectCandidateAt(int index_in_page) {
   // Ignore click on out of range views.
   if (cursor_absolute_index < 0 ||
       candidate_window_.candidates().size() <=
-      static_cast<size_t>(cursor_absolute_index)) {
+          static_cast<size_t>(cursor_absolute_index)) {
     return;
   }
 

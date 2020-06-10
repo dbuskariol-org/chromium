@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/chromeos/ime/suggestion_view.h"
+#include "chrome/browser/chromeos/input_method/ui/suggestion_view.h"
 #include "base/macros.h"
 #include "base/strings/utf_string_conversions.h"
 #include "ui/gfx/color_utils.h"

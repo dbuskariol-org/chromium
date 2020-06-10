@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_CHROMEOS_IME_CANDIDATE_VIEW_H_
-#define UI_CHROMEOS_IME_CANDIDATE_VIEW_H_
+#ifndef CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_VIEW_H_
+#define CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_VIEW_H_
 
 #include "base/gtest_prod_util.h"
 #include "base/macros.h"
@@ -23,11 +23,9 @@ class UI_CHROMEOS_EXPORT CandidateView : public views::Button {
                 ui::CandidateWindow::Orientation orientation);
   ~CandidateView() override {}
 
-  void GetPreferredWidths(int* shortcut_width,
-                          int* candidate_width);
+  void GetPreferredWidths(int* shortcut_width, int* candidate_width);
 
-  void SetWidths(int shortcut_width,
-                 int candidate_width);
+  void SetWidths(int shortcut_width, int candidate_width);
 
   void SetEntry(const ui::CandidateWindow::Entry& entry);
 
@@ -81,4 +79,4 @@ class UI_CHROMEOS_EXPORT CandidateView : public views::Button {
 }  // namespace ime
 }  // namespace ui
 
-#endif  // UI_CHROMEOS_IME_CANDIDATE_VIEW_H_
+#endif  // CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_VIEW_H_

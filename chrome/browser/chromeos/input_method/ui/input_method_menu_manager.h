@@ -4,11 +4,11 @@
 
 #include "base/macros.h"
 #include "base/observer_list.h"
-#include "ui/chromeos/ime/input_method_menu_item.h"
+#include "chrome/browser/chromeos/input_method/ui/input_method_menu_item.h"
 #include "ui/chromeos/ui_chromeos_export.h"
 
-#ifndef UI_CHROMEOS_IME_INPUT_METHOD_MENU_MANAGER_H_
-#define UI_CHROMEOS_IME_INPUT_METHOD_MENU_MANAGER_H_
+#ifndef CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_INPUT_METHOD_MENU_MANAGER_H_
+#define CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_INPUT_METHOD_MENU_MANAGER_H_
 
 namespace base {
 template <typename Type>
@@ -19,7 +19,7 @@ namespace ui {
 namespace ime {
 
 class UI_CHROMEOS_EXPORT InputMethodMenuManager {
-public:
+ public:
   class Observer {
    public:
     virtual ~Observer() {}
@@ -65,4 +65,4 @@ public:
 }  // namespace ime
 }  // namespace ui
 
-#endif // UI_CHROMEOS_IME_INPUT_METHOD_MENU_MANAGER_H_
+#endif  // CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_INPUT_METHOD_MENU_MANAGER_H_

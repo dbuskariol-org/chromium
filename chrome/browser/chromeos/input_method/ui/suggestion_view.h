@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_CHROMEOS_IME_SUGGESTION_VIEW_H_
-#define UI_CHROMEOS_IME_SUGGESTION_VIEW_H_
+#ifndef CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_SUGGESTION_VIEW_H_
+#define CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_SUGGESTION_VIEW_H_
 
 #include "base/gtest_prod_util.h"
 #include "base/macros.h"
@@ -66,4 +66,4 @@ class UI_CHROMEOS_EXPORT SuggestionView : public views::View {
 }  // namespace ime
 }  // namespace ui
 
-#endif  // UI_CHROMEOS_IME_SUGGESTION_VIEW_H_
+#endif  // CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_SUGGESTION_VIEW_H_

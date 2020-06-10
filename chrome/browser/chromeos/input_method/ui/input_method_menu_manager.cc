@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/chromeos/ime/input_method_menu_manager.h"
+#include "chrome/browser/chromeos/input_method/ui/input_method_menu_manager.h"
 
 #include <stddef.h>
 
@@ -11,8 +11,7 @@
 namespace ui {
 namespace ime {
 
-InputMethodMenuManager::InputMethodMenuManager()
-    : menu_list_(), observers_() {}
+InputMethodMenuManager::InputMethodMenuManager() : menu_list_(), observers_() {}
 
 InputMethodMenuManager::~InputMethodMenuManager() {}
 

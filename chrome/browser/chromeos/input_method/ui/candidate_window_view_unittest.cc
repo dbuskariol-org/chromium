@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/chromeos/ime/candidate_window_view.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_window_view.h"
 
 #include <stddef.h>
 
@@ -11,8 +11,8 @@
 #include "base/macros.h"
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
+#include "chrome/browser/chromeos/input_method/ui/candidate_view.h"
 #include "testing/gtest/include/gtest/gtest.h"
-#include "ui/chromeos/ime/candidate_view.h"
 #include "ui/views/test/views_test_base.h"
 #include "ui/views/widget/widget.h"
 
@@ -20,25 +20,19 @@ namespace ui {
 namespace ime {
 
 namespace {
-const char* kSampleCandidate[] = {
-  "Sample Candidate 1",
-  "Sample Candidate 2",
-  "Sample Candidate 3"
-};
-const char* kSampleAnnotation[] = {
-  "Sample Annotation 1",
-  "Sample Annotation 2",
-  "Sample Annotation 3"
-};
+const char* kSampleCandidate[] = {"Sample Candidate 1", "Sample Candidate 2",
+                                  "Sample Candidate 3"};
+const char* kSampleAnnotation[] = {"Sample Annotation 1", "Sample Annotation 2",
+                                   "Sample Annotation 3"};
 const char* kSampleDescriptionTitle[] = {
-  "Sample Description Title 1",
-  "Sample Description Title 2",
-  "Sample Description Title 3",
+    "Sample Description Title 1",
+    "Sample Description Title 2",
+    "Sample Description Title 3",
 };
 const char* kSampleDescriptionBody[] = {
-  "Sample Description Body 1",
-  "Sample Description Body 2",
-  "Sample Description Body 3",
+    "Sample Description Body 1",
+    "Sample Description Body 2",
+    "Sample Description Body 3",
 };
 
 void InitCandidateWindow(size_t page_size,
@@ -171,8 +165,8 @@ TEST_F(CandidateWindowViewTest, SelectCandidateAtTest) {
 
 TEST_F(CandidateWindowViewTest, ShortcutSettingTest) {
   const char* kEmptyLabel = "";
-  const char* kCustomizedLabel[] = { "a", "s", "d" };
-  const char* kExpectedHorizontalCustomizedLabel[] = { "a.", "s.", "d." };
+  const char* kCustomizedLabel[] = {"a", "s", "d"};
+  const char* kExpectedHorizontalCustomizedLabel[] = {"a.", "s.", "d."};
 
   {
     SCOPED_TRACE("candidate_views allocation test");
@@ -258,10 +252,8 @@ TEST_F(CandidateWindowViewTest, ShortcutSettingTest) {
     ASSERT_EQ(kPageSize, GetCandidatesSize());
     // Confirm actual labels not containing ".".
     for (size_t i = 0; i < kPageSize; ++i) {
-      ExpectLabels(kCustomizedLabel[i],
-                   kSampleCandidate[i],
-                   kSampleAnnotation[i],
-                   GetCandidateAt(i));
+      ExpectLabels(kCustomizedLabel[i], kSampleCandidate[i],
+                   kSampleAnnotation[i], GetCandidateAt(i));
     }
   }
   {
@@ -286,10 +278,8 @@ TEST_F(CandidateWindowViewTest, ShortcutSettingTest) {
     ASSERT_EQ(kPageSize, GetCandidatesSize());
     // Confirm actual labels not containing ".".
     for (size_t i = 0; i < kPageSize; ++i) {
-      ExpectLabels(kExpectedHorizontalCustomizedLabel[i],
-                   kSampleCandidate[i],
-                   kSampleAnnotation[i],
-                   GetCandidateAt(i));
+      ExpectLabels(kExpectedHorizontalCustomizedLabel[i], kSampleCandidate[i],
+                   kSampleAnnotation[i], GetCandidateAt(i));
     }
   }
 }
@@ -299,20 +289,19 @@ TEST_F(CandidateWindowViewTest, DoNotChangeRowHeightWithLabelSwitchTest) {
   ui::CandidateWindow candidate_window;
   ui::CandidateWindow no_shortcut_candidate_window;
 
-  const base::string16 kSampleCandidate1 = base::UTF8ToUTF16(
-      "Sample String 1");
-  const base::string16 kSampleCandidate2 = base::UTF8ToUTF16(
-      "\xE3\x81\x82");  // multi byte string.
+  const base::string16 kSampleCandidate1 = base::UTF8ToUTF16("Sample String 1");
+  const base::string16 kSampleCandidate2 =
+      base::UTF8ToUTF16("\xE3\x81\x82");  // multi byte string.
   const base::string16 kSampleCandidate3 = base::UTF8ToUTF16(".....");
 
   const base::string16 kSampleShortcut1 = base::UTF8ToUTF16("1");
   const base::string16 kSampleShortcut2 = base::UTF8ToUTF16("b");
   const base::string16 kSampleShortcut3 = base::UTF8ToUTF16("C");
 
-  const base::string16 kSampleAnnotation1 = base::UTF8ToUTF16(
-      "Sample Annotation 1");
-  const base::string16 kSampleAnnotation2 = base::UTF8ToUTF16(
-      "\xE3\x81\x82");  // multi byte string.
+  const base::string16 kSampleAnnotation1 =
+      base::UTF8ToUTF16("Sample Annotation 1");
+  const base::string16 kSampleAnnotation2 =
+      base::UTF8ToUTF16("\xE3\x81\x82");  // multi byte string.
   const base::string16 kSampleAnnotation3 = base::UTF8ToUTF16("......");
 
   // Create CandidateWindow object.
@@ -351,8 +340,7 @@ TEST_F(CandidateWindowViewTest, DoNotChangeRowHeightWithLabelSwitchTest) {
   ASSERT_EQ(3UL, GetCandidatesSize());
   // Check the selected index is invalidated.
   EXPECT_EQ(-1, selected_candidate_index_in_page());
-  before_height =
-      GetCandidateAt(0)->GetContentsBounds().height();
+  before_height = GetCandidateAt(0)->GetContentsBounds().height();
   // Checks all entry have same row height.
   for (size_t i = 1; i < GetCandidatesSize(); ++i)
     EXPECT_EQ(before_height, GetCandidateAt(i)->GetContentsBounds().height());

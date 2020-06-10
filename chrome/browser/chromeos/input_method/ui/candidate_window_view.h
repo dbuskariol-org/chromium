@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_CHROMEOS_IME_CANDIDATE_WINDOW_VIEW_H_
-#define UI_CHROMEOS_IME_CANDIDATE_WINDOW_VIEW_H_
+#ifndef CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_WINDOW_VIEW_H_
+#define CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_WINDOW_VIEW_H_
 
 #include <memory>
 
@@ -37,9 +37,7 @@ class UI_CHROMEOS_EXPORT CandidateWindowView
   views::Widget* InitWidget();
 
   // Adds the given observer. The ownership is not transferred.
-  void AddObserver(Observer* observer) {
-    observers_.AddObserver(observer);
-  }
+  void AddObserver(Observer* observer) { observers_.AddObserver(observer); }
 
   // Removes the given observer.
   void RemoveObserver(Observer* observer) {
@@ -137,4 +135,4 @@ class UI_CHROMEOS_EXPORT CandidateWindowView
 }  // namespace ime
 }  // namespace ui
 
-#endif  // UI_CHROMEOS_IME_CANDIDATE_WINDOW_VIEW_H_
+#endif  // CHROME_BROWSER_CHROMEOS_INPUT_METHOD_UI_CANDIDATE_WINDOW_VIEW_H_
