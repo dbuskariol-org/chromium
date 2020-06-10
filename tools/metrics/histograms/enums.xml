@@ -15423,6 +15423,8 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="36" label="Settings opened via gear icon"/>
   <int value="37" label="Settings opened via menu"/>
   <int value="38" label="Settings opened via command menu"/>
+  <int value="39" label="Tab moved to drawer"/>
+  <int value="40" label="Tab moved to main panel"/>
 </enum>
 
 <enum name="DevToolsBackgroundService">
