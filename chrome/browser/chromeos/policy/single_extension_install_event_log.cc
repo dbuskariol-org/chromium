@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/policy/single_arc_app_install_event_log.h"
+#include "chrome/browser/chromeos/policy/single_extension_install_event_log.h"
 
 #include "base/files/file.h"
 
@@ -10,15 +10,15 @@ namespace em = enterprise_management;
 
 namespace policy {
 
-SingleArcAppInstallEventLog::SingleArcAppInstallEventLog(
-    const std::string& package)
-    : SingleInstallEventLog(package) {}
+SingleExtensionInstallEventLog::SingleExtensionInstallEventLog(
+    const std::string& extension_id)
+    : SingleInstallEventLog(extension_id) {}
 
-SingleArcAppInstallEventLog::~SingleArcAppInstallEventLog() {}
+SingleExtensionInstallEventLog::~SingleExtensionInstallEventLog() {}
 
-bool SingleArcAppInstallEventLog::Load(
+bool SingleExtensionInstallEventLog::Load(
     base::File* file,
-    std::unique_ptr<SingleArcAppInstallEventLog>* log) {
+    std::unique_ptr<SingleExtensionInstallEventLog>* log) {
   log->reset();
 
   ssize_t size;
@@ -26,18 +26,18 @@ bool SingleArcAppInstallEventLog::Load(
   if (!ParseIdFromFile(file, &size, &package_buffer))
     return false;
 
-  *log = std::make_unique<SingleArcAppInstallEventLog>(
+  *log = std::make_unique<SingleExtensionInstallEventLog>(
       std::string(package_buffer.get(), size));
-
   return LoadEventLogFromFile(file, (*log).get());
 }
 
-void SingleArcAppInstallEventLog::Serialize(em::AppInstallReport* report) {
+void SingleExtensionInstallEventLog::Serialize(
+    em::ExtensionInstallReport* report) {
   report->Clear();
-  report->set_package(id_);
+  report->set_extension_id(id_);
   report->set_incomplete(incomplete_);
   for (const auto& event : events_) {
-    em::AppInstallReportLogEvent* const log_event = report->add_logs();
+    em::ExtensionInstallReportLogEvent* const log_event = report->add_logs();
     *log_event = event;
   }
   serialized_entries_ = events_.size();
