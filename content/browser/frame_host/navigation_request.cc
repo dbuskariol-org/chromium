@@ -4647,7 +4647,7 @@ void NavigationRequest::CheckStateTransition(NavigationState state) const {
   static const base::NoDestructor<StateTransitions<NavigationState>>
       transitions(StateTransitions<NavigationState>({
           // See
-          // https://chromium.googlesource.com/chromium/src/+/HEAD/docs/navigation-request-navigation-state.svg
+          // https://chromium.googlesource.com/chromium/src/+/HEAD/docs/navigation-request-navigation-state.png
           {NOT_STARTED,
            {WAITING_FOR_RENDERER_RESPONSE, WILL_START_NAVIGATION,
             WILL_START_REQUEST}},
