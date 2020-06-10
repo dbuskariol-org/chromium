@@ -19,13 +19,13 @@ shift
 id=$1
 shift
 
-bindir=$bindir
+bindir=$(dirname $0)
 
 function get_ids() {
   perl -lne 'print $1 if m#shard \#0\]\(https://chromium-swarm.appspot.com/user/task/([0-9a-f]*)#;' "$1" | sort | uniq
 }
 
-log=$("$bindir"/get_one_log.sh "$base_dir" "$id")
+log=$("$bindir"/get_one.sh "$base_dir" "$id")
 dir="$base_dir/$id"
 running=0
 for id in $(get_ids "$log" ); do
