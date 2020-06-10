@@ -454,12 +454,6 @@
       status: "experimental",
     },
     {
-      // Support for CSS contain-intrinsic-size property.
-      // https://wicg.github.io/display-locking/contain-intrinsic-size.html
-      name: "CSSIntrinsicSize",
-      status: "stable",
-    },
-    {
       name: "CSSLayoutAPI",
       status: "experimental",
     },
