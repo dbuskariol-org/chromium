@@ -2660,7 +2660,7 @@ crbug.com/1086855 external/wpt/css/css-pseudo/file-chooser-button-001.tentative.
 crbug.com/626703 [ Mac10.11 ] virtual/cors/external/wpt/preload/download-resources.html [ Timeout ]
 crbug.com/626703 [ Mac10.12 ] virtual/cors/external/wpt/preload/download-resources.html [ Timeout ]
 crbug.com/626703 [ Mac10.15 ] virtual/cors/external/wpt/preload/download-resources.html [ Timeout ]
-crbug.com/626703 [ Win7 ] virtual/cors/external/wpt/preload/download-resources.html [ Timeout ]
+crbug.com/626703 [ Win7 ] virtual/cors/external/wpt/preload/download-resources.html [ Failure Timeout ]
 crbug.com/626703 [ Linux ] external/wpt/mathml/presentation-markup/fractions/frac-invalid-3.html [ Failure ]
 crbug.com/626703 [ Mac ] external/wpt/mathml/presentation-markup/fractions/frac-invalid-3.html [ Failure ]
 crbug.com/626703 [ Win ] external/wpt/mathml/presentation-markup/fractions/frac-invalid-3.html [ Failure ]
