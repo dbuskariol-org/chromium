@@ -726,6 +726,7 @@ junit_binary("chrome_junit_tests") {
     "//chrome/android/webapk/test:junit_test_support",
     "//chrome/browser/android/lifecycle:java",
     "//chrome/browser/download/android:java",
+    "//chrome/browser/download/android:junit_tests",
     "//chrome/browser/flags:flags_junit_tests",
     "//chrome/browser/flags:java",
     "//chrome/browser/image_fetcher:java",

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.download;
+package org.chromium.chrome.browser.download.dialogs;
 
 import static org.chromium.chrome.browser.download.settings.DownloadDirectoryAdapter.NO_SELECTED_ITEM_ID;
 
@@ -18,6 +18,11 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
+import org.chromium.chrome.browser.download.DirectoryOption;
+import org.chromium.chrome.browser.download.DownloadDialogBridge;
+import org.chromium.chrome.browser.download.DownloadLocationDialogType;
+import org.chromium.chrome.browser.download.DownloadPromptStatus;
+import org.chromium.chrome.browser.download.R;
 import org.chromium.chrome.browser.download.settings.DownloadDirectoryAdapter;
 import org.chromium.components.browser_ui.widget.text.AlertDialogEditText;
 
