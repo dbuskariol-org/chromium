@@ -50981,6 +50981,27 @@ Called by update_net_trust_anchors.py.-->
   <int value="1701" label="Copy Detailed Build Info"/>
 </enum>
 
+<enum name="OsSettingSearchBoxUserAction">
+  <int value="0" label="User clicked on a search result"/>
+  <int value="1"
+      label="User clicked out of the search box, but still on area within the
+             OS Settings window"/>
+</enum>
+
+<enum name="OsSettingSearchRequestTypes">
+  <int value="0"
+      label="Any search request made to the Settings Search Mojo API, which
+             may succeed or fail in recieving a response."/>
+  <int value="1"
+      label="A succeeding search request returning results that will be
+             discarded since the query used to fetch results no longer
+             matches the current query."/>
+  <int value="2"
+      label="A succeeding search request returning results that will be shown
+             to the user since the query used to fetch results still matches
+             the current query."/>
+</enum>
+
 <enum name="OsSettingsProviderError">
   <int value="0" label="Ok"/>
   <int value="1" label="App service unavailable"/>
