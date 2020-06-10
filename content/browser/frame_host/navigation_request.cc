@@ -3290,6 +3290,8 @@ net::Error NavigationRequest::CheckContentSecurityPolicy(
             parent->ContentSecurityPolicies())) {
       upgrade_if_insecure_ = true;
       network::UpgradeInsecureRequest(&common_params_->url);
+      common_params_->referrer = Referrer::SanitizeForRequest(
+          common_params_->url, *common_params_->referrer);
       commit_params_->original_url = common_params_->url;
     }
   }
