@@ -2873,6 +2873,23 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="AutofillCreditCardsEdited">
+  <owner>sujiezhu@google.com</owner>
+  <owner>jsaul@google.com</owner>
+  <description>
+    Recorded when user edits card via chrome://settings/payments page.
+  </description>
+</action>
+
+<action name="AutofillCreditCardsEditedWithNickname">
+  <owner>sujiezhu@google.com</owner>
+  <owner>jsaul@google.com</owner>
+  <description>
+    Recorded when user edits card with a new nickname via
+    chrome://settings/payments page.
+  </description>
+</action>
+
 <action name="AutofillCreditCardsViewed">
   <owner>nikunjb@chromium.org</owner>
   <owner>sebsg@chromium.org</owner>
