@@ -1519,7 +1519,7 @@ TEST_F(StyleEngineTest, MediaQueriesChangeColorSchemeForcedDarkMode) {
 
   GetDocument().body()->setInnerHTML(R"HTML(
     <style>
-      @media (prefers-color-scheme: no-preference) {
+      @media (prefers-color-scheme: light) {
         body { color: green }
       }
       @media (prefers-color-scheme: dark) {
@@ -1634,14 +1634,6 @@ TEST_F(StyleEngineTest, MediaQueriesChangeForcedColorsAndPreferredColorScheme) {
   color_scheme_helper.SetForcedColors(GetDocument(), ForcedColors::kActive);
   UpdateAllLifecyclePhases();
   EXPECT_EQ(MakeRGB(255, 165, 0),
-            GetDocument().body()->GetComputedStyle()->VisitedDependentColor(
-                GetCSSPropertyColor()));
-
-  // ForcedColors = kActive, PreferredColorScheme = kNoPreference
-  color_scheme_helper.SetPreferredColorScheme(
-      PreferredColorScheme::kNoPreference);
-  UpdateAllLifecyclePhases();
-  EXPECT_EQ(MakeRGB(255, 255, 0),
             GetDocument().body()->GetComputedStyle()->VisitedDependentColor(
                 GetCSSPropertyColor()));
 

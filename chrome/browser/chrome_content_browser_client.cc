@@ -3436,11 +3436,9 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
       web_prefs->preferred_color_scheme = blink::PreferredColorScheme::kDark;
       break;
     case ui::NativeTheme::PreferredColorScheme::kLight:
+    case ui::NativeTheme::PreferredColorScheme::kNoPreference:
       web_prefs->preferred_color_scheme = blink::PreferredColorScheme::kLight;
       break;
-    case ui::NativeTheme::PreferredColorScheme::kNoPreference:
-      web_prefs->preferred_color_scheme =
-          blink::PreferredColorScheme::kNoPreference;
   }
 #endif  // !defined(OS_ANDROID)
 

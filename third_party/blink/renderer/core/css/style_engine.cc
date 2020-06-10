@@ -2120,7 +2120,7 @@ void StyleEngine::UpdateColorScheme() {
   if (!SupportsDarkColorScheme() && settings->GetForceDarkModeEnabled()) {
     // Make sure we don't match (prefers-color-scheme: dark) when forced
     // darkening is enabled.
-    preferred_color_scheme_ = PreferredColorScheme::kNoPreference;
+    preferred_color_scheme_ = PreferredColorScheme::kLight;
   }
   if (GetDocument().Printing())
     preferred_color_scheme_ = PreferredColorScheme::kLight;

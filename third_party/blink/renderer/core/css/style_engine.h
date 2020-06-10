@@ -606,9 +606,8 @@ class CORE_EXPORT StyleEngine final : public GarbageCollected<StyleEngine>,
 
   // The preferred color scheme is set in settings, but may be overridden by the
   // ForceDarkMode setting where the preferred_color_scheme_ will be set to
-  // kNoPreference to avoid dark styling to be applied before auto darkening.
-  PreferredColorScheme preferred_color_scheme_ =
-      PreferredColorScheme::kNoPreference;
+  // kLight to avoid dark styling to be applied before auto darkening.
+  PreferredColorScheme preferred_color_scheme_ = PreferredColorScheme::kLight;
   bool use_dark_background_ = false;
 
   // Forced colors is set in WebThemeEngine.
