@@ -1354,18 +1354,6 @@ crbug.com/929098 virtual/dark-color-scheme/external/wpt/css/css-color-adjust/ren
 
 # ====== Style team owned tests to here ======
 
-# ====== OOPIF-mode failures from here ======
-
-# See crbug.com/891427. These tests either fail or become flaky on one or more
-# platforms when --enable-display-compositor-pixel-dump is turned on. They need
-# triage. Note that these overlap with several existing entries in this
-# TestExpectations file. All of those have been commented out with a pointer back
-# up to this section. So if you close one of these, you should search for the
-# same test elsewhere, to see if perhaps you need to uncomment the old line.
-crbug.com/891427 virtual/android/fullscreen/rendering/backdrop-video.html [ Failure ]
-
-# ====== OOPIF-mode failures until here ======
-
 # ====== Form Controls Refresh (chrome://flags/#form-controls-refresh) failures from here ======
 
 crbug.com/1057518 virtual/controls-refresh/month-picker/month-picker-appearance-step.html [ Skip ]
@@ -1517,6 +1505,9 @@ crbug.com/520736 [ Win7 ] media/W3C/video/networkState/networkState_during_progr
 crbug.com/520736 [ Win10 ] media/W3C/video/networkState/networkState_during_progress.html [ Failure Pass ]
 crbug.com/520736 [ Linux ] media/W3C/video/networkState/networkState_during_progress.html [ Failure Pass ]
 crbug.com/909095 [ Mac ] media/W3C/video/networkState/networkState_during_progress.html [ Failure Pass ]
+
+# Hiding video::-webkit-media-controls breaks --force-overlay-fullscreen-video.
+crbug.com/1093447 virtual/android/fullscreen/rendering/backdrop-video.html [ Failure ]
 
 # gpuBenchmarking.pinchBy is busted on desktops for touchscreen pinch
 crbug.com/787615 [ Win ] virtual/threaded/synthetic_gestures/synthetic-pinch-zoom-gesture-touchscreen-zoom-in-slow.html [ Failure Pass ]
