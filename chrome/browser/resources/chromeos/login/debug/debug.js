@@ -397,6 +397,7 @@ cr.define('cr.ui.login.debug', function() {
       id: 'saml-confirm-password',
       kind: ScreenKind.OTHER,
       suffix: 'SAML',
+      handledSteps: 'password',
       states: [
         {
           // Password was scraped
@@ -410,13 +411,24 @@ cr.define('cr.ui.login.debug', function() {
           }
         },
         {
+          // Password was scraped
+          id: 'scraped-retry',
+          trigger: (screen) => {
+            screen.show(
+                'someone@example.com',
+                false,  // manualPasswordInput
+                1,      // attempt count
+                () => {});
+          }
+        },
+        {
           // No password was scraped
           id: 'manual',
           trigger: (screen) => {
             screen.show(
                 'someone@example.com',
                 true,  // manualPasswordInput
-                1,     // attempt count
+                0,     // attempt count
                 () => {});
           }
         },
