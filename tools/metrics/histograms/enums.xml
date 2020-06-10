@@ -20483,6 +20483,7 @@ Called by update_document_policy_enum.py.-->
   <int value="712" label="PluginVmDataCollectionAllowed"/>
   <int value="713" label="IntensiveWakeUpThrottlingEnabled"/>
   <int value="714" label="MinimumChromeVersionEolMessage"/>
+  <int value="715" label="DefaultSearchProviderContextMenuAccessAllowed"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
