@@ -173,7 +173,7 @@ const base::Feature kCrostiniAnsibleSoftwareManagement{
 
 // Enables custom UI for forcibly closing unresponsive windows.
 const base::Feature kCrostiniForceClose{"CrostiniForceClose",
-                                        base::FEATURE_DISABLED_BY_DEFAULT};
+                                        base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Enables support for sideloading android apps into Arc via crostini.
 const base::Feature kCrostiniArcSideload{"CrostiniArcSideload",
