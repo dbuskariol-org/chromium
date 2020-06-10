@@ -21253,9 +21253,9 @@ Called by update_extension_histograms.py.-->
   <int value="57" label="BRAILLE_DISPLAY_PRIVATE_ON_DISPLAY_STATE_CHANGED"/>
   <int value="58" label="BRAILLE_DISPLAY_PRIVATE_ON_KEY_EVENT"/>
   <int value="59" label="BROWSER_ACTION_ON_CLICKED"/>
-  <int value="60" label="CAST_STREAMING_RTP_STREAM_ON_ERROR"/>
-  <int value="61" label="CAST_STREAMING_RTP_STREAM_ON_STARTED"/>
-  <int value="62" label="CAST_STREAMING_RTP_STREAM_ON_STOPPED"/>
+  <int value="60" label="DELETED_CAST_STREAMING_RTP_STREAM_ON_ERROR"/>
+  <int value="61" label="DELETED_CAST_STREAMING_RTP_STREAM_ON_STARTED"/>
+  <int value="62" label="DELETED_CAST_STREAMING_RTP_STREAM_ON_STOPPED"/>
   <int value="63" label="COMMANDS_ON_COMMAND"/>
   <int value="64" label="CONTEXT_MENUS_INTERNAL_ON_CLICKED"/>
   <int value="65" label="CONTEXT_MENUS_ON_CLICKED"/>
