@@ -3613,6 +3613,11 @@ if (use_libfuzzer) {
       "$root_gen_dir/components/policy/proto",
     ]
 
+    proto_deps = [
+      "//components/policy:cloud_policy_full_runtime_proto",
+      "//components/policy/proto:chrome_device_policy_full_runtime_proto",
+    ]
+
     link_deps = [
       "//components/policy:cloud_policy_full_runtime_proto",
       "//components/policy/proto:chrome_device_policy_full_runtime_proto",
