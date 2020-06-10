@@ -968,11 +968,6 @@
     "expiry_milestone": 89
   },
   {
-    "name": "display-change-modal",
-    "owners": [ "baileyberro", "zentaro" ],
-    "expiry_milestone": 85
-  },
-  {
     "name": "display-identification",
     "owners": [ "baileyberro", "cros-peripherals@google.com" ],
     "expiry_milestone": 85
