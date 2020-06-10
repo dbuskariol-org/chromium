@@ -465,6 +465,49 @@ TEST_F(ScrollTimelineTest, ScheduleFrameWhenScrollerLayoutChanges) {
   EXPECT_TRUE(scroll_timeline->NextServiceScheduled());
 }
 
+TEST_F(ScrollTimelineTest,
+       TimelineInvalidationWhenScrollerDisplayPropertyChanges) {
+  SetBodyInnerHTML(R"HTML(
+    <style>
+      #scroller { overflow: scroll; width: 100px; height: 100px; }
+      #spacer { width: 200px; height: 200px; }
+    </style>
+    <div id='scroller'>
+      <div id ='spacer'></div>
+    </div>
+  )HTML");
+  LayoutBoxModelObject* scroller =
+      ToLayoutBoxModelObject(GetLayoutObjectByElementId("scroller"));
+  PaintLayerScrollableArea* scrollable_area = scroller->GetScrollableArea();
+  scrollable_area->SetScrollOffset(ScrollOffset(0, 20),
+                                   mojom::blink::ScrollType::kProgrammatic);
+  Element* scroller_element = GetElementById("scroller");
+
+  // Use empty offsets as 'auto'.
+  TestScrollTimeline* scroll_timeline =
+      MakeGarbageCollected<TestScrollTimeline>(
+          &GetDocument(), scroller_element,
+          MakeGarbageCollected<ScrollTimelineOffset>(),
+          MakeGarbageCollected<ScrollTimelineOffset>());
+  NonThrowableExceptionState exception_state;
+  Timing timing;
+  timing.iteration_duration = AnimationTimeDelta::FromSecondsD(30);
+  Animation* scroll_animation =
+      Animation::Create(MakeGarbageCollected<KeyframeEffect>(
+                            nullptr,
+                            MakeGarbageCollected<StringKeyframeEffectModel>(
+                                StringKeyframeVector()),
+                            timing),
+                        scroll_timeline, exception_state);
+  scroll_animation->play();
+  UpdateAllLifecyclePhasesForTest();
+
+  scroller_element->setAttribute(html_names::kStyleAttr, "display:table-cell;");
+  scroll_timeline->ResetNextServiceScheduled();
+  UpdateAllLifecyclePhasesForTest();
+  EXPECT_TRUE(scroll_timeline->NextServiceScheduled());
+}
+
 // Verify that scroll timeline current time is updated once upon construction
 // and at the top of every animation frame.
 TEST_F(ScrollTimelineTest, CurrentTimeUpdateAfterNewAnimationFrame) {

@@ -166,7 +166,7 @@ bool ScrollTimeline::IsActive() const {
 }
 
 void ScrollTimeline::Invalidate() {
-  ScheduleNextService();
+  ScheduleNextServiceInternal(/* time_check = */ false);
 }
 
 bool ScrollTimeline::ComputeIsActive() const {
@@ -285,14 +285,21 @@ void ScrollTimeline::ServiceAnimations(TimingUpdateReason reason) {
   AnimationTimeline::ServiceAnimations(reason);
 }
 
-void ScrollTimeline::ScheduleNextService() {
+void ScrollTimeline::ScheduleNextServiceInternal(bool time_check) {
   if (AnimationsNeedingUpdateCount() == 0)
     return;
 
-  auto state = ComputeTimelineState();
-  PhaseAndTime current_phase_and_time{state.phase, state.current_time};
-  if (current_phase_and_time != last_current_phase_and_time_)
-    ScheduleServiceOnNextFrame();
+  if (time_check) {
+    auto state = ComputeTimelineState();
+    PhaseAndTime current_phase_and_time{state.phase, state.current_time};
+    if (current_phase_and_time == last_current_phase_and_time_)
+      return;
+  }
+  ScheduleServiceOnNextFrame();
+}
+
+void ScrollTimeline::ScheduleNextService() {
+  ScheduleNextServiceInternal(/* time_check = */ true);
 }
 
 void ScrollTimeline::SnapshotState() {

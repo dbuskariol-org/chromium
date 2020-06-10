@@ -152,6 +152,10 @@ class CORE_EXPORT ScrollTimeline : public AnimationTimeline {
 
   TimelineState ComputeTimelineState() const;
 
+  // Use time_check true to request next service if time has changed.
+  // false - regardless of time change.
+  void ScheduleNextServiceInternal(bool time_check);
+
   // Use |scroll_source_| only to implement the web-exposed API but use
   // resolved_scroll_source_ to actually access the scroll related properties.
   Member<Element> scroll_source_;
