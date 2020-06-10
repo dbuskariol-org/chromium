@@ -6717,5 +6717,4 @@ crbug.com/1090180 virtual/gpu/fast/canvas/canvas-gpu-consistency.html [ Failure 
 crbug.com/1093003 [ Mac ] external/wpt/html/rendering/replaced-elements/embedded-content/cross-domain-iframe.sub.html [ Pass Failure ]
 
 # Sheriff 2020-06-10
-crbug.com/1093203 [ Retina ] virtual/text-antialias/color-emoji.html [ Pass Failure ]
 crbug.com/1093429 [ Mac ] external/wpt/webrtc/RTCPeerConnection-getStats.https.html [ Failure ]
