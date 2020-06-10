@@ -21,6 +21,7 @@
 #include "third_party/blink/renderer/core/css/css_style_sheet.h"
 #include "third_party/blink/renderer/core/css/css_test_helpers.h"
 #include "third_party/blink/renderer/core/css/parser/css_parser_context.h"
+#include "third_party/blink/renderer/core/css/properties/css_property_ref.h"
 #include "third_party/blink/renderer/core/css/style_sheet_contents.h"
 #include "third_party/blink/renderer/core/dom/document.h"
 #include "third_party/blink/renderer/core/dom/first_letter_pseudo_element.h"
@@ -71,6 +72,22 @@ class StyleEngineTest : public testing::Test {
 
   Node* GetStyleRecalcRoot() {
     return GetStyleEngine().style_recalc_root_.GetRootNode();
+  }
+
+  const CSSValue* ComputedValue(Element* element, String property_name) {
+    CSSPropertyRef ref(property_name, GetDocument());
+    DCHECK(ref.IsValid());
+    return ref.GetProperty().CSSValueFromComputedStyle(
+        element->ComputedStyleRef(),
+        /* layout_object */ nullptr,
+        /* allow_visited_style */ false);
+  }
+
+  void InjectSheet(String key, WebDocument::CSSOrigin origin, String text) {
+    auto* context = MakeGarbageCollected<CSSParserContext>(GetDocument());
+    auto* sheet = MakeGarbageCollected<StyleSheetContents>(context);
+    sheet->ParseString(text);
+    GetStyleEngine().InjectSheet(StyleSheetKey(key), sheet, origin);
   }
 
  private:
@@ -2737,6 +2754,54 @@ TEST_F(StyleEngineTest, MediaQueryAffectedByViewportSanityCheck) {
   GetDocument().body()->setInnerHTML("<audio controls>");
   UpdateAllLifecyclePhases();
   EXPECT_FALSE(GetStyleEngine().MediaQueryAffectedByViewportChange());
+}
+
+TEST_F(StyleEngineTest, RemoveDeclaredPropertiesEmptyRegistry) {
+  ScopedCSSVariables2AtPropertyForTest scoped_feature(true);
+
+  EXPECT_FALSE(GetDocument().GetPropertyRegistry());
+  PropertyRegistration::RemoveDeclaredProperties(GetDocument());
+  EXPECT_FALSE(GetDocument().GetPropertyRegistry());
+}
+
+TEST_F(StyleEngineTest, AtPropertyInUserOrigin) {
+  // @property in the user origin:
+  InjectSheet("user1", WebDocument::kUserOrigin, R"CSS(
+    @property --x {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 10px;
+    }
+  )CSS");
+  UpdateAllLifecyclePhases();
+  ASSERT_TRUE(ComputedValue(GetDocument().body(), "--x"));
+  EXPECT_EQ("10px", ComputedValue(GetDocument().body(), "--x")->CssText());
+
+  // @property in the author origin (should win over user origin)
+  InjectSheet("author", WebDocument::kAuthorOrigin, R"CSS(
+    @property --x {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 20px;
+    }
+  )CSS");
+  UpdateAllLifecyclePhases();
+  ASSERT_TRUE(ComputedValue(GetDocument().body(), "--x"));
+  EXPECT_EQ("20px", ComputedValue(GetDocument().body(), "--x")->CssText());
+
+  // An additional @property in the user origin:
+  InjectSheet("user2", WebDocument::kUserOrigin, R"CSS(
+    @property --y {
+      syntax: "<length>";
+      inherits: false;
+      initial-value: 30px;
+    }
+  )CSS");
+  UpdateAllLifecyclePhases();
+  ASSERT_TRUE(ComputedValue(GetDocument().body(), "--x"));
+  ASSERT_TRUE(ComputedValue(GetDocument().body(), "--y"));
+  EXPECT_EQ("20px", ComputedValue(GetDocument().body(), "--x")->CssText());
+  EXPECT_EQ("30px", ComputedValue(GetDocument().body(), "--y")->CssText());
 }
 
 class ParameterizedStyleEngineTest
