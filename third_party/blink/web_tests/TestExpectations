@@ -6745,7 +6745,6 @@ crbug.com/1092721 external/wpt/webrtc/RTCPeerConnection-getStats.https.html [ Pa
 crbug.com/1091843 fast/canvas/color-space/canvas-createImageBitmap-p3.html [ Pass Failure ]
 
 # Sheriff 2020-06-09
-crbug.com/1092813 [ Retina ] virtual/text-antialias/emoticons.html [ Pass Failure ]
 crbug.com/1090180 virtual/gpu/fast/canvas/canvas-gpu-consistency.html [ Failure ]
 crbug.com/1093003 [ Mac ] external/wpt/html/rendering/replaced-elements/embedded-content/cross-domain-iframe.sub.html [ Pass Failure ]
 
