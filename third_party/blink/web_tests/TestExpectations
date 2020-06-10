@@ -5894,6 +5894,11 @@ crbug.com/970285 external/wpt/forced-colors-mode/* [ Failure ]
 crbug.com/970285 [ Mac ] virtual/forced-high-contrast-cascade/* [ Failure ]
 crbug.com/970285 [ Mac ] virtual/forced-high-contrast-colors/* [ Failure ]
 
+# Expected failures for dark mode tests when the corresponding flags
+# are not enabled.
+crbug.com/1090660 external/wpt/css/css-color-adjust/rendering/dark-color-scheme/svg-as-image.html [ Skip ]
+crbug.com/1090660 virtual/dark-color-scheme/external/wpt/css/css-color-adjust/rendering/dark-color-scheme/svg-as-image.html [ Pass ]
+
 # Sheriff 2019-08-14
 crbug.com/993671 [ Win ] http/tests/media/video-frame-size-change.html [ Pass Failure ]
 crbug.com/993671 [ Win ] virtual/audio-service/http/tests/media/video-frame-size-change.html [ Pass Failure ]
