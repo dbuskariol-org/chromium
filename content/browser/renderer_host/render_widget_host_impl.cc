@@ -1771,12 +1771,20 @@ void RenderWidgetHostImpl::DragTargetDragEnterWithMetaData(
 }
 
 void RenderWidgetHostImpl::DragTargetDragOver(
-    const gfx::PointF& client_pt,
-    const gfx::PointF& screen_pt,
+    const gfx::PointF& client_point,
+    const gfx::PointF& screen_point,
     WebDragOperationsMask operations_allowed,
     int key_modifiers) {
-  Send(new DragMsg_TargetDragOver(GetRoutingID(), client_pt, screen_pt,
-                                  operations_allowed, key_modifiers));
+  // TODO(dtapuska): Remove this null check once all of the Drag IPCs
+  // come over the mojo channels. It will be guaranteed that this
+  // will be non-null.
+  if (blink_frame_widget_) {
+    blink_frame_widget_->DragTargetDragOver(
+        ConvertWindowPointToViewport(client_point), screen_point,
+        operations_allowed, key_modifiers,
+        base::BindOnce(&RenderWidgetHostImpl::OnUpdateDragCursor,
+                       weak_factory_.GetWeakPtr()));
+  }
 }
 
 void RenderWidgetHostImpl::DragTargetDragLeave(

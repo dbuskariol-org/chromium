@@ -28,12 +28,6 @@ IPC_MESSAGE_ROUTED5(DragMsg_TargetDragEnter,
                     blink::WebDragOperationsMask /* ops_allowed */,
                     int /* key_modifiers */)
 
-IPC_MESSAGE_ROUTED4(DragMsg_TargetDragOver,
-                    gfx::PointF /* client_pt */,
-                    gfx::PointF /* screen_pt */,
-                    blink::WebDragOperationsMask /* ops_allowed */,
-                    int /* key_modifiers */)
-
 IPC_MESSAGE_ROUTED4(DragMsg_TargetDrop,
                     content::DropData /* drop_data */,
                     gfx::PointF /* client_pt */,

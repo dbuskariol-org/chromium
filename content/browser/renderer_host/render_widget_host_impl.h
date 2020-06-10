@@ -241,8 +241,8 @@ class CONTENT_EXPORT RenderWidgetHostImpl
       const gfx::PointF& screen_pt,
       blink::WebDragOperationsMask operations_allowed,
       int key_modifiers) override;
-  void DragTargetDragOver(const gfx::PointF& client_pt,
-                          const gfx::PointF& screen_pt,
+  void DragTargetDragOver(const gfx::PointF& client_point,
+                          const gfx::PointF& screen_point,
                           blink::WebDragOperationsMask operations_allowed,
                           int key_modifiers) override;
   void DragTargetDragLeave(const gfx::PointF& client_point,
