@@ -19,7 +19,7 @@ import time
 
 @functools.lru_cache(1)
 def get_chromium_root():
-    path = os.path.realpath('../../../../../')
+    path = os.path.realpath('../../../../')
     assert os.path.basename(path) == 'src'
     return path
 
@@ -284,7 +284,7 @@ def parse_args(args):
 
 def main(args):
     cca_root = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-    assert os.path.basename(cca_root) == 'camera'
+    assert os.path.basename(cca_root) == 'resources'
     os.chdir(cca_root)
 
     args = parse_args(args)

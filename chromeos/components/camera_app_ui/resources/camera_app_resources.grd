@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <grit latest_public_release="0" current_release="1" output_all_resource_defines="false">
   <outputs>
-    <output filename="grit/camera_resources.h" type="rc_header">
+    <output filename="grit/chromeos_camera_app_resources.h" type="rc_header">
       <emit emit_type='prepend'></emit>
     </output>
-    <output filename="grit/camera_resources_map.cc"
+    <output filename="grit/chromeos_camera_app_resources_map.cc"
             type="resource_file_map_source" />
-    <output filename="grit/camera_resources_map.h"
+    <output filename="grit/chromeos_camera_app_resources_map.h"
             type="resource_map_header" />
-    <output filename="camera_resources.pak" type="data_package" />
+    <output filename="chromeos_camera_app_resources.pak" type="data_package" />
   </outputs>
   <release seq="1">
     <structures>
@@ -46,6 +46,7 @@
       <structure name="IDR_CAMERA_OPTIONS_JS" file="src/js/views/camera/options.js" type="chrome_html" />
       <structure name="IDR_CAMERA_PERF_JS" file="src/js/perf.js" type="chrome_html" />
       <structure name="IDR_CAMERA_PREVIEW_JS" file="src/js/views/camera/preview.js" type="chrome_html" />
+      <structure name="IDR_CAMERA_PWA_HTML" file="pwa.html" type="chrome_html" />
       <structure name="IDR_CAMERA_RECORDTIME_JS" file="src/js/views/camera/recordtime.js" type="chrome_html" />
       <structure name="IDR_CAMERA_RESULT_SAVER_JS" file="src/js/models/result_saver.js" type="chrome_html" />
       <structure name="IDR_CAMERA_REVIEW_RESULT_JS" file="src/js/views/camera/review_result.js" type="chrome_html" />
