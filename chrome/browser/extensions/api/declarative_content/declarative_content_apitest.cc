@@ -712,22 +712,17 @@ IN_PROC_BROWSER_TEST_F(DeclarativeContentApiTest, DISABLED_RulesPersistence) {
 }
 
 // http://crbug.com/304373
-#if defined(OS_WIN)
-// Fails on XP: http://crbug.com/515717
-#define MAYBE_UninstallWhileActivePageAction \
-  DISABLED_UninstallWhileActivePageAction
-#else
-#define MAYBE_UninstallWhileActivePageAction UninstallWhileActivePageAction
-#endif
 IN_PROC_BROWSER_TEST_F(DeclarativeContentApiTest,
-                       MAYBE_UninstallWhileActivePageAction) {
+                       UninstallWhileActivePageAction) {
   ext_dir_.WriteManifest(kDeclarativeContentManifest);
-  ext_dir_.WriteFile(FILE_PATH_LITERAL("background.js"), kBackgroundHelpers);
+  std::string script =
+      kBackgroundHelpers + std::string("\nchrome.test.sendMessage('ready');");
+  ext_dir_.WriteFile(FILE_PATH_LITERAL("background.js"), script);
+  ExtensionTestMessageListener ready_listener("ready", false);
   const Extension* extension = LoadExtension(ext_dir_.UnpackedPath());
   ASSERT_TRUE(extension);
-  // Wait for declarative rules to be set up.
-  content::BrowserContext::GetDefaultStoragePartition(profile())
-      ->FlushNetworkInterfaceForTesting();
+  ASSERT_TRUE(ready_listener.WaitUntilSatisfied());
+
   const std::string extension_id = extension->id();
   const ExtensionAction* action =
       ExtensionActionManager::Get(browser()->profile())
@@ -754,10 +749,10 @@ IN_PROC_BROWSER_TEST_F(DeclarativeContentApiTest,
   EXPECT_EQ(1u, extension_action_test_util::GetVisiblePageActionCount(tab));
   EXPECT_EQ(1u, extension_action_test_util::GetTotalPageActionCount(tab));
 
+  ExtensionTestMessageListener reload_ready_listener("ready", false);
   ReloadExtension(extension_id);  // Invalidates action and extension.
-  // Wait for declarative rules to be removed.
-  content::BrowserContext::GetDefaultStoragePartition(profile())
-      ->FlushNetworkInterfaceForTesting();
+  ASSERT_TRUE(reload_ready_listener.WaitUntilSatisfied());
+
   EXPECT_EQ("test_rule",
             ExecuteScriptInBackgroundPage(extension_id, kTestRule));
   // TODO(jyasskin): Apply new rules to existing tabs, without waiting for a
