@@ -621,6 +621,12 @@
       status: "test",
     },
     {
+      name: "DelayAsyncScriptExecutionUntilFinishedParsing",
+    },
+    {
+      name: "DelayAsyncScriptExecutionUntilFirstPaintOrFinishedParsing",
+    },
+    {
       name: "DelegatedInkTrails",
       status: "test",
     },

@@ -38956,6 +38956,7 @@ from previous Chrome versions.
       label="OmniboxSpeculativeServiceWorkerStartOnQueryInput:enabled"/>
   <int value="-1779753607" label="VizDisplayCompositor:disabled"/>
   <int value="-1778993296" label="ContextualSearchMlTapSuppression:disabled"/>
+  <int value="-1778202807" label="DelayAsyncScriptExecution:enabled"/>
   <int value="-1776351704" label="DesktopPWAsOmniboxInstall:disabled"/>
   <int value="-1774818943" label="VrWebInputEditing:enabled"/>
   <int value="-1772942854" label="LongPressBackForHistory:enabled"/>
@@ -42189,6 +42190,7 @@ from previous Chrome versions.
   <int value="1843088575" label="OutOfBlinkCors:enabled"/>
   <int value="1844110073" label="enable-app-view"/>
   <int value="1847024354" label="enable-hotword-hardware"/>
+  <int value="1848974467" label="DelayAsyncScriptExecution:disabled"/>
   <int value="1849379463" label="OfflinePagesCTV2:enabled"/>
   <int value="1849580433" label="disable-oop-rasterization"/>
   <int value="1851358497" label="enable-ash-sidebar"/>
