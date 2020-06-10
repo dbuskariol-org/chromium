@@ -50820,6 +50820,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="7" label="WrongVersion"/>
   <int value="8" label="FeatureDisabled"/>
   <int value="9" label="TokenDisabled"/>
+  <int value="10" label="FeatureDisabledForUser"/>
 </enum>
 
 <enum name="OsSetting">
