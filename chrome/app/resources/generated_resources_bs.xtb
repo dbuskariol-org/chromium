@@ -1418,7 +1418,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="2766161002040448006">Pitaj roditelja</translation>
 <translation id="2767127727915954024"><ph name="ORIGIN" /> će moći uređivati fajl <ph name="FILENAME" /> dok ne zatvorite sve kartice za ovu web lokaciju</translation>
 <translation id="276969039800130567">Prijavljeni ste s računom <ph name="USER_EMAIL_ADDRESS" />.</translation>
-<translation id="2770465223704140727">Ukloni sa spiska</translation>
+<translation id="2770465223704140727">Ukloni s liste</translation>
 <translation id="2770690685823456775">Izvezite svoje lozinke u drugi folder</translation>
 <translation id="2770929488047004208">Rezolucija monitora</translation>
 <translation id="2771268254788431918">Prijenos podataka na mobilnoj mreži je aktiviran</translation>
@@ -2664,6 +2664,7 @@ Postavkama ovog računa možete upravljati instaliranjem aplikacije Family Link 
 <translation id="4364327530094270451">Dinja</translation>
 <translation id="4364567974334641491">Aplikacija <ph name="APP_NAME" /> dijeli prozor.</translation>
 <translation id="4364830672918311045">Prikaži obavještenja</translation>
+<translation id="437004882363131692">Primajte savjete, ponude i ažuriranja za uređaj <ph name="DEVICE_TYPE" /> i dijelite povratne informacije. Otkažite pretplatu bilo kada.</translation>
 <translation id="4370975561335139969">Unijeli ste e-adresu i zaporku koje se ne podudaraju</translation>
 <translation id="4374831787438678295">Paket za instalaciju Linuxa</translation>
 <translation id="4375035964737468845">Otvori preuzete fajlove</translation>
