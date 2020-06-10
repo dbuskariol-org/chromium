@@ -1767,6 +1767,7 @@ crbug.com/1071928 external/wpt/css/css-text/white-space/white-space-intrinsic-si
 # For M84 merge only - these two tests were deleted/disabled:
 crbug.com/1074752 fast/ruby/select-ruby.html [ Skip ]
 crbug.com/1074752 editing/style/4916887.html [ Skip ]
+crbug.com/1087250 virtual/controls-refresh-hc/virtual/controls-refresh/color-scheme/select/select-popup-appearance-basic.html [ Skip ]
 
 # Handling of trailing other spaces is not implemented yet.
 crbug.com/991413 external/wpt/css/css-text/white-space/trailing-other-space-separators-001.html [ Skip ]
