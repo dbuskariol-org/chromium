@@ -1942,8 +1942,8 @@ void OutOfProcessInstance::IsSelectingChanged(bool is_selecting) {
   PostMessage(message);
 }
 
-void OutOfProcessInstance::IsEditModeChanged(bool is_edit_mode) {
-  edit_mode_ = is_edit_mode;
+void OutOfProcessInstance::EnteredEditMode() {
+  edit_mode_ = true;
   pp::PDF::SetPluginCanSave(this, CanSaveEdits());
   if (CanSaveEdits()) {
     pp::VarDictionary message;

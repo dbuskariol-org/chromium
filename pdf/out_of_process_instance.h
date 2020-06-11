@@ -144,7 +144,7 @@ class OutOfProcessInstance : public pp::Instance,
   uint32_t GetBackgroundColor() override;
   void IsSelectingChanged(bool is_selecting) override;
   void SelectionChanged(const pp::Rect& left, const pp::Rect& right) override;
-  void IsEditModeChanged(bool is_edit_mode) override;
+  void EnteredEditMode() override;
   float GetToolbarHeightInScreenCoords() override;
   void DocumentFocusChanged(bool document_has_focus) override;
 
