@@ -323,6 +323,8 @@ void SetRuntimeFeaturesFromChromiumFeatures() {
      kUseFeatureState},
     {wf::EnableVideoWakeLockOptimisationHiddenMuted,
      media::kWakeLockOptimisationHiddenMuted, kUseFeatureState},
+    {wf::EnableMediaFeeds, media::kMediaFeeds, kUseFeatureState},
+
   };
   for (const auto& mapping : blinkFeatureToBaseFeatureMapping) {
     SetRuntimeFeatureFromChromiumFeature(
