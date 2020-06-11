@@ -4750,9 +4750,7 @@ crbug.com/930297 external/wpt/html/infrastructure/urls/resolving-urls/query-enco
 crbug.com/930297 external/wpt/html/infrastructure/urls/resolving-urls/query-encoding/utf-16le.html?include=workers [ Timeout ]
 
 # RubyNG TODOs
-crbug.com/1069817 external/wpt/css/css-ruby/line-break-around-ruby-001.html [ Failure ]
 crbug.com/1069817 fast/ruby/float-overhang-from-ruby-text.html [ Failure ]
-crbug.com/1069817 fast/ruby/line-break-ruby.html [ Failure ]
 crbug.com/1069817 fast/ruby/position-after.html [ Failure ]
 crbug.com/1069817 virtual/text-antialias/emphasis-avoid-ruby.html [ Failure ]
 
