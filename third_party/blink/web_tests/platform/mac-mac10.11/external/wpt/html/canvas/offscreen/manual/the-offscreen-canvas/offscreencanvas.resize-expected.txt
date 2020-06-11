@@ -7,7 +7,7 @@ PASS Verify that writing to the width or height attribute of a placeholder canva
 PASS Verify that resizing a 2d context resets its state.
 PASS Verify that setting the size of a 2d context to the same size it already had resets its state.
 PASS Verify that resizing an OffscreenCanvas with a 2d context propagates the new size to its placeholder canvas asynchronously.
-FAIL Verify that resizing an OffscreenCanvas with a webgl context propagates the new size to its placeholder canvas asynchronously. assert_equals: expected 30 but got 10
-FAIL Verify that drawImage uses the size of the frame as the intinsic size of a placeholder canvas. assert_equals: expected 10 but got 1
+PASS Verify that resizing an OffscreenCanvas with a webgl context propagates the new size to its placeholder canvas asynchronously.
+PASS Verify that drawImage uses the size of the frame as the intinsic size of a placeholder canvas.
 Harness: the test ran to completion.
 
