@@ -368,7 +368,7 @@ try_.chromium_linux_builder(
 try_.chromium_linux_builder(
     name = 'fuchsia_arm64',
     tryjob = try_.job(
-      experiment_percentage=3,
+      experiment_percentage=10,
     ),
 )
 
