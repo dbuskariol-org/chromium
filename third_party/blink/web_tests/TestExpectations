@@ -6720,6 +6720,9 @@ crbug.com/1092091 [ Mac ] virtual/dark-color-scheme/datetimelocal-picker/datetim
 # Sheriff 2020-06-06
 crbug.com/1091843 fast/canvas/color-space/canvas-createImageBitmap-p3.html [ Pass Failure ]
 
+# Flaky test
+crbug.com/1093198 external/wpt/webrtc/RTCPeerConnection-addIceCandidate-timing [ Pass Failure ]
+
 # Sheriff 2020-06-09
 crbug.com/1090180 virtual/gpu/fast/canvas/canvas-gpu-consistency.html [ Failure ]
 crbug.com/1093003 [ Mac ] external/wpt/html/rendering/replaced-elements/embedded-content/cross-domain-iframe.sub.html [ Pass Failure ]
