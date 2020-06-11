@@ -69523,6 +69523,7 @@ Full version information for the fingerprint enum values:
   <int value="1" label="Prefs cleared"/>
   <int value="2" label="Prefs retrieved - empty"/>
   <int value="3" label="Prefs retrieved - non-empty"/>
+  <int value="4" label="Prefs cleared and were not empty"/>
 </enum>
 
 <enum name="VariationsFirstRunResult">
