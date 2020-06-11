@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/privacy_budget/identifiability_study_settings.h"
+#include "chrome/browser/privacy_budget/identifiability_study_state.h"
 
 #include <algorithm>
 #include <cstdint>
@@ -23,13 +23,13 @@ namespace test_utils {
 // This class is a friend of IdentifiabilityStudySettings and can reach into the
 // internals. Use this as a last resort.
 class InspectableIdentifiabilityStudySettings
-    : public IdentifiabilityStudySettings {
+    : public IdentifiabilityStudyState {
  public:
-  using IdentifiabilityStudySettings::IdentifiableSurfaceSet;
-  using IdentifiabilityStudySettings::IdentifiableSurfaceTypeSet;
+  using IdentifiabilityStudyState::IdentifiableSurfaceSet;
+  using IdentifiabilityStudyState::IdentifiableSurfaceTypeSet;
 
   explicit InspectableIdentifiabilityStudySettings(PrefService* pref_service)
-      : IdentifiabilityStudySettings(pref_service) {}
+      : IdentifiabilityStudyState(pref_service) {}
 
   const IdentifiableSurfaceSet& active_surfaces() const {
     return active_surfaces_;
@@ -103,8 +103,7 @@ class IdentifiabilityStudySettingsTest : public ::testing::Test {
 };
 
 TEST_F(IdentifiabilityStudySettingsTest, InstantiateAndInitialize) {
-  auto settings =
-      std::make_unique<IdentifiabilityStudySettings>(pref_service());
+  auto settings = std::make_unique<IdentifiabilityStudyState>(pref_service());
 
   // Successful initialization should result in a new PRNG seed and setting the
   // generation number.
@@ -118,8 +117,7 @@ TEST_F(IdentifiabilityStudySettingsTest, ReInitializeWhenGenerationChanges) {
                              kTestingGeneration - 1);
   pref_service()->SetUint64(prefs::kPrivacyBudgetSeed, kFakeSeed);
 
-  auto settings =
-      std::make_unique<IdentifiabilityStudySettings>(pref_service());
+  auto settings = std::make_unique<IdentifiabilityStudyState>(pref_service());
 
   // Successful re-initialization should result in a new PRNG seed and setting
   // the generation number.
@@ -193,9 +191,9 @@ TEST_F(IdentifiabilityStudySettingsTest, AllowsActive) {
   auto settings =
       std::make_unique<test_utils::InspectableIdentifiabilityStudySettings>(
           pref_service());
-  EXPECT_TRUE(settings->ShouldRecordSurface(kRegularSurface1));
-  EXPECT_TRUE(settings->ShouldRecordSurface(kRegularSurface2));
-  EXPECT_TRUE(settings->ShouldRecordSurface(kRegularSurface3));
+  EXPECT_TRUE(settings->ShouldSampleSurface(kRegularSurface1));
+  EXPECT_TRUE(settings->ShouldSampleSurface(kRegularSurface2));
+  EXPECT_TRUE(settings->ShouldSampleSurface(kRegularSurface3));
   EXPECT_EQ((IdentifiableSurfaceSet{kRegularSurface1, kRegularSurface2,
                                     kRegularSurface3}),
             settings->active_surfaces());
@@ -211,15 +209,15 @@ TEST_F(IdentifiabilityStudySettingsTest, BlocksBlocked) {
   auto settings =
       std::make_unique<test_utils::InspectableIdentifiabilityStudySettings>(
           pref_service());
-  EXPECT_FALSE(settings->ShouldRecordSurface(kBlockedSurface1));
-  EXPECT_FALSE(settings->ShouldRecordSurface(kBlockedTypeSurface1));
+  EXPECT_FALSE(settings->ShouldSampleSurface(kBlockedSurface1));
+  EXPECT_FALSE(settings->ShouldSampleSurface(kBlockedTypeSurface1));
 }
 
 TEST_F(IdentifiabilityStudySettingsTest, UpdatesActive) {
   auto settings =
       std::make_unique<test_utils::InspectableIdentifiabilityStudySettings>(
           pref_service());
-  EXPECT_TRUE(settings->ShouldRecordSurface(kRegularSurface1));
+  EXPECT_TRUE(settings->ShouldSampleSurface(kRegularSurface1));
   EXPECT_EQ((IdentifiableSurfaceSet{kRegularSurface1}),
             settings->active_surfaces());
   EXPECT_EQ(SurfaceListString({kRegularSurface1}),
@@ -230,18 +228,18 @@ TEST_F(IdentifiabilityStudySettingsTest, UpdatesActive) {
 TEST(IdentifiabilityStudySettingsStandaloneTest, HighClamps) {
   auto params = test::ScopedPrivacyBudgetConfig::Parameters{};
   params.max_surfaces =
-      IdentifiabilityStudySettings::kMaxSampledIdentifiableSurfaces + 1;
+      IdentifiabilityStudyState::kMaxSampledIdentifiableSurfaces + 1;
   params.surface_selection_rate =
-      IdentifiabilityStudySettings::kMaxSamplingRateDenominator + 1;
+      IdentifiabilityStudyState::kMaxSamplingRateDenominator + 1;
   test::ScopedPrivacyBudgetConfig config(params);
 
   TestingPrefServiceSimple pref_service;
   prefs::RegisterPrivacyBudgetPrefs(pref_service.registry());
   test_utils::InspectableIdentifiabilityStudySettings settings(&pref_service);
 
-  EXPECT_EQ(IdentifiabilityStudySettings::kMaxSampledIdentifiableSurfaces,
+  EXPECT_EQ(IdentifiabilityStudyState::kMaxSampledIdentifiableSurfaces,
             settings.max_active_surfaces());
-  EXPECT_EQ(IdentifiabilityStudySettings::kMaxSamplingRateDenominator,
+  EXPECT_EQ(IdentifiabilityStudyState::kMaxSamplingRateDenominator,
             settings.surface_selection_rate());
 }
 
@@ -271,7 +269,7 @@ TEST(IdentifiabilityStudySettingsStandaloneTest, Disabled) {
   test_utils::InspectableIdentifiabilityStudySettings settings(&pref_service);
 
   EXPECT_FALSE(settings.enabled());
-  EXPECT_FALSE(settings.ShouldRecordSurface(kRegularSurface1));
-  EXPECT_FALSE(settings.ShouldRecordSurface(kRegularSurface2));
-  EXPECT_FALSE(settings.ShouldRecordSurface(kRegularSurface3));
+  EXPECT_FALSE(settings.ShouldSampleSurface(kRegularSurface1));
+  EXPECT_FALSE(settings.ShouldSampleSurface(kRegularSurface2));
+  EXPECT_FALSE(settings.ShouldSampleSurface(kRegularSurface3));
 }

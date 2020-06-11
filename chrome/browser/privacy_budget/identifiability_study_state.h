@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PRIVACY_BUDGET_IDENTIFIABILITY_STUDY_SETTINGS_H_
-#define CHROME_BROWSER_PRIVACY_BUDGET_IDENTIFIABILITY_STUDY_SETTINGS_H_
+#ifndef CHROME_BROWSER_PRIVACY_BUDGET_IDENTIFIABILITY_STUDY_STATE_H_
+#define CHROME_BROWSER_PRIVACY_BUDGET_IDENTIFIABILITY_STUDY_STATE_H_
 
 #include <unordered_set>
 
@@ -13,23 +13,24 @@
 #include "base/thread_annotations.h"
 #include "chrome/browser/privacy_budget/privacy_budget_prefs.h"
 #include "components/prefs/pref_service.h"
+#include "third_party/blink/public/common/privacy_budget/identifiability_study_settings.h"
 #include "third_party/blink/public/common/privacy_budget/identifiable_surface.h"
 
 namespace test_utils {
 class InspectableIdentifiabilityStudySettings;
 }  // namespace test_utils
 
-class IdentifiabilityStudySettings {
+class IdentifiabilityStudyState {
  public:
   // Construct from a PrefService. |pref_service| is used to retrieve and store
   // study parameters.
-  explicit IdentifiabilityStudySettings(PrefService* pref_service);
+  explicit IdentifiabilityStudyState(PrefService* pref_service);
 
-  IdentifiabilityStudySettings(IdentifiabilityStudySettings&) = delete;
-  IdentifiabilityStudySettings& operator=(const IdentifiabilityStudySettings&) =
+  IdentifiabilityStudyState(IdentifiabilityStudyState&) = delete;
+  IdentifiabilityStudyState& operator=(const IdentifiabilityStudyState&) =
       delete;
 
-  ~IdentifiabilityStudySettings();
+  ~IdentifiabilityStudyState();
 
   // True if this client is included in the identifiability study.
   //
@@ -50,15 +51,16 @@ class IdentifiabilityStudySettings {
   // fetched from the server. This number updates each time the experiment
   // parameters change, and can be used to separate clients using different sets
   // of study settings.
-  int generation() const { return generation_; }
+  int generation() const;
 
   // Returns true if metrics collection is enabled for |surface|.
   //
   // Calling this method may alter the state of the study settings.
-  bool ShouldRecordSurface(blink::IdentifiableSurface surface);
+  bool ShouldSampleSurface(blink::IdentifiableSurface surface);
 
-  // Returns true if |surface| matches any of the server configured blocklists.
-  bool IsBlocked(blink::IdentifiableSurface surface) const;
+  // Returns true if the |surface| is blocked by configuration. Does not take
+  // into account whether the surface is included in the study or not.
+  bool IsSurfaceBlocked(blink::IdentifiableSurface surface) const;
 
   // This is a hard coded maximum for the number of identifiable surfaces that
   // can be reported for a user. The actual ceiling for active surfaces cannot
@@ -227,4 +229,4 @@ class IdentifiabilityStudySettings {
   SEQUENCE_CHECKER(sequence_checker_);
 };
 
-#endif  // CHROME_BROWSER_PRIVACY_BUDGET_IDENTIFIABILITY_STUDY_SETTINGS_H_
+#endif  // CHROME_BROWSER_PRIVACY_BUDGET_IDENTIFIABILITY_STUDY_STATE_H_
