@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ENTERPRISE_REPORTING_REPORT_REQUEST_DEFINITION_H_
-#define CHROME_BROWSER_ENTERPRISE_REPORTING_REPORT_REQUEST_DEFINITION_H_
+#ifndef COMPONENTS_POLICY_CORE_COMMON_REPORTING_REPORT_REQUEST_DEFINITION_H_
+#define COMPONENTS_POLICY_CORE_COMMON_REPORTING_REPORT_REQUEST_DEFINITION_H_
 
 #include "build/build_config.h"
 #include "components/policy/proto/device_management_backend.pb.h"
@@ -26,4 +26,4 @@ using ReportRequest = enterprise_management::ChromeDesktopReportRequest;
 
 }  // namespace enterprise_reporting
 
-#endif  // CHROME_BROWSER_ENTERPRISE_REPORTING_REPORT_REQUEST_DEFINITION_H_
+#endif  // COMPONENTS_POLICY_CORE_COMMON_REPORTING_REPORT_REQUEST_DEFINITION_H_

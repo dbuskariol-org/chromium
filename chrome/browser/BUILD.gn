@@ -3273,7 +3273,6 @@ static_library("browser") {
       "enterprise/reporting/profile_report_generator.h",
       "enterprise/reporting/report_generator.cc",
       "enterprise/reporting/report_generator.h",
-      "enterprise/reporting/report_request_definition.h",
       "enterprise/reporting/report_request_queue_generator.cc",
       "enterprise/reporting/report_request_queue_generator.h",
       "enterprise/reporting/report_scheduler.cc",
