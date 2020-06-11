@@ -349,38 +349,16 @@ export class PDFViewer {
    * @private
    */
   handleKeyEvent_(e) {
-    const position = this.viewport_.position;
-    // Certain scroll events may be sent from outside of the extension.
-    const fromScriptingAPI = e.fromScriptingAPI;
-
     if (shouldIgnoreKeyEvents(document.activeElement) || e.defaultPrevented) {
       return;
     }
 
     this.toolbarManager_.hideToolbarsAfterTimeout();
 
-    const pageUpHandler = () => {
-      // Go to the previous page if we are fit-to-page or fit-to-height.
-      if (this.viewport_.isPagedMode()) {
-        this.viewport_.goToPreviousPage();
-        // Since we do the movement of the page.
-        e.preventDefault();
-      } else if (fromScriptingAPI) {
-        position.y -= this.viewport_.size.height;
-        this.viewport_.position = position;
-      }
-    };
-    const pageDownHandler = () => {
-      // Go to the next page if we are fit-to-page or fit-to-height.
-      if (this.viewport_.isPagedMode()) {
-        this.viewport_.goToNextPage();
-        // Since we do the movement of the page.
-        e.preventDefault();
-      } else if (fromScriptingAPI) {
-        position.y += this.viewport_.size.height;
-        this.viewport_.position = position;
-      }
-    };
+    // Let the viewport handle directional key events.
+    if (this.viewport_.handleDirectionalKeyEvent(e, this.isFormFieldFocused_)) {
+      return;
+    }
 
     switch (e.keyCode) {
       case 9:  // Tab key.
@@ -392,61 +370,6 @@ export class PDFViewer {
           return;
         }
         break;  // Ensure escape falls through to the print-preview handler.
-      case 32:  // Space key.
-        if (e.shiftKey) {
-          pageUpHandler();
-        } else {
-          pageDownHandler();
-        }
-        return;
-      case 33:  // Page up key.
-        pageUpHandler();
-        return;
-      case 34:  // Page down key.
-        pageDownHandler();
-        return;
-      case 37:  // Left arrow key.
-        if (!hasKeyModifiers(e)) {
-          // Go to the previous page if there are no horizontal scrollbars and
-          // no form field is focused.
-          if (!(this.viewport_.documentHasScrollbars().horizontal ||
-                this.isFormFieldFocused_)) {
-            this.viewport_.goToPreviousPage();
-            // Since we do the movement of the page.
-            e.preventDefault();
-          } else if (fromScriptingAPI) {
-            position.x -= Viewport.SCROLL_INCREMENT;
-            this.viewport_.position = position;
-          }
-        }
-        return;
-      case 38:  // Up arrow key.
-        if (fromScriptingAPI) {
-          position.y -= Viewport.SCROLL_INCREMENT;
-          this.viewport_.position = position;
-        }
-        return;
-      case 39:  // Right arrow key.
-        if (!hasKeyModifiers(e)) {
-          // Go to the next page if there are no horizontal scrollbars and no
-          // form field is focused.
-          if (!(this.viewport_.documentHasScrollbars().horizontal ||
-                this.isFormFieldFocused_)) {
-            this.viewport_.goToNextPage();
-            // Since we do the movement of the page.
-            e.preventDefault();
-          } else if (fromScriptingAPI) {
-            position.x += Viewport.SCROLL_INCREMENT;
-            this.viewport_.position = position;
-          }
-        }
-        return;
-      case 40:  // Down arrow key.
-        if (fromScriptingAPI) {
-          position.y += Viewport.SCROLL_INCREMENT;
-          this.viewport_.position = position;
-        }
-        return;
       case 65:  // 'a' key.
         if (e.ctrlKey || e.metaKey) {
           this.pluginController_.selectAll();
@@ -478,7 +401,7 @@ export class PDFViewer {
     }
 
     // Give print preview a chance to handle the key event.
-    if (!fromScriptingAPI && this.isPrintPreview_) {
+    if (!e.fromScriptingAPI && this.isPrintPreview_) {
       this.sendScriptingMessage_(
           {type: 'sendKeyEvent', keyEvent: SerializeKeyEvent(e)});
     } else {
