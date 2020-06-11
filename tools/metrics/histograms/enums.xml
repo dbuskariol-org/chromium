@@ -27662,6 +27662,8 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3311" label="StorageAccessAPI_requestStorageAccess_Method"/>
   <int value="3312" label="WebBluetoothWatchAdvertisements"/>
   <int value="3313" label="RubyTextWithNonDefaultTextAlign"/>
+  <int value="3314" label="HTMLMetaElementReferrerPolicyOutsideHead"/>
+  <int value="3315" label="HTMLMetaElementReferrerPolicyMultipleTokens"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
