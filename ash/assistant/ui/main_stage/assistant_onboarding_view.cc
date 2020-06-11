@@ -7,9 +7,11 @@
 #include <memory>
 #include <string>
 
+#include "ash/assistant/model/assistant_ui_model.h"
 #include "ash/assistant/ui/assistant_ui_constants.h"
 #include "ash/assistant/ui/assistant_view_delegate.h"
 #include "ash/assistant/ui/assistant_view_ids.h"
+#include "ash/public/cpp/assistant/controller/assistant_ui_controller.h"
 #include "ash/strings/grit/ash_strings.h"
 #include "base/strings/stringprintf.h"
 #include "base/time/time.h"
@@ -181,9 +183,15 @@ AssistantOnboardingView::AssistantOnboardingView(
     : delegate_(delegate) {
   SetID(AssistantViewID::kOnboardingView);
   InitLayout();
+
+  assistant_controller_observer_.Add(AssistantController::Get());
+  AssistantUiController::Get()->GetModel()->AddObserver(this);
 }
 
-AssistantOnboardingView::~AssistantOnboardingView() = default;
+AssistantOnboardingView::~AssistantOnboardingView() {
+  if (AssistantUiController::Get())
+    AssistantUiController::Get()->GetModel()->RemoveObserver(this);
+}
 
 const char* AssistantOnboardingView::GetClassName() const {
   return "AssistantOnboardingView";
@@ -197,6 +205,20 @@ void AssistantOnboardingView::ChildPreferredSizeChanged(views::View* child) {
   PreferredSizeChanged();
 }
 
+void AssistantOnboardingView::OnAssistantControllerDestroying() {
+  AssistantUiController::Get()->GetModel()->RemoveObserver(this);
+  assistant_controller_observer_.Remove(AssistantController::Get());
+}
+
+void AssistantOnboardingView::OnUiVisibilityChanged(
+    AssistantVisibility new_visibility,
+    AssistantVisibility old_visibility,
+    base::Optional<AssistantEntryPoint> entry_point,
+    base::Optional<AssistantExitPoint> exit_point) {
+  if (new_visibility == AssistantVisibility::kVisible)
+    UpdateGreeting();
+}
+
 // TODO(dmblack): Implement suggestions.
 void AssistantOnboardingView::InitLayout() {
   SetLayoutManager(std::make_unique<views::BoxLayout>(
@@ -204,17 +226,16 @@ void AssistantOnboardingView::InitLayout() {
       gfx::Insets(0, kHorizontalMarginDip)));
 
   // Greeting.
-  auto greeting = std::make_unique<views::Label>();
-  greeting->SetAutoColorReadabilityEnabled(false);
-  greeting->SetBackground(views::CreateSolidBackground(SK_ColorWHITE));
-  greeting->SetEnabledColor(SK_ColorBLACK);
-  greeting->SetFontList(assistant::ui::GetDefaultFontList()
-                            .DeriveWithSizeDelta(kGreetingLabelSizeDelta)
-                            .DeriveWithWeight(gfx::Font::Weight::MEDIUM));
-  greeting->SetHorizontalAlignment(gfx::HorizontalAlignment::ALIGN_LEFT);
-  greeting->SetLineHeight(kGreetingLabelLineHeight);
-  greeting->SetText(base::UTF8ToUTF16(GetGreetingMessage(delegate_)));
-  AddChildView(std::move(greeting));
+  greeting_ = AddChildView(std::make_unique<views::Label>());
+  greeting_->SetAutoColorReadabilityEnabled(false);
+  greeting_->SetBackground(views::CreateSolidBackground(SK_ColorWHITE));
+  greeting_->SetEnabledColor(SK_ColorBLACK);
+  greeting_->SetFontList(assistant::ui::GetDefaultFontList()
+                             .DeriveWithSizeDelta(kGreetingLabelSizeDelta)
+                             .DeriveWithWeight(gfx::Font::Weight::MEDIUM));
+  greeting_->SetHorizontalAlignment(gfx::HorizontalAlignment::ALIGN_LEFT);
+  greeting_->SetLineHeight(kGreetingLabelLineHeight);
+  greeting_->SetText(base::UTF8ToUTF16(GetGreetingMessage(delegate_)));
 
   // Intro.
   auto intro = std::make_unique<views::Label>();
@@ -274,6 +295,10 @@ void AssistantOnboardingView::InitSuggestions() {
     }
     layout->AddView(std::make_unique<SuggestionView>(/*index=*/i));
   }
+}
+
+void AssistantOnboardingView::UpdateGreeting() {
+  greeting_->SetText(base::UTF8ToUTF16(GetGreetingMessage(delegate_)));
 }
 
 }  // namespace ash
