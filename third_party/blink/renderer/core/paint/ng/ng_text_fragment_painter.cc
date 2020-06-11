@@ -337,7 +337,8 @@ void PaintDocumentMarkers(GraphicsContext& context,
               context, box_origin, styleable_marker, style,
               FloatRect(MarkerRectForForeground(
                   text_fragment, text, paint_start_offset, paint_end_offset)),
-              LayoutUnit(font_data->GetFontMetrics().Height()));
+              LayoutUnit(font_data->GetFontMetrics().Height()),
+              text_fragment.GetNode()->GetDocument().InDarkMode());
         }
       } break;
 
