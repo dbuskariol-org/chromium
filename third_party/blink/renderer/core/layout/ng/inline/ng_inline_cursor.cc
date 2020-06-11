@@ -923,7 +923,7 @@ PositionWithAffinity NGInlineCursor::PositionForPointInChild(
         // can utilize LayoutBlock::PositionForPoint() that resolves the
         // position in block layout.
         // TODO(xiaochengh): Don't fallback to legacy for NG block layout.
-        if (box_fragment->IsBlockFlow() || box_fragment->IsLegacyLayoutRoot()) {
+        if (!box_fragment->IsInlineBox()) {
           return child_item.GetLayoutObject()->PositionForPoint(
               point - child_item.OffsetInContainerBlock());
         }
