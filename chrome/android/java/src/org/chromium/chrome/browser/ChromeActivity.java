@@ -1267,6 +1267,12 @@ public abstract class ChromeActivity<C extends ChromeActivityComponent>
 
         UpdateMenuItemHelper.getInstance().unregisterObserver(mUpdateStateChangedListener);
 
+        if (mBookmarkBridgeSupplier != null) {
+            BookmarkBridge bookmarkBridge = mBookmarkBridgeSupplier.get();
+            if (bookmarkBridge != null) bookmarkBridge.destroy();
+            mBookmarkBridgeSupplier = null;
+        }
+
         mActivityTabProvider.destroy();
 
         mComponent = null;
