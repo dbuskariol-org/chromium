@@ -361,6 +361,14 @@ base::string16 GetAttachmentAttribute(FPDF_ATTACHMENT attachment,
       /*check_expected_size=*/true);
 }
 
+unsigned long GetAttachmentFileLengthInBytes(FPDF_ATTACHMENT attachment) {
+  unsigned long actual_length_bytes;
+  bool is_attachment_readable = FPDFAttachment_GetFile(
+      attachment, /*buffer=*/nullptr, /*buflen=*/0, &actual_length_bytes);
+  DCHECK(is_attachment_readable);
+  return actual_length_bytes;
+}
+
 base::string16 GetAttachmentName(FPDF_ATTACHMENT attachment) {
   return CallPDFiumWideStringBufferApi(
       base::BindRepeating(&FPDFAttachment_GetName, attachment),
@@ -3840,7 +3848,7 @@ void PDFiumEngine::LoadDocumentAttachmentInfoList() {
 
     doc_attachment_info_list_[i].name = GetAttachmentName(attachment);
     doc_attachment_info_list_[i].size_bytes =
-        FPDFAttachment_GetFile(attachment, /*buffer=*/nullptr, /*buflen=*/0);
+        GetAttachmentFileLengthInBytes(attachment);
     doc_attachment_info_list_[i].creation_date =
         GetAttachmentAttribute(attachment, "CreationDate");
     doc_attachment_info_list_[i].modified_date =
