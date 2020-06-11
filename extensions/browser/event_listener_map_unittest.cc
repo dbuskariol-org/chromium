@@ -158,6 +158,9 @@ TEST_F(EventListenerMapTest, FilteredEventsOnlyGoToMatchingListeners) {
   event->filter_info.url = GURL("http://www.google.com");
   std::set<const EventListener*> targets(listeners_->GetEventListeners(*event));
   ASSERT_EQ(1u, targets.size());
+  std::unique_ptr<EventListener> listener(EventListener::ForExtension(
+      kEvent1Name, kExt1Id, nullptr, CreateHostSuffixFilter("google.com")));
+  ASSERT_TRUE((*targets.begin())->Equals(listener.get()));
 }
 
 TEST_F(EventListenerMapTest, LazyAndUnlazyListenersGetReturned) {
