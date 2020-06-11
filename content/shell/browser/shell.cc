@@ -37,7 +37,6 @@
 #include "content/shell/browser/shell_content_browser_client.h"
 #include "content/shell/browser/shell_devtools_frontend.h"
 #include "content/shell/browser/shell_javascript_dialog_manager.h"
-#include "content/shell/browser/web_test/fake_bluetooth_scanning_prompt.h"
 #include "content/shell/browser/web_test/secondary_test_window_observer.h"
 #include "content/shell/browser/web_test/web_test_bluetooth_chooser_factory.h"
 #include "content/shell/browser/web_test/web_test_control_host.h"
@@ -579,10 +578,17 @@ std::unique_ptr<BluetoothChooser> Shell::RunBluetoothChooser(
   return nullptr;
 }
 
+class AlwaysAllowBluetoothScanning : public BluetoothScanningPrompt {
+ public:
+  explicit AlwaysAllowBluetoothScanning(const EventHandler& event_handler) {
+    event_handler.Run(content::BluetoothScanningPrompt::Event::kAllow);
+  }
+};
+
 std::unique_ptr<BluetoothScanningPrompt> Shell::ShowBluetoothScanningPrompt(
     RenderFrameHost* frame,
     const BluetoothScanningPrompt::EventHandler& event_handler) {
-  return std::make_unique<FakeBluetoothScanningPrompt>(event_handler);
+  return std::make_unique<AlwaysAllowBluetoothScanning>(event_handler);
 }
 
 #if defined(OS_MACOSX)
