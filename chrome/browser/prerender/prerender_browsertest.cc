@@ -913,28 +913,6 @@ class PrerenderBrowserTest : public test_utils::PrerenderInProcessBrowserTest {
   std::unique_ptr<content::URLLoaderInterceptor> interceptor_;
 };
 
-// Checks that the correct page load metrics observers are produced without a
-// prerender.
-IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest, PageLoadMetricsSimple) {
-  // The prefetch page is used as a simple page with a nonempty layout; no
-  // prefetching is performed.
-  test_utils::FirstContentfulPaintManagerWaiter* simple_fcp_waiter =
-      test_utils::FirstContentfulPaintManagerWaiter::Create(
-          GetPrerenderManager());
-  ui_test_utils::NavigateToURL(
-      current_browser(), src_server()->GetURL("/prerender/prefetch_page.html"));
-  simple_fcp_waiter->Wait();
-
-  histogram_tester().ExpectTotalCount(
-      "Prerender.none_PrefetchTTFCP.Reference.Cacheable.Visible", 1);
-  histogram_tester().ExpectTotalCount(
-      "PageLoad.PaintTiming.ParseStartToFirstContentfulPaint", 1);
-
-  // Histogram only emitted during a prerender, which should not happen here.
-  histogram_tester().ExpectTotalCount(
-      "Prerender.websame_PrefetchTTFCP.Warm.Cacheable.Visible", 0);
-}
-
 // Checks that pending prerenders which are canceled before they are launched
 // never get started.
 IN_PROC_BROWSER_TEST_F(PrerenderBrowserTest, PrerenderPageRemovesPending) {
