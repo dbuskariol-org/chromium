@@ -51,6 +51,8 @@ void AddStrings(base::Value* dict) {
     {"errorDialogTitle", IDS_PDF_ERROR_DIALOG_TITLE},
     {"pageReload", IDS_PDF_PAGE_RELOAD_BUTTON},
     {"bookmarks", IDS_PDF_BOOKMARKS},
+    {"downloadEdited", IDS_PDF_DOWNLOAD_EDITED},
+    {"downloadOriginal", IDS_PDF_DOWNLOAD_ORIGINAL},
     {"labelPageNumber", IDS_PDF_LABEL_PAGE_NUMBER},
     {"tooltipRotateCW", IDS_PDF_TOOLTIP_ROTATE_CW},
     {"tooltipDownload", IDS_PDF_TOOLTIP_DOWNLOAD},

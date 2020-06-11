@@ -10,7 +10,7 @@ import {$, hasKeyModifiers, isRTL} from 'chrome://resources/js/util.m.js';
 
 import {Bookmark} from './bookmark_type.js';
 import {BrowserApi} from './browser_api.js';
-import {FittingType, TwoUpViewAction} from './constants.js';
+import {FittingType, SaveRequestType, TwoUpViewAction} from './constants.js';
 import {ContentController, InkController, MessageData, PluginController, PrintPreviewParams} from './controller.js';
 import {FitToChangedEvent} from './elements/viewer-zoom-toolbar.js';
 import {PDFMetrics} from './metrics.js';
@@ -94,6 +94,12 @@ export class PDFViewer {
 
     /** @private {boolean} */
     this.hasEnteredAnnotationMode_ = false;
+
+    /** @private {boolean} */
+    this.annotationMode_ = false;
+
+    /** @private {boolean} */
+    this.hasEdits_ = false;
 
     /** @private {boolean} */
     this.hadPassword_ = false;
@@ -231,7 +237,7 @@ export class PDFViewer {
     if (toolbarEnabled) {
       this.toolbar_ = /** @type {!ViewerPdfToolbarElement} */ ($('toolbar'));
       this.toolbar_.hidden = false;
-      this.toolbar_.addEventListener('save', () => this.save_());
+      this.toolbar_.addEventListener('save', e => this.save_(e.detail));
       this.toolbar_.addEventListener('print', () => this.print_());
       this.toolbar_.addEventListener(
           'undo', () => this.currentController_.undo());
@@ -490,6 +496,7 @@ export class PDFViewer {
    */
   async annotationModeToggled_(e) {
     const annotationMode = e.detail.value;
+    this.annotationMode_ = annotationMode;
     this.zoomToolbar_.annotationMode = annotationMode;
     if (annotationMode) {
       // Enter annotation mode.
@@ -497,8 +504,9 @@ export class PDFViewer {
       // TODO(dstockwell): set plugin read-only, begin transition
       this.updateProgress_(0);
       // TODO(dstockwell): handle save failure
-      const saveResult = await this.pluginController_.save(true);
-      // Data always exists when save is called with requireResult = true.
+      const saveResult =
+          await this.pluginController_.save(SaveRequestType.ANNOTATION);
+      // Data always exists when save is called with requestType = ANNOTATION.
       const result = /** @type {!RequiredSaveResult} */ (saveResult);
       if (result.hasUnsavedChanges) {
         assert(!loadTimeData.getBoolean('pdfFormSaveEnabled'));
@@ -508,6 +516,7 @@ export class PDFViewer {
           // The user aborted entering annotation mode. Revert to the plugin.
           this.toolbar_.annotationMode = false;
           this.zoomToolbar_.annotationMode = false;
+          this.annotationMode_ = false;
           this.updateProgress_(100);
           return;
         }
@@ -535,8 +544,9 @@ export class PDFViewer {
         this.inkController_.unload();
       });
       // TODO(dstockwell): handle save failure
-      const saveResult = await this.inkController_.save(true);
-      // Data always exists when save is called with requireResult = true.
+      const saveResult =
+          await this.inkController_.save(SaveRequestType.ANNOTATION);
+      // Data always exists when save is called with requestType = ANNOTATION.
       const result = /** @type {!RequiredSaveResult} */ (saveResult);
       await this.pluginController_.load(result.fileName, result.dataToSave);
       // Ensure the plugin gets the initial viewport.
@@ -1061,6 +1071,11 @@ export class PDFViewer {
         this.setDocumentMetadata_(
             metadata.title, metadata.bookmarks, metadata.canSerializeDocument);
         return;
+      case 'setIsEditing':
+        // Editing mode can only be entered once, and cannot be exited.
+        this.hasEdits_ = true;
+        this.toolbar_.setIsEditing();
+        return;
       case 'setIsSelecting':
         this.setIsSelecting_(
             /** @type {{ isSelecting: boolean }} */ (data).isSelecting);
@@ -1234,24 +1249,46 @@ export class PDFViewer {
       return;
     }
 
-    this.save_();
+    let saveMode;
+    if (this.hasEnteredAnnotationMode_) {
+      saveMode = SaveRequestType.ANNOTATION;
+    } else if (
+        loadTimeData.getBoolean('pdfFormSaveEnabled') && this.hasEdits_) {
+      saveMode = SaveRequestType.EDITED;
+    } else {
+      saveMode = SaveRequestType.ORIGINAL;
+    }
+
+    this.save_(saveMode);
   }
 
   /**
    * Saves the current PDF document to disk.
+   * @param {SaveRequestType} requestType The type of save request.
    * @private
    */
-  async save_() {
+  async save_(requestType) {
     PDFMetrics.record(PDFMetrics.UserAction.SAVE);
-    if (this.hasEnteredAnnotationMode_) {
+    // If we have entered annotation mode we must require the local
+    // contents to ensure annotations are saved, unless the user specifically
+    // requested the original document. Otherwise we would save the cached
+    // remote copy without annotations.
+    if (requestType === SaveRequestType.ANNOTATION) {
       PDFMetrics.record(PDFMetrics.UserAction.SAVE_WITH_ANNOTATION);
     }
-    // If we have entered annotation mode we must require the local
-    // contents to ensure annotations are saved. Otherwise we would
-    // save the cached or remote copy without annotatios.
-    const requireResult = this.hasEnteredAnnotationMode_;
+    // Always send requests of type ORIGINAL to the plugin controller, not the
+    // ink controller. The ink controller always saves the edited document.
     // TODO(dstockwell): Report an error to user if this fails.
-    const result = await this.currentController_.save(requireResult);
+    let result;
+    if (requestType !== SaveRequestType.ORIGINAL || !this.annotationMode_) {
+      result = await this.currentController_.save(requestType);
+    } else {
+      // Request type original in annotation mode --> need to exit annotation
+      // mode before saving. See https://crbug.com/919364.
+      await this.exitAnnotationMode_();
+      assert(!this.annotationMode_);
+      result = await this.currentController_.save(SaveRequestType.ORIGINAL);
+    }
     if (result == null) {
       // The content controller handled the save internally.
       return;

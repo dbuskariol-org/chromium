@@ -186,7 +186,7 @@ class OutOfProcessInstance : public pp::Instance,
   // frame's origin.
   pp::URLLoader CreateURLLoaderInternal();
 
-  bool ShouldSaveEdits() const;
+  bool CanSaveEdits() const;
   void SaveToFile(const std::string& token);
   void SaveToBuffer(const std::string& token);
   void ConsumeSaveToken(const std::string& token);
@@ -210,6 +210,13 @@ class OutOfProcessInstance : public pp::Instance,
     LOAD_STATE_LOADING,
     LOAD_STATE_COMPLETE,
     LOAD_STATE_FAILED,
+  };
+
+  // Must match SaveRequestType in chrome/browser/resources/pdf/constants.js.
+  enum class SaveRequestType {
+    kAnnotation = 0,
+    kOriginal = 1,
+    kEdited = 2,
   };
 
   // Set new zoom scale.
