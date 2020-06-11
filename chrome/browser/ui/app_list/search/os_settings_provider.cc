@@ -40,7 +40,7 @@ constexpr float kScoreEps = 1e-5f;
 // Finch.
 constexpr size_t kMinQueryLength = 1u;
 constexpr size_t kMinQueryLengthForAlternates = 4u;
-constexpr float kMinScoreForAlternates = 0.3f;
+constexpr float kMinScoreForAlternates = 0.35f;
 
 constexpr size_t kNumRequestedResults = 5u;
 constexpr size_t kMaxShownResults = 2u;
