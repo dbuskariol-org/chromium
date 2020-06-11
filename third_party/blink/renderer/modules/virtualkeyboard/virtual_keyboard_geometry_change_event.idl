@@ -9,8 +9,8 @@
 [
     Exposed=Window,
     RuntimeEnabled=VirtualKeyboard
-] interface VirtualKeyboardOverlayGeometryChangeEvent : Event {
-    constructor(DOMString type, VirtualKeyboardOverlayGeometryChangeEventInit eventInitDict);
+] interface VirtualKeyboardGeometryChangeEvent : Event {
+    constructor(DOMString type, VirtualKeyboardGeometryChangeEventInit eventInitDict);
     [SameObject] readonly attribute DOMRect boundingRect;
 };
 
