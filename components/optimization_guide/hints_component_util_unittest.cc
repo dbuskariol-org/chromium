@@ -294,4 +294,30 @@ TEST_F(HintsComponentUtilTest,
   EXPECT_TRUE(optimization_filter->Matches(GURL("https://m.black.com")));
 }
 
+TEST_F(HintsComponentUtilTest,
+       ProcessOptimizationFilterSkipHostSuffixCheckingIsPropagated) {
+  int num_hash_functions = 7;
+  int num_bits = 1234;
+
+  proto::OptimizationFilter optimization_filter_proto;
+  optimization_filter_proto.set_skip_host_suffix_checking(true);
+  BloomFilter bloom_filter(num_hash_functions, num_bits);
+  bloom_filter.Add("host.com");
+  proto::BloomFilter* bloom_filter_proto =
+      optimization_filter_proto.mutable_bloom_filter();
+  bloom_filter_proto->set_num_hash_functions(num_hash_functions);
+  bloom_filter_proto->set_num_bits(num_bits);
+  std::string blacklist_data(
+      reinterpret_cast<const char*>(&bloom_filter.bytes()[0]),
+      bloom_filter.bytes().size());
+  bloom_filter_proto->set_data(blacklist_data);
+
+  std::unique_ptr<OptimizationFilter> optimization_filter =
+      ProcessOptimizationFilter(optimization_filter_proto,
+                                /*out_status=*/nullptr);
+
+  ASSERT_TRUE(optimization_filter);
+  EXPECT_FALSE(optimization_filter->Matches(GURL("https://m.host.com")));
+}
+
 }  // namespace optimization_guide

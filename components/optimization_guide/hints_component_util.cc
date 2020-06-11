@@ -169,8 +169,9 @@ std::unique_ptr<OptimizationFilter> ProcessOptimizationFilter(
       return nullptr;
   }
 
-  return std::make_unique<OptimizationFilter>(std::move(bloom_filter),
-                                              std::move(regexps));
+  return std::make_unique<OptimizationFilter>(
+      std::move(bloom_filter), std::move(regexps),
+      optimization_filter.skip_host_suffix_checking());
 }
 
 }  // namespace optimization_guide

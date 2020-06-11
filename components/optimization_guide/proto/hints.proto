@@ -258,6 +258,9 @@ message OptimizationFilter {
   // Additional filters represented as regexps matched against the main page
   // URL.
   repeated string regexps = 3;
+  // Whether additional host suffixes (other than the host) should be checked
+  // against the filter.
+  optional bool skip_host_suffix_checking = 4;
 }
 
 message Configuration {
