@@ -1574,8 +1574,8 @@ public class ChromeTabbedActivity
         mContentContainer = (ViewGroup) findViewById(android.R.id.content);
         mControlContainer = (ToolbarControlContainer) findViewById(R.id.control_container);
 
-        mUndoBarPopupController =
-                new UndoBarController(this, mTabModelSelectorImpl, this::getSnackbarManager);
+        mUndoBarPopupController = new UndoBarController(
+                this, mTabModelSelectorImpl, this::getSnackbarManager, getOverviewModeBehavior());
 
         mInactivityTracker = new ChromeInactivityTracker(
                 ChromePreferenceKeys.TABBED_ACTIVITY_LAST_BACKGROUNDED_TIME_MS_PREF);
