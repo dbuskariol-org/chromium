@@ -5525,7 +5525,7 @@ crbug.com/719023 media_capabilities/encodingInfo-avc1.html [ Pass Failure ]
 crbug.com/919587 [ Linux ] virtual/threaded/fast/idle-callback/idle_periods.html [ Pass Failure ]
 
 # WebRTC Unified Plan
-crbug.com/923244 external/wpt/webrtc/RTCDTMFSender-ontonechange.https.html [ Failure Pass ]
+crbug.com/923244 external/wpt/webrtc/RTCDTMFSender-ontonechange.https.html [ Failure Pass Crash Timeout ]
 # WebRTC Plan B
 crbug.com/920979 virtual/webrtc-wpt-plan-b/external/wpt/webrtc/RTCTrackEvent-fire.html [ Timeout ]
 # WebRTC codec tests - software H.264 not present on webkit bot family
