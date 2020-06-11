@@ -16,8 +16,6 @@
 
 namespace blink {
 
-class Image;
-
 FORWARD_DECLARE_TEST(DarkModeImageClassifierTest, FeaturesAndClassification);
 FORWARD_DECLARE_TEST(DarkModeImageClassifierTest, Caching);
 FORWARD_DECLARE_TEST(DarkModeImageClassifierTest, BlocksCount);
@@ -46,7 +44,9 @@ class PLATFORM_EXPORT DarkModeImageClassifier {
     float background_ratio;
   };
 
-  DarkModeClassification Classify(Image* image,
+  // Performance warning: |paint_image| will be synchronously decoded if this
+  // function is called in blink main thread.
+  DarkModeClassification Classify(const PaintImage& paint_image,
                                   const FloatRect& src_rect,
                                   const FloatRect& dest_rect);
 
@@ -62,7 +62,11 @@ class PLATFORM_EXPORT DarkModeImageClassifier {
  private:
   DarkModeClassification ClassifyWithFeatures(const Features& features);
   DarkModeClassification ClassifyUsingDecisionTree(const Features& features);
-  base::Optional<Features> GetFeatures(Image* image, const FloatRect& src_rect);
+  bool GetBitmap(const PaintImage& paint_image,
+                 const SkRect& rect,
+                 SkBitmap* bitmap);
+  base::Optional<Features> GetFeatures(const PaintImage& paint_image,
+                                       const FloatRect& src_rect);
   void Reset();
 
   enum class ColorMode { kColor = 0, kGrayscale = 1 };

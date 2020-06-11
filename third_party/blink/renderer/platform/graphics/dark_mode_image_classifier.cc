@@ -9,7 +9,6 @@
 #include "base/memory/singleton.h"
 #include "base/optional.h"
 #include "third_party/blink/renderer/platform/graphics/darkmode/darkmode_classifier.h"
-#include "third_party/blink/renderer/platform/graphics/image.h"
 #include "third_party/blink/renderer/platform/wtf/hash_set.h"
 #include "third_party/blink/renderer/platform/wtf/hash_traits.h"
 #include "third_party/blink/renderer/platform/wtf/text/string_hash.h"
@@ -161,12 +160,12 @@ DarkModeImageClassifier::MakeGradientGeneratedImageClassifier() {
 }
 
 DarkModeClassification DarkModeImageClassifier::Classify(
-    Image* image,
+    const PaintImage& paint_image,
     const FloatRect& src_rect,
     const FloatRect& dest_rect) {
   DarkModeImageClassificationCache* cache =
       DarkModeImageClassificationCache::GetInstance();
-  PaintImage::Id image_id = image->paint_image_id();
+  PaintImage::Id image_id = paint_image.stable_id();
   DarkModeClassification result = cache->Get(image_id, src_rect);
   if (result != DarkModeClassification::kNotClassified)
     return result;
@@ -177,7 +176,7 @@ DarkModeClassification DarkModeImageClassifier::Classify(
     return result;
   }
 
-  auto features_or_null = GetFeatures(image, src_rect);
+  auto features_or_null = GetFeatures(paint_image, src_rect);
   if (!features_or_null) {
     // Do not cache this classification.
     return DarkModeClassification::kDoNotApplyFilter;
@@ -194,10 +193,30 @@ void DarkModeImageClassifier::Reset() {
   blocks_count_vertical_ = kBlocksCount1D;
 }
 
+bool DarkModeImageClassifier::GetBitmap(const PaintImage& paint_image,
+                                        const SkRect& src,
+                                        SkBitmap* bitmap) {
+  if (!src.width() || !src.height())
+    return false;
+
+  SkRect dst = {0, 0, src.width(), src.height()};
+
+  if (!bitmap || !bitmap->tryAllocPixels(SkImageInfo::MakeN32(
+                     static_cast<int>(src.width()),
+                     static_cast<int>(src.height()), kPremul_SkAlphaType)))
+    return false;
+
+  SkCanvas canvas(*bitmap);
+  canvas.clear(SK_ColorTRANSPARENT);
+  canvas.drawImageRect(paint_image.GetSkImage(), src, dst, nullptr);
+  return true;
+}
+
 base::Optional<DarkModeImageClassifier::Features>
-DarkModeImageClassifier::GetFeatures(Image* image, const FloatRect& src_rect) {
+DarkModeImageClassifier::GetFeatures(const PaintImage& paint_image,
+                                     const FloatRect& src_rect) {
   SkBitmap bitmap;
-  if (!image->GetBitmap(src_rect, &bitmap))
+  if (!GetBitmap(paint_image, src_rect, &bitmap))
     return base::nullopt;
 
   if (pixels_to_sample_ > src_rect.Width() * src_rect.Height())

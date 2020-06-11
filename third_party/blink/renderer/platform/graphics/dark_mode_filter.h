@@ -11,7 +11,7 @@
 #include "third_party/blink/renderer/platform/geometry/float_rect.h"
 #include "third_party/blink/renderer/platform/graphics/color.h"
 #include "third_party/blink/renderer/platform/graphics/dark_mode_settings.h"
-#include "third_party/blink/renderer/platform/graphics/image.h"
+#include "third_party/blink/renderer/platform/graphics/paint/paint_image.h"
 #include "third_party/blink/renderer/platform/platform_export.h"
 #include "third_party/skia/include/core/SkRefCnt.h"
 
@@ -19,6 +19,7 @@ class SkColorFilter;
 
 namespace blink {
 
+class GraphicsContext;
 class DarkModeColorClassifier;
 class DarkModeImageClassifier;
 class DarkModeColorFilter;
@@ -59,7 +60,7 @@ class PLATFORM_EXPORT DarkModeFilter {
   // |image| and |flags| must not be null.
   void ApplyToImageFlagsIfNeeded(const FloatRect& src_rect,
                                  const FloatRect& dest_rect,
-                                 Image* image,
+                                 const PaintImage& paint_image,
                                  cc::PaintFlags* flags,
                                  ElementRole element_role);
 
@@ -75,7 +76,7 @@ class PLATFORM_EXPORT DarkModeFilter {
   bool ShouldApplyToImage(const DarkModeSettings& settings,
                           const FloatRect& src_rect,
                           const FloatRect& dest_rect,
-                          Image* image,
+                          const PaintImage& paint_image,
                           ElementRole role);
 
   std::unique_ptr<DarkModeColorClassifier> text_classifier_;
