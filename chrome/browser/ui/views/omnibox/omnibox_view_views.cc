@@ -410,7 +410,7 @@ void OmniboxViewViews::EmphasizeURLComponents() {
     path_fade_out_animation_->Start(GetPathBounds());
   }
 
-  if (OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover() ||
+  if (OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover() &&
       !OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction()) {
     // If reveal-on-hover is enabled and hide-on-interaction is disabled, hide
     // the path now.
