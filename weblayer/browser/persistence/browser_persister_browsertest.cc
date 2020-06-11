@@ -6,9 +6,12 @@
 
 #include "base/bind_helpers.h"
 #include "base/files/file_path.h"
+#include "base/files/file_util.h"
 #include "base/guid.h"
 #include "base/path_service.h"
 #include "base/run_loop.h"
+#include "base/test/bind_test_util.h"
+#include "base/threading/thread_restrictions.h"
 #include "build/build_config.h"
 #include "components/sessions/core/command_storage_manager_test_helper.h"
 #include "content/public/test/browser_test_utils.h"
@@ -17,6 +20,7 @@
 #include "net/test/embedded_test_server/embedded_test_server.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "weblayer/browser/browser_impl.h"
+#include "weblayer/browser/persistence/browser_persister_file_utils.h"
 #include "weblayer/browser/profile_impl.h"
 #include "weblayer/browser/tab_impl.h"
 #include "weblayer/common/weblayer_paths.h"
@@ -390,6 +394,85 @@ IN_PROC_BROWSER_TEST_F(BrowserPersisterTest, MoveBetweenBrowsers) {
   EXPECT_TRUE(restored_tab_3->web_contents()->GetController().NeedsReload());
   restored_tab_3->web_contents()->GetController().LoadIfNecessary();
   content::WaitForLoadStop(restored_tab_3->web_contents());
+}
+
+class BrowserPersisterTestWithTwoPersistedIds : public WebLayerBrowserTest {
+ public:
+  // WebLayerBrowserTest:
+  void SetUpOnMainThread() override {
+    WebLayerBrowserTest::SetUpOnMainThread();
+    // Configure two browsers with ids 'x' and 'y'.
+    ASSERT_TRUE(embedded_test_server()->Start());
+    std::unique_ptr<BrowserImpl> browser1 = CreateBrowser(GetProfile(), "x");
+    const GURL url1 = embedded_test_server()->GetURL("/simple_page.html");
+    NavigateAndWaitForCompletion(url1,
+                                 browser1->AddTab(Tab::Create(GetProfile())));
+
+    std::unique_ptr<BrowserImpl> browser2 = CreateBrowser(GetProfile(), "y");
+    const GURL url2 = embedded_test_server()->GetURL("/simple_page3.html");
+    NavigateAndWaitForCompletion(url2,
+                                 browser2->AddTab(Tab::Create(GetProfile())));
+
+    // Shut down the browsers.
+    ShutdownBrowserPersisterAndWait(browser1.get());
+    browser1.reset();
+    ShutdownBrowserPersisterAndWait(browser2.get());
+    browser2.reset();
+  }
+};
+
+IN_PROC_BROWSER_TEST_F(BrowserPersisterTestWithTwoPersistedIds,
+                       GetBrowserPersistenceIds) {
+  {
+    // Create a file that has the name of a valid persistence file, but has
+    // invalid contents.
+    base::ScopedAllowBlockingForTesting allow_blocking;
+    base::WriteFile(BuildPathForBrowserPersister(
+                        GetProfile()->GetBrowserPersisterDataBaseDir(), "z"),
+                    "a bogus persistence file");
+  }
+
+  base::RunLoop run_loop;
+  base::flat_set<std::string> persistence_ids;
+  GetProfile()->GetBrowserPersistenceIds(
+      base::BindLambdaForTesting([&](base::flat_set<std::string> ids) {
+        persistence_ids = std::move(ids);
+        run_loop.Quit();
+      }));
+  run_loop.Run();
+  ASSERT_EQ(2u, persistence_ids.size());
+  EXPECT_TRUE(persistence_ids.contains("x"));
+  EXPECT_TRUE(persistence_ids.contains("y"));
+}
+
+IN_PROC_BROWSER_TEST_F(BrowserPersisterTestWithTwoPersistedIds,
+                       RemoveBrowserPersistenceStorage) {
+  base::FilePath file_path1 = BuildPathForBrowserPersister(
+      GetProfile()->GetBrowserPersisterDataBaseDir(), "x");
+  base::FilePath file_path2 = BuildPathForBrowserPersister(
+      GetProfile()->GetBrowserPersisterDataBaseDir(), "y");
+
+  {
+    base::ScopedAllowBlockingForTesting allow_blocking;
+    ASSERT_TRUE(base::PathExists(file_path1));
+    ASSERT_TRUE(base::PathExists(file_path2));
+  }
+  base::RunLoop run_loop;
+  base::flat_set<std::string> persistence_ids;
+  persistence_ids.insert("x");
+  persistence_ids.insert("y");
+  GetProfile()->RemoveBrowserPersistenceStorage(
+      base::BindLambdaForTesting([&](bool result) {
+        EXPECT_TRUE(result);
+        run_loop.Quit();
+      }),
+      std::move(persistence_ids));
+  run_loop.Run();
+  {
+    base::ScopedAllowBlockingForTesting allow_blocking;
+    EXPECT_FALSE(base::PathExists(file_path1));
+    EXPECT_FALSE(base::PathExists(file_path2));
+  }
 }
 
 }  // namespace weblayer

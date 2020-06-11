@@ -34,9 +34,14 @@ class TabImpl;
 
 class BrowserImpl : public Browser {
  public:
+  // Prefix used for storing persistence state.
+  static constexpr char kPersistenceFilePrefix[] = "State";
+
   BrowserImpl(const BrowserImpl&) = delete;
   BrowserImpl& operator=(const BrowserImpl&) = delete;
   ~BrowserImpl() override;
+
+  static const std::vector<BrowserImpl*>& GetAllBrowsers();
 
   BrowserPersister* browser_persister() { return browser_persister_.get(); }
 
@@ -129,7 +134,6 @@ class BrowserImpl : public Browser {
   std::string persistence_id_;
   std::unique_ptr<BrowserPersister> browser_persister_;
   base::OnceClosure visible_security_state_changed_callback_for_tests_;
-  static int browser_count_;
 };
 
 }  // namespace weblayer

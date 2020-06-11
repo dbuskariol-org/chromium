@@ -9,12 +9,15 @@
 #include "base/callback_forward.h"
 #include "base/containers/unique_ptr_adapters.h"
 #include "base/memory/ptr_util.h"
+#include "base/no_destructor.h"
 #include "base/path_service.h"
+#include "base/stl_util.h"
 #include "components/base32/base32.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/common/web_preferences.h"
 #include "weblayer/browser/feature_list_creator.h"
 #include "weblayer/browser/persistence/browser_persister.h"
+#include "weblayer/browser/persistence/browser_persister_file_utils.h"
 #include "weblayer/browser/persistence/minimal_browser_persister.h"
 #include "weblayer/browser/profile_impl.h"
 #include "weblayer/browser/tab_impl.h"
@@ -38,8 +41,17 @@ using base::android::ScopedJavaLocalRef;
 
 namespace weblayer {
 
-// TODO(timvolodine): consider using an observer for this, crbug.com/1068713.
-int BrowserImpl::browser_count_ = 0;
+namespace {
+
+std::vector<BrowserImpl*>& GetBrowsers() {
+  static base::NoDestructor<std::vector<BrowserImpl*>> browsers;
+  return *browsers;
+}
+
+}  // namespace
+
+// static
+constexpr char BrowserImpl::kPersistenceFilePrefix[];
 
 std::unique_ptr<Browser> Browser::Create(
     Profile* profile,
@@ -62,15 +74,17 @@ BrowserImpl::~BrowserImpl() {
   while (!tabs_.empty())
     RemoveTab(tabs_.back().get());
 #endif
-  profile_->DecrementBrowserImplCount();
-  browser_count_--;
-  DCHECK(browser_count_ >= 0);
+  base::Erase(GetBrowsers(), this);
 
 #if defined(OS_ANDROID)
-  if (browser_count_ == 0) {
+  if (GetBrowsers().empty())
     BrowserProcess::GetInstance()->StopSafeBrowsingService();
-  }
 #endif
+}
+
+// static
+const std::vector<BrowserImpl*>& BrowserImpl::GetAllBrowsers() {
+  return GetBrowsers();
 }
 
 TabImpl* BrowserImpl::CreateTabForSessionRestore(
@@ -312,8 +326,7 @@ void BrowserImpl::RemoveObserver(BrowserObserver* observer) {
 }
 
 BrowserImpl::BrowserImpl(ProfileImpl* profile) : profile_(profile) {
-  profile_->IncrementBrowserImplCount();
-  browser_count_++;
+  GetBrowsers().push_back(this);
 }
 
 void BrowserImpl::RestoreStateIfNecessary(
@@ -338,10 +351,8 @@ void BrowserImpl::VisibleSecurityStateOfActiveTabChanged() {
 }
 
 base::FilePath BrowserImpl::GetBrowserPersisterDataPath() {
-  base::FilePath base_path = profile_->GetBrowserPersisterDataBaseDir();
-  DCHECK(!GetPersistenceId().empty());
-  const std::string encoded_name = base32::Base32Encode(GetPersistenceId());
-  return base_path.AppendASCII("State" + encoded_name);
+  return BuildPathForBrowserPersister(
+      profile_->GetBrowserPersisterDataBaseDir(), GetPersistenceId());
 }
 
 #if defined(OS_ANDROID)
