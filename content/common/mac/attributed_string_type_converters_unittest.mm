@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "content/common/mac/attributed_string_coder.h"
+#import "content/common/mac/attributed_string_type_converters.h"
 
 #include <AppKit/AppKit.h>
 
@@ -14,9 +14,7 @@
 #include "testing/gtest/include/gtest/gtest.h"
 #include "testing/gtest_mac.h"
 
-using mac::AttributedStringCoder;
-
-class AttributedStringCoderTest : public testing::Test {
+class AttributedStringConverterTest : public testing::Test {
  public:
   NSMutableAttributedString* NewAttrString() {
     NSString* str = @"The quick brown fox jumped over the lazy dog.";
@@ -28,29 +26,29 @@ class AttributedStringCoderTest : public testing::Test {
     return [NSDictionary dictionaryWithObject:font forKey:NSFontAttributeName];
   }
 
-  NSAttributedString* EncodeAndDecode(NSAttributedString* str) {
-    std::unique_ptr<const AttributedStringCoder::EncodedString> encoded_str(
-        AttributedStringCoder::Encode(str));
-    return AttributedStringCoder::Decode(encoded_str.get());
+  NSAttributedString* ConvertAndRestore(NSAttributedString* str) {
+    ui::mojom::AttributedStringPtr attributed_str =
+        ui::mojom::AttributedString::From(str);
+    return attributed_str.To<NSAttributedString*>();
   }
 };
 
-TEST_F(AttributedStringCoderTest, SimpleString) {
+TEST_F(AttributedStringConverterTest, SimpleString) {
   base::scoped_nsobject<NSMutableAttributedString> attr_str(NewAttrString());
   [attr_str addAttributes:FontAttribute(@"Helvetica", 12.5)
                     range:NSMakeRange(0, [attr_str length])];
 
-  NSAttributedString* decoded = EncodeAndDecode(attr_str.get());
-  EXPECT_NSEQ(attr_str.get(), decoded);
+  NSAttributedString* ns_attributed_string = ConvertAndRestore(attr_str.get());
+  EXPECT_NSEQ(attr_str.get(), ns_attributed_string);
 }
 
-TEST_F(AttributedStringCoderTest, NoAttributes) {
+TEST_F(AttributedStringConverterTest, NoAttributes) {
   base::scoped_nsobject<NSAttributedString> attr_str(NewAttrString());
-  NSAttributedString* decoded = EncodeAndDecode(attr_str.get());
-  EXPECT_NSEQ(attr_str.get(), decoded);
+  NSAttributedString* ns_attributed_string = ConvertAndRestore(attr_str.get());
+  EXPECT_NSEQ(attr_str.get(), ns_attributed_string);
 }
 
-TEST_F(AttributedStringCoderTest, StripColor) {
+TEST_F(AttributedStringConverterTest, StripColor) {
   base::scoped_nsobject<NSMutableAttributedString> attr_str(NewAttrString());
   const NSUInteger kStringLength = [attr_str length];
   [attr_str addAttribute:NSFontAttributeName
@@ -60,17 +58,18 @@ TEST_F(AttributedStringCoderTest, StripColor) {
                    value:[NSColor redColor]
                    range:NSMakeRange(0, kStringLength)];
 
-  NSAttributedString* decoded = EncodeAndDecode(attr_str.get());
+  NSAttributedString* ns_attributed_string = ConvertAndRestore(attr_str.get());
 
   NSRange range;
-  NSDictionary* attrs = [decoded attributesAtIndex:0 effectiveRange:&range];
+  NSDictionary* attrs = [ns_attributed_string attributesAtIndex:0
+                                                 effectiveRange:&range];
   EXPECT_TRUE(NSEqualRanges(NSMakeRange(0, kStringLength), range));
   EXPECT_NSEQ([NSFont systemFontOfSize:26],
               [attrs objectForKey:NSFontAttributeName]);
   EXPECT_FALSE([attrs objectForKey:NSForegroundColorAttributeName]);
 }
 
-TEST_F(AttributedStringCoderTest, MultipleFonts) {
+TEST_F(AttributedStringConverterTest, MultipleFonts) {
   base::scoped_nsobject<NSMutableAttributedString> attr_str(NewAttrString());
   [attr_str setAttributes:FontAttribute(@"Courier", 12)
                     range:NSMakeRange(0, 10)];
@@ -79,12 +78,12 @@ TEST_F(AttributedStringCoderTest, MultipleFonts) {
   [attr_str addAttributes:FontAttribute(@"Helvetica", 14)
                     range:NSMakeRange(15, 5)];
 
-  NSAttributedString* decoded = EncodeAndDecode(attr_str);
+  NSAttributedString* ns_attributed_string = ConvertAndRestore(attr_str);
 
-  EXPECT_NSEQ(attr_str.get(), decoded);
+  EXPECT_NSEQ(attr_str.get(), ns_attributed_string);
 }
 
-TEST_F(AttributedStringCoderTest, NoPertinentAttributes) {
+TEST_F(AttributedStringConverterTest, NoPertinentAttributes) {
   base::scoped_nsobject<NSMutableAttributedString> attr_str(NewAttrString());
   [attr_str addAttribute:NSForegroundColorAttributeName
                    value:[NSColor blueColor]
@@ -96,40 +95,43 @@ TEST_F(AttributedStringCoderTest, NoPertinentAttributes) {
                    value:[NSNumber numberWithFloat:2.6]
                    range:NSMakeRange(11, 3)];
 
-  NSAttributedString* decoded = EncodeAndDecode(attr_str.get());
+  NSAttributedString* ns_attributed_string = ConvertAndRestore(attr_str.get());
 
   base::scoped_nsobject<NSAttributedString> expected(NewAttrString());
-  EXPECT_NSEQ(expected.get(), decoded);
+  EXPECT_NSEQ(expected.get(), ns_attributed_string);
 }
 
-TEST_F(AttributedStringCoderTest, NilString) {
-  NSAttributedString* decoded = EncodeAndDecode(nil);
-  EXPECT_TRUE(decoded);
-  EXPECT_EQ(0U, [decoded length]);
+TEST_F(AttributedStringConverterTest, NilString) {
+  NSAttributedString* ns_attributed_string = ConvertAndRestore(nil);
+  EXPECT_TRUE(ns_attributed_string);
+  EXPECT_EQ(0U, [ns_attributed_string length]);
 }
 
-TEST_F(AttributedStringCoderTest, OutOfRange) {
+TEST_F(AttributedStringConverterTest, OutOfRange) {
   NSFont* system_font = [NSFont systemFontOfSize:10];
   base::string16 font_name = base::SysNSStringToUTF16([system_font fontName]);
-  AttributedStringCoder::EncodedString encoded(
-      base::ASCIIToUTF16("Hello World"));
-  encoded.attributes()->push_back(
-      AttributedStringCoder::FontAttribute(font_name, 12, gfx::Range(0, 5)));
-  encoded.attributes()->push_back(
-      AttributedStringCoder::FontAttribute(font_name, 14, gfx::Range(5, 100)));
-  encoded.attributes()->push_back(
-      AttributedStringCoder::FontAttribute(font_name, 16, gfx::Range(100, 5)));
+  ui::mojom::AttributedStringPtr attributed_string =
+      ui::mojom::AttributedString::New();
+  attributed_string->string = base::ASCIIToUTF16("Hello World");
+  attributed_string->attributes.push_back(
+      ui::mojom::FontAttribute::New(font_name, 12, gfx::Range(0, 5)));
+  attributed_string->attributes.push_back(
+      ui::mojom::FontAttribute::New(font_name, 14, gfx::Range(5, 100)));
+  attributed_string->attributes.push_back(
+      ui::mojom::FontAttribute::New(font_name, 16, gfx::Range(100, 5)));
 
-  NSAttributedString* decoded = AttributedStringCoder::Decode(&encoded);
-  EXPECT_TRUE(decoded);
+  NSAttributedString* ns_attributed_string =
+      attributed_string.To<NSAttributedString*>();
+  EXPECT_TRUE(ns_attributed_string);
 
   NSRange range;
-  NSDictionary* attrs = [decoded attributesAtIndex:0 effectiveRange:&range];
+  NSDictionary* attrs = [ns_attributed_string attributesAtIndex:0
+                                                 effectiveRange:&range];
   EXPECT_NSEQ([NSFont systemFontOfSize:12],
               [attrs objectForKey:NSFontAttributeName]);
   EXPECT_TRUE(NSEqualRanges(range, NSMakeRange(0, 5)));
 
-  attrs = [decoded attributesAtIndex:5 effectiveRange:&range];
+  attrs = [ns_attributed_string attributesAtIndex:5 effectiveRange:&range];
   EXPECT_FALSE([attrs objectForKey:NSFontAttributeName]);
   EXPECT_EQ(0U, [attrs count]);
 }
