@@ -36,7 +36,6 @@
 #include "content/public/common/origin_util.h"
 #include "crypto/sha2.h"
 #include "device/base/features.h"
-#include "device/bluetooth/bluetooth_adapter_factory.h"
 #include "device/fido/attestation_statement.h"
 #include "device/fido/ctap_make_credential_request.h"
 #include "device/fido/features.h"
@@ -471,14 +470,6 @@ base::flat_set<device::FidoTransportProtocol> GetAvailableTransports(
         {device::FidoTransportProtocol::kUsbHumanInterfaceDevice});
   }
 
-  // Try all transports if the FidoDiscoveryFactory has been injected in tests
-  // or via the testing API.
-  if (AuthenticatorEnvironmentImpl::GetInstance()->GetDiscoveryFactoryOverride(
-          static_cast<RenderFrameHostImpl*>(render_frame_host)
-              ->frame_tree_node())) {
-    return device::GetAllTransportProtocols();
-  }
-
   base::flat_set<device::FidoTransportProtocol> transports;
   transports.insert(device::FidoTransportProtocol::kUsbHumanInterfaceDevice);
 
@@ -486,25 +477,28 @@ base::flat_set<device::FidoTransportProtocol> GetAvailableTransports(
       AuthenticatorEnvironmentImpl::GetInstance()->GetDiscoveryFactoryOverride(
           static_cast<RenderFrameHostImpl*>(render_frame_host)
               ->frame_tree_node());
-  if (!discovery_factory) {
-    discovery_factory = delegate->GetDiscoveryFactory();
-  }
+  if (discovery_factory) {
+    // The desktop implementation does not support BLE or NFC, but we emulate
+    // them if the testing API is enabled.
+    transports.insert(device::FidoTransportProtocol::kBluetoothLowEnergy);
+    transports.insert(device::FidoTransportProtocol::kNearFieldCommunication);
 
-  // Don't instantiate a platform discovery in contexts where IsUVPAA() would
-  // return false. This avoids platform authenticators mistakenly being
-  // available when e.g. an embedder provided implementation of
-  // IsUserVerifyingPlatformAuthenticatorAvailableOverride() returned false.
-  if (IsUserVerifyingPlatformAuthenticatorAvailableImpl(
-          delegate, discovery_factory,
-          content::WebContents::FromRenderFrameHost(render_frame_host)
-              ->GetBrowserContext())) {
+    // Instantiate a virtual platform discovery regardless of IsUVPAA() to
+    // support non-uv, platform authenticators.
     transports.insert(device::FidoTransportProtocol::kInternal);
-  }
+  } else {
+    discovery_factory = delegate->GetDiscoveryFactory();
 
-  // FIXME(martinkr): Check whether this can be moved in front of the BLE
-  // adapter enumeration logic in FidoRequestHandlerBase.
-  if (!device::BluetoothAdapterFactory::Get()->IsLowEnergySupported()) {
-    return transports;
+    // Don't instantiate a platform discovery in contexts where IsUVPAA() would
+    // return false. This avoids platform authenticators mistakenly being
+    // available when e.g. an embedder provided implementation of
+    // IsUserVerifyingPlatformAuthenticatorAvailableOverride() returned false.
+    if (IsUserVerifyingPlatformAuthenticatorAvailableImpl(
+            delegate, discovery_factory,
+            content::WebContents::FromRenderFrameHost(render_frame_host)
+                ->GetBrowserContext())) {
+      transports.insert(device::FidoTransportProtocol::kInternal);
+    }
   }
 
   if (base::FeatureList::IsEnabled(features::kWebAuthCable) ||
