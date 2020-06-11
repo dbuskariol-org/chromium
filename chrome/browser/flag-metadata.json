@@ -4495,7 +4495,7 @@
   {
     "name": "webxr-incubations",
     "owners": [ "//third_party/blink/renderer/modules/xr/OWNERS", "xr-dev@chromium.org" ],
-    "expiry_milestone": 85
+    "expiry_milestone": 95
   },
   {
     "name": "webxr-multi-gpu",
