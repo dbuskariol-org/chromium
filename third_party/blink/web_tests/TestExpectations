@@ -6727,6 +6727,5 @@ crbug.com/1093003 [ Mac ] external/wpt/html/rendering/replaced-elements/embedded
 
 # Sheriff 2020-06-10
 crbug.com/1093429 [ Mac ] external/wpt/webrtc/RTCPeerConnection-getStats.https.html [ Failure ]
-crbug.com/1093620 [ Debug ] http/tests/devtools/appcache/* [ Pass Failure ]
 crbug.com/1093709 [ Mac ] external/wpt/html/canvas/offscreen/manual/the-offscreen-canvas/offscreencanvas.resize.html [ Pass Failure ]
 crbug.com/1093709 [ Linux ] external/wpt/html/canvas/offscreen/manual/the-offscreen-canvas/offscreencanvas.resize.html [ Pass Failure ]
