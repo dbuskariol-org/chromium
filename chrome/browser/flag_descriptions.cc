@@ -2333,6 +2333,10 @@ const char kAndroidAutofillAccessibilityName[] = "Autofill Accessibility";
 const char kAndroidAutofillAccessibilityDescription[] =
     "Enable accessibility for autofill popup.";
 
+const char kAndroidDefaultBrowserPromoName[] = "Default Browser Promo";
+const char kAndroidDefaultBrowserPromoDescription[] =
+    "Shows a promo dialog to set Chrome as the default browser";
+
 const char kAndroidMultipleDisplayName[] = "Multiple Display";
 const char kAndroidMultipleDisplayDescription[] =
     "When enabled, tabs can be moved to the secondary display.";
