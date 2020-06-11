@@ -215,7 +215,7 @@
 <translation id="1260451001046713751">Eman beti <ph name="HOST" /> webguneko leiho gainerakorrak eta birbideratzeak erakusteko baimena</translation>
 <translation id="126156426083987769">Arazo bat izan da demo moduko gailuen lizentziekin.</translation>
 <translation id="1263490604593716556"><ph name="FIRST_PARENT_EMAIL" /> eta <ph name="SECOND_PARENT_EMAIL" /> arduratzen dira kontu hau kudeatzeaz. Gailu honetako kontu nagusiko saioa amaitzeko, sakatu pantailako ordua. Agertuko den menuan, sakatu "Amaitu saioa".</translation>
-<translation id="126387934568812801">Barne hartu pantaila-argazkia eta irekita dauden fitxen izenak</translation>
+<translation id="126387934568812801">Sartu pantaila-argazkia eta irekita dauden fitxen izenak</translation>
 <translation id="126710816202626562">Xede-hizkuntza:</translation>
 <translation id="126768002343224824">16x</translation>
 <translation id="1272079795634619415">Gelditu</translation>
@@ -2270,7 +2270,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="3830654885961023588">{NUM_EXTENSIONS,plural, =1{Luzapen kaltegarri bat berriro aktibatu du administratzaileak}other{{NUM_EXTENSIONS} luzapen kaltegarri berriro aktibatu ditu administratzaileak}}</translation>
 <translation id="3831436149286513437">Google Drive-ko bilaketa-iradokizunak</translation>
 <translation id="383161972796689579">Gailuaren jabeak erabiltzaile berriak gehitzeko aukera desgaitu du</translation>
-<translation id="3834728400518755610">Mikrofonoaren ezarpenean egindako aldaketa aplikatzeko, itzali egin behar da Linux. Aurrera egiteko, itzali Linux.</translation>
+<translation id="3834728400518755610">Mikrofonoaren ezarpenean egindako aldaketa aplikatzeko, itxi egin behar da Linux. Aurrera egiteko, itxi Linux.</translation>
 <translation id="3834775135533257713">Ezin izan da gehitu "<ph name="TO_INSTALL_APP_NAME" />" aplikazioa, "<ph name="INSTALLED_APP_NAME" />" aplikazioarekin gatazkan dagoelako.</translation>
 <translation id="3835522725882634757"><ph name="PRODUCT_NAME" />-k ezin ditu ulertu zerbitzariak bidalitako datuak. <ph name="BEGIN_LINK" />Emaguzu akatsaren berri<ph name="END_LINK" /> eta sartu <ph name="BEGIN2_LINK" />direktorio-zerrenda prozesatu gabeko testuan<ph name="END2_LINK" />.</translation>
 <translation id="383669374481694771">Gailu honi eta hura erabiltzeko moduari buruzko informazio orokorra da hau (adibidez, bateria-maila, sistemako eta aplikazioetako jarduerak, eta erroreak). Android hobetzeko erabiliko dira datuok. Gainera, multzokatutako datu batzuk oso baliagarriak dira Google-ren aplikazioak hobetzeko eta bazkideei (adibidez, Android-en garatzaileei) euren aplikazio eta produktuak hobetzen laguntzeko.</translation>
@@ -2664,7 +2664,7 @@ Kontu honen ezarpenak kudeatzeko, instalatu Family Link aplikazioa zure gailuan.
 <translation id="4364327530094270451">Meloia</translation>
 <translation id="4364567974334641491"><ph name="APP_NAME" /> leiho bat partekatzen ari da.</translation>
 <translation id="4364830672918311045">Bistaratu jakinarazpenak</translation>
-<translation id="437004882363131692">Lortu <ph name="DEVICE_TYPE" /> gailuari buruzko aholkuak eta eskaintzak, eta partekatu zure iritzia. Edonoiz ken dezakezu harpidetza.</translation>
+<translation id="437004882363131692">Lortu <ph name="DEVICE_TYPE" /> gailuari buruzko aholkuak, eskaintzak eta berritasunak, eta partekatu zure iritzia. Edonoiz ken dezakezu harpidetza.</translation>
 <translation id="4370975561335139969">Idatzitako helbide elektronikoa eta pasahitza ez datoz bat</translation>
 <translation id="4374831787438678295">Linux-en instalatzailea</translation>
 <translation id="4375035964737468845">Ireki deskargatutako fitxategiak</translation>
@@ -6404,7 +6404,7 @@ Gorde gakoen fitxategia leku seguru batean. Zure luzapenaren bertsio berriak sor
 <translation id="932327136139879170">Hasiera</translation>
 <translation id="932508678520956232">Ezin izan da hasi inprimatzen.</translation>
 <translation id="933427034780221291">{NUM_FILES,plural, =1{Fitxategia handiegia da haren segurtasuna egiaztatzeko. Gehienez 50 MB dituzten fitxategiak karga ditzakezu.}other{Fitxategi batzuk handiegiak dira haien segurtasuna egiaztatzeko. Gehienez 50 MB dituzten fitxategiak karga ditzakezu.}}</translation>
-<translation id="93343527085570547">Legezko arrazoiengatik edukia aldatzea eskatzeko, joan <ph name="BEGIN_LINK1" />legezko laguntzari buruzko orrira<ph name="END_LINK1" />. Baliteke kontuari eta sistemari buruzko datu batzuk bidaltzea Google-ri. Arazo teknikoei ekiteko eta gure zerbitzuak hobetzeko erabiliko dugu ematen diguzun informazioa, <ph name="BEGIN_LINK2" />Pribatutasun-gidalerroetan<ph name="END_LINK2" /> eta <ph name="BEGIN_LINK3" />Zerbitzu-baldintzetan<ph name="END_LINK3" /> zehaztutakoari jarraikiz.</translation>
+<translation id="93343527085570547">Legezko arrazoiak direla eta edukian aldaketak eskatzeko, joan <ph name="BEGIN_LINK1" />legezko laguntzari buruzko orrira<ph name="END_LINK1" />. Baliteke kontuari eta sistemari buruzko datu batzuk bidaltzea Google-ri. Arazo teknikoei ekiteko eta gure zerbitzuak hobetzeko erabiliko dugu ematen diguzun informazioa, <ph name="BEGIN_LINK2" />Pribatutasun-gidalerroetan<ph name="END_LINK2" /> eta <ph name="BEGIN_LINK3" />Zerbitzu-baldintzetan<ph name="END_LINK3" /> zehaztutakoari jarraikiz.</translation>
 <translation id="93393615658292258">Pasahitza bakarrik</translation>
 <translation id="934244546219308557">Eman izena taldeari</translation>
 <translation id="934503638756687833">Hemen agertzen ez diren zenbait elementu ere kenduko dira, hala behar izanez gero. Lortu informazio gehiago &lt;a href="<ph name="URL" />"&gt;nahi ez den softwarearekiko babesari&lt;/a&gt; buruz Chrome-ren pribatutasunaren liburu zurian.</translation>

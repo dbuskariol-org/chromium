@@ -1347,7 +1347,7 @@
 <translation id="2682498795777673382">保護者の方による更新</translation>
 <translation id="2683638487103917598">フォルダが並べ替えられました</translation>
 <translation id="2684004000387153598">利用を続けるには、[OK]、[ユーザーを追加] の順にクリックして、お使いのメールアドレス用の新しいプロフィールを作成してください。</translation>
-<translation id="2687403674020088961">すべての Cookie をブロック（推奨されません）</translation>
+<translation id="2687403674020088961">すべての Cookie をブロックする（推奨されません）</translation>
 <translation id="2687407218262674387">Google 利用規約</translation>
 <translation id="2688196195245426394">デバイスをサーバーに登録するときにエラーが発生しました: <ph name="CLIENT_ERROR" />。</translation>
 <translation id="2690024944919328218">言語オプションを表示</translation>
@@ -2050,7 +2050,7 @@
 <translation id="359283478042092570">ログイン</translation>
 <translation id="3593965109698325041">証明書名の制約</translation>
 <translation id="3596235046596950091">クラウド サービスを有効にする</translation>
-<translation id="3596414637720633074">シークレット モードでサードパーティの Cookie をブロックします</translation>
+<translation id="3596414637720633074">シークレット モードでサードパーティの Cookie をブロックする</translation>
 <translation id="3599221874935822507">浮き彫り</translation>
 <translation id="3599863153486145794">ログインしているすべてのデバイスの履歴を削除します。お使いの Google アカウントの <ph name="BEGIN_LINK" />myactivity.google.com<ph name="END_LINK" /> に、他の形式の閲覧履歴が記録されている場合があります。</translation>
 <translation id="3600051066689725006">ウェブ リクエスト情報</translation>
