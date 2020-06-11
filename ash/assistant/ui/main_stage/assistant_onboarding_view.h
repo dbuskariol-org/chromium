@@ -27,6 +27,7 @@ class COMPONENT_EXPORT(ASSISTANT_UI) AssistantOnboardingView
 
  private:
   void InitLayout();
+  void InitSuggestions();
 
   AssistantViewDelegate* const delegate_;
 };
