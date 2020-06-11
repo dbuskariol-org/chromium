@@ -227,31 +227,6 @@ Shell* Shell::CreateNewWindow(BrowserContext* browser_context,
   return shell;
 }
 
-Shell* Shell::CreateNewWindowWithSessionStorageNamespace(
-    BrowserContext* browser_context,
-    const GURL& url,
-    const scoped_refptr<SiteInstance>& site_instance,
-    const gfx::Size& initial_size,
-    scoped_refptr<SessionStorageNamespace> session_storage_namespace) {
-  WebContents::CreateParams create_params(browser_context, site_instance);
-  if (base::CommandLine::ForCurrentProcess()->HasSwitch(
-          switches::kForcePresentationReceiverForTesting)) {
-    create_params.starting_sandbox_flags =
-        content::kPresentationReceiverSandboxFlags;
-  }
-  std::map<std::string, scoped_refptr<SessionStorageNamespace>>
-      session_storages;
-  session_storages[""] = session_storage_namespace;
-  std::unique_ptr<WebContents> web_contents =
-      WebContents::CreateWithSessionStorage(create_params, session_storages);
-  Shell* shell =
-      CreateShell(std::move(web_contents), AdjustWindowSize(initial_size),
-                  true /* should_set_delegate */);
-  if (!url.is_empty())
-    shell->LoadURL(url);
-  return shell;
-}
-
 void Shell::RenderViewReady() {
   g_platform->RenderViewReady(this);
 }
