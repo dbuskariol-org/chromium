@@ -28,6 +28,7 @@
 #include "gin/array_buffer.h"
 #include "gin/public/gin_embedders.h"
 #include "gin/public/isolate_holder.h"
+#include "gin/public/v8_platform.h"
 #include "pdf/document_loader_impl.h"
 #include "pdf/draw_utils/coordinates.h"
 #include "pdf/draw_utils/shadow.h"
@@ -370,14 +371,19 @@ base::string16 GetAttachmentName(FPDF_ATTACHMENT attachment) {
 
 void InitializeSDK(bool enable_v8) {
   FPDF_LIBRARY_CONFIG config;
-  config.version = 2;
+  config.version = 3;
   config.m_pUserFontPaths = nullptr;
 
   if (enable_v8) {
     SetUpV8();
     config.m_pIsolate = v8::Isolate::GetCurrent();
+    // NOTE: static_cast<> prior to assigning to (void*) is safer since it
+    // will manipulate the pointer value should gin::V8Platform someday have
+    // multiple base classes.
+    config.m_pPlatform = static_cast<v8::Platform*>(gin::V8Platform::Get());
   } else {
     config.m_pIsolate = nullptr;
+    config.m_pPlatform = nullptr;
   }
   config.m_v8EmbedderSlot = gin::kEmbedderPDFium;
   FPDF_InitLibraryWithConfig(&config);
