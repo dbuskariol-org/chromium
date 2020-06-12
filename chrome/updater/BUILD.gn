@@ -52,6 +52,7 @@ if (is_win || is_mac) {
       "policy_manager.h",
       "prefs.cc",
       "prefs.h",
+      "prefs_impl.h",
       "registration_data.cc",
       "registration_data.h",
       "unzipper.cc",
@@ -78,12 +79,16 @@ if (is_win || is_mac) {
     ]
 
     if (is_mac) {
-      sources += [ "external_constants_mac.mm" ]
+      sources += [
+        "external_constants_mac.mm",
+        "prefs_mac.mm",
+      ]
     }
 
     if (is_win) {
       sources += [
         "external_constants_win.cc",
+        "prefs_win.cc",
         "win/group_policy_manager.cc",
         "win/group_policy_manager.h",
       ]
