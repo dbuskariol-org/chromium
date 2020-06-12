@@ -4764,7 +4764,6 @@ crbug.com/930297 external/wpt/html/infrastructure/urls/resolving-urls/query-enco
 # RubyNG TODOs
 crbug.com/1069817 fast/ruby/float-overhang-from-ruby-text.html [ Failure ]
 crbug.com/1069817 fast/ruby/position-after.html [ Failure ]
-crbug.com/1069817 virtual/text-antialias/emphasis-avoid-ruby.html [ Failure ]
 
 crbug.com/676229 plugins/mouse-click-plugin-clears-selection.html [ Failure Pass ]
 crbug.com/742670 plugins/iframe-plugin-bgcolor.html [ Failure Pass ]
