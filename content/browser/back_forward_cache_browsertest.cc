@@ -2094,6 +2094,40 @@ IN_PROC_BROWSER_TEST_F(BackForwardCacheBrowserTest,
   EXPECT_TRUE(all_sites_it != all_sites_blocklist_values.end());
 }
 
+IN_PROC_BROWSER_TEST_F(BackForwardCacheBrowserTest,
+                       DoesNotCacheOnKeyboardLock) {
+  ASSERT_TRUE(embedded_test_server()->Start());
+
+  // 1) Navigate to a page and start using the IdleManager class.
+  GURL url(embedded_test_server()->GetURL("/title1.html"));
+  EXPECT_TRUE(NavigateToURL(shell(), url));
+  RenderFrameHostImpl* rfh_a = current_frame_host();
+  RenderFrameDeletedObserver rfh_a_deleted(rfh_a);
+
+  EXPECT_TRUE(ExecJs(rfh_a, R"(
+    new Promise(resolve => {
+      navigator.keyboard.lock();
+      resolve();
+    });
+  )"));
+
+  // 2) Navigate away.
+  EXPECT_TRUE(NavigateToURL(
+      shell(), embedded_test_server()->GetURL("b.com", "/title1.html")));
+
+  // The page uses IdleManager so it should be deleted.
+  rfh_a_deleted.WaitUntilDeleted();
+
+  // 3) Go back and make sure the IdleManager page wasn't in the cache.
+  web_contents()->GetController().GoBack();
+  EXPECT_TRUE(WaitForLoadStop(shell()->web_contents()));
+  ExpectNotRestored(
+      {BackForwardCacheMetrics::NotRestoredReason::kBlocklistedFeatures},
+      FROM_HERE);
+  ExpectBlocklistedFeature(
+      blink::scheduler::WebSchedulerTrackedFeature::kKeyboardLock, FROM_HERE);
+}
+
 class MockAppBannerService : public blink::mojom::AppBannerService {
  public:
   MockAppBannerService() = default;
