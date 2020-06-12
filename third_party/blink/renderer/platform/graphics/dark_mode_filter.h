@@ -8,7 +8,6 @@
 #include <memory>
 
 #include "cc/paint/paint_flags.h"
-#include "third_party/blink/renderer/platform/geometry/float_rect.h"
 #include "third_party/blink/renderer/platform/graphics/color.h"
 #include "third_party/blink/renderer/platform/graphics/dark_mode_settings.h"
 #include "third_party/blink/renderer/platform/graphics/paint/paint_image.h"
@@ -58,8 +57,8 @@ class PLATFORM_EXPORT DarkModeFilter {
       ElementRole element_role);
 
   // |image| and |flags| must not be null.
-  void ApplyToImageFlagsIfNeeded(const FloatRect& src_rect,
-                                 const FloatRect& dest_rect,
+  void ApplyToImageFlagsIfNeeded(const SkRect& src,
+                                 const SkRect& dst,
                                  const PaintImage& paint_image,
                                  cc::PaintFlags* flags,
                                  ElementRole element_role);
@@ -74,8 +73,8 @@ class PLATFORM_EXPORT DarkModeFilter {
 
   bool ShouldApplyToColor(SkColor color, ElementRole role);
   bool ShouldApplyToImage(const DarkModeSettings& settings,
-                          const FloatRect& src_rect,
-                          const FloatRect& dest_rect,
+                          const SkRect& src,
+                          const SkRect& dst,
                           const PaintImage& paint_image,
                           ElementRole role);
 

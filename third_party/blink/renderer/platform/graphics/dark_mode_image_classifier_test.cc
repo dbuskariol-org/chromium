@@ -64,7 +64,7 @@ TEST_F(DarkModeImageClassifierTest, FeaturesAndClassification) {
   image = GetImage("/images/resources/grid-large.png");
   features = image_classifier()
                  ->GetFeatures(image->PaintImageForCurrentFrame(),
-                               FloatRect(0, 0, image->width(), image->height()))
+                               SkRect::MakeWH(image->width(), image->height()))
                  .value();
   EXPECT_EQ(image_classifier()->ClassifyWithFeatures(features),
             DarkModeClassification::kApplyFilter);
@@ -84,7 +84,7 @@ TEST_F(DarkModeImageClassifierTest, FeaturesAndClassification) {
   image = GetImage("/images/resources/apng08-ref.png");
   features = image_classifier()
                  ->GetFeatures(image->PaintImageForCurrentFrame(),
-                               FloatRect(0, 0, image->width(), image->height()))
+                               SkRect::MakeWH(image->width(), image->height()))
                  .value();
   EXPECT_EQ(image_classifier()->ClassifyWithFeatures(features),
             DarkModeClassification::kDoNotApplyFilter);
@@ -104,7 +104,7 @@ TEST_F(DarkModeImageClassifierTest, FeaturesAndClassification) {
   image = GetImage("/images/resources/twitter_favicon.ico");
   features = image_classifier()
                  ->GetFeatures(image->PaintImageForCurrentFrame(),
-                               FloatRect(0, 0, image->width(), image->height()))
+                               SkRect::MakeWH(image->width(), image->height()))
                  .value();
   EXPECT_EQ(image_classifier()->ClassifyWithFeatures(features),
             DarkModeClassification::kApplyFilter);
@@ -124,7 +124,7 @@ TEST_F(DarkModeImageClassifierTest, FeaturesAndClassification) {
   image = GetImage("/images/resources/blue-wheel-srgb-color-profile.png");
   features = image_classifier()
                  ->GetFeatures(image->PaintImageForCurrentFrame(),
-                               FloatRect(0, 0, image->width(), image->height()))
+                               SkRect::MakeWH(image->width(), image->height()))
                  .value();
   EXPECT_EQ(image_classifier()->ClassifyWithFeatures(features),
             DarkModeClassification::kDoNotApplyFilter);
@@ -144,7 +144,7 @@ TEST_F(DarkModeImageClassifierTest, FeaturesAndClassification) {
   image = GetImage("/images/resources/ycbcr-444-float.jpg");
   features = image_classifier()
                  ->GetFeatures(image->PaintImageForCurrentFrame(),
-                               FloatRect(0, 0, image->width(), image->height()))
+                               SkRect::MakeWH(image->width(), image->height()))
                  .value();
   EXPECT_EQ(image_classifier()->ClassifyWithFeatures(features),
             DarkModeClassification::kApplyFilter);
@@ -206,7 +206,7 @@ TEST_F(DarkModeImageClassifierTest, BlocksCount) {
   image_classifier()->blocks_count_vertical_ = image->height() - 1;
   features = image_classifier()
                  ->GetFeatures(image->PaintImageForCurrentFrame(),
-                               FloatRect(0, 0, image->width(), image->height()))
+                               SkRect::MakeWH(image->width(), image->height()))
                  .value();
   EXPECT_EQ(image_classifier()->blocks_count_horizontal_, image->width() - 1);
   EXPECT_EQ(image_classifier()->blocks_count_vertical_, image->height() - 1);
@@ -217,7 +217,7 @@ TEST_F(DarkModeImageClassifierTest, BlocksCount) {
   image_classifier()->blocks_count_vertical_ = image->height();
   features = image_classifier()
                  ->GetFeatures(image->PaintImageForCurrentFrame(),
-                               FloatRect(0, 0, image->width(), image->height()))
+                               SkRect::MakeWH(image->width(), image->height()))
                  .value();
   EXPECT_EQ(image_classifier()->blocks_count_horizontal_, image->width());
   EXPECT_EQ(image_classifier()->blocks_count_vertical_, image->height());
@@ -228,7 +228,7 @@ TEST_F(DarkModeImageClassifierTest, BlocksCount) {
   image_classifier()->blocks_count_vertical_ = image->height() + 1;
   features = image_classifier()
                  ->GetFeatures(image->PaintImageForCurrentFrame(),
-                               FloatRect(0, 0, image->width(), image->height()))
+                               SkRect::MakeWH(image->width(), image->height()))
                  .value();
   EXPECT_EQ(image_classifier()->blocks_count_horizontal_,
             floor(image->width()));

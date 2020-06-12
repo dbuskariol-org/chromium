@@ -41,14 +41,13 @@ const int kMinImageSizeForClassification1D = 24;
 const int kMaxImageSizeForClassification1D = 100;
 
 class DarkModeBitmapImageClassifier : public DarkModeImageClassifier {
-  DarkModeClassification DoInitialClassification(
-      const FloatRect& dest_rect) override {
-    if (dest_rect.Width() < kMinImageSizeForClassification1D ||
-        dest_rect.Height() < kMinImageSizeForClassification1D)
+  DarkModeClassification DoInitialClassification(const SkRect& dst) override {
+    if (dst.width() < kMinImageSizeForClassification1D ||
+        dst.height() < kMinImageSizeForClassification1D)
       return DarkModeClassification::kApplyFilter;
 
-    if (dest_rect.Width() > kMaxImageSizeForClassification1D ||
-        dest_rect.Height() > kMaxImageSizeForClassification1D) {
+    if (dst.width() > kMaxImageSizeForClassification1D ||
+        dst.height() > kMaxImageSizeForClassification1D) {
       return DarkModeClassification::kDoNotApplyFilter;
     }
 
@@ -57,16 +56,14 @@ class DarkModeBitmapImageClassifier : public DarkModeImageClassifier {
 };
 
 class DarkModeSVGImageClassifier : public DarkModeImageClassifier {
-  DarkModeClassification DoInitialClassification(
-      const FloatRect& dest_rect) override {
+  DarkModeClassification DoInitialClassification(const SkRect& dst) override {
     return DarkModeClassification::kNotClassified;
   }
 };
 
 class DarkModeGradientGeneratedImageClassifier
     : public DarkModeImageClassifier {
-  DarkModeClassification DoInitialClassification(
-      const FloatRect& dest_rect) override {
+  DarkModeClassification DoInitialClassification(const SkRect& dst) override {
     return DarkModeClassification::kApplyFilter;
   }
 };
@@ -161,29 +158,29 @@ DarkModeImageClassifier::MakeGradientGeneratedImageClassifier() {
 
 DarkModeClassification DarkModeImageClassifier::Classify(
     const PaintImage& paint_image,
-    const FloatRect& src_rect,
-    const FloatRect& dest_rect) {
+    const SkRect& src,
+    const SkRect& dst) {
   DarkModeImageClassificationCache* cache =
       DarkModeImageClassificationCache::GetInstance();
   PaintImage::Id image_id = paint_image.stable_id();
-  DarkModeClassification result = cache->Get(image_id, src_rect);
+  DarkModeClassification result = cache->Get(image_id, src);
   if (result != DarkModeClassification::kNotClassified)
     return result;
 
-  result = DoInitialClassification(dest_rect);
+  result = DoInitialClassification(dst);
   if (result != DarkModeClassification::kNotClassified) {
-    cache->Add(image_id, src_rect, result);
+    cache->Add(image_id, src, result);
     return result;
   }
 
-  auto features_or_null = GetFeatures(paint_image, src_rect);
+  auto features_or_null = GetFeatures(paint_image, src);
   if (!features_or_null) {
     // Do not cache this classification.
     return DarkModeClassification::kDoNotApplyFilter;
   }
 
   result = ClassifyWithFeatures(features_or_null.value());
-  cache->Add(image_id, src_rect, result);
+  cache->Add(image_id, src, result);
   return result;
 }
 
@@ -214,19 +211,19 @@ bool DarkModeImageClassifier::GetBitmap(const PaintImage& paint_image,
 
 base::Optional<DarkModeImageClassifier::Features>
 DarkModeImageClassifier::GetFeatures(const PaintImage& paint_image,
-                                     const FloatRect& src_rect) {
+                                     const SkRect& src) {
   SkBitmap bitmap;
-  if (!GetBitmap(paint_image, src_rect, &bitmap))
+  if (!GetBitmap(paint_image, src, &bitmap))
     return base::nullopt;
 
-  if (pixels_to_sample_ > src_rect.Width() * src_rect.Height())
-    pixels_to_sample_ = src_rect.Width() * src_rect.Height();
+  if (pixels_to_sample_ > src.width() * src.height())
+    pixels_to_sample_ = src.width() * src.height();
 
-  if (blocks_count_horizontal_ > src_rect.Width())
-    blocks_count_horizontal_ = floor(src_rect.Width());
+  if (blocks_count_horizontal_ > src.width())
+    blocks_count_horizontal_ = floor(src.width());
 
-  if (blocks_count_vertical_ > src_rect.Height())
-    blocks_count_vertical_ = floor(src_rect.Height());
+  if (blocks_count_vertical_ > src.height())
+    blocks_count_vertical_ = floor(src.height());
 
   float transparency_ratio;
   float background_ratio;
