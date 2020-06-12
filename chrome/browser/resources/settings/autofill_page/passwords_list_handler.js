@@ -4,7 +4,8 @@
 
 /**
  * @fileoverview PasswordsListHandler is a container for a passwords list
- * responsible for handling events such as copy, editing and removal.
+ * responsible for handling events associated with the overflow menu (copy,
+ * editing, removal, moving to account).
  */
 
 import './password_edit_dialog.js';
@@ -48,6 +49,15 @@ Polymer({
      * about which location(s) a password is stored.
      */
     shouldShowStorageDetails: {
+      type: Boolean,
+      value: false,
+    },
+
+    /**
+     * Whether an option for moving a password to the account should be offered
+     * in the overflow menu.
+     */
+    shouldShowMoveToAccountOption: {
       type: Boolean,
       value: false,
     },
@@ -189,9 +199,25 @@ Polymer({
     this.activePassword = null;
   },
 
+  /**
+   * @private
+   */
   onUndoButtonClick_() {
     PasswordManagerImpl.getInstance().undoRemoveSavedPasswordOrException();
     this.onSavedPasswordOrExceptionRemoved();
   },
+
+  /**
+   * Should only be called when |activePassword| has a device copy.
+   * @private
+   */
+  onMenuMovePasswordToAccountTap_() {
+    assert(this.activePassword.entry.isPresentOnDevice());
+    PasswordManagerImpl.getInstance()
+        .movePasswordToAccount(/** @type {number} */
+                               (this.activePassword.entry.deviceId));
+    this.$.menu.close();
+    this.activePassword = null;
+  }
 
 });

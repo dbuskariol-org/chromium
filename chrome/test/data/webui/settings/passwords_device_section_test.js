@@ -263,4 +263,44 @@ suite('PasswordsDeviceSection', function() {
                    .hidden);
   });
 
+  // Test verifies that the overflow menu offers an option to move a password
+  // to the account and that it has the right text.
+  test('hasMoveToAccountOption', function() {
+    const passwordsDeviceSection =
+        createPasswordsDeviceSection(passwordManager, [], []);
+    const moveToAccountButton =
+        passwordsDeviceSection.$.passwordsListHandler.$$(
+            '#menuMovePasswordToAccount');
+    assertTrue(!!moveToAccountButton);
+    assertEquals(
+        passwordsDeviceSection.i18n('movePasswordToAccount'),
+        moveToAccountButton.innerText);
+  });
+
+
+  // Test verifies that clicking the 'move to account' button calls the move API
+  // with the correct id.
+  test('verifyMovesCorrectIdToAccount', async function() {
+    // Create duplicated password that will be merged.
+    const passwordList = [
+      createPasswordEntry(
+          {user: 'both', id: 1, frontendId: 42, fromAccountStore: false}),
+      createPasswordEntry(
+          {user: 'both', id: 2, frontendId: 42, fromAccountStore: true}),
+    ];
+
+    const passwordsDeviceSection =
+        createPasswordsDeviceSection(passwordManager, passwordList, []);
+
+    const [password] =
+        passwordsDeviceSection.root.querySelectorAll('password-list-item');
+
+    // The API should be called with the device copy id.
+    password.$.passwordMenu.click();
+    passwordsDeviceSection.$.passwordsListHandler
+        .$$('#menuMovePasswordToAccount')
+        .click();
+    const movedId = await passwordManager.whenCalled('movePasswordToAccount');
+    assertEquals(1, movedId);
+  });
 });
