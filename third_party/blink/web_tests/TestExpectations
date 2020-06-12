@@ -4629,7 +4629,6 @@ crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/distribution
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/form-in-shadow.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/no-style-sharing-with-uncommon-attribute-nodes.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadow-dynamic-style-change-via-mutation-and-selector.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadow-element-rendering-single.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadowhost-keyframes.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadowroot-keyframes.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/transition-on-shadow-host-createshadowroot.html [ Skip ]
@@ -4644,10 +4643,6 @@ crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/custom-pseud
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/dynamically-created-shadow-root.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/new-fallback.html [ Skip ]
 crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadow-on-image.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadowdom-for-button-complex-shadow.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadowdom-for-button-without-shadow.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/shadowroot-of-insertionpoint.html [ Skip ]
-crbug.com/937746 virtual/web-components-v0-disabled/fast/dom/shadow/table-border.html [ Skip ]
 
 
 # == These fail with or without the WCv0 features disabled, and most/all already
