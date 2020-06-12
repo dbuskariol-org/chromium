@@ -1160,12 +1160,6 @@ void DownloadItemView::ShowWarningDialog() {
   time_download_warning_shown_ = base::Time::Now();
   download::DownloadDangerType danger_type = model_->GetDangerType();
   RecordDangerousDownloadWarningShown(danger_type);
-#if BUILDFLAG(FULL_SAFE_BROWSING)
-  if (model_->ShouldAllowDownloadFeedback()) {
-    safe_browsing::DownloadFeedbackService::RecordEligibleDownloadShown(
-        danger_type);
-  }
-#endif
   SetMode(model_->MightBeMalicious() ? MALICIOUS_MODE : DANGEROUS_MODE);
 
   dropdown_state_ = NORMAL;
