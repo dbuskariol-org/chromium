@@ -12,10 +12,15 @@
 @class PrivacyCookiesCoordinator;
 
 // Delegate that allows to dereference the PrivacyCookiesCoordinator.
-@protocol PrivacyCookiesCoordinatorDelegate
+@protocol PrivacyCookiesCoordinatorDelegate <NSObject>
 
+@optional
 // Called when the view controller is removed from navigation controller.
 - (void)privacyCookiesCoordinatorViewControllerWasRemoved:
+    (PrivacyCookiesCoordinator*)coordinator;
+
+// Called when the view controller should be dismissed.
+- (void)dismissPrivacyCookiesCoordinatorViewController:
     (PrivacyCookiesCoordinator*)coordinator;
 
 @end
@@ -24,13 +29,9 @@
 
 @property(nonatomic, weak) id<PrivacyCookiesCoordinatorDelegate> delegate;
 
-- (instancetype)initWithBaseViewController:(UIViewController*)viewController
-                                   browser:(Browser*)browser NS_UNAVAILABLE;
-
 - (instancetype)initWithBaseNavigationController:
                     (UINavigationController*)navigationController
-                                         browser:(Browser*)browser
-    NS_DESIGNATED_INITIALIZER;
+                                         browser:(Browser*)browser;
 
 @end
 

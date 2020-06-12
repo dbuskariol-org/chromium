@@ -16,7 +16,6 @@
 #import "ios/chrome/browser/ui/settings/utils/content_setting_backed_boolean.h"
 #import "ios/chrome/browser/ui/settings/utils/pref_backed_boolean.h"
 #include "ios/chrome/grit/ios_strings.h"
-#include "ios/web/public/web_state_observer.h"
 #include "ui/base/l10n/l10n_util.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
@@ -48,10 +47,8 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 
 @implementation PageInfoCookiesMediator
 
-// TODO(crbug.com/1038919): Use webState to retrieve Cookies information.
-- (instancetype)initWithWebState:(web::WebState*)webState
-                     prefService:(PrefService*)prefService
-                     settingsMap:(HostContentSettingsMap*)settingsMap {
+- (instancetype)initWithPrefService:(PrefService*)prefService
+                        settingsMap:(HostContentSettingsMap*)settingsMap {
   self = [super init];
   if (self) {
     __weak PageInfoCookiesMediator* weakSelf = self;
@@ -74,7 +71,8 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 - (PageInfoCookiesDescription*)cookiesDescription {
   PageInfoCookiesDescription* dataHolder =
       [[PageInfoCookiesDescription alloc] init];
-  dataHolder.status = [self cookiesStatus];
+  dataHolder.headerDescription = [self cookiesStatus];
+  dataHolder.footerDescription = [self cookiesFooterDescription];
   return dataHolder;
 }
 
@@ -82,7 +80,7 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 
 // Updates consumer.
 - (void)updateConsumer {
-  [self.consumer cookiesOptionChanged:[self cookiesStatus]];
+  [self.consumer cookiesOptionChangedToDescription:[self cookiesDescription]];
 }
 
 // Returns the status of Cookies according to preferences.
@@ -101,6 +99,16 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
     return l10n_util::GetNSString(IDS_IOS_COOKIES_BLOCK_THIRD_PARTY_INCOGNITO);
 
   return l10n_util::GetNSString(IDS_IOS_COOKIES_ALLOW_ALL);
+}
+
+// Returns the footer description of Cookies according to preferences.
+- (NSString*)cookiesFooterDescription {
+  if (_prefsCookieControlsMode.GetValue() ==
+      static_cast<int>(content_settings::CookieControlsMode::kOff))
+    return l10n_util::GetNSString(
+        IDS_IOS_PAGE_INFO_COOKIES_SETTINGS_LINK_LABEL_ALLOW_ALL);
+  return l10n_util::GetNSString(
+      IDS_IOS_PAGE_INFO_COOKIES_SETTINGS_LINK_LABEL_BLOCK);
 }
 
 #pragma mark - BooleanObserver

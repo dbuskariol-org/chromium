@@ -7,8 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ios/web/public/web_state_observer_bridge.h"
-
 class HostContentSettingsMap;
 @protocol PageInfoCookiesConsumer;
 @class PageInfoCookiesDescription;
@@ -21,9 +19,8 @@ class PrefService;
 - (instancetype)init NS_UNAVAILABLE;
 
 // Designated initializer.
-- (instancetype)initWithWebState:(web::WebState*)webState
-                     prefService:(PrefService*)prefService
-                     settingsMap:(HostContentSettingsMap*)settingsMap
+- (instancetype)initWithPrefService:(PrefService*)prefService
+                        settingsMap:(HostContentSettingsMap*)settingsMap
     NS_DESIGNATED_INITIALIZER;
 
 // The consumer for this mediator.

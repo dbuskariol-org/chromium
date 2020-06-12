@@ -1228,6 +1228,12 @@ Handoff must also be enabled in the General section of Settings, and your device
       <message name="IDS_IOS_PAGE_INFO_COOKIES_IN_USE_LABEL" desc="Title of the item that displays the number of Cookies in Use in the site information screen.">
         Cookies in Use
       </message>
+      <message name="IDS_IOS_PAGE_INFO_COOKIES_SETTINGS_LINK_LABEL_ALLOW_ALL" desc="Footer to invite the user to open Cookies settings.">
+        To manage cookies for all sites, see <ph name="BEGIN_LINK">BEGIN_LINK</ph>Cookie Settings<ph name="END_LINK">END_LINK</ph>.
+      </message>
+      <message name="IDS_IOS_PAGE_INFO_COOKIES_SETTINGS_LINK_LABEL_BLOCK" desc="Footer to invite the user to open Cookies settings.">
+        Your current setting may cause some sites to break. To manage cookies for all sites, see <ph name="BEGIN_LINK">BEGIN_LINK</ph>Cookie Settings<ph name="END_LINK">END_LINK</ph>.
+           </message>
       <message name="IDS_IOS_PAGE_INFO_COOKIES_SWITCH_LABEL" desc="Title of the switch item that can be toggled to enable or disable Third-Party Cookies (in page info)">
         Block Third-Party Cookies
       </message>

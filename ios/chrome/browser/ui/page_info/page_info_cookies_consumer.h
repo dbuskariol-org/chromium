@@ -7,11 +7,14 @@
 
 #import <Foundation/Foundation.h>
 
+@class PageInfoCookiesDescription;
+
 // Consumer for the page info Cookies.
 @protocol PageInfoCookiesConsumer
 
 // Called when Cookies option has changed.
-- (void)cookiesOptionChanged:(NSString*)description;
+- (void)cookiesOptionChangedToDescription:
+    (PageInfoCookiesDescription*)description;
 
 @end
 

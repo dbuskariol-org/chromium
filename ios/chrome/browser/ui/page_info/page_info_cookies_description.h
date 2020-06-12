@@ -10,7 +10,8 @@
 // Config for the information displayed by the page info Cookies section.
 @interface PageInfoCookiesDescription : NSObject
 
-@property(nonatomic, copy) NSString* status;
+@property(nonatomic, copy) NSString* headerDescription;
+@property(nonatomic, copy) NSString* footerDescription;
 
 @end
 

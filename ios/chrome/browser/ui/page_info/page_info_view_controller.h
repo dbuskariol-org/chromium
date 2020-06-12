@@ -13,6 +13,7 @@
 #import "ios/chrome/browser/ui/table_view/chrome_table_view_controller.h"
 
 @protocol BrowserCommands;
+@protocol PageInfoCookiesCommands;
 
 // View Controller for displaying the page info.
 @interface PageInfoViewController
@@ -28,7 +29,7 @@
 - (instancetype)initWithStyle:(UITableViewStyle)style NS_UNAVAILABLE;
 
 // Handler used to navigate outside the page info.
-@property(nonatomic, weak) id<BrowserCommands> handler;
+@property(nonatomic, weak) id<BrowserCommands, PageInfoCookiesCommands> handler;
 
 @end
 
