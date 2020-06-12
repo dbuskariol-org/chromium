@@ -12,6 +12,7 @@ ci.set_defaults(
     add_to_console_view = True,
     bucketed_triggers = settings.is_master,
     main_console_view = settings.main_console_name,
+    cq_mirrors_console_view = settings.cq_mirrors_console_name,
 )
 
 ci.declare_bucket(settings)
