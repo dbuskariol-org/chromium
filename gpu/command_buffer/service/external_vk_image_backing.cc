@@ -136,8 +136,19 @@ std::unique_ptr<ExternalVkImageBacking> ExternalVkImageBacking::Create(
 
   auto* device_queue = context_state->vk_context_provider()->GetDeviceQueue();
   VkFormat vk_format = ToVkFormat(format);
-  VkImageUsageFlags vk_usage =
-      VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT;
+
+  constexpr auto kUsageNeedsColorAttachment =
+      SHARED_IMAGE_USAGE_GLES2 | SHARED_IMAGE_USAGE_RASTER |
+      SHARED_IMAGE_USAGE_OOP_RASTERIZATION | SHARED_IMAGE_USAGE_WEBGPU;
+  VkImageUsageFlags vk_usage = VK_IMAGE_USAGE_SAMPLED_BIT;
+  if (usage & kUsageNeedsColorAttachment) {
+    vk_usage |= VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
+    if (format == viz::ETC1) {
+      DLOG(ERROR) << "ETC1 format cannot be used as color attachment.";
+      return nullptr;
+    }
+  }
+
   if (is_transfer_dst)
     vk_usage |= VK_IMAGE_USAGE_TRANSFER_DST_BIT;
 
@@ -769,6 +780,8 @@ bool ExternalVkImageBacking::WritePixels(size_t data_size,
                                       size().width(), size().height());
   }
 
+  SetCleared();
+
   if (!need_synchronization()) {
     DCHECK(handles.empty());
     command_buffer->Submit(0, nullptr, 0, nullptr);
@@ -781,7 +794,6 @@ bool ExternalVkImageBacking::WritePixels(size_t data_size,
         std::move(command_buffer));
     fence_helper->EnqueueBufferCleanupForSubmittedWork(stage_buffer,
                                                        stage_allocation);
-
     return true;
   }
 
@@ -814,7 +826,6 @@ bool ExternalVkImageBacking::WritePixels(size_t data_size,
       begin_access_semaphores);
   fence_helper->EnqueueBufferCleanupForSubmittedWork(stage_buffer,
                                                      stage_allocation);
-
   return true;
 }
 
