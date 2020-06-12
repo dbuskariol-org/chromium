@@ -1447,8 +1447,6 @@ class CORE_EXPORT Document : public ContainerNode,
     return shadow_cascade_order_ == ShadowCascadeOrder::kShadowCascadeV1;
   }
 
-  Element* rootScroller() const;
-  void setRootScroller(Element*, ExceptionState& = ASSERT_NO_EXCEPTION);
   RootScrollerController& GetRootScrollerController() const {
     DCHECK(root_scroller_controller_);
     return *root_scroller_controller_;

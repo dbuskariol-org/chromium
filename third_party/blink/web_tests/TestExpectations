@@ -5124,7 +5124,6 @@ skbug.com/7641 external/wpt/css/css-paint-api/paint2d-paths.https.html [ Failure
 
 # Sheriff failures 2018-01-25
 # Flaking on Linux Tests, WebKit Linux Trusty (also ASAN, Leak)
-crbug.com/805794 [ Linux ] virtual/android/rootscroller/nested-rootscroller-browser-controls-bounds-shown.html [ Pass Failure ]
 crbug.com/805794 [ Linux ] virtual/android/url-bar/bottom-fixed-adjusted-when-showing-url-bar.html [ Pass Failure ]
 
 # Sheriff failures 2018-02-05

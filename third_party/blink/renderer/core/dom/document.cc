@@ -1080,14 +1080,6 @@ void Document::ChildrenChanged(const ChildrenChange& change) {
     BeginLifecycleUpdatesIfRenderingReady();
 }
 
-void Document::setRootScroller(Element* new_scroller, ExceptionState&) {
-  root_scroller_controller_->Set(new_scroller);
-}
-
-Element* Document::rootScroller() const {
-  return root_scroller_controller_->Get();
-}
-
 bool Document::IsInMainFrame() const {
   return GetFrame() && GetFrame()->IsMainFrame();
 }
