@@ -3886,11 +3886,6 @@ const char kSyncWifiConfigurationsName[] = "Sync Wi-Fi network configurations";
 const char kSyncWifiConfigurationsDescription[] =
     "Enables the option to sync Wi-Fi network configurations with Chrome Sync.";
 
-const char kMessageCenterRedesignName[] = "Enable Message Center Redesign";
-const char kMessageCenterRedesignDescription[] =
-    "Enables split message center, stacked notification icons and system tray "
-    "pagination";
-
 const char kTerminalSystemAppName[] = "Terminal System App";
 const char kTerminalSystemAppDescription[] =
     "Enables the Terminal System App at chrome://terminal which is used for "

@@ -2288,9 +2288,6 @@ extern const char kStreamlinedUsbPrinterSetupDescription[];
 extern const char kSyncWifiConfigurationsName[];
 extern const char kSyncWifiConfigurationsDescription[];
 
-extern const char kMessageCenterRedesignName[];
-extern const char kMessageCenterRedesignDescription[];
-
 extern const char kTetherName[];
 extern const char kTetherDescription[];
 

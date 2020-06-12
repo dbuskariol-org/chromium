@@ -3011,11 +3011,6 @@
     "expiry_milestone": -1
   },
   {
-    "name": "message-center-redesign",
-    "owners": ["amehfooz", "tengs"],
-    "expiry_milestone": 81
-  },
-  {
     "name": "messages-block-popup-infobars",
     "owners": [ "sczs", "thegreenfrog" ],
     "expiry_milestone": 85
