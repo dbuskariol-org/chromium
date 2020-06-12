@@ -3574,6 +3574,10 @@ const char kEnableNewShortcutMappingName[] = "Enable New Shortcut Mapping";
 const char kEnableNewShortcutMappingDescription[] =
     "Enables experimental new shortcut mapping";
 
+const char kEnableOnDeviceAssistantName[] = "Enable On Device Assistant";
+const char kEnableOnDeviceAssistantDescription[] =
+    "Enable On Device Assistant.";
+
 const char kEnablePalmOnMaxTouchMajorName[] =
     "Enable Palm when Touch is Maximum";
 const char kEnablePalmOnMaxTouchMajorDescription[] =

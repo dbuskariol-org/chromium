@@ -4435,6 +4435,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEnableQuickAnswersTextAnnotatorDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kQuickAnswersTextAnnotator)},
 
+    {"enable-on-device-assistant",
+     flag_descriptions::kEnableOnDeviceAssistantName,
+     flag_descriptions::kEnableOnDeviceAssistantDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(
+         chromeos::assistant::features::kEnableOnDeviceAssistant)},
+
 #endif  // defined(OS_CHROMEOS)
 
 #if BUILDFLAG(ENABLE_CLICK_TO_CALL)
