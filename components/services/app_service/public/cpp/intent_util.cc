@@ -16,14 +16,15 @@ base::Optional<std::string> GetIntentConditionValueByType(
     apps::mojom::ConditionType condition_type,
     const apps::mojom::IntentPtr& intent) {
   switch (condition_type) {
+    case apps::mojom::ConditionType::kAction:
+      return intent->action;
     case apps::mojom::ConditionType::kScheme:
       return intent->scheme;
     case apps::mojom::ConditionType::kHost:
       return intent->host;
     case apps::mojom::ConditionType::kPattern:
       return intent->path;
-    // TODO(crbug.com/1092784): Handle action and mime type.
-    case apps::mojom::ConditionType::kAction:
+    // TODO(crbug.com/1092784): Handle mime type.
     case apps::mojom::ConditionType::kMimeType:
       NOTIMPLEMENTED();
       return base::nullopt;
@@ -40,6 +41,7 @@ const char kIntentActionSendMultiple[] = "send_multiple";
 
 apps::mojom::IntentPtr CreateIntentFromUrl(const GURL& url) {
   auto intent = apps::mojom::Intent::New();
+  intent->action = kIntentActionView;
   intent->scheme = url.scheme();
   intent->host = url.host();
   intent->port = url.port();

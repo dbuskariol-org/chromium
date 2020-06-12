@@ -153,7 +153,7 @@ base::Optional<arc::UserInteractionType> GetUserInterationType(
   return user_interaction_type;
 }
 
-arc::mojom::IntentInfoPtr CreateArcViewIntent(apps::mojom::IntentPtr intent) {
+arc::mojom::IntentInfoPtr CreateArcIntent(apps::mojom::IntentPtr intent) {
   arc::mojom::IntentInfoPtr arc_intent;
   if (!intent->scheme.has_value() || !intent->host.has_value() ||
       !intent->path.has_value()) {
@@ -162,11 +162,22 @@ arc::mojom::IntentInfoPtr CreateArcViewIntent(apps::mojom::IntentPtr intent) {
 
   arc_intent = arc::mojom::IntentInfo::New();
   auto uri_components = arc::mojom::UriComponents::New();
-  constexpr char kAndroidIntentActionView[] = "android.intent.action.VIEW";
   uri_components->scheme = intent->scheme.value();
   uri_components->authority = intent->host.value();
   uri_components->path = intent->path.value();
-  arc_intent->action = kAndroidIntentActionView;
+  if (intent->action.has_value()) {
+    if (intent->action.value() == apps_util::kIntentActionView) {
+      arc_intent->action = arc::kIntentActionView;
+    } else if (intent->action.value() == apps_util::kIntentActionSend) {
+      arc_intent->action = arc::kIntentActionSend;
+    } else if (intent->action.value() == apps_util::kIntentActionSendMultiple) {
+      arc_intent->action = arc::kIntentActionSendMultiple;
+    } else {
+      arc_intent->action = arc::kIntentActionView;
+    }
+  } else {
+    arc_intent->action = arc::kIntentActionView;
+  }
   arc_intent->uri_components = std::move(uri_components);
   return arc_intent;
 }
@@ -360,7 +371,7 @@ void AddPreferredApp(const std::string& app_id,
 
   instance->AddPreferredApp(package_name,
                             CreateArcIntentFilter(package_name, intent_filter),
-                            CreateArcViewIntent(std::move(intent)));
+                            CreateArcIntent(std::move(intent)));
 }
 
 void ResetVerifiedLinks(
@@ -621,7 +632,7 @@ void ArcApps::LaunchAppWithIntent(const std::string& app_id,
   activity->package_name = app_info->package_name;
   activity->activity_name = app_info->activity;
 
-  auto arc_intent = CreateArcViewIntent(std::move(intent));
+  auto arc_intent = CreateArcIntent(std::move(intent));
 
   if (!arc_intent) {
     LOG(ERROR) << "Launch App failed, launch intent is not valid";

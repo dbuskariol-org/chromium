@@ -92,6 +92,10 @@ int GetFilterMatchLevel(const apps::mojom::IntentFilterPtr& intent_filter) {
   int match_level = IntentFilterMatchLevel::kNone;
   for (const auto& condition : intent_filter->conditions) {
     switch (condition->condition_type) {
+      case apps::mojom::ConditionType::kAction:
+        // Action always need to be matched, so there is no need for
+        // match level.
+        break;
       case apps::mojom::ConditionType::kScheme:
         match_level += IntentFilterMatchLevel::kScheme;
         break;
@@ -101,8 +105,7 @@ int GetFilterMatchLevel(const apps::mojom::IntentFilterPtr& intent_filter) {
       case apps::mojom::ConditionType::kPattern:
         match_level += IntentFilterMatchLevel::kPattern;
         break;
-      // TODO(crbug.com/1092784): Handle action and mime type.
-      case apps::mojom::ConditionType::kAction:
+      // TODO(crbug.com/1092784): Handle mime type.
       case apps::mojom::ConditionType::kMimeType:
         NOTIMPLEMENTED();
     }
