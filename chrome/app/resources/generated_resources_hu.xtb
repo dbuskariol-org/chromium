@@ -344,7 +344,7 @@
 <translation id="1432581352905426595">Keresőmotorok beállítása</translation>
 <translation id="1433811987160647649">Kérdezzen rá hozzáférés előtt</translation>
 <translation id="1434696352799406980">Ez a művelet visszaállítja a kezdőoldalt, az új lap oldalt, a keresőmotort és a rögzített lapokat. Kikapcsol továbbá minden bővítményt, és törli az ideiglenes adatokat, például a cookie-kat. Könyvjelzői, előzményei és mentett jelszavai megmaradnak.</translation>
-<translation id="1434886155212424586">Az Új lap oldal a kezdőoldal</translation>
+<translation id="1434886155212424586">Az Új lap oldal a kezdőlap</translation>
 <translation id="1436390408194692385">Érvényesség: <ph name="TICKET_TIME_LEFT" /></translation>
 <translation id="1436671784520050284">Beállítás folytatása</translation>
 <translation id="1436784010935106834">Eltávolítva</translation>
@@ -2163,7 +2163,7 @@ Ha kezelni szeretné a fiók beállításait, telepítse eszközére a Family Li
 <translation id="3713047097299026954">Ezen a biztonsági hardverkulcson nincsenek bejelentkezési adatok</translation>
 <translation id="3714195043138862580">Ez a demó módú eszköz leválasztott állapotba került.</translation>
 <translation id="3714633008798122362">internetes naptár</translation>
-<translation id="3719826155360621982">Kezdőoldal</translation>
+<translation id="3719826155360621982">Kezdőlap</translation>
 <translation id="372062398998492895">CUPS</translation>
 <translation id="3721119614952978349">Ön és a Google</translation>
 <translation id="3722108462506185496">Nem sikerült elindítani a virtuális gép szolgáltatást. Próbálja újra később.</translation>
@@ -4265,7 +4265,7 @@ Győződjön meg arról, hogy nem ad ki bizalmas adatokat.</translation>
 <translation id="6468485451923838994">Betűtípusok</translation>
 <translation id="6469557521904094793">Mobilhálózat bekapcsolása</translation>
 <translation id="6472207088655375767">Egyszer használatos jelszó</translation>
-<translation id="6472893788822429178">A „kezdőoldal” gomb megjelenítése</translation>
+<translation id="6472893788822429178">A Kezdőlap gomb megjelenítése</translation>
 <translation id="6473842110411557830">Powerwash művelet illusztrációja</translation>
 <translation id="6474498546677193336">Nem sikerült a megosztás visszavonása, mivel valamelyik alkalmazás használja ezt a mappát. A mappa megosztásának visszavonása a Linux következő leállításakor történik majd meg.</translation>
 <translation id="6474884162850599008">Google Drive-fiók leválasztása</translation>
@@ -5673,7 +5673,7 @@ A kulcsfájlt tartsa biztonságos helyen. Szüksége lesz rá ahhoz, hogy új ve
     <ph name="BEGIN_PARAGRAPH4" />Ha a további internetes és alkalmazástevékenységek beállítás is be van kapcsolva, akkor a rendszer ezeket az adatokat gyermeke Google-fiókjába is mentheti. A families.google.com oldalon talál további információt ezekről a beállításokról és módosításukról.<ph name="END_PARAGRAPH4" /></translation>
 <translation id="826905130698769948">Érvénytelen ügyféltanúsítvány</translation>
 <translation id="8270242299912238708">PDF-dokumentumok</translation>
-<translation id="827097179112817503">A „kezdőoldal” gomb megjelenítése</translation>
+<translation id="827097179112817503">A Kezdőlap gomb megjelenítése</translation>
 <translation id="8271246892936492311">{COUNT,plural, =1{1 könyvjelző törölve}other{# könyvjelző törölve}}</translation>
 <translation id="8272443605911821513">Bővítményeit a „További eszközök” menü Bővítmények elemére kattintva kezelheti.</translation>
 <translation id="8274212285504931082">Segédje a képernyő tartalmához kapcsolódó információkat jeleníthet meg</translation>
