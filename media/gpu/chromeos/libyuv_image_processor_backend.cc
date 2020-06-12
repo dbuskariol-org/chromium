@@ -128,6 +128,7 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
     const PortConfig& input_config,
     const PortConfig& output_config,
     const std::vector<OutputMode>& preferred_output_modes,
+    VideoRotation relative_rotation,
     ErrorCB error_cb,
     scoped_refptr<base::SequencedTaskRunner> backend_task_runner) {
   VLOGF(2);
@@ -215,6 +216,12 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
     }
   }
 
+  // LibyuvIP now doesn't support rotation case, so return nullptr.
+  if (relative_rotation != VIDEO_ROTATION_0) {
+    VLOGF(1) << "Currently LibyuvIP doesn't support rotation";
+    return nullptr;
+  }
+
   scoped_refptr<VideoFrame> intermediate_frame;
   if (res == SupportResult::SupportedWithPivot) {
     intermediate_frame = VideoFrame::CreateFrame(
@@ -237,7 +244,7 @@ std::unique_ptr<ImageProcessorBackend> LibYUVImageProcessorBackend::Create(
           PortConfig(output_config.fourcc, output_config.size,
                      output_config.planes, output_config.visible_rect,
                      {output_storage_type}),
-          OutputMode::IMPORT, std::move(error_cb),
+          OutputMode::IMPORT, relative_rotation, std::move(error_cb),
           std::move(backend_task_runner)));
   VLOGF(2) << "LibYUVImageProcessorBackend created for converting from "
            << input_config.ToString() << " to " << output_config.ToString();
@@ -251,11 +258,13 @@ LibYUVImageProcessorBackend::LibYUVImageProcessorBackend(
     const PortConfig& input_config,
     const PortConfig& output_config,
     OutputMode output_mode,
+    VideoRotation relative_rotation,
     ErrorCB error_cb,
     scoped_refptr<base::SequencedTaskRunner> backend_task_runner)
     : ImageProcessorBackend(input_config,
                             output_config,
                             output_mode,
+                            relative_rotation,
                             std::move(error_cb),
                             std::move(backend_task_runner)),
       input_frame_mapper_(std::move(input_frame_mapper)),
