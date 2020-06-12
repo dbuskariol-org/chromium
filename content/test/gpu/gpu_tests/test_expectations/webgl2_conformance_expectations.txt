@@ -625,6 +625,18 @@ crbug.com/982294 [ mac passthrough intel ] deqp/functional/gles3/transformfeedba
 crbug.com/982294 [ mac passthrough intel ] deqp/functional/gles3/transformfeedback/random_separate_lines.html [ Failure ]
 crbug.com/982294 [ mac passthrough intel ] deqp/functional/gles3/transformfeedback/random_separate_points.html [ Failure ]
 crbug.com/982294 [ mac passthrough intel ] deqp/functional/gles3/transformfeedback/random_separate_triangles.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance/textures/webgl_canvas/tex-2d-rgba-rgba-unsigned_byte.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance/textures/webgl_canvas/tex-2d-rgba-rgba-unsigned_short_4_4_4_4.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance/textures/webgl_canvas/tex-2d-rgba-rgba-unsigned_short_5_5_5_1.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgb10_a2-rgba-unsigned_int_2_10_10_10_rev.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgb5_a1-rgba-unsigned_byte.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgb5_a1-rgba-unsigned_short_5_5_5_1.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgba16f-rgba-float.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgba16f-rgba-half_float.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgba32f-rgba-float.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgba4-rgba-unsigned_byte.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgba4-rgba-unsigned_short_4_4_4_4.html [ Failure ]
+crbug.com/1092734 [ mac passthrough intel ] conformance2/textures/webgl_canvas/tex-2d-rgba8-rgba-unsigned_byte.html [ Failure ]
 
 # Mac ASAN flakes
 crbug.com/1059760 [ mac asan ] conformance/textures/image_bitmap_from_video/* [ RetryOnFailure ]
