@@ -45,6 +45,7 @@ class WebLayerMetricsServiceClient
   int GetPackageNameLimitRatePerMille() override;
   void RegisterAdditionalMetricsProviders(
       metrics::MetricsService* service) override;
+  bool EnablePersistentHistograms() override;
 
  private:
   std::vector<base::OnceClosure> post_start_tasks_;

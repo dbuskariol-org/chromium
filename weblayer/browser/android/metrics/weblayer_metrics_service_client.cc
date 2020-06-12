@@ -144,6 +144,10 @@ void WebLayerMetricsServiceClient::RegisterAdditionalMetricsProviders(
   service->RegisterMetricsProvider(std::make_unique<PageLoadMetricsProvider>());
 }
 
+bool WebLayerMetricsServiceClient::EnablePersistentHistograms() {
+  return true;
+}
+
 // static
 void JNI_MetricsServiceClient_SetHaveMetricsConsent(JNIEnv* env,
                                                     jboolean user_consent,
