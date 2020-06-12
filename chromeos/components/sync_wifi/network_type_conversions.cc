@@ -37,7 +37,6 @@ std::string SecurityTypeStringFromMojo(
       return shill::kSecurityWep;
     default:
       // Only PSK and WEP secured networks are supported by sync.
-      NOTREACHED();
       return "";
   }
 }
