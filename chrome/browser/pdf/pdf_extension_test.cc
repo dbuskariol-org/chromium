@@ -2143,7 +2143,8 @@ void EnsureCustomPinchZoomInvoked(WebContents* guest_contents,
       guest_contents,
       "var gestureDetector = new GestureDetector(viewer.plugin_); "
       "var updatePromise = new Promise(function(resolve) { "
-      "  gestureDetector.addEventListener('pinchupdate', resolve); "
+      "  gestureDetector.getEventTarget().addEventListener('pinchupdate', "
+      "resolve); "
       "});"));
 
   zoom::ZoomChangedWatcher zoom_watcher(

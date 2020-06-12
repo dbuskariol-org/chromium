@@ -61,9 +61,12 @@ chrome.test.runTests(function() {
   class PinchListener {
     constructor(gestureDetector) {
       this.lastEvent = null;
-      gestureDetector.addEventListener('pinchstart', this.onPinch_.bind(this));
-      gestureDetector.addEventListener('pinchupdate', this.onPinch_.bind(this));
-      gestureDetector.addEventListener('pinchend', this.onPinch_.bind(this));
+      gestureDetector.getEventTarget().addEventListener(
+          'pinchstart', this.onPinch_.bind(this));
+      gestureDetector.getEventTarget().addEventListener(
+          'pinchupdate', this.onPinch_.bind(this));
+      gestureDetector.getEventTarget().addEventListener(
+          'pinchend', this.onPinch_.bind(this));
     }
 
     onPinch_(pinchEvent) {
@@ -81,41 +84,43 @@ chrome.test.runTests(function() {
         {clientX: 0, clientY: 0},
         {clientX: 0, clientY: 2},
       ]));
+      chrome.test.assertEq('pinchstart', pinchListener.lastEvent.type);
       chrome.test.assertEq(
-          {type: 'pinchstart', center: {x: 0, y: 1}}, pinchListener.lastEvent);
+          {center: {x: 0, y: 1}}, pinchListener.lastEvent.detail);
 
       stubElement.sendEvent(new MockTouchEvent('touchmove', [
         {clientX: 0, clientY: 0},
         {clientX: 0, clientY: 4},
       ]));
+      chrome.test.assertEq('pinchupdate', pinchListener.lastEvent.type);
       chrome.test.assertEq(
           {
-            type: 'pinchupdate',
             scaleRatio: 2,
             direction: 'in',
             startScaleRatio: 2,
             center: {x: 0, y: 2}
           },
-          pinchListener.lastEvent);
+          pinchListener.lastEvent.detail);
 
       stubElement.sendEvent(new MockTouchEvent('touchmove', [
         {clientX: 0, clientY: 0},
         {clientX: 0, clientY: 8},
       ]));
+      chrome.test.assertEq('pinchupdate', pinchListener.lastEvent.type);
       chrome.test.assertEq(
           {
-            type: 'pinchupdate',
             scaleRatio: 2,
             direction: 'in',
             startScaleRatio: 4,
             center: {x: 0, y: 4}
           },
-          pinchListener.lastEvent);
+          pinchListener.lastEvent.detail);
 
       stubElement.sendEvent(new MockTouchEvent('touchend', []));
+      chrome.test.assertEq('pinchend', pinchListener.lastEvent.type);
       chrome.test.assertEq(
-          {type: 'pinchend', startScaleRatio: 4, center: {x: 0, y: 4}},
-          pinchListener.lastEvent);
+          {startScaleRatio: 4, center: {x: 0, y: 4}},
+          pinchListener.lastEvent.detail);
 
       chrome.test.succeed();
     },
@@ -129,22 +134,24 @@ chrome.test.runTests(function() {
         {clientX: 0, clientY: 0},
         {clientX: 0, clientY: 2},
       ]));
-      chrome.test.assertEq(
-          {type: 'pinchstart', center: {x: 0, y: 1}}, pinchListener.lastEvent);
+      let {type, detail} = pinchListener.lastEvent;
+      chrome.test.assertEq('pinchstart', type);
+      chrome.test.assertEq({center: {x: 0, y: 1}}, detail);
 
       stubElement.sendEvent(new MockTouchEvent('touchmove', [
         {clientX: 0, clientY: 0},
         {clientX: 0, clientY: 4},
       ]));
+      ({type, detail} = pinchListener.lastEvent);
+      chrome.test.assertEq('pinchupdate', type);
       chrome.test.assertEq(
           {
-            type: 'pinchupdate',
             scaleRatio: 2,
             direction: 'in',
             startScaleRatio: 2,
             center: {x: 0, y: 2}
           },
-          pinchListener.lastEvent);
+          detail);
 
       stubElement.sendEvent(new MockTouchEvent('touchmove', [
         {clientX: 0, clientY: 0},
@@ -152,20 +159,21 @@ chrome.test.runTests(function() {
       ]));
       // This should be part of the same gesture as an update.
       // A change in direction should not end the gesture and start a new one.
+      ({type, detail} = pinchListener.lastEvent);
+      chrome.test.assertEq('pinchupdate', type);
       chrome.test.assertEq(
           {
-            type: 'pinchupdate',
             scaleRatio: 0.5,
             direction: 'out',
             startScaleRatio: 1,
             center: {x: 0, y: 1}
           },
-          pinchListener.lastEvent);
+          detail);
 
       stubElement.sendEvent(new MockTouchEvent('touchend', []));
-      chrome.test.assertEq(
-          {type: 'pinchend', startScaleRatio: 1, center: {x: 0, y: 1}},
-          pinchListener.lastEvent);
+      ({type, detail} = pinchListener.lastEvent);
+      chrome.test.assertEq('pinchend', type);
+      chrome.test.assertEq({startScaleRatio: 1, center: {x: 0, y: 1}}, detail);
 
       chrome.test.succeed();
     },
@@ -181,11 +189,13 @@ chrome.test.runTests(function() {
       class PinchSequenceListener {
         constructor(gestureDetector) {
           this.seenBegin = false;
-          gestureDetector.addEventListener('pinchstart', function() {
-            this.seenBegin = true;
-          }.bind(this));
+          gestureDetector.getEventTarget().addEventListener(
+              'pinchstart', function() {
+                this.seenBegin = true;
+              }.bind(this));
           this.endPromise = new Promise(function(resolve) {
-            gestureDetector.addEventListener('pinchend', resolve);
+            gestureDetector.getEventTarget().addEventListener(
+                'pinchend', resolve);
           });
         }
       }
@@ -198,14 +208,13 @@ chrome.test.runTests(function() {
 
       chrome.test.assertTrue(pinchSequenceListener.seenBegin);
 
-      const lastEvent = pinchListener.lastEvent;
-      chrome.test.assertEq('pinchupdate', lastEvent.type);
-      chrome.test.assertTrue(Math.abs(lastEvent.scaleRatio - scale) < 0.001);
-      chrome.test.assertEq('in', lastEvent.direction);
-      chrome.test.assertTrue(
-          Math.abs(lastEvent.startScaleRatio - scale) < 0.001);
+      const {type, detail} = pinchListener.lastEvent;
+      chrome.test.assertEq('pinchupdate', type);
+      chrome.test.assertTrue(Math.abs(detail.scaleRatio - scale) < 0.001);
+      chrome.test.assertEq('in', detail.direction);
+      chrome.test.assertTrue(Math.abs(detail.startScaleRatio - scale) < 0.001);
       chrome.test.assertEq(
-          {x: position.clientX, y: position.clientY}, lastEvent.center);
+          {x: position.clientX, y: position.clientY}, detail.center);
 
       pinchSequenceListener.endPromise.then(chrome.test.succeed);
     },
