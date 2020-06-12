@@ -3593,6 +3593,7 @@ test("unit_tests") {
       "../browser/sharing/webrtc/sharing_service_host_unittest.cc",
       "../browser/sharing/webrtc/sharing_webrtc_connection_host_unittest.cc",
       "../browser/sharing/webrtc/webrtc_signalling_host_fcm_unittest.cc",
+      "../browser/speech/speech_recognition_service_factory_unittest.cc",
       "../browser/tab_contents/form_interaction_tab_helper_unittest.cc",
       "../browser/ui/autofill/payments/autofill_dialog_models_unittest.cc",
       "../browser/ui/bookmarks/bookmark_editor_unittest.cc",
