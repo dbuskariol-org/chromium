@@ -5,6 +5,8 @@
 #import "ios/chrome/browser/ui/infobars/infobar_feature.h"
 
 #include "components/infobars/core/infobar_feature.h"
+#include "components/version_info/version_info.h"
+#include "ios/chrome/common/channel_info.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
@@ -44,6 +46,17 @@ const base::Feature kInfobarUIRebootOnlyiOS13{"InfobarUIRebootOnlyiOS13",
                                               base::FEATURE_ENABLED_BY_DEFAULT};
 
 bool IsInfobarUIRebootEnabled() {
+  // Enable Messages to 100% in Dev, Canary and Beta.
+  switch (GetChannel()) {
+    case version_info::Channel::BETA:
+    case version_info::Channel::DEV:
+    case version_info::Channel::CANARY:
+      return YES;
+    case version_info::Channel::UNKNOWN:
+    case version_info::Channel::STABLE:
+      break;
+  }
+
   if (base::FeatureList::IsEnabled(kInfobarUIRebootOnlyiOS13)) {
     if (@available(iOS 13, *)) {
       return base::FeatureList::IsEnabled(kIOSInfobarUIReboot);
