@@ -73,9 +73,6 @@ class StaticBitmapImage;
 #define CANVAS2D_HIBERNATION_ENABLED 1
 #endif
 
-// TODO: Fix background rendering and remove this workaround. crbug.com/600386
-#define CANVAS2D_BACKGROUND_RENDER_SWITCH_TO_CPU 0
-
 class PLATFORM_EXPORT Canvas2DLayerBridge : public cc::TextureLayerClient {
  public:
   enum AccelerationMode {
@@ -201,7 +198,6 @@ class PLATFORM_EXPORT Canvas2DLayerBridge : public cc::TextureLayerClient {
   bool have_recorded_draw_commands_;
   bool is_hidden_;
   bool is_being_displayed_;
-  bool software_rendering_while_hidden_;
   bool hibernation_scheduled_ = false;
   bool dont_use_idle_scheduling_for_testing_ = false;
   bool context_lost_ = false;

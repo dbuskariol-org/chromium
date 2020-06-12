@@ -62,7 +62,6 @@ Canvas2DLayerBridge::Canvas2DLayerBridge(const IntSize& size,
       have_recorded_draw_commands_(false),
       is_hidden_(false),
       is_being_displayed_(false),
-      software_rendering_while_hidden_(false),
       acceleration_mode_(acceleration_mode),
       color_params_(color_params),
       size_(size),
@@ -111,9 +110,7 @@ void Canvas2DLayerBridge::ResetResourceProvider() {
 
 bool Canvas2DLayerBridge::ShouldAccelerate(RasterModeHint hint) const {
   bool accelerate;
-  if (software_rendering_while_hidden_) {
-    accelerate = false;
-  } else if (acceleration_mode_ == kForceAccelerationForTesting) {
+  if (acceleration_mode_ == kForceAccelerationForTesting) {
     accelerate = true;
   } else if (acceleration_mode_ == kDisableAcceleration) {
     accelerate = false;
@@ -137,8 +134,6 @@ bool Canvas2DLayerBridge::IsAccelerated() const {
   if (acceleration_mode_ == kDisableAcceleration)
     return false;
   if (IsHibernating())
-    return false;
-  if (software_rendering_while_hidden_)
     return false;
   if (resource_host_ && resource_host_->ResourceProvider())
     return resource_host_->ResourceProvider()->IsAccelerated();
@@ -266,11 +261,6 @@ CanvasResourceProvider* Canvas2DLayerBridge::GetOrCreateResourceProvider(
   }
 
   bool want_acceleration = ShouldAccelerate(hint);
-  if (CANVAS2D_BACKGROUND_RENDER_SWITCH_TO_CPU && IsHidden() &&
-      want_acceleration) {
-    want_acceleration = false;
-    software_rendering_while_hidden_ = true;
-  }
   RasterModeHint adjusted_hint = want_acceleration ? RasterModeHint::kPreferGPU
                                                    : RasterModeHint::kPreferCPU;
 
@@ -359,28 +349,6 @@ void Canvas2DLayerBridge::SetIsInHiddenPage(bool hidden) {
       ThreadScheduler::Current()->PostIdleTask(
           FROM_HERE,
           WTF::Bind(&HibernateWrapper, weak_ptr_factory_.GetWeakPtr()));
-    }
-  }
-  if (!IsHidden() && software_rendering_while_hidden_) {
-    FlushRecording();
-    PaintFlags copy_paint;
-    copy_paint.setBlendMode(SkBlendMode::kSrc);
-
-    std::unique_ptr<CanvasResourceProvider> old_resource_provider =
-        resource_host_->ReplaceResourceProvider(nullptr);
-
-    software_rendering_while_hidden_ = false;
-    GetOrCreateResourceProvider(RasterModeHint::kPreferGPU);
-
-    if (ResourceProvider()) {
-      if (old_resource_provider) {
-        cc::PaintImage snapshot =
-            old_resource_provider->Snapshot()->PaintImageForCurrentFrame();
-        ResourceProvider()->Canvas()->drawImage(snapshot, 0, 0, &copy_paint);
-      }
-    } else {
-      // New resource provider could not be created. Stay with old one.
-      resource_host_->ReplaceResourceProvider(std::move(old_resource_provider));
     }
   }
   if (!IsHidden() && IsHibernating())
@@ -651,7 +619,7 @@ bool Canvas2DLayerBridge::PrepareTransferableResource(
     rate_limiter_->Reset();
 
   // If hibernating but not hidden, we want to wake up from hibernation.
-  if ((IsHibernating() || software_rendering_while_hidden_) && IsHidden())
+  if (IsHibernating() && IsHidden())
     return false;
 
   if (!IsValid())
