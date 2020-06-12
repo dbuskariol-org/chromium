@@ -37,6 +37,7 @@ import org.chromium.base.Callback;
 import org.chromium.chrome.browser.widget.ScrimView;
 import org.chromium.chrome.tab_ui.R;
 import org.chromium.components.browser_ui.widget.animation.Interpolators;
+import org.chromium.ui.KeyboardVisibilityDelegate;
 import org.chromium.ui.interpolators.BakedBezierInterpolator;
 
 import java.lang.annotation.Retention;
@@ -113,7 +114,8 @@ public class TabGridDialogView extends FrameLayout
         mParentHeight = mParent.getHeight();
         mParentWidth = mParent.getWidth();
         mParentGlobalLayoutListener = () -> {
-            if (mParent.getWidth() == mParentWidth) return;
+            // Skip updating the parent view size caused by keyboard showing.
+            if (KeyboardVisibilityDelegate.getInstance().isKeyboardShowing(mContext, this)) return;
             mParentWidth = mParent.getWidth();
             mParentHeight = mParent.getHeight();
         };
