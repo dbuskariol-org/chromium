@@ -4,6 +4,8 @@
 
 #include "components/services/app_service/public/cpp/intent_filter_util.h"
 
+#include "components/services/app_service/public/cpp/intent_util.h"
+
 namespace {
 
 bool ConditionsHaveOverlap(const apps::mojom::ConditionPtr& condition1,
@@ -47,8 +49,20 @@ apps::mojom::ConditionPtr MakeCondition(
   return condition;
 }
 
-apps::mojom::IntentFilterPtr CreateIntentFilterForUrlScope(const GURL& url) {
+apps::mojom::IntentFilterPtr CreateIntentFilterForUrlScope(
+    const GURL& url,
+    bool with_action_view) {
   auto intent_filter = apps::mojom::IntentFilter::New();
+
+  if (with_action_view) {
+    std::vector<apps::mojom::ConditionValuePtr> action_condition_values;
+    action_condition_values.push_back(apps_util::MakeConditionValue(
+        apps_util::kIntentActionView, apps::mojom::PatternMatchType::kNone));
+    auto action_condition =
+        apps_util::MakeCondition(apps::mojom::ConditionType::kAction,
+                                 std::move(action_condition_values));
+    intent_filter->conditions.push_back(std::move(action_condition));
+  }
 
   std::vector<apps::mojom::ConditionValuePtr> scheme_condition_values;
   scheme_condition_values.push_back(apps_util::MakeConditionValue(
