@@ -1010,9 +1010,6 @@ extern const char kPullToRefreshName[];
 extern const char kPullToRefreshDescription[];
 extern const char kPullToRefreshEnabledTouchscreen[];
 
-extern const char kQueryInOmniboxName[];
-extern const char kQueryInOmniboxDescription[];
-
 extern const char kQuicName[];
 extern const char kQuicDescription[];
 

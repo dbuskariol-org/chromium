@@ -3915,10 +3915,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kSplitPartiallyOccludedQuadsDescription, kOsAll,
      FEATURE_VALUE_TYPE(features::kSplitPartiallyOccludedQuads)},
 
-    {"enable-query-in-omnibox", flag_descriptions::kQueryInOmniboxName,
-     flag_descriptions::kQueryInOmniboxDescription, kOsAll,
-     FEATURE_VALUE_TYPE(omnibox::kQueryInOmnibox)},
-
 #if BUILDFLAG(ENABLE_PDF)
     {"pdf-form-save", flag_descriptions::kPdfFormSaveName,
      flag_descriptions::kPdfFormSaveDescription, kOsDesktop,

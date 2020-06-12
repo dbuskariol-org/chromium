@@ -1714,11 +1714,6 @@ const char kPullToRefreshDescription[] =
     "Pull-to-refresh gesture in response to vertical overscroll.";
 const char kPullToRefreshEnabledTouchscreen[] = "Enabled for touchscreen only";
 
-const char kQueryInOmniboxName[] = "Query in Omnibox";
-const char kQueryInOmniboxDescription[] =
-    "Only display query terms in the omnibox when viewing a search results "
-    "page.";
-
 const char kQuicName[] = "Experimental QUIC protocol";
 const char kQuicDescription[] = "Enable experimental QUIC protocol support.";
 

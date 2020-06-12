@@ -240,7 +240,6 @@ const base::Feature* kFeaturesExposedToJava[] = {
     &omnibox::kOmniboxSearchEngineLogo,
     &omnibox::kOmniboxSuggestionsRecyclerView,
     &omnibox::kOmniboxSuggestionsWrapAround,
-    &omnibox::kQueryInOmnibox,
     &password_manager::features::kGooglePasswordManager,
     &password_manager::features::kPasswordEditingAndroid,
     &password_manager::features::kPasswordManagerOnboardingAndroid,
