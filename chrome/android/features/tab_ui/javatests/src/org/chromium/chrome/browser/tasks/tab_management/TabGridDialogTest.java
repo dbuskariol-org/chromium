@@ -828,6 +828,10 @@ public class TabGridDialogTest {
 
     private void clickScrimToExitDialog(ChromeTabbedActivity cta) throws ExecutionException {
         CriteriaHelper.pollUiThread(() -> isDialogShowing(cta));
-        TestThreadUtils.runOnUiThreadBlocking(() -> cta.getScrim().performClick());
+        TestThreadUtils.runOnUiThreadBlocking(() -> {
+            View scrimView =
+                    cta.getRootUiCoordinatorForTesting().getScrimCoordinator().getViewForTesting();
+            scrimView.performClick();
+        });
     }
 }

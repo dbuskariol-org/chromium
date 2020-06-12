@@ -196,6 +196,7 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
     // TODO(https://crbug.com/865801): Consolidate isBottomToolbarVisible(),
     // onBottomToolbarVisibilityChanged, etc. to all use mBottomToolbarVisibilitySupplier.
     private final ObservableSupplierImpl<Boolean> mBottomToolbarVisibilitySupplier;
+    private final ScrimCoordinator mScrimCoordinator;
 
     /**
      * Creates a ToolbarManager object.
@@ -242,6 +243,7 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
         mShareDelegateSupplier = shareDelegateSupplier;
         mBottomToolbarVisibilitySupplier = bottomToolbarVisibilitySupplier;
         mCanAnimateNativeBrowserControls = canAnimateNativeBrowserControls;
+        mScrimCoordinator = scrimCoordinator;
 
         mLocationBarModel = new LocationBarModel(activity);
         mControlContainer = controlContainer;
@@ -700,7 +702,9 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
                                 id -> mActivity.onOptionsItemSelected(id, null)),
                 mAppThemeColorProvider, mShareDelegateSupplier, mShowStartSurfaceSupplier,
                 mToolbarTabController::openHomepage,
-                (reason) -> setUrlBarFocus(true, reason), mOverviewModeBehaviorSupplier);
+                (reason)
+                        -> setUrlBarFocus(true, reason),
+                mOverviewModeBehaviorSupplier, mScrimCoordinator);
 
         boolean isBottomToolbarVisible = BottomToolbarConfiguration.isBottomToolbarEnabled()
                 && (!BottomToolbarConfiguration.isAdaptiveToolbarEnabled()
