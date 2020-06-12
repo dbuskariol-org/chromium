@@ -2774,13 +2774,6 @@ scoped_refptr<const NGLayoutResult> LayoutBox::CachedLayoutResult(
 
   DCHECK(!physical_fragment.BreakToken());
 
-  // If we have an orthogonal flow root descendant, we don't attempt to cache
-  // our layout result. This is because the initial containing block size may
-  // have changed, having a high likelihood of changing the size of the
-  // orthogonal flow root.
-  if (physical_fragment.HasOrthogonalFlowRoots())
-    return nullptr;
-
   NGBlockNode node(this);
   NGLayoutCacheStatus size_cache_status = CalculateSizeBasedLayoutCacheStatus(
       node, *cached_layout_result, new_space, initial_fragment_geometry);
