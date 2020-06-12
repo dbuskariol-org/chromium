@@ -633,7 +633,9 @@ TEST_F(AuthenticatorImplTest, MakeCredentialOriginAndRpIds) {
     PublicKeyCredentialCreationOptionsPtr options =
         GetTestPublicKeyCredentialCreationOptions();
     options->relying_party.id = test_case.claimed_authority;
-    options->public_key_parameters = GetTestPublicKeyCredentialParameters(123);
+    options->public_key_parameters =
+        GetTestPublicKeyCredentialParameters(static_cast<int32_t>(
+            device::CoseAlgorithmIdentifier::kInvalidForTesting));
 
     TestMakeCredentialCallback callback_receiver;
     authenticator->MakeCredential(std::move(options),
@@ -716,7 +718,9 @@ TEST_F(AuthenticatorImplTest, MakeCredentialValidIconUrl) {
 
     PublicKeyCredentialCreationOptionsPtr options =
         GetTestPublicKeyCredentialCreationOptions();
-    options->public_key_parameters = GetTestPublicKeyCredentialParameters(123);
+    options->public_key_parameters =
+        GetTestPublicKeyCredentialParameters(static_cast<int32_t>(
+            device::CoseAlgorithmIdentifier::kInvalidForTesting));
     options->relying_party.icon_url = test_case;
 
     TestMakeCredentialCallback callback_receiver;
@@ -739,7 +743,9 @@ TEST_F(AuthenticatorImplTest, MakeCredentialValidIconUrl) {
 
     PublicKeyCredentialCreationOptionsPtr options =
         GetTestPublicKeyCredentialCreationOptions();
-    options->public_key_parameters = GetTestPublicKeyCredentialParameters(123);
+    options->public_key_parameters =
+        GetTestPublicKeyCredentialParameters(static_cast<int32_t>(
+            device::CoseAlgorithmIdentifier::kInvalidForTesting));
     options->user.icon_url = test_case;
 
     TestMakeCredentialCallback callback_receiver;
@@ -764,7 +770,9 @@ TEST_F(AuthenticatorImplTest, MakeCredentialNoSupportedAlgorithm) {
 
   PublicKeyCredentialCreationOptionsPtr options =
       GetTestPublicKeyCredentialCreationOptions();
-  options->public_key_parameters = GetTestPublicKeyCredentialParameters(123);
+  options->public_key_parameters =
+      GetTestPublicKeyCredentialParameters(static_cast<int32_t>(
+          device::CoseAlgorithmIdentifier::kInvalidForTesting));
 
   TestMakeCredentialCallback callback_receiver;
   authenticator->MakeCredential(std::move(options),
@@ -2618,7 +2626,9 @@ TEST_F(AuthenticatorContentBrowserClientTest, Unfocused) {
   {
     PublicKeyCredentialCreationOptionsPtr options =
         GetTestPublicKeyCredentialCreationOptions();
-    options->public_key_parameters = GetTestPublicKeyCredentialParameters(123);
+    options->public_key_parameters =
+        GetTestPublicKeyCredentialParameters(static_cast<int32_t>(
+            device::CoseAlgorithmIdentifier::kInvalidForTesting));
 
     TestMakeCredentialCallback cb;
     TestRequestStartedCallback request_started;
