@@ -1496,6 +1496,18 @@
       'fuchsia-fyi-x64-dbg',  # https://crbug.com/844416
     ],
     'modifications': {
+      'CrWinAsan': {
+        # TODO(crbug.com/794372): net_unittests is slow under ASan.
+        'swarming': {
+          'shards': 16,
+        },
+      },
+      'CrWinAsan(dll)': {
+        # TODO(crbug.com/794372): net_unittests is slow under ASan.
+        'swarming': {
+          'shards': 16,
+        },
+      },
       'Linux ASan LSan Tests (1)': {
         # These are very slow on the ASAN trybot for some reason.
         # crbug.com/794372
@@ -1565,6 +1577,12 @@
       'linux-chromeos-dbg': {
         'swarming': {
           'shards': 2,
+        },
+      },
+      'win-asan': {
+        # TODO(crbug.com/794372): net_unittests is slow under ASan.
+        'swarming': {
+          'shards': 16,
         },
       },
     },
