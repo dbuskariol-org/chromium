@@ -6744,3 +6744,7 @@ crbug.com/1093709 [ Linux ] external/wpt/html/canvas/offscreen/manual/the-offscr
 # Sheriff 2020-06-11
 crbug.com/1093026 [ Linux ] http/tests/security/offscreencanvas-placeholder-read-blocked-no-crossorigin.html [ Pass Failure ]
 crbug.com/1093026 [ Win10 ] http/tests/security/offscreencanvas-placeholder-read-blocked-no-crossorigin.html [ Pass Failure ]
+
+# Sheriff 2020-06-12
+crbug.com/915903 http/tests/security/inactive-document-with-empty-security-origin.html [ Pass Timeout ]
+crbug.com/915903 virtual/cors/http/tests/security/inactive-document-with-empty-security-origin.html [ Pass Timeout ]
