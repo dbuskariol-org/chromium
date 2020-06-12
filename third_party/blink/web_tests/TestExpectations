@@ -6413,10 +6413,6 @@ crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/back
 crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/preserve-3d-flat-grouping-properties.tentative.html [ Pass ]
 crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/subpixel-perspective-backface-hidden.html [ Failure ]
 
-# Fails due to anonymous layout objects causing flattening
-crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/transform-table-010.html [ Failure ]
-crbug.com/1008483 virtual/transform-interop/external/wpt/css/css-transforms/transform-table-011.html [ Failure ]
-
 # Swiftshader issue.
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-innerwidth.html [ Crash Timeout ]
 crbug.com/1048149 external/wpt/html/browsers/the-window-object/apis-for-creating-and-navigating-browsing-contexts-by-name/open-features-non-integer-screeny.html [ Crash Timeout ]

@@ -1419,9 +1419,14 @@ bool LayoutBox::MapVisualRectToContainer(
     transform.PostTranslate(offset.Width(), offset.Height());
   }
 
+  bool has_perspective = container_object && container_object->HasLayer() &&
+                         container_object->StyleRef().HasPerspective();
+  if (has_perspective && RuntimeEnabledFeatures::TransformInteropEnabled() &&
+      container_object != NonAnonymousAncestor())
+    has_perspective = false;
+
   // d) Perspective applied by container.
-  if (container_object && container_object->HasLayer() &&
-      container_object->StyleRef().HasPerspective()) {
+  if (has_perspective) {
     // Perspective on the container affects us, so we have to factor it in here.
     DCHECK(container_object->HasLayer());
     FloatPoint perspective_origin =
