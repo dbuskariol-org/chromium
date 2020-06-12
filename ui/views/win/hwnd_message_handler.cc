@@ -2084,7 +2084,6 @@ LRESULT HWNDMessageHandler::OnNCActivate(UINT message,
     return TRUE;
 
   delegate_->HandleNonClientActivationChanged(active);
-  const bool paint_as_active = delegate_->ShouldPaintAsActive();
 
   if (delegate_->GetFrameMode() == FrameMode::CUSTOM_DRAWN) {
     // TODO(beng, et al): Hack to redraw this window and child windows
@@ -2112,8 +2111,11 @@ LRESULT HWNDMessageHandler::OnNCActivate(UINT message,
     return TRUE;
   }
 
-  return DefWindowProcWithRedrawLock(WM_NCACTIVATE, paint_as_active || active,
-                                     0);
+  // There are cases where ShouldPaintAsActive() becomes false as a result of
+  // code called between HandleNonClientActivationChanged() and here, hence the
+  // disjunction.
+  return DefWindowProcWithRedrawLock(
+      WM_NCACTIVATE, active || delegate_->ShouldPaintAsActive(), 0);
 }
 
 LRESULT HWNDMessageHandler::OnNCCalcSize(BOOL mode, LPARAM l_param) {
