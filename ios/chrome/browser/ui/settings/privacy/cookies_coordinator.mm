@@ -4,7 +4,6 @@
 
 #import "ios/chrome/browser/ui/settings/privacy/cookies_coordinator.h"
 
-#include "base/check.h"
 #include "base/logging.h"
 #include "ios/chrome/browser/browser_state/chrome_browser_state.h"
 #include "ios/chrome/browser/content_settings/host_content_settings_map_factory.h"
@@ -87,9 +86,7 @@
 - (void)privacyCookiesViewControllerWasRemoved:
     (PrivacyCookiesViewController*)controller {
   DCHECK_EQ(self.viewController, controller);
-  if ([self.delegate respondsToSelector:@selector
-                     (privacyCookiesCoordinatorViewControllerWasRemoved:)])
-    [self.delegate privacyCookiesCoordinatorViewControllerWasRemoved:self];
+  [self.delegate privacyCookiesCoordinatorViewControllerWasRemoved:self];
 }
 
 #pragma mark - Private
@@ -97,9 +94,7 @@
 // Called when the view controller is displayed from the page info and the
 // user pressed 'Done'.
 - (void)hideCookiesSettings {
-  if ([self.delegate respondsToSelector:@selector
-                     (dismissPrivacyCookiesCoordinatorViewController:)])
-    [self.delegate dismissPrivacyCookiesCoordinatorViewController:self];
+  [self.delegate dismissPrivacyCookiesCoordinatorViewController:self];
 }
 
 @end

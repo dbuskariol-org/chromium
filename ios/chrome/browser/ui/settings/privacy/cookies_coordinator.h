@@ -12,7 +12,7 @@
 @class PrivacyCookiesCoordinator;
 
 // Delegate that allows to dereference the PrivacyCookiesCoordinator.
-@protocol PrivacyCookiesCoordinatorDelegate <NSObject>
+@protocol PrivacyCookiesCoordinatorDelegate
 
 @optional
 // Called when the view controller is removed from navigation controller.

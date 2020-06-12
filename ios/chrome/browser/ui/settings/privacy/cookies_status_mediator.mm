@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/page_info/page_info_cookies_mediator.h"
+#import "ios/chrome/browser/ui/settings/privacy/cookies_status_mediator.h"
 
 #import "base/logging.h"
 #include "components/content_settings/core/browser/cookie_settings.h"
@@ -11,8 +11,8 @@
 #include "components/prefs/pref_member.h"
 #include "components/prefs/pref_service.h"
 #include "ios/chrome/browser/content_settings/host_content_settings_map_factory.h"
-#import "ios/chrome/browser/ui/page_info/page_info_cookies_consumer.h"
-#import "ios/chrome/browser/ui/page_info/page_info_cookies_description.h"
+#import "ios/chrome/browser/ui/settings/privacy/cookies_status_consumer.h"
+#import "ios/chrome/browser/ui/settings/privacy/cookies_status_description.h"
 #import "ios/chrome/browser/ui/settings/utils/content_setting_backed_boolean.h"
 #import "ios/chrome/browser/ui/settings/utils/pref_backed_boolean.h"
 #include "ios/chrome/grit/ios_strings.h"
@@ -33,7 +33,7 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 
 }  // namespace
 
-@interface PageInfoCookiesMediator () <BooleanObserver> {
+@interface CookiesStatusMediator () <BooleanObserver> {
   // The preference that decides when the cookie controls UI is enabled.
   IntegerPrefMember _prefsCookieControlsMode;
 }
@@ -45,13 +45,13 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 
 @end
 
-@implementation PageInfoCookiesMediator
+@implementation CookiesStatusMediator
 
 - (instancetype)initWithPrefService:(PrefService*)prefService
                         settingsMap:(HostContentSettingsMap*)settingsMap {
   self = [super init];
   if (self) {
-    __weak PageInfoCookiesMediator* weakSelf = self;
+    __weak CookiesStatusMediator* weakSelf = self;
     _prefsCookieControlsMode.Init(prefs::kCookieControlsMode, prefService,
                                   base::BindRepeating(^() {
                                     [weakSelf updateConsumer];
@@ -68,9 +68,9 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 
 #pragma mark - Public
 
-- (PageInfoCookiesDescription*)cookiesDescription {
-  PageInfoCookiesDescription* dataHolder =
-      [[PageInfoCookiesDescription alloc] init];
+- (CookiesStatusDescription*)cookiesDescription {
+  CookiesStatusDescription* dataHolder =
+      [[CookiesStatusDescription alloc] init];
   dataHolder.headerDescription = [self cookiesStatus];
   dataHolder.footerDescription = [self cookiesFooterDescription];
   return dataHolder;

@@ -12,11 +12,11 @@
 #include "ios/chrome/browser/ui/commands/browser_commands.h"
 #import "ios/chrome/browser/ui/commands/command_dispatcher.h"
 #import "ios/chrome/browser/ui/page_info/page_info_cookies_commands.h"
-#import "ios/chrome/browser/ui/page_info/page_info_cookies_mediator.h"
 #import "ios/chrome/browser/ui/page_info/page_info_site_security_description.h"
 #import "ios/chrome/browser/ui/page_info/page_info_site_security_mediator.h"
 #import "ios/chrome/browser/ui/page_info/page_info_view_controller.h"
 #import "ios/chrome/browser/ui/settings/privacy/cookies_coordinator.h"
+#import "ios/chrome/browser/ui/settings/privacy/cookies_status_mediator.h"
 #import "ios/chrome/browser/ui/table_view/table_view_navigation_controller.h"
 #include "ios/chrome/browser/ui/ui_feature_flags.h"
 #import "ios/chrome/browser/web_state_list/web_state_list.h"
@@ -35,8 +35,8 @@
     TableViewNavigationController* navigationController;
 @property(nonatomic, strong) CommandDispatcher* dispatcher;
 @property(nonatomic, strong) PageInfoViewController* viewController;
-@property(nonatomic, strong) PageInfoCookiesMediator* cookiesMediator;
 @property(nonatomic, strong) PrivacyCookiesCoordinator* cookiesCoordinator;
+@property(nonatomic, strong) CookiesStatusMediator* cookiesMediator;
 
 @end
 
@@ -64,7 +64,7 @@
                                             offlinePage:offlinePage];
   if (!siteSecurityDescription.isEmpty &&
       base::FeatureList::IsEnabled(content_settings::kImprovedCookieControls)) {
-    self.cookiesMediator = [[PageInfoCookiesMediator alloc]
+    self.cookiesMediator = [[CookiesStatusMediator alloc]
         initWithPrefService:self.browser->GetBrowserState()->GetPrefs()
                 settingsMap:ios::HostContentSettingsMapFactory::
                                 GetForBrowserState(

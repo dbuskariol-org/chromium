@@ -52,8 +52,7 @@ float kPaddingCookiesHeader = 0.0f;
 
 @property(nonatomic, strong)
     PageInfoSiteSecurityDescription* pageInfoSecurityDescription;
-@property(nonatomic, strong)
-    PageInfoCookiesDescription* pageInfoCookiesDescription;
+@property(nonatomic, strong) CookiesStatusDescription* cookiesDescription;
 
 @end
 
@@ -63,12 +62,12 @@ float kPaddingCookiesHeader = 0.0f;
 
 - (instancetype)initWithSiteSecurityDescription:
                     (PageInfoSiteSecurityDescription*)siteSecurityDescription
-                             cookiesDescription:(PageInfoCookiesDescription*)
-                                                    cookiesDescription {
+                             cookiesDescription:
+                                 (CookiesStatusDescription*)cookiesDescription {
   self = [super initWithStyle:UITableViewStylePlain];
   if (self) {
     _pageInfoSecurityDescription = siteSecurityDescription;
-    _pageInfoCookiesDescription = cookiesDescription;
+    _cookiesDescription = cookiesDescription;
   }
   return self;
 }
@@ -134,14 +133,14 @@ float kPaddingCookiesHeader = 0.0f;
   TableViewDetailIconItem* cookiesHeader =
       [[TableViewDetailIconItem alloc] initWithType:ItemTypeCookiesHeader];
   cookiesHeader.text = l10n_util::GetNSString(IDS_IOS_PAGE_INFO_COOKIES_HEADER);
-  cookiesHeader.detailText = self.pageInfoCookiesDescription.headerDescription;
+  cookiesHeader.detailText = self.cookiesDescription.headerDescription;
   cookiesHeader.iconImageName = @"cookies_icon";
   [self.tableViewModel addItem:cookiesHeader
        toSectionWithIdentifier:SectionIdentifierCookiesContent];
 
   TableViewTextLinkItem* cookiesFooter =
       [[TableViewTextLinkItem alloc] initWithType:ITemTypeCookiesFooter];
-  cookiesFooter.text = self.pageInfoCookiesDescription.footerDescription;
+  cookiesFooter.text = self.cookiesDescription.footerDescription;
   cookiesFooter.linkURL = GURL(kChromeUICookiesSettingsURL);
   [self.tableViewModel addItem:cookiesFooter
        toSectionWithIdentifier:SectionIdentifierCookiesContent];
@@ -188,7 +187,7 @@ float kPaddingCookiesHeader = 0.0f;
 #pragma mark - PageInfoCookiesConsumer
 
 - (void)cookiesOptionChangedToDescription:
-    (PageInfoCookiesDescription*)description {
+    (CookiesStatusDescription*)description {
   // Update the Cookies Header.
   NSIndexPath* headerPath = [self.tableViewModel
       indexPathForItemType:ItemTypeCookiesHeader
