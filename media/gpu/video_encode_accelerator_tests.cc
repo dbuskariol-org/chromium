@@ -69,7 +69,9 @@ class VideoEncoderTest : public ::testing::Test {
     auto video_encoder =
         VideoEncoder::Create(config, CreateBitstreamProcessors(video, config));
     LOG_ASSERT(video_encoder);
-    LOG_ASSERT(video_encoder->Initialize(video));
+
+    if (!video_encoder->Initialize(video))
+      ADD_FAILURE();
 
     return video_encoder;
   }
@@ -177,6 +179,17 @@ TEST_F(VideoEncoderTest, Initialize) {
   auto encoder = CreateVideoEncoder(g_env->Video(), config);
 
   EXPECT_EQ(encoder->GetEventCount(VideoEncoder::kInitialized), 1u);
+}
+
+// Create a video encoder and immediately destroy it without initializing. The
+// video encoder will be automatically destroyed when the video encoder goes out
+// of scope at the end of the test. The test will pass if no asserts or crashes
+// are triggered upon destroying.
+TEST_F(VideoEncoderTest, DestroyBeforeInitialize) {
+  VideoEncoderClientConfig config = VideoEncoderClientConfig();
+  auto video_encoder = VideoEncoder::Create(config);
+
+  EXPECT_NE(video_encoder, nullptr);
 }
 
 }  // namespace test
