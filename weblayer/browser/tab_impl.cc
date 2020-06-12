@@ -164,8 +164,6 @@ struct UserData : public base::SupportsUserData::Data {
 };
 
 #if defined(OS_ANDROID)
-Tab* g_last_tab;
-
 void HandleJavaScriptResult(const ScopedJavaGlobalRef<jobject>& callback,
                             base::Value result) {
   std::string json;
@@ -244,9 +242,6 @@ TabImpl::TabImpl(ProfileImpl* profile,
     : profile_(profile),
       web_contents_(std::move(web_contents)),
       guid_(guid.empty() ? base::GenerateGUID() : guid) {
-#if defined(OS_ANDROID)
-  g_last_tab = this;
-#endif
   if (web_contents_) {
     // This code path is hit when the page requests a new tab, which should
     // only be possible from the same profile.
@@ -1080,12 +1075,6 @@ void TabImpl::SetBrowserControlsConstraint(
   Java_TabImpl_setBrowserControlsVisibilityConstraint(
       base::android::AttachCurrentThread(), java_impl_,
       static_cast<int>(reason), constraint);
-}
-#endif
-
-#if defined(OS_ANDROID)
-Tab* Tab::GetLastTabForTesting() {
-  return g_last_tab;
 }
 #endif
 
