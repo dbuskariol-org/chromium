@@ -512,10 +512,13 @@ static jlong JNI_TabImpl_CreateTab(JNIEnv* env,
 }
 
 static void JNI_TabImpl_DeleteTab(JNIEnv* env, jlong tab) {
+  std::unique_ptr<Tab> owned_tab;
   TabImpl* tab_impl = reinterpret_cast<TabImpl*>(tab);
   DCHECK(tab_impl);
-  DCHECK(tab_impl->browser());
-  tab_impl->browser()->DestroyTab(tab_impl);
+  if (tab_impl->browser())
+    owned_tab = tab_impl->browser()->RemoveTab(tab_impl);
+  else
+    owned_tab.reset(tab_impl);
 }
 
 ScopedJavaLocalRef<jobject> TabImpl::GetWebContents(JNIEnv* env) {
@@ -927,7 +930,9 @@ void TabImpl::AddNewContents(content::WebContents* source,
                                                         source, disposition);
   }
 
-  new_tab_delegate_->OnNewTab(browser_->CreateTab(std::move(new_contents)),
+  std::unique_ptr<Tab> tab =
+      std::make_unique<TabImpl>(profile_, std::move(new_contents));
+  new_tab_delegate_->OnNewTab(std::move(tab),
                               NewTabTypeFromWindowDisposition(disposition));
 }
 
@@ -951,7 +956,7 @@ void TabImpl::CloseContents(content::WebContents* source) {
     // return.
   }
 #else
-  browser_->DestroyTab(this);
+  browser_->RemoveTab(this);
 #endif
 }
 
@@ -1082,6 +1087,10 @@ void TabImpl::SetBrowserControlsConstraint(
       static_cast<int>(reason), constraint);
 }
 #endif
+
+std::unique_ptr<Tab> Tab::Create(Profile* profile) {
+  return std::make_unique<TabImpl>(static_cast<ProfileImpl*>(profile));
+}
 
 #if defined(OS_ANDROID)
 Tab* Tab::GetLastTabForTesting() {

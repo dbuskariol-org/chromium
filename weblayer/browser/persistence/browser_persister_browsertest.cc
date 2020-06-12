@@ -189,7 +189,7 @@ IN_PROC_BROWSER_TEST_F(BrowserPersisterTest, SingleTab) {
   ASSERT_TRUE(embedded_test_server()->Start());
 
   std::unique_ptr<BrowserImpl> browser = CreateBrowser(GetProfile(), "x");
-  Tab* tab = browser->CreateTab();
+  Tab* tab = browser->AddTab(Tab::Create(GetProfile()));
   const GURL url = embedded_test_server()->GetURL("/simple_page.html");
   NavigateAndWaitForCompletion(url, tab);
   ShutdownBrowserPersisterAndWait(browser.get());
@@ -214,7 +214,7 @@ IN_PROC_BROWSER_TEST_F(BrowserPersisterTest, RestoresGuid) {
   ASSERT_TRUE(embedded_test_server()->Start());
 
   std::unique_ptr<BrowserImpl> browser = CreateBrowser(GetProfile(), "x");
-  Tab* tab = browser->CreateTab();
+  Tab* tab = browser->AddTab(Tab::Create(GetProfile()));
   const std::string original_guid = tab->GetGuid();
   EXPECT_FALSE(original_guid.empty());
   EXPECT_TRUE(base::IsValidGUID(original_guid));
@@ -240,7 +240,7 @@ IN_PROC_BROWSER_TEST_F(BrowserPersisterTest, RestoresData) {
   ASSERT_TRUE(embedded_test_server()->Start());
 
   std::unique_ptr<BrowserImpl> browser = CreateBrowser(GetProfile(), "x");
-  Tab* tab = browser->CreateTab();
+  Tab* tab = browser->AddTab(Tab::Create(GetProfile()));
   tab->SetData({{"abc", "efg"}});
   const GURL url = embedded_test_server()->GetURL("/simple_page.html");
   NavigateAndWaitForCompletion(url, tab);
@@ -265,7 +265,7 @@ IN_PROC_BROWSER_TEST_F(BrowserPersisterTest, RestoresMostRecentData) {
   ASSERT_TRUE(embedded_test_server()->Start());
 
   std::unique_ptr<BrowserImpl> browser = CreateBrowser(GetProfile(), "x");
-  Tab* tab = browser->CreateTab();
+  Tab* tab = browser->AddTab(Tab::Create(GetProfile()));
   tab->SetData({{"xxx", "xxx"}});
   const GURL url = embedded_test_server()->GetURL("/simple_page.html");
   NavigateAndWaitForCompletion(url, tab);
@@ -297,11 +297,11 @@ IN_PROC_BROWSER_TEST_F(BrowserPersisterTest, TwoTabs) {
   ASSERT_TRUE(embedded_test_server()->Start());
 
   std::unique_ptr<BrowserImpl> browser = CreateBrowser(GetProfile(), "x");
-  Tab* tab1 = browser->CreateTab();
+  Tab* tab1 = browser->AddTab(Tab::Create(GetProfile()));
   const GURL url1 = embedded_test_server()->GetURL("/simple_page.html");
   NavigateAndWaitForCompletion(url1, tab1);
 
-  Tab* tab2 = browser->CreateTab();
+  Tab* tab2 = browser->AddTab(Tab::Create(GetProfile()));
   const GURL url2 = embedded_test_server()->GetURL("/simple_page2.html");
   NavigateAndWaitForCompletion(url2, tab2);
   browser->SetActiveTab(tab2);
@@ -345,23 +345,23 @@ IN_PROC_BROWSER_TEST_F(BrowserPersisterTest, MoveBetweenBrowsers) {
 
   // Create a browser with two tabs.
   std::unique_ptr<BrowserImpl> browser1 = CreateBrowser(GetProfile(), "x");
-  Tab* tab1 = browser1->CreateTab();
+  Tab* tab1 = browser1->AddTab(Tab::Create(GetProfile()));
   const GURL url1 = embedded_test_server()->GetURL("/simple_page.html");
   NavigateAndWaitForCompletion(url1, tab1);
 
-  Tab* tab2 = browser1->CreateTab();
+  Tab* tab2 = browser1->AddTab(Tab::Create(GetProfile()));
   const GURL url2 = embedded_test_server()->GetURL("/simple_page2.html");
   NavigateAndWaitForCompletion(url2, tab2);
   browser1->SetActiveTab(tab2);
 
   // Create another browser with a single tab.
   std::unique_ptr<BrowserImpl> browser2 = CreateBrowser(GetProfile(), "y");
-  Tab* tab3 = browser2->CreateTab();
+  Tab* tab3 = browser2->AddTab(Tab::Create(GetProfile()));
   const GURL url3 = embedded_test_server()->GetURL("/simple_page3.html");
   NavigateAndWaitForCompletion(url3, tab3);
 
   // Move |tab2| to |browser2|.
-  browser2->AddTab(tab2);
+  browser2->AddTab(browser1->RemoveTab(tab2));
   browser2->SetActiveTab(tab2);
 
   ShutdownBrowserPersisterAndWait(browser1.get());

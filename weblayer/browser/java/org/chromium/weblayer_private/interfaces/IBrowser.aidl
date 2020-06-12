@@ -34,6 +34,4 @@ interface IBrowser {
   IUrlBarController getUrlBarController() = 9;
 
   void setBottomView(in IObjectWrapper view) = 10;
-
-  ITab createTab() = 11;
 }

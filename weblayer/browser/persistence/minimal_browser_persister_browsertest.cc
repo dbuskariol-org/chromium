@@ -31,7 +31,7 @@ class MinimalBrowserPersisterTest : public WebLayerBrowserTest {
     WebLayerBrowserTest::SetUpOnMainThread();
     ASSERT_TRUE(embedded_test_server()->Start());
     browser_ = Browser::Create(GetProfile(), nullptr);
-    tab_ = static_cast<TabImpl*>(browser_->CreateTab());
+    tab_ = static_cast<TabImpl*>(browser_->AddTab(Tab::Create(GetProfile())));
     browser_->SetActiveTab(tab_);
   }
   void PostRunTestOnMainThread() override {
@@ -83,7 +83,7 @@ IN_PROC_BROWSER_TEST_F(MinimalBrowserPersisterTest, SingleTab) {
 IN_PROC_BROWSER_TEST_F(MinimalBrowserPersisterTest, TwoTabs) {
   NavigateAndWaitForCompletion(url1(), tab_);
 
-  Tab* tab2 = browser_->CreateTab();
+  Tab* tab2 = browser_->AddTab(Tab::Create(GetProfile()));
   NavigateAndWaitForCompletion(url2(), tab2);
   browser_->SetActiveTab(tab2);
 

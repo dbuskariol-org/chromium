@@ -23,7 +23,7 @@ namespace weblayer {
 
 class PopupBlockerBrowserTest : public WebLayerBrowserTest,
                                 public NewTabDelegate,
-                                public BrowserObserver {
+                                BrowserObserver {
  public:
   // WebLayerBrowserTest:
   void SetUpOnMainThread() override {
@@ -35,7 +35,7 @@ class PopupBlockerBrowserTest : public WebLayerBrowserTest,
     original_tab_ = shell()->tab();
 #else
     browser_ = Browser::Create(GetProfile(), nullptr);
-    original_tab_ = browser_->CreateTab();
+    original_tab_ = browser_->AddTab(Tab::Create(GetProfile()));
     original_tab_->SetNewTabDelegate(this);
 #endif
     browser_->AddObserver(this);
@@ -49,7 +49,9 @@ class PopupBlockerBrowserTest : public WebLayerBrowserTest,
   }
 
   // NewTabDelegate:
-  void OnNewTab(Tab* new_tab, NewTabType type) override {}
+  void OnNewTab(std::unique_ptr<Tab> new_tab, NewTabType type) override {
+    browser_->AddTab(std::move(new_tab));
+  }
   void CloseTab() override {}
 
   // BrowserObserver:

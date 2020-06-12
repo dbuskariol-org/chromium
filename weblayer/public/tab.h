@@ -28,11 +28,14 @@ class ErrorPageDelegate;
 class FullscreenDelegate;
 class NavigationController;
 class NewTabDelegate;
+class Profile;
 class TabObserver;
 
 // Represents a tab that is navigable.
 class Tab {
  public:
+  static std::unique_ptr<Tab> Create(Profile* profile);
+
 #if defined(OS_ANDROID)
   static Tab* GetLastTabForTesting();
 #endif
