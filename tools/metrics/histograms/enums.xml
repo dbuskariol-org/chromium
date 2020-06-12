@@ -15940,6 +15940,14 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="7" label="Returned stale result synchronously."/>
 </enum>
 
+<enum name="DNS.UdpIdMismatchStatus">
+  <int value="0" label="Successfully parsed response with matching ID"/>
+  <int value="1"
+      label="ID mismatch with the response ID recognized as a
+             recently-queried ID"/>
+  <int value="2" label="ID mismatch with an unrecognized response ID"/>
+</enum>
+
 <enum name="DNSEmptyAddressListAndNoError">
   <int value="0" label="Error reported or Address List is not empty"/>
   <int value="1" label="Success reported but Address List is empty"/>
