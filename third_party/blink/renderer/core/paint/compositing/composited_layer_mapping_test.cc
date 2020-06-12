@@ -1417,6 +1417,24 @@ TEST_F(CompositedLayerMappingTest,
       target_graphics_layer->CcLayer()->transformed_rasterization_allowed());
 }
 
+TEST_F(CompositedLayerMappingTest,
+       TransformedRasterizationForTrivial3DTransform) {
+  SetBodyInnerHTML(R"HTML(
+    <div id="target" style="transform: translate3d(0.3px, 0px, 0px);">
+        Trivial 3D Transform
+    </div>
+  )HTML");
+
+  LayoutObject* target = GetLayoutObjectByElementId("target");
+  ASSERT_TRUE(target && target->IsBox());
+  PaintLayer* target_layer = ToLayoutBox(target)->Layer();
+  GraphicsLayer* target_graphics_layer =
+      target_layer ? target_layer->GraphicsLayerBacking() : nullptr;
+  ASSERT_TRUE(target_graphics_layer);
+  EXPECT_TRUE(
+      target_graphics_layer->CcLayer()->transformed_rasterization_allowed());
+}
+
 TEST_F(CompositedLayerMappingTest, ScrollingContainerBoundsChange) {
   GetDocument().GetFrame()->GetSettings()->SetPreferCompositingToLCDTextEnabled(
       true);
