@@ -3819,6 +3819,7 @@ test("unit_tests") {
   if (enable_dice_support) {
     sources += [
       "../browser/signin/dice_response_handler_unittest.cc",
+      "../browser/signin/dice_signed_in_profile_creator_unittest.cc",
       "../browser/signin/dice_tab_helper_unittest.cc",
       "../browser/signin/dice_web_signin_interceptor_unittest.cc",
       "../browser/signin/process_dice_header_delegate_impl_unittest.cc",
