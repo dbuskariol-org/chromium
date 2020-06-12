@@ -17,6 +17,6 @@ struct OriginMatcherRule {
   SubdomainMatchingRule? subdomain_matching_rule;
 };
 
-struct AwOriginMatcher {
+struct OriginMatcher {
   array<OriginMatcherRule> rules;
 };

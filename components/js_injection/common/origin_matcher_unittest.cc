@@ -2,9 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/js_injection/common/aw_origin_matcher.h"
+#include "components/js_injection/common/origin_matcher.h"
 
-#include "components/js_injection/common/aw_origin_matcher.mojom.h"
+#include "components/js_injection/common/origin_matcher.mojom.h"
 #include "components/js_injection/common/origin_matcher_internal.h"
 #include "mojo/public/cpp/test_support/test_utils.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -23,7 +23,7 @@ SubdomainMatchingRule::SubdomainMatchingRule(const std::string& scheme,
       optional_host_(optional_host),
       optional_port_(optional_port) {}
 
-class AwOriginMatcherTest : public testing::Test {
+class OriginMatcherTest : public testing::Test {
  public:
   void SetUp() override {
     scheme_registry_ = std::make_unique<url::ScopedSchemeRegistryForTests>();
@@ -38,8 +38,8 @@ class AwOriginMatcherTest : public testing::Test {
   std::unique_ptr<url::ScopedSchemeRegistryForTests> scheme_registry_;
 };
 
-TEST_F(AwOriginMatcherTest, InvalidInputs) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, InvalidInputs) {
+  OriginMatcher matcher;
   // Empty string is invalid.
   EXPECT_FALSE(matcher.AddRuleFromString(""));
   // Scheme doesn't present.
@@ -87,8 +87,8 @@ TEST_F(AwOriginMatcherTest, InvalidInputs) {
   EXPECT_FALSE(matcher.AddRuleFromString("file://*"));
 }
 
-TEST_F(AwOriginMatcherTest, ExactMatching) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, ExactMatching) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("https://www.example.com:99"));
   EXPECT_EQ("https://www.example.com:99", matcher.rules()[0]->ToString());
 
@@ -105,8 +105,8 @@ TEST_F(AwOriginMatcherTest, ExactMatching) {
       matcher.Matches(CreateOriginFromString("https://music.example.com:99")));
 }
 
-TEST_F(AwOriginMatcherTest, SchemeDefaultPortHttp) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, SchemeDefaultPortHttp) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("http://www.example.com"));
   EXPECT_EQ("http://www.example.com:80", matcher.rules()[0]->ToString());
 
@@ -125,8 +125,8 @@ TEST_F(AwOriginMatcherTest, SchemeDefaultPortHttp) {
       matcher.Matches(CreateOriginFromString("https://www.example.com:80")));
 }
 
-TEST_F(AwOriginMatcherTest, SchemeDefaultPortHttps) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, SchemeDefaultPortHttps) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("https://www.example.com"));
   EXPECT_EQ("https://www.example.com:443", matcher.rules()[0]->ToString());
 
@@ -145,8 +145,8 @@ TEST_F(AwOriginMatcherTest, SchemeDefaultPortHttps) {
       matcher.Matches(CreateOriginFromString("https://music.example.com:99")));
 }
 
-TEST_F(AwOriginMatcherTest, SubdomainMatching) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, SubdomainMatching) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("https://*.example.com"));
   EXPECT_EQ("https://*.example.com:443", matcher.rules()[0]->ToString());
 
@@ -174,8 +174,8 @@ TEST_F(AwOriginMatcherTest, SubdomainMatching) {
       matcher.Matches(CreateOriginFromString("https://music.example.com:99")));
 }
 
-TEST_F(AwOriginMatcherTest, SubdomainMatching2) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, SubdomainMatching2) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("http://*.www.example.com"));
   EXPECT_EQ("http://*.www.example.com:80", matcher.rules()[0]->ToString());
 
@@ -199,16 +199,16 @@ TEST_F(AwOriginMatcherTest, SubdomainMatching2) {
       matcher.Matches(CreateOriginFromString("https://music.example.com:99")));
 }
 
-TEST_F(AwOriginMatcherTest, PunyCode) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, PunyCode) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("http://*.xn--fsqu00a.com"));
 
   // Chinese domain example.com
   EXPECT_TRUE(matcher.Matches(CreateOriginFromString("http://www.例子.com")));
 }
 
-TEST_F(AwOriginMatcherTest, IPv4AddressMatching) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, IPv4AddressMatching) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("https://192.168.0.1"));
   EXPECT_EQ("https://192.168.0.1:443", matcher.rules()[0]->ToString());
 
@@ -222,8 +222,8 @@ TEST_F(AwOriginMatcherTest, IPv4AddressMatching) {
   EXPECT_FALSE(matcher.Matches(CreateOriginFromString("http://192.168.0.2")));
 }
 
-TEST_F(AwOriginMatcherTest, IPv6AddressMatching) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, IPv6AddressMatching) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("https://[3ffe:2a00:100:7031:0:0::1]"));
   // Note that the IPv6 address is canonicalized.
   EXPECT_EQ("https://[3ffe:2a00:100:7031::1]:443",
@@ -242,8 +242,8 @@ TEST_F(AwOriginMatcherTest, IPv6AddressMatching) {
       CreateOriginFromString("https://[3ffe:2a00:100:7031::1]:8080")));
 }
 
-TEST_F(AwOriginMatcherTest, WildcardMatchesEveryOrigin) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, WildcardMatchesEveryOrigin) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("*"));
 
   EXPECT_TRUE(
@@ -270,8 +270,8 @@ TEST_F(AwOriginMatcherTest, WildcardMatchesEveryOrigin) {
       "blob:http://127.0.0.1:8080/0530b9d1-c1c2-40ff-9f9c-c57336646baa")));
 }
 
-TEST_F(AwOriginMatcherTest, FileOrigin) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, FileOrigin) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("file://"));
 
   EXPECT_TRUE(matcher.Matches(CreateOriginFromString("file:///sdcard")));
@@ -279,8 +279,8 @@ TEST_F(AwOriginMatcherTest, FileOrigin) {
       matcher.Matches(CreateOriginFromString("file:///android_assets")));
 }
 
-TEST_F(AwOriginMatcherTest, CustomSchemeOrigin) {
-  AwOriginMatcher matcher;
+TEST_F(OriginMatcherTest, CustomSchemeOrigin) {
+  OriginMatcher matcher;
   EXPECT_TRUE(matcher.AddRuleFromString("x-mail://"));
 
   EXPECT_TRUE(matcher.Matches(CreateOriginFromString("x-mail://hostname")));
@@ -302,7 +302,7 @@ void CompareMatcherRules(const OriginMatcherRule& r1,
   EXPECT_EQ(s1.optional_port(), s2.optional_port());
 }
 
-void CompareMatchers(const AwOriginMatcher& m1, const AwOriginMatcher& m2) {
+void CompareMatchers(const OriginMatcher& m1, const OriginMatcher& m2) {
   ASSERT_EQ(m1.rules().size(), m2.rules().size());
   for (size_t i = 0; i < m1.rules().size(); ++i) {
     ASSERT_NO_FATAL_FAILURE(
@@ -312,91 +312,91 @@ void CompareMatchers(const AwOriginMatcher& m1, const AwOriginMatcher& m2) {
 
 }  // namespace
 
-TEST_F(AwOriginMatcherTest, SerializeAndDeserializeMatchAll) {
-  AwOriginMatcher matcher;
-  AwOriginMatcher deserialized;
+TEST_F(OriginMatcherTest, SerializeAndDeserializeMatchAll) {
+  OriginMatcher matcher;
+  OriginMatcher deserialized;
   ASSERT_TRUE(matcher.AddRuleFromString("*"));
-  ASSERT_TRUE(mojo::test::SerializeAndDeserialize<mojom::AwOriginMatcher>(
+  ASSERT_TRUE(mojo::test::SerializeAndDeserialize<mojom::OriginMatcher>(
       &matcher, &deserialized));
   ASSERT_NO_FATAL_FAILURE(CompareMatchers(matcher, deserialized));
 }
 
-TEST_F(AwOriginMatcherTest, SerializeAndDeserializeSubdomainMatcher) {
-  AwOriginMatcher matcher;
-  AwOriginMatcher deserialized;
+TEST_F(OriginMatcherTest, SerializeAndDeserializeSubdomainMatcher) {
+  OriginMatcher matcher;
+  OriginMatcher deserialized;
   ASSERT_TRUE(matcher.AddRuleFromString("https://*.example.com"));
-  ASSERT_TRUE(mojo::test::SerializeAndDeserialize<mojom::AwOriginMatcher>(
+  ASSERT_TRUE(mojo::test::SerializeAndDeserialize<mojom::OriginMatcher>(
       &matcher, &deserialized));
   ASSERT_NO_FATAL_FAILURE(CompareMatchers(matcher, deserialized));
 }
 
-TEST_F(AwOriginMatcherTest, SerializeAndDeserializeInvalidSubdomain) {
-  AwOriginMatcher matcher;
-  AwOriginMatcher deserialized;
+TEST_F(OriginMatcherTest, SerializeAndDeserializeInvalidSubdomain) {
+  OriginMatcher matcher;
+  OriginMatcher deserialized;
   {
-    AwOriginMatcher::RuleList rules;
+    OriginMatcher::RuleList rules;
     // The subdomain is not allowed to have a '/'.
     rules.push_back(std::make_unique<SubdomainMatchingRule>(
         "http", "bogus/host", 100, true));
     matcher.SetRules(std::move(rules));
   }
-  EXPECT_FALSE(mojo::test::SerializeAndDeserialize<mojom::AwOriginMatcher>(
+  EXPECT_FALSE(mojo::test::SerializeAndDeserialize<mojom::OriginMatcher>(
       &matcher, &deserialized));
 }
 
-TEST_F(AwOriginMatcherTest, SerializeAndDeserializeInvalidScheme) {
-  AwOriginMatcher matcher;
-  AwOriginMatcher deserialized;
+TEST_F(OriginMatcherTest, SerializeAndDeserializeInvalidScheme) {
+  OriginMatcher matcher;
+  OriginMatcher deserialized;
   {
-    AwOriginMatcher::RuleList rules;
+    OriginMatcher::RuleList rules;
     // The scheme can not be empty.
     rules.push_back(std::make_unique<SubdomainMatchingRule>(std::string(),
                                                             "host", 101, true));
     matcher.SetRules(std::move(rules));
   }
-  EXPECT_FALSE(mojo::test::SerializeAndDeserialize<mojom::AwOriginMatcher>(
+  EXPECT_FALSE(mojo::test::SerializeAndDeserialize<mojom::OriginMatcher>(
       &matcher, &deserialized));
 }
 
-TEST_F(AwOriginMatcherTest, SerializeAndDeserializeTooManyWildcards) {
-  AwOriginMatcher matcher;
-  AwOriginMatcher deserialized;
+TEST_F(OriginMatcherTest, SerializeAndDeserializeTooManyWildcards) {
+  OriginMatcher matcher;
+  OriginMatcher deserialized;
   {
-    AwOriginMatcher::RuleList rules;
+    OriginMatcher::RuleList rules;
     // Only one wildcard is allowed.
     rules.push_back(
         std::make_unique<SubdomainMatchingRule>("http", "**", 101, true));
     matcher.SetRules(std::move(rules));
   }
-  EXPECT_FALSE(mojo::test::SerializeAndDeserialize<mojom::AwOriginMatcher>(
+  EXPECT_FALSE(mojo::test::SerializeAndDeserialize<mojom::OriginMatcher>(
       &matcher, &deserialized));
 }
 
-TEST_F(AwOriginMatcherTest, SerializeAndDeserializeInvalidWildcard) {
-  AwOriginMatcher matcher;
-  AwOriginMatcher deserialized;
+TEST_F(OriginMatcherTest, SerializeAndDeserializeInvalidWildcard) {
+  OriginMatcher matcher;
+  OriginMatcher deserialized;
   {
-    AwOriginMatcher::RuleList rules;
+    OriginMatcher::RuleList rules;
     // The wild card must be at the front.
     rules.push_back(
         std::make_unique<SubdomainMatchingRule>("http", "ab*", 101, true));
     matcher.SetRules(std::move(rules));
   }
-  EXPECT_FALSE(mojo::test::SerializeAndDeserialize<mojom::AwOriginMatcher>(
+  EXPECT_FALSE(mojo::test::SerializeAndDeserialize<mojom::OriginMatcher>(
       &matcher, &deserialized));
 }
 
-TEST_F(AwOriginMatcherTest, SerializeAndDeserializeValidWildcard) {
-  AwOriginMatcher matcher;
-  AwOriginMatcher deserialized;
+TEST_F(OriginMatcherTest, SerializeAndDeserializeValidWildcard) {
+  OriginMatcher matcher;
+  OriginMatcher deserialized;
   {
-    AwOriginMatcher::RuleList rules;
+    OriginMatcher::RuleList rules;
     // The wild card must be at the front.
     rules.push_back(
         std::make_unique<SubdomainMatchingRule>("http", "*.ab", 101, true));
     matcher.SetRules(std::move(rules));
   }
-  EXPECT_TRUE(mojo::test::SerializeAndDeserialize<mojom::AwOriginMatcher>(
+  EXPECT_TRUE(mojo::test::SerializeAndDeserialize<mojom::OriginMatcher>(
       &matcher, &deserialized));
   ASSERT_NO_FATAL_FAILURE(CompareMatchers(matcher, deserialized));
 }

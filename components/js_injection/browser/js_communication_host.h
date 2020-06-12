@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_JS_INJECTION_BROWSER_JS_JAVA_CONFIGURATOR_HOST_H_
-#define COMPONENTS_JS_INJECTION_BROWSER_JS_JAVA_CONFIGURATOR_HOST_H_
+#ifndef COMPONENTS_JS_INJECTION_BROWSER_JS_COMMUNICATION_HOST_H_
+#define COMPONENTS_JS_INJECTION_BROWSER_JS_COMMUNICATION_HOST_H_
 
 #include <memory>
 #include <vector>
@@ -19,21 +19,21 @@ class RenderFrameHost;
 
 namespace js_injection {
 
-class AwOriginMatcher;
+class OriginMatcher;
 struct DocumentStartJavaScript;
 struct JsObject;
-class JsToJavaMessaging;
+class JsToBrowserMessaging;
 class WebMessageHostFactory;
 
 // This class is 1:1 with WebContents, when AddWebMessageListener() is called,
 // it stores the information in this class and send them to renderer side
-// JsJavaConfigurator if there is any. When RenderFrameCreated() gets called, it
+// JsCommunication if there is any. When RenderFrameCreated() gets called, it
 // needs to configure that new RenderFrame with the information stores in this
 // class.
-class JsJavaConfiguratorHost : public content::WebContentsObserver {
+class JsCommunicationHost : public content::WebContentsObserver {
  public:
-  explicit JsJavaConfiguratorHost(content::WebContents* web_contents);
-  ~JsJavaConfiguratorHost() override;
+  explicit JsCommunicationHost(content::WebContents* web_contents);
+  ~JsCommunicationHost() override;
 
   // Captures the result of adding script. There are two possibilities when
   // adding script: there was an error, in which case |error_message| is set,
@@ -71,7 +71,7 @@ class JsJavaConfiguratorHost : public content::WebContentsObserver {
 
   struct RegisteredFactory {
     base::string16 js_name;
-    AwOriginMatcher allowed_origin_rules;
+    OriginMatcher allowed_origin_rules;
     WebMessageHostFactory* factory = nullptr;
   };
 
@@ -99,12 +99,12 @@ class JsJavaConfiguratorHost : public content::WebContentsObserver {
   std::vector<DocumentStartJavaScript> scripts_;
   std::vector<std::unique_ptr<JsObject>> js_objects_;
   std::map<content::RenderFrameHost*,
-           std::vector<std::unique_ptr<JsToJavaMessaging>>>
-      js_to_java_messagings_;
+           std::vector<std::unique_ptr<JsToBrowserMessaging>>>
+      js_to_browser_messagings_;
 
-  DISALLOW_COPY_AND_ASSIGN(JsJavaConfiguratorHost);
+  DISALLOW_COPY_AND_ASSIGN(JsCommunicationHost);
 };
 
 }  // namespace js_injection
 
-#endif  // COMPONENTS_JS_INJECTION_BROWSER_JS_JAVA_CONFIGURATOR_HOST_H_
+#endif  // COMPONENTS_JS_INJECTION_BROWSER_JS_COMMUNICATION_HOST_H_

@@ -2,15 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/js_injection/browser/js_java_configurator_host.h"
+#include "components/js_injection/browser/js_communication_host.h"
 
 #include "base/bind.h"
 #include "base/strings/utf_string_conversions.h"
-#include "components/js_injection/browser/js_to_java_messaging.h"
+#include "components/js_injection/browser/js_to_browser_messaging.h"
 #include "components/js_injection/browser/web_message_host.h"
 #include "components/js_injection/browser/web_message_host_factory.h"
-#include "components/js_injection/common/aw_origin_matcher.h"
-#include "components/js_injection/common/aw_origin_matcher_mojom_traits.h"
+#include "components/js_injection/common/origin_matcher.h"
+#include "components/js_injection/common/origin_matcher_mojom_traits.h"
 #include "content/public/browser/web_contents.h"
 #include "mojo/public/cpp/bindings/pending_associated_remote.h"
 #include "third_party/blink/public/common/associated_interfaces/associated_interface_provider.h"
@@ -20,7 +20,7 @@ namespace {
 
 std::string ConvertToNativeAllowedOriginRulesWithSanityCheck(
     const std::vector<std::string>& allowed_origin_rules_strings,
-    AwOriginMatcher& allowed_origin_rules) {
+    OriginMatcher& allowed_origin_rules) {
   for (auto& rule : allowed_origin_rules_strings) {
     if (!allowed_origin_rules.AddRuleFromString(rule))
       return "allowedOriginRules " + rule + " is invalid";
@@ -32,7 +32,7 @@ std::string ConvertToNativeAllowedOriginRulesWithSanityCheck(
 
 struct JsObject {
   JsObject(const base::string16& name,
-           AwOriginMatcher allowed_origin_rules,
+           OriginMatcher allowed_origin_rules,
            std::unique_ptr<WebMessageHostFactory> factory)
       : name(std::move(name)),
         allowed_origin_rules(std::move(allowed_origin_rules)),
@@ -42,13 +42,13 @@ struct JsObject {
   ~JsObject() = default;
 
   base::string16 name;
-  AwOriginMatcher allowed_origin_rules;
+  OriginMatcher allowed_origin_rules;
   std::unique_ptr<WebMessageHostFactory> factory;
 };
 
 struct DocumentStartJavaScript {
   DocumentStartJavaScript(base::string16 script,
-                          AwOriginMatcher allowed_origin_rules,
+                          OriginMatcher allowed_origin_rules,
                           int32_t script_id)
       : script_(std::move(script)),
         allowed_origin_rules_(allowed_origin_rules),
@@ -60,29 +60,28 @@ struct DocumentStartJavaScript {
   DocumentStartJavaScript& operator=(DocumentStartJavaScript&&) = default;
 
   base::string16 script_;
-  AwOriginMatcher allowed_origin_rules_;
+  OriginMatcher allowed_origin_rules_;
   int32_t script_id_;
 };
 
-JsJavaConfiguratorHost::AddScriptResult::AddScriptResult() = default;
-JsJavaConfiguratorHost::AddScriptResult::AddScriptResult(
-    const JsJavaConfiguratorHost::AddScriptResult&) = default;
-JsJavaConfiguratorHost::AddScriptResult&
-JsJavaConfiguratorHost::AddScriptResult::operator=(
-    const JsJavaConfiguratorHost::AddScriptResult&) = default;
-JsJavaConfiguratorHost::AddScriptResult::~AddScriptResult() = default;
+JsCommunicationHost::AddScriptResult::AddScriptResult() = default;
+JsCommunicationHost::AddScriptResult::AddScriptResult(
+    const JsCommunicationHost::AddScriptResult&) = default;
+JsCommunicationHost::AddScriptResult&
+JsCommunicationHost::AddScriptResult::operator=(
+    const JsCommunicationHost::AddScriptResult&) = default;
+JsCommunicationHost::AddScriptResult::~AddScriptResult() = default;
 
-JsJavaConfiguratorHost::JsJavaConfiguratorHost(
-    content::WebContents* web_contents)
+JsCommunicationHost::JsCommunicationHost(content::WebContents* web_contents)
     : content::WebContentsObserver(web_contents) {}
 
-JsJavaConfiguratorHost::~JsJavaConfiguratorHost() = default;
+JsCommunicationHost::~JsCommunicationHost() = default;
 
-JsJavaConfiguratorHost::AddScriptResult
-JsJavaConfiguratorHost::AddDocumentStartJavaScript(
+JsCommunicationHost::AddScriptResult
+JsCommunicationHost::AddDocumentStartJavaScript(
     const base::string16& script,
     const std::vector<std::string>& allowed_origin_rules) {
-  AwOriginMatcher origin_matcher;
+  OriginMatcher origin_matcher;
   std::string error_message = ConvertToNativeAllowedOriginRulesWithSanityCheck(
       allowed_origin_rules, origin_matcher);
   AddScriptResult result;
@@ -94,18 +93,18 @@ JsJavaConfiguratorHost::AddDocumentStartJavaScript(
   scripts_.emplace_back(script, origin_matcher, next_script_id_++);
 
   web_contents()->ForEachFrame(base::BindRepeating(
-      &JsJavaConfiguratorHost::NotifyFrameForAddDocumentStartJavaScript,
+      &JsCommunicationHost::NotifyFrameForAddDocumentStartJavaScript,
       base::Unretained(this), &*scripts_.rbegin()));
   result.script_id = scripts_.rbegin()->script_id_;
   return result;
 }
 
-bool JsJavaConfiguratorHost::RemoveDocumentStartJavaScript(int script_id) {
+bool JsCommunicationHost::RemoveDocumentStartJavaScript(int script_id) {
   for (auto it = scripts_.begin(); it != scripts_.end(); ++it) {
     if (it->script_id_ == script_id) {
       scripts_.erase(it);
       web_contents()->ForEachFrame(base::BindRepeating(
-          &JsJavaConfiguratorHost::NotifyFrameForRemoveDocumentStartJavaScript,
+          &JsCommunicationHost::NotifyFrameForRemoveDocumentStartJavaScript,
           base::Unretained(this), script_id));
       return true;
     }
@@ -113,11 +112,11 @@ bool JsJavaConfiguratorHost::RemoveDocumentStartJavaScript(int script_id) {
   return false;
 }
 
-base::string16 JsJavaConfiguratorHost::AddWebMessageHostFactory(
+base::string16 JsCommunicationHost::AddWebMessageHostFactory(
     std::unique_ptr<WebMessageHostFactory> factory,
     const base::string16& js_object_name,
     const std::vector<std::string>& allowed_origin_rules) {
-  AwOriginMatcher origin_matcher;
+  OriginMatcher origin_matcher;
   std::string error_message = ConvertToNativeAllowedOriginRulesWithSanityCheck(
       allowed_origin_rules, origin_matcher);
   if (!error_message.empty())
@@ -134,27 +133,27 @@ base::string16 JsJavaConfiguratorHost::AddWebMessageHostFactory(
       js_object_name, origin_matcher, std::move(factory)));
 
   web_contents()->ForEachFrame(base::BindRepeating(
-      &JsJavaConfiguratorHost::NotifyFrameForWebMessageListener,
+      &JsCommunicationHost::NotifyFrameForWebMessageListener,
       base::Unretained(this)));
   return base::string16();
 }
 
-void JsJavaConfiguratorHost::RemoveWebMessageHostFactory(
+void JsCommunicationHost::RemoveWebMessageHostFactory(
     const base::string16& js_object_name) {
   for (auto iterator = js_objects_.begin(); iterator != js_objects_.end();
        ++iterator) {
     if ((*iterator)->name == js_object_name) {
       js_objects_.erase(iterator);
       web_contents()->ForEachFrame(base::BindRepeating(
-          &JsJavaConfiguratorHost::NotifyFrameForWebMessageListener,
+          &JsCommunicationHost::NotifyFrameForWebMessageListener,
           base::Unretained(this)));
       break;
     }
   }
 }
 
-std::vector<JsJavaConfiguratorHost::RegisteredFactory>
-JsJavaConfiguratorHost::GetWebMessageHostFactories() {
+std::vector<JsCommunicationHost::RegisteredFactory>
+JsCommunicationHost::GetWebMessageHostFactories() {
   const size_t num_objects = js_objects_.size();
   std::vector<RegisteredFactory> factories(num_objects);
   for (size_t i = 0; i < num_objects; ++i) {
@@ -165,35 +164,35 @@ JsJavaConfiguratorHost::GetWebMessageHostFactories() {
   return factories;
 }
 
-void JsJavaConfiguratorHost::RenderFrameCreated(
+void JsCommunicationHost::RenderFrameCreated(
     content::RenderFrameHost* render_frame_host) {
   NotifyFrameForWebMessageListener(render_frame_host);
   NotifyFrameForAllDocumentStartJavaScripts(render_frame_host);
 }
 
-void JsJavaConfiguratorHost::RenderFrameDeleted(
+void JsCommunicationHost::RenderFrameDeleted(
     content::RenderFrameHost* render_frame_host) {
-  js_to_java_messagings_.erase(render_frame_host);
+  js_to_browser_messagings_.erase(render_frame_host);
 }
 
-void JsJavaConfiguratorHost::NotifyFrameForAllDocumentStartJavaScripts(
+void JsCommunicationHost::NotifyFrameForAllDocumentStartJavaScripts(
     content::RenderFrameHost* render_frame_host) {
   for (const auto& script : scripts_) {
     NotifyFrameForAddDocumentStartJavaScript(&script, render_frame_host);
   }
 }
 
-void JsJavaConfiguratorHost::NotifyFrameForWebMessageListener(
+void JsCommunicationHost::NotifyFrameForWebMessageListener(
     content::RenderFrameHost* render_frame_host) {
-  mojo::AssociatedRemote<mojom::JsJavaConfigurator> configurator_remote;
+  mojo::AssociatedRemote<mojom::JsCommunication> configurator_remote;
   render_frame_host->GetRemoteAssociatedInterfaces()->GetInterface(
       &configurator_remote);
   std::vector<mojom::JsObjectPtr> js_objects;
   js_objects.reserve(js_objects_.size());
   for (const auto& js_object : js_objects_) {
-    mojo::PendingAssociatedRemote<mojom::JsToJavaMessaging> pending_remote;
-    js_to_java_messagings_[render_frame_host].emplace_back(
-        std::make_unique<JsToJavaMessaging>(
+    mojo::PendingAssociatedRemote<mojom::JsToBrowserMessaging> pending_remote;
+    js_to_browser_messagings_[render_frame_host].emplace_back(
+        std::make_unique<JsToBrowserMessaging>(
             render_frame_host,
             pending_remote.InitWithNewEndpointAndPassReceiver(),
             js_object->factory.get(), js_object->allowed_origin_rules));
@@ -204,11 +203,11 @@ void JsJavaConfiguratorHost::NotifyFrameForWebMessageListener(
   configurator_remote->SetJsObjects(std::move(js_objects));
 }
 
-void JsJavaConfiguratorHost::NotifyFrameForAddDocumentStartJavaScript(
+void JsCommunicationHost::NotifyFrameForAddDocumentStartJavaScript(
     const DocumentStartJavaScript* script,
     content::RenderFrameHost* render_frame_host) {
   DCHECK(script);
-  mojo::AssociatedRemote<mojom::JsJavaConfigurator> configurator_remote;
+  mojo::AssociatedRemote<mojom::JsCommunication> configurator_remote;
   render_frame_host->GetRemoteAssociatedInterfaces()->GetInterface(
       &configurator_remote);
   configurator_remote->AddDocumentStartScript(
@@ -216,10 +215,10 @@ void JsJavaConfiguratorHost::NotifyFrameForAddDocumentStartJavaScript(
                                           script->allowed_origin_rules_));
 }
 
-void JsJavaConfiguratorHost::NotifyFrameForRemoveDocumentStartJavaScript(
+void JsCommunicationHost::NotifyFrameForRemoveDocumentStartJavaScript(
     int32_t script_id,
     content::RenderFrameHost* render_frame_host) {
-  mojo::AssociatedRemote<mojom::JsJavaConfigurator> configurator_remote;
+  mojo::AssociatedRemote<mojom::JsCommunication> configurator_remote;
   render_frame_host->GetRemoteAssociatedInterfaces()->GetInterface(
       &configurator_remote);
   configurator_remote->RemoveDocumentStartScript(script_id);

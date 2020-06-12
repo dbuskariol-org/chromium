@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/js_injection/browser/js_to_java_messaging.h"
+#include "components/js_injection/browser/js_to_browser_messaging.h"
 
 #include "base/stl_util.h"
 #include "components/js_injection/browser/web_message.h"
@@ -35,10 +35,10 @@ std::string GetOriginString(const url::Origin& source_origin) {
 
 }  // namespace
 
-class JsToJavaMessaging::ReplyProxyImpl : public WebMessageReplyProxy {
+class JsToBrowserMessaging::ReplyProxyImpl : public WebMessageReplyProxy {
  public:
   explicit ReplyProxyImpl(
-      mojo::PendingAssociatedRemote<mojom::JavaToJsMessaging>
+      mojo::PendingAssociatedRemote<mojom::BrowserToJsMessaging>
           java_to_js_messaging)
       : java_to_js_messaging_(std::move(java_to_js_messaging)) {}
   ReplyProxyImpl(const ReplyProxyImpl&) = delete;
@@ -51,23 +51,23 @@ class JsToJavaMessaging::ReplyProxyImpl : public WebMessageReplyProxy {
   }
 
  private:
-  mojo::AssociatedRemote<mojom::JavaToJsMessaging> java_to_js_messaging_;
+  mojo::AssociatedRemote<mojom::BrowserToJsMessaging> java_to_js_messaging_;
 };
 
-JsToJavaMessaging::JsToJavaMessaging(
+JsToBrowserMessaging::JsToBrowserMessaging(
     content::RenderFrameHost* render_frame_host,
-    mojo::PendingAssociatedReceiver<mojom::JsToJavaMessaging> receiver,
+    mojo::PendingAssociatedReceiver<mojom::JsToBrowserMessaging> receiver,
     WebMessageHostFactory* factory,
-    const AwOriginMatcher& origin_matcher)
+    const OriginMatcher& origin_matcher)
     : render_frame_host_(render_frame_host),
       connection_factory_(factory),
       origin_matcher_(origin_matcher) {
   receiver_.Bind(std::move(receiver));
 }
 
-JsToJavaMessaging::~JsToJavaMessaging() = default;
+JsToBrowserMessaging::~JsToBrowserMessaging() = default;
 
-void JsToJavaMessaging::PostMessage(
+void JsToBrowserMessaging::PostMessage(
     const base::string16& message,
     std::vector<blink::MessagePortDescriptor> ports) {
   DCHECK(render_frame_host_);
@@ -87,7 +87,7 @@ void JsToJavaMessaging::PostMessage(
   if (!origin_matcher_.Matches(source_origin))
     return;
 
-  // SetJavaToJsMessaging must be called before this.
+  // SetBrowserToJsMessaging must be called before this.
   DCHECK(reply_proxy_);
 
   if (!host_) {
@@ -116,11 +116,11 @@ void JsToJavaMessaging::PostMessage(
   host_->OnPostMessage(std::move(web_message));
 }
 
-void JsToJavaMessaging::SetJavaToJsMessaging(
-    mojo::PendingAssociatedRemote<mojom::JavaToJsMessaging>
+void JsToBrowserMessaging::SetBrowserToJsMessaging(
+    mojo::PendingAssociatedRemote<mojom::BrowserToJsMessaging>
         java_to_js_messaging) {
-  // A RenderFrame may inject JsToJavaMessaging in the JavaScript context more
-  // than once because of reusing of RenderFrame.
+  // A RenderFrame may inject JsToBrowserMessaging in the JavaScript context
+  // more than once because of reusing of RenderFrame.
   host_.reset();
   reply_proxy_ =
       std::make_unique<ReplyProxyImpl>(std::move(java_to_js_messaging));

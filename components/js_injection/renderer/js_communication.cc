@@ -2,10 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/js_injection/renderer/js_java_configurator.h"
+#include "components/js_injection/renderer/js_communication.h"
 
-#include "components/js_injection/common/aw_origin_matcher.h"
-#include "components/js_injection/common/aw_origin_matcher_mojom_traits.h"
+#include "components/js_injection/common/origin_matcher.h"
 #include "components/js_injection/renderer/js_binding.h"
 #include "content/public/common/isolated_world_ids.h"
 #include "content/public/renderer/render_frame.h"
@@ -18,28 +17,28 @@
 
 namespace js_injection {
 
-struct JsJavaConfigurator::JsObjectInfo {
-  AwOriginMatcher origin_matcher;
-  mojo::AssociatedRemote<mojom::JsToJavaMessaging> js_to_java_messaging;
+struct JsCommunication::JsObjectInfo {
+  OriginMatcher origin_matcher;
+  mojo::AssociatedRemote<mojom::JsToBrowserMessaging> js_to_java_messaging;
 };
 
-struct JsJavaConfigurator::DocumentStartJavaScript {
-  AwOriginMatcher origin_matcher;
+struct JsCommunication::DocumentStartJavaScript {
+  OriginMatcher origin_matcher;
   blink::WebString script;
   int32_t script_id;
 };
 
-JsJavaConfigurator::JsJavaConfigurator(content::RenderFrame* render_frame)
+JsCommunication::JsCommunication(content::RenderFrame* render_frame)
     : RenderFrameObserver(render_frame),
-      RenderFrameObserverTracker<JsJavaConfigurator>(render_frame) {
+      RenderFrameObserverTracker<JsCommunication>(render_frame) {
   render_frame->GetAssociatedInterfaceRegistry()->AddInterface(
-      base::BindRepeating(&JsJavaConfigurator::BindPendingReceiver,
+      base::BindRepeating(&JsCommunication::BindPendingReceiver,
                           base::Unretained(this)));
 }
 
-JsJavaConfigurator::~JsJavaConfigurator() = default;
+JsCommunication::~JsCommunication() = default;
 
-void JsJavaConfigurator::SetJsObjects(
+void JsCommunication::SetJsObjects(
     std::vector<mojom::JsObjectPtr> js_object_ptrs) {
   JsObjectMap js_objects;
   for (const auto& js_object : js_object_ptrs) {
@@ -48,13 +47,13 @@ void JsJavaConfigurator::SetJsObjects(
     JsObjectInfo* js_object_info = js_object_info_pair.first->second.get();
     js_object_info->origin_matcher = js_object->origin_matcher;
     js_object_info->js_to_java_messaging =
-        mojo::AssociatedRemote<mojom::JsToJavaMessaging>(
-            std::move(js_object->js_to_java_messaging));
+        mojo::AssociatedRemote<mojom::JsToBrowserMessaging>(
+            std::move(js_object->js_to_browser_messaging));
   }
   js_objects_.swap(js_objects);
 }
 
-void JsJavaConfigurator::AddDocumentStartScript(
+void JsCommunication::AddDocumentStartScript(
     mojom::DocumentStartJavaScriptPtr script_ptr) {
   DocumentStartJavaScript* script = new DocumentStartJavaScript{
       script_ptr->origin_matcher,
@@ -62,7 +61,7 @@ void JsJavaConfigurator::AddDocumentStartScript(
   scripts_.push_back(std::unique_ptr<DocumentStartJavaScript>(script));
 }
 
-void JsJavaConfigurator::RemoveDocumentStartScript(int32_t script_id) {
+void JsCommunication::RemoveDocumentStartScript(int32_t script_id) {
   for (auto it = scripts_.begin(); it != scripts_.end(); ++it) {
     if ((*it)->script_id == script_id) {
       scripts_.erase(it);
@@ -71,7 +70,7 @@ void JsJavaConfigurator::RemoveDocumentStartScript(int32_t script_id) {
   }
 }
 
-void JsJavaConfigurator::DidClearWindowObject() {
+void JsCommunication::DidClearWindowObject() {
   if (inside_did_clear_window_object_)
     return;
 
@@ -90,9 +89,8 @@ void JsJavaConfigurator::DidClearWindowObject() {
   js_bindings_.swap(js_bindings);
 }
 
-void JsJavaConfigurator::WillReleaseScriptContext(
-    v8::Local<v8::Context> context,
-    int32_t world_id) {
+void JsCommunication::WillReleaseScriptContext(v8::Local<v8::Context> context,
+                                               int32_t world_id) {
   // We created v8 global objects only in the main world, should clear them only
   // when this is for main world.
   if (world_id != content::ISOLATED_WORLD_ID_GLOBAL)
@@ -102,11 +100,11 @@ void JsJavaConfigurator::WillReleaseScriptContext(
     js_binding->ReleaseV8GlobalObjects();
 }
 
-void JsJavaConfigurator::OnDestruct() {
+void JsCommunication::OnDestruct() {
   delete this;
 }
 
-void JsJavaConfigurator::RunScriptsAtDocumentStart() {
+void JsCommunication::RunScriptsAtDocumentStart() {
   url::Origin frame_origin =
       url::Origin(render_frame()->GetWebFrame()->GetSecurityOrigin());
   for (const auto& script : scripts_) {
@@ -117,15 +115,14 @@ void JsJavaConfigurator::RunScriptsAtDocumentStart() {
   }
 }
 
-void JsJavaConfigurator::BindPendingReceiver(
-    mojo::PendingAssociatedReceiver<mojom::JsJavaConfigurator>
-        pending_receiver) {
+void JsCommunication::BindPendingReceiver(
+    mojo::PendingAssociatedReceiver<mojom::JsCommunication> pending_receiver) {
   receiver_.Bind(std::move(pending_receiver),
                  render_frame()->GetTaskRunner(
                      blink::TaskType::kInternalNavigationAssociated));
 }
 
-mojom::JsToJavaMessaging* JsJavaConfigurator::GetJsToJavaMessage(
+mojom::JsToBrowserMessaging* JsCommunication::GetJsToJavaMessage(
     const base::string16& js_object_name) {
   auto iterator = js_objects_.find(js_object_name);
   if (iterator == js_objects_.end())

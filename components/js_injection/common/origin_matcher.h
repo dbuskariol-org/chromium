@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_JS_INJECTION_COMMON_AW_ORIGIN_MATCHER_H_
-#define COMPONENTS_JS_INJECTION_COMMON_AW_ORIGIN_MATCHER_H_
+#ifndef COMPONENTS_JS_INJECTION_COMMON_ORIGIN_MATCHER_H_
+#define COMPONENTS_JS_INJECTION_COMMON_ORIGIN_MATCHER_H_
 
 #include <memory>
 #include <string>
@@ -38,18 +38,18 @@ class OriginMatcherRule;
 // PORT is optional for "http" and "https" schemes, when it is not present, for
 // "http" and "https" schemes, it will match default port number (80 and 443
 // correspondingly).
-class AwOriginMatcher {
+class OriginMatcher {
  public:
   using RuleList = std::vector<std::unique_ptr<OriginMatcherRule>>;
 
-  AwOriginMatcher() = default;
+  OriginMatcher() = default;
   // Allow copy and assign.
-  AwOriginMatcher(const AwOriginMatcher& rhs);
-  AwOriginMatcher(AwOriginMatcher&&) = default;
-  AwOriginMatcher& operator=(const AwOriginMatcher& rhs);
-  AwOriginMatcher& operator=(AwOriginMatcher&&) = default;
+  OriginMatcher(const OriginMatcher& rhs);
+  OriginMatcher(OriginMatcher&&) = default;
+  OriginMatcher& operator=(const OriginMatcher& rhs);
+  OriginMatcher& operator=(OriginMatcher&&) = default;
 
-  ~AwOriginMatcher() = default;
+  ~OriginMatcher() = default;
 
   void SetRules(RuleList rules);
 
@@ -72,4 +72,4 @@ class AwOriginMatcher {
 
 }  // namespace js_injection
 
-#endif  // COMPONENTS_JS_INJECTION_COMMON_AW_ORIGIN_MATCHER_H_
+#endif  // COMPONENTS_JS_INJECTION_COMMON_ORIGIN_MATCHER_H_

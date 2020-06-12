@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/js_injection/common/aw_origin_matcher_mojom_traits.h"
+#include "components/js_injection/common/origin_matcher_mojom_traits.h"
 
 #include "base/strings/pattern.h"
 #include "base/strings/stringprintf.h"
@@ -71,10 +71,10 @@ bool StructTraits<OriginMatcherRuleDataView, OriginMatcherRuleUniquePtr>::Read(
 }
 
 // static
-bool StructTraits<js_injection::mojom::AwOriginMatcherDataView,
-                  js_injection::AwOriginMatcher>::
-    Read(js_injection::mojom::AwOriginMatcherDataView data,
-         js_injection::AwOriginMatcher* out) {
+bool StructTraits<js_injection::mojom::OriginMatcherDataView,
+                  js_injection::OriginMatcher>::
+    Read(js_injection::mojom::OriginMatcherDataView data,
+         js_injection::OriginMatcher* out) {
   std::vector<OriginMatcherRuleUniquePtr> rules;
   if (!data.ReadRules(&rules))
     return false;

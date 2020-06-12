@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/js_injection/common/aw_origin_matcher.h"
+#include "components/js_injection/common/origin_matcher.h"
 
 #include "components/js_injection/common/origin_matcher_internal.h"
 #include "net/base/ip_address.h"
@@ -35,22 +35,22 @@ inline int GetDefaultPortForSchemeIfNoPortInfo(const std::string& scheme,
 
 }  // namespace
 
-AwOriginMatcher::AwOriginMatcher(const AwOriginMatcher& rhs) {
+OriginMatcher::OriginMatcher(const OriginMatcher& rhs) {
   *this = rhs;
 }
 
-AwOriginMatcher& AwOriginMatcher::operator=(const AwOriginMatcher& rhs) {
+OriginMatcher& OriginMatcher::operator=(const OriginMatcher& rhs) {
   rules_.clear();
   for (const auto& rule : rhs.Serialize())
     AddRuleFromString(rule);
   return *this;
 }
 
-void AwOriginMatcher::SetRules(RuleList rules) {
+void OriginMatcher::SetRules(RuleList rules) {
   rules_.swap(rules);
 }
 
-bool AwOriginMatcher::AddRuleFromString(const std::string& raw_untrimmed) {
+bool OriginMatcher::AddRuleFromString(const std::string& raw_untrimmed) {
   std::string raw;
   base::TrimWhitespaceASCII(raw_untrimmed, base::TRIM_ALL, &raw);
 
@@ -102,7 +102,7 @@ bool AwOriginMatcher::AddRuleFromString(const std::string& raw_untrimmed) {
   return true;
 }
 
-bool AwOriginMatcher::Matches(const url::Origin& origin) const {
+bool OriginMatcher::Matches(const url::Origin& origin) const {
   GURL origin_url = origin.GetURL();
   // Since we only do kInclude vs kNoMatch, the order doesn't actually matter.
   for (auto it = rules_.rbegin(); it != rules_.rend(); ++it) {
@@ -113,7 +113,7 @@ bool AwOriginMatcher::Matches(const url::Origin& origin) const {
   return false;
 }
 
-std::vector<std::string> AwOriginMatcher::Serialize() const {
+std::vector<std::string> OriginMatcher::Serialize() const {
   std::vector<std::string> result;
   result.reserve(rules_.size());
   for (const auto& rule : rules_) {

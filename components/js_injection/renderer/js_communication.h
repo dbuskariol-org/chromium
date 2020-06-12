@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_JS_INJECTION_RENDERER_JS_JAVA_CONFIGURATOR_H_
-#define COMPONENTS_JS_INJECTION_RENDERER_JS_JAVA_CONFIGURATOR_H_
+#ifndef COMPONENTS_JS_INJECTION_RENDERER_JS_COMMUNICATION_H_
+#define COMPONENTS_JS_INJECTION_RENDERER_JS_COMMUNICATION_H_
 
 #include <vector>
 
@@ -23,15 +23,15 @@ namespace js_injection {
 
 class JsBinding;
 
-class JsJavaConfigurator
-    : public mojom::JsJavaConfigurator,
+class JsCommunication
+    : public mojom::JsCommunication,
       public content::RenderFrameObserver,
-      public content::RenderFrameObserverTracker<JsJavaConfigurator> {
+      public content::RenderFrameObserverTracker<JsCommunication> {
  public:
-  explicit JsJavaConfigurator(content::RenderFrame* render_frame);
-  ~JsJavaConfigurator() override;
+  explicit JsCommunication(content::RenderFrame* render_frame);
+  ~JsCommunication() override;
 
-  // mojom::JsJavaConfigurator implementation
+  // mojom::JsCommunication implementation
   void SetJsObjects(std::vector<mojom::JsObjectPtr> js_object_ptrs) override;
   void AddDocumentStartScript(
       mojom::DocumentStartJavaScriptPtr script_ptr) override;
@@ -45,7 +45,7 @@ class JsJavaConfigurator
 
   void RunScriptsAtDocumentStart();
 
-  mojom::JsToJavaMessaging* GetJsToJavaMessage(
+  mojom::JsToBrowserMessaging* GetJsToJavaMessage(
       const base::string16& js_object_name);
 
  private:
@@ -53,8 +53,7 @@ class JsJavaConfigurator
   struct DocumentStartJavaScript;
 
   void BindPendingReceiver(
-      mojo::PendingAssociatedReceiver<mojom::JsJavaConfigurator>
-          pending_receiver);
+      mojo::PendingAssociatedReceiver<mojom::JsCommunication> pending_receiver);
 
   using JsObjectMap = std::map<base::string16, std::unique_ptr<JsObjectInfo>>;
   JsObjectMap js_objects_;
@@ -67,11 +66,11 @@ class JsJavaConfigurator
   std::vector<std::unique_ptr<JsBinding>> js_bindings_;
 
   // Associated with legacy IPC channel.
-  mojo::AssociatedReceiver<mojom::JsJavaConfigurator> receiver_{this};
+  mojo::AssociatedReceiver<mojom::JsCommunication> receiver_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(JsJavaConfigurator);
+  DISALLOW_COPY_AND_ASSIGN(JsCommunication);
 };
 
 }  // namespace js_injection
 
-#endif  // COMPONENTS_JS_INJECTION_RENDERER_JS_JAVA_CONFIGURATOR_H_
+#endif  // COMPONENTS_JS_INJECTION_RENDERER_JS_COMMUNICATION_H_
