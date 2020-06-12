@@ -117,7 +117,8 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
 }  // namespace
 
-@interface SceneController () <UserFeedbackDataSource,
+@interface SceneController () <AppStateObserver,
+                               UserFeedbackDataSource,
                                SettingsNavigationControllerDelegate,
                                SceneURLLoadingServiceDelegate,
                                WebStateListObserving> {
@@ -202,6 +203,7 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
   if (self) {
     _sceneState = sceneState;
     [_sceneState addObserver:self];
+    [_sceneState.appState addObserver:self];
     // The window is necessary very early in the app/scene lifecycle, so it
     // should be created right away.
     // When multiwindow is supported, the window is created by SceneDelegate,
@@ -260,6 +262,14 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
 
 - (void)sceneState:(SceneState*)sceneState
     transitionedToActivationLevel:(SceneActivationLevel)level {
+  AppState* appState = self.sceneState.appState;
+  if (appState.isInSafeMode) {
+    // Nothing at all should happen in safe mode. Code in
+    // appStateDidExitSafeMode will ensure the updates happen once safe mode
+    // ends.
+    return;
+  }
+
   if (level > SceneActivationLevelBackground && !self.hasInitializedUI) {
     [self initializeUI];
   }
@@ -278,6 +288,14 @@ const NSTimeInterval kDisplayPromoDelay = 0.1;
           shouldBePresentedForBrowserState:browserState]) {
     [self presentSignedInAccountsViewControllerForBrowserState:browserState];
   }
+}
+
+#pragma mark - AppStateObserver
+
+- (void)appStateDidExitSafeMode:(AppState*)appState {
+  // All events were postponed in safe mode. Resend them.
+  [self sceneState:self.sceneState
+      transitionedToActivationLevel:self.sceneState.activationLevel];
 }
 
 #pragma mark - SceneControllerGuts
