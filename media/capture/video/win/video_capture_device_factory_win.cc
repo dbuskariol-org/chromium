@@ -204,7 +204,7 @@ bool CreateVideoCaptureDeviceMediaFoundation(const Descriptor& descriptor,
   return SUCCEEDED(MFCreateDeviceSource(attributes.Get(), source));
 }
 
-bool IsDeviceBlackListed(const std::string& name) {
+bool IsDeviceBlocked(const std::string& name) {
   DCHECK_EQ(BLOCKED_CAMERA_MAX + 1,
             static_cast<int>(base::size(kBlockedCameraNames)));
   for (size_t i = 0; i < base::size(kBlockedCameraNames); ++i) {
@@ -770,7 +770,7 @@ void VideoCaptureDeviceFactoryWin::GetDeviceDescriptorsDirectShow(
       continue;
 
     const std::string device_name(base::SysWideToUTF8(V_BSTR(name.ptr())));
-    if (IsDeviceBlackListed(device_name))
+    if (IsDeviceBlocked(device_name))
       continue;
 
     name.Reset();
