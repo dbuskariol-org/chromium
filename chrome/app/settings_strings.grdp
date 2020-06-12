@@ -500,6 +500,22 @@
   <message translateable="false" name="IDS_SETTINGS_PASSWORD_DELETED_PASSWORD_FROM_ACCOUNT_AND_DEVICE" desc="Label for an undo tooltip following deletion of a password from the account and the device.">
     Password deleted from your Google Account and this device
   </message>
+  <!-- TODO(crbug.com/1062344): Make it translateable and add translation screenshots once final strings are available. -->
+  <message translateable="false" name="IDS_SETTINGS_PASSWORD_MOVE_TO_ACCOUNT_DIALOG_TITLE" desc="Title for the dialog that confirms whether the user wishes to move a password to their Google Account.">
+    Move to Google Account?
+  </message>
+  <!-- TODO(crbug.com/1062344): Make it translateable and add translation screenshots once final strings are available. -->
+  <message translateable="false" name="IDS_SETTINGS_PASSWORD_MOVE_TO_ACCOUNT_DIALOG_BODY" desc="Description message for the dialog that confirms whether the user wishes to move a password to their Google Account.">
+    Move your password to your Google Account to access it securely wherever you're signed in
+  </message>
+  <!-- TODO(crbug.com/1062344): Make it translateable and add translation screenshots once final strings are available. -->
+  <message translateable="false" name="IDS_SETTINGS_PASSWORD_MOVE_TO_ACCOUNT_DIALOG_MOVE_BUTTON_TEXT" desc="Text for the button that confirms moving a password to the user Google Account.">
+    Move
+  </message>
+  <!-- TODO(crbug.com/1062344): Make it translateable and add translation screenshots once final strings are available. -->
+  <message translateable="false" name="IDS_SETTINGS_PASSWORD_MOVE_TO_ACCOUNT_DIALOG_CANCEL_BUTTON_TEXT" desc="Text for the button that cancels the action of moving a password to the user Google Account.">
+    No thanks
+  </message>
   <message name="IDS_SETTINGS_DEVICE_PASSWORDS_LINK_LABEL_SINGULAR" desc="The label for the link on settings leading to the 'device passwords' page, when there is 1 device password.">
     You have 1 password saved on this device
   </message>
