@@ -7740,9 +7740,6 @@ the Bookmarks menu.">
       <message name="IDS_ACCOUNT_PASSWORDS_REAUTH_CLOSE_BUTTON_LABEL" desc="Label of the close button in the account password storage reauth tab modal dialog.">
         No thanks
       </message>
-      <message name="IDS_ACCOUNT_PASSWORDS_REAUTH_TOOLTIP" desc="The tooltip text and accessibility label for the info icon in the account password storage reauth tab modal dialog.">
-        To access password storage, a one-time, per-device authentication is required. This feature can be disabled later from the "Passwords" section in Settings.
-      </message>
 
       <message name="IDS_PLUGIN_OUTDATED_PROMPT" desc="Infobar message when an outdated plugin was disabled">
         <ph name="PLUGIN_NAME">$1<ex>Flash</ex></ph> was blocked because it is out of date
