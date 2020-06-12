@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#import "ios/chrome/browser/ui/settings/cells/settings_managed_cell.h"
+#import "ios/chrome/browser/ui/table_view/cells/table_view_info_button_cell.h"
 
 #import "ios/chrome/browser/ui/settings/cells/settings_cells_constants.h"
 #include "ios/chrome/browser/ui/table_view/cells/table_view_cells_constants.h"
@@ -31,7 +31,7 @@ const CGFloat kCellLabelsWidthProportion = 0.2f;
 
 }  // namespace
 
-@interface SettingsManagedCell ()
+@interface TableViewInfoButtonCell ()
 
 // The image view for the leading icon.
 @property(nonatomic, readonly, strong) UIImageView* iconImageView;
@@ -49,7 +49,7 @@ const CGFloat kCellLabelsWidthProportion = 0.2f;
 
 @end
 
-@implementation SettingsManagedCell
+@implementation TableViewInfoButtonCell
 
 @synthesize textLabel = _textLabel;
 @synthesize detailTextLabel = _detailTextLabel;
