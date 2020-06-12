@@ -6750,4 +6750,3 @@ crbug.com/1093026 [ Win10 ] http/tests/security/offscreencanvas-placeholder-read
 
 # Sheriff 2020-06-12
 crbug.com/915903 http/tests/security/inactive-document-with-empty-security-origin.html [ Pass Timeout ]
-crbug.com/915903 virtual/cors/http/tests/security/inactive-document-with-empty-security-origin.html [ Pass Timeout ]
