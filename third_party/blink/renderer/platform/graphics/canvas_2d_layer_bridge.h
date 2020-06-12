@@ -131,7 +131,7 @@ class PLATFORM_EXPORT Canvas2DLayerBridge : public cc::TextureLayerClient {
 
   bool HasRecordedDrawCommands() { return have_recorded_draw_commands_; }
 
-  scoped_refptr<StaticBitmapImage> NewImageSnapshot(AccelerationHint);
+  scoped_refptr<StaticBitmapImage> NewImageSnapshot(RasterModeHint);
 
   cc::TextureLayer* layer_for_testing() { return layer_.get(); }
 
@@ -165,7 +165,7 @@ class PLATFORM_EXPORT Canvas2DLayerBridge : public cc::TextureLayerClient {
     logger_ = std::move(logger);
   }
   CanvasResourceProvider* GetOrCreateResourceProvider(
-      AccelerationHint = kPreferAcceleration);
+      RasterModeHint = RasterModeHint::kPreferGPU);
   CanvasResourceProvider* ResourceProvider() const;
   void FlushRecording();
 
@@ -191,7 +191,7 @@ class PLATFORM_EXPORT Canvas2DLayerBridge : public cc::TextureLayerClient {
   void SkipQueuedDrawCommands();
   void EnsureCleared();
 
-  bool ShouldAccelerate(AccelerationHint) const;
+  bool ShouldAccelerate(RasterModeHint) const;
 
   sk_sp<SkImage> hibernation_image_;
   scoped_refptr<cc::TextureLayer> layer_;

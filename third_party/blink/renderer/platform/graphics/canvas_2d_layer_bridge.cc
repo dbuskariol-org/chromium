@@ -109,7 +109,7 @@ void Canvas2DLayerBridge::ResetResourceProvider() {
     resource_host_->ReplaceResourceProvider(nullptr);
 }
 
-bool Canvas2DLayerBridge::ShouldAccelerate(AccelerationHint hint) const {
+bool Canvas2DLayerBridge::ShouldAccelerate(RasterModeHint hint) const {
   bool accelerate;
   if (software_rendering_while_hidden_) {
     accelerate = false;
@@ -120,8 +120,7 @@ bool Canvas2DLayerBridge::ShouldAccelerate(AccelerationHint hint) const {
   } else if (acceleration_mode_ == kEnableAcceleration) {
     accelerate = true;
   } else {
-    accelerate = hint == kPreferAcceleration ||
-                 hint == kPreferAccelerationAfterVisibilityChange;
+    accelerate = hint == RasterModeHint::kPreferGPU;
   }
 
   base::WeakPtr<WebGraphicsContext3DProviderWrapper> context_provider_wrapper =
@@ -148,7 +147,7 @@ bool Canvas2DLayerBridge::IsAccelerated() const {
   // immediate presentation of the canvas would result in the canvas being
   // accelerated. Presentation is assumed to be a 'PreferAcceleration'
   // operation.
-  return ShouldAccelerate(kPreferAcceleration);
+  return ShouldAccelerate(RasterModeHint::kPreferGPU);
 }
 
 static void HibernateWrapper(base::WeakPtr<Canvas2DLayerBridge> bridge,
@@ -237,7 +236,7 @@ CanvasResourceProvider* Canvas2DLayerBridge::ResourceProvider() const {
 }
 
 CanvasResourceProvider* Canvas2DLayerBridge::GetOrCreateResourceProvider(
-    AccelerationHint hint) {
+    RasterModeHint hint) {
   DCHECK(resource_host_);
   CanvasResourceProvider* resource_provider = ResourceProvider();
 
@@ -261,7 +260,7 @@ CanvasResourceProvider* Canvas2DLayerBridge::GetOrCreateResourceProvider(
     return resource_provider;
   }
 
-  if (layer_ && !IsHibernating() && hint == kPreferAcceleration &&
+  if (layer_ && !IsHibernating() && hint == RasterModeHint::kPreferGPU &&
       acceleration_mode_ != kDisableAcceleration) {
     return nullptr;  // re-creation will happen through restore()
   }
@@ -272,8 +271,8 @@ CanvasResourceProvider* Canvas2DLayerBridge::GetOrCreateResourceProvider(
     want_acceleration = false;
     software_rendering_while_hidden_ = true;
   }
-  AccelerationHint adjusted_hint =
-      want_acceleration ? kPreferAcceleration : kPreferNoAcceleration;
+  RasterModeHint adjusted_hint = want_acceleration ? RasterModeHint::kPreferGPU
+                                                   : RasterModeHint::kPreferCPU;
 
   // We call GetOrCreateCanvasResourceProviderImpl directly here to prevent a
   // circular callstack from HTMLCanvasElement.
@@ -371,7 +370,7 @@ void Canvas2DLayerBridge::SetIsInHiddenPage(bool hidden) {
         resource_host_->ReplaceResourceProvider(nullptr);
 
     software_rendering_while_hidden_ = false;
-    GetOrCreateResourceProvider(kPreferAccelerationAfterVisibilityChange);
+    GetOrCreateResourceProvider(RasterModeHint::kPreferGPU);
 
     if (ResourceProvider()) {
       if (old_resource_provider) {
@@ -621,7 +620,7 @@ bool Canvas2DLayerBridge::Restore() {
   if (!context_provider_wrapper->ContextProvider()->IsContextLost()) {
     CanvasResourceProvider* resource_provider =
         resource_host_->GetOrCreateCanvasResourceProviderImpl(
-            kPreferAcceleration);
+            RasterModeHint::kPreferGPU);
 
     // The current paradigm does not support switching from accelerated to
     // non-accelerated, which would be tricky due to changes to the layer tree,
@@ -688,7 +687,7 @@ bool Canvas2DLayerBridge::PrepareTransferableResource(
 
 cc::Layer* Canvas2DLayerBridge::Layer() {
   // Trigger lazy layer creation
-  GetOrCreateResourceProvider(kPreferAcceleration);
+  GetOrCreateResourceProvider(RasterModeHint::kPreferGPU);
   return layer_.get();
 }
 
@@ -703,7 +702,7 @@ void Canvas2DLayerBridge::FinalizeFrame() {
 
   // Make sure surface is ready for painting: fix the rendering mode now
   // because it will be too late during the paint invalidation phase.
-  if (!GetOrCreateResourceProvider(kPreferAcceleration))
+  if (!GetOrCreateResourceProvider(RasterModeHint::kPreferGPU))
     return;
 
   FlushRecording();
@@ -730,7 +729,7 @@ void Canvas2DLayerBridge::DoPaintInvalidation(const FloatRect& dirty_rect) {
 }
 
 scoped_refptr<StaticBitmapImage> Canvas2DLayerBridge::NewImageSnapshot(
-    AccelerationHint hint) {
+    RasterModeHint hint) {
   if (snapshot_state_ == kInitialSnapshotState)
     snapshot_state_ = kDidAcquireSnapshot;
   if (IsHibernating())
