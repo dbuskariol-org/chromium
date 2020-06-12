@@ -16,9 +16,10 @@
 #include "components/embedder_support/android/metrics/jni/AndroidMetricsServiceClient_jni.h"
 #include "components/metrics/android_metrics_provider.h"
 #include "components/metrics/call_stack_profile_metrics_provider.h"
+#include "components/metrics/content/gpu_metrics_provider.h"
+#include "components/metrics/content/subprocess_metrics_provider.h"
 #include "components/metrics/cpu_metrics_provider.h"
 #include "components/metrics/drive_metrics_provider.h"
-#include "components/metrics/gpu/gpu_metrics_provider.h"
 #include "components/metrics/metrics_pref_names.h"
 #include "components/metrics/metrics_service.h"
 #include "components/metrics/metrics_state_manager.h"
@@ -122,6 +123,8 @@ AndroidMetricsServiceClient::CreateMetricsService(
     AndroidMetricsServiceClient* client,
     PrefService* prefs) {
   auto service = std::make_unique<MetricsService>(state_manager, client, prefs);
+  service->RegisterMetricsProvider(
+      std::make_unique<metrics::SubprocessMetricsProvider>());
   service->RegisterMetricsProvider(std::make_unique<NetworkMetricsProvider>(
       content::CreateNetworkConnectionTrackerAsyncGetter()));
   service->RegisterMetricsProvider(std::make_unique<CPUMetricsProvider>());

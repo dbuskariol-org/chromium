@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_METRICS_GPU_RENDERING_PERF_METRICS_PROVIDER_H_
-#define COMPONENTS_METRICS_GPU_RENDERING_PERF_METRICS_PROVIDER_H_
+#ifndef COMPONENTS_METRICS_CONTENT_RENDERING_PERF_METRICS_PROVIDER_H_
+#define COMPONENTS_METRICS_CONTENT_RENDERING_PERF_METRICS_PROVIDER_H_
 
 #include "base/macros.h"
 #include "components/metrics/metrics_provider.h"
@@ -27,4 +27,4 @@ class RenderingPerfMetricsProvider : public MetricsProvider {
 
 }  // namespace metrics
 
-#endif  // COMPONENTS_METRICS_GPU_RENDERING_PERF_METRICS_PROVIDER_H_
+#endif  // COMPONENTS_METRICS_CONTENT_RENDERING_PERF_METRICS_PROVIDER_H_

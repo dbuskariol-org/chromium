@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/metrics/gpu/rendering_perf_metrics_provider.h"
+#include "components/metrics/content/rendering_perf_metrics_provider.h"
 
 #include "gpu/config/gpu_util.h"
 

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/metrics/subprocess_metrics_provider.h"
+#include "components/metrics/content/subprocess_metrics_provider.h"
 
 #include <utility>
 
@@ -18,6 +18,7 @@
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/child_process_data.h"
 
+namespace metrics {
 namespace {
 
 // This is used by tests that don't have an easy way to access the global
@@ -205,3 +206,5 @@ SubprocessMetricsProvider::GetSubprocessHistogramAllocatorOnIOThread(int id) {
   return std::make_unique<base::PersistentHistogramAllocator>(
       std::move(allocator));
 }
+
+}  // namespace metrics

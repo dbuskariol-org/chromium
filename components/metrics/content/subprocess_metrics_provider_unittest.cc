@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/metrics/subprocess_metrics_provider.h"
+#include "components/metrics/content/subprocess_metrics_provider.h"
 
 #include <memory>
 #include <string>
@@ -18,9 +18,10 @@
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
-using ::testing::UnorderedElementsAre;
 using ::testing::IsEmpty;
+using ::testing::UnorderedElementsAre;
 
+namespace metrics {
 namespace {
 
 const uint32_t TEST_MEMORY_SIZE = 64 << 10;  // 64 KiB
@@ -59,8 +60,8 @@ class SubprocessMetricsProviderTest : public testing::Test {
     test_recorder_ = base::StatisticsRecorder::CreateTemporaryForTesting();
 
     // Create a global allocator using a block of memory from the heap.
-    base::GlobalHistogramAllocator::CreateWithLocalMemory(TEST_MEMORY_SIZE,
-                                                          0, "");
+    base::GlobalHistogramAllocator::CreateWithLocalMemory(TEST_MEMORY_SIZE, 0,
+                                                          "");
   }
 
   ~SubprocessMetricsProviderTest() override {
@@ -156,3 +157,5 @@ TEST_F(SubprocessMetricsProviderTest, SnapshotMetrics) {
   bar->Add(20);
   EXPECT_THAT(GetSnapshotHistogramNames(), IsEmpty());
 }
+
+}  // namespace metrics

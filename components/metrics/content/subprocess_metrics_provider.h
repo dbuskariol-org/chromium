@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_METRICS_SUBPROCESS_METRICS_PROVIDER_H_
-#define CHROME_BROWSER_METRICS_SUBPROCESS_METRICS_PROVIDER_H_
+#ifndef COMPONENTS_METRICS_CONTENT_SUBPROCESS_METRICS_PROVIDER_H_
+#define COMPONENTS_METRICS_CONTENT_SUBPROCESS_METRICS_PROVIDER_H_
 
 #include <memory>
 #include <set>
@@ -24,12 +24,14 @@ namespace base {
 class PersistentHistogramAllocator;
 }
 
+namespace metrics {
+
 // SubprocessMetricsProvider gathers and merges histograms stored in shared
 // memory segments between processes. Merging occurs when a process exits,
 // when metrics are being collected for upload, or when something else needs
 // combined metrics (such as the chrome://histograms page).
 class SubprocessMetricsProvider
-    : public metrics::MetricsProvider,
+    : public MetricsProvider,
       public base::StatisticsRecorder::HistogramProvider,
       public content::BrowserChildProcessObserver,
       public content::RenderProcessHostCreationObserver,
@@ -62,7 +64,7 @@ class SubprocessMetricsProvider
       int id,
       base::PersistentHistogramAllocator* allocator);
 
-  // metrics::MetricsProvider:
+  // MetricsProvider:
   void MergeHistogramDeltas() override;
 
   // content::BrowserChildProcessObserver:
@@ -109,4 +111,6 @@ class SubprocessMetricsProvider
   DISALLOW_COPY_AND_ASSIGN(SubprocessMetricsProvider);
 };
 
-#endif  // CHROME_BROWSER_METRICS_SUBPROCESS_METRICS_PROVIDER_H_
+}  // namespace metrics
+
+#endif  // COMPONENTS_METRICS_CONTENT_SUBPROCESS_METRICS_PROVIDER_H_
