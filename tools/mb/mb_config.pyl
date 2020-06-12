@@ -669,15 +669,15 @@
       # waterfall bots, and run_web_tests.py can't handle that (by design).
       'linux-blink-rel': 'release_bot_minimal_symbols',
       'linux-blink-optional-highdpi-rel': 'release_bot_minimal_symbols',
-      'mac10.10-blink-rel': 'release_bot_minimal_symbols',
-      'mac10.11-blink-rel': 'release_bot_minimal_symbols',
-      'mac10.12-blink-rel': 'release_bot_minimal_symbols',
-      'mac10.13-blink-rel': 'release_bot_minimal_symbols',
-      'mac10.13_retina-blink-rel': 'release_bot_minimal_symbols',
-      'mac10.14-blink-rel': 'release_bot_minimal_symbols',
-      'mac10.15-blink-rel': 'release_bot_minimal_symbols_no_nacl',
-      'win7-blink-rel': 'release_bot_x86_minimal_symbols',
-      'win10-blink-rel': 'release_bot_x86_minimal_symbols',
+      'mac10.10-blink-rel': 'gpu_tests_release_bot_minimal_symbols',
+      'mac10.11-blink-rel': 'gpu_tests_release_bot_minimal_symbols',
+      'mac10.12-blink-rel': 'gpu_tests_release_bot_minimal_symbols',
+      'mac10.13-blink-rel': 'gpu_tests_release_bot_minimal_symbols',
+      'mac10.13_retina-blink-rel': 'gpu_tests_release_bot_minimal_symbols',
+      'mac10.14-blink-rel': 'gpu_tests_release_bot_minimal_symbols',
+      'mac10.15-blink-rel': 'gpu_tests_release_bot_minimal_symbols_no_nacl',
+      'win7-blink-rel': 'gpu_tests_release_bot_x86_minimal_symbols',
+      'win10-blink-rel': 'gpu_tests_release_bot_x86_minimal_symbols',
     },
 
     'tryserver.chromium.android': {
@@ -2158,10 +2158,6 @@
 
     'release_bot_x86_minimal_symbols_no_com_init_hooks_with_codecs': [
       'release_bot', 'x86', 'minimal_symbols', 'no_com_init_hooks', 'chrome_with_codecs'
-    ],
-
-    'release_bot_minimal_symbols_no_nacl': [
-      'release_bot', 'minimal_symbols', 'disable_nacl',
     ],
 
     'release_trybot': [
