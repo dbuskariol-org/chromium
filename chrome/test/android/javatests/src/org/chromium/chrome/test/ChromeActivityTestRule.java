@@ -150,9 +150,21 @@ public class ChromeActivityTestRule<T extends ChromeActivity> extends ActivityTe
     private void ruleTearDown() {
         try {
             ApplicationTestUtils.tearDown(InstrumentationRegistry.getTargetContext());
+            waitForActivityFinished();
             Thread.setDefaultUncaughtExceptionHandler(mDefaultUncaughtExceptionHandler);
         } catch (Exception e) {
             throw new RuntimeException("Failed to tearDown", e);
+        }
+    }
+
+    private void waitForActivityFinished() {
+        if (mSetActivity == null) return;
+        try {
+            ApplicationTestUtils.waitForActivityState(mSetActivity, ActivityState.DESTROYED);
+        } catch (Exception e) {
+            Log.e(TAG, "Cannot finish activity, exception:" + e);
+        } finally {
+            mSetActivity = null;
         }
     }
 
