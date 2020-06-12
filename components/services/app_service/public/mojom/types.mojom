@@ -50,6 +50,7 @@ struct App {
   OptionalBool recommendable;
   OptionalBool searchable;
   OptionalBool show_in_launcher;
+  OptionalBool show_in_shelf;
   OptionalBool show_in_search;
   OptionalBool show_in_management;
 

@@ -1163,6 +1163,7 @@ apps::mojom::AppPtr ArcApps::Convert(ArcAppListPrefs* prefs,
   auto show = ShouldShow(app_info) ? apps::mojom::OptionalBool::kTrue
                                    : apps::mojom::OptionalBool::kFalse;
   app->show_in_launcher = show;
+  app->show_in_shelf = show;
   app->show_in_search = show;
   app->show_in_management = show;
 

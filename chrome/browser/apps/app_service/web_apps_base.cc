@@ -408,9 +408,9 @@ void WebAppsBase::SetShowInFields(apps::mojom::AppPtr& app,
     app->show_in_launcher = chromeos_data.show_in_launcher
                                 ? apps::mojom::OptionalBool::kTrue
                                 : apps::mojom::OptionalBool::kFalse;
-    app->show_in_search = chromeos_data.show_in_search
-                              ? apps::mojom::OptionalBool::kTrue
-                              : apps::mojom::OptionalBool::kFalse;
+    app->show_in_shelf = app->show_in_search =
+        chromeos_data.show_in_search ? apps::mojom::OptionalBool::kTrue
+                                     : apps::mojom::OptionalBool::kFalse;
     app->show_in_management = chromeos_data.show_in_management
                                   ? apps::mojom::OptionalBool::kTrue
                                   : apps::mojom::OptionalBool::kFalse;
@@ -420,6 +420,7 @@ void WebAppsBase::SetShowInFields(apps::mojom::AppPtr& app,
   // Show the app everywhere by default.
   auto show = apps::mojom::OptionalBool::kTrue;
   app->show_in_launcher = show;
+  app->show_in_shelf = show;
   app->show_in_search = show;
   app->show_in_management = show;
 }
