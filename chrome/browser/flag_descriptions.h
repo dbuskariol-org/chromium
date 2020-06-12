@@ -2202,6 +2202,9 @@ extern const char kImeMozcProtoDescription[];
 extern const char kImeServiceSandboxName[];
 extern const char kImeServiceSandboxDescription[];
 
+extern const char kIntentHandlingSharingName[];
+extern const char kIntentHandlingSharingDescription[];
+
 extern const char kIntentPickerPWAPersistenceName[];
 extern const char kIntentPickerPWAPersistenceDescription[];
 

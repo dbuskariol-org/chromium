@@ -254,6 +254,8 @@ enum ConditionType {
   kScheme,    // Matches the URL scheme (e.g. https, tel).
   kHost,      // Matches the URL host (e.g. www.google.com).
   kPattern,   // Matches the URL pattern (e.g. /abc/*).
+  kAction,    // Matches the action type (e.g. view, send).
+  kMimeType,  // Matches the data mime type (e.g. image/jpeg).
 };
 
 // The pattern match type for intent filter pattern condition.

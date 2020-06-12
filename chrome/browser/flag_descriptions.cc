@@ -3750,6 +3750,10 @@ const char kImeServiceSandboxName[] = "Use CrOS 'ime' sandbox";
 const char kImeServiceSandboxDescription[] =
     "Controls whether the IME service on CrOS uses the 'ime' sandbox.";
 
+const char kIntentHandlingSharingName[] = "Intent handling for sharing";
+const char kIntentHandlingSharingDescription[] =
+    "Support sharing in Chrome OS intent handling.";
+
 const char kIntentPickerPWAPersistenceName[] = "Intent picker PWA Persistence";
 const char kIntentPickerPWAPersistenceDescription[] =
     "Allow user to always open with PWA in intent picker.";

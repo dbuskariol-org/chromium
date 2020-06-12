@@ -4636,6 +4636,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kIntentPickerPWAPersistenceName,
      flag_descriptions::kIntentPickerPWAPersistenceDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(features::kIntentPickerPWAPersistence)},
+
+    {"intent-handling-sharing", flag_descriptions::kIntentHandlingSharingName,
+     flag_descriptions::kIntentHandlingSharingDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(features::kIntentHandlingSharing)},
 #endif  // defined(OS_CHROMEOS)
 
 #if defined(OS_WIN)

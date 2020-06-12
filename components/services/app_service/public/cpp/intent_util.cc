@@ -22,12 +22,21 @@ base::Optional<std::string> GetIntentConditionValueByType(
       return intent->host;
     case apps::mojom::ConditionType::kPattern:
       return intent->path;
+    // TODO(crbug.com/1092784): Handle action and mime type.
+    case apps::mojom::ConditionType::kAction:
+    case apps::mojom::ConditionType::kMimeType:
+      NOTIMPLEMENTED();
+      return base::nullopt;
   }
 }
 
 }  // namespace
 
 namespace apps_util {
+
+const char kIntentActionView[] = "view";
+const char kIntentActionSend[] = "send";
+const char kIntentActionSendMultiple[] = "send_multiple";
 
 apps::mojom::IntentPtr CreateIntentFromUrl(const GURL& url) {
   auto intent = apps::mojom::Intent::New();

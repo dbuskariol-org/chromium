@@ -2854,6 +2854,11 @@
     "expiry_milestone": -1
   },
   {
+    "name": "intent-handling-sharing",
+    "owners": [ "chromeos-apps-foundation-team@google.com" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "intent-picker-pwa-persistence",
     "owners": [ "chromeos-apps-foundation-team@google.com" ],
     "expiry_milestone": 88
