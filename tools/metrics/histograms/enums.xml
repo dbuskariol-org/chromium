@@ -12177,6 +12177,40 @@ Called by update_net_error_codes.py.-->
   <int value="3" label="Cache hit, but the entry was stale"/>
 </enum>
 
+<enum name="CpuTimeMetricsThreadType">
+  <summary>Thread types used for CPU time metric breakdowns.</summary>
+  <int value="0" label="UnattributedThread"/>
+  <int value="1" label="OtherThread"/>
+  <int value="2" label="MainThread"/>
+  <int value="3" label="IOThread"/>
+  <int value="4" label="ThreadPoolBackgroundWorkerThread"/>
+  <int value="5" label="ThreadPoolForegroundWorkerThread"/>
+  <int value="6" label="ThreadPoolServiceThread"/>
+  <int value="7" label="CompositorThread"/>
+  <int value="8" label="CompositorTileWorkerThread"/>
+  <int value="9" label="VizCompositorThread"/>
+  <int value="10" label="RendererUnspecifiedWorkerThread"/>
+  <int value="11" label="RendererDedicatedWorkerThread"/>
+  <int value="12" label="RendererSharedWorkerThread"/>
+  <int value="13" label="RendererAnimationAndPaintWorkletThread"/>
+  <int value="14" label="RendererServiceWorkerThread"/>
+  <int value="15" label="RendererAudioWorkletThread"/>
+  <int value="16" label="RendererFileThread"/>
+  <int value="17" label="RendererDatabaseThread"/>
+  <int value="18" label="RendererOfflineAudioRenderThread"/>
+  <int value="19" label="RendererReverbConvolutionBackgroundThread"/>
+  <int value="20" label="RendererHRTFDatabaseLoaderThread"/>
+  <int value="21" label="RendererAudioEncoderThread"/>
+  <int value="22" label="RendererVideoEncoderThread"/>
+  <int value="23" label="MemoryInfraThread"/>
+  <int value="24" label="SamplingProfilerThread"/>
+  <int value="25" label="NetworkServiceThread"/>
+  <int value="26" label="AudioThread"/>
+  <int value="27" label="InProcessUtilityThread"/>
+  <int value="28" label="InProcessRendererThread"/>
+  <int value="29" label="InProcessGpuThread"/>
+</enum>
+
 <enum name="Cr50BoardIdFlags">
   <int value="-1" label="Unprogrammed (0xffffffff)"/>
   <int value="127" label="Legacy pre-pvt (0x7f)"/>
