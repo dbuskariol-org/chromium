@@ -1864,7 +1864,7 @@ void Document::DispatchDidReceiveTitle() {
   if (GetFrame() && !GetFrame()->Tree().Parent()) {
     String shortened_title = title_.Substring(0, mojom::blink::kMaxTitleChars);
     GetFrame()->GetLocalFrameHostRemote().UpdateTitle(
-        shortened_title, mojo_base::mojom::blink::TextDirection::LEFT_TO_RIGHT);
+        shortened_title, base::i18n::TextDirection::LEFT_TO_RIGHT);
   }
   GetFrame()->Client()->DispatchDidReceiveTitle(title_);
 }

@@ -1182,7 +1182,7 @@ bool WebLocalFrameImpl::IsSelectionAnchorFirst() const {
 }
 
 void WebLocalFrameImpl::SetTextDirectionForTesting(
-    mojo_base::mojom::blink::TextDirection direction) {
+    base::i18n::TextDirection direction) {
   frame_->SetTextDirection(direction);
 }
 
