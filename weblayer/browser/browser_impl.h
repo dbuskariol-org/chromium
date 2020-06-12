@@ -52,6 +52,7 @@ class BrowserImpl : public Browser {
   TabImpl* CreateTabForSessionRestore(
       std::unique_ptr<content::WebContents> web_contents,
       const std::string& guid);
+  TabImpl* CreateTab(std::unique_ptr<content::WebContents> web_contents);
 
 #if defined(OS_ANDROID)
   bool CompositorHasSurface();
@@ -95,11 +96,12 @@ class BrowserImpl : public Browser {
   void SetWebPreferences(content::WebPreferences* prefs);
 
   // Browser:
-  Tab* AddTab(std::unique_ptr<Tab> tab) override;
-  std::unique_ptr<Tab> RemoveTab(Tab* tab) override;
+  void AddTab(Tab* tab) override;
+  void DestroyTab(Tab* tab) override;
   void SetActiveTab(Tab* tab) override;
   Tab* GetActiveTab() override;
   std::vector<Tab*> GetTabs() override;
+  Tab* CreateTab() override;
   void PrepareForShutdown() override;
   std::string GetPersistenceId() override;
   std::vector<uint8_t> GetMinimalPersistenceState() override;
@@ -120,6 +122,9 @@ class BrowserImpl : public Browser {
   explicit BrowserImpl(ProfileImpl* profile);
 
   void RestoreStateIfNecessary(const PersistenceInfo& persistence_info);
+
+  TabImpl* AddTab(std::unique_ptr<Tab> tab);
+  std::unique_ptr<Tab> RemoveTab(Tab* tab);
 
   // Returns the path used by |browser_persister_|.
   base::FilePath GetBrowserPersisterDataPath();
