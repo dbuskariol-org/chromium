@@ -4,6 +4,9 @@
 
 #include "chrome/updater/dm_storage.h"
 
+#include <set>
+#include <utility>
+
 #include "base/base64.h"
 #include "base/files/file_enumerator.h"
 #include "base/files/file_util.h"
@@ -84,12 +87,13 @@ bool DMStorage::PersistPolicies(const std::string& policy_info_data,
   base::FilePath policy_info_file =
       policy_cache_root_.AppendASCII(kPolicyInfoFileName);
   if (!base::ImportantFileWriter::WriteFileAtomically(policy_info_file,
-                                                      policy_info_data))
+                                                      policy_info_data)) {
     return false;
+  }
 
-  // Persists individule policies.
+  // Persists individual policies.
   std::set<std::string> policy_types_base64;
-  for (auto policy_entry : policy_map) {
+  for (const auto& policy_entry : policy_map) {
     const std::string& policy_type = policy_entry.first;
     const std::string& policy_value = policy_entry.second;
 
@@ -103,13 +107,13 @@ bool DMStorage::PersistPolicies(const std::string& policy_info_data,
     if (!base::CreateDirectory(policy_dir))
       return false;
     base::FilePath policy_file = policy_dir.AppendASCII(kPolicyFileName);
-
     if (!base::ImportantFileWriter::WriteFileAtomically(policy_file,
-                                                        policy_value))
+                                                        policy_value)) {
       return false;
+    }
   }
 
-  // Purge all stale policies not in |policy_types_base64|
+  // Purge all stale policies not in |policy_types_base64|.
   return DeleteObsoletePolicies(policy_cache_root_, policy_types_base64);
 }
 

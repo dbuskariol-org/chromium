@@ -32,8 +32,9 @@ bool LoadEnrollmentTokenFromPolicy(std::string* enrollment_token) {
   base::ScopedCFTypeRef<CFPropertyListRef> token_value(
       CFPreferencesCopyAppValue(kEnrollmentTokenKey, kBrowserBundleId));
   if (!token_value || CFGetTypeID(token_value) != CFStringGetTypeID() ||
-      !CFPreferencesAppValueIsForced(kEnrollmentTokenKey, kBrowserBundleId))
+      !CFPreferencesAppValueIsForced(kEnrollmentTokenKey, kBrowserBundleId)) {
     return false;
+  }
 
   CFStringRef value_string = base::mac::CFCast<CFStringRef>(token_value);
   if (!value_string)
@@ -74,8 +75,9 @@ bool LoadTokenFromFile(const base::FilePath& token_file_path,
                        std::string* token) {
   std::string token_value;
   if (token_file_path.empty() ||
-      !base::ReadFileToString(token_file_path, &token_value))
+      !base::ReadFileToString(token_file_path, &token_value)) {
     return false;
+  }
 
   *token = base::TrimWhitespaceASCII(token_value, base::TRIM_ALL).as_string();
   return true;

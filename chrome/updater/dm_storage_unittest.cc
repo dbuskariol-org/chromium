@@ -2,13 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/updater/dm_storage.h"
+#include <utility>
 
 #include "base/files/file_util.h"
 #include "base/files/scoped_temp_dir.h"
 #include "build/build_config.h"
 #include "chrome/updater/constants.h"
 #include "chrome/updater/dm_cached_policy_info.h"
+#include "chrome/updater/dm_storage.h"
 #include "chrome/updater/policy_manager.h"
 #include "chrome/updater/protos/omaha_settings.pb.h"
 #include "components/policy/proto/device_management_backend.pb.h"

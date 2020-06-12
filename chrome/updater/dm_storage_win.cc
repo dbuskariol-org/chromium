@@ -14,17 +14,19 @@ namespace updater {
 namespace {
 
 // Registry for device ID.
-const wchar_t kRegKeyCryptographyKey[] = L"SOFTWARE\\Microsoft\\Cryptography\\";
-const wchar_t kRegValueMachineGuid[] = L"MachineGuid";
+constexpr base::char16 kRegKeyCryptographyKey[] =
+    L"SOFTWARE\\Microsoft\\Cryptography\\";
+constexpr base::char16 kRegValueMachineGuid[] = L"MachineGuid";
 
 // Registry for enrollment token.
-const wchar_t kRegKeyCompanyCloudManagement[] =
+constexpr base::char16 kRegKeyCompanyCloudManagement[] =
     COMPANY_POLICIES_KEY L"CloudManagement\\";
-const wchar_t kRegValueEnrollmentToken[] = L"EnrollmentToken\\";
+constexpr base::char16 kRegValueEnrollmentToken[] = L"EnrollmentToken\\";
 
 // Registry for DM token.
-const wchar_t kRegKeyCompanyEnrollment[] = COMPANY_POLICIES_KEY L"Enrollment\\";
-const wchar_t kRegValueDmToken[] = L"dmtoken";
+constexpr base::char16 kRegKeyCompanyEnrollment[] =
+    COMPANY_POLICIES_KEY L"Enrollment\\";
+constexpr base::char16 kRegValueDmToken[] = L"dmtoken";
 
 class TokenService : public TokenServiceInterface {
  public:

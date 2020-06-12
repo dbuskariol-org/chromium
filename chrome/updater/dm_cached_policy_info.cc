@@ -9,6 +9,7 @@
 namespace updater {
 
 CachedPolicyInfo::CachedPolicyInfo() : key_version_(-1), timestamp_(0) {}
+CachedPolicyInfo::~CachedPolicyInfo() = default;
 
 bool CachedPolicyInfo::Populate(const std::string& raw_response) {
   ::enterprise_management::PolicyFetchResponse response;
@@ -29,7 +30,5 @@ bool CachedPolicyInfo::Populate(const std::string& raw_response) {
   timestamp_ = policy_data.timestamp();
   return true;
 }
-
-CachedPolicyInfo::~CachedPolicyInfo() = default;
 
 }  // namespace updater

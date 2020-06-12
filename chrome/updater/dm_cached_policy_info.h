@@ -5,7 +5,6 @@
 #ifndef CHROME_UPDATER_DM_CACHED_POLICY_INFO_H_
 #define CHROME_UPDATER_DM_CACHED_POLICY_INFO_H_
 
-#include <memory>
 #include <string>
 
 namespace updater {
@@ -21,7 +20,7 @@ class CachedPolicyInfo {
   bool Populate(const std::string& raw_response);
 
   // Public key of the policy.
-  const std::string PublicKey() const { return key_; }
+  std::string PublicKey() const { return key_; }
 
   // Version of the public key. -1 means the key is not versioned or unknown.
   int32_t KeyVersion() const { return key_version_; }
