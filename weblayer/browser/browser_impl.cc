@@ -72,7 +72,7 @@ BrowserImpl::~BrowserImpl() {
   DCHECK(tabs_.empty());
 #else
   while (!tabs_.empty())
-    RemoveTab(tabs_.back().get());
+    DestroyTab(tabs_.back().get());
 #endif
   base::Erase(GetBrowsers(), this);
 
@@ -93,12 +93,15 @@ TabImpl* BrowserImpl::CreateTabForSessionRestore(
   std::unique_ptr<TabImpl> tab =
       std::make_unique<TabImpl>(profile_, std::move(web_contents), guid);
 #if defined(OS_ANDROID)
-  Java_BrowserImpl_createTabForSessionRestore(
+  Java_BrowserImpl_createJavaTabForNativeTab(
       AttachCurrentThread(), java_impl_, reinterpret_cast<jlong>(tab.get()));
 #endif
-  TabImpl* tab_ptr = tab.get();
-  AddTab(std::move(tab));
-  return tab_ptr;
+  return AddTab(std::move(tab));
+}
+
+TabImpl* BrowserImpl::CreateTab(
+    std::unique_ptr<content::WebContents> web_contents) {
+  return CreateTabForSessionRestore(std::move(web_contents), std::string());
 }
 
 #if defined(OS_ANDROID)
@@ -109,13 +112,7 @@ bool BrowserImpl::CompositorHasSurface() {
 
 void BrowserImpl::AddTab(JNIEnv* env,
                          long native_tab) {
-  TabImpl* tab = reinterpret_cast<TabImpl*>(native_tab);
-  std::unique_ptr<Tab> owned_tab;
-  if (tab->browser())
-    owned_tab = tab->browser()->RemoveTab(tab);
-  else
-    owned_tab.reset(tab);
-  AddTab(std::move(owned_tab));
+  AddTab(reinterpret_cast<TabImpl*>(native_tab));
 }
 
 void BrowserImpl::RemoveTab(JNIEnv* env,
@@ -236,41 +233,19 @@ void BrowserImpl::SetWebPreferences(content::WebPreferences* prefs) {
 #endif
 }
 
-Tab* BrowserImpl::AddTab(std::unique_ptr<Tab> tab) {
+void BrowserImpl::AddTab(Tab* tab) {
   DCHECK(tab);
-  TabImpl* tab_impl = static_cast<TabImpl*>(tab.get());
-  DCHECK(!tab_impl->browser());
-  tabs_.push_back(std::move(tab));
-  tab_impl->set_browser(this);
-#if defined(OS_ANDROID)
-  Java_BrowserImpl_onTabAdded(AttachCurrentThread(), java_impl_,
-                              tab_impl->GetJavaTab());
-#endif
-  for (BrowserObserver& obs : browser_observers_)
-    obs.OnTabAdded(tab_impl);
-  return tab_impl;
+  TabImpl* tab_impl = static_cast<TabImpl*>(tab);
+  std::unique_ptr<Tab> owned_tab;
+  if (tab_impl->browser())
+    owned_tab = tab_impl->browser()->RemoveTab(tab_impl);
+  else
+    owned_tab.reset(tab_impl);
+  AddTab(std::move(owned_tab));
 }
 
-std::unique_ptr<Tab> BrowserImpl::RemoveTab(Tab* tab) {
-  TabImpl* tab_impl = static_cast<TabImpl*>(tab);
-  DCHECK_EQ(this, tab_impl->browser());
-  static_cast<TabImpl*>(tab)->set_browser(nullptr);
-  auto iter =
-      std::find_if(tabs_.begin(), tabs_.end(), base::MatchesUniquePtr(tab));
-  DCHECK(iter != tabs_.end());
-  std::unique_ptr<Tab> owned_tab = std::move(*iter);
-  tabs_.erase(iter);
-  const bool active_tab_changed = active_tab_ == tab;
-  if (active_tab_changed)
-    SetActiveTab(nullptr);
-
-#if defined(OS_ANDROID)
-  Java_BrowserImpl_onTabRemoved(AttachCurrentThread(), java_impl_,
-                                tab ? tab_impl->GetJavaTab() : nullptr);
-#endif
-  for (BrowserObserver& obs : browser_observers_)
-    obs.OnTabRemoved(tab, active_tab_changed);
-  return owned_tab;
+void BrowserImpl::DestroyTab(Tab* tab) {
+  RemoveTab(tab);
 }
 
 void BrowserImpl::SetActiveTab(Tab* tab) {
@@ -304,6 +279,10 @@ std::vector<Tab*> BrowserImpl::GetTabs() {
   return tabs;
 }
 
+Tab* BrowserImpl::CreateTab() {
+  return CreateTab(nullptr);
+}
+
 void BrowserImpl::PrepareForShutdown() {
   browser_persister_.reset();
 }
@@ -325,6 +304,16 @@ void BrowserImpl::RemoveObserver(BrowserObserver* observer) {
   browser_observers_.RemoveObserver(observer);
 }
 
+void BrowserImpl::VisibleSecurityStateOfActiveTabChanged() {
+  if (visible_security_state_changed_callback_for_tests_)
+    std::move(visible_security_state_changed_callback_for_tests_).Run();
+
+#if defined(OS_ANDROID)
+  JNIEnv* env = base::android::AttachCurrentThread();
+  Java_BrowserImpl_onVisibleSecurityStateOfActiveTabChanged(env, java_impl_);
+#endif
+}
+
 BrowserImpl::BrowserImpl(ProfileImpl* profile) : profile_(profile) {
   GetBrowsers().push_back(this);
 }
@@ -340,14 +329,40 @@ void BrowserImpl::RestoreStateIfNecessary(
   }
 }
 
-void BrowserImpl::VisibleSecurityStateOfActiveTabChanged() {
-  if (visible_security_state_changed_callback_for_tests_)
-    std::move(visible_security_state_changed_callback_for_tests_).Run();
+TabImpl* BrowserImpl::AddTab(std::unique_ptr<Tab> tab) {
+  TabImpl* tab_impl = static_cast<TabImpl*>(tab.get());
+  DCHECK(!tab_impl->browser());
+  tabs_.push_back(std::move(tab));
+  tab_impl->set_browser(this);
+#if defined(OS_ANDROID)
+  Java_BrowserImpl_onTabAdded(AttachCurrentThread(), java_impl_,
+                              tab_impl->GetJavaTab());
+#endif
+  for (BrowserObserver& obs : browser_observers_)
+    obs.OnTabAdded(tab_impl);
+  return tab_impl;
+}
+
+std::unique_ptr<Tab> BrowserImpl::RemoveTab(Tab* tab) {
+  TabImpl* tab_impl = static_cast<TabImpl*>(tab);
+  DCHECK_EQ(this, tab_impl->browser());
+  static_cast<TabImpl*>(tab)->set_browser(nullptr);
+  auto iter =
+      std::find_if(tabs_.begin(), tabs_.end(), base::MatchesUniquePtr(tab));
+  DCHECK(iter != tabs_.end());
+  std::unique_ptr<Tab> owned_tab = std::move(*iter);
+  tabs_.erase(iter);
+  const bool active_tab_changed = active_tab_ == tab;
+  if (active_tab_changed)
+    SetActiveTab(nullptr);
 
 #if defined(OS_ANDROID)
-  JNIEnv* env = base::android::AttachCurrentThread();
-  Java_BrowserImpl_onVisibleSecurityStateOfActiveTabChanged(env, java_impl_);
+  Java_BrowserImpl_onTabRemoved(AttachCurrentThread(), java_impl_,
+                                tab ? tab_impl->GetJavaTab() : nullptr);
 #endif
+  for (BrowserObserver& obs : browser_observers_)
+    obs.OnTabRemoved(tab, active_tab_changed);
+  return owned_tab;
 }
 
 base::FilePath BrowserImpl::GetBrowserPersisterDataPath() {
