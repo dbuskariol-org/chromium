@@ -801,7 +801,7 @@ void WebLocalFrameImpl::ClearIsolatedWorldCSPForTesting(int32_t world_id) {
     return;
   }
 
-  GetFrame()->GetDocument()->ClearIsolatedWorldCSPForTesting(world_id);
+  GetFrame()->DomWindow()->ClearIsolatedWorldCSPForTesting(world_id);
 }
 
 void WebLocalFrameImpl::SetIsolatedWorldInfo(int32_t world_id,
