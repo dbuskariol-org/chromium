@@ -4602,6 +4602,11 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(blink::features::kPaintHolding)},
 
 #if defined(OS_CHROMEOS)
+    {"app-service-adaptive-icon",
+     flag_descriptions::kAppServiceAdaptiveIconName,
+     flag_descriptions::kAppServiceAdaptiveIconDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(features::kAppServiceAdaptiveIcon)},
+
     {"app-service-instance-registry",
      flag_descriptions::kAppServiceInstanceRegistryName,
      flag_descriptions::kAppServiceInstanceRegistryDescription, kOsCrOS,

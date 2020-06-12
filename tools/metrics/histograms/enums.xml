@@ -41412,6 +41412,7 @@ from previous Chrome versions.
   <int value="918608729" label="finch-seed-min-download-period"/>
   <int value="921536672" label="OfflinePagesDescriptiveFailStatus:enabled"/>
   <int value="921561616" label="WebAssemblyTiering:disabled"/>
+  <int value="924769517" label="AppServiceAdaptiveIcon:disabled"/>
   <int value="925712999" label="V8Orinoco:enabled"/>
   <int value="926852901" label="DataReductionProxyMainMenu:disabled"/>
   <int value="928900043" label="OmniboxLooseMaxLimitOnDedicatedRows:disabled"/>
@@ -42401,6 +42402,7 @@ from previous Chrome versions.
   <int value="1996125159" label="AutoplayMutedVideos:enabled"/>
   <int value="1997047666" label="NTPSnippetsIncreasedVisibility:disabled"/>
   <int value="1997931863" label="OmniboxContextMenuShowFullUrls:enabled"/>
+  <int value="1998917160" label="AppServiceAdaptiveIcon:enabled"/>
   <int value="2000091128" label="enable-touch-hover"/>
   <int value="2001505416" label="CorbAllowlistAlsoAppliesToOorCors:enabled"/>
   <int value="2001562962"

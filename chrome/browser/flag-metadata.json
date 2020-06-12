@@ -134,6 +134,11 @@
     "expiry_milestone": 86
   },
   {
+    "name": "app-service-adaptive-icon",
+    "owners": [ "//components/services/app_service/OWNERS" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "app-service-instance-registry",
     "owners": [ "//components/services/app_service/OWNERS" ],
     "expiry_milestone": 85

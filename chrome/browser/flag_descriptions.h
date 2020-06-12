@@ -1865,6 +1865,9 @@ extern const char kAllowDisableMouseAccelerationDescription[];
 extern const char kAllowScrollSettingsName[];
 extern const char kAllowScrollSettingsDescription[];
 
+extern const char kAppServiceAdaptiveIconName[];
+extern const char kAppServiceAdaptiveIconDescription[];
+
 extern const char kAppServiceInstanceRegistryName[];
 extern const char kAppServiceInstanceRegistryDescription[];
 
