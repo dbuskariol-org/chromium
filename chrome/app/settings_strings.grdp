@@ -438,7 +438,7 @@
     Hide password
   </message>
   <message name="IDS_SETTINGS_PASSWORDS_VIEW_DETAILS_TITLE" desc="Title for the dialog that shows password details. This dialog lets a user see a saved password and copy the username.">
-    Saved password details
+    Password details
   </message>
   <message name="IDS_SETTINGS_PASSWORD_DETAILS" desc="Label for a context menu item that shows a dialog with details for the selected password.">
     Details
