@@ -1023,14 +1023,19 @@ SharedImageBackingFactoryGLTexture::CreateSharedImage(
     image_state = gles2::Texture::COPIED;
   }
 
-  GLuint internal_format =
+  auto result = std::make_unique<SharedImageBackingGLImage>(
+      image, mailbox, format, size, color_space, usage, attribs,
+      use_passthrough_);
+  SharedImageBackingGLCommon::InitializeGLTextureParams params;
+  params.target = target;
+  params.internal_format =
       is_rgb_emulation ? GL_RGB : image->GetInternalFormat();
-  GLenum gl_format = is_rgb_emulation ? GL_RGB : image->GetDataFormat();
-  GLenum gl_type = image->GetDataType();
-
-  return MakeBacking(use_passthrough_, mailbox, target, service_id, image,
-                     image_state, internal_format, gl_format, gl_type, nullptr,
-                     true, false, format, size, color_space, usage, attribs);
+  params.format = is_rgb_emulation ? GL_RGB : image->GetDataFormat();
+  params.type = image->GetDataType();
+  params.image_state = image_state;
+  params.is_cleared = true;
+  result->InitializeGLTexture(service_id, image, params);
+  return std::move(result);
 }
 
 std::unique_ptr<SharedImageBacking>
@@ -1042,11 +1047,17 @@ SharedImageBackingFactoryGLTexture::CreateSharedImageForTest(
     viz::ResourceFormat format,
     const gfx::Size& size,
     uint32_t usage) {
-  return MakeBacking(false, mailbox, target, service_id, nullptr,
-                     gles2::Texture::UNBOUND, viz::GLInternalFormat(format),
-                     viz::GLDataFormat(format), viz::GLDataType(format),
-                     nullptr, is_cleared, false, format, size,
-                     gfx::ColorSpace(), usage, UnpackStateAttribs());
+  auto result = std::make_unique<SharedImageBackingGLTexture>(
+      mailbox, format, size, gfx::ColorSpace(), usage,
+      false /* is_passthrough */);
+  SharedImageBackingGLCommon::InitializeGLTextureParams params;
+  params.target = target;
+  params.internal_format = viz::GLInternalFormat(format);
+  params.format = viz::GLDataFormat(format);
+  params.type = viz::GLDataType(format);
+  params.is_cleared = is_cleared;
+  result->InitializeGLTexture(service_id, nullptr, params);
+  return std::move(result);
 }
 
 scoped_refptr<gl::GLImage> SharedImageBackingFactoryGLTexture::MakeGLImage(
@@ -1080,47 +1091,6 @@ bool SharedImageBackingFactoryGLTexture::CanImportGpuMemoryBuffer(
   // SharedImageBackingFactory implementations except this one.
   NOTREACHED();
   return true;
-}
-
-std::unique_ptr<SharedImageBacking>
-SharedImageBackingFactoryGLTexture::MakeBacking(
-    bool passthrough,
-    const Mailbox& mailbox,
-    GLenum target,
-    GLuint service_id,
-    scoped_refptr<gl::GLImage> image,
-    gles2::Texture::ImageState image_state,
-    GLuint level_info_internal_format,
-    GLuint gl_format,
-    GLuint gl_type,
-    const gles2::Texture::CompatibilitySwizzle* swizzle,
-    bool is_cleared,
-    bool has_immutable_storage,
-    viz::ResourceFormat format,
-    const gfx::Size& size,
-    const gfx::ColorSpace& color_space,
-    uint32_t usage,
-    const UnpackStateAttribs& attribs) {
-  std::unique_ptr<SharedImageBackingGLCommon> result;
-  if (image) {
-    result = std::make_unique<SharedImageBackingGLImage>(
-        image, mailbox, format, size, color_space, usage, attribs, passthrough);
-  } else {
-    result = std::make_unique<SharedImageBackingGLTexture>(
-        mailbox, format, size, color_space, usage, passthrough);
-  }
-
-  SharedImageBackingGLCommon::InitializeGLTextureParams params;
-  params.target = target;
-  params.internal_format = level_info_internal_format;
-  params.format = gl_format;
-  params.type = gl_type;
-  params.swizzle = swizzle;
-  params.image_state = image_state;
-  params.is_cleared = is_cleared;
-  params.has_immutable_storage = has_immutable_storage;
-  result->InitializeGLTexture(service_id, image, params);
-  return std::move(result);
 }
 
 void SharedImageBackingGLCommon::InitializeGLTexture(
@@ -1317,16 +1287,22 @@ SharedImageBackingFactoryGLTexture::CreateSharedImageInternal(
           surface_handle, &is_cleared);
     }
     // The allocated image should not require copy.
-    if (!image || image->ShouldBindOrCopy() != gl::GLImage::BIND ||
-        !image->BindTexImage(target)) {
-      LOG(ERROR) << "CreateSharedImage: Failed to "
-                 << (image ? "bind" : "create") << " image";
+    if (!image || image->ShouldBindOrCopy() != gl::GLImage::BIND) {
+      LOG(ERROR) << "CreateSharedImage: Failed to create bindable image";
       api->glDeleteTexturesFn(1, &service_id);
       return nullptr;
     }
     level_info_internal_format = image->GetInternalFormat();
     if (color_space.IsValid())
       image->SetColorSpace(color_space);
+  }
+
+  if (image) {
+    if (!image->BindTexImage(target)) {
+      LOG(ERROR) << "CreateSharedImage: Failed to bind image";
+      api->glDeleteTexturesFn(1, &service_id);
+      return nullptr;
+    }
     needs_subimage_upload = !pixel_data.empty();
   } else if (format_info.supports_storage) {
     api->glTexStorage2DEXTFn(target, 1, format_info.storage_internal_format,
@@ -1358,12 +1334,26 @@ SharedImageBackingFactoryGLTexture::CreateSharedImageInternal(
                            pixel_data.data());
   }
 
-  return MakeBacking(
-      use_passthrough_, mailbox, target, service_id, image,
-      gles2::Texture::BOUND, level_info_internal_format, format_info.gl_format,
-      format_info.gl_type, format_info.swizzle,
-      pixel_data.empty() ? is_cleared : true, has_immutable_storage, format,
-      size, color_space, usage, attribs);
+  std::unique_ptr<SharedImageBackingGLCommon> result;
+  if (image) {
+    result = std::make_unique<SharedImageBackingGLImage>(
+        image, mailbox, format, size, color_space, usage, attribs,
+        use_passthrough_);
+  } else {
+    result = std::make_unique<SharedImageBackingGLTexture>(
+        mailbox, format, size, color_space, usage, use_passthrough_);
+  }
+  SharedImageBackingGLCommon::InitializeGLTextureParams params;
+  params.target = target;
+  params.internal_format = level_info_internal_format;
+  params.format = format_info.gl_format;
+  params.type = format_info.gl_type;
+  params.swizzle = format_info.swizzle;
+  params.image_state = gles2::Texture::BOUND;
+  params.is_cleared = pixel_data.empty() ? is_cleared : true;
+  params.has_immutable_storage = has_immutable_storage;
+  result->InitializeGLTexture(service_id, image, params);
+  return std::move(result);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
