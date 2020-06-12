@@ -42,6 +42,7 @@
 #import "ios/chrome/browser/ui/settings/cells/settings_managed_item.h"
 #import "ios/chrome/browser/ui/settings/cells/settings_switch_cell.h"
 #import "ios/chrome/browser/ui/settings/cells/settings_switch_item.h"
+#import "ios/chrome/browser/ui/settings/elements/enterprise_info_popover_view_controller.h"
 #import "ios/chrome/browser/ui/settings/password/password_details_table_view_controller.h"
 #import "ios/chrome/browser/ui/settings/password/password_details_table_view_controller_delegate.h"
 #import "ios/chrome/browser/ui/settings/password/password_exporter.h"
@@ -59,7 +60,6 @@
 #import "ios/chrome/browser/ui/util/uikit_ui_util.h"
 #import "ios/chrome/common/ui/colors/UIColor+cr_semantic_colors.h"
 #import "ios/chrome/common/ui/colors/semantic_color_names.h"
-#import "ios/chrome/common/ui/elements/popover_label_view_controller.h"
 #import "ios/chrome/common/ui/reauthentication/reauthentication_module.h"
 #import "ios/chrome/common/ui/util/constraints_ui_util.h"
 #include "ios/chrome/grit/ios_strings.h"
@@ -545,13 +545,14 @@ std::vector<std::unique_ptr<autofill::PasswordForm>> CopyOf(
 // Being called when the user clicks on the information button of the managed
 // setting's UI. Shows a textual bubble with the information of the enterprise.
 - (void)didTapManagedUIInfoButton:(UIButton*)buttonView {
-  // TODO(crbug.com/1085202): show customized text bubble.
-  // Now showing a PopoverLabelView as a placeholder.
-  NSString* text = l10n_util::GetNSString(
-      IDS_IOS_TOGGLE_SETTING_MANAGED_INFO_BUBBLE_MESSAGE);
-  PopoverLabelViewController* bubbleViewController =
-      [[PopoverLabelViewController alloc] initWithMessage:text];
+  EnterpriseInfoPopoverViewController* bubbleViewController =
+      [[EnterpriseInfoPopoverViewController alloc] initWithEnterpriseName:nil];
   [self presentViewController:bubbleViewController animated:YES completion:nil];
+
+  // Disable the button when showing the bubble.
+  buttonView.enabled = NO;
+
+  // Set the anchor and arrow direction of the bubble.
   bubbleViewController.popoverPresentationController.sourceView = buttonView;
   bubbleViewController.popoverPresentationController.sourceRect =
       buttonView.bounds;
