@@ -68355,6 +68355,13 @@ Full version information for the fingerprint enum values:
   <int value="1" label="Second attempt"/>
 </enum>
 
+<enum name="TrustedVaultKeyRetrievalTrigger">
+  <int value="0" label="Settings page"/>
+  <int value="1" label="Profile menu"/>
+  <int value="2" label="OS-level notification"/>
+  <int value="3" label="New Tab Page Infobar"/>
+</enum>
+
 <enum name="TrustedWebActivityDelegatedNotificationSmallIconFallback">
   <int value="0" label="No fallback"/>
   <int value="1" label="Fallback icon mot provided"/>
