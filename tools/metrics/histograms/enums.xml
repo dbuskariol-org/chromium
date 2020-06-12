@@ -2004,6 +2004,12 @@ Unknown properties are collapsed to zero. -->
   <int value="2" label="IOException"/>
 </enum>
 
+<enum name="AndroidWebViewNonEmbeddedMetricsRetrieveMetricsTaskStatus">
+  <int value="0" label="Success"/>
+  <int value="1" label="ExecutionException"/>
+  <int value="2" label="InterruptionException"/>
+</enum>
+
 <enum name="AndroidWebViewProxySchemeFilterType">
   <int value="0" label="HTTP"/>
   <int value="1" label="HTTPS"/>

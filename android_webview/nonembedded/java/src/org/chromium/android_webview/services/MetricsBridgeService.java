@@ -28,6 +28,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -48,6 +49,12 @@ public final class MetricsBridgeService extends Service {
     // Not guarded by a lock because it should only be accessed in a SequencedTaskRunner.
     private FileOutputStream mFileOutputStream;
     private List<byte[]> mRecordsList = new ArrayList<>();
+
+    // To avoid any potential synchronization issues as well as avoid blocking the caller thread
+    // (e.g when the caller is a thread from the same process.), we post all read/write operations
+    // to be run serially using a SequencedTaskRunner instead of using a lock.
+    private final TaskRunner mSequencedTaskRunner =
+            PostTask.createSequencedTaskRunner(TaskTraits.BEST_EFFORT_MAY_BLOCK);
 
     // These values are persisted to logs. Entries should not be renumbered and
     // numeric values should never be reused.
@@ -82,11 +89,39 @@ public final class MetricsBridgeService extends Service {
         mRecordsList.add(record.toByteArray());
     }
 
-    // To avoid any potential synchronization issues as well as avoid blocking the caller thread
-    // (e.g when the caller is a thread from the same process.), we post all read/write operations
-    // to be run serially using a SequencedTaskRunner instead of using a lock.
-    private final TaskRunner mSequencedTaskRunner =
-            PostTask.createSequencedTaskRunner(TaskTraits.BEST_EFFORT_MAY_BLOCK);
+    // These values are persisted to logs. Entries should not be renumbered and
+    // numeric values should never be reused.
+    @VisibleForTesting
+    @IntDef({RetrieveMetricsTaskStatus.EXECUTION_EXCEPTION,
+            RetrieveMetricsTaskStatus.INTERRUPTED_EXCEPTION})
+    public @interface RetrieveMetricsTaskStatus {
+        int SUCCESS = 0;
+        int EXECUTION_EXCEPTION = 1;
+        int INTERRUPTED_EXCEPTION = 2;
+        int COUNT = 3;
+    }
+
+    // Build a histogram record synchronously so it can be included in the batch of records sent to
+    // the client instead of calling the base.metrics.RecordHistogram API (which is async and will
+    // log in the next batch of records). This histogram captures errors that might happen when the
+    // service is unable to send the current batch to the client. That's why this has to be added to
+    // the current batch being sent.
+    private static byte[] logRetrieveMetricsTaskStatus(@RetrieveMetricsTaskStatus int sample) {
+        // Similar to calling RecordHistogram.recordEnumeratedHistogram(
+        //        "Android.WebView.NonEmbeddedMetrics.RetrieveMetricsTaskStatus", sample,
+        //        RetrieveMetricsTaskStatus.COUNT);
+        HistogramRecord record =
+                HistogramRecord.newBuilder()
+                        .setRecordType(RecordType.HISTOGRAM_LINEAR)
+                        .setHistogramName(
+                                "Android.WebView.NonEmbeddedMetrics.RetrieveMetricsTaskStatus")
+                        .setSample(sample)
+                        .setMin(1)
+                        .setMax(RetrieveMetricsTaskStatus.COUNT)
+                        .setNumBuckets(ParsingLogResult.COUNT + 1)
+                        .build();
+        return record.toByteArray();
+    }
 
     @Override
     public void onCreate() {
@@ -165,14 +200,20 @@ public final class MetricsBridgeService extends Service {
                 List<byte[]> list = mRecordsList;
                 mRecordsList = new ArrayList<>();
                 deleteMetricsLogFile();
+                list.add(logRetrieveMetricsTaskStatus(RetrieveMetricsTaskStatus.SUCCESS));
                 return list;
             });
             mSequencedTaskRunner.postTask(retrieveFutureTask);
             try {
                 return retrieveFutureTask.get();
-            } catch (ExecutionException | InterruptedException e) {
+            } catch (ExecutionException e) {
                 Log.e(TAG, "error executing retrieveNonembeddedMetrics future task", e);
-                return new ArrayList<>();
+                return Collections.singletonList(logRetrieveMetricsTaskStatus(
+                        RetrieveMetricsTaskStatus.EXECUTION_EXCEPTION));
+            } catch (InterruptedException e) {
+                Log.e(TAG, "retrieveNonembeddedMetrics future task interrupted", e);
+                return Collections.singletonList(logRetrieveMetricsTaskStatus(
+                        RetrieveMetricsTaskStatus.INTERRUPTED_EXCEPTION));
             }
         }
     };
