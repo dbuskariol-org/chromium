@@ -97,6 +97,9 @@ class ASH_EXPORT AshColorProvider {
     // Color for sliders (volume, brightness etc.)
     kSliderThumbEnabled,
     kSliderThumbDisabled,
+
+    // The default color for button labels.
+    kButtonLabel,
   };
 
   // Attributes of ripple, includes the base color, opacity of inkdrop and

@@ -265,6 +265,9 @@ SkColor AshColorProvider::GetContentLayerColorImpl(
       light_color = gfx::kGoogleGrey200;
       dark_color = gfx::kGoogleGrey900;
       break;
+    case ContentLayerType::kButtonLabel:
+      light_color = gfx::kGoogleGrey700;
+      dark_color = gfx::kGoogleGrey200;
   }
   return color_mode == AshColorMode::kLight ? light_color : dark_color;
 }
