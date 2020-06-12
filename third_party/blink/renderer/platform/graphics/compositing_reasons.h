@@ -135,7 +135,7 @@ class PLATFORM_EXPORT CompositingReason {
 
     kComboTransformedRasterizationDisallowedReasons =
         kComboAllDirectReasons & ~kScrollDependentPosition &
-        ~kTrivial3DTransform,
+        ~kTrivial3DTransform & ~kBackfaceVisibilityHidden,
 
     kComboAllCompositedScrollingDeterminedReasons =
         kScrollDependentPosition | kOverflowScrolling,
