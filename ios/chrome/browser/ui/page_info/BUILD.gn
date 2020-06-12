@@ -8,7 +8,6 @@ source_set("page_info") {
     "legacy_page_info_view_controller.h",
     "legacy_page_info_view_controller.mm",
     "page_info_cookies_consumer.h",
-    "page_info_cookies_delegate.h",
     "page_info_cookies_description.h",
     "page_info_cookies_description.mm",
     "page_info_site_security_description.h",
@@ -17,6 +16,7 @@ source_set("page_info") {
     "page_info_view_controller.mm",
   ]
   deps = [
+    "resources:cookies_icon",
     "resources:security_icon_dangerous",
     "resources:security_icon_not_secure",
     "resources:security_icon_secure",

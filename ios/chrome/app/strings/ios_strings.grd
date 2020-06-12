@@ -1759,6 +1759,18 @@ Handoff must also be enabled in the General section of Settings, and your device
       <message name="IDS_IOS_CONFIRM_PASSWORD_DELETION" desc="Label of a confirmation dialogue button which allows the user to confirm deletion of a stored password. [Length: one line] [iOS only]">
         Delete
       </message>
+      <message name="IDS_IOS_COOKIES_ALLOW_ALL" desc="Label that informs the user that no cookies are blocked">
+        Allow All
+      </message>
+      <message name="IDS_IOS_COOKIES_BLOCK_ALL" desc="Label that informs the user that all cookies are blocked">
+        Block All
+      </message>
+      <message name="IDS_IOS_COOKIES_BLOCK_THIRD_PARTY" desc="Label that informs the user that Third-Party cookies are blocked">
+        Block Third-Party
+      </message>
+      <message name="IDS_IOS_COOKIES_BLOCK_THIRD_PARTY_INCOGNITO" desc="Label that informs the user that Third-Party cookies are blocked only in Incognito">
+        Block Third-Party in Incognito
+      </message>
       <message name="IDS_IOS_SETTINGS_PASSWORDS_SAVED_HEADING" desc="The title for a list of username/site/password items. These items are already saved by the browser and can be deleted/edited. [Length: one line] [iOS only]">
       Saved Passwords
       </message>

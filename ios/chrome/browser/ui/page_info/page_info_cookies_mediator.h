@@ -7,7 +7,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "ios/chrome/browser/ui/page_info/page_info_cookies_delegate.h"
 #import "ios/web/public/web_state_observer_bridge.h"
 
 class HostContentSettingsMap;
@@ -17,7 +16,7 @@ class PrefService;
 
 // The mediator is pushing the data for the page info Cookies section to the
 // consumer.
-@interface PageInfoCookiesMediator : NSObject <PageInfoCookiesDelegate>
+@interface PageInfoCookiesMediator : NSObject
 
 - (instancetype)init NS_UNAVAILABLE;
 

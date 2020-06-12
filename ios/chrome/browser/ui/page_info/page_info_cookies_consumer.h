@@ -5,11 +5,13 @@
 #ifndef IOS_CHROME_BROWSER_UI_PAGE_INFO_PAGE_INFO_COOKIES_CONSUMER_H_
 #define IOS_CHROME_BROWSER_UI_PAGE_INFO_PAGE_INFO_COOKIES_CONSUMER_H_
 
+#import <Foundation/Foundation.h>
+
 // Consumer for the page info Cookies.
 @protocol PageInfoCookiesConsumer
 
-// Called when the Block Third-Party Cookies switch value has changed.
-- (void)cookiesSwitchChanged:(BOOL)value;
+// Called when Cookies option has changed.
+- (void)cookiesOptionChanged:(NSString*)description;
 
 @end
 

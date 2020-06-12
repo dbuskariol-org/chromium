@@ -11,7 +11,6 @@
 #import "ios/chrome/browser/reading_list/offline_page_tab_helper.h"
 #include "ios/chrome/browser/ui/commands/browser_commands.h"
 #import "ios/chrome/browser/ui/commands/command_dispatcher.h"
-#import "ios/chrome/browser/ui/page_info/page_info_cookies_delegate.h"
 #import "ios/chrome/browser/ui/page_info/page_info_cookies_mediator.h"
 #import "ios/chrome/browser/ui/page_info/page_info_site_security_description.h"
 #import "ios/chrome/browser/ui/page_info/page_info_site_security_mediator.h"
@@ -72,7 +71,6 @@
                                               cookiesDescription]];
 
   self.cookiesMediator.consumer = self.viewController;
-  self.viewController.delegate = self.cookiesMediator;
 
   self.navigationController =
       [[TableViewNavigationController alloc] initWithTable:self.viewController];

@@ -10,12 +10,7 @@
 // Config for the information displayed by the page info Cookies section.
 @interface PageInfoCookiesDescription : NSObject
 
-// Whether the third party cookies are blocked or not.
-@property(nonatomic, assign) BOOL blockThirdPartyCookies;
-// Number of blocked Cookies on the current site.
-@property(nonatomic, assign) NSInteger blockedCookies;
-// Number of Cookies on the current site.
-@property(nonatomic, assign) NSInteger cookiesInUse;
+@property(nonatomic, copy) NSString* status;
 
 @end
 

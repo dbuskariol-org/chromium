@@ -13,7 +13,6 @@
 #import "ios/chrome/browser/ui/table_view/chrome_table_view_controller.h"
 
 @protocol BrowserCommands;
-@protocol PageInfoCookiesDelegate;
 
 // View Controller for displaying the page info.
 @interface PageInfoViewController
@@ -31,8 +30,6 @@
 // Handler used to navigate outside the page info.
 @property(nonatomic, weak) id<BrowserCommands> handler;
 
-// Delegate used to update Cookies settings.
-@property(nonatomic, weak) id<PageInfoCookiesDelegate> delegate;
 @end
 
 #endif  // IOS_CHROME_BROWSER_UI_PAGE_INFO_PAGE_INFO_VIEW_CONTROLLER_H_

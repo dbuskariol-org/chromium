@@ -15,7 +15,9 @@
 #import "ios/chrome/browser/ui/page_info/page_info_cookies_description.h"
 #import "ios/chrome/browser/ui/settings/utils/content_setting_backed_boolean.h"
 #import "ios/chrome/browser/ui/settings/utils/pref_backed_boolean.h"
+#include "ios/chrome/grit/ios_strings.h"
 #include "ios/web/public/web_state_observer.h"
+#include "ui/base/l10n/l10n_util.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
 #error "This file requires ARC support."
@@ -32,8 +34,7 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 
 }  // namespace
 
-@interface PageInfoCookiesMediator () <BooleanObserver,
-                                       PageInfoCookiesDelegate> {
+@interface PageInfoCookiesMediator () <BooleanObserver> {
   // The preference that decides when the cookie controls UI is enabled.
   IntegerPrefMember _prefsCookieControlsMode;
 }
@@ -73,13 +74,7 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 - (PageInfoCookiesDescription*)cookiesDescription {
   PageInfoCookiesDescription* dataHolder =
       [[PageInfoCookiesDescription alloc] init];
-
-  dataHolder.blockThirdPartyCookies =
-      [self cookiesSettingType] == SettingTypeBlockThirdPartyCookies;
-  // TODO(crbug.com/1038919): Implement this,the value is a placeholder.
-  dataHolder.blockedCookies = 7;
-  // TODO(crbug.com/1038919): Implement this,the value is a placeholder.
-  dataHolder.cookiesInUse = 44;
+  dataHolder.status = [self cookiesStatus];
   return dataHolder;
 }
 
@@ -87,47 +82,30 @@ typedef NS_ENUM(NSInteger, CookiesSettingType) {
 
 // Updates consumer.
 - (void)updateConsumer {
-  [self.consumer cookiesSwitchChanged:[self cookiesSettingType] ==
-                                      SettingTypeBlockThirdPartyCookies];
+  [self.consumer cookiesOptionChanged:[self cookiesStatus]];
 }
 
-// Returns the cookiesSettingType according to preferences.
-- (CookiesSettingType)cookiesSettingType {
-  if (!self.prefsContentSettingCookieControl.value)
-    return SettingTypeBlockAllCookies;
+// Returns the status of Cookies according to preferences.
+- (NSString*)cookiesStatus {
+  if (![self.prefsContentSettingCookieControl value])
+    return l10n_util::GetNSString(IDS_IOS_COOKIES_BLOCK_ALL);
 
-  const content_settings::CookieControlsMode mode =
-      static_cast<content_settings::CookieControlsMode>(
-          _prefsCookieControlsMode.GetValue());
+  if (self.prefsContentSettingCookieControl.value &&
+      _prefsCookieControlsMode.GetValue() ==
+          static_cast<int>(
+              content_settings::CookieControlsMode::kBlockThirdParty))
+    return l10n_util::GetNSString(IDS_IOS_COOKIES_BLOCK_THIRD_PARTY);
 
-  switch (mode) {
-    case content_settings::CookieControlsMode::kBlockThirdParty:
-      return SettingTypeBlockThirdPartyCookies;
-    case content_settings::CookieControlsMode::kIncognitoOnly:
-      return SettingTypeBlockThirdPartyCookiesIncognito;
-    default:
-      return SettingTypeAllowCookies;
-  }
+  if (_prefsCookieControlsMode.GetValue() ==
+      static_cast<int>(content_settings::CookieControlsMode::kIncognitoOnly))
+    return l10n_util::GetNSString(IDS_IOS_COOKIES_BLOCK_THIRD_PARTY_INCOGNITO);
+
+  return l10n_util::GetNSString(IDS_IOS_COOKIES_ALLOW_ALL);
 }
 
 #pragma mark - BooleanObserver
 
 - (void)booleanDidChange:(id<ObservableBoolean>)observableBoolean {
-  [self updateConsumer];
-}
-
-#pragma mark - PageInfoCookiesDelegate
-
-- (void)blockThirdPartyCookies:(BOOL)blocked {
-  if (blocked) {
-    [self.prefsContentSettingCookieControl setValue:YES];
-    _prefsCookieControlsMode.SetValue(static_cast<int>(
-        content_settings::CookieControlsMode::kBlockThirdParty));
-  } else {
-    [self.prefsContentSettingCookieControl setValue:YES];
-    _prefsCookieControlsMode.SetValue(
-        static_cast<int>(content_settings::CookieControlsMode::kOff));
-  }
   [self updateConsumer];
 }
 
