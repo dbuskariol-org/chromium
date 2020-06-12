@@ -5767,6 +5767,7 @@ grit("resources") {
 
   if (is_chromeos && optimize_webui) {
     deps += [
+      "//chrome/browser/resources/chromeos/bluetooth_pairing_dialog:build",
       "//chrome/browser/resources/chromeos/internet_config_dialog:build",
       "//chrome/browser/resources/chromeos/internet_detail_dialog:build",
     ]

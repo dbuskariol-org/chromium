@@ -208,54 +208,47 @@
   "chrome/browser/resources/bluetooth_internals/resources.grd": {
     "includes": [2020],
   },
-  "chrome/browser/resources/chromeos/bluetooth_pairing_dialog/bluetooth_pairing_dialog_resources.grd": {
-    "includes": [2030],
-    "structures": [2050],
-  },
-  "chrome/browser/resources/chromeos/bluetooth_pairing_dialog/bluetooth_pairing_dialog_resources_vulcanized.grd": {
-    "includes": [2070],
-  },
   "chrome/browser/resources/gaia_auth_host/gaia_auth_host_resources.grd": {
-    "includes": [2080],
+    "includes": [2030],
   },
   "chrome/browser/resources/invalidations/invalidations_resources.grd": {
-    "includes": [2090],
+    "includes": [2040],
   },
   "chrome/browser/resources/media/webrtc_logs_resources.grd": {
-    "includes": [2100],
+    "includes": [2060],
   },
   "chrome/browser/resources/net_internals/net_internals_resources.grd": {
-    "includes": [2120],
+    "includes": [2080],
   },
   "chrome/browser/resources/omnibox/resources.grd": {
-    "includes": [2140],
+    "includes": [2100],
   },
   "chrome/browser/resources/quota_internals/quota_internals_resources.grd": {
-    "includes": [2160],
+    "includes": [2120],
   },
   "chrome/browser/resources/sync_file_system_internals/sync_file_system_internals_resources.grd": {
-    "includes": [2180],
+    "includes": [2140],
   },
   "chrome/browser/resources/usb_internals/resources.grd": {
-    "includes": [2200],
+    "includes": [2160],
   },
   "chrome/browser/resources/webapks/webapks_ui_resources.grd": {
-    "includes": [2220],
+    "includes": [2180],
   },
   "components/sync/driver/resources.grd": {
-    "includes": [2240],
+    "includes": [2200],
   },
   "components/resources/dev_ui_components_resources.grd": {
-    "includes": [2260],
+    "includes": [2210],
   },
   "content/browser/resources/media/media_internals_resources.grd": {
-    "includes": [2270],
+    "includes": [2220],
   },
   "content/browser/webrtc/resources/resources.grd": {
-    "includes": [2280],
+    "includes": [2240],
   },
   "content/dev_ui_content_resources.grd": {
-    "includes": [2300],
+    "includes": [2250],
   },
   # END chrome/ WebUI resources section
 
