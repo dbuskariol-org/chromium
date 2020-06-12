@@ -168,6 +168,17 @@ TEST_F(VideoEncoderTest, FlushAtEndOfStream) {
   EXPECT_TRUE(encoder->WaitForBitstreamProcessors());
 }
 
+// Test initializing the video encoder. The test will be successful if the video
+// encoder is capable of setting up the encoder for the specified codec and
+// resolution. The test only verifies initialization and doesn't do any
+// encoding.
+TEST_F(VideoEncoderTest, Initialize) {
+  VideoEncoderClientConfig config = VideoEncoderClientConfig();
+  auto encoder = CreateVideoEncoder(g_env->Video(), config);
+
+  EXPECT_EQ(encoder->GetEventCount(VideoEncoder::kInitialized), 1u);
+}
+
 }  // namespace test
 }  // namespace media
 
