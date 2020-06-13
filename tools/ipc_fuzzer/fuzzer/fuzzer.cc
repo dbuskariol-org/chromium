@@ -714,6 +714,15 @@ struct FuzzTraits<viz::FrameSinkId> {
   }
 };
 
+template <>
+struct FuzzTraits<viz::ResourceFormat> {
+  static bool Fuzz(viz::ResourceFormat* p, Fuzzer* fuzzer) {
+    int format = RandInRange(viz::ResourceFormat::RESOURCE_FORMAT_MAX + 1);
+    *p = static_cast<viz::ResourceFormat>(format);
+    return true;
+  }
+};
+
 template <class A>
 struct FuzzTraits<cc::ListContainer<A>> {
   static bool Fuzz(cc::ListContainer<A>* p, Fuzzer* fuzzer) {
@@ -1450,6 +1459,16 @@ struct FuzzTraits<media::VideoPixelFormat> {
 };
 
 template <>
+struct FuzzTraits<net::EffectiveConnectionType> {
+  static bool Fuzz(net::EffectiveConnectionType* p, Fuzzer* fuzzer) {
+    int type = RandInRange(
+        net::EffectiveConnectionType::EFFECTIVE_CONNECTION_TYPE_LAST + 1);
+    *p = static_cast<net::EffectiveConnectionType>(type);
+    return true;
+  }
+};
+
+template <>
 struct FuzzTraits<net::LoadTimingInfo> {
   static bool Fuzz(net::LoadTimingInfo* p, Fuzzer* fuzzer) {
     return FuzzParam(&p->socket_log_id, fuzzer) &&
@@ -1688,6 +1707,15 @@ struct FuzzTraits<ppapi::SocketOptionData> {
     if (!FuzzParam(&tmp, fuzzer))
       return false;
     p->SetInt32(tmp);
+    return true;
+  }
+};
+
+template <>
+struct FuzzTraits<printing::MarginType> {
+  static bool Fuzz(printing::MarginType* p, Fuzzer* fuzzer) {
+    int type = RandInRange(printing::MarginType::MARGIN_TYPE_LAST + 1);
+    *p = static_cast<printing::MarginType>(type);
     return true;
   }
 };
