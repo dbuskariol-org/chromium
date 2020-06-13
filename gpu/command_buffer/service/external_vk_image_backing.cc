@@ -164,10 +164,11 @@ std::unique_ptr<ExternalVkImageBacking> ExternalVkImageBacking::Create(
 
   auto* vulkan_implementation =
       context_state->vk_context_provider()->GetVulkanImplementation();
-  VkImageCreateFlags vk_flags =
-      vulkan_implementation->enforce_protected_memory()
-          ? VK_IMAGE_CREATE_PROTECTED_BIT
-          : 0;
+  VkImageCreateFlags vk_flags = 0;
+  if (vulkan_implementation->enforce_protected_memory() &&
+      !(usage & SHARED_IMAGE_USAGE_GLES2)) {
+    vk_flags |= VK_IMAGE_CREATE_PROTECTED_BIT;
+  }
   std::unique_ptr<VulkanImage> image;
   if (is_external) {
     image = VulkanImage::CreateWithExternalMemory(device_queue, size, vk_format,
