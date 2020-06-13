@@ -1990,6 +1990,7 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Report a bug"/>
   <int value="2" label="Check for updates"/>
   <int value="3" label="Refresh the crash list"/>
+  <int value="4" label="About WebView DevTools"/>
 </enum>
 
 <enum name="AndroidWebViewDevUiMetricsTransmission">
