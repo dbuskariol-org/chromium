@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<script src="/resources/testharness.js"></script>
-<script src="/resources/testharnessreport.js"></script>
-<script src="/gen/layout_test_data/mojo/public/js/mojo_bindings.js"></script>
-<script src="/gen/mojo/public/mojom/base/unguessable_token.mojom.js"></script>
-<script src="/gen/third_party/blink/public/mojom/serial/serial.mojom.js"></script>
-<script src="resources/serial-test-utils.js"></script>
-<script>
+// META: script=/resources/testharness.js
+// META: script=/resources/testharnessreport.js
+// META: script=/gen/layout_test_data/mojo/public/js/mojo_bindings.js
+// META: script=/gen/mojo/public/mojom/base/unguessable_token.mojom.js
+// META: script=/gen/third_party/blink/public/mojom/serial/serial.mojom.js
+// META: script=resources/serial-test-utils.js
 
 // ParityError is not (as of 2020/03/23) a valid DOMException, so cannot use
 // promise_rejects_dom for it.
@@ -51,5 +49,3 @@ serial_test(async (t, fake) => {
   await port.close();
   assert_equals(port.readable, null);
 }, 'Parity error closes readable and replaces it with a new stream');
-
-</script>

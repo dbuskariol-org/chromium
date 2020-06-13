@@ -1,14 +1,11 @@
-<!DOCTYPE html>
-<body>
-<script src="/resources/testharness.js"></script>
-<script src="/resources/testharnessreport.js"></script>
-<script src="/resources/testdriver.js"></script>
-<script src="/resources/testdriver-vendor.js"></script>
-<script src="/gen/layout_test_data/mojo/public/js/mojo_bindings.js"></script>
-<script src="/gen/mojo/public/mojom/base/unguessable_token.mojom.js"></script>
-<script src="/gen/third_party/blink/public/mojom/serial/serial.mojom.js"></script>
-<script src="resources/serial-test-utils.js"></script>
-<script>
+// META: script=/resources/testharness.js
+// META: script=/resources/testharnessreport.js
+// META: script=/resources/testdriver.js
+// META: script=/resources/testdriver-vendor.js
+// META: script=/gen/layout_test_data/mojo/public/js/mojo_bindings.js
+// META: script=/gen/mojo/public/mojom/base/unguessable_token.mojom.js
+// META: script=/gen/third_party/blink/public/mojom/serial/serial.mojom.js
+// META: script=resources/serial-test-utils.js
 
 promise_test((t) => {
   return promise_rejects_dom(t, 'SecurityError', navigator.serial.requestPort());
@@ -83,6 +80,3 @@ serial_test(async (t, fake) => {
     filters: [{ usbProductId: 0x0001 }],
   }));
 }, 'requestPort() requires a USB vendor ID if a product ID specified');
-
-</script>
-</body>

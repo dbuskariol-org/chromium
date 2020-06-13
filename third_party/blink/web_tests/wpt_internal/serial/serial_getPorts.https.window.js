@@ -1,11 +1,9 @@
-<!DOCTYPE html>
-<script src="/resources/testharness.js"></script>
-<script src="/resources/testharnessreport.js"></script>
-<script src="/gen/layout_test_data/mojo/public/js/mojo_bindings.js"></script>
-<script src="/gen/mojo/public/mojom/base/unguessable_token.mojom.js"></script>
-<script src="/gen/third_party/blink/public/mojom/serial/serial.mojom.js"></script>
-<script src="resources/serial-test-utils.js"></script>
-<script>
+// META: script=/resources/testharness.js
+// META: script=/resources/testharnessreport.js
+// META: script=/gen/layout_test_data/mojo/public/js/mojo_bindings.js
+// META: script=/gen/mojo/public/mojom/base/unguessable_token.mojom.js
+// META: script=/gen/third_party/blink/public/mojom/serial/serial.mojom.js
+// META: script=resources/serial-test-utils.js
 
 promise_test(async () => {
   let interceptor =
@@ -41,5 +39,3 @@ serial_test(async (t, fake) => {
   assert_true(portsSecond[0] instanceof SerialPort);
   assert_true(portsFirst[0] === portsSecond[0]);
 }, 'getPorts() returns the same port objects every time');
-
-</script>
