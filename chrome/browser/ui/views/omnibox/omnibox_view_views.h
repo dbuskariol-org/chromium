@@ -124,12 +124,11 @@ class OmniboxViewViews : public OmniboxView,
   using OmniboxView::SetUserText;
   void SetUserText(const base::string16& text,
                    bool update_popup) override;
-  void SetWindowTextAndCaretPos(
-      const base::string16& text,
-      size_t caret_pos,
-      bool update_popup,
-      bool notify_text_changed,
-      const base::string16& additional_text = base::string16()) override;
+  void SetWindowTextAndCaretPos(const base::string16& text,
+                                size_t caret_pos,
+                                bool update_popup,
+                                bool notify_text_changed) override;
+  void SetAdditionalText(const base::string16& additional_text) override;
   void EnterKeywordModeForDefaultSearchProvider() override;
   bool IsSelectAll() const override;
   void GetSelectionBounds(base::string16::size_type* start,
@@ -232,10 +231,8 @@ class OmniboxViewViews : public OmniboxView,
   // Update the field with |text| and set the selection. |ranges| should not be
   // empty; even text with no selections must have at least 1 empty range in
   // |ranges| to indicate the cursor position.
-  void SetTextAndSelectedRanges(
-      const base::string16& text,
-      const std::vector<gfx::Range>& ranges,
-      const base::string16& additional_text = base::string16());
+  void SetTextAndSelectedRanges(const base::string16& text,
+                                const std::vector<gfx::Range>& ranges);
 
   void SetSelectedRanges(const std::vector<gfx::Range>& ranges);
 
@@ -284,11 +281,9 @@ class OmniboxViewViews : public OmniboxView,
                                    const AutocompleteMatch& match,
                                    bool save_original_selection,
                                    bool notify_text_changed) override;
-  void OnInlineAutocompleteTextMaybeChanged(
-      const base::string16& display_text,
-      size_t user_text_length,
-      size_t user_text_start = 0,
-      const base::string16& additional_text = base::string16()) override;
+  void OnInlineAutocompleteTextMaybeChanged(const base::string16& display_text,
+                                            size_t user_text_start,
+                                            size_t user_text_length) override;
   void OnInlineAutocompleteTextCleared() override;
   void OnRevertTemporaryText(const base::string16& display_text,
                              const AutocompleteMatch& match) override;

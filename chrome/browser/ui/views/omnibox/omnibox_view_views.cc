@@ -440,6 +440,16 @@ void OmniboxViewViews::SetUserText(const base::string16& text,
   OmniboxView::SetUserText(text, update_popup);
 }
 
+void OmniboxViewViews::SetAdditionalText(
+    const base::string16& additional_text) {
+  // TODO (manukh): Ideally, OmniboxView wouldn't be responsible for its sibling
+  // label owned by LocationBarView. However, this is the only practical pathway
+  // between the OmniboxEditModel, which handles setting the omnibox match, and
+  // LocationBarView. Perhaps, if we decide to launch rich autocompletion we'll
+  // consider alternatives.
+  location_bar_view_->SetOmniboxAdditionalText(additional_text);
+}
+
 void OmniboxViewViews::EnterKeywordModeForDefaultSearchProvider() {
   // Transition the user into keyword mode using their default search provider.
   model()->EnterKeywordModeForDefaultSearchProvider(
@@ -671,8 +681,7 @@ bool OmniboxViewViews::IsDropCursorForInsertion() const {
 
 void OmniboxViewViews::SetTextAndSelectedRanges(
     const base::string16& text,
-    const std::vector<gfx::Range>& ranges,
-    const base::string16& additional_text) {
+    const std::vector<gfx::Range>& ranges) {
   // Will try to fit as much of unselected text as possible. If possible,
   // guarantees at least |pad_left| chars of the unselected text are visible. If
   // possible given the prior guarantee, also guarantees |pad_right| chars of
@@ -695,13 +704,8 @@ void OmniboxViewViews::SetTextAndSelectedRanges(
                  ranges[0].end() - std::min(kPadLeft, ranges[0].end())));
   // Select the specified ranges.
   SetSelectedRanges(ranges);
-  // Set the additional text.
-  // TODO (manukh): Ideally, OmniboxView wouldn't be responsible for its sibling
-  // label owned by LocationBarView. However, this is the only practical pathway
-  // between the OmniboxEditModel, which handles setting the omnibox match, and
-  // LocationBarView. Perhaps, if we decide to launch rich autocompletion we'll
-  // consider alternatives.
-  location_bar_view_->SetOmniboxAdditionalText(additional_text);
+  // Clear the additional text.
+  SetAdditionalText(base::string16());
 }
 
 void OmniboxViewViews::SetSelectedRanges(
@@ -819,14 +823,12 @@ bool OmniboxViewViews::MaybeTriggerSecondaryButton(const ui::KeyEvent& event) {
       ->MaybeTriggerSecondaryButton(event);
 }
 
-void OmniboxViewViews::SetWindowTextAndCaretPos(
-    const base::string16& text,
-    size_t caret_pos,
-    bool update_popup,
-    bool notify_text_changed,
-    const base::string16& additional_text) {
+void OmniboxViewViews::SetWindowTextAndCaretPos(const base::string16& text,
+                                                size_t caret_pos,
+                                                bool update_popup,
+                                                bool notify_text_changed) {
   const gfx::Range range(caret_pos);
-  SetTextAndSelectedRanges(text, {range}, additional_text);
+  SetTextAndSelectedRanges(text, {range});
 
   if (update_popup)
     UpdatePopup();
@@ -875,9 +877,8 @@ void OmniboxViewViews::OnTemporaryTextMaybeChanged(
 
 void OmniboxViewViews::OnInlineAutocompleteTextMaybeChanged(
     const base::string16& display_text,
-    size_t user_text_length,
     size_t user_text_start,
-    const base::string16& additional_text) {
+    size_t user_text_length) {
   if (display_text == GetText())
     return;
 
@@ -886,7 +887,7 @@ void OmniboxViewViews::OnInlineAutocompleteTextMaybeChanged(
         {display_text.size(), user_text_length + user_text_start}};
     if (user_text_start)
       ranges.push_back({0, user_text_start});
-    SetTextAndSelectedRanges(display_text, ranges, additional_text);
+    SetTextAndSelectedRanges(display_text, ranges);
   } else if (location_bar_view_) {
     location_bar_view_->SetImeInlineAutocompletion(
         display_text.substr(user_text_length));
