@@ -3592,6 +3592,7 @@ test("unit_tests") {
       "../browser/nearby_sharing/nearby_process_manager_unittest.cc",
       "../browser/nearby_sharing/nearby_sharing_service_impl_unittest.cc",
       "../browser/profiles/profile_avatar_icon_util_unittest.cc",
+      "../browser/profiles/profile_destroyer_unittest.cc",
       "../browser/sharing/webrtc/sharing_service_host_unittest.cc",
       "../browser/sharing/webrtc/sharing_webrtc_connection_host_unittest.cc",
       "../browser/sharing/webrtc/webrtc_signalling_host_fcm_unittest.cc",
