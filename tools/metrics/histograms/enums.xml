@@ -65427,6 +65427,7 @@ would be helpful to identify which type is being sent.
   <int value="8" label="Bookmark in model is missing sync metadata"/>
   <int value="9" label="Client tag hash does not match bookmark GUID"/>
   <int value="10" label="Duplicate client tag hashes exist"/>
+  <int value="11" label="Managed bookmark has sync metadata"/>
 </enum>
 
 <enum name="SyncBookmarkModelSyncState">
