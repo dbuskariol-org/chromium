@@ -12,17 +12,14 @@ import org.chromium.chrome.browser.tab.TabCreationState;
  */
 public class EmptyTabModelSelectorObserver implements TabModelSelectorObserver {
     @Override
-    public void onChange() {
-    }
+    public void onChange() {}
 
     @Override
     public void onNewTabCreated(Tab tab, @TabCreationState int creationState) {}
 
     @Override
-    public void onTabModelSelected(TabModel newModel, TabModel oldModel) {
-    }
+    public void onTabModelSelected(TabModel newModel, TabModel oldModel) {}
 
     @Override
-    public void onTabStateInitialized() {
-    }
+    public void onTabStateInitialized() {}
 }

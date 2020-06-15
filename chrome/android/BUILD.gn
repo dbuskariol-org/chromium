@@ -1246,9 +1246,10 @@ if (enable_vr || enable_arcore) {
             "//chrome/android:chrome_test_xr_java",
             "//components/module_installer/android:module_installer_java",
             "//components/browser_ui/site_settings/android:java",
-            "//chrome/browser/settings:java",
             "//components/content_settings/android:content_settings_enums_java",
             "//chrome/browser/profiles/android:java",
+            "//chrome/browser/settings:java",
+            "//chrome/browser/tabmodel:java",
 
             "//third_party/gvr-android-sdk:controller_test_api_java",
             "//third_party/gvr-android-sdk:gvr_common_java",
