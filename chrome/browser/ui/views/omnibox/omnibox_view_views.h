@@ -205,6 +205,8 @@ class OmniboxViewViews : public OmniboxView,
     // views::AnimationDelegateViews:
     void AnimationProgressed(const gfx::Animation* animation) override;
 
+    bool HasStarted();
+
     gfx::MultiAnimation* GetAnimationForTesting();
 
    private:
@@ -217,6 +219,8 @@ class OmniboxViewViews : public OmniboxView,
     gfx::Range path_bounds_;
 
     gfx::MultiAnimation animation_;
+
+    bool has_started_ = false;
   };
 
   enum class UnelisionGesture {
@@ -372,7 +376,8 @@ class OmniboxViewViews : public OmniboxView,
   void ResetToHideOnInteraction();
 
   PathFadeAnimation* GetPathFadeInAnimationForTesting();
-  PathFadeAnimation* GetPathFadeOutFastAnimationForTesting();
+  PathFadeAnimation* GetPathFadeOutAfterHoverAnimationForTesting();
+  PathFadeAnimation* GetPathFadeOutAfterInteractionAnimationForTesting();
 
   // When true, the location bar view is read only and also is has a slightly
   // different presentation (smaller font size). This is used for popups.
@@ -380,16 +385,47 @@ class OmniboxViewViews : public OmniboxView,
 
   std::unique_ptr<OmniboxPopupContentsView> popup_view_;
 
-  // Animations used to fade in/out the path under some elision settings.
+  // Animations are used to fade in/out the path under some elision settings.
+  // These animations are created at different times depending on the field
+  // trial configuration, so don't assume they are non-null.
+  //
+  // These animations are used by different field trials as described below.
 
-  // Fades the path in after a short delay. Under certain variations, this
-  // animation is not created until the user interacts with the page, so it's
-  // not always guaranteed to exist.
+  // When OmniboxFieldTrial::IsHidePathQueryRefEnabled() but not
+  // ShouldRevealPathQueryRefOnHover() or ShouldHidePathQueryRefOnInteraction(),
+  // only |delayed_path_fade_out_animation_| is used. It's created in
+  // OnThemeChanged() and starts running in EmphasizeUrlComponents(), fading the
+  // path out after a fixed delay.
+  std::unique_ptr<PathFadeAnimation> delayed_path_fade_out_animation_;
+  // When ShouldRevealPathQueryRefOnHover() is enabled but not
+  // ShouldHidePathQueryRefOnInteraction(), then the path is hidden in
+  // EmphasizeUrlComponents() and |path_fade_in_animation_| and
+  // |path_fade_out_hover_animation_| are created in OnThemeChanged(). These
+  // animations are used to show or hide the path when the mouse hovers or exits
+  // the omnibox. |path_fade_in_animation_| is created afresh every time the
+  // mouse exits. The invariant is that each incarnation of the fade-in
+  // animation is run exactly once; this allows us to avoid flickering by fading
+  // the path in multiple times as the user hovers over the omnibox for a long
+  // period of time.
   std::unique_ptr<PathFadeAnimation> path_fade_in_animation_;
-  // Waits a few seconds and then fades the path out.
-  std::unique_ptr<PathFadeAnimation> path_fade_out_animation_;
-  // Fades the path out without a delay.
-  std::unique_ptr<PathFadeAnimation> path_fade_out_fast_animation_;
+  std::unique_ptr<PathFadeAnimation> path_fade_out_after_hover_animation_;
+  // Finally, when ShouldHidePathQueryRefOnInteraction() is enabled, we don't
+  // create any animations until a navigation finishes. At that point, we show
+  // the path if it was a full cross-document navigation, and create
+  // |path_fade_out_after_interaction_animation_| to fade the path out once the
+  // user interacts with the page. If ShouldRevealPathQueryRefOnHover() is also
+  // enabled, we defer the creation of |path_fade_in_animation_| and
+  // |path_fade_out_animation_| until the user interacts with the page; their
+  // creation is deferred to avoid flickering the path in and out as the user
+  // hovers over the omnibox before they've interacted with the page. After the
+  // first user interaction, |path_fade_out_after_interaction_| animation
+  // doesn't run again until it's re-created for the next navigation, and
+  // |path_fade_in_animation_| and |path_fade_out_after_hover_animation_| behave
+  // as described above for the rest of the navigation. There are 2 separate
+  // fade-out animations (one for after-interaction and one for after-hover) so
+  // that the state of the after-interaction animation can be queried to avoid
+  // flickering the path after multiple user interactions.
+  std::unique_ptr<PathFadeAnimation> path_fade_out_after_interaction_animation_;
 
   // Selection persisted across temporary text changes, like popup suggestions.
   std::vector<gfx::Range> saved_temporary_selection_;

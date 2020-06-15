@@ -31,6 +31,7 @@
 #include "components/omnibox/browser/test_location_bar_model.h"
 #include "components/omnibox/common/omnibox_features.h"
 #include "content/public/test/browser_task_environment.h"
+#include "content/public/test/mock_navigation_handle.h"
 #include "content/public/test/test_renderer_host.h"
 #include "content/public/test/web_contents_tester.h"
 #include "testing/gtest/include/gtest/gtest.h"
@@ -1298,30 +1299,31 @@ TEST_F(OmniboxViewViewsTest, RevealOnHover) {
   // Now advance through the fade-in and check the color. We assume that the
   // fade-in takes less than 1 second.
   fade_in_as_element->Step(base::TimeTicks() + base::TimeDelta::FromSeconds(1));
-  EXPECT_EQ(GetOmniboxColor(omnibox_view()->GetThemeProvider(),
-                            OmniboxPart::LOCATION_BAR_TEXT_DIMMED),
-            fade_in->GetCurrentColor());
+  SkColor dimmed_text_color =
+      GetOmniboxColor(omnibox_view()->GetThemeProvider(),
+                      OmniboxPart::LOCATION_BAR_TEXT_DIMMED);
+  EXPECT_EQ(dimmed_text_color, fade_in->GetCurrentColor());
 
   // Now exit the mouse. At this point the fade-in animation should be stopped
   // and the fade-out animation should run.
   omnibox_view()->OnMouseExited(CreateMouseEvent(ui::ET_MOUSE_EXITED, {0, 0}));
+  OmniboxViewViews::PathFadeAnimation* path_fade_out_after_hover_animation =
+      omnibox_view()->GetPathFadeOutAfterHoverAnimationForTesting();
   EXPECT_FALSE(
       omnibox_view()->GetPathFadeInAnimationForTesting()->IsAnimating());
-  EXPECT_TRUE(
-      omnibox_view()->GetPathFadeOutFastAnimationForTesting()->IsAnimating());
+  EXPECT_TRUE(path_fade_out_after_hover_animation->IsAnimating());
+  EXPECT_EQ(dimmed_text_color,
+            path_fade_out_after_hover_animation->GetCurrentColor());
 
   gfx::AnimationContainerElement* fade_out_as_element =
       static_cast<gfx::AnimationContainerElement*>(
-          omnibox_view()
-              ->GetPathFadeOutFastAnimationForTesting()
-              ->GetAnimationForTesting());
+          path_fade_out_after_hover_animation->GetAnimationForTesting());
   fade_out_as_element->SetStartTime(base::TimeTicks());
   // We assume that the fade-out takes less than 1 second.
   fade_out_as_element->Step(base::TimeTicks() +
                             base::TimeDelta::FromSeconds(1));
-  EXPECT_EQ(SK_ColorTRANSPARENT, omnibox_view()
-                                     ->GetPathFadeOutFastAnimationForTesting()
-                                     ->GetCurrentColor());
+  EXPECT_EQ(SK_ColorTRANSPARENT,
+            path_fade_out_after_hover_animation->GetCurrentColor());
 }
 
 // Tests the field trial variation that hides the path when the user interacts
@@ -1342,11 +1344,15 @@ TEST_F(OmniboxViewViewsTest, HideOnInteractionAndRevealOnHover) {
   // Call OnThemeChanged() to create the animations.
   omnibox_view()->OnThemeChanged();
 
+  content::MockNavigationHandle navigation;
+  navigation.set_is_same_document(false);
+  omnibox_view()->DidFinishNavigation(&navigation);
+
   // Simulate a user interaction and check that the fade-out animation runs.
   omnibox_view()->DidGetUserInteraction(
       blink::WebInputEvent::Type::kGestureScrollBegin);
   OmniboxViewViews::PathFadeAnimation* fade_out =
-      omnibox_view()->GetPathFadeOutFastAnimationForTesting();
+      omnibox_view()->GetPathFadeOutAfterInteractionAnimationForTesting();
   EXPECT_TRUE(fade_out->IsAnimating());
   EXPECT_EQ(GetOmniboxColor(omnibox_view()->GetThemeProvider(),
                             OmniboxPart::LOCATION_BAR_TEXT_DIMMED),
@@ -1357,12 +1363,19 @@ TEST_F(OmniboxViewViewsTest, HideOnInteractionAndRevealOnHover) {
   gfx::AnimationContainerElement* fade_out_as_element =
       static_cast<gfx::AnimationContainerElement*>(
           omnibox_view()
-              ->GetPathFadeOutFastAnimationForTesting()
+              ->GetPathFadeOutAfterInteractionAnimationForTesting()
               ->GetAnimationForTesting());
   fade_out_as_element->SetStartTime(base::TimeTicks());
   fade_out_as_element->Step(base::TimeTicks() +
                             base::TimeDelta::FromSeconds(1));
   EXPECT_EQ(SK_ColorTRANSPARENT, fade_out->GetCurrentColor());
+
+  // A second user interaction should not run the animation again.
+  omnibox_view()->DidGetUserInteraction(
+      blink::WebInputEvent::Type::kGestureScrollBegin);
+  EXPECT_FALSE(omnibox_view()
+                   ->GetPathFadeOutAfterInteractionAnimationForTesting()
+                   ->IsAnimating());
 
   // The path should come back on hover.
   omnibox_view()->OnMouseMoved(CreateMouseEvent(ui::ET_MOUSE_MOVED, {0, 0}));
