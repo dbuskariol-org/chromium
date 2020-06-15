@@ -52,12 +52,14 @@ import org.chromium.base.test.util.FlakyTest;
 import org.chromium.base.test.util.MetricsUtils;
 import org.chromium.base.test.util.MinAndroidSdkLevel;
 import org.chromium.components.autofill.AutofillManagerWrapper;
+import org.chromium.components.autofill.AutofillPopup;
 import org.chromium.components.autofill.AutofillProvider;
 import org.chromium.components.autofill.AutofillProviderImpl;
 import org.chromium.components.autofill.AutofillProviderUMA;
 import org.chromium.content_public.browser.UiThreadTaskTraits;
 import org.chromium.content_public.browser.test.util.DOMUtils;
 import org.chromium.content_public.browser.test.util.TestThreadUtils;
+import org.chromium.content_public.browser.test.util.TouchCommon;
 import org.chromium.net.test.util.TestWebServer;
 
 import java.io.ByteArrayInputStream;
@@ -756,6 +758,7 @@ public class AwAutofillTest {
     private int mSubmissionSource;
     private TestAutofillManagerWrapper mTestAutofillManagerWrapper;
     private AwAutofillSessionUMATestHelper mUMATestHelper;
+    private AutofillProviderImpl mAutofillProviderImpl;
 
     @Before
     public void setUp() throws Exception {
@@ -768,8 +771,9 @@ public class AwAutofillTest {
                     public AutofillProvider createAutofillProvider(
                             Context context, ViewGroup containerView) {
                         mTestAutofillManagerWrapper = new TestAutofillManagerWrapper(context);
-                        return new AutofillProviderImpl(containerView, mTestAutofillManagerWrapper,
-                                context, "AwAutofillTest");
+                        mAutofillProviderImpl = new AutofillProviderImpl(containerView,
+                                mTestAutofillManagerWrapper, context, "AwAutofillTest");
+                        return mAutofillProviderImpl;
                     }
                 });
         mAwContents = mTestContainerView.getAwContents();
@@ -779,6 +783,7 @@ public class AwAutofillTest {
     @After
     public void tearDown() {
         mWebServer.shutdown();
+        mAutofillProviderImpl = null;
     }
 
     @Test
@@ -1890,6 +1895,44 @@ public class AwAutofillTest {
         // events from the change of text1.
         cnt += waitForCallbackAndVerifyTypes(
                 cnt, new Integer[] {AUTOFILL_VIEW_ENTERED, AUTOFILL_VALUE_CHANGED});
+    }
+
+    @Test
+    @SmallTest
+    @Feature({"AndroidWebView"})
+    public void testDatalistPopup() throws Throwable {
+        final String data = "<html><head></head><body><form action='a.html' name='formname'>"
+                + "<input type='text' id='text1' name='username'>"
+                + "<input list='datalist_id' name='count' id='text2'/><datalist id='datalist_id'>"
+                + "<option value='A1'>one</option><option value='A2'>two</option></datalist>"
+                + "</form></body></html>";
+        final String url = mWebServer.setResponse(FILE, data, null);
+        loadUrlSync(url);
+        int cnt = 0;
+        executeJavaScriptAndWaitForResult("document.getElementById('text2').select();");
+        dispatchDownAndUpKeyEvents(KeyEvent.KEYCODE_A);
+        pollDatalistPopupShown();
+        TouchCommon.singleClickView(
+                mAutofillProviderImpl.getDatalistPopupForTesting().getListView().getChildAt(1));
+        // Verify the selection accepted by renderer.
+        pollJavascriptResult("document.getElementById('text2').value;", "\"A2\"");
+    }
+
+    private void pollJavascriptResult(String script, String expectedResult) throws Throwable {
+        AwActivityTestRule.pollInstrumentationThread(() -> {
+            try {
+                return expectedResult.equals(executeJavaScriptAndWaitForResult(script));
+            } catch (Throwable e) {
+                return false;
+            }
+        });
+    }
+
+    private void pollDatalistPopupShown() {
+        AwActivityTestRule.pollInstrumentationThread(() -> {
+            AutofillPopup popup = mAutofillProviderImpl.getDatalistPopupForTesting();
+            return popup != null && popup.getListView().getChildCount() > 0;
+        });
     }
 
     private void scrollToBottom() {
