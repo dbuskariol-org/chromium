@@ -12523,7 +12523,7 @@
       'tags': [],
       'desc': '''Setting the policy sets up a list of bookmarks where each one is a dictionary with the keys "<ph name="NAME">name</ph>" and "<ph name="URL_LABEL">url</ph>". These keys hold the bookmark's name and target. Admins can set up a subfolder by defining a bookmark without a "<ph name="URL_LABEL">url</ph>" key, but with an additional "<ph name="CHILDREN">children</ph>" key. This key also has a list of bookmarks, some of which can also be folders. Chrome amends incomplete URLs as if they were submitted through the address bar. For example, "<ph name="GOOGLE_COM">google.com</ph>" becomes "<ph name="HTTPS_GOOGLE_COM">https://google.com/</ph>".
 
-      Users can't change the folders the bookmarks are placed in (though they can hide it from the bookmark bar). The folder name is "Managed bookmarks," but they can add it to the list of bookmarks a dictionary with the key "<ph name="TOPLEVEL_NAME">toplevel_name</ph>" with the desired folder name as the value. Managed bookmarks are not synced to the user account and extensions can't modify them.''',
+      Users can't change the folders the bookmarks are placed in (though they can hide it from the bookmark bar). The default folder name for managed bookmarks is "Managed bookmarks" but it can be changed by adding a new sub-dictionary to the policy with a single key named "<ph name="TOPLEVEL_NAME">toplevel_name</ph>" with the desired folder name as its value. Managed bookmarks are not synced to the user account and extensions can't modify them.''',
     },
     {
       'name': 'DataCompressionProxyEnabled',
