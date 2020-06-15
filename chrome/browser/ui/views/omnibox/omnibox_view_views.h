@@ -163,6 +163,10 @@ class OmniboxViewViews : public OmniboxView,
     return popup_view_.get();
   }
 
+  // Applies |color| to the URL's path. Callers should ensure that the URL is
+  // valid before calling. Virtual for testing.
+  virtual void SetPathColor(SkColor color);
+
  protected:
   // views::Textfield:
   void OnThemeChanged() override;

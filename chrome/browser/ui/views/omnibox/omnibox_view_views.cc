@@ -373,9 +373,6 @@ bool OmniboxViewViews::SelectionAtEnd() const {
 }
 
 void OmniboxViewViews::EmphasizeURLComponents() {
-  if (!location_bar_view_)
-    return;
-
   // Cancel any existing path fading animation. The path style will be reset
   // in the following lines, so there should be no ill effects from cancelling
   // the animation midway.
@@ -410,7 +407,7 @@ void OmniboxViewViews::EmphasizeURLComponents() {
     // If reveal-on-hover is enabled and hide-on-interaction is disabled, hide
     // the path now.
     if (CanFadePath())
-      ApplyColor(SK_ColorTRANSPARENT, GetPathBounds());
+      SetPathColor(SK_ColorTRANSPARENT);
   }
 }
 
@@ -634,6 +631,10 @@ void OmniboxViewViews::AddedToWidget() {
 void OmniboxViewViews::RemovedFromWidget() {
   views::Textfield::RemovedFromWidget();
   scoped_compositor_observer_.RemoveAll();
+}
+
+void OmniboxViewViews::SetPathColor(SkColor color) {
+  ApplyColor(color, GetPathBounds());
 }
 
 void OmniboxViewViews::OnThemeChanged() {
@@ -1591,7 +1592,7 @@ void OmniboxViewViews::OnBlur() {
         !OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction()) {
       ResetPathFadeInAnimation();
       if (CanFadePath())
-        ApplyColor(SK_ColorTRANSPARENT, GetPathBounds());
+        SetPathColor(SK_ColorTRANSPARENT);
     } else if (OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction()) {
       ResetToHideOnInteraction();
     }
@@ -1621,7 +1622,7 @@ void OmniboxViewViews::DidFinishNavigation(
   if (navigation->IsSameDocument()) {
     // Make sure the path is not re-shown for same-document navigations.
     if (CanFadePath())
-      ApplyColor(SK_ColorTRANSPARENT, GetPathBounds());
+      SetPathColor(SK_ColorTRANSPARENT);
     return;
   }
   // Once a cross-document navigation finishes, show the path and reset state so
@@ -2158,9 +2159,8 @@ void OmniboxViewViews::ResetToHideOnInteraction() {
       std::make_unique<PathFadeAnimation>(this, dimmed_text_color,
                                           SK_ColorTRANSPARENT, 0);
   if (CanFadePath()) {
-    ApplyColor(GetOmniboxColor(GetThemeProvider(),
-                               OmniboxPart::LOCATION_BAR_TEXT_DIMMED),
-               GetPathBounds());
+    SetPathColor(GetOmniboxColor(GetThemeProvider(),
+                                 OmniboxPart::LOCATION_BAR_TEXT_DIMMED));
   }
 }
 
