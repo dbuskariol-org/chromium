@@ -240,7 +240,7 @@ TEST_F(GatewayCanBePingedRoutineTest, TestSingleActiveNetwork) {
   SetUpRoutine(kFakeValidICMPOutput);
   SetUpWiFi(shill::kStateOnline);
   std::vector<mojom::GatewayCanBePingedProblem> expected_problems = {};
-  gateway_can_be_pinged_routine()->RunTest(
+  gateway_can_be_pinged_routine()->RunRoutine(
       base::BindOnce(&GatewayCanBePingedRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kNoProblem, expected_problems));
   base::RunLoop().RunUntilIdle();
@@ -251,7 +251,7 @@ TEST_F(GatewayCanBePingedRoutineTest, TestNoActiveNetworks) {
   SetUpWiFi(shill::kStateOffline);
   std::vector<mojom::GatewayCanBePingedProblem> expected_problems = {
       mojom::GatewayCanBePingedProblem::kUnreachableGateway};
-  gateway_can_be_pinged_routine()->RunTest(
+  gateway_can_be_pinged_routine()->RunRoutine(
       base::BindOnce(&GatewayCanBePingedRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kProblem, expected_problems));
   base::RunLoop().RunUntilIdle();
@@ -264,7 +264,7 @@ TEST_F(GatewayCanBePingedRoutineTest, TestFailureToPingDefaultNetwork) {
   SetUpWiFi(shill::kStateOnline);
   std::vector<mojom::GatewayCanBePingedProblem> expected_problems = {
       mojom::GatewayCanBePingedProblem::kFailedToPingDefaultNetwork};
-  gateway_can_be_pinged_routine()->RunTest(
+  gateway_can_be_pinged_routine()->RunRoutine(
       base::BindOnce(&GatewayCanBePingedRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kProblem, expected_problems));
   base::RunLoop().RunUntilIdle();
@@ -277,7 +277,7 @@ TEST_F(GatewayCanBePingedRoutineTest, TestDefaultNetworkAboveLatencyThreshold) {
   SetUpWiFi(shill::kStateOnline);
   std::vector<mojom::GatewayCanBePingedProblem> expected_problems = {
       mojom::GatewayCanBePingedProblem::kDefaultNetworkAboveLatencyThreshold};
-  gateway_can_be_pinged_routine()->RunTest(
+  gateway_can_be_pinged_routine()->RunRoutine(
       base::BindOnce(&GatewayCanBePingedRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kProblem, expected_problems));
   base::RunLoop().RunUntilIdle();

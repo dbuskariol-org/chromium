@@ -83,7 +83,7 @@ class LanConnectivityRoutineTest : public ::testing::Test {
 TEST_F(LanConnectivityRoutineTest, TestConnectedLan) {
   SetUpEthernet();
   SetUpWiFi(shill::kStateOnline);
-  lan_connectivity_routine()->RunTest(
+  lan_connectivity_routine()->RunRoutine(
       base::BindOnce(&LanConnectivityRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kNoProblem));
   base::RunLoop().RunUntilIdle();
@@ -91,7 +91,7 @@ TEST_F(LanConnectivityRoutineTest, TestConnectedLan) {
 
 TEST_F(LanConnectivityRoutineTest, TestDisconnectedLan) {
   SetUpWiFi(shill::kStateOffline);
-  lan_connectivity_routine()->RunTest(
+  lan_connectivity_routine()->RunRoutine(
       base::BindOnce(&LanConnectivityRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kProblem));
   base::RunLoop().RunUntilIdle();

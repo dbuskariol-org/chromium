@@ -82,7 +82,7 @@ class SignalStrengthRoutineTest : public ::testing::Test {
 TEST_F(SignalStrengthRoutineTest, TestGoodWiFiSignal) {
   SetUpWiFi(shill::kStateOnline, kGoodWiFiSignal);
   std::vector<mojom::SignalStrengthProblem> expected_problems = {};
-  signal_strength_routine()->RunTest(
+  signal_strength_routine()->RunRoutine(
       base::BindOnce(&SignalStrengthRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kNoProblem, expected_problems));
   base::RunLoop().RunUntilIdle();
@@ -92,7 +92,7 @@ TEST_F(SignalStrengthRoutineTest, TestBadWiFiSignal) {
   SetUpWiFi(shill::kStateOnline, kBadWiFiSignal);
   std::vector<mojom::SignalStrengthProblem> expected_problems = {
       mojom::SignalStrengthProblem::kWeakSignal};
-  signal_strength_routine()->RunTest(
+  signal_strength_routine()->RunRoutine(
       base::BindOnce(&SignalStrengthRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kProblem, expected_problems));
   base::RunLoop().RunUntilIdle();
@@ -102,7 +102,7 @@ TEST_F(SignalStrengthRoutineTest, TestUnknownSignal) {
   SetUpWiFi(shill::kStateOffline, kGoodWiFiSignal);
   std::vector<mojom::SignalStrengthProblem> expected_problems = {
       mojom::SignalStrengthProblem::kSignalNotFound};
-  signal_strength_routine()->RunTest(
+  signal_strength_routine()->RunRoutine(
       base::BindOnce(&SignalStrengthRoutineTest::CompareVerdict, weak_ptr(),
                      mojom::RoutineVerdict::kNotRun, expected_problems));
   base::RunLoop().RunUntilIdle();

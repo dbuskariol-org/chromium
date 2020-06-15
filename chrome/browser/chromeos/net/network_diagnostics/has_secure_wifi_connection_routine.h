@@ -28,7 +28,7 @@ class HasSecureWiFiConnectionRoutine : public NetworkDiagnosticsRoutine {
   bool CanRun() override;
   void AnalyzeResultsAndExecuteCallback() override;
 
-  void RunTest(HasSecureWiFiConnectionRoutineCallback callback);
+  void RunRoutine(HasSecureWiFiConnectionRoutineCallback callback);
 
  private:
   void FetchActiveWiFiNetworks();
