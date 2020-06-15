@@ -17552,8 +17552,7 @@
         'per_profile': True,
         'cloud_only': True,
       },
-      'supported_on': ['chrome.*:83-', 'chrome_os:83-'],
-      'future': True,
+      'supported_on': ['chrome.*:85-', 'chrome_os:85-'],
       'caption': '''Enables <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> extension installation requests''',
       'example_value': True,
       'desc': '''This policy controls <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> extension installation requests which allows users to send the requests to the Google Admin console for approval.
