@@ -7311,6 +7311,22 @@
             ]
         }
     ],
+    "Vulkan": [
+        {
+            "platforms": [
+                "android"
+            ],
+            "experiments": [
+                {
+                    "name": "Vulkan",
+                    "enable_features": [
+                        "Vulkan"
+                    ],
+                    "min_os_version": "10.0.0"
+                }
+            ]
+        }
+    ],
     "WKHTTPSystemCookieStore": [
         {
             "platforms": [
