@@ -129,6 +129,10 @@ bool IsMicSharingEnabled(Profile* profile, bool crostini_mic_sharing_enabled) {
   return false;
 }
 
+void EmitCorruptionStateMetric(CorruptionStates state) {
+  base::UmaHistogramEnumeration("Crostini.FilesystemCorruption", state);
+}
+
 }  // namespace
 
 CrostiniManager::RestartOptions::RestartOptions() = default;
@@ -2443,12 +2447,10 @@ void CrostiniManager::OnStartTerminaVm(
 
   switch (response->mount_result()) {
     case vm_tools::concierge::StartVmResponse::PARTIAL_DATA_LOSS:
-      base::UmaHistogramEnumeration(kCrostiniCorruptionHistogram,
-                                    CorruptionStates::MOUNT_ROLLED_BACK);
+      EmitCorruptionStateMetric(CorruptionStates::MOUNT_ROLLED_BACK);
       break;
     case vm_tools::concierge::StartVmResponse::FAILURE:
-      base::UmaHistogramEnumeration(kCrostiniCorruptionHistogram,
-                                    CorruptionStates::MOUNT_FAILED);
+      EmitCorruptionStateMetric(CorruptionStates::MOUNT_FAILED);
       break;
     default:
       break;
@@ -2636,8 +2638,7 @@ void CrostiniManager::OnDefaultContainerConfigured(bool success) {
 
 void CrostiniManager::OnGuestFileCorruption(
     const anomaly_detector::GuestFileCorruptionSignal& signal) {
-  base::UmaHistogramEnumeration(kCrostiniCorruptionHistogram,
-                                CorruptionStates::OTHER_CORRUPTION);
+  EmitCorruptionStateMetric(CorruptionStates::OTHER_CORRUPTION);
 }
 
 void CrostiniManager::OnVmStarted(
