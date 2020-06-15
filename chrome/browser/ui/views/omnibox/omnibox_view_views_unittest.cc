@@ -1395,6 +1395,82 @@ TEST_F(OmniboxViewViewsTest, HideOnInteractionAndRevealOnHover) {
             fade_in->GetCurrentColor());
 }
 
+// Tests that in the hide-on-interaction field trial variation, the path is
+// faded out after omnibox focus and blur.
+TEST_F(OmniboxViewViewsTest, HideOnInteractionAfterFocusAndBlur) {
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeatures(
+      {omnibox::kHideSteadyStateUrlPathQueryAndRef,
+       omnibox::kHideSteadyStateUrlPathQueryAndRefOnInteraction,
+       omnibox::kRevealSteadyStateUrlPathQueryAndRefOnHover},
+      {});
+  location_bar_model()->set_url(GURL("https://example.test/foo"));
+  location_bar_model()->set_url_for_display(
+      base::ASCIIToUTF16("example.test/foo"));
+  omnibox_view()->model()->ResetDisplayTexts();
+  omnibox_view()->RevertAll();
+
+  // Call OnThemeChanged() to create the animations.
+  omnibox_view()->OnThemeChanged();
+
+  content::MockNavigationHandle navigation;
+  navigation.set_is_same_document(false);
+  omnibox_view()->DidFinishNavigation(&navigation);
+
+  // Simulate a user interaction to fade out the path.
+  omnibox_view()->DidGetUserInteraction(
+      blink::WebInputEvent::Type::kGestureScrollBegin);
+  OmniboxViewViews::PathFadeAnimation* fade_out =
+      omnibox_view()->GetPathFadeOutAfterInteractionAnimationForTesting();
+  gfx::AnimationContainerElement* fade_out_as_element =
+      static_cast<gfx::AnimationContainerElement*>(
+          omnibox_view()
+              ->GetPathFadeOutAfterInteractionAnimationForTesting()
+              ->GetAnimationForTesting());
+  fade_out_as_element->SetStartTime(base::TimeTicks());
+  fade_out_as_element->Step(base::TimeTicks() +
+                            base::TimeDelta::FromSeconds(1));
+  EXPECT_EQ(SK_ColorTRANSPARENT, fade_out->GetCurrentColor());
+
+  // Now focus and blur the omnibox. After blur, the path should fade out again
+  // after another user interaction.
+  omnibox_view()->OnFocus();
+  omnibox_view()->OnBlur();
+  omnibox_view()->DidGetUserInteraction(
+      blink::WebInputEvent::Type::kGestureScrollBegin);
+  fade_out =
+      omnibox_view()->GetPathFadeOutAfterInteractionAnimationForTesting();
+  EXPECT_TRUE(fade_out->IsAnimating());
+}
+
+// Tests that in the reveal-on-hover field trial variation (without
+// hide-on-interaction), the path is faded back in after focus, then blur, then
+// hover.
+TEST_F(OmniboxViewViewsTest, RevealOnHoverAfterBlur) {
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeatures(
+      {omnibox::kHideSteadyStateUrlPathQueryAndRef,
+       omnibox::kRevealSteadyStateUrlPathQueryAndRefOnHover},
+      {omnibox::kHideSteadyStateUrlPathQueryAndRefOnInteraction});
+  location_bar_model()->set_url(GURL("https://example.test/foo"));
+  location_bar_model()->set_url_for_display(
+      base::ASCIIToUTF16("example.test/foo"));
+  omnibox_view()->model()->ResetDisplayTexts();
+  omnibox_view()->RevertAll();
+
+  // Call OnThemeChanged() to create the animations.
+  omnibox_view()->OnThemeChanged();
+
+  // Focus and blur the omnibox, then hover over it. The path should fade in.
+  omnibox_view()->OnFocus();
+  omnibox_view()->OnBlur();
+  omnibox_view()->OnMouseMoved(CreateMouseEvent(ui::ET_MOUSE_MOVED, {0, 0}));
+  OmniboxViewViews::PathFadeAnimation* fade_in =
+      omnibox_view()->GetPathFadeInAnimationForTesting();
+  ASSERT_TRUE(fade_in);
+  EXPECT_TRUE(fade_in->IsAnimating());
+}
+
 // TODO (manukh) move up to where the other OmniboxViewViewsTest tests are.
 TEST_F(OmniboxViewViewsTest, OverflowingAutocompleteText) {
   // Make the Omnibox narrow so it can't fit the entire string (~650px), but

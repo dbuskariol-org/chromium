@@ -652,9 +652,7 @@ void OmniboxViewViews::OnThemeChanged() {
         // both the fade-in and fade-out animations now. When
         // hide-on-interaction is enabled, the animations are created after the
         // user interacts with each page.
-        path_fade_in_animation_ = std::make_unique<PathFadeAnimation>(
-            this, SK_ColorTRANSPARENT, dimmed_text_color,
-            OmniboxFieldTrial::RevealPathQueryRefOnHoverThresholdMs());
+        ResetPathFadeInAnimation();
         path_fade_out_after_hover_animation_ =
             std::make_unique<PathFadeAnimation>(this, dimmed_text_color,
                                                 SK_ColorTRANSPARENT, 0);
@@ -1178,9 +1176,7 @@ void OmniboxViewViews::OnMouseExited(const ui::MouseEvent& event) {
             ? path_fade_in_animation_->GetCurrentColor()
             : dimmed_text_color);
     path_fade_in_animation_->Stop();
-    path_fade_in_animation_ = std::make_unique<PathFadeAnimation>(
-        this, SK_ColorTRANSPARENT, dimmed_text_color,
-        OmniboxFieldTrial::RevealPathQueryRefOnHoverThresholdMs());
+    ResetPathFadeInAnimation();
     path_fade_out_after_hover_animation_->Start(GetPathBounds());
   }
 }
@@ -1587,6 +1583,19 @@ void OmniboxViewViews::OnBlur() {
   }
 
   ClearAccessibilityLabel();
+
+  // When the relevant field trial is enabled, reset state so that the path will
+  // be hidden upon interaction with the page.
+  if (OmniboxFieldTrial::IsHidePathQueryRefEnabled()) {
+    if (OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover() &&
+        !OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction()) {
+      ResetPathFadeInAnimation();
+      if (CanFadePath())
+        ApplyColor(SK_ColorTRANSPARENT, GetPathBounds());
+    } else if (OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction()) {
+      ResetToHideOnInteraction();
+    }
+  }
 }
 
 bool OmniboxViewViews::IsCommandIdEnabled(int command_id) const {
@@ -1636,9 +1645,7 @@ void OmniboxViewViews::DidGetUserInteraction(
   if (OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover()) {
     const SkColor dimmed_text_color = GetOmniboxColor(
         GetThemeProvider(), OmniboxPart::LOCATION_BAR_TEXT_DIMMED);
-    path_fade_in_animation_ = std::make_unique<PathFadeAnimation>(
-        this, SK_ColorTRANSPARENT, dimmed_text_color,
-        OmniboxFieldTrial::RevealPathQueryRefOnHoverThresholdMs());
+    ResetPathFadeInAnimation();
     path_fade_out_after_hover_animation_ = std::make_unique<PathFadeAnimation>(
         this, dimmed_text_color, SK_ColorTRANSPARENT, 0);
   }
@@ -2155,6 +2162,15 @@ void OmniboxViewViews::ResetToHideOnInteraction() {
                                OmniboxPart::LOCATION_BAR_TEXT_DIMMED),
                GetPathBounds());
   }
+}
+
+void OmniboxViewViews::ResetPathFadeInAnimation() {
+  DCHECK(OmniboxFieldTrial::ShouldRevealPathQueryRefOnHover());
+  const SkColor dimmed_text_color = GetOmniboxColor(
+      GetThemeProvider(), OmniboxPart::LOCATION_BAR_TEXT_DIMMED);
+  path_fade_in_animation_ = std::make_unique<PathFadeAnimation>(
+      this, SK_ColorTRANSPARENT, dimmed_text_color,
+      OmniboxFieldTrial::RevealPathQueryRefOnHoverThresholdMs());
 }
 
 OmniboxViewViews::PathFadeAnimation*

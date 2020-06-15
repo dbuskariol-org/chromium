@@ -172,6 +172,9 @@ class OmniboxViewViews : public OmniboxView,
   FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest, RevealOnHover);
   FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest,
                            HideOnInteractionAndRevealOnHover);
+  FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest,
+                           HideOnInteractionAfterFocusAndBlur);
+  FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest, RevealOnHoverAfterBlur);
   // TODO(tommycli): Remove the rest of these friends after porting these
   // browser tests to unit tests.
   FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest, CloseOmniboxPopupOnTextDrag);
@@ -369,6 +372,12 @@ class OmniboxViewViews : public OmniboxView,
   // back to the on-page-load state. That is, it unhides the path (if currently
   // hidden) and resets state so that the path will show until user interaction.
   void ResetToHideOnInteraction();
+
+  // This method recreates the path fade-in animation. Each incarnation of the
+  // fade-in animation should only be run once, so this method should be called
+  // when the path is eligible to be faded in again (e.g., on mouse exit after a
+  // hover that faded the path in).
+  void ResetPathFadeInAnimation();
 
   PathFadeAnimation* GetPathFadeInAnimationForTesting();
   PathFadeAnimation* GetPathFadeOutAfterHoverAnimationForTesting();
