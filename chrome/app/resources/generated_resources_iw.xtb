@@ -1223,7 +1223,7 @@
 <translation id="2523184218357549926">‏שליחת כתובות אתרים של דפים שבהם ביקרת ל-Google</translation>
 <translation id="2526277209479171883">התקנה והמשך</translation>
 <translation id="2526590354069164005">שולחן עבודה</translation>
-<translation id="2526619973349913024">בדוק אם קיים עדכון</translation>
+<translation id="2526619973349913024">יש עדכון חדש?</translation>
 <translation id="2527167509808613699">חיבור מכל סוג שהוא</translation>
 <translation id="2532589005999780174">מצב ניגודיות גבוהה</translation>
 <translation id="253434972992662860">&amp;השהה</translation>
@@ -2111,7 +2111,7 @@
 <translation id="3664511988987167893">סמל התוסף</translation>
 <translation id="3665589677786828986">‏Chrome זיהה שחלק מההגדרות שלך נפגמו על ידי תכנית אחרת ואיפס אותן לברירות המחדל המקוריות.</translation>
 <translation id="3668801437375206837">‏כדי לשפר את האבחון של בעיות בחיבור Bluetooth, גוגלרים יכולים לכלול יומני Bluetooth נוספים במשובים. אם האפשרות מסומנת, הדוח יכלול את יומני btsnoop ו-HCI מהסשן הנוכחי, והמערכת "תנקה" אותו כדי להסיר כמה שיותר פרטים אישיים מזהים (PII). הגישה ליומנים האלה תוגבל למנהלים של קבוצת מוצרי Chrome OS ב-Listnr. המערכת תמחק לצמיתות את היומנים אחרי 90 ימים.</translation>
-<translation id="3668823961463113931">מטפלים</translation>
+<translation id="3668823961463113931">Handlers</translation>
 <translation id="3670113805793654926">מכשירים של כל ספק</translation>
 <translation id="3670229581627177274">‏הפעל Bluetooth</translation>
 <translation id="3672681487849735243">אותרה שגיאה שמקורה ביצרן</translation>
@@ -5088,7 +5088,7 @@
 <translation id="7559719679815339381">המתן....מתבצע עדכון של אפליקצית הקיוסק. אל תסיר את הדיסק און קי.</translation>
 <translation id="7561196759112975576">תמיד</translation>
 <translation id="756445078718366910">פתח חלון דפדפן</translation>
-<translation id="7564847347806291057">סיים תהליך</translation>
+<translation id="7564847347806291057">סיום התהליך</translation>
 <translation id="7566118625369982896">‏ניהול קישורים של אפליקציות מ-Play</translation>
 <translation id="756809126120519699">‏נתוני Chrome נוקו</translation>
 <translation id="7568790562536448087">מעדכן</translation>

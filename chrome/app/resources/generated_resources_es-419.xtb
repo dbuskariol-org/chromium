@@ -795,7 +795,7 @@
 <translation id="1994173015038366702">URL del sitio</translation>
 <translation id="1995916364271252349">Controla qué información pueden usar y mostrar los sitios (ubicación, cámara, ventanas emergentes y más)</translation>
 <translation id="1997616988432401742">Tus certificados</translation>
-<translation id="1999115740519098545">En inicio</translation>
+<translation id="1999115740519098545">Al iniciar</translation>
 <translation id="2000419248597011803">Envía algunas cookies y búsquedas de la barra de direcciones y del cuadro de búsqueda a tu motor de búsqueda predeterminado</translation>
 <translation id="2002109485265116295">En tiempo real</translation>
 <translation id="2003130567827682533">Para activar los datos de "<ph name="NAME" />", debes conectarte a una red Wi-Fi</translation>
@@ -1909,7 +1909,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="3427092606871434483">Permitir (predeterminado)</translation>
 <translation id="3428419049384081277">¡Accediste!</translation>
 <translation id="3428747202529429621">Te protege en Chrome y puede usarse para mejorar tu seguridad en otras apps de Google cuando accedes a tu cuenta.</translation>
-<translation id="3428800329481094896">Obteniendo llaves SSH del contenedor de Linux</translation>
+<translation id="3428800329481094896">Obteniendo claves SSH del contenedor de Linux</translation>
 <translation id="3429275422858276529">Agrega esta página a favoritos para encontrarla fácilmente más tarde</translation>
 <translation id="3432227430032737297">Quitar todo lo que se muestra</translation>
 <translation id="3432757130254800023">Enviar audio y video a pantallas en la red local</translation>

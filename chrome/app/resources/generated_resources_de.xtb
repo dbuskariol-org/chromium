@@ -320,7 +320,7 @@
 <translation id="1408504635543854729">Sie können sich Geräteinhalte in der App "Dateien" ansehen. Die Inhalte wurden von einem Administrator schreibgeschützt und können nicht bearbeitet werden.</translation>
 <translation id="1408980562518920698">Personenbezogene Daten verwalten</translation>
 <translation id="1410197035576869800">App-Symbol</translation>
-<translation id="1410616244180625362"><ph name="HOST" /> weiterhin Zugriff auf Ihre Kamera gestatten</translation>
+<translation id="1410616244180625362"><ph name="HOST" /> weiterhin Zugriff auf meine Kamera gestatten</translation>
 <translation id="1414648216875402825">Sie aktualisieren auf eine instabile Version von <ph name="PRODUCT_NAME" />. Diese enthält Funktionen, die sich noch in der Entwicklung befinden. Es können Abstürze und unerwartete Fehler auftreten. Gehen Sie daher bitte vorsichtig vor.</translation>
 <translation id="1415708812149920388">Lesezugriff auf Zwischenablage verweigert</translation>
 <translation id="1415990189994829608"><ph name="EXTENSION_NAME" /> (Erweiterungs-ID "<ph name="EXTENSION_ID" />") ist bei diesem Sitzungstyp nicht zulässig.</translation>
@@ -2101,7 +2101,7 @@ Servernachricht: <ph name="SERVER_MSG" /></translation>
 <translation id="3652817283076144888">Initialisierung läuft</translation>
 <translation id="3653160965917900914">Netzwerkfreigaben</translation>
 <translation id="3653842108912548333">Mit Voice Match auf Assistant zugreifen</translation>
-<translation id="3653999333232393305"><ph name="HOST" /> weiterhin Zugriff auf Ihr Mikrofon gestatten</translation>
+<translation id="3653999333232393305"><ph name="HOST" /> weiterhin Zugriff auf mein Mikrofon gestatten</translation>
 <translation id="3654045516529121250">Einstellungen für Bedienungshilfen lesen</translation>
 <translation id="3655712721956801464">{NUM_FILES,plural, =1{Dauerhafter Zugriff auf eine Datei}other{Dauerhafter Zugriff auf # Dateien}}</translation>
 <translation id="3660234220361471169">Nicht vertrauenswürdig</translation>
