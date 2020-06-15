@@ -152,7 +152,6 @@ class OmniboxViewViews : public OmniboxView,
   ui::TextInputType GetTextInputType() const override;
   void AddedToWidget() override;
   void RemovedFromWidget() override;
-  bool ShouldDoLearning() override;
   base::string16 GetLabelForCommandId(int command_id) const override;
   bool IsCommandIdEnabled(int command_id) const override;
 

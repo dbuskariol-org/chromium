@@ -272,6 +272,9 @@ void OmniboxViewViews::Init() {
         new OmniboxPopupContentsView(this, model(), location_bar_view_));
     if (OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction())
       Observe(location_bar_view_->GetWebContents());
+
+    // Set whether the text should be used to improve typing suggestions.
+    SetShouldDoLearning(!location_bar_view_->profile()->IsOffTheRecord());
   }
 
   // Override the default FocusableBorder from Textfield, since the
@@ -614,10 +617,6 @@ void OmniboxViewViews::AddedToWidget() {
 void OmniboxViewViews::RemovedFromWidget() {
   views::Textfield::RemovedFromWidget();
   scoped_compositor_observer_.RemoveAll();
-}
-
-bool OmniboxViewViews::ShouldDoLearning() {
-  return location_bar_view_ && !location_bar_view_->profile()->IsOffTheRecord();
 }
 
 void OmniboxViewViews::OnThemeChanged() {
