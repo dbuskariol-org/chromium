@@ -26,6 +26,11 @@ class HasSecureWiFiConnectionRoutineTest : public ::testing::Test {
         std::make_unique<HasSecureWiFiConnectionRoutine>();
   }
 
+  HasSecureWiFiConnectionRoutineTest(
+      const HasSecureWiFiConnectionRoutineTest&) = delete;
+  HasSecureWiFiConnectionRoutineTest& operator=(
+      const HasSecureWiFiConnectionRoutineTest&) = delete;
+
   void CompareVerdict(mojom::RoutineVerdict expected_verdict,
                       const std::vector<mojom::HasSecureWiFiConnectionProblem>&
                           expected_problems,
@@ -78,8 +83,6 @@ class HasSecureWiFiConnectionRoutineTest : public ::testing::Test {
       has_secure_wifi_connection_routine_;
   std::string wifi_path_;
   base::WeakPtrFactory<HasSecureWiFiConnectionRoutineTest> weak_factory_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(HasSecureWiFiConnectionRoutineTest);
 };
 
 TEST_F(HasSecureWiFiConnectionRoutineTest, TestSecureWiFiConnection) {

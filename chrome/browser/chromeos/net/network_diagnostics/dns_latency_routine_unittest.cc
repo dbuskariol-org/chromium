@@ -137,6 +137,9 @@ class DnsLatencyRoutineTest : public ::testing::Test {
         session_manager::SessionState::LOGIN_PRIMARY);
   }
 
+  DnsLatencyRoutineTest(const DnsLatencyRoutineTest&) = delete;
+  DnsLatencyRoutineTest& operator=(const DnsLatencyRoutineTest&) = delete;
+
   void CompareVerdict(
       mojom::RoutineVerdict expected_verdict,
       const std::vector<mojom::DnsLatencyProblem>& expected_problems,
@@ -209,8 +212,6 @@ class DnsLatencyRoutineTest : public ::testing::Test {
   TestingProfileManager profile_manager_;
   std::unique_ptr<DnsLatencyRoutine> dns_latency_routine_;
   base::WeakPtrFactory<DnsLatencyRoutineTest> weak_factory_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(DnsLatencyRoutineTest);
 };
 
 // A passing routine requires an error code of net::OK and a non-empty

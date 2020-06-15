@@ -67,6 +67,10 @@ class DnsResolverPresentRoutineTest : public ::testing::Test {
     base::RunLoop().RunUntilIdle();
   }
 
+  DnsResolverPresentRoutineTest(const DnsResolverPresentRoutineTest&) = delete;
+  DnsResolverPresentRoutineTest& operator=(
+      const DnsResolverPresentRoutineTest&) = delete;
+
   ~DnsResolverPresentRoutineTest() override {
     NetworkCertLoader::Shutdown();
     LoginState::Shutdown();
@@ -221,8 +225,6 @@ class DnsResolverPresentRoutineTest : public ::testing::Test {
   sync_preferences::TestingPrefServiceSyncable user_prefs_;
   TestingPrefServiceSimple local_state_;
   base::WeakPtrFactory<DnsResolverPresentRoutineTest> weak_factory_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(DnsResolverPresentRoutineTest);
 };
 
 TEST_F(DnsResolverPresentRoutineTest, TestResolverPresent) {

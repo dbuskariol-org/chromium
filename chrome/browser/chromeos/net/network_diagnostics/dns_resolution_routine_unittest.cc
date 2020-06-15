@@ -112,6 +112,8 @@ class DnsResolutionRoutineTest : public ::testing::Test {
     session_manager::SessionManager::Get()->SetSessionState(
         session_manager::SessionState::LOGIN_PRIMARY);
   }
+  DnsResolutionRoutineTest(const DnsResolutionRoutineTest&) = delete;
+  DnsResolutionRoutineTest& operator=(const DnsResolutionRoutineTest&) = delete;
 
   void RunRoutine(
       mojom::RoutineVerdict expected_routine_verdict,
@@ -175,8 +177,6 @@ class DnsResolutionRoutineTest : public ::testing::Test {
   TestingProfileManager profile_manager_;
   std::unique_ptr<DnsResolutionRoutine> dns_resolution_routine_;
   base::WeakPtrFactory<DnsResolutionRoutineTest> weak_factory_{this};
-
-  DISALLOW_COPY_AND_ASSIGN(DnsResolutionRoutineTest);
 };
 
 // A passing routine requires an error code of net::OK and a non-empty

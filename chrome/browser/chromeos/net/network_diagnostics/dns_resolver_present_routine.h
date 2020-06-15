@@ -23,6 +23,9 @@ class DnsResolverPresentRoutine : public NetworkDiagnosticsRoutine {
       mojom::NetworkDiagnosticsRoutines::DnsResolverPresentCallback;
 
   DnsResolverPresentRoutine();
+  DnsResolverPresentRoutine(const DnsResolverPresentRoutine&) = delete;
+  DnsResolverPresentRoutine& operator=(const DnsResolverPresentRoutine&) =
+      delete;
   ~DnsResolverPresentRoutine() override;
 
   // NetworkDiagnosticsRoutine:
@@ -50,8 +53,6 @@ class DnsResolverPresentRoutine : public NetworkDiagnosticsRoutine {
   mojo::Remote<chromeos::network_config::mojom::CrosNetworkConfig>
       remote_cros_network_config_;
   DnsResolverPresentRoutineCallback routine_completed_callback_;
-
-  DISALLOW_COPY_AND_ASSIGN(DnsResolverPresentRoutine);
 };
 
 }  // namespace network_diagnostics

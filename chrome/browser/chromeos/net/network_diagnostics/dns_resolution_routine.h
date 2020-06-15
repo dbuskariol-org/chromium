@@ -34,6 +34,8 @@ class DnsResolutionRoutine : public NetworkDiagnosticsRoutine,
       mojom::NetworkDiagnosticsRoutines::DnsResolutionCallback;
 
   DnsResolutionRoutine();
+  DnsResolutionRoutine(const DnsResolutionRoutine&) = delete;
+  DnsResolutionRoutine& operator=(const DnsResolutionRoutine&) = delete;
   ~DnsResolutionRoutine() override;
 
   // NetworkDiagnosticsRoutine:
@@ -76,8 +78,6 @@ class DnsResolutionRoutine : public NetworkDiagnosticsRoutine,
   mojo::Receiver<network::mojom::ResolveHostClient> receiver_{this};
   mojo::Remote<network::mojom::HostResolver> host_resolver_;
   DnsResolutionRoutineCallback routine_completed_callback_;
-
-  DISALLOW_COPY_AND_ASSIGN(DnsResolutionRoutine);
 };
 
 }  // namespace network_diagnostics
