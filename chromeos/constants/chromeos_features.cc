@@ -110,7 +110,7 @@ const base::Feature kCrostiniGpuSupport{"CrostiniGpuSupport",
 
 // Enables or disables Crostini usb mounting for unsupported devices.
 const base::Feature kCrostiniUsbAllowUnsupported{
-    "CrostiniUsbAllowUnsupported", base::FEATURE_DISABLED_BY_DEFAULT};
+    "CrostiniUsbAllowUnsupported", base::FEATURE_ENABLED_BY_DEFAULT};
 
 // Enables or disables the new WebUI Crostini upgrader.
 const base::Feature kCrostiniWebUIUpgrader{"CrostiniWebUIUpgrader",
