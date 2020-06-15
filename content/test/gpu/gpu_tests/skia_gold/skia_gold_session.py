@@ -1,29 +1,29 @@
 # Copyright 2020 The Chromium Authors. All rights reserved.
 # Use of this source code is governed by a BSD-style license that can be
 # found in the LICENSE file.
-"""Utilities for interacting with the Skia Gold image diffing service.
+"""Class for interacting with the Skia Gold image diffing service.
 
-The files in //content/test/gpu/gpu_tests/skia_gold are heavily based on this.
-If you need to make a change to this file, check to see if the same change needs
-to be made there.
+This is based heavily off Android's Skia Gold implementation in
+//build/android/pylib/utils/gold_utils.py. If you need to make a change to this
+file, check to see if the same change needs to be made there.
 """
 
-import json
 import logging
 import os
-import shutil
+import subprocess
+import sys
 import tempfile
 
-from devil.utils import cmd_helper
-from pylib.base.output_manager import Datatype
-from pylib.constants import host_paths
-from pylib.utils import local_utils
-from pylib.utils import repo_utils
+from gpu_tests import path_util
 
-DEFAULT_INSTANCE = 'chrome'
-
-GOLDCTL_BINARY = os.path.join(host_paths.DIR_SOURCE_ROOT, 'tools',
-                              'skia_goldctl', 'linux', 'goldctl')
+GOLDCTL_BINARY = os.path.join(path_util.GetChromiumSrcDir(), 'tools',
+                              'skia_goldctl')
+if sys.platform == 'win32':
+  GOLDCTL_BINARY = os.path.join(GOLDCTL_BINARY, 'win', 'goldctl') + '.exe'
+elif sys.platform == 'darwin':
+  GOLDCTL_BINARY = os.path.join(GOLDCTL_BINARY, 'mac', 'goldctl')
+else:
+  GOLDCTL_BINARY = os.path.join(GOLDCTL_BINARY, 'linux', 'goldctl')
 
 
 class SkiaGoldSession(object):
@@ -35,7 +35,6 @@ class SkiaGoldSession(object):
     COMPARISON_FAILURE_REMOTE = 3
     COMPARISON_FAILURE_LOCAL = 4
     LOCAL_DIFF_FAILURE = 5
-    NO_OUTPUT_MANAGER = 6
 
   class ComparisonResults(object):
     """Struct-like object for storing results of an image comparison."""
@@ -47,24 +46,18 @@ class SkiaGoldSession(object):
       self.local_diff_closest_image = None
       self.local_diff_diff_image = None
 
-  def __init__(self,
-               working_dir,
-               gold_properties,
-               keys_file,
-               corpus,
-               instance=DEFAULT_INSTANCE):
+  def __init__(self, working_dir, gold_properties, keys_file, corpus, instance):
     """A class to handle all aspects of an image comparison via Skia Gold.
 
     A single SkiaGoldSession is valid for a single instance/corpus/keys_file
     combination.
 
     Args:
-      working_dir: The directory to store config files, etc. Sharing the same
-          working directory between multiple SkiaGoldSessions allows re-use of
-          authentication and downloaded baselines.
-      gold_properties: A SkiaGoldProperties instance for the current test run.
-      keys_file: A path to a JSON file containing various comparison config
-          data such as corpus and debug information like the hardware/software
+      working_dir: The directory to store config files, etc.
+      gold_properties: A skia_gold_properties.SkiaGoldProperties instance for
+          the current test run.
+      keys_file: A path to a JSON file containing various comparison config data
+          such as corpus and debug information like the hardware/software
           configuration the images will be produced on.
       corpus: The corpus that images that will be compared belong to.
       instance: The name of the Skia Gold instance to interact with.
@@ -74,33 +67,26 @@ class SkiaGoldSession(object):
     self._keys_file = keys_file
     self._corpus = corpus
     self._instance = instance
-    self._triage_link_file = tempfile.NamedTemporaryFile(
-        suffix='.txt', dir=working_dir, delete=False).name
+    self._triage_link_file = tempfile.NamedTemporaryFile(suffix='.txt',
+                                                         dir=working_dir,
+                                                         delete=False).name
     # A map of image name (string) to ComparisonResults for that image.
     self._comparison_results = {}
     self._authenticated = False
     self._initialized = False
 
-  # pylint: disable=too-many-return-statements
-  def RunComparison(self,
-                    name,
-                    png_file,
-                    output_manager,
-                    use_luci=True):
+  def RunComparison(self, name, png_file, use_luci=True):
     """Helper method to run all steps to compare a produced image.
 
-    Handles authentication, initialization, comparison, and, if necessary,
+    Handles authentication, itnitialization, comparison, and, if necessary,
     local diffing.
 
     Args:
       name: The name of the image being compared.
       png_file: A path to a PNG file containing the image to be compared.
-      output_manager: The output manager used to save local diff images if
-          necessary. Can be None, but will fail if it ends up needing to be used
-          and is not set.
-      use_luci: If true, authentication will use the service account provided
-          by the LUCI context. If false, will attempt to use whatever is set up
-          in gsutil, which is only supported for local runs.
+      use_luci: If true, authentication will use the service account provided by
+          the LUCI context. If false, will attempt to use whatever is set up in
+          gsutil, which is only supported for local runs.
 
     Returns:
       A tuple (status, error). |status| is a value from
@@ -123,11 +109,7 @@ class SkiaGoldSession(object):
     if not self._gold_properties.local_pixel_tests:
       return self.StatusCodes.COMPARISON_FAILURE_REMOTE, compare_stdout
 
-    if not output_manager:
-      return (self.StatusCodes.NO_OUTPUT_MANAGER,
-              'No output manager for local diff images')
-    diff_rc, diff_stdout = self.Diff(
-        name=name, png_file=png_file, output_manager=output_manager)
+    diff_rc, diff_stdout = self.Diff(name=name, png_file=png_file)
     if diff_rc:
       return self.StatusCodes.LOCAL_DIFF_FAILURE, diff_stdout
     return self.StatusCodes.COMPARISON_FAILURE_LOCAL, compare_stdout
@@ -160,8 +142,7 @@ class SkiaGoldSession(object):
           'Cannot authenticate to Skia Gold with use_luci=False unless running '
           'local pixel tests')
 
-    rc, stdout, _ = cmd_helper.GetCmdStatusOutputAndError(
-        auth_cmd, merge_stderr=True)
+    rc, stdout = _RunCmdForRcAndOutput(auth_cmd)
     if rc == 0:
       self._authenticated = True
     return rc, stdout
@@ -217,8 +198,8 @@ class SkiaGoldSession(object):
           '--cis',
           str(self._gold_properties.continuous_integration_system),
       ])
-    rc, stdout, _ = cmd_helper.GetCmdStatusOutputAndError(
-        init_cmd, merge_stderr=True)
+
+    rc, stdout = _RunCmdForRcAndOutput(init_cmd)
     if rc == 0:
       self._initialized = True
     return rc, stdout
@@ -257,8 +238,7 @@ class SkiaGoldSession(object):
       compare_cmd.append('--dryrun')
 
     self._ClearTriageLinkFile()
-    rc, stdout, _ = cmd_helper.GetCmdStatusOutputAndError(
-        compare_cmd, merge_stderr=True)
+    rc, stdout = _RunCmdForRcAndOutput(compare_cmd)
 
     self._comparison_results[name] = self.ComparisonResults()
     if rc == 0:
@@ -280,7 +260,7 @@ class SkiaGoldSession(object):
             'Failed to read triage link from file')
     return rc, stdout
 
-  def Diff(self, name, png_file, output_manager):
+  def Diff(self, name, png_file):
     """Performs a local image diff against the closest known positive in Gold.
 
     This is used for running tests on a workstation, where uploading data to
@@ -291,7 +271,6 @@ class SkiaGoldSession(object):
     Args:
       name: The name of the image being compared.
       png_file: The path to a PNG file containing the image to be diffed.
-      output_manager: The output manager used to save local diff images.
 
     Returns:
       A tuple (return_code, output). |return_code| is the return code of the
@@ -305,10 +284,10 @@ class SkiaGoldSession(object):
           '--bypass-skia-gold-functionality is not supported when running '
           'tests locally.')
 
-    # Output managers only support archived files, not directories, so we have
-    # to use a temporary directory and later move the data into the archived
-    # files.
-    output_dir = tempfile.mkdtemp(dir=self._working_dir)
+    # We intentionally don't clean this up and don't put it in self._working_dir
+    # since we need it to stick around after the test completes so the user
+    # can look at its contents.
+    output_dir = tempfile.mkdtemp()
     diff_cmd = [
         GOLDCTL_BINARY,
         'diff',
@@ -325,38 +304,19 @@ class SkiaGoldSession(object):
         '--out-dir',
         output_dir,
     ]
-    rc, stdout, _ = cmd_helper.GetCmdStatusOutputAndError(
-        diff_cmd, merge_stderr=True)
-    given_path = closest_path = diff_path = None
+    rc, stdout = _RunCmdForRcAndOutput(diff_cmd)
+    results = self._comparison_results.setdefault(name,
+                                                  self.ComparisonResults())
     # The directory should contain "input-<hash>.png", "closest-<hash>.png",
     # and "diff.png".
     for f in os.listdir(output_dir):
-      filepath = os.path.join(output_dir, f)
+      file_url = 'file://%s' % os.path.join(output_dir, f)
       if f.startswith('input-'):
-        given_path = filepath
+        results.local_diff_given_image = file_url
       elif f.startswith('closest-'):
-        closest_path = filepath
+        results.local_diff_closest_image = file_url
       elif f == 'diff.png':
-        diff_path = filepath
-    results = self._comparison_results.setdefault(name,
-                                                  self.ComparisonResults())
-    if given_path:
-      with output_manager.ArchivedTempfile('given_%s.png' % name,
-                                           'gold_local_diffs',
-                                           Datatype.PNG) as given_file:
-        shutil.move(given_path, given_file.name)
-      results.local_diff_given_image = given_file.Link()
-    if closest_path:
-      with output_manager.ArchivedTempfile('closest_%s.png' % name,
-                                           'gold_local_diffs',
-                                           Datatype.PNG) as closest_file:
-        shutil.move(closest_path, closest_file.name)
-      results.local_diff_closest_image = closest_file.Link()
-    if diff_path:
-      with output_manager.ArchivedTempfile(
-          'diff_%s.png' % name, 'gold_local_diffs', Datatype.PNG) as diff_file:
-        shutil.move(diff_path, diff_file.name)
-      results.local_diff_diff_image = diff_file.Link()
+        results.local_diff_diff_image = file_url
     return rc, stdout
 
   def GetTriageLink(self, name):
@@ -403,9 +363,7 @@ class SkiaGoldSession(object):
 
     Returns:
       A string containing the link to where the image is saved, or None if it
-      does not exist. Since local diffing should only be done when running
-      locally, this *should* be a file:// URL, but there is no guarantee of
-      that.
+      does not exist.
     """
     assert name in self._comparison_results
     return self._comparison_results[name].local_diff_given_image
@@ -418,9 +376,7 @@ class SkiaGoldSession(object):
 
     Returns:
       A string containing the link to where the image is saved, or None if it
-      does not exist. Since local diffing should only be done when running
-      locally, this *should* be a file:// URL, but there is no guarantee of
-      that.
+      does not exist.
     """
     assert name in self._comparison_results
     return self._comparison_results[name].local_diff_closest_image
@@ -433,9 +389,7 @@ class SkiaGoldSession(object):
 
     Returns:
       A string containing the link to where the image is saved, or None if it
-      does not exist. Since local diffing should only be done when running
-      locally, this *should* be a file:// URL, but there is no guarantee of
-      that.
+      does not exist.
     """
     assert name in self._comparison_results
     return self._comparison_results[name].local_diff_diff_image
@@ -450,169 +404,9 @@ class SkiaGoldSession(object):
     open(self._triage_link_file, 'w').close()
 
 
-class SkiaGoldSessionManager(object):
-  def __init__(self, working_dir, gold_properties):
-    """Class to manage one or more SkiaGoldSessions.
-
-    A separate session is required for each instance/corpus/keys_file
-    combination, so this class will lazily create them as necessary.
-
-    Args:
-      working_dir: The working directory under which each individual
-          SkiaGoldSessions' working directory will be created.
-      gold_properties: A SkiaGoldProperties instance that will be used to create
-          any SkiaGoldSessions.
-    """
-    self._working_dir = working_dir
-    self._gold_properties = gold_properties
-    self._sessions = {}
-
-  def GetSkiaGoldSession(self,
-                         keys_file,
-                         corpus=None,
-                         instance=DEFAULT_INSTANCE):
-    """Gets a SkiaGoldSession for the given arguments.
-
-    Lazily creates one if necessary.
-
-    Args:
-      keys_file: A path to a JSON file containing various comparison config
-          data such as corpus and debug information like the hardware/software
-          configuration the image was produced on.
-      corpus: The corpus the session is for. If None, the corpus will be
-          determined using available information.
-      instance: The name of the Skia Gold instance to interact with.
-    """
-    with open(keys_file) as f:
-      keys = json.load(f)
-    keys_string = json.dumps(keys, sort_keys=True)
-    if corpus is None:
-      corpus = keys.get('source_type', instance)
-    # Use the string representation of the keys JSON as a proxy for a hash since
-    # dicts themselves are not hashable.
-    session = self._sessions.setdefault(instance,
-                                        {}).setdefault(corpus, {}).setdefault(
-                                            keys_string, None)
-    if not session:
-      working_dir = tempfile.mkdtemp(dir=self._working_dir)
-      session = SkiaGoldSession(working_dir, self._gold_properties, keys_file,
-                                corpus, instance)
-      self._sessions[instance][corpus][keys_string] = session
-    return session
-
-
-class SkiaGoldProperties(object):
-  def __init__(self, args):
-    """Class to validate and store properties related to Skia Gold.
-
-    Args:
-      args: The parsed arguments from an argparse.ArgumentParser.
-    """
-    self._git_revision = None
-    self._issue = None
-    self._patchset = None
-    self._job_id = None
-    self._local_pixel_tests = None
-    self._no_luci_auth = None
-    self._bypass_skia_gold_functionality = None
-
-    # Could in theory be configurable, but hard-coded for now since there's
-    # no plan to support anything else.
-    self._code_review_system = 'gerrit'
-    self._continuous_integration_system = 'buildbucket'
-
-    self._InitializeProperties(args)
-
-  def IsTryjobRun(self):
-    return self.issue is not None
-
-  @property
-  def continuous_integration_system(self):
-    return self._continuous_integration_system
-
-  @property
-  def code_review_system(self):
-    return self._code_review_system
-
-  @property
-  def git_revision(self):
-    return self._GetGitRevision()
-
-  @property
-  def issue(self):
-    return self._issue
-
-  @property
-  def job_id(self):
-    return self._job_id
-
-  @property
-  def local_pixel_tests(self):
-    return self._IsLocalRun()
-
-  @property
-  def no_luci_auth(self):
-    return self._no_luci_auth
-
-  @property
-  def patchset(self):
-    return self._patchset
-
-  @property
-  def bypass_skia_gold_functionality(self):
-    return self._bypass_skia_gold_functionality
-
-  def _GetGitRevision(self):
-    if not self._git_revision:
-      # Automated tests should always pass the revision, so assume we're on
-      # a workstation and try to get the local origin/master HEAD.
-      if not self._IsLocalRun():
-        raise RuntimeError(
-            '--git-revision was not passed when running on a bot')
-      revision = repo_utils.GetGitOriginMasterHeadSHA1(
-          host_paths.DIR_SOURCE_ROOT)
-      if not revision or len(revision) != 40:
-        raise RuntimeError(
-            '--git-revision not passed and unable to determine from git')
-      self._git_revision = revision
-    return self._git_revision
-
-  def _IsLocalRun(self):
-    if self._local_pixel_tests is None:
-      self._local_pixel_tests = not local_utils.IsOnSwarming()
-      if self._local_pixel_tests:
-        logging.warning(
-            'Automatically determined that test is running on a workstation')
-      else:
-        logging.warning(
-            'Automatically determined that test is running on a bot')
-    return self._local_pixel_tests
-
-  def _InitializeProperties(self, args):
-    if hasattr(args, 'local_pixel_tests'):
-      # If not set, will be automatically determined later if needed.
-      self._local_pixel_tests = args.local_pixel_tests
-
-    if hasattr(args, 'no_luci_auth'):
-      self._no_luci_auth = args.no_luci_auth
-
-    if hasattr(args, 'bypass_skia_gold_functionality'):
-      self._bypass_skia_gold_functionality = args.bypass_skia_gold_functionality
-
-    # Will be automatically determined later if needed.
-    if not hasattr(args, 'git_revision') or not args.git_revision:
-      return
-    self._git_revision = args.git_revision
-
-    # Only expected on tryjob runs.
-    if not hasattr(args, 'gerrit_issue') or not args.gerrit_issue:
-      return
-    self._issue = args.gerrit_issue
-    if not hasattr(args, 'gerrit_patchset') or not args.gerrit_patchset:
-      raise RuntimeError(
-          '--gerrit-issue passed, but --gerrit-patchset not passed.')
-    self._patchset = args.gerrit_patchset
-    if not hasattr(args, 'buildbucket_id') or not args.buildbucket_id:
-      raise RuntimeError(
-          '--gerrit-issue passed, but --buildbucket-id not passed.')
-    self._job_id = args.buildbucket_id
+def _RunCmdForRcAndOutput(cmd):
+  try:
+    output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
+    return 0, output
+  except subprocess.CalledProcessError as e:
+    return e.returncode, e.output

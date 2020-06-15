@@ -153,17 +153,13 @@ class PixelIntegrationTest(
                                    int(page.test_rect[2] * dpr),
                                    int(page.test_rect[3] * dpr))
 
-    build_id_args = self._GetBuildIdArgs()
-
     # Compare images against approved images/colors.
     if page.expected_colors:
       # Use expected colors instead of hash comparison for validation.
-      self._ValidateScreenshotSamplesWithSkiaGold(tab, page, screenshot, dpr,
-                                                  build_id_args)
+      self._ValidateScreenshotSamplesWithSkiaGold(tab, page, screenshot, dpr)
       return
     image_name = self._UrlToImageName(page.name)
-    self._UploadTestResultToSkiaGold(
-        image_name, screenshot, page, build_id_args=build_id_args)
+    self._UploadTestResultToSkiaGold(image_name, screenshot, page)
 
   def _DoPageAction(self, tab, page):
     getattr(self, '_' + page.optional_action)(tab, page)
