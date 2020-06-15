@@ -434,10 +434,16 @@ bool X11EventSource::ShouldContinueStream() const {
 }
 
 void X11EventSource::DispatchXEvent(XEvent* event) {
-  base::AutoReset<XEvent*> dispatching_event(&dispatching_event_, event);
+  // NB: The event should be reset to nullptr when this function
+  // returns, not to its initial value, otherwise nested message loops
+  // will incorrectly think that the current event being dispatched is
+  // an old event.  This means base::AutoReset should not be used.
+  dispatching_event_ = event;
 
   ProcessXEvent(event);
   PostDispatchEvent(event);
+
+  dispatching_event_ = nullptr;
 }
 
 // ScopedXEventDispatcher implementation
