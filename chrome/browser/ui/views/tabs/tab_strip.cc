@@ -2052,6 +2052,21 @@ void TabStrip::Layout() {
     return;
   }
 
+  if (base::FeatureList::IsEnabled(features::kScrollableTabStrip)) {
+    // With tab scrolling, the tabstrip is solely responsible for its own
+    // width.
+    // It should never be larger than its preferred width.
+    const int max_width =
+        layout_helper_->CalculatePreferredWidth() + GetRightSideReservedWidth();
+    // It should never be smaller than its minimum width.
+    const int min_width = GetMinimumSize().width();
+    // If it can, it should fit within the tab strip region.
+    const int available_width = available_width_callback_.Run();
+    // It should be as wide as possible subject to the above constraints.
+    const int width = std::min(max_width, std::max(min_width, available_width));
+    SetBounds(0, 0, width, height());
+  }
+
   // Only do a layout if our size changed.
   if (last_layout_size_ == size() && last_available_width_ != 0)
     return;
