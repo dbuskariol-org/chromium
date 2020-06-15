@@ -7,6 +7,8 @@
 #include <gdk/gdk.h>
 #include <gdk/gdkx.h>
 #include <gtk/gtk.h>
+#include <xcb/xcb.h>
+#include <xcb/xproto.h>
 
 #include "base/memory/singleton.h"
 #include "ui/events/platform/x11/x11_event_source.h"
@@ -69,27 +71,30 @@ void GtkEventLoopX11::ProcessGdkEventKey(const GdkEventKey& gdk_event_key) {
   auto* conn = x11::Connection::Get();
   XDisplay* display = conn->display();
 
-  XEvent x_event;
-  x_event.xkey = {};
-  x_event.xkey.type = gdk_event_key.type == GDK_KEY_PRESS
-                          ? x11::KeyPressEvent::opcode
-                          : x11::KeyReleaseEvent::opcode;
-  x_event.xkey.send_event = gdk_event_key.send_event;
-  x_event.xkey.display = display;
-  x_event.xkey.window = GDK_WINDOW_XID(gdk_event_key.window);
-  x_event.xkey.root = DefaultRootWindow(x_event.xkey.display);
-  x_event.xkey.time = gdk_event_key.time;
-  x_event.xkey.keycode = gdk_event_key.hardware_keycode;
-  x_event.xkey.same_screen = true;
-  x_event.xkey.state =
+  xcb_generic_event_t generic_event;
+  memset(&generic_event, 0, sizeof(generic_event));
+  auto* key_event = reinterpret_cast<xcb_key_press_event_t*>(&generic_event);
+  key_event->response_type = gdk_event_key.type == GDK_KEY_PRESS
+                                 ? x11::KeyEvent::Press
+                                 : x11::KeyEvent::Release;
+  if (gdk_event_key.send_event)
+    key_event->response_type |= x11::kSendEventMask;
+  key_event->event = GDK_WINDOW_XID(gdk_event_key.window);
+  key_event->root = DefaultRootWindow(display);
+  key_event->time = gdk_event_key.time;
+  key_event->detail = gdk_event_key.hardware_keycode;
+  key_event->same_screen = true;
+  key_event->state =
       BuildXkbStateFromGdkEvent(gdk_event_key.state, gdk_event_key.group);
+
+  x11::Event event(&generic_event, conn, false);
 
   // We want to process the gtk event; mapped to an X11 event immediately
   // otherwise if we put it back on the queue we may get items out of order.
   if (ui::X11EventSource* x11_source = ui::X11EventSource::GetInstance())
-    x11_source->DispatchXEvent(&x_event);
+    x11_source->DispatchXEvent(&event);
   else
-    conn->events().emplace_front(base::nullopt, x_event);
+    conn->events().push_front(std::move(event));
 }
 
 }  // namespace ui
