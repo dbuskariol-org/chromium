@@ -6,7 +6,6 @@ package org.chromium.chrome.browser.tabmodel;
 
 import androidx.annotation.Nullable;
 
-import org.chromium.chrome.browser.compositor.layouts.OverviewModeBehavior;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.tab.TabLaunchType;
 import org.chromium.content_public.browser.LoadUrlParams;
@@ -157,13 +156,6 @@ public interface TabModelSelector {
      * @param delegate The delegate to be used.
      */
     void setCloseAllTabsDelegate(CloseAllTabsDelegate delegate);
-
-    /**
-     * Sets the {@link OverviewModeBehavior} that should be used to determine
-     * when the app is in overview mode or not.
-     * @param overviewModeBehavior The {@link OverviewModeBehavior} to use.
-     */
-    void setOverviewModeBehavior(OverviewModeBehavior overviewModeBehavior);
 
     /**
      * @return Whether the tab state for this {@link TabModelSelector} has been initialized.
