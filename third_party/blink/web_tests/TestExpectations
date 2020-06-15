@@ -6639,7 +6639,8 @@ crbug.com/1073792 [ Mac ] virtual/threaded-prefer-compositing/fast/scrolling/eve
 crbug.com/1074129 inspector-protocol/media/media-player.js [ TIMEOUT ]
 
 # Sheriff 2020-04-30
-crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Timeout ]
+# When https://crbug.com/1094900 is fixed, don't allow failures.
+crbug.com/1068681 fast/peerconnection/RTCPeerConnection-insertable-streams.html [ Pass Failure Timeout ]
 
 # Sheriff 2020-05-04
 crbug.com/952717 [ Debug ] http/tests/xmlhttprequest/redirect-cross-origin-post.html [ Pass Failure ]
