@@ -57,7 +57,7 @@ bool X11WorkspaceHandler::DispatchXEvent(XEvent* event) {
     return false;
   }
   switch (event->type) {
-    case x11::PropertyNotifyEvent::opcode: {
+    case PropertyNotify: {
       if (event->xproperty.atom ==
           static_cast<uint32_t>(gfx::GetAtom("_NET_CURRENT_DESKTOP"))) {
         GetWorkspace().OnResponse(

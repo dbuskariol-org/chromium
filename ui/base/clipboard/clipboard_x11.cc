@@ -464,7 +464,7 @@ bool ClipboardX11::X11Details::DispatchXEvent(XEvent* xev) {
     return false;
 
   switch (xev->type) {
-    case x11::SelectionRequestEvent::opcode: {
+    case SelectionRequest: {
       if (xev->xselectionrequest.selection == XA_PRIMARY) {
         primary_owner_.OnSelectionRequest(*xev);
       } else {
@@ -476,11 +476,11 @@ bool ClipboardX11::X11Details::DispatchXEvent(XEvent* xev) {
       }
       break;
     }
-    case x11::SelectionNotifyEvent::opcode: {
+    case SelectionNotify: {
       selection_requestor_.OnSelectionNotify(*xev);
       break;
     }
-    case x11::SelectionClearEvent::opcode: {
+    case SelectionClear: {
       if (xev->xselectionclear.selection == XA_PRIMARY) {
         primary_owner_.OnSelectionClear(*xev);
       } else {
@@ -492,7 +492,7 @@ bool ClipboardX11::X11Details::DispatchXEvent(XEvent* xev) {
       }
       break;
     }
-    case x11::PropertyNotifyEvent::opcode: {
+    case PropertyNotify: {
       if (primary_owner_.CanDispatchPropertyEvent(*xev))
         primary_owner_.OnPropertyEvent(*xev);
       if (clipboard_owner_.CanDispatchPropertyEvent(*xev))

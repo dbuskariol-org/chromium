@@ -129,9 +129,9 @@ bool X11ClipboardOzone::DispatchXEvent(XEvent* xev) {
     return false;
 
   switch (xev->type) {
-    case x11::SelectionRequestEvent::opcode:
+    case SelectionRequest:
       return OnSelectionRequest(xev->xselectionrequest);
-    case x11::SelectionNotifyEvent::opcode:
+    case SelectionNotify:
       return OnSelectionNotify(xev->xselection);
   }
 

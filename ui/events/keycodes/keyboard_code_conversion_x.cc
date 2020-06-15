@@ -1439,10 +1439,10 @@ void InitXKeyEventFromXIDeviceEvent(const XEvent& src, XEvent* xkeyevent) {
   XIDeviceEvent* xievent = static_cast<XIDeviceEvent*>(src.xcookie.data);
   switch (xievent->evtype) {
     case XI_KeyPress:
-      xkeyevent->type = x11::KeyEvent::Press;
+      xkeyevent->type = x11::KeyPressEvent::opcode;
       break;
     case XI_KeyRelease:
-      xkeyevent->type = x11::KeyEvent::Release;
+      xkeyevent->type = x11::KeyReleaseEvent::opcode;
       break;
     default:
       NOTREACHED();

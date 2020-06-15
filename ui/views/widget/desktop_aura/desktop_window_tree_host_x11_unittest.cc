@@ -199,8 +199,7 @@ class DesktopWindowTreeHostX11Test : public ViewsTestBase {
   }
 
   void DispatchSingleEventToWidget(XEvent* xev, Widget* widget) {
-    auto generic_event_opcode = x11::GeGenericEvent::opcode;
-    EXPECT_EQ(generic_event_opcode, xev->type);
+    DCHECK_EQ(GenericEvent, xev->type);
     XIDeviceEvent* device_event =
         static_cast<XIDeviceEvent*>(xev->xcookie.data);
     device_event->event =

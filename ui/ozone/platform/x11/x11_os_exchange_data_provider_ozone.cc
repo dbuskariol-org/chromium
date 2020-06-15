@@ -39,7 +39,7 @@ bool X11OSExchangeDataProviderOzone::DispatchXEvent(XEvent* xev) {
     return false;
 
   switch (xev->type) {
-    case x11::SelectionRequestEvent::opcode:
+    case SelectionRequest:
       selection_owner().OnSelectionRequest(*xev);
       return true;
     default:
