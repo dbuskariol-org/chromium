@@ -2477,7 +2477,7 @@
   {
     "name": "enterprise-reporting-in-chromeos",
     "owners": [ "anqing" ],
-    "expiry_milestone": 83
+    "expiry_milestone": 87
   },
   {
     "name": "ev-details-in-page-info",
