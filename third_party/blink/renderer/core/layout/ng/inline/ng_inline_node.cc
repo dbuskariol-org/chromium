@@ -818,7 +818,7 @@ void NGInlineNode::SegmentText(NGInlineNodeData* data) const {
 
 // Segment NGInlineItem by script, Emoji, and orientation using RunSegmenter.
 void NGInlineNode::SegmentScriptRuns(NGInlineNodeData* data) const {
-  DCHECK_EQ(data->segments, nullptr);
+  DCHECK_EQ(data->segments.get(), nullptr);
 
   String& text_content = data->text_content;
   if (text_content.IsEmpty()) {
