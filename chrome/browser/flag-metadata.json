@@ -215,7 +215,7 @@
   {
     "name": "ash-enable-pip-rounded-corners",
     "owners": [ "edcourtney" ],
-    "expiry_milestone": 74
+    "expiry_milestone": 90
   },
   {
     "name": "ash-enable-unified-desktop",
