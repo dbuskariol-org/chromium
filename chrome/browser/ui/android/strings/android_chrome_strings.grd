@@ -1516,9 +1516,6 @@ To change this setting, <ph name="BEGIN_LINK">&lt;resetlink&gt;</ph>reset sync<p
       </message>
 
       <!-- InfoBar -->
-      <message name="IDS_INFOBAR_CLOSE" desc="Accessibility label for the dismiss infobar Button">
-        Close
-      </message>
       <message name="IDS_BOTTOM_BAR_SCREEN_POSITION" desc="Accessibility label to inform users about the InfoBar location">
         Options available near bottom of the screen
       </message>

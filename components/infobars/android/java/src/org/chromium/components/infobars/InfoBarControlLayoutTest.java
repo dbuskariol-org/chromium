@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ui.messages.infobar;
+package org.chromium.components.infobars;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -19,15 +19,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.ui.messages.infobar.InfoBarControlLayout.ControlLayoutParams;
-import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
+import org.chromium.base.test.BaseJUnit4ClassRunner;
+import org.chromium.components.infobars.InfoBarControlLayout.ControlLayoutParams;
 
 /**
  * Tests for InfoBarControlLayout.  This suite doesn't check for specific details, like margins
  * paddings, and instead focuses on whether controls are placed correctly.
  */
-@RunWith(ChromeJUnit4ClassRunner.class)
+@RunWith(BaseJUnit4ClassRunner.class)
 public class InfoBarControlLayoutTest {
     private static final int SWITCH_ID_1 = 1;
     private static final int SWITCH_ID_2 = 2;
@@ -44,7 +43,7 @@ public class InfoBarControlLayoutTest {
     @Before
     public void setUp() {
         mContext = InstrumentationRegistry.getTargetContext();
-        mContext.setTheme(R.style.Theme_Chromium_WithWindowAnimation);
+        mContext.setTheme(R.style.Theme_BrowserUI);
     }
 
     /**

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ui.messages.infobar;
+package org.chromium.components.infobars;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -24,7 +24,6 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.widget.SwitchCompat;
 
 import org.chromium.base.ApiCompatibilityUtils;
-import org.chromium.chrome.ui.messages.R;
 import org.chromium.components.browser_ui.widget.DualControlLayout;
 import org.chromium.components.browser_ui.widget.RadioButtonLayout;
 

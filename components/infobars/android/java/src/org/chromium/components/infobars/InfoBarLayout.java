@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.ui.messages.infobar;
+package org.chromium.components.infobars;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -27,7 +27,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.content.res.AppCompatResources;
 
 import org.chromium.base.ApiCompatibilityUtils;
-import org.chromium.chrome.ui.messages.R;
 import org.chromium.components.browser_ui.widget.DualControlLayout;
 import org.chromium.ui.UiUtils;
 import org.chromium.ui.text.NoUnderlineClickableSpan;
@@ -527,7 +526,7 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
      * @return {@link ImageButton} that represents the icon.
      */
     @Nullable
-    static ImageView createIconView(
+    public static ImageView createIconView(
             Context context, int iconResourceId, @ColorRes int iconTintId, Bitmap iconBitmap) {
         if (iconResourceId == 0 && iconBitmap == null) return null;
 
@@ -553,7 +552,7 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
      * @param context Context to grab resources from.
      * @return {@link ImageButton} that represents a close button.
      */
-    static ImageButton createCloseButton(Context context) {
+    public static ImageButton createCloseButton(Context context) {
         final ColorStateList tint =
                 AppCompatResources.getColorStateList(context, R.color.default_icon_color);
         TypedArray a =
@@ -566,7 +565,7 @@ public final class InfoBarLayout extends ViewGroup implements View.OnClickListen
         closeButton.setImageResource(R.drawable.btn_close);
         ApiCompatibilityUtils.setImageTintList(closeButton, tint);
         closeButton.setBackground(closeButtonBackground);
-        closeButton.setContentDescription(context.getString(R.string.infobar_close));
+        closeButton.setContentDescription(context.getString(R.string.close));
         closeButton.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
 
         return closeButton;
