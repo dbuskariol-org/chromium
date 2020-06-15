@@ -68391,6 +68391,13 @@ Full version information for the fingerprint enum values:
   <int value="3" label="Fallback for Status Bar and content"/>
 </enum>
 
+<enum name="TrustedWebActivityPermissionChanged">
+  <int value="0" label="Null to False"/>
+  <int value="1" label="Null to True"/>
+  <int value="2" label="True to False"/>
+  <int value="3" label="False to True"/>
+</enum>
+
 <enum name="TunnelRedirectHistogramValue">
   <obsolete>
     Removed in Chrome 76.
