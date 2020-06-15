@@ -2282,6 +2282,8 @@ if (!is_android) {
         "../browser/chromeos/login/test/hid_controller_mixin.h",
         "../browser/chromeos/login/test/https_forwarder.cc",
         "../browser/chromeos/login/test/https_forwarder.h",
+        "../browser/chromeos/login/test/kiosk_test_helpers.cc",
+        "../browser/chromeos/login/test/kiosk_test_helpers.h",
         "../browser/chromeos/login/test/local_policy_test_server_mixin.cc",
         "../browser/chromeos/login/test/local_policy_test_server_mixin.h",
         "../browser/chromeos/login/test/local_state_mixin.cc",
