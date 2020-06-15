@@ -48,6 +48,7 @@ void SwitchAccessMenuBubbleController::ShowMenu(
     init_params.has_shadow = false;
     init_params.translucent = true;
     bubble_view_ = new TrayBubbleView(init_params);
+    bubble_view_->SetArrow(views::BubbleBorder::Arrow::TOP_LEFT);
 
     menu_view_ = new SwitchAccessMenuView();
     menu_view_->SetBorder(
