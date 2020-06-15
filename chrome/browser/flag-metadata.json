@@ -1709,8 +1709,8 @@
   },
   {
     "name": "enable-immersive-fullscreen-toolbar",
-    "owners": [ "ellyjones" ],
-    "expiry_milestone": 80
+    "owners": [ "lgrey" ],
+    "expiry_milestone": 90
   },
   {
     "name": "enable-implicit-root-scroller",
