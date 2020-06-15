@@ -29,6 +29,7 @@
 #include "ui/views/painter.h"
 #include "ui/views/widget/tooltip_manager.h"
 #include "ui/views/widget/widget.h"
+#include "ui/wm/core/coordinate_conversion.h"
 
 namespace ash {
 namespace {
@@ -427,8 +428,9 @@ void QuickAnswersView::UpdateBounds() {
     y = anchor_view_bounds_.bottom() + kMarginDip;
   }
 
-  GetWidget()->SetBounds(
-      gfx::Rect(anchor_view_bounds_.x(), y, desired_width, height));
+  gfx::Rect bounds = {{anchor_view_bounds_.x(), y}, {desired_width, height}};
+  wm::ConvertRectFromScreen(GetWidget()->GetNativeWindow()->parent(), &bounds);
+  GetWidget()->SetBounds(bounds);
 }
 
 void QuickAnswersView::UpdateQuickAnswerResult(
