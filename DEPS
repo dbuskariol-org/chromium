@@ -1561,6 +1561,17 @@ deps = {
       'dep_type': 'cipd',
   },
 
+  'src/third_party/webpagereplay': {
+      'packages' : [
+          {
+              'package': 'infra/tools/wpr/linux_x86_64',
+              'version': ' y28SfbEF6nHSkZ1eHysM1t711zpOCmtk7jUdxZB-QSMC',
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+
   'src/third_party/android_prebuilts/build_tools': {
       'url': Var('android_git') + '/platform/prebuilts/build-tools.git' + '@' + '5794e96eb8bae47bb48feee915d99583573b3887',
       'condition': 'checkout_android_prebuilts_build_tools',

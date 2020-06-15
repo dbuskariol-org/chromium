@@ -10,7 +10,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * We use this annotation to tell which WPR archive file to load for each test cases.
+ * We use this annotation to tell where WPR archive file to load from for each
+ * test cases. Typically the folder should be called wpr_tests.
  * Note the archive is a relative path from src/.
  *
  * New tests should also annotate with "WPRRecordReplayTest" in @Feature.
@@ -19,27 +20,26 @@ import java.lang.annotation.Target;
  * in test B.
  *
  *     @Feature("WPRRecordReplayTest")
- *     @WPRArchiveConfigFilePath("file_foo.json")
+ *     @WPRArchiveDirectory("/path_of_file_foo")
  *     public void test_A() {
  *        // Write the test case here.
  *     }
  *
  *     @Feature("WPRRecordReplayTest")
- *     @WPRArchiveConfigFilePath("file_bar.json")
+ *     @WPRArchiveDirectory("/path_of_file_bar")
  *     public void test_B() {
  *        // Write the test case here.
  *     }
  *
- *  In test_A, the test runner will download file via file_foo.json before running test_A.
- *  The key of the download file is the test unique name.
- *  In test_B, the test runner will download file via file_bar.json before running test_B.
- *  The key of the download file is the test unique name.
+ * During gClient runhooks, the files in /path_of_file_foo and /path_of_file_bar
+ * are downloaded from GCS. Once the files are downloaded, it will be used in
+ * tests as isolated.
  */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
-public @interface WPRArchiveConfigFilePath {
+public @interface WPRArchiveDirectory {
     /**
-     * @return one WPRArchiveConfigFilePath.
+     * @return one WPRArchiveDirectory.
      */
     public String value();
 }
