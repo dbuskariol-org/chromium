@@ -21,7 +21,7 @@ import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.Log;
 import org.chromium.base.ThreadUtils;
-import org.chromium.base.annotations.DoNotInline;
+import org.chromium.base.annotations.VerifiesOnO;
 import org.chromium.base.metrics.ScopedSysTraceEvent;
 import org.chromium.components.version_info.VersionConstants;
 import org.chromium.content_public.browser.WebContents;
@@ -38,9 +38,9 @@ import org.chromium.ui.display.DisplayAndroid;
  * AutofillProviderAndroid is owned by the embedder-specific C++ WebContents
  * wrapper (e.g., native AwContents in //android_webview).
  *
- * DoNotInline since it causes class verification errors, see crbug.com/991851.
+ * VerifiesOnO since it causes class verification errors, see crbug.com/991851.
  */
-@DoNotInline
+@VerifiesOnO
 @TargetApi(Build.VERSION_CODES.O)
 public class AutofillProviderImpl extends AutofillProvider {
     private static final String TAG = "AutofillProviderImpl";
