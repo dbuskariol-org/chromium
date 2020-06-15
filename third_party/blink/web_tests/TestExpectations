@@ -84,18 +84,6 @@ crbug.com/901056 virtual/synchronous_html_parser/http/tests/preload/meta-viewpor
 
 # ====== Site Isolation failures from here ======
 # See also third_party/blink/web_tests/virtual/not-site-per-process/README.md
-#
-# When modifying the list of files that behave differently with and without
-# OOPIFs, please consider modifying all the locations below:
-# - LayoutTests/TestExpectations (the section here)
-# - LayoutTests/VirtualTestSuites (virtual/not-site-per-process suite)
-# - LayoutTests/virtual/not-site-per-process/README.md
-
-# Tests temporarily disabled with Site Isolation - test issues or test harness
-# issues (e.g. missing OOPIF support in the test harness).
-# TODO(lukasza, alexmos): Burn down this list.
-crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag.https.html [ Timeout ]
-
 # Tests temporarily disabled with Site Isolation - uninvestigated bugs:
 # TODO(lukasza, alexmos): Burn down this list.
 crbug.com/949003 http/tests/printing/cross-site-frame-scrolled.html [ Pass Failure ]
@@ -187,6 +175,9 @@ crbug.com/845267 [ Mac ] http/tests/inspector-protocol/page/page-lifecycleEvents
 # instead of a timeout, which may fix things.
 crbug.com/713049 images/color-profile-reflection.html [ Failure Pass ]
 crbug.com/713049 virtual/gpu-rasterization/images/color-profile-reflection.html [ Failure Pass Timeout ]
+
+# This test was attributed to site isolation but times out with or without it. Broken test?
+crbug.com/1050826 external/wpt/mixed-content/gen/top.http-rp/opt-in/object-tag.https.html [ Timeout ]
 
 crbug.com/774873 [ Mac ] virtual/exotic-color-space/images/color-profile-border-fade.html [ Pass Failure ]
 crbug.com/774873 [ Linux ] virtual/exotic-color-space/images/color-profile-border-fade.html [ Pass Failure ]
@@ -423,7 +414,7 @@ crbug.com/1056492 external/wpt/svg/painting/reftests/marker-path-001.svg [ Failu
 crbug.com/1050993 [ Linux ] virtual/gpu-rasterization/images/drag-image-descendant-painting-sibling.html [ Crash Pass Timeout ]
 
 # Flaky test.
-crbug.com/1054894 [ Mac ] http/tests/images/image-decode-in-frame.html [ Pass Failure Timeout ]
+crbug.com/1054894 http/tests/images/image-decode-in-frame.html [ Pass Timeout ]
 
 # ====== Paint team owned tests to here ======
 
@@ -3104,7 +3095,6 @@ crbug.com/626703 external/wpt/html/semantics/forms/the-fieldset-element/accessib
 crbug.com/626703 external/wpt/html/semantics/forms/the-fieldset-element/accessibility/legend-display-none-manual.html [ Skip ]
 crbug.com/626703 external/wpt/webrtc/RTCPeerConnection-setRemoteDescription-tracks.https.html [ Timeout ]
 crbug.com/626703 external/wpt/webrtc/RTCPeerConnection-remote-track-mute.https.html [ Timeout ]
-crbug.com/626703 virtual/not-site-per-process/external/wpt/html/browsers/origin/relaxing-the-same-origin-restriction/document_domain_access_details.sub.html [ Skip ]
 crbug.com/626703 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/flexbox/flexbox-intrinsic-ratio-007v.html [ Failure ]
 crbug.com/626703 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/counter-styles-3/system-cyclic-invalid.html [ Pass Failure Timeout ]
 crbug.com/626703 external/wpt/css/vendor-imports/mozilla/mozilla-central-reftests/counter-styles-3/system-alphabetic-invalid.html [ Pass Failure Timeout ]
@@ -6465,7 +6455,6 @@ crbug.com/1050039 [ Mac ] fast/events/onbeforeunload-focused-iframe.html [ Pass 
 crbug.com/1050039 [ Mac ] fast/forms/calendar-picker/calendar-picker-type-change-onchange.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/calendar-picker-appearance.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/calendar-picker/datetimelocal-picker-choose-default-value-after-set-value.html [ Pass Failure ]
-crbug.com/1050039 [ Mac ] virtual/not-site-per-process/http/tests/devtools/oopif/oopif-storage.js [ Pass Failure Timeout ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-01.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-02.html [ Pass Failure ]
 crbug.com/1050039 [ Mac ] virtual/omt-worker-fetch/fast/workers/worker-onerror-03.html [ Pass Failure ]
@@ -6520,7 +6509,6 @@ crbug.com/1056022 [ Fuchsia ] virtual/text-antialias/international/001.html [ Pa
 crbug.com/1056022 [ Fuchsia ] http/tests/eventsource/eventsource-bad-mime-type.html [ Pass Timeout ]
 
 # Sheriff 2020-02-28
-crbug.com/1057138 [ Linux Debug ] virtual/not-site-per-process/http/tests/devtools/oopif/oopif-storage.js [ Pass Timeout ]
 crbug.com/1056879 [ Win7 ] external/wpt/webxr/xrSession_requestAnimationFrame_getViewerPose.https.html [ Pass Failure Timeout ]
 crbug.com/1053861 http/tests/devtools/network/network-initiator-chain.js [ Pass Failure ]
 crbug.com/1047648 external/wpt/html/canvas/offscreen/the-offscreen-canvas/offscreencanvas.resize.html [ Pass Failure ]
