@@ -126,24 +126,14 @@ class CORE_EXPORT NGContainerFragmentBuilder : public NGFragmentBuilder {
       const LogicalOffset& child_offset,
       TextDirection inline_container_direction);
 
-  void AddOutOfFlowFragmentainerDescendant(
-      const NGLogicalOutOfFlowPositionedNode& descendant);
-
   void AddOutOfFlowDescendant(
       const NGLogicalOutOfFlowPositionedNode& descendant);
 
   void SwapOutOfFlowPositionedCandidates(
       Vector<NGLogicalOutOfFlowPositionedNode>* candidates);
 
-  void SwapOutOfFlowFragmentainerDescendants(
-      Vector<NGLogicalOutOfFlowPositionedNode>* descendants);
-
   bool HasOutOfFlowPositionedCandidates() const {
     return !oof_positioned_candidates_.IsEmpty();
-  }
-
-  bool HasOutOfFlowFragmentainerDescendants() const {
-    return !oof_positioned_fragmentainer_descendants_.IsEmpty();
   }
 
   // This method should only be used within the inline layout algorithm. It is
@@ -181,10 +171,6 @@ class CORE_EXPORT NGContainerFragmentBuilder : public NGFragmentBuilder {
   // containers.
   void SetIsBlockFragmentationContextRoot() {
     is_fragmentation_context_root_ = true;
-  }
-
-  bool IsBlockFragmentationContextRoot() const {
-    return is_fragmentation_context_root_;
   }
 
   // See NGLayoutResult::AnnotationOverflow().
@@ -234,8 +220,6 @@ class CORE_EXPORT NGContainerFragmentBuilder : public NGFragmentBuilder {
   NGExclusionSpace exclusion_space_;
 
   Vector<NGLogicalOutOfFlowPositionedNode> oof_positioned_candidates_;
-  Vector<NGLogicalOutOfFlowPositionedNode>
-      oof_positioned_fragmentainer_descendants_;
   Vector<NGLogicalOutOfFlowPositionedNode> oof_positioned_descendants_;
 
   NGUnpositionedListMarker unpositioned_list_marker_;
