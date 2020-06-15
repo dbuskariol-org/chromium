@@ -206,6 +206,26 @@ static CSSPropertyValueSet* RightToLeftDeclaration() {
   return right_to_left_decl;
 }
 
+static CSSPropertyValueSet* MarkerUserAgentDeclarations() {
+  DEFINE_STATIC_LOCAL(
+      Persistent<MutableCSSPropertyValueSet>, marker_ua_decl,
+      (MakeGarbageCollected<MutableCSSPropertyValueSet>(kHTMLQuirksMode)));
+  if (marker_ua_decl->IsEmpty()) {
+    // Set 'unicode-bidi: isolate'
+    marker_ua_decl->SetProperty(
+        CSSPropertyID::kUnicodeBidi,
+        *CSSIdentifierValue::Create(CSSValueID::kIsolate));
+
+    // Set 'font-variant-numeric: tabular-nums'
+    CSSValueList* variant_numeric = CSSValueList::CreateSpaceSeparated();
+    variant_numeric->Append(
+        *CSSIdentifierValue::Create(CSSValueID::kTabularNums));
+    marker_ua_decl->SetProperty(CSSPropertyID::kFontVariantNumeric,
+                                *variant_numeric);
+  }
+  return marker_ua_decl;
+}
+
 static CSSPropertyValueSet* DocumentElementUserAgentDeclarations() {
   DEFINE_STATIC_LOCAL(
       Persistent<MutableCSSPropertyValueSet>, document_element_ua_decl,
@@ -649,9 +669,6 @@ void StyleResolver::MatchUARules(const Element& element,
   // style sheet.
   if (IsForcedColorsModeEnabled())
     MatchRuleSet(collector, default_style_sheets.DefaultForcedColorStyle());
-
-  if (collector.IsCollectingForPseudoElement())
-    MatchRuleSet(collector, default_style_sheets.DefaultPseudoElementStyle());
 
   collector.FinishAddingUARules();
   collector.SetMatchingUARules(false);
@@ -1134,12 +1151,17 @@ bool StyleResolver::PseudoStyleForElementInternal(
                                    state.Style()->InsideLink());
     collector.SetPseudoElementStyleRequest(pseudo_style_request);
 
-    GetDocument().GetStyleEngine().EnsureUAStyleForPseudoElement(
-        pseudo_style_request.pseudo_id);
+    // The UA sheet is supposed to set some styles to ::marker pseudo-elements,
+    // but that would use a slow universal element selector. So instead we apply
+    // the styles here as an optimization.
+    if (pseudo_style_request.pseudo_id == kPseudoIdMarker) {
+      cascade.MutableMatchResult().AddMatchedProperties(
+          MarkerUserAgentDeclarations());
+    }
 
-    MatchUARules(state.GetElement(), collector);
     // TODO(obrufau): support styling nested pseudo-elements
     if (!element.IsPseudoElement()) {
+      MatchUARules(state.GetElement(), collector);
       MatchUserRules(collector);
       MatchAuthorRules(state.GetElement(), collector);
     }
@@ -1381,11 +1403,10 @@ void StyleResolver::CollectPseudoRulesForElement(
     unsigned rules_to_include) {
   collector.SetPseudoElementStyleRequest(PseudoElementStyleRequest(pseudo_id));
 
-  if (rules_to_include & kUACSSRules)
+  if (rules_to_include & kUAAndUserCSSRules) {
     MatchUARules(element, collector);
-
-  if (rules_to_include & kUserCSSRules)
     MatchUserRules(collector);
+  }
 
   if (rules_to_include & kAuthorCSSRules) {
     collector.SetSameOriginOnly(!(rules_to_include & kCrossOriginCSSRules));
