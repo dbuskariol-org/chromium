@@ -14,7 +14,7 @@ if (optimize_webui) {
 
   optimize_webui("build") {
     host = "bluetooth_pairing_dialog"
-    html_in_files = [ "bluetooth_pairing_dialog.html" ]
+    html_in_files = [ "bluetooth_pairing_dialog_container.html" ]
     html_out_files = [ "vulcanized.html" ]
 
     input = rebase_path(".", root_build_dir)

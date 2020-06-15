@@ -109,7 +109,9 @@ BluetoothPairingDialogUI::BluetoothPairingDialogUI(content::WebUI* web_ui)
   source->AddResourcePath("crisper.js",
                           IDR_BLUETOOTH_PAIRING_DIALOG_CRISPER_JS);
 #else
-  source->SetDefaultResource(IDR_BLUETOOTH_PAIRING_DIALOG_HTML);
+  source->SetDefaultResource(IDR_BLUETOOTH_PAIRING_DIALOG_CONTAINER_HTML);
+  source->AddResourcePath("bluetooth_pairing_dialog.html",
+                          IDR_BLUETOOTH_PAIRING_DIALOG_HTML);
   source->AddResourcePath("bluetooth_pairing_dialog.js",
                           IDR_BLUETOOTH_PAIRING_DIALOG_JS);
 #endif
