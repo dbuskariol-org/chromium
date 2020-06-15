@@ -31,6 +31,7 @@
 #include "chrome/browser/chromeos/crostini/crostini_pref_names.h"
 #include "chrome/browser/chromeos/crostini/crostini_remover.h"
 #include "chrome/browser/chromeos/crostini/crostini_reporting_util.h"
+#include "chrome/browser/chromeos/crostini/crostini_stability_monitor.h"
 #include "chrome/browser/chromeos/crostini/crostini_types.mojom.h"
 #include "chrome/browser/chromeos/crostini/throttle/crostini_throttle.h"
 #include "chrome/browser/chromeos/file_manager/path_util.h"
@@ -895,7 +896,10 @@ CrostiniManager* CrostiniManager::GetForProfile(Profile* profile) {
 }
 
 CrostiniManager::CrostiniManager(Profile* profile)
-    : profile_(profile), owner_id_(CryptohomeIdForProfile(profile)) {
+    : profile_(profile),
+      owner_id_(CryptohomeIdForProfile(profile)),
+      crostini_stability_monitor_(
+          std::make_unique<CrostiniStabilityMonitor>(this)) {
   DCHECK(!profile_->IsOffTheRecord());
   GetCiceroneClient()->AddObserver(this);
   GetConciergeClient()->AddVmObserver(this);
@@ -934,6 +938,9 @@ void CrostiniManager::RemoveDBusObservers() {
   if (chromeos::PowerManagerClient::Get()) {
     chromeos::PowerManagerClient::Get()->RemoveObserver(this);
   }
+  // CrostiniStabilityMonitor needs to be destructed here so it can unregister
+  // itself from the DBus clients that may no longer exist later.
+  crostini_stability_monitor_.reset();
 }
 
 // static
