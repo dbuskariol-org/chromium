@@ -30,10 +30,11 @@ import static org.chromium.chrome.browser.tasks.TasksSurfaceProperties.VOICE_SEA
 import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.support.test.annotation.UiThreadTest;
-import android.support.test.filters.SmallTest;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+
+import androidx.test.filters.SmallTest;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
