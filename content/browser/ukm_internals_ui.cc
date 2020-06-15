@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/ukm/ukm_internals_ui.h"
+#include "content/browser/ukm_internals_ui.h"
 
 #include <stddef.h>
 
@@ -11,23 +11,23 @@
 #include <utility>
 
 #include "base/bind.h"
-#include "chrome/browser/browser_process.h"
-#include "chrome/common/url_constants.h"
-#include "chrome/grit/dev_ui_browser_resources.h"
-#include "components/metrics_services_manager/metrics_services_manager.h"
 #include "components/ukm/debug/ukm_debug_data_extractor.h"
 #include "components/ukm/ukm_service.h"
+#include "content/grit/content_resources.h"
 #include "content/public/browser/browser_thread.h"
+#include "content/public/browser/content_browser_client.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_ui.h"
 #include "content/public/browser/web_ui_data_source.h"
 #include "content/public/browser/web_ui_message_handler.h"
+#include "content/public/common/content_client.h"
+#include "content/public/common/url_constants.h"
 
+namespace content {
 namespace {
 
-content::WebUIDataSource* CreateUkmHTMLSource() {
-  content::WebUIDataSource* source =
-      content::WebUIDataSource::Create(chrome::kChromeUIUkmHost);
+WebUIDataSource* CreateUkmHTMLSource() {
+  WebUIDataSource* source = WebUIDataSource::Create(kChromeUIUkmHost);
 
   source->AddResourcePath("ukm_internals.js", IDR_UKM_INTERNALS_JS);
   source->AddResourcePath("ukm_internals.css", IDR_UKM_INTERNALS_CSS);
@@ -38,7 +38,7 @@ content::WebUIDataSource* CreateUkmHTMLSource() {
 // This class receives javascript messages from the renderer.
 // Note that the WebUI infrastructure runs on the UI thread, therefore all of
 // this class's methods are expected to run on the UI thread.
-class UkmMessageHandler : public content::WebUIMessageHandler {
+class UkmMessageHandler : public WebUIMessageHandler {
  public:
   explicit UkmMessageHandler(const ukm::UkmService* ukm_service);
   ~UkmMessageHandler() override;
@@ -74,7 +74,7 @@ void UkmMessageHandler::HandleRequestUkmData(const base::ListValue* args) {
 }
 
 void UkmMessageHandler::RegisterMessages() {
-  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  DCHECK_CURRENTLY_ON(BrowserThread::UI);
 
   // We can use base::Unretained() here, as both the callback and this class are
   // owned by UkmInternalsUI.
@@ -88,14 +88,14 @@ void UkmMessageHandler::RegisterMessages() {
 
 // Changes to this class should be in sync with its iOS equivalent
 // ios/chrome/browser/ui/webui/ukm_internals_ui.cc
-UkmInternalsUI::UkmInternalsUI(content::WebUI* web_ui)
-    : content::WebUIController(web_ui) {
-  ukm::UkmService* ukm_service =
-      g_browser_process->GetMetricsServicesManager()->GetUkmService();
+UkmInternalsUI::UkmInternalsUI(WebUI* web_ui) : WebUIController(web_ui) {
+  ukm::UkmService* ukm_service = GetContentClient()->browser()->GetUkmService();
   web_ui->AddMessageHandler(std::make_unique<UkmMessageHandler>(ukm_service));
 
   // Set up the chrome://ukm/ source.
-  content::BrowserContext* browser_context =
+  BrowserContext* browser_context =
       web_ui->GetWebContents()->GetBrowserContext();
-  content::WebUIDataSource::Add(browser_context, CreateUkmHTMLSource());
+  WebUIDataSource::Add(browser_context, CreateUkmHTMLSource());
 }
+
+}  // namespace content

@@ -2,19 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_WEBUI_UKM_UKM_INTERNALS_UI_H_
-#define CHROME_BROWSER_UI_WEBUI_UKM_UKM_INTERNALS_UI_H_
+#ifndef CONTENT_BROWSER_UKM_INTERNALS_UI_H_
+#define CONTENT_BROWSER_UKM_INTERNALS_UI_H_
 
 #include "base/macros.h"
 #include "content/public/browser/web_ui_controller.h"
 
+namespace content {
+
 // Handles serving the chrome://ukm HTML and JS.
-class UkmInternalsUI : public content::WebUIController {
+class UkmInternalsUI : public WebUIController {
  public:
-  explicit UkmInternalsUI(content::WebUI* web_ui);
+  explicit UkmInternalsUI(WebUI* web_ui);
 
  private:
   DISALLOW_COPY_AND_ASSIGN(UkmInternalsUI);
 };
 
-#endif  // CHROME_BROWSER_UI_WEBUI_UKM_UKM_INTERNALS_UI_H_
+}  // namespace content
+
+#endif  // CONTENT_BROWSER_UKM_INTERNALS_UI_H_
