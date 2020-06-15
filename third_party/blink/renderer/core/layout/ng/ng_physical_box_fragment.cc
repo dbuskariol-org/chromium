@@ -176,7 +176,7 @@ scoped_refptr<const NGLayoutResult>
 NGPhysicalBoxFragment::CloneAsHiddenForPaint() const {
   const ComputedStyle& style = Style();
   NGBoxFragmentBuilder builder(GetMutableLayoutObject(), &style,
-                               style.GetWritingMode(), style.Direction());
+                               style.GetWritingDirection());
   builder.SetBoxType(BoxType());
   NGFragmentGeometry initial_fragment_geometry{
       Size().ConvertToLogical(style.GetWritingMode())};
