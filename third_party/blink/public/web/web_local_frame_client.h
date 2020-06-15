@@ -428,15 +428,6 @@ class BLINK_EXPORT WebLocalFrameClient {
   virtual void DidChangeSelection(bool is_selection_empty) {}
   virtual void DidChangeContents() {}
 
-  // This method is called in response to handleInputEvent() when the
-  // default action for the current keyboard event is not suppressed by the
-  // page, to give the embedder a chance to handle the keyboard event
-  // specially.
-  //
-  // Returns true if the keyboard event was handled by the embedder,
-  // indicating that the default action should be suppressed.
-  virtual bool HandleCurrentKeyboardEvent() { return false; }
-
   // UI ------------------------------------------------------------------
 
   // Shows a context menu with commands relevant to a specific element on
