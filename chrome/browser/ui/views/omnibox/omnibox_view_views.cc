@@ -1619,10 +1619,14 @@ void OmniboxViewViews::DidFinishNavigation(
     content::NavigationHandle* navigation) {
   if (!OmniboxFieldTrial::ShouldHidePathQueryRefOnInteraction())
     return;
-  if (navigation->IsSameDocument()) {
-    // Make sure the path is not re-shown for same-document navigations.
-    if (CanFadePath())
+  if (navigation->IsSameDocument() || !navigation->IsInMainFrame()) {
+    // If we've already finished fading out the path, make sure the path is not
+    // re-shown for same-document or subframe navigations.
+    if (CanFadePath() && path_fade_out_after_interaction_animation_ &&
+        path_fade_out_after_interaction_animation_->HasStarted() &&
+        !path_fade_out_after_interaction_animation_->IsAnimating()) {
       SetPathColor(SK_ColorTRANSPARENT);
+    }
     return;
   }
   // Once a cross-document navigation finishes, show the path and reset state so

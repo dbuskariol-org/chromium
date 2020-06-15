@@ -1426,6 +1426,183 @@ TEST_F(OmniboxViewViewsTest, HideOnInteractionAndRevealOnHover) {
             fade_in->GetCurrentColor());
 }
 
+// Tests that in the hide-on-interaction field trial, when the path changes
+// while being faded out, the animation is stopped.
+TEST_F(OmniboxViewViewsTest, PathChangeDuringAnimation) {
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeatures(
+      {omnibox::kHideSteadyStateUrlPathQueryAndRef,
+       omnibox::kHideSteadyStateUrlPathQueryAndRefOnInteraction,
+       omnibox::kRevealSteadyStateUrlPathQueryAndRefOnHover},
+      {});
+  location_bar_model()->set_url(GURL("https://example.test/foo"));
+  location_bar_model()->set_url_for_display(
+      base::ASCIIToUTF16("example.test/foo"));
+  omnibox_view()->model()->ResetDisplayTexts();
+  omnibox_view()->RevertAll();
+
+  // Call OnThemeChanged() to create the animations.
+  omnibox_view()->OnThemeChanged();
+
+  content::MockNavigationHandle navigation;
+  navigation.set_is_same_document(false);
+  omnibox_view()->DidFinishNavigation(&navigation);
+  EXPECT_NE(SK_ColorTRANSPARENT, omnibox_view()->path_color());
+
+  // Simulate a user interaction and check that the fade-out animation runs.
+  omnibox_view()->DidGetUserInteraction(
+      blink::WebInputEvent::Type::kGestureScrollBegin);
+  OmniboxViewViews::PathFadeAnimation* fade_out =
+      omnibox_view()->GetPathFadeOutAfterInteractionAnimationForTesting();
+  EXPECT_TRUE(fade_out->IsAnimating());
+
+  // Change the path and check that the animation is cancelled.
+  location_bar_model()->set_url(GURL("https://example.test/foo#bar"));
+  location_bar_model()->set_url_for_display(
+      base::ASCIIToUTF16("example.test/foo#bar"));
+  omnibox_view()->model()->ResetDisplayTexts();
+  omnibox_view()->RevertAll();
+  EXPECT_FALSE(fade_out->IsAnimating());
+}
+
+// Tests that in the hide-on-interaction field trial, the path is shown on
+// cross-document main-frame navigations, but not on same-document navigations.
+TEST_F(OmniboxViewViewsTest, HideOnInteractionSameDocNavigations) {
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeatures(
+      {omnibox::kHideSteadyStateUrlPathQueryAndRef,
+       omnibox::kHideSteadyStateUrlPathQueryAndRefOnInteraction},
+      {});
+  location_bar_model()->set_url(GURL("https://example.test/foo"));
+  location_bar_model()->set_url_for_display(
+      base::ASCIIToUTF16("example.test/foo"));
+  omnibox_view()->model()->ResetDisplayTexts();
+  omnibox_view()->RevertAll();
+
+  // Call OnThemeChanged() to create the animations.
+  omnibox_view()->OnThemeChanged();
+
+  {
+    content::MockNavigationHandle navigation;
+    navigation.set_is_same_document(false);
+    omnibox_view()->DidFinishNavigation(&navigation);
+    EXPECT_NE(SK_ColorTRANSPARENT, omnibox_view()->path_color());
+  }
+
+  // On a same-document navigation before the path has faded out, the path
+  // should remain visible.
+  {
+    content::MockNavigationHandle navigation;
+    navigation.set_is_same_document(true);
+    omnibox_view()->DidFinishNavigation(&navigation);
+    EXPECT_NE(SK_ColorTRANSPARENT, omnibox_view()->path_color());
+  }
+
+  // Simulate a user interaction to fade out the path.
+  omnibox_view()->DidGetUserInteraction(
+      blink::WebInputEvent::Type::kGestureScrollBegin);
+  OmniboxViewViews::PathFadeAnimation* fade_out =
+      omnibox_view()->GetPathFadeOutAfterInteractionAnimationForTesting();
+  ASSERT_TRUE(fade_out);
+  EXPECT_TRUE(fade_out->IsAnimating());
+
+  // On a cross-document main-frame navigation, the path should remain visible.
+  {
+    content::MockNavigationHandle navigation;
+    navigation.set_is_same_document(false);
+    omnibox_view()->DidFinishNavigation(&navigation);
+    EXPECT_NE(SK_ColorTRANSPARENT, omnibox_view()->path_color());
+    OmniboxViewViews::PathFadeAnimation* fade_out =
+        omnibox_view()->GetPathFadeOutAfterInteractionAnimationForTesting();
+    ASSERT_TRUE(fade_out);
+    EXPECT_FALSE(fade_out->IsAnimating());
+  }
+
+  // Simulate another user interaction to fade out the path, and advance the
+  // clock all the way through the animation.
+  omnibox_view()->DidGetUserInteraction(
+      blink::WebInputEvent::Type::kGestureScrollBegin);
+  fade_out =
+      omnibox_view()->GetPathFadeOutAfterInteractionAnimationForTesting();
+  ASSERT_TRUE(fade_out);
+  EXPECT_TRUE(fade_out->IsAnimating());
+  gfx::AnimationContainerElement* fade_out_as_element =
+      fade_out->GetAnimationForTesting();
+  fade_out_as_element->SetStartTime(base::TimeTicks());
+  fade_out_as_element->Step(base::TimeTicks() +
+                            base::TimeDelta::FromSeconds(1));
+  EXPECT_EQ(SK_ColorTRANSPARENT, fade_out->GetCurrentColor());
+
+  // On a subsequent same-document main-frame navigation, the path should remain
+  // invisible.
+  {
+    content::MockNavigationHandle navigation;
+    navigation.set_is_same_document(true);
+    omnibox_view()->DidFinishNavigation(&navigation);
+    // The path is explicitly set to transparent after same-frame navigations
+    // that happen after the path has been faded out.
+    EXPECT_EQ(SK_ColorTRANSPARENT, omnibox_view()->path_color());
+  }
+}
+
+// Tests that in the hide-on-interaction field trial, the path is not re-shown
+// on subframe navigations.
+TEST_F(OmniboxViewViewsTest, HideOnInteractionSubframeNavigations) {
+  content::RenderViewHostTestEnabler rvh_enabler;
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeatures(
+      {omnibox::kHideSteadyStateUrlPathQueryAndRef,
+       omnibox::kHideSteadyStateUrlPathQueryAndRefOnInteraction},
+      {});
+  location_bar_model()->set_url(GURL("https://example.test/foo"));
+  location_bar_model()->set_url_for_display(
+      base::ASCIIToUTF16("example.test/foo"));
+  omnibox_view()->model()->ResetDisplayTexts();
+  omnibox_view()->RevertAll();
+
+  // Call OnThemeChanged() to create the animations.
+  omnibox_view()->OnThemeChanged();
+
+  {
+    content::MockNavigationHandle navigation;
+    navigation.set_is_same_document(false);
+    omnibox_view()->DidFinishNavigation(&navigation);
+    EXPECT_NE(SK_ColorTRANSPARENT, omnibox_view()->path_color());
+  }
+
+  // Simulate a user interaction to fade out the path, and advance the clock all
+  // the way through the animation.
+  omnibox_view()->DidGetUserInteraction(
+      blink::WebInputEvent::Type::kGestureScrollBegin);
+  OmniboxViewViews::PathFadeAnimation* fade_out =
+      omnibox_view()->GetPathFadeOutAfterInteractionAnimationForTesting();
+  ASSERT_TRUE(fade_out);
+  EXPECT_TRUE(fade_out->IsAnimating());
+  gfx::AnimationContainerElement* fade_out_as_element =
+      fade_out->GetAnimationForTesting();
+  fade_out_as_element->SetStartTime(base::TimeTicks());
+  fade_out_as_element->Step(base::TimeTicks() +
+                            base::TimeDelta::FromSeconds(1));
+  EXPECT_EQ(SK_ColorTRANSPARENT, fade_out->GetCurrentColor());
+
+  // On a subframe navigation, the path should remain invisible.
+  {
+    content::MockNavigationHandle navigation;
+    navigation.set_is_same_document(false);
+    std::unique_ptr<content::WebContents> web_contents =
+        content::WebContentsTester::CreateTestWebContents(profile(), nullptr);
+    content::RenderFrameHostTester::For(web_contents->GetMainFrame())
+        ->InitializeRenderFrameIfNeeded();
+    content::RenderFrameHost* subframe =
+        content::RenderFrameHostTester::For(web_contents->GetMainFrame())
+            ->AppendChild("subframe");
+    navigation.set_render_frame_host(subframe);
+    omnibox_view()->DidFinishNavigation(&navigation);
+    // The path is explicitly set to transparent in DidFinishNavigation.
+    EXPECT_EQ(SK_ColorTRANSPARENT, omnibox_view()->path_color());
+  }
+}
+
 // Tests that in the hide-on-interaction field trial variation, the path is
 // faded out after omnibox focus and blur.
 TEST_F(OmniboxViewViewsTest, HideOnInteractionAfterFocusAndBlur) {

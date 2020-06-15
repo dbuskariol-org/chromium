@@ -179,6 +179,11 @@ class OmniboxViewViews : public OmniboxView,
   FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest,
                            HideOnInteractionAfterFocusAndBlur);
   FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest, RevealOnHoverAfterBlur);
+  FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest, PathChangeDuringAnimation);
+  FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest,
+                           HideOnInteractionSameDocNavigations);
+  FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest,
+                           HideOnInteractionSubframeNavigations);
   // TODO(tommycli): Remove the rest of these friends after porting these
   // browser tests to unit tests.
   FRIEND_TEST_ALL_PREFIXES(OmniboxViewViewsTest, CloseOmniboxPopupOnTextDrag);
