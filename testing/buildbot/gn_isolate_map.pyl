@@ -1478,10 +1478,15 @@
     "type": "generated_script",
     "script": "bin/resource_sizes_monochrome_public_minimal_apks",
   },
-  "resource_sizes_system_webview_apk": {
-    "label": "//android_webview:resource_sizes_system_webview_apk",
+  "resource_sizes_trichrome": {
+    "label": "//chrome/android:resource_sizes_trichrome",
     "type": "generated_script",
-    "script": "bin/resource_sizes_system_webview_apk",
+    "script": "bin/resource_sizes_trichrome",
+  },
+  "resource_sizes_system_webview_bundle": {
+    "label": "//android_webview:resource_sizes_system_webview_bundle",
+    "type": "generated_script",
+    "script": "bin/resource_sizes_system_webview_bundle",
   },
   "sandbox_linux_unittests": {
     "label": "//sandbox/linux:sandbox_linux_unittests",

@@ -280,13 +280,13 @@ BUILDERS = {
                 'type': TEST_TYPES.GENERIC,
             },
             {
-                'name': 'resource_sizes_system_webview_apk',
-                'isolate': 'resource_sizes_system_webview_apk',
+                'name': 'resource_sizes_system_webview_bundle',
+                'isolate': 'resource_sizes_system_webview_bundle',
                 'type': TEST_TYPES.GENERIC,
             },
             {
-                'name': 'resource_sizes_system_webview_google_apk',
-                'isolate': 'resource_sizes_system_webview_google_apk',
+                'name': 'resource_sizes_system_webview_google_bundle',
+                'isolate': 'resource_sizes_system_webview_google_bundle',
                 'type': TEST_TYPES.GENERIC,
             },
         ],
@@ -327,18 +327,23 @@ BUILDERS = {
                 'type': TEST_TYPES.GENERIC,
             },
             {
+                'name': 'resource_sizes_trichrome',
+                'isolate': 'resource_sizes_trichrome',
+                'type': TEST_TYPES.GENERIC,
+            },
+            {
                 'name': 'resource_sizes_trichrome_google',
                 'isolate': 'resource_sizes_trichrome_google',
                 'type': TEST_TYPES.GENERIC,
             },
             {
-                'name': 'resource_sizes_system_webview_apk',
-                'isolate': 'resource_sizes_system_webview_apk',
+                'name': 'resource_sizes_system_webview_bundle',
+                'isolate': 'resource_sizes_system_webview_bundle',
                 'type': TEST_TYPES.GENERIC,
             },
             {
-                'name': 'resource_sizes_system_webview_google_apk',
-                'isolate': 'resource_sizes_system_webview_google_apk',
+                'name': 'resource_sizes_system_webview_google_bundle',
+                'isolate': 'resource_sizes_system_webview_google_bundle',
                 'type': TEST_TYPES.GENERIC,
             },
         ],
@@ -755,9 +760,10 @@ OTHER_BENCHMARKS = {
     'resource_sizes_chrome_modern_public_minimal_apks': RESOURCE_SIZES_METADATA,
     'resource_sizes_monochrome_minimal_apks': RESOURCE_SIZES_METADATA,
     'resource_sizes_monochrome_public_minimal_apks': RESOURCE_SIZES_METADATA,
+    'resource_sizes_trichrome': RESOURCE_SIZES_METADATA,
     'resource_sizes_trichrome_google': RESOURCE_SIZES_METADATA,
-    'resource_sizes_system_webview_apk': RESOURCE_SIZES_METADATA,
-    'resource_sizes_system_webview_google_apk': RESOURCE_SIZES_METADATA,
+    'resource_sizes_system_webview_bundle': RESOURCE_SIZES_METADATA,
+    'resource_sizes_system_webview_google_bundle': RESOURCE_SIZES_METADATA,
 }
 
 
