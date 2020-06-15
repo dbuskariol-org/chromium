@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef IOS_CHROME_BROWSER_SAFE_BROWSING_SAFE_BROWSING_URL_ALLOW_LIST_H_
-#define IOS_CHROME_BROWSER_SAFE_BROWSING_SAFE_BROWSING_URL_ALLOW_LIST_H_
+#ifndef COMPONENTS_SAFE_BROWSING_IOS_BROWSER_SAFE_BROWSING_URL_ALLOW_LIST_H_
+#define COMPONENTS_SAFE_BROWSING_IOS_BROWSER_SAFE_BROWSING_URL_ALLOW_LIST_H_
 
 #include <map>
 #include <set>
@@ -128,4 +128,4 @@ class SafeBrowsingUrlAllowList
   base::ObserverList<Observer, /*check_empty=*/true> observers_;
 };
 
-#endif  // IOS_CHROME_BROWSER_SAFE_BROWSING_SAFE_BROWSING_URL_ALLOW_LIST_H_
+#endif  // COMPONENTS_SAFE_BROWSING_IOS_BROWSER_SAFE_BROWSING_URL_ALLOW_LIST_H_
