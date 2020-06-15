@@ -245,16 +245,6 @@ BUILDERS = {
         ['microdump_stackwalk', 'angle_perftests', 'chrome_apk'],
         'tests': [
             {
-                'name': 'resource_sizes_chrome_apk',
-                'isolate': 'resource_sizes_chrome_apk',
-                'type': TEST_TYPES.GENERIC,
-            },
-            {
-                'name': 'resource_sizes_chrome_public_apk',
-                'isolate': 'resource_sizes_chrome_public_apk',
-                'type': TEST_TYPES.GENERIC,
-            },
-            {
                 'name': 'resource_sizes_monochrome_minimal_apks',
                 'isolate': 'resource_sizes_monochrome_minimal_apks',
                 'type': TEST_TYPES.GENERIC,
@@ -301,11 +291,6 @@ BUILDERS = {
         'additional_compile_targets':
         ['microdump_stackwalk', 'angle_perftests', 'chrome_apk'],
         'tests': [
-            {
-                'name': 'resource_sizes_chrome_public_apk',
-                'isolate': 'resource_sizes_chrome_public_apk',
-                'type': TEST_TYPES.GENERIC,
-            },
             {
                 'name': 'resource_sizes_monochrome_minimal_apks',
                 'isolate': 'resource_sizes_monochrome_minimal_apks',
@@ -754,8 +739,6 @@ RESOURCE_SIZES_METADATA = BenchmarkMetadata(
 
 
 OTHER_BENCHMARKS = {
-    'resource_sizes_chrome_apk': RESOURCE_SIZES_METADATA,
-    'resource_sizes_chrome_public_apk': RESOURCE_SIZES_METADATA,
     'resource_sizes_chrome_modern_minimal_apks': RESOURCE_SIZES_METADATA,
     'resource_sizes_chrome_modern_public_minimal_apks': RESOURCE_SIZES_METADATA,
     'resource_sizes_monochrome_minimal_apks': RESOURCE_SIZES_METADATA,
