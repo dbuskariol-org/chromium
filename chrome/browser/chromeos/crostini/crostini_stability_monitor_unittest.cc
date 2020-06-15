@@ -10,7 +10,9 @@
 #include "base/run_loop.h"
 #include "base/test/metrics/histogram_tester.h"
 #include "chrome/browser/chromeos/crostini/crostini_manager.h"
+#include "chrome/browser/chromeos/crostini/crostini_simple_types.h"
 #include "chrome/browser/chromeos/crostini/crostini_test_helper.h"
+#include "chrome/browser/chromeos/crostini/crostini_util.h"
 #include "chrome/test/base/testing_profile.h"
 #include "chromeos/dbus/dbus_thread_manager.h"
 #include "chromeos/dbus/fake_chunneld_client.h"
@@ -56,6 +58,16 @@ class CrostiniStabilityMonitorTest : public testing::Test {
     base::ThreadTaskRunnerHandle::Get()->PostTask(FROM_HERE,
                                                   run_loop.QuitClosure());
     run_loop.Run();
+  }
+
+  void SendVmStoppedSignal() {
+    auto* concierge_client = static_cast<chromeos::FakeConciergeClient*>(
+        chromeos::DBusThreadManager::Get()->GetConciergeClient());
+
+    vm_tools::concierge::VmStoppedSignal signal;
+    signal.set_name("termina");
+    signal.set_owner_id(CryptohomeIdForProfile(profile_.get()));
+    concierge_client->NotifyVmStopped(signal);
   }
 
  protected:
@@ -116,6 +128,37 @@ TEST_F(CrostiniStabilityMonitorTest, ChunneldFailure) {
   chunneld_client->NotifyChunneldStarted();
   histogram_tester_.ExpectUniqueSample(kCrostiniStabilityHistogram,
                                        FailureClasses::ChunneldStopped, 1);
+}
+
+TEST_F(CrostiniStabilityMonitorTest, UnknownVmStopped) {
+  SendVmStoppedSignal();
+  histogram_tester_.ExpectUniqueSample(kCrostiniStabilityHistogram,
+                                       FailureClasses::VmStopped, 0);
+}
+
+TEST_F(CrostiniStabilityMonitorTest, VmStoppedDuringStartup) {
+  crostini_manager_->AddRunningVmForTesting("termina");
+  crostini_manager_->UpdateVmState("termina", VmState::STARTING);
+
+  SendVmStoppedSignal();
+  histogram_tester_.ExpectUniqueSample(kCrostiniStabilityHistogram,
+                                       FailureClasses::VmStopped, 0);
+}
+
+TEST_F(CrostiniStabilityMonitorTest, ExpectedVmStopped) {
+  crostini_manager_->AddStoppingVmForTesting("termina");
+
+  SendVmStoppedSignal();
+  histogram_tester_.ExpectUniqueSample(kCrostiniStabilityHistogram,
+                                       FailureClasses::VmStopped, 0);
+}
+
+TEST_F(CrostiniStabilityMonitorTest, UnexpectedVmStopped) {
+  crostini_manager_->AddRunningVmForTesting("termina");
+
+  SendVmStoppedSignal();
+  histogram_tester_.ExpectUniqueSample(kCrostiniStabilityHistogram,
+                                       FailureClasses::VmStopped, 1);
 }
 
 }  // namespace crostini

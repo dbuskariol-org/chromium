@@ -7,6 +7,7 @@
 
 #include "base/memory/weak_ptr.h"
 #include "base/scoped_observer.h"
+#include "chrome/browser/chromeos/crostini/crostini_manager.h"
 #include "chromeos/dbus/chunneld_client.h"
 #include "chromeos/dbus/cicerone_client.h"
 #include "chromeos/dbus/concierge_client.h"
@@ -24,15 +25,15 @@ enum class FailureClasses {
   CiceroneStopped = 1,
   SeneschalStopped = 2,
   ChunneldStopped = 3,
-  kMaxValue = ChunneldStopped,
+  VmStopped = 4,
+  kMaxValue = VmStopped,
 };
-
-class CrostiniManager;
 
 class CrostiniStabilityMonitor : chromeos::ConciergeClient::Observer,
                                  chromeos::CiceroneClient::Observer,
                                  chromeos::SeneschalClient::Observer,
-                                 chromeos::ChunneldClient::Observer {
+                                 chromeos::ChunneldClient::Observer,
+                                 VmShutdownObserver {
  public:
   explicit CrostiniStabilityMonitor(CrostiniManager* crostini_manager);
   ~CrostiniStabilityMonitor() override;
@@ -61,6 +62,9 @@ class CrostiniStabilityMonitor : chromeos::ConciergeClient::Observer,
   void ChunneldServiceStopped() override;
   void ChunneldServiceStarted() override;
 
+  //  VmShutdownObserver::
+  void OnVmShutdown(const std::string& vm_name) override;
+
  private:
   ScopedObserver<chromeos::ConciergeClient, chromeos::ConciergeClient::Observer>
       concierge_observer_;
@@ -70,6 +74,13 @@ class CrostiniStabilityMonitor : chromeos::ConciergeClient::Observer,
       seneschal_observer_;
   ScopedObserver<chromeos::ChunneldClient, chromeos::ChunneldClient::Observer>
       chunneld_observer_;
+  ScopedObserver<CrostiniManager,
+                 VmShutdownObserver,
+                 &CrostiniManager::AddVmShutdownObserver,
+                 &CrostiniManager::RemoveVmShutdownObserver>
+      vm_stopped_observer_;
+
+  base::WeakPtr<CrostiniManager> crostini_manager_;
 
   // Note: This should remain the last member so it'll be destroyed and
   // invalidate its weak pointers before any other members are destroyed.

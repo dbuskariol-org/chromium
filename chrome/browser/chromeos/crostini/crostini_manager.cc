@@ -896,10 +896,7 @@ CrostiniManager* CrostiniManager::GetForProfile(Profile* profile) {
 }
 
 CrostiniManager::CrostiniManager(Profile* profile)
-    : profile_(profile),
-      owner_id_(CryptohomeIdForProfile(profile)),
-      crostini_stability_monitor_(
-          std::make_unique<CrostiniStabilityMonitor>(this)) {
+    : profile_(profile), owner_id_(CryptohomeIdForProfile(profile)) {
   DCHECK(!profile_->IsOffTheRecord());
   GetCiceroneClient()->AddObserver(this);
   GetConciergeClient()->AddVmObserver(this);
@@ -913,6 +910,8 @@ CrostiniManager::CrostiniManager(Profile* profile)
     chromeos::PowerManagerClient::Get()->AddObserver(this);
   }
   CrostiniThrottle::GetForBrowserContext(profile_);
+  crostini_stability_monitor_ =
+      std::make_unique<CrostiniStabilityMonitor>(this);
 }
 
 CrostiniManager::~CrostiniManager() {

@@ -5,7 +5,6 @@
 #include "chrome/browser/chromeos/crostini/crostini_stability_monitor.h"
 
 #include "base/metrics/histogram_functions.h"
-#include "chrome/browser/chromeos/crostini/crostini_manager.h"
 #include "chromeos/dbus/dbus_thread_manager.h"
 
 namespace crostini {
@@ -17,7 +16,9 @@ CrostiniStabilityMonitor::CrostiniStabilityMonitor(
     : concierge_observer_(this),
       cicerone_observer_(this),
       seneschal_observer_(this),
-      chunneld_observer_(this) {
+      chunneld_observer_(this),
+      vm_stopped_observer_(this),
+      crostini_manager_(crostini_manager->GetWeakPtr()) {
   auto* concierge_client =
       chromeos::DBusThreadManager::Get()->GetConciergeClient();
   DCHECK(concierge_client);
@@ -45,6 +46,8 @@ CrostiniStabilityMonitor::CrostiniStabilityMonitor(
   chunneld_client->WaitForServiceToBeAvailable(
       base::BindOnce(&CrostiniStabilityMonitor::ChunneldStarted,
                      weak_ptr_factory_.GetWeakPtr()));
+
+  vm_stopped_observer_.Add(crostini_manager);
 }
 
 CrostiniStabilityMonitor::~CrostiniStabilityMonitor() {}
@@ -108,5 +111,21 @@ void CrostiniStabilityMonitor::ChunneldServiceStopped() {
                                 FailureClasses::ChunneldStopped);
 }
 void CrostiniStabilityMonitor::ChunneldServiceStarted() {}
+
+void CrostiniStabilityMonitor::OnVmShutdown(const std::string& vm_name) {
+  // CrostiniManager calls this observer method before removing the VM from its
+  // tracking list, so this list will tell us what state the VM was believed to
+  // be in before the stop signal was received.
+  //
+  // If it was STARTING then the error is tracked as a restart failure, not
+  // here. If it was STOPPING then the stop was expected and not an error. If it
+  // wasn't tracked by CrostiniManager, then we don't care what happens to it.
+  //
+  // So we can just ask if it was in the STARTED state with ::IsVmRunning.
+  if (crostini_manager_->IsVmRunning(vm_name)) {
+    base::UmaHistogramEnumeration(kCrostiniStabilityHistogram,
+                                  FailureClasses::VmStopped);
+  }
+}
 
 }  // namespace crostini
