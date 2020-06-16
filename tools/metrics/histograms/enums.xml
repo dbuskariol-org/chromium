@@ -12197,8 +12197,15 @@ Called by update_net_error_codes.py.-->
 
 <enum name="CpuTimeMetricsThreadType">
   <summary>Thread types used for CPU time metric breakdowns.</summary>
-  <int value="0" label="UnattributedThread"/>
-  <int value="1" label="OtherThread"/>
+  <int value="0" label="UnattributedThread">
+    CPU time consumed by the process that could not be attributed to a specific
+    thread.
+  </int>
+  <int value="1" label="OtherThread">
+    Thread whose name was not known to the instrumentation, e.g. a new/unknown
+    type of thread or a Java thread not registered with
+    base::ThreadIdNameManager.
+  </int>
   <int value="2" label="MainThread"/>
   <int value="3" label="IOThread"/>
   <int value="4" label="ThreadPoolBackgroundWorkerThread"/>
