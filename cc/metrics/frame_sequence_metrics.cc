@@ -141,6 +141,8 @@ FrameSequenceMetrics::ThreadType FrameSequenceMetrics::GetEffectiveThread()
       return ThreadType::kSlower;
 
     case FrameSequenceTrackerType::kCustom:
+      return ThreadType::kMain;
+
     case FrameSequenceTrackerType::kMaxType:
       NOTREACHED();
   }
@@ -149,6 +151,8 @@ FrameSequenceMetrics::ThreadType FrameSequenceMetrics::GetEffectiveThread()
 
 void FrameSequenceMetrics::Merge(
     std::unique_ptr<FrameSequenceMetrics> metrics) {
+  // Merging custom trackers are not supported.
+  DCHECK_NE(type_, FrameSequenceTrackerType::kCustom);
   DCHECK_EQ(type_, metrics->type_);
   DCHECK_EQ(GetEffectiveThread(), metrics->GetEffectiveThread());
   impl_throughput_.Merge(metrics->impl_throughput_);
