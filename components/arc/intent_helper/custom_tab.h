@@ -2,35 +2,35 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef ASH_PUBLIC_CPP_ARC_CUSTOM_TAB_H_
-#define ASH_PUBLIC_CPP_ARC_CUSTOM_TAB_H_
+#ifndef COMPONENTS_ARC_INTENT_HELPER_CUSTOM_TAB_H_
+#define COMPONENTS_ARC_INTENT_HELPER_CUSTOM_TAB_H_
 
 #include <memory>
 
-#include "ash/ash_export.h"
 #include "base/macros.h"
 #include "base/scoped_observer.h"
+#include "components/arc/arc_export.h"
 #include "ui/aura/window.h"
 #include "ui/aura/window_observer.h"
 #include "ui/gfx/native_widget_types.h"
 #include "ui/views/controls/native/native_view_host.h"
 
-namespace ash {
+namespace arc {
 
-// ArcCustomTab is responsible to embed an ARC++ custom tab.
-class ASH_EXPORT ArcCustomTab : public aura::WindowObserver {
+// CustomTab is responsible to embed an ARC++ custom tab.
+class ARC_EXPORT CustomTab : public aura::WindowObserver {
  public:
-  ArcCustomTab(aura::Window* arc_app_window,
-               int32_t surface_id,
-               int32_t top_margin);
-  ArcCustomTab(const ArcCustomTab&) = delete;
-  ArcCustomTab& operator=(const ArcCustomTab&) = delete;
-  ~ArcCustomTab() override;
+  CustomTab(aura::Window* arc_app_window,
+            int32_t surface_id,
+            int32_t top_margin);
+  CustomTab(const CustomTab&) = delete;
+  CustomTab& operator=(const CustomTab&) = delete;
+  ~CustomTab() override;
 
   void Attach(gfx::NativeView view);
 
   // Returns the view against which a view or dialog is positioned and parented
-  // in an ArcCustomTab.
+  // in an CustomTab.
   gfx::NativeView GetHostView();
 
   // aura::WindowObserver:
@@ -68,9 +68,9 @@ class ASH_EXPORT ArcCustomTab : public aura::WindowObserver {
       this};
   ScopedObserver<aura::Window, aura::WindowObserver> other_windows_observer_{
       this};
-  base::WeakPtrFactory<ArcCustomTab> weak_ptr_factory_{this};
+  base::WeakPtrFactory<CustomTab> weak_ptr_factory_{this};
 };
 
-}  // namespace ash
+}  // namespace arc
 
-#endif  // ASH_PUBLIC_CPP_ARC_CUSTOM_TAB_H_
+#endif  // COMPONENTS_ARC_INTENT_HELPER_CUSTOM_TAB_H_

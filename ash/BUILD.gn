@@ -41,7 +41,6 @@ component("ash") {
     # TODO: move MultiUserWindowManager (and delegate) to sources:
     # https://crbug.com/756085
     "multi_user/multi_user_window_manager_impl.h",
-    "public/cpp/arc_custom_tab.h",
     "public/cpp/ash_prefs.h",
     "public/cpp/autotest_ambient_api.h",
     "public/cpp/autotest_desks_api.h",
@@ -241,7 +240,6 @@ component("ash") {
     "bluetooth_devices_observer.h",
     "cancel_mode.cc",
     "cancel_mode.h",
-    "custom_tab/arc_custom_tab.cc",
     "dbus/ash_dbus_services.cc",
     "dbus/ash_dbus_services.h",
     "dbus/display_service_provider.cc",
