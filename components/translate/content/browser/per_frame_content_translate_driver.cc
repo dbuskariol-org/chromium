@@ -377,7 +377,9 @@ void PerFrameContentTranslateDriver::OnPageContents(
   // Run language detection of contents in a sandboxed utility process.
   mojo::Remote<language_detection::mojom::LanguageDetectionService> service =
       language_detection::LaunchLanguageDetectionService();
-  service->DetermineLanguage(
+  // Ensure that we call `service.get()` _before_ moving out of `service` below.
+  auto* raw_service = service.get();
+  raw_service->DetermineLanguage(
       contents,
       base::BindOnce(&PerFrameContentTranslateDriver::OnPageContentsLanguage,
                      weak_pointer_factory_.GetWeakPtr(), std::move(service)));
