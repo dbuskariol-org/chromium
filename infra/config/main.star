@@ -13,6 +13,9 @@ lucicfg.check_version(
     message = 'Update depot_tools',
 )
 
+# Enable LUCI Realms support.
+lucicfg.enable_experiment('crbug.com/1085650')
+
 # Tell lucicfg what files it is allowed to touch
 lucicfg.config(
     config_dir = 'generated',
@@ -25,6 +28,7 @@ lucicfg.config(
         'luci-notify.cfg',
         'luci-scheduler.cfg',
         'project.cfg',
+        'realms.cfg',
         'tricium-prod.cfg',
     ],
     fail_on_warnings = True,
