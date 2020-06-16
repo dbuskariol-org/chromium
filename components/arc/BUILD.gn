@@ -233,6 +233,7 @@ static_library("arc_base") {
 
   deps = [
     "//ash/public/cpp",
+    "//ash/public/cpp/external_arc",
     "//base",
     "//chromeos/constants",
     "//chromeos/cryptohome",
