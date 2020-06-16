@@ -1321,6 +1321,8 @@ InspectorOverlayAgent::ToGridHighlightConfig(
       std::make_unique<InspectorGridHighlightConfig>();
   highlight_config->show_positive_line_numbers =
       config->getShowPositiveLineNumbers(false);
+  highlight_config->show_negative_line_numbers =
+      config->getShowNegativeLineNumbers(false);
   highlight_config->show_grid_extension_lines =
       config->getShowGridExtensionLines(false);
   highlight_config->grid_border_dash = config->getGridBorderDash(false);
