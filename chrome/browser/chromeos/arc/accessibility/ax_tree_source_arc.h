@@ -109,14 +109,6 @@ class AXTreeSourceArc : public ui::AXTreeSource<AccessibilityInfoDataWrapper*,
   void ComputeEnclosingBoundsInternal(AccessibilityInfoDataWrapper* info_data,
                                       gfx::Rect* computed_bounds) const;
 
-  // Computes if the node is clickable and has no clickable descendants.
-  // TODO(hirokisato): Remove this so that we can handle the case where a parent
-  // node is clickable and a child node is focusable but not clickable.
-  bool ComputeIsClickableLeaf(
-      const std::vector<mojom::AccessibilityNodeInfoDataPtr>& nodes,
-      int32_t node_index,
-      const std::map<int32_t, int32_t>& node_id_to_nodes_index) const;
-
   // Builds a mapping from index in |nodes| to whether ignored state should be
   // applied to the node in chrome accessibility.
   void BuildImportanceTable(

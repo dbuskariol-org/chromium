@@ -35,11 +35,9 @@ using AXStringProperty = mojom::AccessibilityStringProperty;
 AccessibilityNodeInfoDataWrapper::AccessibilityNodeInfoDataWrapper(
     AXTreeSourceArc* tree_source,
     AXNodeInfoData* node,
-    bool is_clickable_leaf,
     bool is_important)
     : AccessibilityInfoDataWrapper(tree_source),
       node_ptr_(node),
-      is_clickable_leaf_(is_clickable_leaf),
       is_important_(is_important) {}
 
 AccessibilityNodeInfoDataWrapper::~AccessibilityNodeInfoDataWrapper() = default;
@@ -118,7 +116,7 @@ bool AccessibilityNodeInfoDataWrapper::CanBeAccessibilityFocused() const {
                           data.role != ax::mojom::Role::kGroup &&
                           data.role != ax::mojom::Role::kList &&
                           data.role != ax::mojom::Role::kGrid;
-  bool actionable = is_clickable_leaf_ ||
+  bool actionable = GetProperty(AXBooleanProperty::CLICKABLE) ||
                     GetProperty(AXBooleanProperty::FOCUSABLE) ||
                     GetProperty(AXBooleanProperty::CHECKABLE);
   bool top_level_scrollable = HasProperty(AXStringProperty::TEXT) &&
@@ -418,10 +416,8 @@ void AccessibilityNodeInfoDataWrapper::Serialize(
   } else if (tree_source_->IsScreenReaderMode() &&
              IsAccessibilityFocusableContainer()) {
     // Compute the name by joining all nodes with names.
-    // When this is clickable leaf, compute from all the nodes.
-    // Otherwise, compute from only non-clickable / non-focusable nodes.
     std::vector<std::string> names;
-    ComputeNameFromContents(!is_clickable_leaf_, &names);
+    ComputeNameFromContents(&names);
     if (!names.empty())
       out_data->SetName(base::JoinString(names, " "));
   }
@@ -480,7 +476,7 @@ void AccessibilityNodeInfoDataWrapper::Serialize(
   if (GetProperty(AXBooleanProperty::SCROLLABLE)) {
     out_data->AddBoolAttribute(ax::mojom::BoolAttribute::kScrollable, true);
   }
-  if (is_clickable_leaf_) {
+  if (GetProperty(AXBooleanProperty::CLICKABLE)) {
     out_data->AddBoolAttribute(ax::mojom::BoolAttribute::kClickable, true);
   }
   if (GetProperty(AXBooleanProperty::SELECTED)) {
@@ -644,20 +640,18 @@ bool AccessibilityNodeInfoDataWrapper::HasCoveringSpan(
 }
 
 void AccessibilityNodeInfoDataWrapper::ComputeNameFromContents(
-    bool from_non_focusables,
     std::vector<std::string>* names) const {
   std::vector<AccessibilityInfoDataWrapper*> children;
   GetChildren(&children);
   for (AccessibilityInfoDataWrapper* child : children) {
     static_cast<AccessibilityNodeInfoDataWrapper*>(child)
-        ->ComputeNameFromContentsInternal(from_non_focusables, names);
+        ->ComputeNameFromContentsInternal(names);
   }
 }
 
 void AccessibilityNodeInfoDataWrapper::ComputeNameFromContentsInternal(
-    bool from_non_focusables,
     std::vector<std::string>* names) const {
-  if (from_non_focusables && IsAccessibilityFocusableContainer())
+  if (IsAccessibilityFocusableContainer())
     return;
 
   // Take the name from either content description or text. It's not clear
@@ -679,7 +673,7 @@ void AccessibilityNodeInfoDataWrapper::ComputeNameFromContentsInternal(
   GetChildren(&children);
   for (AccessibilityInfoDataWrapper* child : children) {
     static_cast<AccessibilityNodeInfoDataWrapper*>(child)
-        ->ComputeNameFromContentsInternal(from_non_focusables, names);
+        ->ComputeNameFromContentsInternal(names);
   }
 }
 

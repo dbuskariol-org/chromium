@@ -21,7 +21,6 @@ class AccessibilityNodeInfoDataWrapper : public AccessibilityInfoDataWrapper {
  public:
   AccessibilityNodeInfoDataWrapper(AXTreeSourceArc* tree_source,
                                    mojom::AccessibilityNodeInfoData* node,
-                                   bool is_clickable_leaf,
                                    bool is_important);
 
   ~AccessibilityNodeInfoDataWrapper() override;
@@ -68,11 +67,9 @@ class AccessibilityNodeInfoDataWrapper : public AccessibilityInfoDataWrapper {
   bool HasCoveringSpan(mojom::AccessibilityStringProperty prop,
                        mojom::SpanType span_type) const;
 
-  void ComputeNameFromContents(bool from_non_focusables,
-                               std::vector<std::string>* names) const;
+  void ComputeNameFromContents(std::vector<std::string>* names) const;
 
-  void ComputeNameFromContentsInternal(bool from_non_focusables,
-                                       std::vector<std::string>* names) const;
+  void ComputeNameFromContentsInternal(std::vector<std::string>* names) const;
 
   bool IsScrollableContainer() const;
   bool IsToplevelScrollItem() const;
@@ -80,7 +77,6 @@ class AccessibilityNodeInfoDataWrapper : public AccessibilityInfoDataWrapper {
 
   mojom::AccessibilityNodeInfoData* node_ptr_ = nullptr;
 
-  bool is_clickable_leaf_;
   bool is_important_;
 
   base::Optional<ax::mojom::Role> role_;
