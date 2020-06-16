@@ -1565,7 +1565,7 @@ deps = {
       'packages' : [
           {
               'package': 'infra/tools/wpr/linux_x86_64',
-              'version': ' y28SfbEF6nHSkZ1eHysM1t711zpOCmtk7jUdxZB-QSMC',
+              'version': 'y28SfbEF6nHSkZ1eHysM1t711zpOCmtk7jUdxZB-QSMC',
           },
       ],
       'condition': 'checkout_android',
