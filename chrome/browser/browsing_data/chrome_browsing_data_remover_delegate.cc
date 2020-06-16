@@ -117,6 +117,7 @@
 #include "media/mojo/services/video_decode_perf_history.h"
 #include "mojo/public/cpp/bindings/callback_helpers.h"
 #include "mojo/public/cpp/bindings/remote.h"
+#include "net/base/registry_controlled_domains/registry_controlled_domain.h"
 #include "net/http/http_transaction_factory.h"
 
 #if defined(OS_ANDROID)
@@ -324,6 +325,32 @@ ChromeBrowsingDataRemoverDelegate::GetOriginTypeMatcher() {
 
 bool ChromeBrowsingDataRemoverDelegate::MayRemoveDownloadHistory() {
   return profile_->GetPrefs()->GetBoolean(prefs::kAllowDeletingBrowserHistory);
+}
+
+std::vector<std::string>
+ChromeBrowsingDataRemoverDelegate::GetDomainsForDeferredCookieDeletion(
+    uint64_t remove_mask) {
+  if (!base::FeatureList::IsEnabled(
+          password_manager::features::kEnablePasswordsAccountStorage)) {
+    return {};
+  }
+  if ((remove_mask & DEFERRED_COOKIE_DELETION_DATA_TYPES) == 0) {
+    return {};
+  }
+
+  // Return Google and Gaia domains, so Google signout is deferred until
+  // account-scoped data is deleted.
+  auto urls = {GaiaUrls::GetInstance()->google_url(),
+               GaiaUrls::GetInstance()->gaia_url()};
+  std::set<std::string> domains;
+  for (const GURL& url : urls) {
+    std::string domain = GetDomainAndRegistry(
+        url, net::registry_controlled_domains::INCLUDE_PRIVATE_REGISTRIES);
+    if (domain.empty())
+      domain = url.host();
+    domains.insert(domain);
+  }
+  return {domains.begin(), domains.end()};
 }
 
 void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
@@ -828,6 +855,7 @@ void ChromeBrowsingDataRemoverDelegate::RemoveEmbedderData(
   // Password manager
   if (remove_mask & DATA_TYPE_PASSWORDS) {
     base::RecordAction(UserMetricsAction("ClearBrowsingData_Passwords"));
+    // TODO(crbug.com/1086433): Clear account-scoped passwords.
     password_manager::PasswordStore* password_store =
         PasswordStoreFactory::GetForProfile(
             profile_, ServiceAccessType::EXPLICIT_ACCESS).get();

@@ -8058,6 +8058,9 @@ Unknown properties are collapsed to zero. -->
   <int value="9" label="kAuthCache"/>
   <int value="10" label="kCodeCaches"/>
   <int value="11" label="kNetworkErrorLogging"/>
+  <int value="12" label="kTrustTokens"/>
+  <int value="13" label="kConversions"/>
+  <int value="14" label="kDeferredCookies"/>
 </enum>
 
 <enum name="BrowsingInstancePluralityVisibilityState">
