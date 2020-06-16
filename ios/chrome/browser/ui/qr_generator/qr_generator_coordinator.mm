@@ -9,6 +9,7 @@
 #include "base/metrics/user_metrics_action.h"
 #include "base/strings/sys_string_conversions.h"
 #include "ios/chrome/browser/main/browser.h"
+#import "ios/chrome/browser/ui/activity_services/activity_scenario.h"
 #import "ios/chrome/browser/ui/activity_services/activity_service_coordinator.h"
 #import "ios/chrome/browser/ui/activity_services/requirements/activity_service_positioner.h"
 #import "ios/chrome/browser/ui/activity_services/requirements/activity_service_presentation.h"
@@ -107,7 +108,8 @@
 
   self.activityServiceCoordinator = [[ActivityServiceCoordinator alloc]
       initWithBaseViewController:self.viewController
-                         browser:self.browser];
+                         browser:self.browser
+                        scenario:ActivityScenario::QRCodeImage];
 
   self.activityServiceCoordinator.positionProvider = self;
   self.activityServiceCoordinator.presentationProvider = self;

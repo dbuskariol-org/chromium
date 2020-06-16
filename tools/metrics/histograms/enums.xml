@@ -36102,6 +36102,11 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="1" label="Empty URL"/>
 </enum>
 
+<enum name="IOSActivityScenario">
+  <int value="0" label="Tab Share Button"/>
+  <int value="1" label="QR Code Image"/>
+</enum>
+
 <enum name="IOSContentSizeCategory">
   <int value="0" label="Unspecified"/>
   <int value="1" label="ExtraSmall"/>
@@ -36240,6 +36245,26 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="5" label="Open URL"/>
   <int value="6" label="Search Text"/>
   <int value="7" label="Search Image"/>
+</enum>
+
+<enum name="IOSShareAction">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Cancel"/>
+  <int value="2" label="Add/Edit Bookmark"/>
+  <int value="3" label="Copy to Clipboard"/>
+  <int value="4" label="Save Image"/>
+  <int value="5" label="Find in Page"/>
+  <int value="6" label="Print"/>
+  <int value="7" label="Add to Reading List"/>
+  <int value="8" label="Mail"/>
+  <int value="9" label="Request Desktop/Mobile Site"/>
+  <int value="10" label="Send Tab To Self"/>
+  <int value="11" label="Create QR Code"/>
+  <int value="12" label="Send to iMessage"/>
+  <int value="13" label="Unknown Google App"/>
+  <int value="14" label="Native Social App"/>
+  <int value="15" label="Third-party Messaging App"/>
+  <int value="16" label="Third-party Content App"/>
 </enum>
 
 <enum name="IOSShareExtensionReceivedEntrySource">
