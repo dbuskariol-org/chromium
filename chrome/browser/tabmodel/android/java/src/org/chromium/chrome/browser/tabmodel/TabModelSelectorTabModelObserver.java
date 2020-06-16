@@ -68,8 +68,7 @@ public class TabModelSelectorTabModelObserver implements TabModelObserver {
     /**
      * Notifies that the registration of the observers has been completed.
      */
-    protected void onRegistrationComplete() {
-    }
+    protected void onRegistrationComplete() {}
 
     /**
      * Destroys the observer and removes itself as a listener for Tab updates.

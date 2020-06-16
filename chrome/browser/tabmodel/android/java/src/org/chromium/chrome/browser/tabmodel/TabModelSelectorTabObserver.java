@@ -21,7 +21,6 @@ import java.util.List;
  * Observer of tab changes for all tabs owned by a {@link TabModelSelector}.
  */
 public class TabModelSelectorTabObserver extends EmptyTabObserver {
-
     private final TabModelSelector mTabModelSelector;
     private final TabModelSelectorTabModelObserver mTabModelObserver;
     private final SparseArray<Tab> mTabsToClose = new SparseArray<>();
