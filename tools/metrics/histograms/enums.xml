@@ -43700,6 +43700,12 @@ Called by update_use_counter_css.py.-->
   <int value="4" label="Other Error"/>
 </enum>
 
+<enum name="MarketingOptInGeolocationEvent">
+  <summary>Geolocation resolve status on OOBE MarketingOptInScreen.</summary>
+  <int value="0" label="Country determined successfully."/>
+  <int value="1" label="Country could not be determined."/>
+</enum>
+
 <enum name="MarketingOptInScreenEvent">
   <summary>Opt-in actions that occur on the OOBE MarketingOptInScreen.</summary>
   <int value="0" label="Opt-in when the default is opt-in"/>
