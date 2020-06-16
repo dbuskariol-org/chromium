@@ -377,8 +377,11 @@ class Port(object):
     def default_smoke_test_only(self):
         return False
 
-    def default_timeout_ms(self):
-        timeout_ms = 6 * 1000
+    def _default_timeout_ms(self):
+        return 6000
+
+    def timeout_ms(self):
+        timeout_ms = self._default_timeout_ms()
         if self.get_option('configuration') == 'Debug':
             # Debug is usually 2x-3x slower than Release.
             return 3 * timeout_ms
@@ -389,7 +392,7 @@ class Port(object):
         # We want to wait for at least 3 seconds, but if we are really slow, we
         # want to be slow on cleanup as well (for things like ASAN, Valgrind, etc.)
         return (3.0 * float(self.get_option('time_out_ms', '0')) /
-                self.default_timeout_ms())
+                self._default_timeout_ms())
 
     def default_batch_size(self):
         """Returns the default batch size to use for this port."""

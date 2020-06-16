@@ -128,16 +128,19 @@ class PortTestCase(LoggingTestCase):
         self.assertEqual(port.default_max_locked_shards(), 1)
 
     def test_default_timeout_ms(self):
+        self.assertEqual(self.make_port().timeout_ms(), 6000)
+
+    def test_timeout_ms_release(self):
         self.assertEqual(
-            self.make_port(
-                options=optparse.Values({
-                    'configuration': 'Release'
-                })).default_timeout_ms(), 6000)
+            self.make_port(options=optparse.Values(
+                {'configuration': 'Release'})).timeout_ms(),
+            self.make_port().timeout_ms())
+
+    def test_timeout_ms_debug(self):
         self.assertEqual(
-            self.make_port(
-                options=optparse.Values({
-                    'configuration': 'Debug'
-                })).default_timeout_ms(), 18000)
+            self.make_port(options=optparse.Values({'configuration': 'Debug'
+                                                    })).timeout_ms(),
+            3 * self.make_port().timeout_ms())
 
     def test_driver_cmd_line(self):
         port = self.make_port()
