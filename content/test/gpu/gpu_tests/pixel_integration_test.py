@@ -64,6 +64,7 @@ class PixelIntegrationTest(
     pages = namespace.DefaultPages(cls.test_base_name)
     pages += namespace.GpuRasterizationPages(cls.test_base_name)
     pages += namespace.ExperimentalCanvasFeaturesPages(cls.test_base_name)
+    pages += namespace.LowLatencyPages(cls.test_base_name)
     pages += namespace.PaintWorkletPages(cls.test_base_name)
     # pages += namespace.NoGpuProcessPages(cls.test_base_name)
     # The following pages should run only on platforms where SwiftShader is
@@ -77,7 +78,6 @@ class PixelIntegrationTest(
       pages += namespace.DualGPUMacSpecificPages(cls.test_base_name)
     if sys.platform.startswith('win'):
       pages += namespace.DirectCompositionPages(cls.test_base_name)
-      pages += namespace.LowLatencySwapChainPages(cls.test_base_name)
       pages += namespace.HdrTestPages(cls.test_base_name)
     for p in pages:
       yield (p.name, skia_gold_integration_test_base.GPU_RELATIVE_PATH + p.url,

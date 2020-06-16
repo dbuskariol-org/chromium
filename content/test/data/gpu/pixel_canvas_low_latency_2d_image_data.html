@@ -8,7 +8,7 @@ that the baseline images are regenerated on the next run.
 
 <html>
 <head>
-<title>Low Latency 2D Canvas drawImage Test</title>
+<title>Low Latency 2D Canvas get/putImageData Test</title>
 <style type="text/css">
 .nomargin {
   margin: 0px auto;
@@ -35,20 +35,23 @@ function main()
   let c2 = document.getElementById("c2");
   let ctx2 = c2.getContext("2d", {"desynchronized": true});
 
-  let width = c1.width;
-  let height = c1.height;
-
   ctx1.fillStyle = "#FF0000";
   ctx1.fillRect(0, 0, 100, 100);
-  ctx2.drawImage(c1, 0, 0, 100, 100, 0, 0, 100, 100);
+
+  let imageData = ctx1.getImageData(0, 0, 100, 100);
+  ctx2.putImageData(imageData, 0, 0);
 
   ctx1.fillStyle = "#00FF00";
   ctx1.fillRect(0, 50, 50, 50);
-  ctx2.drawImage(c1, 0, 50, 50, 50, 0, 50, 50, 50);
+
+  imageData = ctx1.getImageData(0, 50, 50, 50);
+  ctx2.putImageData(imageData, 0, 50);
 
   ctx1.fillStyle = "#0000FF";
   ctx1.fillRect(50, 0, 50, 50);
-  ctx2.drawImage(c1, 50, 0, 50, 50, 50, 0, 50, 50);
+
+  imageData = ctx1.getImageData(50, 0, 50, 50);
+  ctx2.putImageData(imageData, 50, 0);
 
   waitForFinish();
 }
