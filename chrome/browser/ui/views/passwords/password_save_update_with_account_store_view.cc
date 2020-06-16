@@ -258,8 +258,8 @@ std::unique_ptr<views::Combobox> CreateDestinationCombobox(
     ui::ImageModel primary_account_avatar,
     bool is_using_account_store) {
   ui::ImageModel computer_image = ui::ImageModel::FromVectorIcon(
-      kHardwareComputerIcon, ui::NativeTheme::kColorId_DefaultIconColor,
-      ComboboxIconSize());
+      kComputerWithCircleBackgroundIcon,
+      ui::NativeTheme::kColorId_DefaultIconColor, ComboboxIconSize());
 
   std::vector<ComboboxItem> destinations = {
       {.combobox_text = l10n_util::GetStringUTF16(
