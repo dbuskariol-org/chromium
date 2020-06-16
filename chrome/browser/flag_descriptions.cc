@@ -3920,6 +3920,11 @@ const char kPluginVmShowCameraPermissionsName[] =
 const char kPluginVmShowCameraPermissionsDescription[] =
     "Displays camera permissions for Plugin VM in the app settings.";
 
+const char kPluginVmShowMicrophonePermissionsName[] =
+    "Show Plugin VM microphone permissions";
+const char kPluginVmShowMicrophonePermissionsDescription[] =
+    "Displays microphone permissions for Plugin VM in the app settings.";
+
 const char kTetherName[] = "Instant Tethering";
 const char kTetherDescription[] =
     "Enables Instant Tethering. Instant Tethering allows your nearby Google "

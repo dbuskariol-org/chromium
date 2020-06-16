@@ -39732,6 +39732,7 @@ from previous Chrome versions.
   <int value="-1126217973" label="IdleTimeSpellChecking:disabled"/>
   <int value="-1125840399" label="ViewsBrowserWindows:enabled"/>
   <int value="-1125133283" label="disable-threaded-scrolling"/>
+  <int value="-1122899696" label="PluginVmShowMicrophonePermissions:disabled"/>
   <int value="-1122853453" label="LazyImageLoading:enabled"/>
   <int value="-1122458028" label="UnifiedMediaView:enabled"/>
   <int value="-1121931029" label="DownloadsForeground:enabled"/>
@@ -40686,6 +40687,7 @@ from previous Chrome versions.
   <int value="-41672681" label="WebUITabStripDemoOptions:disabled"/>
   <int value="-40935502" label="ContextualSuggestionsSlimPeekUI:enabled"/>
   <int value="-36503306" label="HomepageLocationPolicy:enabled"/>
+  <int value="-36234530" label="PluginVmShowMicrophonePermissions:enabled"/>
   <int value="-35388407" label="AshNewSystemMenu:disabled"/>
   <int value="-31444029" label="MediaInspectorLogging:disabled"/>
   <int value="-30966385" label="enable-hardware-overlays"/>

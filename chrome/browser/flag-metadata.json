@@ -3648,6 +3648,11 @@
     "expiry_milestone": 87
   },
   {
+    "name": "pluginvm-show-microphone-permissions",
+    "owners": [ "dtor"],
+    "expiry_milestone": 87
+  },
+  {
     "name": "pointer-support",
     "owners": [ "noyau" ],
     "expiry_milestone": 85

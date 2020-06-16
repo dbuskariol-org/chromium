@@ -2643,6 +2643,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kPluginVmShowCameraPermissionsName,
      flag_descriptions::kPluginVmShowCameraPermissionsDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kPluginVmShowCameraPermissions)},
+    {"pluginvm-show-microphone-permissions",
+     flag_descriptions::kPluginVmShowMicrophonePermissionsName,
+     flag_descriptions::kPluginVmShowMicrophonePermissionsDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(
+         chromeos::features::kPluginVmShowMicrophonePermissions)},
 #endif  // OS_CHROMEOS
 #if defined(OS_CHROMEOS) || defined(OS_LINUX)
 #if BUILDFLAG(USE_TCMALLOC)
