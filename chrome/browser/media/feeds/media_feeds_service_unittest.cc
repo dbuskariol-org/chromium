@@ -33,9 +33,6 @@
 
 namespace media_feeds {
 
-using SafeSearchCheckedType =
-    media_history::MediaHistoryKeyedService::SafeSearchCheckedType;
-
 namespace {
 
 constexpr size_t kCacheSize = 2;
@@ -159,47 +156,6 @@ const char kTestData[] = R"END({
 const char kFirstItemActionURL[] = "https://www.example.com/action";
 const char kFirstItemPlayNextActionURL[] = "https://www.example.com/next";
 
-// CounterRunLoop is a RunLoop that requires a certain number of calls from
-// distinct ids before it will quit.
-class CounterRunLoop {
- public:
-  explicit CounterRunLoop(const unsigned num_required)
-      : num_required_(num_required) {}
-  ~CounterRunLoop() = default;
-  CounterRunLoop(const CounterRunLoop& t) = delete;
-  CounterRunLoop& operator=(const CounterRunLoop&) = delete;
-
-  media_feeds::MediaFeedsService::SafeSearchCompletionCallback QuitClosure() {
-    return base::BindRepeating(&CounterRunLoop::WasCalled,
-                               weak_factory_.GetWeakPtr());
-  }
-
-  void Run() {
-    if (calls_.size() >= num_required_)
-      return;
-
-    run_loop.Run();
-  }
-
- private:
-  void WasCalled(
-      base::Optional<media_history::MediaHistoryKeyedService::SafeSearchID>
-          id) {
-    if (!id.has_value())
-      return;
-
-    calls_.insert(*id);
-    if (calls_.size() >= num_required_)
-      run_loop.Quit();
-  }
-
-  std::set<media_history::MediaHistoryKeyedService::SafeSearchID> calls_;
-  unsigned const num_required_;
-  base::RunLoop run_loop;
-
-  base::WeakPtrFactory<CounterRunLoop> weak_factory_{this};
-};
-
 }  // namespace
 
 class MediaFeedsServiceTest : public ChromeRenderViewHostTestHarness {
@@ -228,18 +184,16 @@ class MediaFeedsServiceTest : public ChromeRenderViewHostTestHarness {
     run_loop.Run();
   }
 
-  void SimulateOnCheckURLDone(
-      const media_history::MediaHistoryKeyedService::SafeSearchID id,
-      const GURL& url,
-      safe_search_api::Classification classification,
-      bool uncertain) {
+  void SimulateOnCheckURLDone(const int64_t id,
+                              const GURL& url,
+                              safe_search_api::Classification classification,
+                              bool uncertain) {
     GetMediaFeedsService()->OnCheckURLDone(id, url, url, classification,
                                            uncertain);
   }
 
-  bool AddInflightSafeSearchCheck(
-      const media_history::MediaHistoryKeyedService::SafeSearchID id,
-      const std::set<GURL>& urls) {
+  bool AddInflightSafeSearchCheck(const int64_t id,
+                                  const std::set<GURL>& urls) {
     return GetMediaFeedsService()->AddInflightSafeSearchCheck(id, urls);
   }
 
@@ -603,12 +557,8 @@ TEST_F(MediaFeedsServiceTest, FetchFeed_NotFoundError) {
 TEST_F(MediaFeedsServiceTest, SafeSearch_AllSafe) {
   base::HistogramTester histogram_tester;
 
-  CounterRunLoop run_loop(2u);
-  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
-      run_loop.QuitClosure());
-
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
   SetSafeSearchEnabled(true);
+  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
   // Store a Media Feed.
   GetMediaFeedsService()->DiscoverMediaFeed(
@@ -620,10 +570,14 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllSafe) {
       SuccessfulResultWithItems(GetExpectedItems(), 1), base::DoNothing());
   WaitForDB();
 
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
         std::move(pending_items));
   }
@@ -650,18 +604,14 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllSafe) {
 
   histogram_tester.ExpectUniqueSample(
       MediaFeedsService::kSafeSearchResultHistogramName,
-      media_feeds::mojom::SafeSearchResult::kSafe, 5);
+      media_feeds::mojom::SafeSearchResult::kSafe, 3);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_AllUnsafe) {
   base::HistogramTester histogram_tester;
 
-  CounterRunLoop run_loop(2u);
-  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
-      run_loop.QuitClosure());
-
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ true);
   SetSafeSearchEnabled(true);
+  safe_search_checker()->SetUpValidResponse(/* is_porn= */ true);
 
   // Store a Media Feed.
   GetMediaFeedsService()->DiscoverMediaFeed(
@@ -673,10 +623,14 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllUnsafe) {
       SuccessfulResultWithItems(GetExpectedItems(), 1), base::DoNothing());
   WaitForDB();
 
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
         std::move(pending_items));
   }
@@ -703,18 +657,14 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_AllUnsafe) {
 
   histogram_tester.ExpectUniqueSample(
       MediaFeedsService::kSafeSearchResultHistogramName,
-      media_feeds::mojom::SafeSearchResult::kUnsafe, 5);
+      media_feeds::mojom::SafeSearchResult::kUnsafe, 3);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Request) {
   base::HistogramTester histogram_tester;
 
-  CounterRunLoop run_loop(2u);
-  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
-      run_loop.QuitClosure());
-
-  safe_search_checker()->SetUpFailedResponse();
   SetSafeSearchEnabled(true);
+  safe_search_checker()->SetUpFailedResponse();
 
   // Store a Media Feed.
   GetMediaFeedsService()->DiscoverMediaFeed(
@@ -726,10 +676,14 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Request) {
       SuccessfulResultWithItems(GetExpectedItems(), 1), base::DoNothing());
   WaitForDB();
 
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
         std::move(pending_items));
   }
@@ -739,9 +693,9 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Request) {
   WaitForDB();
 
   {
-    // The pending items should still be 4.
+    // The pending items should still be 3.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
   }
 
   // Check the items were updated.
@@ -756,7 +710,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Request) {
 
   histogram_tester.ExpectUniqueSample(
       MediaFeedsService::kSafeSearchResultHistogramName,
-      media_feeds::mojom::SafeSearchResult::kUnknown, 5);
+      media_feeds::mojom::SafeSearchResult::kUnknown, 3);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Pref) {
@@ -772,21 +726,26 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Pref) {
       SuccessfulResultWithItems(GetExpectedItems(), 1), base::DoNothing());
   WaitForDB();
 
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
         std::move(pending_items));
   }
 
   // Wait for the service and DB to finish.
+  run_loop.Run();
   WaitForDB();
 
   {
-    // The pending items should still be 4.
+    // The pending items should still be 3.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
   }
 
   // Check the items were updated.
@@ -804,12 +763,8 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Pref) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Inflight) {
-  CounterRunLoop run_loop(2u);
-  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
-      run_loop.QuitClosure());
-
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
   SetSafeSearchEnabled(true);
+  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
   // Store a Media Feed.
   GetMediaFeedsService()->DiscoverMediaFeed(
@@ -821,10 +776,14 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Inflight) {
       SuccessfulResultWithItems(GetExpectedItems(), 1), base::DoNothing());
   WaitForDB();
 
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_LE(0u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
         std::move(pending_items));
   }
@@ -832,7 +791,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Inflight) {
   {
     // This checks we ignore the duplicate items for inflight checks.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_LE(0u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
         std::move(pending_items));
   }
@@ -849,8 +808,8 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Inflight) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Committed) {
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
   SetSafeSearchEnabled(true);
+  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
   // Store a Media Feed.
   GetMediaFeedsService()->DiscoverMediaFeed(
@@ -863,13 +822,13 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Committed) {
   WaitForDB();
 
   auto pending_items_a = GetPendingSafeSearchCheckMediaFeedItemsSync();
-  EXPECT_LE(0u, pending_items_a.size());
+  EXPECT_EQ(3u, pending_items_a.size());
 
   auto pending_items_b = GetPendingSafeSearchCheckMediaFeedItemsSync();
-  EXPECT_LE(0u, pending_items_b.size());
+  EXPECT_EQ(3u, pending_items_b.size());
 
   {
-    CounterRunLoop run_loop(2u);
+    base::RunLoop run_loop;
     GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
         run_loop.QuitClosure());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
@@ -881,7 +840,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Committed) {
   }
 
   {
-    CounterRunLoop run_loop(1u);
+    base::RunLoop run_loop;
     GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
         run_loop.QuitClosure());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
@@ -900,7 +859,6 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_CheckTwice_Committed) {
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUnsafe) {
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
   SetSafeSearchEnabled(true);
   base::HistogramTester histogram_tester;
 
@@ -919,22 +877,15 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUnsafe) {
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(2u, pending_items.size());
-
-    for (auto& item : pending_items) {
-      if (item->id.first != SafeSearchCheckedType::kFeedItem)
-        continue;
-
-      EXPECT_TRUE(AddInflightSafeSearchCheck(item->id, item->urls));
-    }
+    EXPECT_EQ(1u, pending_items.size());
+    EXPECT_TRUE(AddInflightSafeSearchCheck(pending_items[0]->id,
+                                           pending_items[0]->urls));
   }
 
-  SimulateOnCheckURLDone(std::make_pair(SafeSearchCheckedType::kFeedItem, 1),
-                         GURL(kFirstItemActionURL),
+  SimulateOnCheckURLDone(1, GURL(kFirstItemActionURL),
                          safe_search_api::Classification::SAFE,
                          /*uncertain=*/false);
-  SimulateOnCheckURLDone(std::make_pair(SafeSearchCheckedType::kFeedItem, 1),
-                         GURL(kFirstItemPlayNextActionURL),
+  SimulateOnCheckURLDone(1, GURL(kFirstItemPlayNextActionURL),
                          safe_search_api::Classification::UNSAFE,
                          /*uncertain=*/false);
 
@@ -948,13 +899,12 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUnsafe) {
               items[0]->safe_search_result);
   }
 
-  histogram_tester.ExpectBucketCount(
+  histogram_tester.ExpectUniqueSample(
       MediaFeedsService::kSafeSearchResultHistogramName,
       media_feeds::mojom::SafeSearchResult::kUnsafe, 1);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUncertain) {
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
   SetSafeSearchEnabled(true);
   base::HistogramTester histogram_tester;
 
@@ -973,22 +923,15 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUncertain) {
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(2u, pending_items.size());
-
-    for (auto& item : pending_items) {
-      if (item->id.first != SafeSearchCheckedType::kFeedItem)
-        continue;
-
-      EXPECT_TRUE(AddInflightSafeSearchCheck(item->id, item->urls));
-    }
+    EXPECT_EQ(1u, pending_items.size());
+    EXPECT_TRUE(AddInflightSafeSearchCheck(pending_items[0]->id,
+                                           pending_items[0]->urls));
   }
 
-  SimulateOnCheckURLDone(std::make_pair(SafeSearchCheckedType::kFeedItem, 1),
-                         GURL(kFirstItemActionURL),
+  SimulateOnCheckURLDone(1, GURL(kFirstItemActionURL),
                          safe_search_api::Classification::SAFE,
                          /*uncertain=*/false);
-  SimulateOnCheckURLDone(std::make_pair(SafeSearchCheckedType::kFeedItem, 1),
-                         GURL(kFirstItemPlayNextActionURL),
+  SimulateOnCheckURLDone(1, GURL(kFirstItemPlayNextActionURL),
                          safe_search_api::Classification::SAFE,
                          /*uncertain=*/true);
 
@@ -1002,13 +945,12 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_SafeUncertain) {
               items[0]->safe_search_result);
   }
 
-  histogram_tester.ExpectBucketCount(
+  histogram_tester.ExpectUniqueSample(
       MediaFeedsService::kSafeSearchResultHistogramName,
       media_feeds::mojom::SafeSearchResult::kUnknown, 1);
 }
 
 TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_UnsafeUncertain) {
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
   SetSafeSearchEnabled(true);
   base::HistogramTester histogram_tester;
 
@@ -1027,22 +969,15 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_UnsafeUncertain) {
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(2u, pending_items.size());
-
-    for (auto& item : pending_items) {
-      if (item->id.first != SafeSearchCheckedType::kFeedItem)
-        continue;
-
-      EXPECT_TRUE(AddInflightSafeSearchCheck(item->id, item->urls));
-    }
+    EXPECT_EQ(1u, pending_items.size());
+    EXPECT_TRUE(AddInflightSafeSearchCheck(pending_items[0]->id,
+                                           pending_items[0]->urls));
   }
 
-  SimulateOnCheckURLDone(std::make_pair(SafeSearchCheckedType::kFeedItem, 1),
-                         GURL(kFirstItemActionURL),
+  SimulateOnCheckURLDone(1, GURL(kFirstItemActionURL),
                          safe_search_api::Classification::UNSAFE,
                          /*uncertain=*/false);
-  SimulateOnCheckURLDone(std::make_pair(SafeSearchCheckedType::kFeedItem, 1),
-                         GURL(kFirstItemPlayNextActionURL),
+  SimulateOnCheckURLDone(1, GURL(kFirstItemPlayNextActionURL),
                          safe_search_api::Classification::SAFE,
                          /*uncertain=*/true);
 
@@ -1056,7 +991,7 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Mixed_UnsafeUncertain) {
               items[0]->safe_search_result);
   }
 
-  histogram_tester.ExpectBucketCount(
+  histogram_tester.ExpectUniqueSample(
       MediaFeedsService::kSafeSearchResultHistogramName,
       media_feeds::mojom::SafeSearchResult::kUnsafe, 1);
 }
@@ -1079,21 +1014,26 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Feature) {
       SuccessfulResultWithItems(GetExpectedItems(), 1), base::DoNothing());
   WaitForDB();
 
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
   {
     // Get the pending items and check them against Safe Search.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
     GetMediaFeedsService()->CheckItemsAgainstSafeSearch(
         std::move(pending_items));
   }
 
   // Wait for the service and DB to finish.
+  run_loop.Run();
   WaitForDB();
 
   {
-    // The pending items should still be 4.
+    // The pending items should still be 3.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
   }
 
   // Check the items were updated.
@@ -1113,16 +1053,16 @@ TEST_F(MediaFeedsServiceTest, SafeSearch_Failed_Feature) {
 TEST_F(MediaFeedsServiceTest, FetcherShouldTriggerSafeSearch) {
   const GURL feed_url("https://www.google.com/feed");
 
-  CounterRunLoop run_loop(2u);
-  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
-      run_loop.QuitClosure());
-
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
   SetSafeSearchEnabled(true);
+  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
   // Store a Media Feed.
   GetMediaFeedsService()->DiscoverMediaFeed(feed_url);
   WaitForDB();
+
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
 
   {
     // Fetch the Media Feed.
@@ -1160,10 +1100,6 @@ TEST_F(MediaFeedsServiceTest, FetcherShouldDeleteFeedIfGone) {
 
   safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
 
-  CounterRunLoop run_loop(1u);
-  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
-      run_loop.QuitClosure());
-
   // Store a Media Feed.
   GetMediaFeedsService()->DiscoverMediaFeed(feed_url);
   WaitForDB();
@@ -1173,10 +1109,14 @@ TEST_F(MediaFeedsServiceTest, FetcherShouldDeleteFeedIfGone) {
       SuccessfulResultWithItems(GetExpectedItems(), 1), base::DoNothing());
   WaitForDB();
 
+  base::RunLoop run_loop;
+  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
+      run_loop.QuitClosure());
+
   {
     // Check there are pending items.
     auto pending_items = GetPendingSafeSearchCheckMediaFeedItemsSync();
-    EXPECT_EQ(4u, pending_items.size());
+    EXPECT_EQ(3u, pending_items.size());
   }
 
   // Enable the safe search pref. This should trigger a refetch.
@@ -2084,46 +2024,6 @@ TEST_P(MediaFeedsSpecTest, RunOpenSourceTest) {
     EXPECT_EQ(media_feeds::mojom::FetchResult::kInvalidFeed,
               feeds[0]->last_fetch_result);
   }
-}
-
-TEST_F(MediaFeedsServiceTest, DiscoverFeed_SafeSearch_Enabled) {
-  const GURL feed_url("https://www.google.com/feed");
-
-  SetSafeSearchEnabled(true);
-  safe_search_checker()->SetUpValidResponse(/* is_porn= */ false);
-
-  CounterRunLoop run_loop(1u);
-  GetMediaFeedsService()->SetSafeSearchCompletionCallbackForTest(
-      run_loop.QuitClosure());
-
-  // Store a Media Feed.
-  GetMediaFeedsService()->DiscoverMediaFeed(feed_url);
-  WaitForDB();
-
-  // Wait for the service and DB to finish.
-  run_loop.Run();
-  WaitForDB();
-
-  // The feed should have been updated to be safe.
-  auto feeds = GetMediaFeedsSync();
-  ASSERT_EQ(1u, feeds.size());
-  EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kSafe,
-            feeds[0]->safe_search_result);
-}
-
-TEST_F(MediaFeedsServiceTest, DiscoverFeed_SafeSearch_Disabled) {
-  const GURL feed_url("https://www.google.com/feed");
-
-  SetSafeSearchEnabled(false);
-
-  // Store a Media Feed.
-  GetMediaFeedsService()->DiscoverMediaFeed(feed_url);
-  WaitForDB();
-
-  auto feeds = GetMediaFeedsSync();
-  ASSERT_EQ(1u, feeds.size());
-  EXPECT_EQ(media_feeds::mojom::SafeSearchResult::kUnknown,
-            feeds[0]->safe_search_result);
 }
 
 }  // namespace media_feeds
