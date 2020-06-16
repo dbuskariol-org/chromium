@@ -260,7 +260,7 @@ apps::mojom::IntentFilterPtr ConvertArcIntentFilter(
     std::vector<apps::mojom::ConditionValuePtr> mime_type_condition_values;
     for (auto& mime_type : arc_intent_filter.mime_types()) {
       mime_type_condition_values.push_back(apps_util::MakeConditionValue(
-          mime_type, apps::mojom::PatternMatchType::kNone));
+          mime_type, apps::mojom::PatternMatchType::kMimeType));
     }
     if (!mime_type_condition_values.empty()) {
       auto mime_type_condition =
@@ -309,6 +309,7 @@ arc::IntentFilter CreateArcIntentFilter(
               match_type = arc::mojom::PatternType::PATTERN_SIMPLE_GLOB;
               break;
             case apps::mojom::PatternMatchType::kNone:
+            case apps::mojom::PatternMatchType::kMimeType:
               NOTREACHED();
               return arc::IntentFilter();
           }
