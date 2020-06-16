@@ -2793,6 +2793,26 @@
             ]
         }
     ],
+    "FriendlySettingsHats": [
+        {
+            "platforms": [
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Launched_20200616",
+                    "enable_features": [
+                        "PrivacySettingsRedesign",
+                        "SafeBrowsingEnhancedProtection",
+                        "SyncSetupFriendlySettings"
+                    ]
+                }
+            ]
+        }
+    ],
     "FuzzyAppSearch": [
         {
             "platforms": [
@@ -4734,17 +4754,13 @@
             ],
             "experiments": [
                 {
-                    "name": "WithEnhancedExperiment_20200604",
+                    "name": "WithEnhancedExperiment_20200616",
                     "params": {
                         "DefaultInIncognito": "true"
                     },
                     "enable_features": [
                         "ImprovedCookieControls",
-                        "ImprovedCookieControlsForThirdPartyCookieBlocking",
-                        "PasswordCheck",
-                        "PrivacySettingsRedesign",
-                        "SafeBrowsingEnhancedProtection",
-                        "SyncSetupFriendlySettings"
+                        "ImprovedCookieControlsForThirdPartyCookieBlocking"
                     ]
                 }
             ]
