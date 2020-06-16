@@ -6775,3 +6775,6 @@ crbug.com/1092135 [ Linux ] virtual/threaded/external/wpt/feature-policy/experim
 
 # Sheriff 2020-06-16
 crbug.com/1044825 http/tests/devtools/network/resource-priority.js [ Pass Timeout ]
+
+# Temporarily disable test to allow devtools-frontend changes
+crbug.com/1095733 http/tests/devtools/tabbed-pane-closeable-persistence.js [ Skip ]
