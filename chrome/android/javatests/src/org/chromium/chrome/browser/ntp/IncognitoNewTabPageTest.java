@@ -17,9 +17,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.not;
 
-import android.support.test.filters.SmallTest;
-
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.filters.SmallTest;
 
 import org.junit.Assert;
 import org.junit.Before;

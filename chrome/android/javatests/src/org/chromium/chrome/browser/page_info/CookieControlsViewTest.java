@@ -13,9 +13,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibilit
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
 import android.support.test.InstrumentationRegistry;
-import android.support.test.filters.MediumTest;
 
 import androidx.test.espresso.matcher.ViewMatchers;
+import androidx.test.filters.MediumTest;
 
 import org.junit.After;
 import org.junit.Assert;
