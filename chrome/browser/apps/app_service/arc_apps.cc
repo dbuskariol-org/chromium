@@ -426,6 +426,16 @@ void RequestDomainVerificationStatusUpdate(ArcAppListPrefs* prefs) {
   instance->RequestDomainVerificationStatusUpdate();
 }
 
+bool ShouldSkipFilter(const arc::IntentFilter& arc_intent_filter) {
+  return !base::FeatureList::IsEnabled(features::kIntentHandlingSharing) &&
+         std::any_of(arc_intent_filter.actions().begin(),
+                     arc_intent_filter.actions().end(),
+                     [](const std::string& action) {
+                       return action == arc::kIntentActionSend ||
+                              action == arc::kIntentActionSendMultiple;
+                     });
+}
+
 }  // namespace
 
 namespace apps {
@@ -986,6 +996,10 @@ void ArcApps::OnPreferredAppsChanged() {
       intent_helper_bridge->GetAddedPreferredApps();
 
   for (auto& added_preferred_app : added_preferred_apps) {
+    if (ShouldSkipFilter(added_preferred_app)) {
+      continue;
+    }
+
     constexpr bool kFromPublisher = true;
     // TODO(crbug.com/853604): Currently only handles one App ID per package.
     // If need to handle multiple activities per package, will need to
@@ -1006,6 +1020,9 @@ void ArcApps::OnPreferredAppsChanged() {
       intent_helper_bridge->GetDeletedPreferredApps();
 
   for (auto& deleted_preferred_app : deleted_preferred_apps) {
+    if (ShouldSkipFilter(deleted_preferred_app)) {
+      continue;
+    }
     // TODO(crbug.com/853604): Currently only handles one App ID per package.
     // If need to handle multiple activities per package, will need to
     // update ARC to send through the corresponding activity and ensure this
@@ -1269,13 +1286,7 @@ void ArcApps::UpdateAppIntentFilters(
   const std::vector<arc::IntentFilter>& arc_intent_filters =
       intent_helper_bridge->GetIntentFilterForPackage(package_name);
   for (auto& arc_intent_filter : arc_intent_filters) {
-    if (!base::FeatureList::IsEnabled(features::kIntentHandlingSharing) &&
-        std::any_of(arc_intent_filter.actions().begin(),
-                    arc_intent_filter.actions().end(),
-                    [](const std::string& action) {
-                      return action == arc::kIntentActionSend ||
-                             action == arc::kIntentActionSendMultiple;
-                    })) {
+    if (ShouldSkipFilter(arc_intent_filter)) {
       continue;
     }
     intent_filters->push_back(ConvertArcIntentFilter(arc_intent_filter));
