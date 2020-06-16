@@ -2851,7 +2851,7 @@
     },
 
     'use_clang_coverage': {
-      'gn_args': 'use_clang_coverage=false',
+      'gn_args': 'use_clang_coverage=true',
     },
 
     'use_cxx11': {
