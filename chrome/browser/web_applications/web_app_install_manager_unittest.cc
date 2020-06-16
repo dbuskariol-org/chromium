@@ -34,6 +34,7 @@
 #include "chrome/browser/web_applications/web_app.h"
 #include "chrome/browser/web_applications/web_app_icon_manager.h"
 #include "chrome/browser/web_applications/web_app_install_finalizer.h"
+#include "chrome/browser/web_applications/web_app_install_task.h"
 #include "chrome/browser/web_applications/web_app_registrar.h"
 #include "chrome/browser/web_applications/web_app_sync_bridge.h"
 #include "chrome/test/base/testing_profile.h"
@@ -124,6 +125,16 @@ std::unique_ptr<WebAppDataRetriever> ConvertWebAppToDataRetriever(
 std::unique_ptr<WebAppDataRetriever> CreateEmptyDataRetriever() {
   auto data_retriever = std::make_unique<TestDataRetriever>();
   return std::unique_ptr<WebAppDataRetriever>(std::move(data_retriever));
+}
+
+std::unique_ptr<WebAppInstallTask> CreateDummyTask() {
+  return std::make_unique<WebAppInstallTask>(
+      /*profile=*/nullptr,
+      /*registrar=*/nullptr,
+      /*shortcut_manager=*/nullptr,
+      /*file_handler_manager=*/nullptr,
+      /*install_finalizer=*/nullptr,
+      /*data_retriever=*/nullptr);
 }
 
 }  // namespace
@@ -1472,6 +1483,48 @@ TEST_F(WebAppInstallManagerTest,
 
   EXPECT_TRUE(web_app_install_returns_early);
   EXPECT_TRUE(bookmark_app_installed);
+}
+
+TEST_F(WebAppInstallManagerTest, TaskQueueWebContentsReadyRace) {
+  InitEmptyRegistrar();
+
+  std::unique_ptr<WebAppInstallTask> task_a = CreateDummyTask();
+  WebAppInstallTask* task_a_ptr = task_a.get();
+  std::unique_ptr<WebAppInstallTask> task_b = CreateDummyTask();
+  std::unique_ptr<WebAppInstallTask> task_c = CreateDummyTask();
+
+  // Enqueue task A and await it to be started.
+  base::RunLoop run_loop_a_start;
+  url_loader().SetAboutBlankResultLoaded();
+  install_manager().EnsureWebContentsCreated();
+  install_manager().EnqueueTask(std::move(task_a),
+                                run_loop_a_start.QuitClosure());
+  run_loop_a_start.Run();
+
+  // Enqueue task B before A has finished.
+  bool task_b_started = false;
+  install_manager().EnqueueTask(
+      std::move(task_b),
+      base::BindLambdaForTesting([&]() { task_b_started = true; }));
+
+  // Finish task A.
+  url_loader().SetAboutBlankResultLoaded();
+  install_manager().OnQueuedTaskCompleted(
+      task_a_ptr, base::DoNothing(), AppId(),
+      InstallResultCode::kSuccessNewInstall);
+
+  // Task B needs to wait for WebContents to return ready.
+  EXPECT_FALSE(task_b_started);
+
+  // Enqueue task C before B has started.
+  bool task_c_started = false;
+  install_manager().EnqueueTask(
+      std::move(task_c),
+      base::BindLambdaForTesting([&]() { task_c_started = true; }));
+
+  // Task C should not start before B has started.
+  EXPECT_FALSE(task_b_started);
+  EXPECT_FALSE(task_c_started);
 }
 
 }  // namespace web_app

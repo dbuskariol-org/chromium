@@ -438,9 +438,9 @@ void WebAppInstallManager::OnQueuedTaskCompleted(WebAppInstallTask* task,
   if (is_running_queued_task_)
     return;
 
+  web_contents_ready_ = false;
   if (task_queue_.empty()) {
     web_contents_.reset();
-    web_contents_ready_ = false;
   } else {
     // Load about:blank to clean up the renderer process.
     url_loader_->LoadUrl(

@@ -89,6 +89,9 @@ class WebAppInstallManager final : public InstallManager,
   size_t tasks_size_for_testing() const { return tasks_.size(); }
 
  private:
+  FRIEND_TEST_ALL_PREFIXES(WebAppInstallManagerTest,
+                           TaskQueueWebContentsReadyRace);
+
   void MaybeEnqueuePendingBookmarkAppInstalls();
   void EnqueueInstallBookmarkAppFromSync(
       const AppId& bookmark_app_id,
