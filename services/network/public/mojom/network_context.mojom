@@ -669,10 +669,10 @@ struct URLLoaderFactoryParams {
   ClientSecurityState? client_security_state;
 
   // Used to report CORP violations caused by COEP.
-  CrossOriginEmbedderPolicyReporter? coep_reporter;
+  pending_remote<CrossOriginEmbedderPolicyReporter>? coep_reporter;
 
   // Used to notify clients about cookie reads or writes.
-  CookieAccessObserver? cookie_observer;
+  pending_remote<CookieAccessObserver>? cookie_observer;
 
   // If this equals kForbid, the context to which this loader is bound does not
   // allow any Trust Tokens (https://github.com/wicg/trust-token-api)
