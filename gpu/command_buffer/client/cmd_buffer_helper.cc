@@ -179,9 +179,6 @@ void CommandBufferHelper::Flush() {
     last_flush_time_ = base::TimeTicks::Now();
     last_flush_put_ = put_;
     last_ordering_barrier_put_ = put_;
-#if defined(CMD_HELPER_FLUSH_CHECK)
-    commands_flushed_ = commands_issued_;
-#endif
     command_buffer_->Flush(put_);
     ++flush_generation_;
     CalcImmediateEntries(0);
@@ -207,12 +204,11 @@ void CommandBufferHelper::OrderingBarrier() {
   }
 }
 
-#if defined(CMD_HELPER_FLUSH_CHECK)
+#if defined(CMD_HELPER_PERIODIC_FLUSH_CHECK)
 void CommandBufferHelper::PeriodicFlushCheck() {
   base::TimeTicks current_time = base::TimeTicks::Now();
-  if ((current_time - last_flush_time_ >
-       base::TimeDelta::FromMicroseconds(kPeriodicFlushDelayInMicroseconds)) ||
-      (commands_issued_ - commands_flushed_ >= kCommandsPerForceFlushCheck)) {
+  if (current_time - last_flush_time_ >
+      base::TimeDelta::FromMicroseconds(kPeriodicFlushDelayInMicroseconds)) {
     Flush();
   }
 }
