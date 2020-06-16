@@ -27,8 +27,9 @@ namespace gpu {
 class Buffer;
 
 #if !defined(OS_ANDROID)
-#define CMD_HELPER_PERIODIC_FLUSH_CHECK
+#define CMD_HELPER_FLUSH_CHECK
 const int kCommandsPerFlushCheck = 100;
+const int kCommandsPerForceFlushCheck = 200;
 const int kPeriodicFlushDelayInMicroseconds =
     base::Time::kMicrosecondsPerSecond / (5 * 60);
 #endif
@@ -126,7 +127,7 @@ class GPU_EXPORT CommandBufferHelper {
   // Called prior to each command being issued. Waits for a certain amount of
   // space to be available. Returns address of space.
   void* GetSpace(int32_t entries) {
-#if defined(CMD_HELPER_PERIODIC_FLUSH_CHECK)
+#if defined(CMD_HELPER_FLUSH_CHECK)
     // Allow this command buffer to be pre-empted by another if a "reasonable"
     // amount of work has been done. On highend machines, this reduces the
     // latency of GPU commands. However, on Android, this can cause the
@@ -296,7 +297,7 @@ class GPU_EXPORT CommandBufferHelper {
   // false if there was an error.
   bool WaitForGetOffsetInRange(int32_t start, int32_t end);
 
-#if defined(CMD_HELPER_PERIODIC_FLUSH_CHECK)
+#if defined(CMD_HELPER_FLUSH_CHECK)
   // Calls Flush if automatic flush conditions are met.
   void PeriodicFlushCheck();
 #endif
@@ -321,8 +322,9 @@ class GPU_EXPORT CommandBufferHelper {
   uint32_t set_get_buffer_count_ = 0;
   bool service_on_old_buffer_ = false;
 
-#if defined(CMD_HELPER_PERIODIC_FLUSH_CHECK)
+#if defined(CMD_HELPER_FLUSH_CHECK)
   int commands_issued_ = 0;
+  int commands_flushed_ = 0;
 #endif
 
   bool usable_ = true;
