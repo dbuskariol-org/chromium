@@ -38860,6 +38860,7 @@ from previous Chrome versions.
   <int value="-1998927516" label="enable-md-settings"/>
   <int value="-1996233283"
       label="OmniboxGroupSuggestionsBySearchVsUrl:enabled"/>
+  <int value="-1996087238" label="kAutofillEnableOffersInDownstream:enabled"/>
   <int value="-1993730028" label="CrostiniPortForwarding:enabled"/>
   <int value="-1990614981" label="StoragePressureUI:disabled"/>
   <int value="-1989747818" label="TabStripKeyboardFocus:disabled"/>
@@ -41703,6 +41704,7 @@ from previous Chrome versions.
   <int value="1164377197" label="SwipingFromLeftEdgeToGoBack:enabled"/>
   <int value="1164460660" label="AutofillEnableVirtualCard:enabled"/>
   <int value="1165682330" label="AutofillSaveAndFillVPA:disabled"/>
+  <int value="1165828757" label="kAutofillEnableOffersInDownstream:disabled"/>
   <int value="1166169237" label="disable-delay-agnostic-aec"/>
   <int value="1166789664" label="SyncPseudoUSSAppList:disabled"/>
   <int value="1166897718" label="TextSuggestionsTouchBar:disabled"/>

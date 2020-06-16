@@ -136,6 +136,9 @@ extern const char kAutofillEnableCompanyNameDescription[];
 extern const char kAutofillEnableGoogleIssuedCardName[];
 extern const char kAutofillEnableGoogleIssuedCardDescription[];
 
+extern const char kAutofillEnableOffersInDownstreamName[];
+extern const char kAutofillEnableOffersInDownstreamDescription[];
+
 extern const char kAutofillEnableStickyPaymentsBubbleName[];
 extern const char kAutofillEnableStickyPaymentsBubbleDescription[];
 

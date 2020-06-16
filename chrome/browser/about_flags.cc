@@ -5764,6 +5764,11 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(app_list_features::kNewDragSpecInLauncher)},
 #endif  // OS_CHROMEOS
 
+    {"autofill-enable-offers-in-downstream",
+     flag_descriptions::kAutofillEnableOffersInDownstreamName,
+     flag_descriptions::kAutofillEnableOffersInDownstreamDescription, kOsAll,
+     FEATURE_VALUE_TYPE(autofill::features::kAutofillEnableOffersInDownstream)},
+
     // NOTE: Adding a new flag requires adding a corresponding entry to enum
     // "LoginCustomFlags" in tools/metrics/histograms/enums.xml. See "Flag
     // Histograms" in tools/metrics/histograms/README.md (run the

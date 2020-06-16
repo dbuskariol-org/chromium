@@ -295,6 +295,11 @@
     "expiry_milestone": 92
   },
   {
+    "name": "autofill-enable-offers-in-downstream",
+    "owners": [ "fiorito@google.com", "siyua" ],
+    "expiry_milestone": 90
+  },
+  {
     "name": "autofill-enable-sticky-payments-bubble",
     "owners": [ "siyua" ],
     "expiry_milestone": 90
