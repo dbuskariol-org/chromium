@@ -385,7 +385,21 @@ class Port(object):
         if self.get_option('configuration') == 'Debug':
             # Debug is usually 2x-3x slower than Release.
             return 3 * timeout_ms
+        if self._build_has_dcheck_always_on():
+            # Release with DCHECK is also slower than pure Release.
+            return 2 * timeout_ms
         return timeout_ms
+
+    @memoized
+    def _build_has_dcheck_always_on(self):
+        args_gn_file = self._build_path('args.gn')
+        if not self._filesystem.exists(args_gn_file):
+            _log.error('Unable to find %s', args_gn_file)
+            return False
+        contents = self._filesystem.read_text_file(args_gn_file)
+        return bool(
+            re.search(r'^\s*dcheck_always_on\s*=\s*true\s*(#.*)?$', contents,
+                      re.MULTILINE))
 
     def driver_stop_timeout(self):
         """Returns the amount of time in seconds to wait before killing the process in driver.stop()."""
@@ -974,10 +988,8 @@ class Port(object):
         # amount of JavaScript they use (most web_tests run very little JS).
         # This causes flaky timeouts for a lot of them, as a 0.5-1s test becomes
         # close to the default 6s timeout.
-        #
-        # Since we can't detect DCHECK being enabled, we instead always consider
-        # idlharness tests to be slow. See https://crbug.com/1047818
-        if self.is_wpt_idlharness_test(test_file):
+        if (self.is_wpt_idlharness_test(test_file)
+                and self._build_has_dcheck_always_on()):
             return True
 
         match = self.WPT_REGEX.match(test_file)

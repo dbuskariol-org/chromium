@@ -142,6 +142,25 @@ class PortTestCase(LoggingTestCase):
                                                     })).timeout_ms(),
             3 * self.make_port().timeout_ms())
 
+    def make_dcheck_port(self, options):
+        host = MockSystemHost(os_name=self.os_name, os_version=self.os_version)
+        host.filesystem.write_text_file(
+            self.make_port(host)._build_path('args.gn'),
+            'is_debug=false\ndcheck_always_on = true # comment\n')
+        port = self.make_port(host, options=options)
+        return port
+
+    def test_timeout_ms_with_dcheck(self):
+        default_timeout_ms = self.make_port().timeout_ms()
+        self.assertEqual(
+            self.make_dcheck_port(options=optparse.Values(
+                {'configuration': 'Release'})).timeout_ms(),
+            2 * default_timeout_ms)
+        self.assertEqual(
+            self.make_dcheck_port(options=optparse.Values(
+                {'configuration': 'Debug'})).timeout_ms(),
+            3 * default_timeout_ms)
+
     def test_driver_cmd_line(self):
         port = self.make_port()
         self.assertTrue(len(port.driver_cmd_line()))
