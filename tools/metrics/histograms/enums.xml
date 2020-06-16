@@ -9913,6 +9913,7 @@ histogram as enum -->
   <int value="-1566592213" label="hi-Latn"/>
   <int value="-1532548885" label="pa"/>
   <int value="-1515310228" label="ps"/>
+  <int value="-1453785110" label="rw"/>
   <int value="-1284862637" label="ru"/>
   <int value="-1273588087" label="kn"/>
   <int value="-1211529228" label="gd"/>
@@ -9926,10 +9927,12 @@ histogram as enum -->
   <int value="-1025520269" label="az"/>
   <int value="-1010619188" label="ru-Latn"/>
   <int value="-1000295094" label="no"/>
+  <int value="-950444864" label="tk"/>
   <int value="-887258309" label="hu"/>
   <int value="-862298602" label="st"/>
   <int value="-851607677" label="sm"/>
   <int value="-838275151" label="xh"/>
+  <int value="-812926878" label="ug"/>
   <int value="-750267977" label="bg"/>
   <int value="-742603342" label="ca"/>
   <int value="-740941224" label="ku"/>
@@ -9940,6 +9943,7 @@ histogram as enum -->
   <int value="-645438410" label="my"/>
   <int value="-644560085" label="su"/>
   <int value="-598481752" label="et"/>
+  <int value="-548175087" label="tt"/>
   <int value="-442590807" label="sd"/>
   <int value="-441493751" label="el-Latn"/>
   <int value="-426630965" label="ga"/>
@@ -9978,6 +9982,7 @@ histogram as enum -->
   <int value="596295208" label="bs"/>
   <int value="632444664" label="yue-HK"/>
   <int value="673577439" label="cs"/>
+  <int value="729519028" label="or"/>
   <int value="796588925" label="yo"/>
   <int value="804120371" label="jv"/>
   <int value="873647701" label="th"/>
