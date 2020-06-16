@@ -1269,6 +1269,15 @@ void ArcApps::UpdateAppIntentFilters(
   const std::vector<arc::IntentFilter>& arc_intent_filters =
       intent_helper_bridge->GetIntentFilterForPackage(package_name);
   for (auto& arc_intent_filter : arc_intent_filters) {
+    if (!base::FeatureList::IsEnabled(features::kIntentHandlingSharing) &&
+        std::any_of(arc_intent_filter.actions().begin(),
+                    arc_intent_filter.actions().end(),
+                    [](const std::string& action) {
+                      return action == arc::kIntentActionSend ||
+                             action == arc::kIntentActionSendMultiple;
+                    })) {
+      continue;
+    }
     intent_filters->push_back(ConvertArcIntentFilter(arc_intent_filter));
   }
 }
