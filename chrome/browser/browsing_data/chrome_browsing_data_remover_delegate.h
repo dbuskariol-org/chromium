@@ -242,7 +242,9 @@ class ChromeBrowsingDataRemoverDelegate
     kCompromisedCredentials = 34,
     kUserDataSnapshot = 35,
     kMediaFeeds = 36,
-    kMaxValue = kMediaFeeds,
+    kAccountPasswords = 37,
+    kAccountPasswordsSynced = 38,
+    kMaxValue = kAccountPasswordsSynced,
   };
 
   // Called by CreateTaskCompletionClosure().
