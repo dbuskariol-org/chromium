@@ -35,6 +35,7 @@
 #include "ui/views/controls/menu/menu_types.h"
 #include "ui/views/focus/focus_manager.h"
 #include "ui/views/view_model.h"
+#include "ui/views/widget/unique_widget_ptr.h"
 
 namespace ui {
 class SimpleMenuModel;
@@ -183,8 +184,9 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
 
   void DestroyDragIconProxy() override;
 
-  // Transfers ownership of |drag_image_|, and cleans up DragIconProxy state.
-  DragImageView* RetrieveDragIconProxyAndClearDragProxyState();
+  // Transfers ownership of |drag_image_widget_|, and cleans up DragIconProxy
+  // state.
+  views::UniqueWidgetPtr RetrieveDragIconProxyAndClearDragProxyState();
 
   bool ShouldStartDrag(
       const std::string& app_id,
@@ -509,6 +511,9 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
 
   int CalculateAppIconsLayoutOffset() const;
 
+  // Get the |drag_image_widget_| content view as DragImageView.
+  DragImageView* GetDragImage();
+
   // The model; owned by Launcher.
   ShelfModel* model_;
 
@@ -588,7 +593,7 @@ class ASH_EXPORT ShelfView : public views::AccessiblePaneView,
 
   // The image proxy for drag operations when a drag and drop host exists and
   // the item can be dragged outside the app grid.
-  std::unique_ptr<DragImageView> drag_image_;
+  views::UniqueWidgetPtr drag_image_widget_;
 
   // The cursor offset to the middle of the dragged item.
   gfx::Vector2d drag_image_offset_;
