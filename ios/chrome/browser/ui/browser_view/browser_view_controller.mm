@@ -4619,8 +4619,11 @@ NSString* const kBrowserViewControllerSnackbarCategory =
   [self.dispatcher showGoogleServicesSettingsFromViewController:self];
 }
 
-- (void)showTrustedVaultReauthentication {
-  [self.dispatcher showTrustedVaultReauthenticationFromViewController:self];
+- (void)showTrustedVaultReauthenticationWithRetrievalTrigger:
+    (syncer::KeyRetrievalTriggerForUMA)retrievalTrigger {
+  [self.dispatcher
+      showTrustedVaultReauthenticationFromViewController:self
+                                        retrievalTrigger:retrievalTrigger];
 }
 
 #pragma mark - NewTabPageTabHelperDelegate
