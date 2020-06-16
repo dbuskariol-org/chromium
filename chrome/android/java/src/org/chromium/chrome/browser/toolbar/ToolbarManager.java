@@ -857,6 +857,13 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
             mOnInitializedRunnable = null;
         }
 
+        // Allow bitmap capturing once everything has been initialized.
+        Tab currentTab = tabModelSelector.getCurrentTab();
+        if (currentTab != null && currentTab.getWebContents() != null
+                && !TextUtils.isEmpty(currentTab.getUrlString())) {
+            mControlContainer.setReadyForBitmapCapture(true);
+        }
+
         setCurrentProfile(mProfileSupplier.get());
     }
 
