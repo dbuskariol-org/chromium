@@ -8602,6 +8602,18 @@ should be able to be added at any place in this file.
   <description>Please enter the description of this user action.</description>
 </action>
 
+<action name="IOS.NTP.Doodle.Tapped">
+  <owner>gambard@chromium.org</owner>
+  <owner>justincohen@chromium.org</owner>
+  <description>
+    Recorded when the user is tapping the doodle on the NTP. There is also a
+    histogram (NewTabPageActioniOS::doodle), but histograms are not recorded in
+    Breadcrumbs. iOS Breadcrumbs attaches steps the user performed in the app to
+    crash logs. These steps can help debug causes of crashes when the stack
+    doesn't provide enough information.
+  </description>
+</action>
+
 <action name="IOS.PageZoom.ZoomIn">
   <owner>rkgibson@google.com</owner>
   <owner>gambard@chromium.org</owner>
