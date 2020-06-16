@@ -39032,6 +39032,7 @@ from previous Chrome versions.
   <int value="-1832575380" label="show-saved-copy"/>
   <int value="-1832221649" label="disable-out-of-process-pac"/>
   <int value="-1830472348" label="CryptAuthV2DeviceSync:enabled"/>
+  <int value="-1830199297" label="force-empty-corb-allowlist"/>
   <int value="-1826649921" label="ContextualSuggestionsButton:disabled"/>
   <int value="-1826309726" label="ArcCustomTabsExperiment:disabled"/>
   <int value="-1823193038" label="QuietNotificationPrompts:disabled"/>
