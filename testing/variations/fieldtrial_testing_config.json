@@ -7062,6 +7062,9 @@
             "experiments": [
                 {
                     "name": "Enabled",
+                    "params": {
+                        "NumOfFramesToToggleInterval": "6"
+                    },
                     "enable_features": [
                         "UsePreferredIntervalForVideo"
                     ]
