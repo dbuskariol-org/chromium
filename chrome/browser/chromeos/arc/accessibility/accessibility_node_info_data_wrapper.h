@@ -34,7 +34,9 @@ class AccessibilityNodeInfoDataWrapper : public AccessibilityInfoDataWrapper {
   const gfx::Rect GetBounds() const override;
   bool IsVisibleToUser() const override;
   bool IsVirtualNode() const override;
+  bool IsIgnored() const override;
   bool CanBeAccessibilityFocused() const override;
+  bool IsAccessibilityFocusableContainer() const override;
   void PopulateAXRole(ui::AXNodeData* out_data) const override;
   void PopulateAXState(ui::AXNodeData* out_data) const override;
   void Serialize(ui::AXNodeData* out_data) const override;
@@ -66,9 +68,14 @@ class AccessibilityNodeInfoDataWrapper : public AccessibilityInfoDataWrapper {
   bool HasCoveringSpan(mojom::AccessibilityStringProperty prop,
                        mojom::SpanType span_type) const;
 
-  void ComputeNameFromContents(const AccessibilityNodeInfoDataWrapper* data,
+  void ComputeNameFromContents(bool from_non_focusables,
                                std::vector<std::string>* names) const;
 
+  void ComputeNameFromContentsInternal(bool from_non_focusables,
+                                       std::vector<std::string>* names) const;
+
+  bool IsScrollableContainer() const;
+  bool IsToplevelScrollItem() const;
   bool IsInterestingLeaf() const;
 
   mojom::AccessibilityNodeInfoData* node_ptr_ = nullptr;

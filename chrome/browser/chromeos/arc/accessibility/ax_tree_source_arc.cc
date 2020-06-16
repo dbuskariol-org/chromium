@@ -198,6 +198,10 @@ void AXTreeSourceArc::NotifyGetTextLocationDataResult(
   GetAutomationEventRouter()->DispatchGetTextLocationDataResult(data, rect);
 }
 
+bool AXTreeSourceArc::IsScreenReaderMode() const {
+  return delegate_->IsScreenReaderEnabled();
+}
+
 void AXTreeSourceArc::InvalidateTree() {
   current_tree_serializer_->Reset();
 }
@@ -217,6 +221,16 @@ bool AXTreeSourceArc::IsRootOfNodeTree(int32_t id) const {
   const auto& parent_tree_it = tree_map_.find(parent_it->second);
   CHECK(parent_tree_it != tree_map_.end());
   return !parent_tree_it->second->IsNode();
+}
+
+AccessibilityInfoDataWrapper* AXTreeSourceArc::GetFirstImportantAncestor(
+    AccessibilityInfoDataWrapper* info_data) const {
+  AccessibilityInfoDataWrapper* parent = GetParent(info_data);
+  while (parent && parent->IsNode() &&
+         !IsImportantInAndroid(parent->GetNode())) {
+    parent = GetParent(parent);
+  }
+  return parent;
 }
 
 bool AXTreeSourceArc::GetTreeData(ui::AXTreeData* data) const {
@@ -332,6 +346,7 @@ void AXTreeSourceArc::BuildImportanceTable(
     AXEventData* event_data,
     const std::map<int32_t, int32_t>& node_id_to_nodes_index,
     std::vector<bool>* out_values) const {
+  // TODO(hirokisato): move this logic into AccessibilityNodeInfoDataWrapper.
   DCHECK(out_values);
   DCHECK(out_values->size() == event_data->node_data.size());
 

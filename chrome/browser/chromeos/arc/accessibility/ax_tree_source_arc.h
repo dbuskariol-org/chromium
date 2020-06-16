@@ -42,6 +42,7 @@ class AXTreeSourceArc : public ui::AXTreeSource<AccessibilityInfoDataWrapper*,
   class Delegate {
    public:
     virtual void OnAction(const ui::AXActionData& data) const = 0;
+    virtual bool IsScreenReaderEnabled() const = 0;
   };
 
   AXTreeSourceArc(Delegate* delegate, float device_scale_factor);
@@ -60,9 +61,17 @@ class AXTreeSourceArc : public ui::AXTreeSource<AccessibilityInfoDataWrapper*,
   // Invalidates the tree serializer.
   void InvalidateTree();
 
+  // When it is enabled, this class exposes an accessibility tree optimized for
+  // screen readers such as ChromeVox and SwitchAccess. This intends to have the
+  // navigation order and focusabilities similar to TalkBack.
+  bool IsScreenReaderMode() const;
+
   // Returns true if the node id is the root of the node tree (which can have a
   // parent window).
   bool IsRootOfNodeTree(int32_t id) const;
+
+  AccessibilityInfoDataWrapper* GetFirstImportantAncestor(
+      AccessibilityInfoDataWrapper* info_data) const;
 
   // AXTreeSource:
   bool GetTreeData(ui::AXTreeData* data) const override;
@@ -101,6 +110,8 @@ class AXTreeSourceArc : public ui::AXTreeSource<AccessibilityInfoDataWrapper*,
                                       gfx::Rect* computed_bounds) const;
 
   // Computes if the node is clickable and has no clickable descendants.
+  // TODO(hirokisato): Remove this so that we can handle the case where a parent
+  // node is clickable and a child node is focusable but not clickable.
   bool ComputeIsClickableLeaf(
       const std::vector<mojom::AccessibilityNodeInfoDataPtr>& nodes,
       int32_t node_index,
