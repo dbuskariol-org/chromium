@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/policy/app_install_event_log_uploader.h"
+#include "chrome/browser/chromeos/policy/arc_app_install_event_log_uploader.h"
 
 #include <algorithm>
 #include <memory>
@@ -25,10 +25,10 @@
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
+using testing::_;
 using testing::Invoke;
 using testing::Mock;
 using testing::WithArgs;
-using testing::_;
 
 namespace em = enterprise_management;
 
@@ -57,10 +57,10 @@ MATCHER_P(MatchValue, expected, "matches base::Value") {
   return arg_serialized_string == expected_serialized_string;
 }
 
-class MockAppInstallEventLogUploaderDelegate
-    : public AppInstallEventLogUploader::Delegate {
+class MockArcAppInstallEventLogUploaderDelegate
+    : public ArcAppInstallEventLogUploader::Delegate {
  public:
-  MockAppInstallEventLogUploaderDelegate() {}
+  MockArcAppInstallEventLogUploaderDelegate() {}
 
   void SerializeForUpload(SerializationCallback callback) override {
     SerializeForUpload_(callback);
@@ -70,14 +70,14 @@ class MockAppInstallEventLogUploaderDelegate
   MOCK_METHOD0(OnUploadSuccess, void());
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(MockAppInstallEventLogUploaderDelegate);
+  DISALLOW_COPY_AND_ASSIGN(MockArcAppInstallEventLogUploaderDelegate);
 };
 
 }  // namespace
 
-class AppInstallEventLogUploaderTest : public testing::Test {
+class ArcAppInstallEventLogUploaderTest : public testing::Test {
  protected:
-  AppInstallEventLogUploaderTest() = default;
+  ArcAppInstallEventLogUploaderTest() = default;
 
   void TearDown() override {
     Mock::VerifyAndClearExpectations(&client_);
@@ -96,7 +96,7 @@ class AppInstallEventLogUploaderTest : public testing::Test {
   }
 
   void CreateUploader() {
-    uploader_ = std::make_unique<AppInstallEventLogUploader>(
+    uploader_ = std::make_unique<ArcAppInstallEventLogUploader>(
         &client_, /*profile=*/nullptr);
     uploader_->SetDelegate(&delegate_);
   }
@@ -104,12 +104,13 @@ class AppInstallEventLogUploaderTest : public testing::Test {
   void CompleteSerialize() {
     EXPECT_CALL(delegate_, SerializeForUpload_(_))
         .WillOnce(WithArgs<0>(Invoke(
-            [=](AppInstallEventLogUploader::Delegate::SerializationCallback&
+            [=](ArcAppInstallEventLogUploader::Delegate::SerializationCallback&
                     callback) { std::move(callback).Run(&log_); })));
   }
 
   void CaptureSerialize(
-      AppInstallEventLogUploader::Delegate::SerializationCallback* callback) {
+      ArcAppInstallEventLogUploader::Delegate::SerializationCallback*
+          callback) {
     EXPECT_CALL(delegate_, SerializeForUpload_(_))
         .WillOnce(MoveArg<0>(callback));
   }
@@ -163,19 +164,19 @@ class AppInstallEventLogUploaderTest : public testing::Test {
   base::Value value_report_{base::Value::Type::DICTIONARY};
 
   MockCloudPolicyClient client_;
-  MockAppInstallEventLogUploaderDelegate delegate_;
-  std::unique_ptr<AppInstallEventLogUploader> uploader_;
+  MockArcAppInstallEventLogUploaderDelegate delegate_;
+  std::unique_ptr<ArcAppInstallEventLogUploader> uploader_;
 
   chromeos::system::ScopedFakeStatisticsProvider
       scoped_fake_statistics_provider_;
 
  private:
-  DISALLOW_COPY_AND_ASSIGN(AppInstallEventLogUploaderTest);
+  DISALLOW_COPY_AND_ASSIGN(ArcAppInstallEventLogUploaderTest);
 };
 
 // Make a log upload request. Have serialization and log upload succeed. Verify
 // that the delegate is notified of the success.
-TEST_F(AppInstallEventLogUploaderTest, RequestSerializeAndUpload) {
+TEST_F(ArcAppInstallEventLogUploaderTest, RequestSerializeAndUpload) {
   RegisterClient();
   CreateUploader();
 
@@ -188,7 +189,7 @@ TEST_F(AppInstallEventLogUploaderTest, RequestSerializeAndUpload) {
 // Make a second upload request. Have the first upload succeed. Verify that the
 // delegate is notified of the first request's success and no serialization is
 // started for the second request.
-TEST_F(AppInstallEventLogUploaderTest, RequestSerializeRequestAndUpload) {
+TEST_F(ArcAppInstallEventLogUploaderTest, RequestSerializeRequestAndUpload) {
   RegisterClient();
   CreateUploader();
 
@@ -210,11 +211,11 @@ TEST_F(AppInstallEventLogUploaderTest, RequestSerializeRequestAndUpload) {
 // request. Verify that no serialization is started for the second request.
 // Then, have the first request's serialization and upload succeed. Verify that
 // the delegate is notified of the first request's success.
-TEST_F(AppInstallEventLogUploaderTest, RequestRequestSerializeAndUpload) {
+TEST_F(ArcAppInstallEventLogUploaderTest, RequestRequestSerializeAndUpload) {
   RegisterClient();
   CreateUploader();
 
-  AppInstallEventLogUploader::Delegate::SerializationCallback
+  ArcAppInstallEventLogUploader::Delegate::SerializationCallback
       serialization_callback;
   CaptureSerialize(&serialization_callback);
   uploader_->RequestUpload();
@@ -232,11 +233,11 @@ TEST_F(AppInstallEventLogUploaderTest, RequestRequestSerializeAndUpload) {
 // Make a log upload request. Have serialization begin. Cancel the request. Have
 // the serialization succeed. Verify that the serialization result is ignored
 // and no upload is started.
-TEST_F(AppInstallEventLogUploaderTest, RequestCancelAndSerialize) {
+TEST_F(ArcAppInstallEventLogUploaderTest, RequestCancelAndSerialize) {
   RegisterClient();
   CreateUploader();
 
-  AppInstallEventLogUploader::Delegate::SerializationCallback
+  ArcAppInstallEventLogUploader::Delegate::SerializationCallback
       serialization_callback;
   CaptureSerialize(&serialization_callback);
   uploader_->RequestUpload();
@@ -253,7 +254,7 @@ TEST_F(AppInstallEventLogUploaderTest, RequestCancelAndSerialize) {
 
 // Make a log upload request. Have serialization succeed and log upload begin.
 // Cancel the request. Verify that the upload is canceled in the client.
-TEST_F(AppInstallEventLogUploaderTest, RequestSerializeAndCancel) {
+TEST_F(ArcAppInstallEventLogUploaderTest, RequestSerializeAndCancel) {
   RegisterClient();
   CreateUploader();
 
@@ -273,7 +274,7 @@ TEST_F(AppInstallEventLogUploaderTest, RequestSerializeAndCancel) {
 // notified of the success. Then, make another log upload request. Have the
 // serialization succeed but log upload fail again. Verify that the backoff has
 // returned to the minimum.
-TEST_F(AppInstallEventLogUploaderTest, Retry) {
+TEST_F(ArcAppInstallEventLogUploaderTest, Retry) {
   RegisterClient();
   CreateUploader();
 
@@ -324,7 +325,7 @@ TEST_F(AppInstallEventLogUploaderTest, Retry) {
 // yet. Register the client with the server. Make a log upload request. Have
 // serialization and log upload succeed. Verify that the delegate is notified of
 // the success.
-TEST_F(AppInstallEventLogUploaderTest, RegisterRequestSerializeAndUpload) {
+TEST_F(ArcAppInstallEventLogUploaderTest, RegisterRequestSerializeAndUpload) {
   CreateUploader();
   RegisterClient();
 
@@ -338,7 +339,7 @@ TEST_F(AppInstallEventLogUploaderTest, RegisterRequestSerializeAndUpload) {
 // Then, register the client with the server. Verify that serialization is
 // started. Have serialization and log upload succeed. Verify that the delegate
 // is notified of the success.
-TEST_F(AppInstallEventLogUploaderTest, RequestRegisterSerializeAndUpload) {
+TEST_F(ArcAppInstallEventLogUploaderTest, RequestRegisterSerializeAndUpload) {
   CreateUploader();
 
   EXPECT_CALL(delegate_, SerializeForUpload_(_)).Times(0);
@@ -354,7 +355,7 @@ TEST_F(AppInstallEventLogUploaderTest, RequestRegisterSerializeAndUpload) {
 // Unregister the client from the server. Register the client with the server.
 // Verify that a new serialization is started. Then, have serialization and log
 // upload succeed. Verify that the delegate is notified of the success.
-TEST_F(AppInstallEventLogUploaderTest,
+TEST_F(ArcAppInstallEventLogUploaderTest,
        RequestSerializeUnregisterRegisterAndUpload) {
   RegisterClient();
   CreateUploader();
@@ -381,12 +382,12 @@ TEST_F(AppInstallEventLogUploaderTest,
 // the server. Verify that a new serialization is started. Then, have
 // serialization and log upload succeed. Verify that the delegate is notified of
 // the success.
-TEST_F(AppInstallEventLogUploaderTest,
+TEST_F(ArcAppInstallEventLogUploaderTest,
        RequestUnregisterSerializeRegisterAndUpload) {
   RegisterClient();
   CreateUploader();
 
-  AppInstallEventLogUploader::Delegate::SerializationCallback
+  ArcAppInstallEventLogUploader::Delegate::SerializationCallback
       serialization_callback;
   CaptureSerialize(&serialization_callback);
   uploader_->RequestUpload();
@@ -415,12 +416,12 @@ TEST_F(AppInstallEventLogUploaderTest,
 // Then, have the second serialization succeed. Verify that an upload is
 // started. Then, have the upload succeed. Verify that the delegate is notified
 // of the success.
-TEST_F(AppInstallEventLogUploaderTest,
+TEST_F(ArcAppInstallEventLogUploaderTest,
        RequestUnregisterRegisterSerializeAndUpload) {
   RegisterClient();
   CreateUploader();
 
-  AppInstallEventLogUploader::Delegate::SerializationCallback
+  ArcAppInstallEventLogUploader::Delegate::SerializationCallback
       serialization_callback_1;
   CaptureSerialize(&serialization_callback_1);
   uploader_->RequestUpload();
@@ -430,7 +431,7 @@ TEST_F(AppInstallEventLogUploaderTest,
   UnregisterClient();
   Mock::VerifyAndClearExpectations(&client_);
 
-  AppInstallEventLogUploader::Delegate::SerializationCallback
+  ArcAppInstallEventLogUploader::Delegate::SerializationCallback
       serialization_callback_2;
   CaptureSerialize(&serialization_callback_2);
   RegisterClient();
@@ -449,7 +450,7 @@ TEST_F(AppInstallEventLogUploaderTest,
 
 // Make a log upload request. Have serialization succeed and log upload begin.
 // Remove the delegate. Verify that the upload is canceled in the client.
-TEST_F(AppInstallEventLogUploaderTest, RequestAndRemoveDelegate) {
+TEST_F(ArcAppInstallEventLogUploaderTest, RequestAndRemoveDelegate) {
   RegisterClient();
   CreateUploader();
 
@@ -464,7 +465,7 @@ TEST_F(AppInstallEventLogUploaderTest, RequestAndRemoveDelegate) {
 
 // When there is more than one identical event in the log, ensure that only one
 // of those duplicate events is in the created report.
-TEST_F(AppInstallEventLogUploaderTest, DuplicateEvents) {
+TEST_F(ArcAppInstallEventLogUploaderTest, DuplicateEvents) {
   RegisterClient();
   CreateUploader();
 
