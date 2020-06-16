@@ -9097,6 +9097,7 @@ histogram as enum -->
   <int value="503" label="Shelf Alignment Right"/>
   <int value="504" label="Shelf Alignment Bottom"/>
   <int value="505" label="Change Wallpaper"/>
+  <int value="506" label="Display Settings"/>
 <!-- Please put in checks to ensure Command IDs are stable before adding them to this enum. -->
 
 </enum>
