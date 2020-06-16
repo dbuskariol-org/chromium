@@ -953,6 +953,7 @@ void ScrollableShelfView::Layout() {
 
 void ScrollableShelfView::ChildPreferredSizeChanged(views::View* child) {
   // Add/remove a shelf icon may change the layout strategy.
+  UpdateAvailableSpaceAndScroll();
   Layout();
 }
 
@@ -1036,7 +1037,7 @@ void ScrollableShelfView::ViewHierarchyChanged(
   if (details.parent != shelf_view_)
     return;
 
-  shelf_view_->UpdateVisibleIndices();
+  shelf_view_->UpdateShelfItemViewsVisibility();
 
   // When app scaling state needs update, hotseat bounds should change. Then
   // it is not meaningful to do further work in the current view bounds. So
