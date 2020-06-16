@@ -50632,6 +50632,19 @@ Called by update_net_trust_anchors.py.-->
   <int value="3" label="(non-invalidated) replies received"/>
 </enum>
 
+<enum name="OnServiceConnectedTimedOutResult">
+  <int value="0" label="AlreadyConnected">
+    OnServiceConnected is already called. Everything worked as expected.
+  </int>
+  <int value="1" label="NotNeeded">
+    OnServiceConnected is not called and connection is not needed. Could for
+    example indicate the user closed the tab before timeout.
+  </int>
+  <int value="2" label="Fallback">
+    Timed out and perform fallback operation.
+  </int>
+</enum>
+
 <enum name="OobeUserClickTarget">
   <int value="0" label="Shut down button"/>
   <int value="1" label="Browse as guest button"/>
