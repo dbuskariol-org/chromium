@@ -103,5 +103,6 @@ master_only_exec('//generators/scheduler-bucketed-jobs.star')
 # The trybots should be update to not require no-op jobs to be triggered so that
 # the no-op jobs can be removed
 exec('//generators/scheduler-noop-jobs.star')
+exec('//generators/sort-consoles.star')
 
 exec('//validators/builders-in-consoles.star')
