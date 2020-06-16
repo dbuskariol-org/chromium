@@ -6,7 +6,6 @@
 
 #include <memory>
 
-#include "base/macros.h"
 #include "base/run_loop.h"
 #include "base/strings/utf_string_conversions.h"
 #include "build/build_config.h"
@@ -85,6 +84,8 @@ class CaptionBubbleControllerViewsTest : public InProcessBrowserTest {
   views::Widget* GetCaptionWidget() {
     return controller_ ? controller_->caption_widget_ : nullptr;
   }
+
+  void DestroyController() { controller_.reset(nullptr); }
 
   void ClickCloseButton() {
     views::Button* button = GetCloseButton();
@@ -751,6 +752,17 @@ IN_PROC_BROWSER_TEST_F(CaptionBubbleControllerViewsTest, TabNavigation) {
       browser()->tab_strip_model()->GetActiveWebContents());
   EXPECT_TRUE(GetCaptionWidget()->IsVisible());
   EXPECT_EQ("Rats laugh when they are tickled", GetLabelText());
+}
+
+IN_PROC_BROWSER_TEST_F(CaptionBubbleControllerViewsTest,
+                       DestroysWithoutCrashing) {
+  // Test passes if destroying the controller does not crash.
+  OnPartialTranscription("Deer have a four-chambered stomach");
+  DestroyController();
+
+  OnPartialTranscription("Deer antlers fall off and regrow every year");
+  ClickCloseButton();
+  DestroyController();
 }
 
 }  // namespace captions
