@@ -116,6 +116,7 @@ test("weblayer_browsertests") {
     "../browser/cookie_manager_browsertest.cc",
     "../browser/download_browsertest.cc",
     "../browser/errorpage_browsertest.cc",
+    "../browser/js_communication/web_message_browsertest.cc",
     "../browser/navigation_browsertest.cc",
     "../browser/page_load_metrics_browsertest.cc",
     "../browser/popup_blocker_browsertest.cc",
