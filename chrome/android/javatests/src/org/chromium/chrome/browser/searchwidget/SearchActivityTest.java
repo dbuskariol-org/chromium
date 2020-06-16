@@ -430,7 +430,7 @@ public class SearchActivityTest {
         // Set some text in the search box, then continue startup.
         setUrlBarText(searchActivity, ContentUrlConstants.ABOUT_BLANK_DISPLAY_URL);
         TestThreadUtils.runOnUiThreadBlocking(
-                () -> mTestDelegate.onSearchEngineFinalizedCallback.onResult(true));
+                mTestDelegate.onSearchEngineFinalizedCallback.bind(true));
 
         // Let the initialization finish completely.
         Assert.assertEquals(
