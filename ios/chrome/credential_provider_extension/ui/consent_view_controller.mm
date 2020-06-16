@@ -21,6 +21,9 @@ constexpr CGFloat kStackViewSpacingAfterIllustration = 37;
   self.customSpacingAfterImage = kStackViewSpacingAfterIllustration;
 
   self.helpButtonAvailable = YES;
+  self.helpButtonAccessibilityLabel = NSLocalizedString(
+      @"IDS_IOS_CREDENTIAL_PROVIDER_HELP_ACCESSIBILITY_LABEL", @"Help.");
+
   self.primaryActionAvailable = YES;
   NSString* titleString =
       NSLocalizedString(@"IDS_IOS_CREDENTIAL_PROVIDER_CONSENT_TITLE",
