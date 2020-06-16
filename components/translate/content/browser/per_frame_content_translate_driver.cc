@@ -102,9 +102,10 @@ PerFrameContentTranslateDriver::PendingRequestStats::~PendingRequestStats() =
     default;
 
 void PerFrameContentTranslateDriver::PendingRequestStats::Clear() {
-  frame_request_count = 0;
+  pending_request_count = 0;
   main_frame_success = false;
   main_frame_error = TranslateErrors::NONE;
+  frame_request_count = 0;
   frame_success_count = 0;
   frame_errors.clear();
 }
@@ -144,7 +145,6 @@ void PerFrameContentTranslateDriver::TranslatePage(
 
   ReportUserActionDuration(language_determined_time_, base::TimeTicks::Now());
   stats_.Clear();
-
   translate_seq_no_ = IncrementSeqNo(translate_seq_no_);
 
   web_contents()->ForEachFrame(base::BindRepeating(
@@ -180,6 +180,7 @@ void PerFrameContentTranslateDriver::RevertTranslation(int page_seq_no) {
   if (!IsForCurrentPage(page_seq_no))
     return;
 
+  stats_.Clear();
   translate_seq_no_ = IncrementSeqNo(translate_seq_no_);
 
   web_contents()->ForEachFrame(base::BindRepeating(
@@ -445,6 +446,7 @@ void PerFrameContentTranslateDriver::OnFrameTranslated(
     OnPageTranslated(cancelled, original_lang, translated_lang,
                      stats_.main_frame_error);
     stats_.Report();
+    stats_.Clear();
   }
 }
 
