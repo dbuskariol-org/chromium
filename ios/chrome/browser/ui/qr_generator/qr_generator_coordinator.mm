@@ -99,7 +99,7 @@
 
 #pragma mark - ConfirmationAlertActionHandler
 
-- (void)confirmationAlertDone {
+- (void)confirmationAlertDismissAction {
   [self.handler hideQRCode];
 }
 

@@ -67,6 +67,10 @@ extern NSString* const
 // The help button item in the top left of the view. Nil if not available.
 @property(nonatomic, readonly) UIBarButtonItem* helpButton;
 
+// Allows to modify the system item for the dismiss bar button (defaults to
+// UIBarButtonSystemItemDone). Must be set before the view is loaded.
+@property(nonatomic, assign) UIBarButtonSystemItem dismissBarButtonSystemItem;
+
 // The action handler for interactions in this View Controller.
 @property(nonatomic, weak) id<ConfirmationAlertActionHandler> actionHandler;
 
