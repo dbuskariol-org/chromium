@@ -11,6 +11,8 @@
 #include <memory>
 #include <string>
 
+#include "base/containers/span.h"
+#include "base/optional.h"
 #include "base/strings/string_piece.h"
 #include "build/build_config.h"
 #include "crypto/crypto_export.h"
@@ -19,6 +21,10 @@ namespace crypto {
 
 class SymmetricKey;
 
+// This class implements encryption without authentication, which is usually
+// unsafe. Prefer crypto::Aead for new code. If using this class, prefer the
+// base::span and std::vector overloads over the base::StringPiece and
+// std::string overloads.
 class CRYPTO_EXPORT Encryptor {
  public:
   enum Mode {
@@ -30,7 +36,7 @@ class CRYPTO_EXPORT Encryptor {
   // Only 128-bits counter is supported in this class.
   class CRYPTO_EXPORT Counter {
    public:
-    explicit Counter(base::StringPiece counter);
+    explicit Counter(base::span<const uint8_t> counter);
     ~Counter();
 
     // Increment the counter value.
@@ -59,10 +65,13 @@ class CRYPTO_EXPORT Encryptor {
   // If |mode| is CBC, |iv| must not be empty; if it is CTR, then |iv| must be
   // empty.
   bool Init(const SymmetricKey* key, Mode mode, base::StringPiece iv);
+  bool Init(const SymmetricKey* key, Mode mode, base::span<const uint8_t> iv);
 
   // Encrypts |plaintext| into |ciphertext|.  |plaintext| may only be empty if
   // the mode is CBC.
   bool Encrypt(base::StringPiece plaintext, std::string* ciphertext);
+  bool Encrypt(base::span<const uint8_t> plaintext,
+               std::vector<uint8_t>* ciphertext);
 
   // Decrypts |ciphertext| into |plaintext|.  |ciphertext| must not be empty.
   //
@@ -74,12 +83,15 @@ class CRYPTO_EXPORT Encryptor {
   // care to not report decryption failure. Otherwise it could inadvertently
   // be used as a padding oracle to attack the cryptosystem.
   bool Decrypt(base::StringPiece ciphertext, std::string* plaintext);
+  bool Decrypt(base::span<const uint8_t> ciphertext,
+               std::vector<uint8_t>* plaintext);
 
   // Sets the counter value when in CTR mode. Currently only 128-bits
   // counter value is supported.
   //
   // Returns true only if update was successful.
   bool SetCounter(base::StringPiece counter);
+  bool SetCounter(base::span<const uint8_t> counter);
 
   // TODO(albertb): Support streaming encryption.
 
@@ -88,11 +100,23 @@ class CRYPTO_EXPORT Encryptor {
   Mode mode_;
   std::unique_ptr<Counter> counter_;
 
-  bool Crypt(bool do_encrypt,  // Pass true to encrypt, false to decrypt.
-             base::StringPiece input,
-             std::string* output);
-  bool CryptCTR(bool do_encrypt, base::StringPiece input, std::string* output);
-  std::string iv_;
+  bool CryptString(bool do_encrypt,
+                   base::StringPiece input,
+                   std::string* output);
+  bool CryptBytes(bool do_encrypt,
+                  base::span<const uint8_t> input,
+                  std::vector<uint8_t>* output);
+
+  // On success, these helper functions return the number of bytes written to
+  // |output|.
+  size_t MaxOutput(bool do_encrypt, size_t length);
+  base::Optional<size_t> Crypt(bool do_encrypt,
+                               base::span<const uint8_t> input,
+                               base::span<uint8_t> output);
+  base::Optional<size_t> CryptCTR(bool do_encrypt,
+                                  base::span<const uint8_t> input,
+                                  base::span<uint8_t> output);
+  std::vector<uint8_t> iv_;
 };
 
 }  // namespace crypto

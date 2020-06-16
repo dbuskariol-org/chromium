@@ -29,13 +29,21 @@ TEST(EncryptorTest, EncryptDecrypt) {
   std::string plaintext("this is the plaintext");
   std::string ciphertext;
   EXPECT_TRUE(encryptor.Encrypt(plaintext, &ciphertext));
-
   EXPECT_LT(0U, ciphertext.size());
 
   std::string decrypted;
   EXPECT_TRUE(encryptor.Decrypt(ciphertext, &decrypted));
-
   EXPECT_EQ(plaintext, decrypted);
+
+  // Repeat the test with the bytes API.
+  std::vector<uint8_t> plaintext_vec(plaintext.begin(), plaintext.end());
+  std::vector<uint8_t> ciphertext_vec;
+  EXPECT_TRUE(encryptor.Encrypt(plaintext_vec, &ciphertext_vec));
+  EXPECT_LT(0U, ciphertext_vec.size());
+
+  std::vector<uint8_t> decrypted_vec;
+  EXPECT_TRUE(encryptor.Decrypt(ciphertext_vec, &decrypted_vec));
+  EXPECT_EQ(plaintext_vec, decrypted_vec);
 }
 
 TEST(EncryptorTest, DecryptWrongKey) {
@@ -211,6 +219,24 @@ void TestAESCTREncrypt(
   EXPECT_TRUE(encryptor.Decrypt(encrypted, &decrypted));
 
   EXPECT_EQ(plaintext_str, decrypted);
+
+  // Repeat the test with the bytes API.
+  EXPECT_TRUE(
+      encryptor.SetCounter(base::make_span(init_counter, init_counter_size)));
+  std::vector<uint8_t> encrypted_vec;
+  EXPECT_TRUE(encryptor.Encrypt(base::make_span(plaintext, plaintext_size),
+                                &encrypted_vec));
+
+  EXPECT_EQ(ciphertext_size, encrypted_vec.size());
+  EXPECT_EQ(0, memcmp(encrypted_vec.data(), ciphertext, encrypted_vec.size()));
+
+  std::vector<uint8_t> decrypted_vec;
+  EXPECT_TRUE(
+      encryptor.SetCounter(base::make_span(init_counter, init_counter_size)));
+  EXPECT_TRUE(encryptor.Decrypt(encrypted_vec, &decrypted_vec));
+
+  EXPECT_EQ(std::vector<uint8_t>(plaintext, plaintext + plaintext_size),
+            decrypted_vec);
 }
 
 void TestAESCTRMultipleDecrypt(
@@ -317,8 +343,7 @@ TEST(EncryptorTest, CTRCounter) {
   unsigned char buf[16];
 
   // Increment 10 times.
-  crypto::Encryptor::Counter counter1(
-      std::string(reinterpret_cast<const char*>(kTest1), kCounterSize));
+  crypto::Encryptor::Counter counter1(kTest1);
   for (int i = 0; i < 10; ++i)
     counter1.Increment();
   counter1.Write(buf);
@@ -332,8 +357,7 @@ TEST(EncryptorTest, CTRCounter) {
   };
   const unsigned char kExpect2[] =
       {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  crypto::Encryptor::Counter counter2(
-      std::string(reinterpret_cast<const char*>(kTest2), kCounterSize));
+  crypto::Encryptor::Counter counter2(kTest2);
   counter2.Increment();
   counter2.Write(buf);
   EXPECT_EQ(0, memcmp(buf, kExpect2, kCounterSize));
@@ -344,8 +368,7 @@ TEST(EncryptorTest, CTRCounter) {
   };
   const unsigned char kExpect3[] =
       {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  crypto::Encryptor::Counter counter3(
-      std::string(reinterpret_cast<const char*>(kTest3), kCounterSize));
+  crypto::Encryptor::Counter counter3(kTest3);
   counter3.Increment();
   counter3.Write(buf);
   EXPECT_EQ(0, memcmp(buf, kExpect3, kCounterSize));
