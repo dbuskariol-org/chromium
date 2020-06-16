@@ -163,6 +163,9 @@ constexpr char kJSRotateCounterclockwiseType[] = "rotateCounterclockwise";
 // Toggle two-up view (Page -> Plugin)
 constexpr char kJSSetTwoUpViewType[] = "setTwoUpView";
 constexpr char kJSEnableTwoUpView[] = "enableTwoUpView";
+// Display annotations (Page -> Plugin)
+constexpr char kJSDisplayAnnotationsType[] = "displayAnnotations";
+constexpr char kJSDisplayAnnotations[] = "display";
 // Select all text in the document (Page -> Plugin)
 constexpr char kJSSelectAllType[] = "selectAll";
 // Get the selected text in the document (Page -> Plugin)
@@ -565,6 +568,8 @@ void OutOfProcessInstance::HandleMessage(const pp::Var& message) {
     RotateCounterclockwise();
   } else if (type == kJSSetTwoUpViewType) {
     HandleSetTwoUpViewMessage(dict);
+  } else if (type == kJSDisplayAnnotationsType) {
+    HandleDisplayAnnotations(dict);
   } else if (type == kJSSelectAllType) {
     engine_->SelectAll();
   } else if (type == kJSBackgroundColorChangedType) {
@@ -1512,6 +1517,17 @@ void OutOfProcessInstance::HandleBackgroundColorChangedMessage(
   }
   base::HexStringToUInt(dict.Get(pp::Var(kJSBackgroundColor)).AsString(),
                         &background_color_);
+}
+
+void OutOfProcessInstance::HandleDisplayAnnotations(
+    const pp::VarDictionary& dict) {
+  if (!dict.Get(pp::Var(kJSDisplayAnnotations)).is_bool()) {
+    NOTREACHED();
+    return;
+  }
+
+  engine_->DisplayAnnotations(
+      dict.Get(pp::Var(kJSDisplayAnnotations)).AsBool());
 }
 
 void OutOfProcessInstance::HandleGetNamedDestinationMessage(
