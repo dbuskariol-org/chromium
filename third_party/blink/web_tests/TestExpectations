@@ -6776,3 +6776,5 @@ crbug.com/924472 external/wpt/css/css-transforms/transform-box/cssbox-fill-box.h
 crbug.com/924472 external/wpt/css/css-transforms/transform-box/svgbox-border-box.html [ Failure ]
 crbug.com/924472 external/wpt/css/css-transforms/transform-box/svgbox-content-box.html [ Failure ]
 crbug.com/924472 external/wpt/css/css-transforms/transform-box/svgbox-stroke-box.html [ Failure ]
+
+crbug.com/1092135 [ Linux ] virtual/threaded/external/wpt/feature-policy/experimental-features/vertical-scroll-touch-block-manual.tentative.html [ Pass Timeout ]
