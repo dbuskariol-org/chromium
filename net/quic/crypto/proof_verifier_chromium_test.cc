@@ -104,10 +104,12 @@ class DummyProofVerifierCallback : public quic::ProofVerifierCallback {
 };
 
 const char kTestHostname[] = "test.example.com";
-const char kTestChloHash[] = "CHLO hash";
-const char kTestEmptySCT[] = "";
 const uint16_t kTestPort = 8443;
 const char kTestConfig[] = "server config bytes";
+const char kTestChloHash[] = "CHLO hash";
+const char kTestEmptySCT[] = "";
+const char kTestEmptySignature[] = "";
+
 const char kLogDescription[] = "somelog";
 
 }  // namespace
@@ -252,7 +254,7 @@ TEST_F(ProofVerifierChromiumTest, ValidSCTList) {
       new DummyProofVerifierCallback);
   quic::QuicAsyncStatus status = proof_verifier.VerifyProof(
       kTestHostname, kTestPort, kTestConfig, quic::QUIC_VERSION_43,
-      kTestChloHash, certs_, ct::GetSCTListForTesting(), kTestEmptySCT,
+      kTestChloHash, certs_, ct::GetSCTListForTesting(), kTestEmptySignature,
       verify_context_.get(), &error_details_, &details_, std::move(callback));
   ASSERT_EQ(quic::QUIC_FAILURE, status);
   CheckSCT(/*sct_expected_ok=*/true);
@@ -272,8 +274,9 @@ TEST_F(ProofVerifierChromiumTest, InvalidSCTList) {
       new DummyProofVerifierCallback);
   quic::QuicAsyncStatus status = proof_verifier.VerifyProof(
       kTestHostname, kTestPort, kTestConfig, quic::QUIC_VERSION_43,
-      kTestChloHash, certs_, ct::GetSCTListWithInvalidSCT(), kTestEmptySCT,
-      verify_context_.get(), &error_details_, &details_, std::move(callback));
+      kTestChloHash, certs_, ct::GetSCTListWithInvalidSCT(),
+      kTestEmptySignature, verify_context_.get(), &error_details_, &details_,
+      std::move(callback));
   ASSERT_EQ(quic::QUIC_FAILURE, status);
   CheckSCT(/*sct_expected_ok=*/false);
 }
@@ -290,8 +293,8 @@ TEST_F(ProofVerifierChromiumTest, FailsIfSignatureFails) {
       new DummyProofVerifierCallback);
   quic::QuicAsyncStatus status = proof_verifier.VerifyProof(
       kTestHostname, kTestPort, kTestConfig, quic::QUIC_VERSION_43,
-      kTestChloHash, certs_, kTestEmptySCT, kTestConfig, verify_context_.get(),
-      &error_details_, &details_, std::move(callback));
+      kTestChloHash, certs_, kTestEmptySCT, kTestEmptySignature,
+      verify_context_.get(), &error_details_, &details_, std::move(callback));
   ASSERT_EQ(quic::QUIC_FAILURE, status);
 }
 
