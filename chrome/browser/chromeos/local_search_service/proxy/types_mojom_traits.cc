@@ -2,41 +2,9 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/chromeos/local_search_service/types_mojom_traits.h"
+#include "chrome/browser/chromeos/local_search_service/proxy/types_mojom_traits.h"
 
 namespace mojo {
-
-// static
-local_search_service::mojom::IndexId
-EnumTraits<local_search_service::mojom::IndexId,
-           local_search_service::IndexId>::ToMojom(local_search_service::IndexId
-                                                       input) {
-  switch (input) {
-    case local_search_service::IndexId::kInvalid:
-      return local_search_service::mojom::IndexId::INVALID;
-    case local_search_service::IndexId::kCrosSettings:
-      return local_search_service::mojom::IndexId::CROS_SETTINGS;
-  }
-  NOTREACHED();
-  return local_search_service::mojom::IndexId::INVALID;
-}
-
-// static
-bool EnumTraits<local_search_service::mojom::IndexId,
-                local_search_service::IndexId>::
-    FromMojom(local_search_service::mojom::IndexId input,
-              local_search_service::IndexId* output) {
-  switch (input) {
-    case local_search_service::mojom::IndexId::INVALID:
-      *output = local_search_service::IndexId::kInvalid;
-      return true;
-    case local_search_service::mojom::IndexId::CROS_SETTINGS:
-      *output = local_search_service::IndexId::kCrosSettings;
-      return true;
-  }
-  NOTREACHED();
-  return false;
-}
 
 // static
 bool StructTraits<local_search_service::mojom::ContentDataView,
@@ -117,16 +85,16 @@ EnumTraits<local_search_service::mojom::ResponseStatus,
     ToMojom(local_search_service::ResponseStatus input) {
   switch (input) {
     case local_search_service::ResponseStatus::kUnknownError:
-      return local_search_service::mojom::ResponseStatus::UNKNOWN_ERROR;
+      return local_search_service::mojom::ResponseStatus::kUnknownError;
     case local_search_service::ResponseStatus::kSuccess:
-      return local_search_service::mojom::ResponseStatus::SUCCESS;
+      return local_search_service::mojom::ResponseStatus::kSuccess;
     case local_search_service::ResponseStatus::kEmptyQuery:
-      return local_search_service::mojom::ResponseStatus::EMPTY_QUERY;
+      return local_search_service::mojom::ResponseStatus::kEmptyQuery;
     case local_search_service::ResponseStatus::kEmptyIndex:
-      return local_search_service::mojom::ResponseStatus::EMPTY_INDEX;
+      return local_search_service::mojom::ResponseStatus::kEmptyIndex;
   }
   NOTREACHED();
-  return local_search_service::mojom::ResponseStatus::UNKNOWN_ERROR;
+  return local_search_service::mojom::ResponseStatus::kUnknownError;
 }
 
 // static
@@ -135,16 +103,16 @@ bool EnumTraits<local_search_service::mojom::ResponseStatus,
     FromMojom(local_search_service::mojom::ResponseStatus input,
               local_search_service::ResponseStatus* output) {
   switch (input) {
-    case local_search_service::mojom::ResponseStatus::UNKNOWN_ERROR:
+    case local_search_service::mojom::ResponseStatus::kUnknownError:
       *output = local_search_service::ResponseStatus::kUnknownError;
       return true;
-    case local_search_service::mojom::ResponseStatus::SUCCESS:
+    case local_search_service::mojom::ResponseStatus::kSuccess:
       *output = local_search_service::ResponseStatus::kSuccess;
       return true;
-    case local_search_service::mojom::ResponseStatus::EMPTY_QUERY:
+    case local_search_service::mojom::ResponseStatus::kEmptyQuery:
       *output = local_search_service::ResponseStatus::kEmptyQuery;
       return true;
-    case local_search_service::mojom::ResponseStatus::EMPTY_INDEX:
+    case local_search_service::mojom::ResponseStatus::kEmptyIndex:
       *output = local_search_service::ResponseStatus::kEmptyIndex;
       return true;
   }

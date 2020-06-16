@@ -59,13 +59,13 @@ struct Result {
 // Status of the search attempt.
 // More will be added later.
 enum ResponseStatus {
-  UNKNOWN_ERROR,
+  kUnknownError,
   // Search operation is successful. But there could be no item and result list
   // is empty.
-  SUCCESS,
+  kSuccess,
   // Query is empty.
-  EMPTY_QUERY,
+  kEmptyQuery,
   // Index is empty (i.e. no data).
-  EMPTY_INDEX
+  kEmptyIndex
 };
 

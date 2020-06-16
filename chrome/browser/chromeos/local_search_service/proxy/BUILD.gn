@@ -5,10 +5,7 @@
 import("//mojo/public/tools/bindings/mojom.gni")
 
 mojom("mojom") {
-  sources = [
-    "local_search_service.mojom",
-    "types.mojom",
-  ]
+  sources = [ "types.mojom" ]
 
   public_deps = [ "//mojo/public/mojom/base" ]
 
@@ -44,12 +41,8 @@ mojom("mojom") {
           cpp = "::local_search_service::ResponseStatus"
         },
       ]
-      traits_headers = [
-        "//chrome/browser/chromeos/local_search_service/types_mojom_traits.h",
-      ]
-      traits_sources = [
-        "//chrome/browser/chromeos/local_search_service/types_mojom_traits.cc",
-      ]
+      traits_headers = [ "//chrome/browser/chromeos/local_search_service/proxy/types_mojom_traits.h" ]
+      traits_sources = [ "//chrome/browser/chromeos/local_search_service/proxy/types_mojom_traits.cc" ]
     },
   ]
 }

@@ -2,25 +2,15 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_CHROMEOS_LOCAL_SEARCH_SERVICE_TYPES_MOJOM_TRAITS_H_
-#define CHROME_BROWSER_CHROMEOS_LOCAL_SEARCH_SERVICE_TYPES_MOJOM_TRAITS_H_
+#ifndef CHROME_BROWSER_CHROMEOS_LOCAL_SEARCH_SERVICE_PROXY_TYPES_MOJOM_TRAITS_H_
+#define CHROME_BROWSER_CHROMEOS_LOCAL_SEARCH_SERVICE_PROXY_TYPES_MOJOM_TRAITS_H_
 
 #include "chrome/browser/chromeos/local_search_service/index.h"
 #include "chrome/browser/chromeos/local_search_service/local_search_service.h"
-#include "chrome/browser/chromeos/local_search_service/local_search_service.mojom.h"
-#include "chrome/browser/chromeos/local_search_service/types.mojom.h"
+#include "chrome/browser/chromeos/local_search_service/proxy/types.mojom.h"
 #include "mojo/public/cpp/bindings/struct_traits.h"
 
 namespace mojo {
-
-template <>
-struct EnumTraits<local_search_service::mojom::IndexId,
-                  local_search_service::IndexId> {
-  static local_search_service::mojom::IndexId ToMojom(
-      local_search_service::IndexId input);
-  static bool FromMojom(local_search_service::mojom::IndexId input,
-                        local_search_service::IndexId* output);
-};
 
 template <>
 struct StructTraits<local_search_service::mojom::ContentDataView,
@@ -116,4 +106,4 @@ struct EnumTraits<local_search_service::mojom::ResponseStatus,
 
 }  // namespace mojo
 
-#endif  // CHROME_BROWSER_CHROMEOS_LOCAL_SEARCH_SERVICE_TYPES_MOJOM_TRAITS_H_
+#endif  // CHROME_BROWSER_CHROMEOS_LOCAL_SEARCH_SERVICE_PROXY_TYPES_MOJOM_TRAITS_H_
