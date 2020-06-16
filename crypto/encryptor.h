@@ -32,30 +32,6 @@ class CRYPTO_EXPORT Encryptor {
     CTR,
   };
 
-  // This class implements a 128-bits counter to be used in AES-CTR encryption.
-  // Only 128-bits counter is supported in this class.
-  class CRYPTO_EXPORT Counter {
-   public:
-    explicit Counter(base::span<const uint8_t> counter);
-    ~Counter();
-
-    // Increment the counter value.
-    bool Increment();
-
-    // Write the content of the counter to |buf|. |buf| should have enough
-    // space for |GetLengthInBytes()|.
-    void Write(void* buf);
-
-    // Return the length of this counter.
-    size_t GetLengthInBytes() const;
-
-   private:
-    union {
-      uint32_t components32[4];
-      uint64_t components64[2];
-    } counter_;
-  };
-
   Encryptor();
   ~Encryptor();
 
@@ -98,7 +74,6 @@ class CRYPTO_EXPORT Encryptor {
  private:
   const SymmetricKey* key_;
   Mode mode_;
-  std::unique_ptr<Counter> counter_;
 
   bool CryptString(bool do_encrypt,
                    base::StringPiece input,
@@ -116,6 +91,9 @@ class CRYPTO_EXPORT Encryptor {
   base::Optional<size_t> CryptCTR(bool do_encrypt,
                                   base::span<const uint8_t> input,
                                   base::span<uint8_t> output);
+
+  // In CBC mode, the IV passed to Init(). In CTR mode, the counter value passed
+  // to SetCounter().
   std::vector<uint8_t> iv_;
 };
 

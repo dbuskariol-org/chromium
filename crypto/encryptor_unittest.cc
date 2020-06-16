@@ -336,44 +336,6 @@ TEST(EncryptorTest, EncryptDecryptCTR) {
   EXPECT_EQ(plaintext, decrypted);
 }
 
-TEST(EncryptorTest, CTRCounter) {
-  const int kCounterSize = 16;
-  const unsigned char kTest1[] =
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  unsigned char buf[16];
-
-  // Increment 10 times.
-  crypto::Encryptor::Counter counter1(kTest1);
-  for (int i = 0; i < 10; ++i)
-    counter1.Increment();
-  counter1.Write(buf);
-  EXPECT_EQ(0, memcmp(buf, kTest1, 15));
-  EXPECT_EQ(10, buf[15]);
-
-  // Check corner cases.
-  const unsigned char kTest2[] = {
-      0, 0, 0, 0, 0, 0, 0, 0,
-      0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-  };
-  const unsigned char kExpect2[] =
-      {0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0};
-  crypto::Encryptor::Counter counter2(kTest2);
-  counter2.Increment();
-  counter2.Write(buf);
-  EXPECT_EQ(0, memcmp(buf, kExpect2, kCounterSize));
-
-  const unsigned char kTest3[] = {
-      0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
-      0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff
-  };
-  const unsigned char kExpect3[] =
-      {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-  crypto::Encryptor::Counter counter3(kTest3);
-  counter3.Increment();
-  counter3.Write(buf);
-  EXPECT_EQ(0, memcmp(buf, kExpect3, kCounterSize));
-}
-
 // TODO(wtc): add more known-answer tests.  Test vectors are available from
 // http://www.ietf.org/rfc/rfc3602
 // http://csrc.nist.gov/publications/nistpubs/800-38a/sp800-38a.pdf

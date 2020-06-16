@@ -28,58 +28,7 @@ const EVP_CIPHER* GetCipherForKey(const SymmetricKey* key) {
   }
 }
 
-// On destruction this class will cleanup the ctx, and also clear the OpenSSL
-// ERR stack as a convenience.
-class ScopedCipherCTX {
- public:
-  ScopedCipherCTX() {
-    EVP_CIPHER_CTX_init(&ctx_);
-  }
-  ~ScopedCipherCTX() {
-    EVP_CIPHER_CTX_cleanup(&ctx_);
-    ClearOpenSSLERRStack(FROM_HERE);
-  }
-  EVP_CIPHER_CTX* get() { return &ctx_; }
-
- private:
-  EVP_CIPHER_CTX ctx_;
-};
-
 }  // namespace
-
-/////////////////////////////////////////////////////////////////////////////
-// Encyptor::Counter Implementation.
-Encryptor::Counter::Counter(base::span<const uint8_t> counter) {
-  CHECK(sizeof(counter_) == counter.size());
-
-  memcpy(&counter_, counter.data(), sizeof(counter_));
-}
-
-Encryptor::Counter::~Counter() = default;
-
-bool Encryptor::Counter::Increment() {
-  uint64_t low_num = base::NetToHost64(counter_.components64[1]);
-  uint64_t new_low_num = low_num + 1;
-  counter_.components64[1] = base::HostToNet64(new_low_num);
-
-  // If overflow occured then increment the most significant component.
-  if (new_low_num < low_num) {
-    counter_.components64[0] =
-        base::HostToNet64(base::NetToHost64(counter_.components64[0]) + 1);
-  }
-
-  // TODO(hclam): Return false if counter value overflows.
-  return true;
-}
-
-void Encryptor::Counter::Write(void* buf) {
-  uint8_t* buf_ptr = reinterpret_cast<uint8_t*>(buf);
-  memcpy(buf_ptr, &counter_, sizeof(counter_));
-}
-
-size_t Encryptor::Counter::GetLengthInBytes() const {
-  return sizeof(counter_);
-}
 
 /////////////////////////////////////////////////////////////////////////////
 // Encryptor Implementation.
@@ -100,6 +49,9 @@ bool Encryptor::Init(const SymmetricKey* key,
 
   EnsureOpenSSLInit();
   if (mode == CBC && iv.size() != AES_BLOCK_SIZE)
+    return false;
+  // CTR mode passes the starting counter separately, via SetCounter().
+  if (mode == CTR && !iv.empty())
     return false;
 
   if (GetCipherForKey(key) == nullptr)
@@ -143,7 +95,7 @@ bool Encryptor::SetCounter(base::span<const uint8_t> counter) {
   if (counter.size() != 16u)
     return false;
 
-  counter_ = std::make_unique<Counter>(counter);
+  iv_.assign(counter.begin(), counter.end());
   return true;
 }
 
@@ -203,7 +155,8 @@ base::Optional<size_t> Encryptor::Crypt(bool do_encrypt,
   DCHECK_EQ(EVP_CIPHER_iv_length(cipher), iv_.size());
   DCHECK_EQ(EVP_CIPHER_key_length(cipher), key.size());
 
-  ScopedCipherCTX ctx;
+  OpenSSLErrStackTracer err_tracer(FROM_HERE);
+  bssl::ScopedEVP_CIPHER_CTX ctx;
   if (!EVP_CipherInit_ex(ctx.get(), cipher, nullptr,
                          reinterpret_cast<const uint8_t*>(key.data()),
                          iv_.data(), do_encrypt)) {
@@ -231,7 +184,7 @@ base::Optional<size_t> Encryptor::Crypt(bool do_encrypt,
 base::Optional<size_t> Encryptor::CryptCTR(bool do_encrypt,
                                            base::span<const uint8_t> input,
                                            base::span<uint8_t> output) {
-  if (!counter_.get()) {
+  if (iv_.size() != AES_BLOCK_SIZE) {
     LOG(ERROR) << "Counter value not set in CTR mode.";
     return base::nullopt;
   }
@@ -242,19 +195,15 @@ base::Optional<size_t> Encryptor::CryptCTR(bool do_encrypt,
     return base::nullopt;
   }
 
-  uint8_t ivec[AES_BLOCK_SIZE] = { 0 };
   uint8_t ecount_buf[AES_BLOCK_SIZE] = { 0 };
   unsigned int block_offset = 0;
 
-  counter_->Write(ivec);
-
   // |output| must have room for |input|.
   CHECK_GE(output.size(), input.size());
-  AES_ctr128_encrypt(input.data(), output.data(), input.size(), &aes_key, ivec,
-                     ecount_buf, &block_offset);
-
-  // AES_ctr128_encrypt() updates |ivec|. Update the |counter_| here.
-  SetCounter(ivec);
+  // Note AES_ctr128_encrypt() will update |iv_|. However, this method discards
+  // |ecount_buf| and |block_offset|, so this is not quite a streaming API.
+  AES_ctr128_encrypt(input.data(), output.data(), input.size(), &aes_key,
+                     iv_.data(), ecount_buf, &block_offset);
   return input.size();
 }
 
