@@ -345,6 +345,12 @@ constexpr CGFloat kSafeAreaMultiplier = 0.8;
                action:@selector(didTapHelpButton)];
     [regularHeightItems addObject:helpButton];
     [compactHeightItems addObject:helpButton];
+
+    if (self.helpButtonAccessibilityLabel) {
+      helpButton.isAccessibilityElement = YES;
+      helpButton.accessibilityLabel = self.helpButtonAccessibilityLabel;
+    }
+
     helpButton.accessibilityIdentifier =
         kConfirmationAlertMoreInfoAccessibilityIdentifier;
     // Set the help button as the left button item so it can be used as a

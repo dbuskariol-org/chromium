@@ -78,7 +78,6 @@
   [self.viewController setPageURL:net::NSURLWithGURL(_URL)];
   [self.viewController setTitleString:self.title];
   [self.viewController setActionHandler:self];
-  [self.viewController setHelpButtonAvailable:YES];
 
   [self.baseViewController presentViewController:self.viewController
                                         animated:YES
