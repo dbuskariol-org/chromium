@@ -229,7 +229,7 @@
 <translation id="1280965841156951489">Змяніць файлы</translation>
 <translation id="1285320974508926690">Ніколі не перакладаць гэты сайт</translation>
 <translation id="1285484354230578868">Захаванне даных на вашым Google Дыску</translation>
-<translation id="1288037062697528143">Начны рэжым уключыцца аўтаматычна пасля захаду сонца</translation>
+<translation id="1288037062697528143">Начная падсветка ўключыцца аўтаматычна пасля захаду сонца</translation>
 <translation id="1288300545283011870">Параметры маўлення</translation>
 <translation id="1293264513303784526">Прылада USB-C (левы порт)</translation>
 <translation id="1293556467332435079">Файлы</translation>
@@ -1371,7 +1371,7 @@
 <translation id="2714393097308983682">Крама Google Play</translation>
 <translation id="2715751256863167692">Гэта абнаўленне скідае налады Chromebook і выдаляе карыстальніцкія даныя.</translation>
 <translation id="2716986496990888774">Гэтай наладай кіруюць бацькі.</translation>
-<translation id="2718395828230677721">Начны рэжым</translation>
+<translation id="2718395828230677721">Начная падсветка</translation>
 <translation id="2718998670920917754">Праграма-антывірус знайшла вірус.</translation>
 <translation id="2719020180254996569">Сетка <ph name="NETWORK_INDEX" /> з <ph name="NETWORK_COUNT" />, <ph name="NETWORK_NAME" />, <ph name="CONNECTION_STATUS" />, падрабязныя звесткі</translation>
 <translation id="2719936478972253983">Наступныя файлы cookie заблакіраваны</translation>
@@ -2518,7 +2518,7 @@
 <translation id="413121957363593859">Кампаненты</translation>
 <translation id="4131410914670010031">Чорна-белы друк</translation>
 <translation id="4133076602192971179">Каб змяніць пароль, адкрыйце праграму</translation>
-<translation id="4136203100490971508">Начны рэжым выключыцца аўтаматычна пасля ўзыходу сонца</translation>
+<translation id="4136203100490971508">Начная падсветка выключыцца аўтаматычна пасля ўзыходу сонца</translation>
 <translation id="41365691917097717">Калі працягнуць, будзе ўключана адладка ADB для стварэння і тэсціравання праграм для Android. Звярніце ўвагу, што, уключыўшы ADB, вы дазваляеце ўсталёўваць праграмы для Android, якія не былі спраўджаны Google, а для выключэння ADB патрабуецца скід налад да заводскіх значэнняў.</translation>
 <translation id="4138267921960073861">Паказваць фота і імёны карыстальнікаў на экране ўваходу</translation>
 <translation id="413915106327509564"><ph name="WINDOW_TITLE" /> – падключана прылада HID</translation>
