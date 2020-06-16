@@ -1993,7 +1993,8 @@ CommandHandler.COMMANDS_['share-with-plugin-vm'] = new class extends Command {
       fileManager.ui.toast.show(str('FOLDER_SHARED_WITH_PLUGIN_VM'), {
         text: str('MANAGE_TOAST_BUTTON_LABEL'),
         callback: () => {
-          chrome.fileManagerPrivate.openSettingsSubpage('pluginVm/sharedPaths');
+          chrome.fileManagerPrivate.openSettingsSubpage(
+              'app-management/pluginVm/sharedPaths');
           CommandHandler.recordMenuItemSelected(
               CommandHandler.MenuCommandsForUMA.MANAGE_PLUGIN_VM_SHARING_TOAST);
         }
@@ -2086,7 +2087,8 @@ CommandHandler.COMMANDS_['manage-linux-sharing'] = new class extends Command {
 CommandHandler.COMMANDS_['manage-plugin-vm-sharing-gear'] =
     new class extends Command {
   execute(event, fileManager) {
-    chrome.fileManagerPrivate.openSettingsSubpage('pluginVm/sharedPaths');
+    chrome.fileManagerPrivate.openSettingsSubpage(
+        'app-management/pluginVm/sharedPaths');
     CommandHandler.recordMenuItemSelected(
         CommandHandler.MenuCommandsForUMA.MANAGE_PLUGIN_VM_SHARING);
   }
@@ -2105,7 +2107,8 @@ CommandHandler.COMMANDS_['manage-plugin-vm-sharing-gear'] =
 CommandHandler.COMMANDS_['manage-plugin-vm-sharing'] =
     new class extends Command {
   execute(event, fileManager) {
-    chrome.fileManagerPrivate.openSettingsSubpage('pluginVm/sharedPaths');
+    chrome.fileManagerPrivate.openSettingsSubpage(
+        'app-management/pluginVm/sharedPaths');
     CommandHandler.recordMenuItemSelected(
         CommandHandler.MenuCommandsForUMA.MANAGE_PLUGIN_VM_SHARING);
   }
