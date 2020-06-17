@@ -216,6 +216,10 @@ extern const char kEnableSyncTrustedVaultDescription[];
 extern const char kEnableSyncUSSNigoriName[];
 extern const char kEnableSyncUSSNigoriDescription[];
 
+// Title and description for the flag to enable an expanded tab strip.
+extern const char kExpandedTabStripName[];
+extern const char kExpandedTabStripDescription[];
+
 // Title and description for the flag to trigger the startup sign-in promo.
 extern const char kForceStartupSigninPromoName[];
 extern const char kForceStartupSigninPromoDescription[];

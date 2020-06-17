@@ -255,6 +255,11 @@ const char kEnableSyncUSSNigoriName[] = "Enable USS for sync encryption keys";
 const char kEnableSyncUSSNigoriDescription[] =
     "Enables the new, experimental implementation of sync encryption keys";
 
+const char kExpandedTabStripName[] = "Enable expanded tabstrip";
+const char kExpandedTabStripDescription[] =
+    "Enables the new expanded tabstrip. Activated by swiping down the tabstrip"
+    " or the toolbar";
+
 const char kForceStartupSigninPromoName[] = "Display the startup sign-in promo";
 const char kForceStartupSigninPromoDescription[] =
     "When enabled, the startup sign-in promo is always displayed when starting "
