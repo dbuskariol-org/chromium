@@ -223,6 +223,11 @@ public class Profile {
      * @since 84
      */
     public void setBooleanSetting(@SettingType int type, boolean value) {
+        ThreadCheck.ensureOnUiThread();
+        if (WebLayer.getSupportedMajorVersionInternal() < 84) {
+            throw new UnsupportedOperationException();
+        }
+
         try {
             mImpl.setBooleanSetting(type, value);
         } catch (RemoteException e) {
@@ -237,6 +242,11 @@ public class Profile {
      * @since 84
      */
     public boolean getBooleanSetting(@SettingType int type) {
+        ThreadCheck.ensureOnUiThread();
+        if (WebLayer.getSupportedMajorVersionInternal() < 84) {
+            throw new UnsupportedOperationException();
+        }
+
         try {
             return mImpl.getBooleanSetting(type);
         } catch (RemoteException e) {
