@@ -6421,6 +6421,25 @@ Unknown properties are collapsed to zero. -->
   <int value="12" label="Unknown"/>
 </enum>
 
+<enum name="BlueZResultOfPerProfileConnection">
+  <int value="0" label="Success"/>
+  <int value="1" label="Unknown Error"/>
+  <int value="2" label="Already Connected"/>
+  <int value="3" label="Busy Connecting"/>
+  <int value="4" label="Connection Refused"/>
+  <int value="5" label="Connect Canceled"/>
+  <int value="6" label="Remote Unavailable"/>
+  <int value="7" label="Profile Not Supported"/>
+</enum>
+
+<enum name="BlueZResultOfPerProfileProbing">
+  <int value="0" label="Success"/>
+  <int value="1" label="Unknown Error"/>
+  <int value="2" label="Unable To Register Interface"/>
+  <int value="3" label="Unable To Create New Device"/>
+  <int value="4" label="Profile Not Supported"/>
+</enum>
+
 <enum name="BlueZTypeOfDiscovery">
   <int value="1" label="BR/EDR"/>
   <int value="2" label="LE"/>
