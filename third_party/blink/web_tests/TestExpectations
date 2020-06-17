@@ -6612,6 +6612,7 @@ crbug.com/1066716 http/tests/cache/zero-length-xhr.html [ Pass Timeout ]
 crbug.com/1067533 [ Mac10.10 ] external/wpt/shape-detection/idlharness.https.any.sharedworker.html [ Pass Failure ]
 
 # Temporarily disabled for landing changes to DevTools frontend
+crbug.com/1066595 http/tests/devtools/tracing/timeline-network/timeline-network-resource.js [ Pass Failure ]
 crbug.com/1066579 http/tests/devtools/har-importer.js [ Pass Failure ]
 
 # Flaky test, happens only on Mac 10.13.
