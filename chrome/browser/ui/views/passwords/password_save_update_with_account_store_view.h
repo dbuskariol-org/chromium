@@ -47,6 +47,8 @@ class PasswordSaveUpdateWithAccountStoreView
     return destination_dropdown_;
   }
 
+  views::View* GetUsernameTextfieldForTest() const;
+
  private:
   class AutoResizingLayout;
   ~PasswordSaveUpdateWithAccountStoreView() override;

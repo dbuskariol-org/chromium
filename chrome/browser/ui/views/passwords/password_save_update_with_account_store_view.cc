@@ -458,6 +458,11 @@ PasswordSaveUpdateWithAccountStoreView::
   CloseIPHBubbleIfOpen();
 }
 
+views::View*
+PasswordSaveUpdateWithAccountStoreView::GetUsernameTextfieldForTest() const {
+  return username_dropdown_->GetTextfieldForTest();
+}
+
 PasswordBubbleControllerBase*
 PasswordSaveUpdateWithAccountStoreView::GetController() {
   return &controller_;
