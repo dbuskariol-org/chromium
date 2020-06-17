@@ -91,6 +91,19 @@ std::unique_ptr<EventListener> CreateEventListenerForURL(
                                std::move(filter));
 }
 
+std::unique_ptr<EventListener> CreateEventListenerForExtensionServiceWorker(
+    const std::string& extension_id,
+    int64_t service_worker_version_id,
+    int worker_thread_id,
+    const std::string& event_name,
+    content::RenderProcessHost* process,
+    std::unique_ptr<base::DictionaryValue> filter) {
+  return EventListener::ForExtensionServiceWorker(
+      event_name, extension_id, process,
+      Extension::GetBaseURLFromExtensionId(extension_id),
+      service_worker_version_id, worker_thread_id, std::move(filter));
+}
+
 // Creates an extension.  If |component| is true, it is created as a component
 // extension.  If |persistent| is true, it is created with a persistent
 // background page; otherwise it is created with an event page.
@@ -312,6 +325,13 @@ TEST_F(EventRouterTest, EventRouterObserverForExtensions) {
 TEST_F(EventRouterTest, EventRouterObserverForURLs) {
   RunEventRouterObserverTest(base::BindRepeating(
       &CreateEventListenerForURL, GURL("http://google.com/path")));
+}
+
+TEST_F(EventRouterTest, EventRouterObserverForServiceWorkers) {
+  RunEventRouterObserverTest(base::BindRepeating(
+      &CreateEventListenerForExtensionServiceWorker, "extension_id",
+      // Dummy version_id and thread_id.
+      99, 199));
 }
 
 TEST_F(EventRouterTest, TestReportEvent) {
