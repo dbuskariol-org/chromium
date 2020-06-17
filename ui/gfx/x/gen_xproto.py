@@ -261,11 +261,11 @@ def event_base_name(names):
     # Handle a few special cases where the longest common prefix is empty: eg.
     # EnterNotify/LeaveNotify/FocusIn/FocusOut -> Crossing.
     EVENT_NAMES = [
-        ('Motion', 'Pointer'),
-        ('RawMotion', 'RawPointer'),
+        ('TouchBegin', 'Device'),
+        ('RawTouchBegin', 'RawDevice'),
         ('Enter', 'Crossing'),
         ('EnterNotify', 'Crossing'),
-        ('DeviceButtonPress', 'Device'),
+        ('DeviceButtonPress', 'LegacyDevice'),
     ]
     for name, rename in EVENT_NAMES:
         if name in names:
@@ -572,6 +572,14 @@ class GenXproto(FileWriter):
         if (name[-1] in ('FLOAT32', 'FLOAT64')
                 or renamed in self.replace_with_enum):
             return
+        elif name[-1] == 'FP1616':
+            # Xcbproto defines FP1616 as uint32_t instead of a struct of
+            # two 16-bit ints, which is how it's intended to be used.
+            with Indent(self, 'struct Fp1616 {', '};'):
+                self.write('int16_t integral;')
+                self.write('uint16_t frac;')
+            self.write()
+            return
 
         xidunion = self.get_xidunion_element(name)
         if xidunion:
@@ -845,7 +853,9 @@ class GenXproto(FileWriter):
                            event.opcodes[name])
             else:
                 with Indent(self, 'enum Opcode {', '} opcode{};'):
-                    for opname, opcode in event.enum_opcodes.items():
+                    items = [(int(x), y)
+                             for (y, x) in event.enum_opcodes.items()]
+                    for opcode, opname in sorted(items):
                         self.undef(opname)
                         self.write('%s = %s,' % (opname, opcode))
             self.declare_fields(event.fields)
@@ -1086,6 +1096,35 @@ class GenXproto(FileWriter):
     # all of these events under one structure with an additional opcode field
     # to indicate the type of event.
     def uniquify_events(self):
+        # Manually merge some events in XInput.  These groups of 8 events have
+        # idential structure, and are merged as XIDeviceEvent in Xlib.  To avoid
+        # duplication, and to ease the transition from Xlib to XProto, we merge
+        # the events here too.
+        # TODO(thomasanderson): We should avoid adding workarounds for xcbproto.
+        # Instead, the protocol files should be modified directly.  However,
+        # some of the changes we want to make change the API, so the changes
+        # should be made in a fork in //third_party rather than upstreamed.
+        MERGE = [
+            ([
+                'KeyPress', 'KeyRelease', 'ButtonPress', 'ButtonRelease',
+                'Motion', 'TouchBegin', 'TouchUpdate', 'TouchEnd'
+            ], []),
+            ([
+                'RawKeyPress', 'RawKeyRelease', 'RawButtonPress',
+                'RawButtonRelease', 'RawMotion', 'RawTouchBegin',
+                'RawTouchUpdate', 'RawTouchEnd'
+            ], []),
+        ]
+        for i, (name, t) in enumerate(self.module.all):
+            if t.is_event and name[1] == 'Input':
+                for names, event in MERGE:
+                    if name[-1] in names:
+                        if event:
+                            event[0].opcodes.update(t.opcodes)
+                            self.module.all[i] = name, event[0]
+                        else:
+                            event.append(t)
+
         types = []
         events = set()
         for name, t in self.module.all:

@@ -61,7 +61,8 @@ void XDisplayManager::RemoveObserver(display::DisplayObserver* observer) {
   change_notifier_.RemoveObserver(observer);
 }
 
-bool XDisplayManager::CanProcessEvent(const XEvent& xev) {
+bool XDisplayManager::CanProcessEvent(const x11::Event& x11_event) {
+  const XEvent& xev = x11_event.xlib_event();
   return xev.type - xrandr_event_base_ ==
              x11::RandR::ScreenChangeNotifyEvent::opcode ||
          xev.type - xrandr_event_base_ == x11::RandR::NotifyEvent::opcode ||
@@ -71,8 +72,9 @@ bool XDisplayManager::CanProcessEvent(const XEvent& xev) {
               static_cast<uint32_t>(gfx::GetAtom("_NET_WORKAREA")));
 }
 
-bool XDisplayManager::ProcessEvent(XEvent* xev) {
-  DCHECK(xev);
+bool XDisplayManager::ProcessEvent(x11::Event* x11_event) {
+  DCHECK(x11_event);
+  XEvent* xev = &x11_event->xlib_event();
   int ev_type = xev->type - xrandr_event_base_;
   if (ev_type == x11::RandR::ScreenChangeNotifyEvent::opcode) {
     // Pass the event through to xlib.
