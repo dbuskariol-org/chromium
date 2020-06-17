@@ -11,8 +11,6 @@
 
 #include "base/bits.h"
 #include "base/containers/queue.h"
-#include "base/containers/span.h"
-#include "base/files/file.h"
 #include "base/memory/aligned_memory.h"
 #include "base/memory/scoped_refptr.h"
 #include "base/optional.h"
@@ -24,7 +22,6 @@
 #include "media/base/video_frame.h"
 #include "media/base/video_frame_layout.h"
 #include "media/base/video_types.h"
-#include "media/filters/ivf_parser.h"
 #include "ui/gfx/geometry/rect.h"
 #include "ui/gfx/geometry/size.h"
 
@@ -76,30 +73,6 @@ StateEnum ClientStateNotification<StateEnum>::Wait() {
   return ret;
 }
 
-struct IvfFrame {
-  IvfFrameHeader header;
-  uint8_t* data = nullptr;
-};
-
-// Read functions to fill IVF file header and IVF frame header from |data|.
-// |data| must have sufficient length.
-IvfFileHeader GetIvfFileHeader(const base::span<const uint8_t>& data);
-IvfFrameHeader GetIvfFrameHeader(const base::span<const uint8_t>& data);
-
-// The helper class to save data as ivf format.
-class IvfWriter {
- public:
-  IvfWriter(base::FilePath output_filepath);
-  bool WriteFileHeader(VideoCodec codec,
-                       const gfx::Size& resolution,
-                       uint32_t frame_rate,
-                       uint32_t num_frames);
-  bool WriteFrame(uint32_t data_size, uint64_t timestamp, const uint8_t* data);
-
- private:
-  base::File output_file_;
-};
-
 // Helper to extract fragments from encoded video stream.
 class EncodedDataHelper {
  public:
@@ -122,13 +95,15 @@ class EncodedDataHelper {
   size_t num_skipped_fragments() { return num_skipped_fragments_; }
 
  private:
+  struct IVFHeader;
+  struct IVFFrame;
 
   // For h.264.
   scoped_refptr<DecoderBuffer> GetNextFragment();
   // For VP8/9.
   scoped_refptr<DecoderBuffer> GetNextFrame();
-  base::Optional<IvfFrameHeader> GetNextIvfFrameHeader() const;
-  base::Optional<IvfFrame> ReadNextIvfFrame();
+  base::Optional<IVFHeader> GetNextIVFFrameHeader() const;
+  base::Optional<IVFFrame> ReadNextIVFFrame();
 
   // Helpers for GetBytesForNextFragment above.
   size_t GetBytesForNextNALU(size_t pos);

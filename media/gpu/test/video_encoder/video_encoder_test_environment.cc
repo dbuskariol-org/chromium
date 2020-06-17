@@ -52,8 +52,7 @@ VideoEncoderTestEnvironment* VideoEncoderTestEnvironment::Create(
     const base::FilePath& video_metadata_path,
     bool enable_bitstream_validator,
     const base::FilePath& output_folder,
-    const std::string& codec,
-    bool output_bitstream) {
+    const std::string& codec) {
   if (video_path.empty()) {
     LOG(ERROR) << "No video specified";
     return nullptr;
@@ -83,13 +82,6 @@ VideoEncoderTestEnvironment* VideoEncoderTestEnvironment::Create(
     return nullptr;
   }
 
-  base::Optional<base::FilePath> bitstream_filename;
-  if (output_bitstream) {
-    base::FilePath::StringPieceType extension =
-        codec.find("h264") != std::string::npos ? "h264" : "ivf";
-    bitstream_filename = video_path.BaseName().ReplaceExtension(extension);
-  }
-
   const auto* it = std::find_if(
       std::begin(kCodecParamToProfile), std::end(kCodecParamToProfile),
       [codec](const auto& cp) { return cp.codec == codec; });
@@ -97,26 +89,22 @@ VideoEncoderTestEnvironment* VideoEncoderTestEnvironment::Create(
     LOG(ERROR) << "Unknown codec: " << codec;
     return nullptr;
   }
-
   VideoCodecProfile profile = it->profile;
   return new VideoEncoderTestEnvironment(
-      std::move(video), enable_bitstream_validator, output_folder, profile,
-      bitstream_filename);
+      std::move(video), enable_bitstream_validator, output_folder, profile);
 }
 
 VideoEncoderTestEnvironment::VideoEncoderTestEnvironment(
     std::unique_ptr<media::test::Video> video,
     bool enable_bitstream_validator,
     const base::FilePath& output_folder,
-    VideoCodecProfile profile,
-    const base::Optional<base::FilePath>& bitstream_filename)
+    VideoCodecProfile profile)
     : VideoTestEnvironment(kEnabledFeaturesForVideoEncoderTest,
                            kDisabledFeaturesForVideoEncoderTest),
       video_(std::move(video)),
       enable_bitstream_validator_(enable_bitstream_validator),
       output_folder_(output_folder),
       profile_(profile),
-      bitstream_filename_(bitstream_filename),
       gpu_memory_buffer_factory_(
           gpu::GpuMemoryBufferFactory::CreateNativeType(nullptr)) {}
 
@@ -136,15 +124,6 @@ const base::FilePath& VideoEncoderTestEnvironment::OutputFolder() const {
 
 VideoCodecProfile VideoEncoderTestEnvironment::Profile() const {
   return profile_;
-}
-
-base::Optional<base::FilePath>
-VideoEncoderTestEnvironment::OutputBitstreamFilePath() const {
-  if (!bitstream_filename_)
-    return base::nullopt;
-
-  return output_folder_.Append(GetTestOutputFilePath())
-      .Append(*bitstream_filename_);
 }
 
 gpu::GpuMemoryBufferFactory*

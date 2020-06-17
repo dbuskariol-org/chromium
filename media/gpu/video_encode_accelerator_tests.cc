@@ -7,13 +7,11 @@
 
 #include "base/command_line.h"
 #include "base/files/file_path.h"
-#include "base/files/file_util.h"
 #include "media/base/media_util.h"
 #include "media/base/test_data_util.h"
 #include "media/base/video_bitrate_allocation.h"
 #include "media/base/video_decoder_config.h"
 #include "media/gpu/test/video.h"
-#include "media/gpu/test/video_encoder/bitstream_file_writer.h"
 #include "media/gpu/test/video_encoder/bitstream_validator.h"
 #include "media/gpu/test/video_encoder/decoder_buffer_validator.h"
 #include "media/gpu/test/video_encoder/video_encoder.h"
@@ -35,7 +33,6 @@ namespace {
 constexpr const char* usage_msg =
     "usage: video_encode_accelerator_tests\n"
     "           [--codec=<codec>] [--disable_validator]\n"
-    "           [--output_bitstream] [--output_folder=<filepath>]\n"
     "           [-v=<level>] [--vmodule=<config>] [--gtest_help] [--help]\n"
     "           [<video path>] [<video metadata path>]\n";
 
@@ -48,19 +45,9 @@ constexpr const char* help_msg =
     "containing the video's metadata, such as frame checksums. By default\n"
     "<video path>.json will be used.\n"
     "\nThe following arguments are supported:\n"
-    "  --codec              codec profile to encode, \"h264\" (baseline),\n"
-    "                       \"h264main, \"h264high\", \"vp8\" and \"vp9\".\n"
-    "                       H264 Baseline is selected if unspecified.\n"
+    "  --codec              codec profile to encode, \"h264 (baseline)\",\n"
+    "                       \"h264main, \"h264high\", \"vp8\" and \"vp9\"\n"
     "  --disable_validator  disable validation of encoded bitstream.\n\n"
-    "  --output_bitstream   save the output bitstream in either H264 AnnexB\n"
-    "                       format (for H264) or IVF format (for vp8 and vp9)\n"
-    "                       to <output_folder>/<testname>/<filename> +\n"
-    "                       .(h264|ivf).\n"
-    "  --output_folder      set the basic folder used to store the output\n"
-    "                       stream. The default is the current directory.\n"
-    "  --output_folder      overwrite the output folder used to store an\n"
-    "                       output stream, if not specified results\n"
-    "                       will be stored in the current working directory.\n"
     "   -v                  enable verbose mode, e.g. -v=2.\n"
     "  --vmodule            enable verbose mode for the specified module,\n"
     "                       e.g. --vmodule=*media/gpu*=2.\n\n"
@@ -84,7 +71,7 @@ class VideoEncoderTest : public ::testing::Test {
  public:
   std::unique_ptr<VideoEncoder> CreateVideoEncoder(
       Video* video,
-      VideoEncoderClientConfig config) {
+      const VideoEncoderClientConfig& config) {
     LOG_ASSERT(video);
 
     auto video_encoder =
@@ -156,15 +143,6 @@ class VideoEncoderTest : public ::testing::Test {
     LOG_ASSERT(bitstream_validator);
     bitstream_processors.emplace_back(std::move(bitstream_validator));
 
-    auto output_bitstream_filepath = g_env->OutputBitstreamFilePath();
-    if (output_bitstream_filepath) {
-      auto bitstream_writer = BitstreamFileWriter::Create(
-          *output_bitstream_filepath, codec, visible_rect.size(),
-          config.framerate, config.num_frames_to_encode);
-      LOG_ASSERT(bitstream_writer);
-      bitstream_processors.emplace_back(std::move(bitstream_writer));
-    }
-
     return bitstream_processors;
   }
 
@@ -228,8 +206,6 @@ TEST_F(VideoEncoderTest, FlushAtEndOfStream_MultipleConcurrentEncodes) {
 
   VideoEncoderClientConfig config = VideoEncoderClientConfig();
   config.framerate = g_env->Video()->FrameRate();
-  config.output_profile = g_env->Profile();
-  config.num_frames_to_encode = g_env->Video()->NumFrames();
 
   std::vector<std::unique_ptr<VideoEncoder>> encoders(
       kMinSupportedConcurrentEncoders);
@@ -350,9 +326,6 @@ int main(int argc, char** argv) {
   base::FilePath video_metadata_path =
       (args.size() >= 2) ? base::FilePath(args[1]) : base::FilePath();
   std::string codec = "h264";
-  bool output_bitstream = false;
-  base::FilePath output_folder =
-      base::FilePath(base::FilePath::kCurrentDirectory);
 
   // Parse command line arguments.
   bool enable_bitstream_validator = true;
@@ -368,10 +341,6 @@ int main(int argc, char** argv) {
       codec = it->second;
     } else if (it->first == "disable_validator") {
       enable_bitstream_validator = false;
-    } else if (it->first == "output_bitstream") {
-      output_bitstream = true;
-    } else if (it->first == "output_folder") {
-      output_folder = base::FilePath(it->second);
     } else {
       std::cout << "unknown option: --" << it->first << "\n"
                 << media::test::usage_msg;
@@ -385,7 +354,7 @@ int main(int argc, char** argv) {
   media::test::VideoEncoderTestEnvironment* test_environment =
       media::test::VideoEncoderTestEnvironment::Create(
           video_path, video_metadata_path, enable_bitstream_validator,
-          output_folder, codec, output_bitstream);
+          base::FilePath(), codec);
   if (!test_environment)
     return EXIT_FAILURE;
 
