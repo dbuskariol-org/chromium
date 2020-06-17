@@ -1728,6 +1728,7 @@ ci.fyi_ios_builder(
         short_name = 'mwd',
     ),
     executable = 'recipe:chromium',
+    os = os.MAC_10_15,
     properties = {
         'xcode_build_version': '11e146',
     },
@@ -1755,6 +1756,7 @@ ci.fyi_ios_builder(
         short_name = 'ios13',
     ),
     executable = 'recipe:chromium',
+    os = os.MAC_10_15,
     properties = {
         'xcode_build_version': '11e146',
     },
@@ -1766,9 +1768,11 @@ ci.fyi_ios_builder(
         category = 'iOS|iOS13',
         short_name = 'dev',
     ),
+    caches = [xcode_cache.x11e608c],
     executable = 'recipe:chromium',
+    os = os.MAC_10_15,
     properties = {
-        'xcode_build_version': '11e146',
+        'xcode_build_version': '11e608c',
     },
 )
 
@@ -1778,11 +1782,11 @@ ci.fyi_ios_builder(
         category = 'iOS|iOS13',
         short_name = 'sim',
     ),
-    caches = [xcode_cache.x11e146],
+    caches = [xcode_cache.x11e608c],
     executable = 'recipe:chromium',
     os = os.MAC_10_15,
     properties = {
-        'xcode_build_version': '11e146'
+        'xcode_build_version': '11e608c'
     }
 )
 
