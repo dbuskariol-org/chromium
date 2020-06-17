@@ -146,7 +146,7 @@ def _update_dep_file(in_folder, args, manifest):
 
   # If the input was a folder holding an unpacked .pak file, the generated
   # depfile should not list files already in the .pak file.
-  if args.input.endswith('.unpak'):
+  if args.input.endswith('unpak'):
     filter_url = args.input
     deps = [d for d in deps if not d.startswith(filter_url)]
 
