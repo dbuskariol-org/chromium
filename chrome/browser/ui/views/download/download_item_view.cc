@@ -691,17 +691,9 @@ void DownloadItemView::ButtonPressed(views::Button* sender,
   }
 
   if (sender == dropdown_button_) {
-    // TODO(estade): this is copied from ToolbarActionView but should be shared
-    // one way or another.
-    ui::MenuSourceType type = ui::MENU_SOURCE_NONE;
-    if (event.IsMouseEvent())
-      type = ui::MENU_SOURCE_MOUSE;
-    else if (event.IsKeyEvent())
-      type = ui::MENU_SOURCE_KEYBOARD;
-    else if (event.IsGestureEvent())
-      type = ui::MENU_SOURCE_TOUCH;
     SetDropdownState(PUSHED);
-    ShowContextMenuImpl(dropdown_button_->GetBoundsInScreen(), type);
+    ShowContextMenuImpl(dropdown_button_->GetBoundsInScreen(),
+                        ui::GetMenuSourceTypeForEvent(event));
     return;
   }
 
