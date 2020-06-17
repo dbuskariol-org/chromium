@@ -4041,6 +4041,7 @@ static_library("browser") {
     ]
     deps += [
       "//ash/public/cpp",
+      "//ash/public/cpp/external_arc",
       "//chrome/browser/chromeos",
       "//chromeos/components/account_manager",
       "//chromeos/components/quick_answers",
@@ -5563,7 +5564,7 @@ static_library("browser") {
   if (enable_wayland_server) {
     deps += [
       "//components/exo",
-      "//components/exo/wayland",
+      "//components/exo/server",
     ]
     sources += [
       "exo_parts.cc",
