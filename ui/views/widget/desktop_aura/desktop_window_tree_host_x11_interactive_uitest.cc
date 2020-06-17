@@ -97,7 +97,7 @@ void DispatchMouseMotionEvent(DesktopWindowTreeHostX11* desktop_host,
   auto* xev = reinterpret_cast<xcb_motion_notify_event_t*>(&ge);
   xev->response_type = MotionNotify;
   xev->event = desktop_host->GetAcceleratedWidget();
-  xev->root = static_cast<uint32_t>(connection->default_screen()->root);
+  xev->root = static_cast<uint32_t>(connection->default_screen().root);
   xev->child = 0;
   xev->time = x11::CurrentTime;
   xev->event_x = point_in_screen.x() - bounds_in_screen.x();

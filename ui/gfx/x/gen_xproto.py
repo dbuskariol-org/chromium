@@ -606,7 +606,7 @@ class GenXproto(FileWriter):
             is_ext = self.module.namespace.is_ext
             self.write(
                 '%s %s = %s;' %
-                (type_name, name, 'major_opcode_' if is_ext
+                (type_name, name, 'info_.major_opcode' if is_ext
                  and name == 'major_opcode' else field.parent[0].opcode))
             self.copy_primitive(name)
         elif name == 'response_type':
@@ -954,6 +954,12 @@ class GenXproto(FileWriter):
         self.write('Future<%s>' % reply_name)
         self.write('%s(' % method_name)
         with Indent(self, '    const %s& request) {' % request_name, '}'):
+            cond = '!connection_->Ready()'
+            if self.module.namespace.is_ext:
+                cond += ' || !present()'
+            self.write('if (%s)' % cond)
+            self.write('  return {};')
+            self.write()
             self.namespace = ['x11', self.class_name]
             self.write('WriteBuffer buf;')
             self.write()
@@ -1236,7 +1242,10 @@ class GenXproto(FileWriter):
         self.write('#include "base/component_export.h"')
         self.write('#include "base/optional.h"')
         self.write('#include "ui/gfx/x/xproto_types.h"')
-        for direct_import in self.module.direct_imports:
+        imports = set(self.module.direct_imports)
+        if self.module.namespace.is_ext:
+            imports.add(('xproto', 'xproto'))
+        for direct_import in sorted(list(imports)):
             self.write('#include "%s.h"' % direct_import[-1])
         self.write('#include "%s_undef.h"' % self.module.namespace.header)
         self.write()
@@ -1261,16 +1270,17 @@ class GenXproto(FileWriter):
                 self.write('static constexpr unsigned minor_version = %s;' %
                            self.module.namespace.minor_version)
                 self.write()
-                self.write(name + '(')
-                self.write('    Connection* connection, uint8_t major_opcode,')
-                self.write('    uint8_t first_event, uint8_t first_error);')
+                self.write(name + '(Connection* connection,')
+                self.write('    const x11::QueryExtensionReply& info);')
                 self.write()
+                with Indent(self, 'uint8_t present() const {', '}'):
+                    self.write('return info_.present;')
                 with Indent(self, 'uint8_t major_opcode() const {', '}'):
-                    self.write('return major_opcode_;')
+                    self.write('return info_.major_opcode;')
                 with Indent(self, 'uint8_t first_event() const {', '}'):
-                    self.write('return first_event_;')
+                    self.write('return info_.first_event;')
                 with Indent(self, 'uint8_t first_error() const {', '}'):
-                    self.write('return first_error_;')
+                    self.write('return info_.first_error;')
             else:
                 self.write('explicit %s(Connection* connection);' % name)
             self.write()
@@ -1285,9 +1295,7 @@ class GenXproto(FileWriter):
             self.write('private:')
             self.write('x11::Connection* const connection_;')
             if self.module.namespace.is_ext:
-                self.write('const uint8_t major_opcode_;')
-                self.write('const uint8_t first_event_;')
-                self.write('const uint8_t first_error_;')
+                self.write('x11::QueryExtensionReply info_{};')
 
         self.write()
         self.write('}  // namespace x11')
@@ -1318,11 +1326,9 @@ class GenXproto(FileWriter):
         self.write()
         ctor = '%s::%s' % (self.class_name, self.class_name)
         if self.module.namespace.is_ext:
-            self.write(ctor + '(x11::Connection* connection, uint8_t opcode,')
-            self.write('    uint8_t first_event, uint8_t first_error)')
-            self.write('    : connection_(connection), major_opcode_(opcode),')
-            self.write('      first_event_(first_event),')
-            self.write('      first_error_(first_error) {}')
+            self.write(ctor + '(x11::Connection* connection,')
+            self.write('    const x11::QueryExtensionReply& info)')
+            self.write('    : connection_(connection), info_(info) {}')
         else:
             self.write(ctor +
                        '(Connection* connection) : connection_(connection) {}')
@@ -1379,7 +1385,7 @@ class GenExtensionManager(FileWriter):
             self.write()
             for extension in self.extensions:
                 name = extension.proto
-                self.write('%s* %s() { return %s_.get(); }' %
+                self.write('%s& %s() { return *%s_; }' %
                            (extension.class_name, name, name))
             self.write()
             self.write('protected:')
@@ -1400,6 +1406,7 @@ class GenExtensionManager(FileWriter):
         self.write('#include "ui/gfx/x/extension_manager.h"')
         self.write()
         self.write('#include "ui/gfx/x/connection.h"')
+        self.write('#include "ui/gfx/x/xproto_internal.h"')
         for genproto in self.genprotos:
             self.write('#include "ui/gfx/x/%s.h"' % genproto.proto)
         self.write()
@@ -1407,9 +1414,6 @@ class GenExtensionManager(FileWriter):
         self.write()
         init = 'void ExtensionManager::Init'
         with Indent(self, init + '(Connection* conn) {', '}'):
-            self.write('if (!conn)')
-            self.write('  return;')
-            self.write()
             for extension in self.extensions:
                 self.write(
                     'auto %s_future = conn->QueryExtension({"%s"});' %
@@ -1417,14 +1421,9 @@ class GenExtensionManager(FileWriter):
             self.write()
             for extension in self.extensions:
                 name = extension.proto
-                self.write('auto {0}_reply = {0}_future.Sync();'.format(name))
-                cond = 'if ({0}_reply && {0}_reply->present) {{'.format(name)
-                with Indent(self, cond, '}'):
-                    self.write('auto* reply = %s_reply.reply.get();' % name)
-                    self.write('  %s_ = std::make_unique<%s>(' %
-                               (name, extension.class_name))
-                    self.write('    conn, reply->major_opcode,')
-                    self.write('    reply->first_event, reply->first_error);')
+                self.write(
+                    '%s_ = MakeExtension<%s>(conn, std::move(%s_future));' %
+                    (name, extension.class_name, name))
         self.write()
         self.write('ExtensionManager::ExtensionManager() = default;')
         self.write('ExtensionManager::~ExtensionManager() = default;')
@@ -1455,15 +1454,13 @@ class GenReadEvent(FileWriter):
         elif event.is_ge_event:
             # GenericEvent extension event
             conds.extend([
-                ext,
                 'evtype == GeGenericEvent::opcode',
-                'ge->extension == %s->major_opcode()' % ext,
+                'ge->extension == %s.major_opcode()' % ext,
             ])
             opcode = 'ge->event_type'
         else:
             # Extension event
-            conds.append(ext)
-            opcode = 'evtype - %s->first_event()' % ext
+            opcode = 'evtype - %s.first_event()' % ext
 
         if len(event.opcodes) == 1:
             conds.append('%s == %s::opcode' % (opcode, typename))

@@ -24,7 +24,7 @@ constexpr int kMinXrandrVersion = 103;  // Need at least xrandr version 1.3
 XDisplayManager::XDisplayManager(Delegate* delegate)
     : delegate_(delegate),
       connection_(x11::Connection::Get()),
-      x_root_window_(connection_->default_screen()->root),
+      x_root_window_(connection_->default_screen().root),
       xrandr_version_(GetXrandrVersion()),
       workspace_handler_(this) {}
 
@@ -32,10 +32,10 @@ XDisplayManager::~XDisplayManager() = default;
 
 void XDisplayManager::Init() {
   if (IsXrandrAvailable()) {
-    auto* randr = connection_->randr();
-    xrandr_event_base_ = randr->first_event();
+    auto& randr = connection_->randr();
+    xrandr_event_base_ = randr.first_event();
 
-    randr->SelectInput(
+    randr.SelectInput(
         {x_root_window_, x11::RandR::NotifyMask::ScreenChange |
                              x11::RandR::NotifyMask::OutputChange |
                              x11::RandR::NotifyMask::CrtcChange});
