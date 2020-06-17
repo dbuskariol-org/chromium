@@ -3748,6 +3748,8 @@ static_library("browser") {
       "task_manager/providers/per_profile_worker_task_tracker.h",
       "task_manager/providers/render_process_host_task_provider.cc",
       "task_manager/providers/render_process_host_task_provider.h",
+      "task_manager/providers/spare_render_process_host_task_provider.cc",
+      "task_manager/providers/spare_render_process_host_task_provider.h",
       "task_manager/providers/task.cc",
       "task_manager/providers/task.h",
       "task_manager/providers/task_provider.cc",
