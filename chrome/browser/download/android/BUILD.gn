@@ -78,8 +78,12 @@ android_library("java") {
 }
 
 android_library_factory("factory_java") {
+  # These deps will be inherited by the resulting android_library target.
   deps = [ ":java" ]
-  sources = [ "java/src/org/chromium/chrome/browser/download/home/DownloadManagerCoordinatorFactory.java" ]
+
+  # This internal file will be replaced by a generated file so the resulting
+  # android_library target does not actually depend on this internal file.
+  sources = [ "//chrome/browser/download/internal/android/java/src/org/chromium/chrome/browser/download/home/DownloadManagerCoordinatorFactory.java" ]
 }
 
 generate_jni("jni_headers") {
