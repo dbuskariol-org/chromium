@@ -891,8 +891,7 @@ class SiteProcessCountTracker : public base::SupportsUserData::Data,
 };
 
 bool ShouldUseSiteProcessTracking(BrowserContext* browser_context,
-                                  StoragePartition* dest_partition,
-                                  const SiteInfo& site_info) {
+                                  StoragePartition* dest_partition) {
   // TODO(alexmos): Sites should be tracked separately for each
   // StoragePartition.  For now, track them only in the default one.
   StoragePartition* default_partition =
@@ -910,7 +909,7 @@ bool ShouldTrackProcessForSite(BrowserContext* browser_context,
     return false;
 
   return ShouldUseSiteProcessTracking(
-      browser_context, render_process_host->GetStoragePartition(), site_info);
+      browser_context, render_process_host->GetStoragePartition());
 }
 
 bool ShouldFindReusableProcessHostForSite(BrowserContext* browser_context,
@@ -919,10 +918,8 @@ bool ShouldFindReusableProcessHostForSite(BrowserContext* browser_context,
     return false;
 
   return ShouldUseSiteProcessTracking(
-      browser_context,
-      BrowserContext::GetStoragePartitionForSite(browser_context,
-                                                 site_info.site_url()),
-      site_info);
+      browser_context, BrowserContext::GetStoragePartitionForSite(
+                           browser_context, site_info.site_url()));
 }
 
 const void* const kUnmatchedServiceWorkerProcessTrackerKey =
