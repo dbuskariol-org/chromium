@@ -105,7 +105,7 @@ class EnterpriseReportingPrivateGetPersistentSecretFunction
   ExtensionFunction::ResponseAction Run() override;
 
   // Callback once the data was retrieved from the file.
-  void OnDataRetrieved(const std::string& data, bool status);
+  void OnDataRetrieved(const std::string& data, long int status);
 };
 
 class EnterpriseReportingPrivateGetDeviceDataFunction

@@ -34,6 +34,10 @@ namespace {
 void LogReportError(const std::string& reason) {
   VLOG(1) << "Enterprise report is not uploaded: " << reason;
 }
+void LogReportErrorCode(const std::string& reason, long int code) {
+  VLOG(1) << "Enterprise report is not uploaded: " << reason
+          << " code: " << code;
+}
 
 }  // namespace
 
@@ -47,8 +51,7 @@ const char kEndpointVerificationRetrievalFailed[] =
     "Failed to retrieve the endpoint verification data.";
 const char kEndpointVerificationStoreFailed[] =
     "Failed to store the endpoint verification data.";
-// const char kEndpointVerificationSecretRetrievalFailed[] = "Failed to retrieve
-// the endpoint verification secret.";
+const char kEndpointVerificationSecretRetrievalFailed[] = "%ld";
 
 }  // namespace enterprise_reporting
 
@@ -192,15 +195,17 @@ EnterpriseReportingPrivateGetPersistentSecretFunction::Run() {
 
 void EnterpriseReportingPrivateGetPersistentSecretFunction::OnDataRetrieved(
     const std::string& data,
-    bool status) {
-  if (status) {
+    long int status) {
+  if (status == 0) {  // Success.
     VLOG(1) << "The Endpoint Verification secret was retrieved.";
     Respond(OneArgument(std::make_unique<base::Value>(base::Value::BlobStorage(
         reinterpret_cast<const uint8_t*>(data.data()),
         reinterpret_cast<const uint8_t*>(data.data() + data.size())))));
   } else {
-    LogReportError("Endpoint Verification secret retrieval error.");
-    Respond(Error(enterprise_reporting::kEndpointVerificationRetrievalFailed));
+    LogReportErrorCode("Endpoint Verification secret retrieval error.", status);
+    Respond(Error(base::StringPrintf(
+        enterprise_reporting::kEndpointVerificationSecretRetrievalFailed,
+        static_cast<long int>(status))));
   }
 }
 
@@ -244,7 +249,8 @@ void EnterpriseReportingPrivateGetDeviceDataFunction::OnDataRetrieved(
       Respond(NoArguments());
       return;
     default:
-      LogReportError("Endpoint Verification data retrieval error.");
+      LogReportErrorCode("Endpoint Verification data retrieval error.",
+                         static_cast<long int>(status));
       Respond(
           Error(enterprise_reporting::kEndpointVerificationRetrievalFailed));
   }

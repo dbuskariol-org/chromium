@@ -242,87 +242,91 @@ const wchar_t kDefaultRegistryPath[] =
     L"SOFTWARE\\Google\\Endpoint Verification";
 const wchar_t kValueName[] = L"Safe Storage";
 
-std::string ReadEncryptedSecret() {
+LONG ReadEncryptedSecret(std::string* encrypted_secret) {
   base::win::RegKey key;
   DWORD kMaxRawSize = 1024;
   char raw_data[kMaxRawSize];
   DWORD raw_data_size = kMaxRawSize;
   DWORD raw_type;
-  if (ERROR_SUCCESS !=
-          key.Open(HKEY_CURRENT_USER, kDefaultRegistryPath, KEY_READ) ||
-      ERROR_SUCCESS !=
-          key.ReadValue(kValueName, raw_data, &raw_data_size, &raw_type) ||
-      raw_type != REG_BINARY) {
-    return std::string();
+  encrypted_secret->clear();
+  LONG result = key.Open(HKEY_CURRENT_USER, kDefaultRegistryPath, KEY_READ);
+  if (result != ERROR_SUCCESS)
+    return result;
+  result = key.ReadValue(kValueName, raw_data, &raw_data_size, &raw_type);
+  if (result != ERROR_SUCCESS)
+    return result;
+  if (raw_type != REG_BINARY) {
+    key.DeleteValue(kValueName);
+    return ERROR_INVALID_DATATYPE;
   }
-  std::string encrypted_secret;
-  encrypted_secret.insert(0, raw_data, raw_data_size);
-  return encrypted_secret;
+  encrypted_secret->insert(0, raw_data, raw_data_size);
+  return ERROR_SUCCESS;
 }
 
 // Encrypts the |plaintext| and write the result in |cyphertext|. This
 // function was taken from os_crypt/os_crypt_win.cc (Chromium).
-bool EncryptString(const std::string& plaintext, std::string* ciphertext) {
+LONG EncryptString(const std::string& plaintext, std::string* ciphertext) {
   DATA_BLOB input;
   input.pbData =
       const_cast<BYTE*>(reinterpret_cast<const BYTE*>(plaintext.data()));
   input.cbData = static_cast<DWORD>(plaintext.length());
+  ciphertext->clear();
 
   DATA_BLOB output;
   BOOL result = ::CryptProtectData(&input, nullptr, nullptr, nullptr, nullptr,
                                    0, &output);
   if (!result)
-    return false;
+    return ::GetLastError();
 
   // this does a copy
   ciphertext->assign(reinterpret_cast<std::string::value_type*>(output.pbData),
                      output.cbData);
 
   LocalFree(output.pbData);
-  return true;
+  return ERROR_SUCCESS;
 }
 
 // Decrypts the |cyphertext| and write the result in |plaintext|. This
 // function was taken from os_crypt/os_crypt_win.cc (Chromium).
-bool DecryptString(const std::string& ciphertext, std::string* plaintext) {
+LONG DecryptString(const std::string& ciphertext, std::string* plaintext) {
   DATA_BLOB input;
   input.pbData =
       const_cast<BYTE*>(reinterpret_cast<const BYTE*>(ciphertext.data()));
   input.cbData = static_cast<DWORD>(ciphertext.length());
+  plaintext->clear();
 
   DATA_BLOB output;
   BOOL result =
       ::CryptUnprotectData(&input, nullptr, nullptr, nullptr, nullptr, 0,
                            &output);
   if (!result)
-    return false;
+    return ::GetLastError();
 
   plaintext->assign(reinterpret_cast<char*>(output.pbData), output.cbData);
   LocalFree(output.pbData);
-  return true;
+  return ERROR_SUCCESS;
 }
 
-std::string CreateRandomSecret() {
+LONG CreateRandomSecret(std::string* secret) {
   // Generate a password with 128 bits of randomness.
   const int kBytes = 128 / 8;
-  std::string secret;
-  base::Base64Encode(base::RandBytesAsString(kBytes), &secret);
+  std::string generated_secret;
+  base::Base64Encode(base::RandBytesAsString(kBytes), &generated_secret);
 
   std::string encrypted_secret;
-  if (!EncryptString(secret, &encrypted_secret)) {
-    return std::string();
-  }
+  LONG result = EncryptString(generated_secret, &encrypted_secret);
+  if (result != ERROR_SUCCESS)
+    return result;
 
   base::win::RegKey key;
-  if (ERROR_SUCCESS !=
-      key.Create(HKEY_CURRENT_USER, kDefaultRegistryPath, KEY_WRITE)) {
-    return std::string();
-  }
-  if (ERROR_SUCCESS != key.WriteValue(kValueName, encrypted_secret.data(),
-                                      encrypted_secret.size(), REG_BINARY)) {
-    return std::string();
-  }
-  return secret;
+  result = key.Create(HKEY_CURRENT_USER, kDefaultRegistryPath, KEY_WRITE);
+  if (result != ERROR_SUCCESS)
+    return result;
+  result = key.WriteValue(kValueName, encrypted_secret.data(),
+                          encrypted_secret.size(), REG_BINARY);
+  if (result == ERROR_SUCCESS)
+    *secret = generated_secret;
+  return result;
 }
 
 #elif defined(OS_MACOSX)  // defined(OS_WIN)
@@ -330,7 +334,8 @@ std::string CreateRandomSecret() {
 constexpr char kServiceName[] = "Endpoint Verification Safe Storage";
 constexpr char kAccountName[] = "Endpoint Verification";
 
-std::string AddRandomPasswordToKeychain(const crypto::AppleKeychain& keychain) {
+OSStatus AddRandomPasswordToKeychain(const crypto::AppleKeychain& keychain,
+                                     std::string* secret) {
   // Generate a password with 128 bits of randomness.
   const int kBytes = 128 / 8;
   std::string password;
@@ -342,32 +347,29 @@ std::string AddRandomPasswordToKeychain(const crypto::AppleKeychain& keychain) {
       strlen(kServiceName), kServiceName, strlen(kAccountName), kAccountName,
       password.size(), password_data, nullptr);
 
-  if (error != noErr)
-    return std::string();
-  return password;
+  if (error == noErr)
+    *secret = password;
+  else
+    secret->clear();
+  return error;
 }
 
-std::string ReadEncryptedSecret() {
+OSStatus ReadEncryptedSecret(std::string* secret) {
   UInt32 password_length = 0;
   void* password_data = nullptr;
   crypto::AppleKeychain keychain;
+  secret->clear();
   OSStatus error = keychain.FindGenericPassword(
       strlen(kServiceName), kServiceName, strlen(kAccountName), kAccountName,
       &password_length, &password_data, nullptr);
 
   if (error == noErr) {
-    std::string password =
-        std::string(static_cast<char*>(password_data), password_length);
+    *secret = std::string(static_cast<char*>(password_data), password_length);
     keychain.ItemFreeContent(password_data);
-    return password;
+  } else if (error == errSecItemNotFound) {
+    error = AddRandomPasswordToKeychain(keychain, secret);
   }
-
-  if (error == errSecItemNotFound) {
-    std::string password = AddRandomPasswordToKeychain(keychain);
-    return password;
-  }
-
-  return std::string();
+  return error;
 }
 
 #endif  // defined(OS_MACOSX)
@@ -520,28 +522,21 @@ void RetrieveDeviceData(
 }
 
 void RetrieveDeviceSecret(
-    base::OnceCallback<void(const std::string&, bool)> callback) {
+    base::OnceCallback<void(const std::string&, long int)> callback) {
   std::string secret;
 #if defined(OS_WIN)
-  std::string encrypted_secret = ReadEncryptedSecret();
-  if (encrypted_secret.empty()) {
-    secret = CreateRandomSecret();
-    std::move(callback).Run(secret, !secret.empty());
-    return;
-  }
-  if (!DecryptString(encrypted_secret, &secret)) {
-    std::move(callback).Run("", false);
-    return;
-  }
+  std::string encrypted_secret;
+  LONG result = ReadEncryptedSecret(&encrypted_secret);
+  if (result == ERROR_FILE_NOT_FOUND)
+    result = CreateRandomSecret(&secret);
+  else if (result == ERROR_SUCCESS)
+    result = DecryptString(encrypted_secret, &secret);
 #elif defined(OS_MACOSX)
-  secret = ReadEncryptedSecret();
-  if (secret.empty()) {
-    std::move(callback).Run(secret, false);
-    return;
-  }
-
+  OSStatus result = ReadEncryptedSecret(&secret);
+#else
+  long int result = -1;  // Anything but 0 is a failure.
 #endif
-  std::move(callback).Run(secret, true);
+  std::move(callback).Run(secret, static_cast<long int>(result));
 }
 
 }  // namespace extensions

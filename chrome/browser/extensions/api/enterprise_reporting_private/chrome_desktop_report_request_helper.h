@@ -25,7 +25,7 @@ namespace extensions {
 enum class RetrieveDeviceDataStatus {
   // The operation finished successfully.
   kSuccess,
-  // The path for device data does can not be identified.
+  // The path for device data can not be identified.
   kDataDirectoryUnknown,
   // The requested device data record does not exist.
   kDataRecordNotFound,
@@ -61,7 +61,7 @@ void RetrieveDeviceData(
 // If one exists then it is fetched from the Registry and returned.
 // If an error occurs then the second parameter is false.
 void RetrieveDeviceSecret(
-    base::OnceCallback<void(const std::string&, bool)> callback);
+    base::OnceCallback<void(const std::string&, long int)> callback);
 
 }  // namespace extensions
 
