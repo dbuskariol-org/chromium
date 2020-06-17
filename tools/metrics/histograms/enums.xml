@@ -71259,6 +71259,7 @@ Full version information for the fingerprint enum values:
   <int value="13" label="Policy-install on Chrome OS"/>
   <int value="14" label="System default app on Chrome OS"/>
   <int value="15" label="Install icon in the Omnibox"/>
+  <int value="16" label="Installed from sync"/>
 </enum>
 
 <enum name="WebAppLauncherLaunchResult">
