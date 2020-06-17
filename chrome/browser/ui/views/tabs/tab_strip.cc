@@ -873,8 +873,20 @@ class TabStrip::TabDragContextImpl : public TabDragContext {
       const gfx::Rect& dragged_bounds,
       int candidate_index,
       base::Optional<tab_groups::TabGroupId> dragging_group) const {
-    if (!dragging_group.has_value())
+    if (!dragging_group.has_value()) {
+      // Collapsed tabs occupy the same space and need additional checks to
+      // ensure we do not drag into a collapsed group.
+      base::Optional<tab_groups::TabGroupId> candidate_group =
+          tab_strip_->tab_at(candidate_index)->group();
+      if (candidate_group.has_value() &&
+          tab_strip_->controller()->IsGroupCollapsed(candidate_group.value()) &&
+          tab_strip_->controller()->GetActiveIndex() < candidate_index) {
+        return tab_strip_->controller()
+            ->ListTabsInGroup(candidate_group.value())
+            .back();
+      }
       return candidate_index;
+    }
 
     const std::vector<int> dragging_tabs =
         tab_strip_->controller()->ListTabsInGroup(dragging_group.value());
