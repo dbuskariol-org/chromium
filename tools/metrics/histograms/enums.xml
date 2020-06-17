@@ -23340,6 +23340,7 @@ Called by update_extension_histograms.py.-->
   <int value="1479" label="INPUT_IME_SETASSISTIVEWINDOWPROPERTIES"/>
   <int value="1480" label="PASSWORDSPRIVATE_MOVEPASSWORDTOACCOUNT"/>
   <int value="1481" label="AUTOTESTPRIVATE_DISABLESWITCHACCESSDIALOG"/>
+  <int value="1482" label="ENTERPRISE_NETWORKINGATTRIBUTES_GETNETWORKDETAILS"/>
 </enum>
 
 <enum name="ExtensionIconState">
@@ -23903,6 +23904,7 @@ Called by update_extension_histograms.py.-->
   <int value="224" label="kPrinting"/>
   <int value="225" label="kCrashReportPrivate"/>
   <int value="226" label="kAutofillAssistantPrivate"/>
+  <int value="227" label="kEnterpriseNetworkingAttributes"/>
 </enum>
 
 <enum name="ExtensionPolicyReinstallReason">
