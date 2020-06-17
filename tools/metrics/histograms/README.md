@@ -153,6 +153,28 @@ or:
 UmaHistogramEnumeration("NewTabPageAction", action);
 ```
 
+Logging histograms from Java should look similar:
+
+```java
+// These values are persisted to logs. Entries should not be renumbered and
+// numeric values should never be reused.
+@IntDef({NewTabPageAction.USE_OMNIBOX, NewTabPageAction.CLICK_TITLE,
+        NewTabPageAction.OPEN_BOOKMARK})
+private @interface NewTabPageAction {
+    int USE_OMNIBOX = 0;
+    int CLICK_TITLE = 1;
+    // int USE_SEARCHBOX = 2;  // no longer used, combined into omnibox
+    int OPEN_BOOKMARK = 3;
+    int COUNT = 4;
+}
+
+// Using a helper function is optional, but avoids some boilerplate.
+private static void logNewTabPageAction(@NewTabPageAction int action) {
+    RecordHistogram.recordEnumeratedHistogram(
+            "NewTabPageAction", action, NewTabPageAction.COUNT);
+}
+```
+
 #### Legacy Enums
 
 **Note: this method of defining histogram enums is deprecated. Do not use this
