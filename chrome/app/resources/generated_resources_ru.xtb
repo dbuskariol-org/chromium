@@ -229,7 +229,7 @@
 <translation id="1280965841156951489">Разрешить</translation>
 <translation id="1285320974508926690">Никогда не переводить этот сайт</translation>
 <translation id="1285484354230578868">Сохранение данных на вашем Google Диске</translation>
-<translation id="1288037062697528143">Ночной режим включится автоматически на закате</translation>
+<translation id="1288037062697528143">Ночная подсветка будет автоматически включаться на закате</translation>
 <translation id="1288300545283011870">Настройки голоса</translation>
 <translation id="1293264513303784526">Устройство USB-C (порт слева)</translation>
 <translation id="1293556467332435079">Файлы</translation>
@@ -1369,7 +1369,7 @@
 <translation id="2714393097308983682">Google Play</translation>
 <translation id="2715751256863167692">Установив это обновление, вы восстановите исходные настройки устройства Chromebook. При этом с него будут удалены пользовательские данные.</translation>
 <translation id="2716986496990888774">Этим параметром управляет родитель.</translation>
-<translation id="2718395828230677721">Ночной режим</translation>
+<translation id="2718395828230677721">Ночная подсветка</translation>
 <translation id="2718998670920917754">Антивирусное ПО обнаружило вирус.</translation>
 <translation id="2719020180254996569">Сеть <ph name="NETWORK_INDEX" /> из <ph name="NETWORK_COUNT" />, название – "<ph name="NETWORK_NAME" />", статус подключения – "<ph name="CONNECTION_STATUS" />", подробная информация</translation>
 <translation id="2719936478972253983">Заблокированные файлы cookie:</translation>
@@ -2516,7 +2516,7 @@
 <translation id="413121957363593859">Компоненты</translation>
 <translation id="4131410914670010031">Черно-белая печать</translation>
 <translation id="4133076602192971179">Чтобы сменить пароль, откройте приложение.</translation>
-<translation id="4136203100490971508">Ночной режим отключится автоматически на рассвете</translation>
+<translation id="4136203100490971508">Ночная подсветка будет автоматически отключаться на рассвете</translation>
 <translation id="41365691917097717">Продолжив, вы включите отладку с ADB для создания и тестирования приложений для Android. Обратите внимание, что это позволит устанавливать приложения для Android, которые не были проверены Google. Для отключения инструмента потребуется сбросить настройки устройства до заводских.</translation>
 <translation id="4138267921960073861">Показывать имена и фотографии пользователей на экране входа</translation>
 <translation id="413915106327509564"><ph name="WINDOW_TITLE" /> – подключено HID-устройство</translation>

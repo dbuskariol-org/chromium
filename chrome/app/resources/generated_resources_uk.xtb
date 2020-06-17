@@ -229,7 +229,7 @@
 <translation id="1280965841156951489">Змінити файли</translation>
 <translation id="1285320974508926690">Ніколи не перекладати цей сайт</translation>
 <translation id="1285484354230578868">Зберігати дані в обліковому записі Google Диска</translation>
-<translation id="1288037062697528143">Нічний режим увімкнеться автоматично після заходу сонця</translation>
+<translation id="1288037062697528143">Нічний екран увімкнеться автоматично після заходу сонця</translation>
 <translation id="1288300545283011870">Властивості мовлення</translation>
 <translation id="1293264513303784526">Пристрій із портом USB типу C (ліворуч)</translation>
 <translation id="1293556467332435079">Файли</translation>
@@ -1371,7 +1371,7 @@
 <translation id="2714393097308983682">Магазин Google Play</translation>
 <translation id="2715751256863167692">Це оновлення скидає налаштування Chromebook і вилучає дані поточного користувача.</translation>
 <translation id="2716986496990888774">Цим налаштуванням керують батьки.</translation>
-<translation id="2718395828230677721">Нічний режим</translation>
+<translation id="2718395828230677721">Нічний екран</translation>
 <translation id="2718998670920917754">Антивірусне програмне забезпечення виявило вірус.</translation>
 <translation id="2719020180254996569">Мережа <ph name="NETWORK_INDEX" /> з <ph name="NETWORK_COUNT" />, <ph name="NETWORK_NAME" />, <ph name="CONNECTION_STATUS" />. Докладніше</translation>
 <translation id="2719936478972253983">Заблоковані файли cookie</translation>
@@ -2518,7 +2518,7 @@
 <translation id="413121957363593859">Компоненти</translation>
 <translation id="4131410914670010031">Чорно-білий</translation>
 <translation id="4133076602192971179">Щоб змінити пароль, відкрийте додаток</translation>
-<translation id="4136203100490971508">Нічний режим вимкнеться автоматично на світанку</translation>
+<translation id="4136203100490971508">Нічний екран вимкнеться автоматично на світанку</translation>
 <translation id="41365691917097717">Якщо продовжити, буде ввімкнено налагодження ADB для створення й тестування додатків для Android. Зауважте, що цією дією ви дозволяєте встановлювати додатки для Android, які не були перевірені Google. Щоб вимкнути цю функцію, доведеться скинути налаштування.</translation>
 <translation id="4138267921960073861">Показувати імена користувачів і фото на екрані входу</translation>
 <translation id="413915106327509564"><ph name="WINDOW_TITLE" />: підключено пристрій HID</translation>
