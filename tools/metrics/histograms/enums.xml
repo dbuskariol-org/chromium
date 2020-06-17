@@ -33052,6 +33052,9 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
 </enum>
 
 <enum name="GpuTextureResultR16_L16">
+  <obsolete>
+    Removed 06/2020. Both LUMINANCE_F16 and R16_EXT must be supported for now.
+  </obsolete>
   <summary>
     Keeps track of how many users have R16_EXT or/and LUMINANCE_F16, and also
     how many have none of the two.
