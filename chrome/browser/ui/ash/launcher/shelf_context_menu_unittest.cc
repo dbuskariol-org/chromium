@@ -253,7 +253,6 @@ class ShelfContextMenuTest
                                EXPECT_EQ(installed_app_id, app_id);
                                EXPECT_EQ(code,
                                          InstallResultCode::kSuccessNewInstall);
-                               LOG(ERROR) << "app installed";
                                run_loop.Quit();
                              }));
     run_loop.Run();
