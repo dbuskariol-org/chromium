@@ -2,61 +2,55 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/android/content_settings/popup_blocked_infobar_delegate.h"
+#include "components/blocked_content/android/popup_blocked_infobar_delegate.h"
 
 #include <stddef.h>
 #include <utility>
 
-#include "chrome/browser/android/android_theme_resources.h"
-#include "chrome/browser/content_settings/chrome_content_settings_utils.h"
-#include "chrome/browser/content_settings/host_content_settings_map_factory.h"
-#include "chrome/browser/infobars/infobar_service.h"
-#include "chrome/browser/profiles/profile.h"
-#include "chrome/grit/generated_resources.h"
 #include "components/blocked_content/popup_blocker_tab_helper.h"
 #include "components/content_settings/core/browser/host_content_settings_map.h"
 #include "components/content_settings/core/common/content_settings.h"
 #include "components/content_settings/core/common/content_settings_types.h"
+#include "components/infobars/content/content_infobar_manager.h"
 #include "components/infobars/core/infobar.h"
 #include "components/prefs/pref_service.h"
+#include "components/resources/android/theme_resources.h"
 #include "components/strings/grit/components_strings.h"
 #include "ui/base/l10n/l10n_util.h"
 
+namespace blocked_content {
+
 // static
-void PopupBlockedInfoBarDelegate::Create(content::WebContents* web_contents,
-                                         int num_popups) {
-  const GURL& url = web_contents->GetURL();
-  Profile* profile =
-      Profile::FromBrowserContext(web_contents->GetBrowserContext());
-  InfoBarService* infobar_service =
-      InfoBarService::FromWebContents(web_contents);
+bool PopupBlockedInfoBarDelegate::Create(
+    infobars::ContentInfoBarManager* infobar_manager,
+    int num_popups,
+    HostContentSettingsMap* settings_map,
+    base::OnceClosure on_accept_callback) {
+  const GURL& url = infobar_manager->web_contents()->GetURL();
   std::unique_ptr<infobars::InfoBar> infobar(
-      infobar_service->CreateConfirmInfoBar(
+      infobar_manager->CreateConfirmInfoBar(
           std::unique_ptr<ConfirmInfoBarDelegate>(
-              new PopupBlockedInfoBarDelegate(
-                  num_popups, url,
-                  HostContentSettingsMapFactory::GetForProfile(profile)))));
+              new PopupBlockedInfoBarDelegate(num_popups, url, settings_map,
+                                              std::move(on_accept_callback)))));
 
   // See if there is an existing popup infobar already.
   // TODO(dfalcantara) When triggering more than one popup the infobar
   // will be shown once, then hide then be shown again.
   // This will be fixed once we have an in place replace infobar mechanism.
-  for (size_t i = 0; i < infobar_service->infobar_count(); ++i) {
-    infobars::InfoBar* existing_infobar = infobar_service->infobar_at(i);
+  for (size_t i = 0; i < infobar_manager->infobar_count(); ++i) {
+    infobars::InfoBar* existing_infobar = infobar_manager->infobar_at(i);
     if (existing_infobar->delegate()->AsPopupBlockedInfoBarDelegate()) {
-      infobar_service->ReplaceInfoBar(existing_infobar, std::move(infobar));
-      return;
+      infobar_manager->ReplaceInfoBar(existing_infobar, std::move(infobar));
+      return false;
     }
   }
 
-  infobar_service->AddInfoBar(std::move(infobar));
+  infobar_manager->AddInfoBar(std::move(infobar));
 
-  content_settings::RecordPopupsAction(
-      content_settings::POPUPS_ACTION_DISPLAYED_INFOBAR_ON_MOBILE);
+  return true;
 }
 
-PopupBlockedInfoBarDelegate::~PopupBlockedInfoBarDelegate() {
-}
+PopupBlockedInfoBarDelegate::~PopupBlockedInfoBarDelegate() = default;
 
 infobars::InfoBarDelegate::InfoBarIdentifier
 PopupBlockedInfoBarDelegate::GetIdentifier() const {
@@ -68,15 +62,20 @@ int PopupBlockedInfoBarDelegate::GetIconId() const {
 }
 
 PopupBlockedInfoBarDelegate*
-    PopupBlockedInfoBarDelegate::AsPopupBlockedInfoBarDelegate() {
+PopupBlockedInfoBarDelegate::AsPopupBlockedInfoBarDelegate() {
   return this;
 }
 
 PopupBlockedInfoBarDelegate::PopupBlockedInfoBarDelegate(
     int num_popups,
     const GURL& url,
-    HostContentSettingsMap* map)
-    : ConfirmInfoBarDelegate(), num_popups_(num_popups), url_(url), map_(map) {
+    HostContentSettingsMap* map,
+    base::OnceClosure on_accept_callback)
+    : ConfirmInfoBarDelegate(),
+      num_popups_(num_popups),
+      url_(url),
+      map_(map),
+      on_accept_callback_(std::move(on_accept_callback)) {
   content_settings::SettingInfo setting_info;
   std::unique_ptr<base::Value> setting = map->GetWebsiteSetting(
       url, url, ContentSettingsType::POPUPS, std::string(), &setting_info);
@@ -121,7 +120,7 @@ bool PopupBlockedInfoBarDelegate::Accept() {
 
   // Launch popups.
   content::WebContents* web_contents =
-      InfoBarService::WebContentsFromInfoBar(infobar());
+      infobars::ContentInfoBarManager::WebContentsFromInfoBar(infobar());
   blocked_content::PopupBlockerTabHelper* popup_blocker_helper =
       blocked_content::PopupBlockerTabHelper::FromWebContents(web_contents);
   DCHECK(popup_blocker_helper);
@@ -134,7 +133,9 @@ bool PopupBlockedInfoBarDelegate::Accept() {
                                            WindowOpenDisposition::CURRENT_TAB);
   }
 
-  content_settings::RecordPopupsAction(
-      content_settings::POPUPS_ACTION_CLICKED_ALWAYS_SHOW_ON_MOBILE);
+  if (on_accept_callback_)
+    std::move(on_accept_callback_).Run();
   return true;
 }
+
+}  // namespace blocked_content

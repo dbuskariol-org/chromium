@@ -191,6 +191,7 @@ android_resources("chrome_app_java_resources") {
     "//chrome/browser/ui/android/strings:ui_strings_grd",
     "//chrome/browser/ui/messages/android:java_resources",
     "//components/autofill/android:autofill_java_resources",
+    "//components/blocked_content/android:java_resources",
     "//components/browser_ui/http_auth/android:java_resources",
     "//components/browser_ui/modaldialog/android:java_resources",
     "//components/browser_ui/settings/android:java_resources",
@@ -695,6 +696,7 @@ java_cpp_template("resource_id_javagen") {
   package_path = "org/chromium/chrome/browser/resources"
   inputs = [
     "../browser/android/resource_id.h",
+    "//components/resources/android/blocked_content_resource_id.h",
     "//components/resources/android/page_info_resource_id.h",
     "//components/resources/android/permissions_resource_id.h",
   ]
