@@ -6536,7 +6536,6 @@ crbug.com/1056022 [ Fuchsia ] http/tests/eventsource/eventsource-bad-mime-type.h
 # Sheriff 2020-02-28
 crbug.com/1056879 [ Win7 ] external/wpt/webxr/xrSession_requestAnimationFrame_getViewerPose.https.html [ Pass Failure Timeout ]
 crbug.com/1053861 http/tests/devtools/network/network-initiator-chain.js [ Pass Failure ]
-crbug.com/1047648 external/wpt/html/canvas/offscreen/the-offscreen-canvas/offscreencanvas.resize.html [ Pass Failure ]
 
 crbug.com/1057822 http/tests/misc/synthetic-gesture-initiated-in-cross-origin-frame.html [ Pass Failure Crash ]
 crbug.com/1057807 http/tests/misc/destroy-middle-click-locked-target-crash.html [ Pass Timeout ]
