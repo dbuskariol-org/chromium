@@ -808,6 +808,11 @@ const char kCrossOriginOpenerPolicyReportingName[] =
 const char kCrossOriginOpenerPolicyReportingDescription[] =
     "Enables Cross Origin Opener Policy reporting.";
 
+const char kCrossOriginOpenerPolicyAccessReportingName[] =
+    "Cross Origin Opener Policy access reporting";
+const char kCrossOriginOpenerPolicyAccessReportingDescription[] =
+    "Enables Cross Origin Opener Policy access reporting.";
+
 const char kDisableKeepaliveFetchName[] = "Disable fetch with keepalive set";
 const char kDisableKeepaliveFetchDescription[] =
     "Disable fetch with keepalive set "

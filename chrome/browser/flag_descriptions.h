@@ -457,6 +457,9 @@ extern const char kCrossOriginOpenerPolicyDescription[];
 extern const char kCrossOriginOpenerPolicyReportingName[];
 extern const char kCrossOriginOpenerPolicyReportingDescription[];
 
+extern const char kCrossOriginOpenerPolicyAccessReportingName[];
+extern const char kCrossOriginOpenerPolicyAccessReportingDescription[];
+
 extern const char kDisableKeepaliveFetchName[];
 extern const char kDisableKeepaliveFetchDescription[];
 

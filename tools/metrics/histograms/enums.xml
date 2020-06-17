@@ -39713,6 +39713,8 @@ from previous Chrome versions.
   <int value="-1183321008" label="ImeDecoderWithSandbox:disabled"/>
   <int value="-1183009666" label="OfflinePagesLimitlessPrefetching:disabled"/>
   <int value="-1182777927" label="ShareButtonInTopToolbar:enabled"/>
+  <int value="-1182087678"
+      label="CrossOriginOpenerPolicyAccessReporting:disabled"/>
   <int value="-1178350793" label="RemoteCopyReceiver:disabled"/>
   <int value="-1177802205" label="enable-hosted-app-quit-notification"/>
   <int value="-1176748003"
@@ -41319,6 +41321,8 @@ from previous Chrome versions.
   <int value="638865852" label="UsePreferredIntervalForVideo:disabled"/>
   <int value="640174751" label="AndroidMultipleDisplay:enabled"/>
   <int value="642037198" label="SoleIntegration:disabled"/>
+  <int value="643068614"
+      label="CrossOriginOpenerPolicyAccessReporting:enabled"/>
   <int value="643725031" label="disable-touch-feedback"/>
   <int value="644084236" label="CloseButtonsInactiveTabs:enabled"/>
   <int value="644189071" label="PermissionsBlacklist:enabled"/>
