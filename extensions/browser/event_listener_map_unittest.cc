@@ -499,8 +499,8 @@ TEST_F(EventListenerMapTest, HasListenerForExtension) {
   }
 }
 
-TEST_F(EventListenerMapTest, AddLazyListenersFromPreferences) {
-  const bool is_for_service_worker = false;
+TEST_P(EventListenerMapWithContextTest, AddLazyListenersFromPreferences) {
+  const bool is_for_service_worker = GetParam();
   struct TestCase {
     const std::string filter_host_suffix;
     const std::string url_of_event;
