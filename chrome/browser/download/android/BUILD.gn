@@ -64,6 +64,8 @@ android_library("java") {
     "//components/feature_engagement:feature_engagement_java",
     "//components/feed/core/shared_prefs:feed_shared_prefs",
     "//components/offline_items_collection/core:core_java",
+    "//components/prefs/android:java",
+    "//components/user_prefs/android:java",
     "//content/public/android:content_java",
     "//third_party/android_deps:androidx_core_core_java",
     "//third_party/android_deps:androidx_fragment_fragment_java",
