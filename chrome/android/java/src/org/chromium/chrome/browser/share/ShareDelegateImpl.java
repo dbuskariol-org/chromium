@@ -22,7 +22,6 @@ import org.chromium.chrome.browser.preferences.PrefServiceBridge;
 import org.chromium.chrome.browser.printing.PrintShareActivity;
 import org.chromium.chrome.browser.printing.TabPrinter;
 import org.chromium.chrome.browser.send_tab_to_self.SendTabToSelfShareActivity;
-import org.chromium.chrome.browser.share.qrcode.QrCodeShareActivity;
 import org.chromium.chrome.browser.share.share_sheet.ShareSheetCoordinator;
 import org.chromium.chrome.browser.share.share_sheet.ShareSheetPropertyModelBuilder;
 import org.chromium.chrome.browser.tab.SadTab;
@@ -101,7 +100,7 @@ public class ShareDelegateImpl implements ShareDelegate {
             Activity activity, Tab currentTab, boolean shareDirectly, boolean isIncognito) {
         if (currentTab == null) return;
 
-        List<Class<? extends ShareActivity>> classesToEnable = new ArrayList<>(2);
+        List<Class<? extends Activity>> classesToEnable = new ArrayList<>(2);
 
         if (PrintShareActivity.featureIsAvailable(currentTab)) {
             classesToEnable.add(PrintShareActivity.class);
@@ -109,10 +108,6 @@ public class ShareDelegateImpl implements ShareDelegate {
 
         if (SendTabToSelfShareActivity.featureIsAvailable(currentTab)) {
             classesToEnable.add(SendTabToSelfShareActivity.class);
-        }
-
-        if (QrCodeShareActivity.featureIsAvailable()) {
-            classesToEnable.add(QrCodeShareActivity.class);
         }
 
         if (!classesToEnable.isEmpty()) {

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.share;
+package org.chromium.chrome.browser;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -12,14 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import org.chromium.base.ApplicationStatus;
 import org.chromium.base.IntentUtils;
-import org.chromium.chrome.browser.ChromeActivity;
+import org.chromium.chrome.browser.share.ShareHelper;
 
 /**
- * {@code ShareActivity} is the base class for share options, which
+ * {@code ChromeActivityAccessor} is the base class for share options, which
  * are activities that are shown in the share chooser. Activities subclassing
- * ShareActivity override featureIsEnabled, and handleShareAction.
+ * ChromeAccessorActivity override handleAction.
  */
-public abstract class ShareActivity extends AppCompatActivity {
+public abstract class ChromeAccessorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +33,7 @@ public abstract class ShareActivity extends AppCompatActivity {
             ChromeActivity triggeringActivity = getTriggeringActivity();
             if (triggeringActivity == null) return;
 
-            handleShareAction(triggeringActivity);
+            handleAction(triggeringActivity);
         } finally {
             finish();
         }
@@ -58,5 +58,5 @@ public abstract class ShareActivity extends AppCompatActivity {
      * Override this activity to implement desired share functionality.  The activity
      * will be destroyed immediately after this method is called.
      */
-    protected abstract void handleShareAction(ChromeActivity triggeringActivity);
+    protected abstract void handleAction(ChromeActivity triggeringActivity);
 }
