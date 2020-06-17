@@ -25,8 +25,15 @@ static bool NoImageSourceSpecified(const Element& element) {
   return element.FastGetAttribute(html_names::kSrcAttr).IsEmpty();
 }
 
+static bool ImageHasNoAltAttribute(const Element& element) {
+  return element.FastGetAttribute(html_names::kAltAttr).IsNull();
+}
+
 static bool ElementRepresentsNothing(const Element& element) {
   const auto& html_element = To<HTMLElement>(element);
+  // We source fallback content/alternative text from more than just the 'alt'
+  // attribute, so consider the element to represent text in those cases as
+  // well.
   bool alt_is_set = !html_element.AltText().IsNull();
   bool alt_is_empty = alt_is_set && html_element.AltText().IsEmpty();
   bool src_is_set = !NoImageSourceSpecified(element);
@@ -170,7 +177,7 @@ void HTMLImageFallbackHelper::CustomStyleForAltText(Element& element,
   bool image_has_intrinsic_dimensions =
       new_style.Width().IsSpecifiedOrIntrinsic() &&
       new_style.Height().IsSpecifiedOrIntrinsic();
-  bool image_has_no_alt_attribute = To<HTMLElement>(element).AltText().IsNull();
+  bool image_has_no_alt_attribute = ImageHasNoAltAttribute(element);
   bool treat_as_replaced =
       image_has_intrinsic_dimensions &&
       (element.GetDocument().InQuirksMode() || image_has_no_alt_attribute);
