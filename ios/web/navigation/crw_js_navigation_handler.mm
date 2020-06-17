@@ -182,7 +182,7 @@ GURL URLEscapedForHistory(const GURL& url) {
   if (currentIndex > 0) {
     web::NavigationItem* previousItem =
         self.navigationManagerImpl->GetItemAtIndex(currentIndex - 1);
-    web::UserAgentType userAgent = previousItem->GetUserAgentForInheritance();
+    web::UserAgentType userAgent = previousItem->GetUserAgentType();
     if (userAgent != web::UserAgentType::NONE) {
       navItem->SetUserAgentType(userAgent);
     }
