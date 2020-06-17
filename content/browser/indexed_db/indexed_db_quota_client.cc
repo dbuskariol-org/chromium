@@ -15,9 +15,9 @@
 #include "base/task_runner_util.h"
 #include "base/threading/sequenced_task_runner_handle.h"
 #include "content/browser/indexed_db/indexed_db_context_impl.h"
-#include "net/base/url_util.h"
 #include "storage/browser/database/database_util.h"
 #include "third_party/blink/public/mojom/quota/quota_types.mojom.h"
+#include "url/origin.h"
 
 using blink::mojom::StorageType;
 using storage::DatabaseUtil;
@@ -60,8 +60,7 @@ void GetOriginsForHostOnIndexedDBThread(
     std::set<url::Origin>* origins_to_return) {
   DCHECK(context->IDBTaskRunner()->RunsTasksInCurrentSequence());
   for (const auto& origin : context->GetAllOrigins()) {
-    GURL origin_url(origin.Serialize());
-    if (host == net::GetHostOrSpecFromURL(origin_url))
+    if (host == origin.host())
       origins_to_return->insert(origin);
   }
 }
