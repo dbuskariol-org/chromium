@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.bottomsheet;
+package org.chromium.components.browser_ui.bottomsheet;
 
 import org.chromium.ui.util.AccessibilityUtil;
 
@@ -10,7 +10,7 @@ import org.chromium.ui.util.AccessibilityUtil;
  * An interface for the owning object to manage interaction between the bottom sheet and the rest
  * of the system.
  */
-public interface BottomSheetControllerInternal extends BottomSheetController {
+public interface ManagedBottomSheetController extends BottomSheetController {
     /**
      * Temporarily suppress the bottom sheet while other UI is showing. This will not itself change
      * the content displayed by the sheet.

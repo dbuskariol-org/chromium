@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.bottomsheet;
+package org.chromium.components.browser_ui.bottomsheet;
 
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +24,7 @@ public class BottomSheetControllerFactory {
      * @param inflater A mechanism for building views from XML.
      * @return A new instance of the {@link BottomSheetController}.
      */
-    public static BottomSheetControllerInternal createBottomSheetController(
+    public static ManagedBottomSheetController createBottomSheetController(
             final Supplier<ScrimCoordinator> scrim, Callback<View> initializedCallback,
             Window window, KeyboardVisibilityDelegate keyboardDelegate, Supplier<ViewGroup> root) {
         return new BottomSheetControllerImpl(

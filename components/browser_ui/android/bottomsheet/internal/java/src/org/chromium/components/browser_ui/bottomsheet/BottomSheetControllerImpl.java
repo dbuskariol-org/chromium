@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.bottomsheet;
+package org.chromium.components.browser_ui.bottomsheet;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +13,6 @@ import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.Callback;
 import org.chromium.base.supplier.Supplier;
-import org.chromium.components.browser_ui.bottomsheet.BottomSheetContent;
 import org.chromium.components.browser_ui.widget.scrim.ScrimCoordinator;
 import org.chromium.components.browser_ui.widget.scrim.ScrimProperties;
 import org.chromium.ui.KeyboardVisibilityDelegate;
@@ -32,7 +31,7 @@ import java.util.PriorityQueue;
  * and call {@link #requestShowContent(BottomSheetContent, boolean)} which will return true if the
  * content was actually shown (see full doc on method).
  */
-class BottomSheetControllerImpl implements BottomSheetControllerInternal {
+class BottomSheetControllerImpl implements ManagedBottomSheetController {
     /** The initial capacity for the priority queue handling pending content show requests. */
     private static final int INITIAL_QUEUE_CAPACITY = 1;
 
@@ -109,9 +108,8 @@ class BottomSheetControllerImpl implements BottomSheetControllerInternal {
      */
     private void initializeSheet(Callback<View> initializedCallback, Window window,
             KeyboardVisibilityDelegate keyboardDelegate, Supplier<ViewGroup> root) {
-        LayoutInflater.from(root.get().getContext()).inflate(
-                org.chromium.chrome.R.layout.bottom_sheet, root.get());
-        mBottomSheet = (BottomSheet) root.get().findViewById(org.chromium.chrome.R.id.bottom_sheet);
+        LayoutInflater.from(root.get().getContext()).inflate(R.layout.bottom_sheet, root.get());
+        mBottomSheet = (BottomSheet) root.get().findViewById(R.id.bottom_sheet);
         initializedCallback.onResult(mBottomSheet);
 
         mBottomSheet.init(window, keyboardDelegate);
@@ -372,18 +370,6 @@ class BottomSheetControllerImpl implements BottomSheetControllerInternal {
     @VisibleForTesting
     View getBottomSheetViewForTesting() {
         return mBottomSheet;
-    }
-
-    /**
-     * WARNING: This destroys the internal sheet state. Only use in tests and only use once!
-     *
-     * To simulate scrolling, this method puts the sheet in a permanent scrolling state.
-     * @return The target state of the bottom sheet (to check thresholds).
-     */
-    @VisibleForTesting
-    @SheetState
-    int forceScrollingForTesting(float sheetHeight, float yVelocity) {
-        return mBottomSheet.forceScrollingStateForTesting(sheetHeight, yVelocity);
     }
 
     @VisibleForTesting

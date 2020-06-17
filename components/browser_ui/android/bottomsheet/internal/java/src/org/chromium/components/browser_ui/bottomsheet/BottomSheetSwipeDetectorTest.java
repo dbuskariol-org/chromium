@@ -2,25 +2,23 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.bottomsheet;
+package org.chromium.components.browser_ui.bottomsheet;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import android.content.Context;
 import android.view.MotionEvent;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 import org.chromium.base.MathUtils;
 import org.chromium.base.test.BaseRobolectricTestRunner;
-import org.chromium.chrome.browser.widget.bottomsheet.BottomSheetSwipeDetector.SwipeableBottomSheet;
+import org.chromium.components.browser_ui.bottomsheet.BottomSheetSwipeDetector.SwipeableBottomSheet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,14 +32,14 @@ public final class BottomSheetSwipeDetectorTest {
     /** The minimum height of the bottom sheet. */
     private static final float MIN_SHEET_OFFSET = 100;
 
+    /** An arbitrary screen height. */
+    private static final float SCREEN_HEIGHT = 1000;
+
     /** An instance of the mock swipable sheet. */
     private MockSwipeableBottomSheet mSwipeableBottomSheet;
 
     /** The swipe detector to process motion events. */
     private BottomSheetSwipeDetector mSwipeDetector;
-
-    /** The height of the screen in px. */
-    private float mScreenHeightPx;
 
     /** A mock implementation of a swipeable bottom sheet. */
     private static class MockSwipeableBottomSheet implements SwipeableBottomSheet {
@@ -114,11 +112,8 @@ public final class BottomSheetSwipeDetectorTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
 
-        Context context = RuntimeEnvironment.application;
-        mScreenHeightPx = context.getResources().getDisplayMetrics().heightPixels;
-
-        mSwipeableBottomSheet = new MockSwipeableBottomSheet(MIN_SHEET_OFFSET, mScreenHeightPx);
-        mSwipeDetector = new BottomSheetSwipeDetector(context, mSwipeableBottomSheet);
+        mSwipeableBottomSheet = new MockSwipeableBottomSheet(MIN_SHEET_OFFSET, SCREEN_HEIGHT);
+        mSwipeDetector = new BottomSheetSwipeDetector(null, mSwipeableBottomSheet);
     }
 
     /**
@@ -170,10 +165,10 @@ public final class BottomSheetSwipeDetectorTest {
     public void testScrollToolbarUp_minHeight() {
         assertEquals("The sheet should be at the minimum state.", MIN_SHEET_OFFSET,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
-        final float halfScreenHeight = mScreenHeightPx / 2f;
+        final float halfScreenHeight = SCREEN_HEIGHT / 2f;
 
         // Scrolling up half the screen should put the sheet at half + the min offset.
-        performScroll(0, mScreenHeightPx, 0, halfScreenHeight, mSwipeDetector, true);
+        performScroll(0, SCREEN_HEIGHT, 0, halfScreenHeight, mSwipeDetector, true);
 
         assertEquals("The sheet is not at the correct height.", halfScreenHeight + MIN_SHEET_OFFSET,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
@@ -183,9 +178,9 @@ public final class BottomSheetSwipeDetectorTest {
     /** Test that the sheet is not told to animate mid-stream. */
     @Test
     public void testScrollToolbarUp_minHeight_noUpEvent() {
-        final float halfScreenHeight = mScreenHeightPx / 2f;
+        final float halfScreenHeight = SCREEN_HEIGHT / 2f;
 
-        performScroll(0, mScreenHeightPx, 0, halfScreenHeight, mSwipeDetector, false);
+        performScroll(0, SCREEN_HEIGHT, 0, halfScreenHeight, mSwipeDetector, false);
 
         assertEquals("The sheet is not at the correct height.", halfScreenHeight + MIN_SHEET_OFFSET,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
@@ -197,14 +192,14 @@ public final class BottomSheetSwipeDetectorTest {
     @Test
     public void testScrollToolbarUp_maxHeight() {
         // Init the sheet to be full height.
-        mSwipeableBottomSheet.setSheetOffset(mScreenHeightPx, false);
+        mSwipeableBottomSheet.setSheetOffset(SCREEN_HEIGHT, false);
 
-        assertEquals("The sheet should be at the maximum state.", mScreenHeightPx,
+        assertEquals("The sheet should be at the maximum state.", SCREEN_HEIGHT,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
 
         performScroll(0, 0, 0, -500, mSwipeDetector, true);
 
-        assertEquals("The sheet should still be at the maximum state.", mScreenHeightPx,
+        assertEquals("The sheet should still be at the maximum state.", SCREEN_HEIGHT,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
         assertFalse(
                 "The sheet should not be set to animate.", mSwipeableBottomSheet.shouldBeAnimating);
@@ -216,7 +211,7 @@ public final class BottomSheetSwipeDetectorTest {
         assertEquals("The sheet should be at the minimum state.", MIN_SHEET_OFFSET,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
 
-        performScroll(0, mScreenHeightPx, 0, mScreenHeightPx + 500, mSwipeDetector, true);
+        performScroll(0, SCREEN_HEIGHT, 0, SCREEN_HEIGHT + 500, mSwipeDetector, true);
 
         assertEquals("The sheet should still be at the minimum state.", MIN_SHEET_OFFSET,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
@@ -228,11 +223,11 @@ public final class BottomSheetSwipeDetectorTest {
     @Test
     public void testScrollToolbarDown_maxHeight() {
         // Init the sheet to be full height.
-        mSwipeableBottomSheet.setSheetOffset(mScreenHeightPx, false);
+        mSwipeableBottomSheet.setSheetOffset(SCREEN_HEIGHT, false);
 
-        assertEquals("The sheet should be at the maximum state.", mScreenHeightPx,
+        assertEquals("The sheet should be at the maximum state.", SCREEN_HEIGHT,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
-        final float halfScreenHeight = mScreenHeightPx / 2f;
+        final float halfScreenHeight = SCREEN_HEIGHT / 2f;
 
         // Scrolling down half the screen should put the sheet at half height.
         performScroll(0, 0, 0, halfScreenHeight, mSwipeDetector, true);
@@ -249,11 +244,11 @@ public final class BottomSheetSwipeDetectorTest {
     @Test
     public void testScrollToolbarDown_maxHeight_contentScrolled() {
         // Init the sheet to be full height.
-        mSwipeableBottomSheet.setSheetOffset(mScreenHeightPx, false);
+        mSwipeableBottomSheet.setSheetOffset(SCREEN_HEIGHT, false);
 
-        assertEquals("The sheet should be at the maximum state.", mScreenHeightPx,
+        assertEquals("The sheet should be at the maximum state.", SCREEN_HEIGHT,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
-        final float halfScreenHeight = mScreenHeightPx / 2f;
+        final float halfScreenHeight = SCREEN_HEIGHT / 2f;
 
         // Scrolling down half the screen should put the sheet at half height, regardless of the
         // state of the content.
@@ -269,7 +264,7 @@ public final class BottomSheetSwipeDetectorTest {
     public void testScrollToolbarDiagonal_minHeight() {
         assertEquals("The sheet should be at the minimum state.", MIN_SHEET_OFFSET,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
-        final float halfScreenHeight = mScreenHeightPx / 2f;
+        final float halfScreenHeight = SCREEN_HEIGHT / 2f;
 
         performScroll(
                 0, halfScreenHeight, halfScreenHeight, halfScreenHeight, mSwipeDetector, true);
@@ -287,17 +282,17 @@ public final class BottomSheetSwipeDetectorTest {
     @Test
     public void testScrollContent_maxHeight() {
         // Init the sheet to be full height.
-        mSwipeableBottomSheet.setSheetOffset(mScreenHeightPx, false);
+        mSwipeableBottomSheet.setSheetOffset(SCREEN_HEIGHT, false);
 
         // Content is scrolled some amount.
         mSwipeableBottomSheet.isContentScrolledToTop = false;
 
-        final float halfScreenHeight = mScreenHeightPx / 2f;
+        final float halfScreenHeight = SCREEN_HEIGHT / 2f;
 
         // Scroll down half the screen. The sheet should not move since the content is scrolled.
-        performScroll(0, halfScreenHeight, 0, mScreenHeightPx, mSwipeDetector, true);
+        performScroll(0, halfScreenHeight, 0, SCREEN_HEIGHT, mSwipeDetector, true);
 
-        assertEquals("The sheet should still be at the maximum state.", mScreenHeightPx,
+        assertEquals("The sheet should still be at the maximum state.", SCREEN_HEIGHT,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);
     }
 
@@ -307,7 +302,7 @@ public final class BottomSheetSwipeDetectorTest {
      */
     @Test
     public void testScrollContent_halfHeight() {
-        final float halfScreenHeight = mScreenHeightPx / 2f;
+        final float halfScreenHeight = SCREEN_HEIGHT / 2f;
 
         // Init the sheet to be half height.
         mSwipeableBottomSheet.setSheetOffset(halfScreenHeight, false);
@@ -316,7 +311,7 @@ public final class BottomSheetSwipeDetectorTest {
         mSwipeableBottomSheet.isContentScrolledToTop = false;
 
         // Scroll down on the content, the sheet should move.
-        performScroll(0, halfScreenHeight / 2f, 0, mScreenHeightPx, mSwipeDetector, true);
+        performScroll(0, halfScreenHeight / 2f, 0, SCREEN_HEIGHT, mSwipeDetector, true);
 
         assertEquals("The sheet should be at the minimum state.", MIN_SHEET_OFFSET,
                 mSwipeableBottomSheet.getCurrentOffsetPx(), MathUtils.EPSILON);

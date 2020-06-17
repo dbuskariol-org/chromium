@@ -192,6 +192,7 @@ android_resources("chrome_app_java_resources") {
     "//chrome/browser/ui/messages/android:java_resources",
     "//components/autofill/android:autofill_java_resources",
     "//components/blocked_content/android:java_resources",
+    "//components/browser_ui/android/bottomsheet:java_resources",
     "//components/browser_ui/http_auth/android:java_resources",
     "//components/browser_ui/modaldialog/android:java_resources",
     "//components/browser_ui/settings/android:java_resources",
@@ -334,7 +335,9 @@ android_library("chrome_java") {
     "//components/background_task_scheduler:background_task_scheduler_java",
     "//components/background_task_scheduler:background_task_scheduler_task_ids_java",
     "//components/bookmarks/common/android:bookmarks_java",
+    "//components/browser_ui/android/bottomsheet:factory_java",
     "//components/browser_ui/android/bottomsheet:java",
+    "//components/browser_ui/android/bottomsheet:manager_java",
     "//components/browser_ui/http_auth/android:java",
     "//components/browser_ui/modaldialog/android:java",
     "//components/browser_ui/notifications/android:java",
@@ -578,6 +581,7 @@ java_group("chrome_all_java") {
     "//chrome/browser/test_dummy/internal:base_module_java",
     "//chrome/browser/touch_to_fill/android/internal:java",
     "//chrome/browser/ui/android/appmenu/internal:java",
+    "//components/browser_ui/android/bottomsheet/internal:java",
   ]
 
   if (disable_autofill_assistant_dfm) {
@@ -947,6 +951,7 @@ android_library("chrome_test_java") {
     "//components/background_task_scheduler/internal:background_task_scheduler_javatests",
     "//components/bookmarks/common/android:bookmarks_java",
     "//components/browser_ui/android/bottomsheet:java",
+    "//components/browser_ui/android/bottomsheet/test:java",
     "//components/browser_ui/modaldialog/android:java",
     "//components/browser_ui/modaldialog/android:javatests",
     "//components/browser_ui/notifications/android:java",

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.widget.bottomsheet;
+package org.chromium.components.browser_ui.bottomsheet;
 
 import android.content.Context;
 import android.view.GestureDetector;
@@ -220,7 +220,7 @@ class BottomSheetSwipeDetector extends GestureDetector.SimpleOnGestureListener {
         // non-fling release.
         if (mIsScrolling
                 && (e.getActionMasked() == MotionEvent.ACTION_UP
-                           || e.getActionMasked() == MotionEvent.ACTION_CANCEL)) {
+                        || e.getActionMasked() == MotionEvent.ACTION_CANCEL)) {
             mIsScrolling = false;
 
             mVelocityTracker.computeCurrentVelocity(1000);
