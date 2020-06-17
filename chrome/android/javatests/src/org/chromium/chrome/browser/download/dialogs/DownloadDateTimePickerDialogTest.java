@@ -22,7 +22,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import org.chromium.base.test.util.CommandLineFlags;
-import org.chromium.base.test.util.DisableIf;
 import org.chromium.chrome.browser.download.R;
 import org.chromium.chrome.browser.download.dialogs.DownloadDateTimePickerDialogProperties.State;
 import org.chromium.chrome.browser.flags.ChromeSwitches;
@@ -39,7 +38,6 @@ import org.chromium.ui.modelutil.PropertyModel;
  */
 @RunWith(ChromeJUnit4ClassRunner.class)
 @CommandLineFlags.Add({ChromeSwitches.DISABLE_FIRST_RUN_EXPERIENCE})
-@DisableIf.Build(sdk_is_less_than = 23, message = "crbug.com/1094925")
 public class DownloadDateTimePickerDialogTest {
     @Rule
     public ChromeTabbedActivityTestRule mActivityTestRule = new ChromeTabbedActivityTestRule();
