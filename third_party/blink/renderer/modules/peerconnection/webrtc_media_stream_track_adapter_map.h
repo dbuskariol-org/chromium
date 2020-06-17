@@ -38,9 +38,7 @@ class MODULES_EXPORT WebRtcMediaStreamTrackAdapterMap
     std::unique_ptr<AdapterRef> Copy() const;
     bool is_initialized() const { return adapter_->is_initialized(); }
     void InitializeOnMainThread();
-    const blink::WebMediaStreamTrack& web_track() const {
-      return adapter_->web_track();
-    }
+    MediaStreamComponent* web_track() const { return adapter_->track(); }
     webrtc::MediaStreamTrackInterface* webrtc_track() const {
       return adapter_->webrtc_track();
     }

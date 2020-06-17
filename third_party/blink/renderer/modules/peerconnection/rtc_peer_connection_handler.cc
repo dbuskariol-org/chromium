@@ -2314,7 +2314,7 @@ void RTCPeerConnectionHandler::OnAddReceiverPlanB(
   DCHECK(task_runner_->RunsTasksInCurrentSequence());
   DCHECK(receiver_state.is_initialized());
   TRACE_EVENT0("webrtc", "RTCPeerConnectionHandler::OnAddReceiverPlanB");
-  auto web_track = receiver_state.track_ref()->web_track();
+  WebMediaStreamTrack web_track = receiver_state.track_ref()->web_track();
   // Update metrics.
   track_metrics_.AddTrack(MediaStreamTrackMetrics::Direction::kReceive,
                           MediaStreamTrackMetricsKind(web_track),

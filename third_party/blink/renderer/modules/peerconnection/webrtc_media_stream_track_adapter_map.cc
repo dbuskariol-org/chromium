@@ -42,7 +42,7 @@ WebRtcMediaStreamTrackAdapterMap::AdapterRef::~AdapterRef() {
       DCHECK(adapter->is_initialized());
       if (type_ == Type::kLocal) {
         map_->local_track_adapters_.EraseByPrimary(
-            adapter->web_track().UniqueId());
+            adapter->track()->UniqueId());
       } else {
         map_->remote_track_adapters_.EraseByPrimary(adapter->webrtc_track());
       }
@@ -66,9 +66,10 @@ void WebRtcMediaStreamTrackAdapterMap::AdapterRef::InitializeOnMainThread() {
   adapter_->InitializeOnMainThread();
   if (type_ == WebRtcMediaStreamTrackAdapterMap::AdapterRef::Type::kRemote) {
     base::AutoLock scoped_lock(map_->lock_);
-    if (!map_->remote_track_adapters_.FindBySecondary(web_track().UniqueId())) {
+    if (!map_->remote_track_adapters_.FindBySecondary(
+            web_track()->UniqueId())) {
       map_->remote_track_adapters_.SetSecondaryKey(webrtc_track(),
-                                                   web_track().UniqueId());
+                                                   web_track()->UniqueId());
     }
   }
 }
