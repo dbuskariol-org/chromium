@@ -1957,9 +1957,6 @@ extern const char kCrostiniDiskResizingDescription[];
 extern const char kCrostiniShowMicSettingName[];
 extern const char kCrostiniShowMicSettingDescription[];
 
-extern const char kCrostiniUsernameName[];
-extern const char kCrostiniUsernameDescription[];
-
 extern const char kCrostiniUseBusterImageName[];
 extern const char kCrostiniUseBusterImageDescription[];
 
