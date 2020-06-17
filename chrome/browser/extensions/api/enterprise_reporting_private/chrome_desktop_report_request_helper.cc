@@ -493,17 +493,19 @@ void StoreDeviceData(const std::string& id,
 
 void RetrieveDeviceData(
     const std::string& id,
-    base::OnceCallback<void(const std::string&, bool)> callback) {
+    base::OnceCallback<void(const std::string&, RetrieveDeviceDataStatus)>
+        callback) {
   base::FilePath data_file = GetEndpointVerificationDir();
   if (data_file.empty()) {
-    std::move(callback).Run("", false);
+    std::move(callback).Run("",
+                            RetrieveDeviceDataStatus::kDataDirectoryUnknown);
     return;
   }
   data_file = data_file.AppendASCII(id);
   // If the file does not exist don't treat this as an error rather return an
   // empty string.
   if (!base::PathExists(data_file)) {
-    std::move(callback).Run("", true);
+    std::move(callback).Run("", RetrieveDeviceDataStatus::kDataRecordNotFound);
     return;
   }
   std::string data;
@@ -512,7 +514,9 @@ void RetrieveDeviceData(
   // Chrome.
   bool result = base::ReadFileToString(data_file, &data);
 
-  std::move(callback).Run(data, result);
+  std::move(callback).Run(
+      data, result ? RetrieveDeviceDataStatus::kSuccess
+                   : RetrieveDeviceDataStatus::kDataRecordRetrievalError);
 }
 
 void RetrieveDeviceSecret(

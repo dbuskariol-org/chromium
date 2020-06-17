@@ -16,7 +16,6 @@
 #include "base/values.h"
 #include "build/build_config.h"
 #include "chrome/browser/browser_process.h"
-#include "chrome/browser/extensions/api/enterprise_reporting_private/chrome_desktop_report_request_helper.h"
 #include "chrome/browser/extensions/api/enterprise_reporting_private/device_info_fetcher.h"
 #include "chrome/browser/net/system_network_context_manager.h"
 #include "chrome/browser/policy/browser_dm_token_storage.h"
@@ -231,15 +230,23 @@ EnterpriseReportingPrivateGetDeviceDataFunction::Run() {
 
 void EnterpriseReportingPrivateGetDeviceDataFunction::OnDataRetrieved(
     const std::string& data,
-    bool status) {
-  if (status) {
-    VLOG(1) << "The Endpoint Verification data was retrieved.";
-    Respond(OneArgument(std::make_unique<base::Value>(base::Value::BlobStorage(
-        reinterpret_cast<const uint8_t*>(data.data()),
-        reinterpret_cast<const uint8_t*>(data.data() + data.size())))));
-  } else {
-    LogReportError("Endpoint Verification data retrieval error.");
-    Respond(Error(enterprise_reporting::kEndpointVerificationRetrievalFailed));
+    RetrieveDeviceDataStatus status) {
+  switch (status) {
+    case RetrieveDeviceDataStatus::kSuccess:
+      VLOG(1) << "The Endpoint Verification data was retrieved.";
+      Respond(
+          OneArgument(std::make_unique<base::Value>(base::Value::BlobStorage(
+              reinterpret_cast<const uint8_t*>(data.data()),
+              reinterpret_cast<const uint8_t*>(data.data() + data.size())))));
+      return;
+    case RetrieveDeviceDataStatus::kDataRecordNotFound:
+      VLOG(1) << "The Endpoint Verification data is not present.";
+      Respond(NoArguments());
+      return;
+    default:
+      LogReportError("Endpoint Verification data retrieval error.");
+      Respond(
+          Error(enterprise_reporting::kEndpointVerificationRetrievalFailed));
   }
 }
 
