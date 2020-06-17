@@ -20548,7 +20548,7 @@ Called by update_document_policy_enum.py.-->
   <int value="671" label="ReportDeviceTimezoneInfo"/>
   <int value="672" label="SystemProxySettings"/>
   <int value="673" label="UserDataSnapshotRetentionLimit"/>
-  <int value="674" label="DeviceLoginScreenChromeVariations"/>
+  <int value="674" label="DeviceChromeVariations"/>
   <int value="675" label="NativeWindowOcclusionEnabled"/>
   <int value="676" label="DeviceLoginScreenPrivacyScreenEnabled"/>
   <int value="677" label="PrivacyScreenEnabled"/>
@@ -20558,8 +20558,8 @@ Called by update_document_policy_enum.py.-->
   <int value="681" label="RequiredClientCertificateForDevice"/>
   <int value="682" label="ReportDeviceMemoryInfo"/>
   <int value="683" label="UseLegacyFormControls"/>
-  <int value="684" label="SafeBrowsingEnhancedProtection"/>
-  <int value="685" label="AdvancedProtectionExtraSecurityAllowed"/>
+  <int value="684" label="SafeBrowsingProtectionLevel"/>
+  <int value="685" label="AdvancedProtectionAllowed"/>
   <int value="686" label="ReportDeviceBacklightInfo"/>
   <int value="687" label="ScrollToTextFragmentEnabled"/>
   <int value="688" label="ManagedGuestSessionAutoLaunchNotificationReduced"/>
@@ -20593,6 +20593,7 @@ Called by update_document_policy_enum.py.-->
   <int value="716" label="CrostiniPortForwardingAllowed"/>
   <int value="717" label="VirtualKeyboardFeatures"/>
   <int value="718" label="PinUnlockAutosubmitEnabled"/>
+  <int value="719" label="SamlLockScreenReauthenticationEnabled"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
@@ -54555,7 +54556,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="24" label="SafeBrowsing"/>
   <int value="25" label="PasswordProtection"/>
   <int value="26" label="NetworkFileShares"/>
-  <int value="27" label="ChromeReportingExtension"/>
+  <int value="27" label="CloudReporting"/>
   <int value="28" label="BrowserSwitcher"/>
   <int value="29" label="PluginVm"/>
   <int value="30" label="SAML"/>
