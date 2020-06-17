@@ -6,6 +6,7 @@
 
 #include <limits>
 
+#include "base/logging.h"
 #include "base/memory/ptr_util.h"
 #include "base/stl_util.h"
 #include "base/sys_byteorder.h"
