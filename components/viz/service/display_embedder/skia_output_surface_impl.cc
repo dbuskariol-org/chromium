@@ -702,6 +702,7 @@ bool SkiaOutputSurfaceImpl::Initialize() {
   if (capabilities_.preserve_buffer_content &&
       capabilities_.supports_post_sub_buffer) {
     capabilities_.only_invalidates_damage_rect = false;
+    capabilities_.supports_target_damage = true;
     damage_of_buffers_.resize(capabilities_.max_frames_pending + 1);
   }
 
