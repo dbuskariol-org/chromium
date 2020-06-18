@@ -788,10 +788,10 @@ TEST_P(OmniboxViewViewsClipboardTest, ClipboardCopyOrCutURL) {
     expected_text = base::ASCIIToUTF16("https://test.com/");
   EXPECT_EQ(expected_text, omnibox_view()->GetText());
 
-  // Make sure both HTML and Plain Text formats are available.
+  // Make sure the plain text format is available, but the HTML one isn't.
   EXPECT_TRUE(clipboard->IsFormatAvailable(
       ui::ClipboardFormatType::GetPlainTextType(), clipboard_buffer));
-  EXPECT_TRUE(clipboard->IsFormatAvailable(
+  EXPECT_FALSE(clipboard->IsFormatAvailable(
       ui::ClipboardFormatType::GetHtmlType(), clipboard_buffer));
 
   // Windows clipboard only supports text URLs.
