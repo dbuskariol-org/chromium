@@ -124,6 +124,14 @@ RebootShlib::RebootSource RebootUtil::GetLastRebootSource() {
       return RebootShlib::RebootSource::HW_WATCHDOG;
     case RebootReason::SOFTWARE_WATCHDOG_TIMEOUT:
       return RebootShlib::RebootSource::WATCHDOG;
+    case RebootReason::USER_REQUEST:
+      return RebootShlib::RebootSource::API;
+    case RebootReason::SYSTEM_UPDATE:
+      return RebootShlib::RebootSource::OTA;
+    case RebootReason::HIGH_TEMPERATURE:
+      return RebootShlib::RebootSource::OVERHEAT;
+    case RebootReason::SESSION_FAILURE:
+      return RebootShlib::RebootSource::SW_OTHER;
     default:
       return last_reboot.graceful() ? RebootShlib::RebootSource::SW_OTHER
                                     : RebootShlib::RebootSource::FORCED;

@@ -50,6 +50,12 @@ const RebootReasonParam kRebootReasonParams[] = {
      RebootShlib::RebootSource::HW_WATCHDOG, false},
     {RebootReason::SOFTWARE_WATCHDOG_TIMEOUT,
      RebootShlib::RebootSource::WATCHDOG, false},
+
+    // Graceful reboot reasons.
+    {RebootReason::USER_REQUEST, RebootShlib::RebootSource::API, true},
+    {RebootReason::SYSTEM_UPDATE, RebootShlib::RebootSource::OTA, true},
+    {RebootReason::HIGH_TEMPERATURE, RebootShlib::RebootSource::OVERHEAT, true},
+    {RebootReason::SESSION_FAILURE, RebootShlib::RebootSource::SW_OTHER, true},
 };
 
 class FakeLastRebootInfoProvider
