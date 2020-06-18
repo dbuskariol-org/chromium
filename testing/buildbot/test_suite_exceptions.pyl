@@ -2168,6 +2168,11 @@
       'android-asan',  # https://crbug.com/962650
     ],
   },
+  'screenshot_sync_tests': {
+    'remove_from': [
+      'Fuchsia x64' # https://crbug.com/1058255
+    ],
+  },
   'services_unittests': {
     'remove_from': [
       'ToTLinuxMSan',  # https://crbug.com/831676
@@ -2371,6 +2376,11 @@
     'remove_from': [
       # crbug.com/1080749
       'Optional Linux Release (NVIDIA)',
+    ],
+  },
+  'trace_test': {
+    'remove_from': [
+      'Fuchsia x64' # https://crbug.com/1058255
     ],
   },
   'unit_tests': {

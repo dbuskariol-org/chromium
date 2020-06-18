@@ -1274,6 +1274,12 @@
         ],
         'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
       },
+      'screenshot_sync': {
+        'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
+      },
+      'trace_test': {
+        'isolate_name': 'fuchsia_telemetry_gpu_integration_test',
+      },
     },
 
     'fuchsia_gtests': {
