@@ -1671,7 +1671,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_activity_activity',
-              'version': 'version:1.0.0-cr0',
+              'version': 'version:1.1.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -1737,7 +1737,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_arch_core_core_runtime',
-              'version': 'version:2.0.0-cr0',
+              'version': 'version:2.1.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -1858,7 +1858,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_fragment_fragment',
-              'version': 'version:1.1.0-cr0',
+              'version': 'version:1.2.5-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -1968,7 +1968,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_lifecycle_lifecycle_common',
-              'version': 'version:2.1.0-cr0',
+              'version': 'version:2.2.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2001,7 +2001,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_lifecycle_lifecycle_livedata_core',
-              'version': 'version:2.0.0-cr0',
+              'version': 'version:2.2.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2012,7 +2012,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_lifecycle_lifecycle_runtime',
-              'version': 'version:2.1.0-cr0',
+              'version': 'version:2.2.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2023,7 +2023,18 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_lifecycle_lifecycle_viewmodel',
-              'version': 'version:2.1.0-cr0',
+              'version': 'version:2.2.0-cr0',
+          },
+      ],
+      'condition': 'checkout_android',
+      'dep_type': 'cipd',
+  },
+
+  'src/third_party/android_deps/libs/androidx_lifecycle_lifecycle_viewmodel_savedstate': {
+      'packages': [
+          {
+              'package': 'chromium/third_party/android_deps/libs/androidx_lifecycle_lifecycle_viewmodel_savedstate',
+              'version': 'version:2.2.0-cr0',
           },
       ],
       'condition': 'checkout_android',
@@ -2100,7 +2111,7 @@ deps = {
       'packages': [
           {
               'package': 'chromium/third_party/android_deps/libs/androidx_preference_preference',
-              'version': 'version:1.0.0-cr0',
+              'version': 'version:1.1.1-cr0',
           },
       ],
       'condition': 'checkout_android',

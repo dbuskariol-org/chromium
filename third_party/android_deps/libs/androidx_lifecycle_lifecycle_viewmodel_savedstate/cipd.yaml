@@ -4,7 +4,7 @@
 
 # To create CIPD package run the following command.
 # cipd create --pkg-def cipd.yaml -tag version:2.2.0-cr0
-package: chromium/third_party/android_deps/libs/androidx_lifecycle_lifecycle_runtime
-description: "Android Lifecycle Runtime"
+package: chromium/third_party/android_deps/libs/androidx_lifecycle_lifecycle_viewmodel_savedstate
+description: "Android Lifecycle ViewModel with SavedState"
 data:
-- file: lifecycle-runtime-2.2.0.aar
+- file: lifecycle-viewmodel-savedstate-2.2.0.aar
