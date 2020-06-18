@@ -1103,6 +1103,9 @@ const PolicyToPreferenceMapEntry kSimplePolicyMap[] = {
   { key::kLoginDisplayPasswordButtonEnabled,
     chromeos::prefs::kLoginDisplayPasswordButtonEnabled,
     base::Value::Type::BOOLEAN },
+  { key::kDeletePrintJobHistoryAllowed,
+    prefs::kDeletePrintJobHistoryAllowed,
+    base::Value::Type::BOOLEAN },
 
 #else  // defined(OS_CHROMEOS)
   { key::kMetricsReportingEnabled,

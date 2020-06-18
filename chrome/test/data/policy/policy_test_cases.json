@@ -490,6 +490,16 @@
     ]
   },
 
+  "DeletePrintJobHistoryAllowed": {
+    "os": ["chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": {"DeletePrintJobHistoryAllowed": false},
+        "prefs": { "printing.delete_print_job_history_allowed": {} }
+      }
+    ]
+  },
+
   "PrintingAPIExtensionsWhitelist": {
     "os": ["chromeos"],
     "policy_pref_mapping_test": [
