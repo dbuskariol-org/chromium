@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/test/appcache_test_helper.h"
+#include "content/browser/appcache/appcache_test_helper.h"
 
 #include "base/bind.h"
 #include "base/bind_helpers.h"
@@ -29,26 +29,22 @@ void AppCacheTestHelper::OnGroupAndNewestCacheStored(
   base::RunLoop::QuitCurrentWhenIdleDeprecated();
 }
 
-void AppCacheTestHelper::AddGroupAndCache(AppCacheServiceImpl*
-    appcache_service, const GURL& manifest_url) {
+void AppCacheTestHelper::AddGroupAndCache(AppCacheServiceImpl* appcache_service,
+                                          const GURL& manifest_url) {
   AppCacheGroup* appcache_group =
-      new AppCacheGroup(appcache_service->storage(),
-                                  manifest_url,
-                                  ++group_id_);
-  AppCache* appcache = new AppCache(
-      appcache_service->storage(), ++appcache_id_);
+      new AppCacheGroup(appcache_service->storage(), manifest_url, ++group_id_);
+  AppCache* appcache =
+      new AppCache(appcache_service->storage(), ++appcache_id_);
   appcache->set_manifest_parser_version(0);
   appcache->set_manifest_scope("/");
   appcache->set_token_expires(base::Time::Now() +
                               base::TimeDelta::FromDays(10));
-  AppCacheEntry entry(AppCacheEntry::MANIFEST,
-                                ++response_id_);
+  AppCacheEntry entry(AppCacheEntry::MANIFEST, ++response_id_);
   appcache->AddEntry(manifest_url, entry);
   appcache->set_complete(true);
   appcache_group->AddCache(appcache);
   appcache_service->storage()->StoreGroupAndNewestCache(appcache_group,
-                                                        appcache,
-                                                        this);
+                                                        appcache, this);
   // OnGroupAndNewestCacheStored will quit the message loop.
   base::RunLoop().Run();
 }
@@ -68,7 +64,6 @@ void AppCacheTestHelper::GetOriginsWithCaches(
 }
 
 void AppCacheTestHelper::OnGotAppCacheInfo(int rv) {
-
   origins_->clear();
   for (const auto& kvp : appcache_info_->infos_by_origin)
     origins_->insert(kvp.first);

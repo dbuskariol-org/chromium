@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_TEST_APPCACHE_TEST_HELPER_H_
-#define CONTENT_TEST_APPCACHE_TEST_HELPER_H_
+#ifndef CONTENT_BROWSER_APPCACHE_APPCACHE_TEST_HELPER_H_
+#define CONTENT_BROWSER_APPCACHE_APPCACHE_TEST_HELPER_H_
 
 #include <set>
 
@@ -46,4 +46,4 @@ class AppCacheTestHelper : public AppCacheStorage::Delegate {
 
 }  // namespace content
 
-#endif  // CONTENT_TEST_APPCACHE_TEST_HELPER_H_
+#endif  // CONTENT_BROWSER_APPCACHE_APPCACHE_TEST_HELPER_H_
