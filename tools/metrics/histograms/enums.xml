@@ -21095,6 +21095,11 @@ Called by update_document_policy_enum.py.-->
   <int value="1" label="Valid time base"/>
 </enum>
 
+<enum name="EvkkEncryptionType">
+  <int value="0" label="EVKK was wrapped with Scrypt"/>
+  <int value="1" label="EVKK was wrapped with TPM"/>
+</enum>
+
 <enum name="EVWhitelistStatus">
   <obsolete>
     Deprecated 06/2017.
