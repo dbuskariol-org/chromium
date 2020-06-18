@@ -11338,6 +11338,7 @@ interface XRLightEstimate
 interface XRLightProbe : EventTarget
     attribute @@toStringTag
     getter onreflectionchange
+    getter probeSpace
     method constructor
     setter onreflectionchange
 interface XRPlane
