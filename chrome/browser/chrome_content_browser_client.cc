@@ -934,10 +934,9 @@ bool URLHasExtensionBackgroundPermission(
 
 #endif
 
-mojo::PendingRemote<components::prerender::common::mojom::PrerenderCanceler>
-GetPrerenderCanceler(const base::Callback<content::WebContents*()>& wc_getter) {
-  mojo::PendingRemote<components::prerender::common::mojom::PrerenderCanceler>
-      canceler;
+mojo::PendingRemote<prerender::mojom::PrerenderCanceler> GetPrerenderCanceler(
+    const base::Callback<content::WebContents*()>& wc_getter) {
+  mojo::PendingRemote<prerender::mojom::PrerenderCanceler> canceler;
   prerender::PrerenderContents::FromWebContents(wc_getter.Run())
       ->AddPrerenderCancelerReceiver(canceler.InitWithNewPipeAndPassReceiver());
   return canceler;
