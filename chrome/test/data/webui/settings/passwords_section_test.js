@@ -1358,10 +1358,12 @@ suite('PasswordsSection', function() {
       // Uncheck the account checkboxes then confirm. Only the device copy is
       // removed.
       removeDialog.$.removeFromAccountCheckbox.click();
+      flush();
       assertTrue(
           !removeDialog.$.removeFromAccountCheckbox.checked &&
           removeDialog.$.removeFromDeviceCheckbox.checked);
       removeDialog.$.removeButton.click();
+      flush();
       const removedIds =
           await passwordManager.whenCalled('removeSavedPasswords');
       assertTrue(removedIds.includes(deviceCopy.id));
