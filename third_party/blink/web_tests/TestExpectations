@@ -4747,9 +4747,6 @@ crbug.com/995106 external/wpt/css/css-display/display-flow-root-list-item-001.ht
 crbug.com/930297 external/wpt/html/infrastructure/urls/resolving-urls/query-encoding/utf-16be.html?include=workers [ Timeout ]
 crbug.com/930297 external/wpt/html/infrastructure/urls/resolving-urls/query-encoding/utf-16le.html?include=workers [ Timeout ]
 
-# RubyNG TODOs
-crbug.com/1069817 fast/ruby/float-overhang-from-ruby-text.html [ Failure ]
-
 crbug.com/676229 plugins/mouse-click-plugin-clears-selection.html [ Failure Pass ]
 crbug.com/742670 plugins/iframe-plugin-bgcolor.html [ Failure Pass ]
 crbug.com/780398 [ Mac ] plugins/mouse-capture-inside-shadow.html [ Failure Pass ]
