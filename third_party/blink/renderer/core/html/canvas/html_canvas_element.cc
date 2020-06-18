@@ -381,14 +381,6 @@ ScriptPromise HTMLCanvasElement::convertToBlob(
     ScriptState* script_state,
     const ImageEncodeOptions* options,
     ExceptionState& exception_state) {
-  if (IsUserInIdentifiabilityStudy()) {
-    RecordIdentifiabilityMetric(
-        blink::IdentifiableSurface::FromTypeAndInput(
-            blink::IdentifiableSurface::Type::kCanvasReadback,
-            context_ ? context_->GetContextType()
-                     : CanvasRenderingContext::kContextTypeUnknown),
-        0);
-  }
   return CanvasRenderingContextHost::convertToBlob(script_state, options,
                                                    exception_state);
 }
@@ -1047,7 +1039,9 @@ void HTMLCanvasElement::toBlob(V8BlobCallback* callback,
     async_creator = MakeGarbageCollected<CanvasAsyncBlobCreator>(
         image_bitmap, options,
         CanvasAsyncBlobCreator::kHTMLCanvasToBlobCallback, callback, start_time,
-        GetExecutionContext());
+        GetExecutionContext(),
+        base::make_optional<UkmParameters>(
+            {GetDocument().UkmRecorder(), GetDocument().UkmSourceID()}));
   }
 
   if (IsUserInIdentifiabilityStudy()) {
