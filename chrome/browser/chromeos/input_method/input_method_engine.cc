@@ -466,6 +466,17 @@ bool InputMethodEngine::SetCompositionRange(
   return input_context->SetCompositionRange(before, after, text_spans);
 }
 
+bool InputMethodEngine::SetAutocorrectRange(
+    const base::string16& autocorrect_text,
+    uint32_t start,
+    uint32_t end) {
+  ui::IMEInputContextHandlerInterface* input_context =
+      ui::IMEBridge::Get()->GetInputContextHandler();
+  if (!input_context)
+    return false;
+  return input_context->SetAutocorrectRange(autocorrect_text, start, end);
+}
+
 bool InputMethodEngine::SetSelectionRange(uint32_t start, uint32_t end) {
   ui::IMEInputContextHandlerInterface* input_context =
       ui::IMEBridge::Get()->GetInputContextHandler();
