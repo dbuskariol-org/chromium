@@ -206,6 +206,24 @@ uint64_t WebPerformance::LargestTextPaintSize() const {
   return private_->timing()->LargestTextPaintSize();
 }
 
+double WebPerformance::ExperimentalLargestImagePaint() const {
+  return MillisecondsToSeconds(
+      private_->timing()->ExperimentalLargestImagePaint());
+}
+
+uint64_t WebPerformance::ExperimentalLargestImagePaintSize() const {
+  return private_->timing()->ExperimentalLargestImagePaintSize();
+}
+
+double WebPerformance::ExperimentalLargestTextPaint() const {
+  return MillisecondsToSeconds(
+      private_->timing()->ExperimentalLargestTextPaint());
+}
+
+uint64_t WebPerformance::ExperimentalLargestTextPaintSize() const {
+  return private_->timing()->ExperimentalLargestTextPaintSize();
+}
+
 double WebPerformance::FirstInputOrScrollNotifiedTimestamp() const {
   return MillisecondsToSeconds(
       private_->timing()->FirstInputOrScrollNotifiedTimestamp());

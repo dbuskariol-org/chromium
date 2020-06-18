@@ -340,14 +340,10 @@ class PageLoadTimingMerger {
       target_paint_timing->first_meaningful_paint =
           new_paint_timing.first_meaningful_paint;
 
-      target_paint_timing->largest_image_paint =
-          new_paint_timing.largest_image_paint;
-      target_paint_timing->largest_image_paint_size =
-          new_paint_timing.largest_image_paint_size;
-      target_paint_timing->largest_text_paint =
-          new_paint_timing.largest_text_paint;
-      target_paint_timing->largest_text_paint_size =
-          new_paint_timing.largest_text_paint_size;
+      target_paint_timing->largest_contentful_paint =
+          new_paint_timing.largest_contentful_paint->Clone();
+      target_paint_timing->experimental_largest_contentful_paint =
+          new_paint_timing.experimental_largest_contentful_paint.Clone();
       target_paint_timing->first_input_or_scroll_notified_timestamp =
           new_paint_timing.first_input_or_scroll_notified_timestamp;
       target_paint_timing->portal_activated_paint =
