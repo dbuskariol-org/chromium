@@ -9,10 +9,8 @@ import android.util.SparseIntArray;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
-import org.chromium.base.UserData;
 import org.chromium.base.supplier.DestroyableObservableSupplier;
 import org.chromium.chrome.browser.fullscreen.BrowserControlsMarginSupplier;
 
@@ -20,7 +18,6 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 /**
- * TODO(crbug.com/1074348) Make this an interface and move it to //chrome/browser/tab.
  * This class is responsible for displaying custom {@link View}s on top of {@link Tab}'s Content
  * view. Users that want to display a custom {@link View} should:
  *     1. Implement {@link TabViewProvider}
@@ -28,10 +25,11 @@ import java.util.PriorityQueue;
  *     3. Add their {@link TabViewProvider.Type} to {@link #PRIORITIZED_TAB_VIEW_PROVIDER_TYPES}
  *        with an appropriate priority. In order to find the right priority, please consider the
  *        existing entries in the array and determine where the new feature fits relative to them.
- *     4. Use {@link #addTabViewProvider} and {@link #removeTabViewProvider} to add and remove their
- *        {@link TabViewProvider}
+ *     4. Use {@link Tab#getTabViewManager#addTabViewProvider} and
+ *        {@link Tab#getTabViewManager#removeTabViewProvider} to add and remove their
+ *        {@link TabViewProvider}.
  */
-public class TabViewManager implements UserData, Comparator<TabViewProvider> {
+class TabViewManagerImpl implements TabViewManager, Comparator<TabViewProvider> {
     /**
      * A prioritized list of all {@link TabViewProvider.Type}s, from most important to least
      * important. The {@link TabViewProvider} with the highest priority will always be shown first,
@@ -40,9 +38,9 @@ public class TabViewManager implements UserData, Comparator<TabViewProvider> {
     @VisibleForTesting
     @TabViewProvider.Type
     static final int[] PRIORITIZED_TAB_VIEW_PROVIDER_TYPES = new int[] {
-        TabViewProvider.Type.SUSPENDED_TAB,
-        TabViewProvider.Type.PAINT_PREVIEW,
-        TabViewProvider.Type.SAD_TAB};
+            TabViewProvider.Type.SUSPENDED_TAB,
+            TabViewProvider.Type.PAINT_PREVIEW,
+            TabViewProvider.Type.SAD_TAB};
 
     /**
      * A lookup table for {@link #PRIORITIZED_TAB_VIEW_PROVIDER_TYPES}. This is initialized in the
@@ -54,7 +52,6 @@ public class TabViewManager implements UserData, Comparator<TabViewProvider> {
             TAB_VIEW_PROVIDER_PRIORITY_LOOKUP.put(PRIORITIZED_TAB_VIEW_PROVIDER_TYPES[i], i);
         }
     }
-    private static final Class<TabViewManager> USER_DATA_KEY = TabViewManager.class;
 
     private PriorityQueue<TabViewProvider> mTabViewProviders;
     private TabImpl mTab;
@@ -62,16 +59,8 @@ public class TabViewManager implements UserData, Comparator<TabViewProvider> {
     private DestroyableObservableSupplier<Rect> mMarginSupplier;
     private final Rect mViewMargins = new Rect();
 
-    public static TabViewManager get(Tab tab) {
-        if (tab.getUserDataHost().getUserData(USER_DATA_KEY) == null) {
-            tab.getUserDataHost().setUserData(USER_DATA_KEY, new TabViewManager(tab));
-        }
-        return tab.getUserDataHost().getUserData(USER_DATA_KEY);
-    }
-
-    @VisibleForTesting
-    TabViewManager(Tab tab) {
-        mTab = (TabImpl) tab;
+    TabViewManagerImpl(TabImpl tab) {
+        mTab = tab;
         mTabViewProviders = new PriorityQueue<>(PRIORITIZED_TAB_VIEW_PROVIDER_TYPES.length, this);
         if (mTab.getActivity() == null) return;
 
@@ -85,10 +74,12 @@ public class TabViewManager implements UserData, Comparator<TabViewProvider> {
     }
 
     /**
-     * @return The {@link TabViewProvider} that is being currently displayed.
+     * @return Whether the given {@link TabViewProvider} is currently being displayed.
      */
-    public @Nullable TabViewProvider getCurrentTabViewProvider() {
-        return mTabViewProviders.peek();
+    @Override
+    public boolean isShowing(TabViewProvider tabViewProvider) {
+        TabViewProvider currentTVP = mTabViewProviders.peek();
+        return currentTVP != null && currentTVP == tabViewProvider;
     }
 
     /**
@@ -97,6 +88,7 @@ public class TabViewManager implements UserData, Comparator<TabViewProvider> {
      * shown immediately. Otherwise, it will be shown after other {@link TabViewProvider}s with
      * higher priorities are removed.
      */
+    @Override
     public void addTabViewProvider(TabViewProvider tabViewProvider) {
         if (mTabViewProviders.contains(tabViewProvider)) return;
 
@@ -111,6 +103,7 @@ public class TabViewManager implements UserData, Comparator<TabViewProvider> {
      * {@link TabViewProvider} with the highest priority will be shown. If there are no other {@link
      * TabViewProvider}s, {@link Tab}'s Content view will be shown.
      */
+    @Override
     public void removeTabViewProvider(TabViewProvider tabViewProvider) {
         TabViewProvider currentTabViewProvider = mTabViewProviders.peek();
         mTabViewProviders.remove(tabViewProvider);
@@ -165,8 +158,7 @@ public class TabViewManager implements UserData, Comparator<TabViewProvider> {
         return tvp1Priority - tvp2Priority;
     }
 
-    @Override
-    public void destroy() {
+    void destroy() {
         mTab.setCustomView(null);
         TabViewProvider currentTabViewProvider = mTabViewProviders.peek();
         if (currentTabViewProvider != null) currentTabViewProvider.onHidden();

@@ -12,7 +12,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 /**
- * TODO(crbug.com/1074348) Move this interface to //chrome/browser/tab.
  * An interface that provides a {@link View} to be shown in a {@link Tab}.
  * Refer to the Javadoc on {@link TabViewManager} to learn how to add a new {@link TabViewProvider}
  * to a {@link Tab}.
