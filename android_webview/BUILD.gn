@@ -750,8 +750,10 @@ repack("repack_100_percent") {
     "$root_gen_dir/content/app/resources/content_resources_100_percent.pak",
     "$root_gen_dir/third_party/blink/public/resources/blink_scaled_resources_100_percent.pak",
     "$root_gen_dir/ui/resources/ui_resources_100_percent.pak",
+    "$target_gen_dir/components_resources_100_percent.pak",
   ]
   deps = [
+    ":generate_components_scaled_resources",
     "//content/app/resources",
     "//third_party/blink/public:scaled_resources_100_percent",
     "//ui/resources",
@@ -963,6 +965,29 @@ grit("generate_components_resources") {
     "//components/resources:about_credits",
     "//components/resources/ssl/ssl_error_assistant:make_ssl_error_assistant_protobuf",
   ]
+}
+
+grit("generate_components_scaled_resources") {
+  source = "../components/resources/components_scaled_resources.grd"
+
+  # See :generate_webui_resources for an explanation of the allowlist
+  _allowlist = rebase_path("$target_gen_dir/grit_resources_allowlist.txt",
+                           root_build_dir)
+
+  grit_flags = [
+    "-w",
+    _allowlist,
+  ]
+  outputs = [
+    "grit/components_scaled_resources.h",
+    "grit/components_scaled_resources_map.cc",
+    "grit/components_scaled_resources_map.h",
+    "components_resources_100_percent.pak",
+    "components_resources_200_percent.pak",
+    "components_resources_300_percent.pak",
+  ]
+
+  deps = [ ":concatenate_resources_allowlists" ]
 }
 
 grit("generate_components_strings") {
