@@ -51147,7 +51147,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="208" label="Nearby Share: On/Off"/>
   <int value="300" label="Add Account"/>
   <int value="301" label="Remove Account"/>
-  <int value="302" label="Sync On/Off"/>
+  <int value="302" label="Split Sync On/Off"/>
   <int value="303" label="Lock Screen"/>
   <int value="304" label="Change Auth Pin"/>
   <int value="305" label="Guest Browsing"/>
@@ -51161,6 +51161,10 @@ Called by update_net_trust_anchors.py.-->
   <int value="313" label="Add Fingerprint"/>
   <int value="314" label="Remove Fingerprint"/>
   <int value="315" label="Set Up Parental Controls"/>
+  <int value="316" label="Non-Split Sync Encryption Options"/>
+  <int value="317" label="Autocomplete Searches and URLs"/>
+  <int value="318" label="Make Searches and Browsing Better"/>
+  <int value="319" label="Google Drive Search Suggestions"/>
   <int value="400" label="Touchpad: Tap-To-Click"/>
   <int value="401" label="Touchpad: Tap Dragging"/>
   <int value="402" label="Touchpad: Reverse Scrolling"/>
