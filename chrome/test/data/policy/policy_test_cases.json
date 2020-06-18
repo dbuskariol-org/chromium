@@ -6433,6 +6433,18 @@
     ]
   },
 
+  "EmojiSuggestionEnabled": {
+    "os" : ["chromeos"],
+    "policy_pref_mapping_test": [
+      {
+        "policies": {
+          "EmojiSuggestionEnabled": false
+        },
+        "prefs": { "assistive_input.emoji_suggestion_enabled": { "local_state": false } }
+      }
+    ]
+  },
+
   "PerAppTimeLimits": {
     "os": ["chromeos"],
     "can_be_recommended": false,

@@ -21499,6 +21499,26 @@ If you disable this policy, web page scrolling to specific text fragments via UR
           If this policy is set to false, users will not have the option of enabling
           the feature on the Settings page.''',
     },
+    {
+      'name': 'EmojiSuggestionEnabled',
+      'owners': ['myy@chromium.org', 'essential-inputs-team@google.com'],
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'future': True,
+      'supported_on' : ['chrome_os:85-'],
+      'features': {
+        'dynamic_refresh': True,
+        'per_profile': True,
+      },
+      'example_value': False,
+      'default_for_enterprise_users': False,
+      'id': 721,
+      'caption': '''Enable Emoji Suggestion''',
+      'tags': [],
+      'desc': '''This feature gives emoji suggestion whenever a user types a word matched with the in-built emoji map.
+      If this policy is set to true, the feature will be force enabled, and users will not be able to override this.
+      This policy is defaulted to false, no emoji will be suggested and users cannot override it.''',
+    },
   ],
 
   'messages': {
@@ -22369,6 +22389,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 476, 546, 562, 569, 578],
-  'highest_id_currently_used': 720,
+  'highest_id_currently_used': 721,
   'highest_atomic_group_id_currently_used': 38
 }

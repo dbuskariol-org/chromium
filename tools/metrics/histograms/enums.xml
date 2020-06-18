@@ -20614,6 +20614,7 @@ Called by update_document_policy_enum.py.-->
   <int value="718" label="PinUnlockAutosubmitEnabled"/>
   <int value="719" label="SamlLockScreenReauthenticationEnabled"/>
   <int value="720" label="DeletePrintJobHistoryAllowed"/>
+  <int value="721" label="EmojiSuggestionEnabled"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
