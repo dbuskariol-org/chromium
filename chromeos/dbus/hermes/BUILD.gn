@@ -5,12 +5,15 @@
 assert(is_chromeos, "Non-ChromeOS builds cannot depend on //chromeos")
 
 component("hermes") {
-  defines = [ "IS_HERMES_CLIENT_IMPL" ]
+  public_deps = [ ":hermes_clients" ]
+  deps = [ ":hermes_fakes" ]
+}
 
+source_set("hermes_clients") {
+  defines = [ "IS_HERMES_CLIENT_IMPL" ]
   deps = [
     "//base",
     "//chromeos/dbus:common",
-    "//chromeos/dbus/constants",
     "//components/device_event_log",
     "//dbus",
   ]
@@ -25,6 +28,25 @@ component("hermes") {
     "hermes_response_status.cc",
     "hermes_response_status.h",
   ]
+}
+
+source_set("hermes_fakes") {
+  deps = [
+    ":hermes_clients",
+    "//base",
+    "//chromeos/dbus/constants",
+    "//chromeos/dbus/shill",
+    "//dbus",
+  ]
+
+  sources = [
+    "fake_hermes_manager_client.cc",
+    "fake_hermes_manager_client.h",
+    "fake_hermes_profile_client.cc",
+    "fake_hermes_profile_client.h",
+  ]
+
+  allow_circular_includes_from = [ ":hermes_clients" ]
 }
 
 source_set("test_support") {

@@ -8,6 +8,7 @@
 #include "base/memory/weak_ptr.h"
 #include "base/observer_list.h"
 #include "base/optional.h"
+#include "chromeos/dbus/hermes/fake_hermes_manager_client.h"
 #include "chromeos/dbus/hermes/hermes_response_status.h"
 #include "components/device_event_log/device_event_log.h"
 #include "dbus/bus.h"
@@ -232,12 +233,12 @@ void HermesManagerClient::Initialize(dbus::Bus* bus) {
 
 // static
 void HermesManagerClient::InitializeFake() {
-  // TODO: Initialize Hermes Manager Fake.
+  new FakeHermesManagerClient();
 }
 
 // static
 void HermesManagerClient::Shutdown() {
-  // TODO: DCHECK(g_instance);
+  DCHECK(g_instance);
   delete g_instance;
 }
 

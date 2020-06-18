@@ -6,6 +6,7 @@
 
 #include "base/bind.h"
 #include "base/memory/weak_ptr.h"
+#include "chromeos/dbus/hermes/fake_hermes_profile_client.h"
 #include "chromeos/dbus/hermes/hermes_response_status.h"
 #include "dbus/bus.h"
 #include "dbus/object_manager.h"
@@ -149,12 +150,12 @@ void HermesProfileClient::Initialize(dbus::Bus* bus) {
 
 // static
 void HermesProfileClient::InitializeFake() {
-  // TODO: Initialize Hermes Profile Fake.
+  new FakeHermesProfileClient();
 }
 
 // static
 void HermesProfileClient::Shutdown() {
-  // TODO: DCHECK(g_instance);
+  DCHECK(g_instance);
   delete g_instance;
 }
 
