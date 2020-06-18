@@ -11,7 +11,6 @@
 #include "base/strings/stringprintf.h"
 #include "base/strings/utf_string_conversions.h"
 #include "chrome/browser/autofill/personal_data_manager_factory.h"
-#include "chrome/browser/chromeos/input_method/ui/suggestion_details.h"
 #include "chrome/browser/profiles/profile_manager.h"
 #include "chrome/browser/ui/ash/keyboard/chrome_keyboard_controller_client.h"
 #include "chromeos/constants/chromeos_pref_names.h"
@@ -237,11 +236,8 @@ void PersonalInfoSuggester::ShowSuggestion(const base::string16& text,
 
   std::string error;
   bool show_tab = GetTabAcceptanceCount() < kMaxTabAcceptanceCount;
-  ui::ime::SuggestionDetails details;
-  details.text = text;
-  details.confirmed_length = confirmed_length;
-  details.show_tab = show_tab;
-  suggestion_handler_->SetSuggestion(context_id_, details, &error);
+  suggestion_handler_->SetSuggestion(context_id_, text, confirmed_length,
+                                     show_tab, &error);
   if (!error.empty()) {
     LOG(ERROR) << "Fail to show suggestion. " << error;
   }
