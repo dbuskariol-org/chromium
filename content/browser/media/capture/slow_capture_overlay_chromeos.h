@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_MEDIA_CAPTURE_LAME_CAPTURE_OVERLAY_CHROMEOS_H_
-#define CONTENT_BROWSER_MEDIA_CAPTURE_LAME_CAPTURE_OVERLAY_CHROMEOS_H_
+#ifndef CONTENT_BROWSER_MEDIA_CAPTURE_SLOW_CAPTURE_OVERLAY_CHROMEOS_H_
+#define CONTENT_BROWSER_MEDIA_CAPTURE_SLOW_CAPTURE_OVERLAY_CHROMEOS_H_
 
 #include "base/callback.h"
 #include "base/macros.h"
@@ -23,7 +23,7 @@ namespace content {
 
 // A minimal FrameSinkVideoCaptureOverlay implementation for aura::Window video
 // capture on ChromeOS (i.e., not desktop capture, and not WebContents capture).
-// See class comments for LameWindowCapturerChromeOS for further details on why
+// See class comments for SlowWindowCapturerChromeOS for further details on why
 // this exists and why this placeholder is needed for now.
 //
 // The implementation here is a hodgepodge of code borrowed from
@@ -35,16 +35,16 @@ namespace content {
 // renderer.
 //
 // TODO(crbug/806366): The goal is to remove this code by 2019.
-class CONTENT_EXPORT LameCaptureOverlayChromeOS
+class CONTENT_EXPORT SlowCaptureOverlayChromeOS
     : public viz::mojom::FrameSinkVideoCaptureOverlay {
  public:
-  // Implemented by LameWindowCapturerChromeOS.
+  // Implemented by SlowWindowCapturerChromeOS.
   class CONTENT_EXPORT Owner {
    public:
     // Called to notify that the |overlay| has lost its mojo binding. The owner
     // will usually delete it during this method call.
     virtual void OnOverlayConnectionLost(
-        LameCaptureOverlayChromeOS* overlay) = 0;
+        SlowCaptureOverlayChromeOS* overlay) = 0;
 
    protected:
     virtual ~Owner();
@@ -53,10 +53,10 @@ class CONTENT_EXPORT LameCaptureOverlayChromeOS
   // A OnceCallback that, when run, renders the overlay on a VideoFrame.
   using OnceRenderer = base::OnceCallback<void(media::VideoFrame*)>;
 
-  LameCaptureOverlayChromeOS(
+  SlowCaptureOverlayChromeOS(
       Owner* owner,
       mojo::PendingReceiver<viz::mojom::FrameSinkVideoCaptureOverlay> receiver);
-  ~LameCaptureOverlayChromeOS() final;
+  ~SlowCaptureOverlayChromeOS() final;
 
   // viz::mojom::FrameSinkVideoCaptureOverlay implementation.
   void SetImageAndBounds(const SkBitmap& image, const gfx::RectF& bounds) final;
@@ -81,9 +81,9 @@ class CONTENT_EXPORT LameCaptureOverlayChromeOS
   // bitmap size changes.
   SkBitmap cached_scaled_image_;
 
-  DISALLOW_COPY_AND_ASSIGN(LameCaptureOverlayChromeOS);
+  DISALLOW_COPY_AND_ASSIGN(SlowCaptureOverlayChromeOS);
 };
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_MEDIA_CAPTURE_LAME_CAPTURE_OVERLAY_CHROMEOS_H_
+#endif  // CONTENT_BROWSER_MEDIA_CAPTURE_SLOW_CAPTURE_OVERLAY_CHROMEOS_H_

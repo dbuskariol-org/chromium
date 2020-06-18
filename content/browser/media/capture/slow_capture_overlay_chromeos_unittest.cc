@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/media/capture/lame_capture_overlay_chromeos.h"
+#include "content/browser/media/capture/slow_capture_overlay_chromeos.h"
 
 #include <stdint.h>
 
@@ -27,7 +27,7 @@ constexpr gfx::Size kFrameSize = gfx::Size(320, 200);
 constexpr gfx::Rect kContentRegion = gfx::Rect(kFrameSize);
 constexpr gfx::RectF kSpanOfEntireFrame = gfx::RectF(0.0f, 0.0f, 1.0f, 1.0f);
 
-class LameCaptureOverlayChromeOSTest : public testing::Test {
+class SlowCaptureOverlayChromeOSTest : public testing::Test {
  public:
   void RunUntilIdle() { env_.RunUntilIdle(); }
 
@@ -68,9 +68,9 @@ class LameCaptureOverlayChromeOSTest : public testing::Test {
   base::test::TaskEnvironment env_;
 };
 
-TEST_F(LameCaptureOverlayChromeOSTest, UnsetImageNotRenderedOnFrame) {
+TEST_F(SlowCaptureOverlayChromeOSTest, UnsetImageNotRenderedOnFrame) {
   mojo::Remote<viz::mojom::FrameSinkVideoCaptureOverlay> overlay_remote;
-  LameCaptureOverlayChromeOS overlay(
+  SlowCaptureOverlayChromeOS overlay(
       nullptr, overlay_remote.BindNewPipeAndPassReceiver());
 
   // Bounds set, but no image. → Should not render anything.
@@ -82,9 +82,9 @@ TEST_F(LameCaptureOverlayChromeOSTest, UnsetImageNotRenderedOnFrame) {
   EXPECT_TRUE(overlay.MakeRenderer(kContentRegion));
 }
 
-TEST_F(LameCaptureOverlayChromeOSTest, HiddenImageNotRenderedOnFrame) {
+TEST_F(SlowCaptureOverlayChromeOSTest, HiddenImageNotRenderedOnFrame) {
   mojo::Remote<viz::mojom::FrameSinkVideoCaptureOverlay> overlay_remote;
-  LameCaptureOverlayChromeOS overlay(
+  SlowCaptureOverlayChromeOS overlay(
       nullptr, overlay_remote.BindNewPipeAndPassReceiver());
 
   // Both image and bounds set. → Should render something.
@@ -96,9 +96,9 @@ TEST_F(LameCaptureOverlayChromeOSTest, HiddenImageNotRenderedOnFrame) {
   EXPECT_FALSE(overlay.MakeRenderer(kContentRegion));
 }
 
-TEST_F(LameCaptureOverlayChromeOSTest, OutOfBoundsOverlayNotRenderedOnFrame) {
+TEST_F(SlowCaptureOverlayChromeOSTest, OutOfBoundsOverlayNotRenderedOnFrame) {
   mojo::Remote<viz::mojom::FrameSinkVideoCaptureOverlay> overlay_remote;
-  LameCaptureOverlayChromeOS overlay(
+  SlowCaptureOverlayChromeOS overlay(
       nullptr, overlay_remote.BindNewPipeAndPassReceiver());
 
   // Both image and bounds set. → Should render something.
@@ -110,9 +110,9 @@ TEST_F(LameCaptureOverlayChromeOSTest, OutOfBoundsOverlayNotRenderedOnFrame) {
   EXPECT_FALSE(overlay.MakeRenderer(kContentRegion));
 }
 
-TEST_F(LameCaptureOverlayChromeOSTest, ImageRenderedOnFrame) {
+TEST_F(SlowCaptureOverlayChromeOSTest, ImageRenderedOnFrame) {
   mojo::Remote<viz::mojom::FrameSinkVideoCaptureOverlay> overlay_remote;
-  LameCaptureOverlayChromeOS overlay(
+  SlowCaptureOverlayChromeOS overlay(
       nullptr, overlay_remote.BindNewPipeAndPassReceiver());
 
   // Create blank black frame. No non-zero pixels should be present.
@@ -156,16 +156,16 @@ TEST_F(LameCaptureOverlayChromeOSTest, ImageRenderedOnFrame) {
   }
 }
 
-TEST_F(LameCaptureOverlayChromeOSTest, ReportsLostMojoConnection) {
-  class MockOwner : public LameCaptureOverlayChromeOS::Owner {
+TEST_F(SlowCaptureOverlayChromeOSTest, ReportsLostMojoConnection) {
+  class MockOwner : public SlowCaptureOverlayChromeOS::Owner {
    public:
     ~MockOwner() final = default;
     MOCK_METHOD1(OnOverlayConnectionLost,
-                 void(LameCaptureOverlayChromeOS* overlay));
+                 void(SlowCaptureOverlayChromeOS* overlay));
   } mock_owner;
 
   mojo::Remote<viz::mojom::FrameSinkVideoCaptureOverlay> overlay_remote;
-  LameCaptureOverlayChromeOS overlay(
+  SlowCaptureOverlayChromeOS overlay(
       &mock_owner, overlay_remote.BindNewPipeAndPassReceiver());
   ASSERT_TRUE(overlay_remote);
   RunUntilIdle();  // Propagate mojo tasks.

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/media/capture/lame_capture_overlay_chromeos.h"
+#include "content/browser/media/capture/slow_capture_overlay_chromeos.h"
 
 #include <algorithm>
 #include <cmath>
@@ -10,7 +10,7 @@
 #include "base/bind.h"
 #include "base/numerics/ranges.h"
 #include "base/numerics/safe_conversions.h"
-#include "content/browser/media/capture/lame_window_capturer_chromeos.h"
+#include "content/browser/media/capture/slow_window_capturer_chromeos.h"
 #include "media/base/video_frame.h"
 #include "skia/ext/image_operations.h"
 #include "third_party/skia/include/core/SkColor.h"
@@ -19,9 +19,9 @@
 
 namespace content {
 
-LameCaptureOverlayChromeOS::Owner::~Owner() = default;
+SlowCaptureOverlayChromeOS::Owner::~Owner() = default;
 
-LameCaptureOverlayChromeOS::LameCaptureOverlayChromeOS(
+SlowCaptureOverlayChromeOS::SlowCaptureOverlayChromeOS(
     Owner* owner,
     mojo::PendingReceiver<viz::mojom::FrameSinkVideoCaptureOverlay> receiver)
     : receiver_(this, std::move(receiver)) {
@@ -31,11 +31,11 @@ LameCaptureOverlayChromeOS::LameCaptureOverlayChromeOS(
   }
 }
 
-LameCaptureOverlayChromeOS::~LameCaptureOverlayChromeOS() {
+SlowCaptureOverlayChromeOS::~SlowCaptureOverlayChromeOS() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 }
 
-void LameCaptureOverlayChromeOS::SetImageAndBounds(const SkBitmap& image,
+void SlowCaptureOverlayChromeOS::SetImageAndBounds(const SkBitmap& image,
                                                    const gfx::RectF& bounds) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
@@ -44,7 +44,7 @@ void LameCaptureOverlayChromeOS::SetImageAndBounds(const SkBitmap& image,
   cached_scaled_image_.reset();
 }
 
-void LameCaptureOverlayChromeOS::SetBounds(const gfx::RectF& bounds) {
+void SlowCaptureOverlayChromeOS::SetBounds(const gfx::RectF& bounds) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   if (bounds != bounds_) {
@@ -89,8 +89,8 @@ inline int alpha_blend(int alpha, int src, int dst) {
 
 }  // namespace
 
-LameCaptureOverlayChromeOS::OnceRenderer
-LameCaptureOverlayChromeOS::MakeRenderer(const gfx::Rect& region_in_frame) {
+SlowCaptureOverlayChromeOS::OnceRenderer
+SlowCaptureOverlayChromeOS::MakeRenderer(const gfx::Rect& region_in_frame) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   if (bounds_.IsEmpty() || image_.drawsNothing()) {
@@ -122,7 +122,7 @@ LameCaptureOverlayChromeOS::MakeRenderer(const gfx::Rect& region_in_frame) {
 
   // The following binds all state required to render the overlay on a
   // VideoFrame at a later time. This callback does not require
-  // LameCaptureOverlayChromeOS to outlive it.
+  // SlowCaptureOverlayChromeOS to outlive it.
   return base::BindOnce(
       [](const SkBitmap& image, const gfx::Point& position,
          const gfx::Rect& rect, media::VideoFrame* frame) {

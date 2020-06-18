@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_MEDIA_CAPTURE_LAME_WINDOW_CAPTURER_CHROMEOS_H_
-#define CONTENT_BROWSER_MEDIA_CAPTURE_LAME_WINDOW_CAPTURER_CHROMEOS_H_
+#ifndef CONTENT_BROWSER_MEDIA_CAPTURE_SLOW_WINDOW_CAPTURER_CHROMEOS_H_
+#define CONTENT_BROWSER_MEDIA_CAPTURE_SLOW_WINDOW_CAPTURER_CHROMEOS_H_
 
 #include <memory>
 #include <utility>
@@ -15,7 +15,7 @@
 #include "base/time/time.h"
 #include "base/timer/timer.h"
 #include "base/unguessable_token.h"
-#include "content/browser/media/capture/lame_capture_overlay_chromeos.h"
+#include "content/browser/media/capture/slow_capture_overlay_chromeos.h"
 #include "media/base/video_frame.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
@@ -50,12 +50,12 @@ namespace content {
 // running.
 //
 // TODO(crbug/806366): The goal is to remove this code by 2019.
-class LameWindowCapturerChromeOS : public viz::mojom::FrameSinkVideoCapturer,
-                                   public LameCaptureOverlayChromeOS::Owner,
+class SlowWindowCapturerChromeOS : public viz::mojom::FrameSinkVideoCapturer,
+                                   public SlowCaptureOverlayChromeOS::Owner,
                                    public aura::WindowObserver {
  public:
-  explicit LameWindowCapturerChromeOS(aura::Window* target);
-  ~LameWindowCapturerChromeOS() final;
+  explicit SlowWindowCapturerChromeOS(aura::Window* target);
+  ~SlowWindowCapturerChromeOS() final;
 
   // viz::mojom::FrameSinkVideoCapturer implementation.
   void SetFormat(media::VideoPixelFormat format,
@@ -83,8 +83,8 @@ class LameWindowCapturerChromeOS : public viz::mojom::FrameSinkVideoCapturer,
   // returns the buffer back to the pool.
   class InFlightFrame;
 
-  // LameWindowCapturerChromeOS::Owner implementation.
-  void OnOverlayConnectionLost(LameCaptureOverlayChromeOS* overlay) final;
+  // SlowWindowCapturerChromeOS::Owner implementation.
+  void OnOverlayConnectionLost(SlowCaptureOverlayChromeOS* overlay) final;
 
   // Initiates capture of the next frame. This is called periodically by the
   // |timer_|.
@@ -134,11 +134,11 @@ class LameWindowCapturerChromeOS : public viz::mojom::FrameSinkVideoCapturer,
   const base::UnguessableToken copy_request_source_;
 
   // An optional overlay to be rendered over each captured video frame.
-  std::unique_ptr<LameCaptureOverlayChromeOS> overlay_;
+  std::unique_ptr<SlowCaptureOverlayChromeOS> overlay_;
 
   // Used for cancelling any outstanding activities' results, once Stop() is
   // called and there is no longer a consumer to receive another frame.
-  base::WeakPtrFactory<LameWindowCapturerChromeOS> weak_factory_{this};
+  base::WeakPtrFactory<SlowWindowCapturerChromeOS> weak_factory_{this};
 
   // Enforce a very low maximum frame rate (5 FPS), due to the lack of
   // design optimizations. See top-level class comments.
@@ -148,9 +148,9 @@ class LameWindowCapturerChromeOS : public viz::mojom::FrameSinkVideoCapturer,
   // The maximum number of frames in-flight at any one time.
   static constexpr int kMaxFramesInFlight = 3;
 
-  DISALLOW_COPY_AND_ASSIGN(LameWindowCapturerChromeOS);
+  DISALLOW_COPY_AND_ASSIGN(SlowWindowCapturerChromeOS);
 };
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_MEDIA_CAPTURE_LAME_WINDOW_CAPTURER_CHROMEOS_H_
+#endif  // CONTENT_BROWSER_MEDIA_CAPTURE_SLOW_WINDOW_CAPTURER_CHROMEOS_H_

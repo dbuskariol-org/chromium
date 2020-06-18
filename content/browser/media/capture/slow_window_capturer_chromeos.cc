@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "content/browser/media/capture/lame_window_capturer_chromeos.h"
+#include "content/browser/media/capture/slow_window_capturer_chromeos.h"
 
 #include <algorithm>
 
@@ -31,22 +31,22 @@ gfx::Size AdjustSizeForI420Format(const gfx::Size& raw_size) {
 }  // namespace
 
 // static
-constexpr base::TimeDelta LameWindowCapturerChromeOS::kAbsoluteMinCapturePeriod;
+constexpr base::TimeDelta SlowWindowCapturerChromeOS::kAbsoluteMinCapturePeriod;
 
-LameWindowCapturerChromeOS::LameWindowCapturerChromeOS(aura::Window* target)
+SlowWindowCapturerChromeOS::SlowWindowCapturerChromeOS(aura::Window* target)
     : target_(target), copy_request_source_(base::UnguessableToken::Create()) {
   if (target_) {
     target_->AddObserver(this);
   }
 }
 
-LameWindowCapturerChromeOS::~LameWindowCapturerChromeOS() {
+SlowWindowCapturerChromeOS::~SlowWindowCapturerChromeOS() {
   if (target_) {
     target_->RemoveObserver(this);
   }
 }
 
-void LameWindowCapturerChromeOS::SetFormat(media::VideoPixelFormat format,
+void SlowWindowCapturerChromeOS::SetFormat(media::VideoPixelFormat format,
                                            const gfx::ColorSpace& color_space) {
   if (format != media::PIXEL_FORMAT_I420) {
     LOG(DFATAL) << "Invalid pixel format: Only I420 is supported.";
@@ -57,7 +57,7 @@ void LameWindowCapturerChromeOS::SetFormat(media::VideoPixelFormat format,
   }
 }
 
-void LameWindowCapturerChromeOS::SetMinCapturePeriod(
+void SlowWindowCapturerChromeOS::SetMinCapturePeriod(
     base::TimeDelta min_capture_period) {
   capture_period_ = std::max(min_capture_period, kAbsoluteMinCapturePeriod);
 
@@ -65,14 +65,14 @@ void LameWindowCapturerChromeOS::SetMinCapturePeriod(
   // re-start with the new capture period.
   if (timer_.IsRunning()) {
     timer_.Start(FROM_HERE, capture_period_, this,
-                 &LameWindowCapturerChromeOS::CaptureNextFrame);
+                 &SlowWindowCapturerChromeOS::CaptureNextFrame);
   }
 }
 
-void LameWindowCapturerChromeOS::SetMinSizeChangePeriod(
+void SlowWindowCapturerChromeOS::SetMinSizeChangePeriod(
     base::TimeDelta min_period) {}
 
-void LameWindowCapturerChromeOS::SetResolutionConstraints(
+void SlowWindowCapturerChromeOS::SetResolutionConstraints(
     const gfx::Size& min_size,
     const gfx::Size& max_size,
     bool use_fixed_aspect_ratio) {
@@ -95,17 +95,17 @@ void LameWindowCapturerChromeOS::SetResolutionConstraints(
   in_flight_count_ = 0;
 }
 
-void LameWindowCapturerChromeOS::SetAutoThrottlingEnabled(bool enabled) {
+void SlowWindowCapturerChromeOS::SetAutoThrottlingEnabled(bool enabled) {
   NOTIMPLEMENTED();
 }
 
-void LameWindowCapturerChromeOS::ChangeTarget(
+void SlowWindowCapturerChromeOS::ChangeTarget(
     const base::Optional<viz::FrameSinkId>& frame_sink_id) {
-  // The LameWindowCapturerChromeOS does not capture from compositor frame
+  // The SlowWindowCapturerChromeOS does not capture from compositor frame
   // sinks.
 }
 
-void LameWindowCapturerChromeOS::Start(
+void SlowWindowCapturerChromeOS::Start(
     mojo::PendingRemote<viz::mojom::FrameSinkVideoConsumer> consumer) {
   DCHECK(consumer);
 
@@ -115,13 +115,13 @@ void LameWindowCapturerChromeOS::Start(
   // In the future, if the connection to the consumer is lost before a call to
   // Stop(), make that call on its behalf.
   consumer_.set_disconnect_handler(base::BindOnce(
-      &LameWindowCapturerChromeOS::Stop, base::Unretained(this)));
+      &SlowWindowCapturerChromeOS::Stop, base::Unretained(this)));
 
   timer_.Start(FROM_HERE, capture_period_, this,
-               &LameWindowCapturerChromeOS::CaptureNextFrame);
+               &SlowWindowCapturerChromeOS::CaptureNextFrame);
 }
 
-void LameWindowCapturerChromeOS::Stop() {
+void SlowWindowCapturerChromeOS::Stop() {
   // Stop the timer, cancel any in-flight frames, and clear the buffer pool.
   timer_.Stop();
   weak_factory_.InvalidateWeakPtrs();
@@ -134,24 +134,24 @@ void LameWindowCapturerChromeOS::Stop() {
   }
 }
 
-void LameWindowCapturerChromeOS::RequestRefreshFrame() {
-  // This is ignored because the LameWindowCapturerChromeOS captures frames
+void SlowWindowCapturerChromeOS::RequestRefreshFrame() {
+  // This is ignored because the SlowWindowCapturerChromeOS captures frames
   // continuously.
 }
 
-void LameWindowCapturerChromeOS::CreateOverlay(
+void SlowWindowCapturerChromeOS::CreateOverlay(
     int32_t stacking_index,
     mojo::PendingReceiver<viz::mojom::FrameSinkVideoCaptureOverlay> receiver) {
-  // LameWindowCapturerChromeOS only supports one overlay at a time. If one
+  // SlowWindowCapturerChromeOS only supports one overlay at a time. If one
   // already exists, the following will cause it to be dropped.
   overlay_ =
-      std::make_unique<LameCaptureOverlayChromeOS>(this, std::move(receiver));
+      std::make_unique<SlowCaptureOverlayChromeOS>(this, std::move(receiver));
 }
 
-class LameWindowCapturerChromeOS::InFlightFrame
+class SlowWindowCapturerChromeOS::InFlightFrame
     : public viz::mojom::FrameSinkVideoConsumerFrameCallbacks {
  public:
-  InFlightFrame(base::WeakPtr<LameWindowCapturerChromeOS> capturer,
+  InFlightFrame(base::WeakPtr<SlowWindowCapturerChromeOS> capturer,
                 base::MappedReadOnlyRegion buffer)
       : capturer_(std::move(capturer)), buffer_(std::move(buffer)) {}
 
@@ -169,7 +169,7 @@ class LameWindowCapturerChromeOS::InFlightFrame
   const gfx::Rect& content_rect() const { return content_rect_; }
   void set_content_rect(const gfx::Rect& rect) { content_rect_ = rect; }
 
-  void set_overlay_renderer(LameCaptureOverlayChromeOS::OnceRenderer renderer) {
+  void set_overlay_renderer(SlowCaptureOverlayChromeOS::OnceRenderer renderer) {
     overlay_renderer_ = std::move(renderer);
   }
   void RenderOptionalOverlay() {
@@ -199,23 +199,23 @@ class LameWindowCapturerChromeOS::InFlightFrame
   void ProvideFeedback(double utilization) final {}
 
  private:
-  base::WeakPtr<LameWindowCapturerChromeOS> capturer_;
+  base::WeakPtr<SlowWindowCapturerChromeOS> capturer_;
   base::MappedReadOnlyRegion buffer_;
   scoped_refptr<VideoFrame> video_frame_;
   gfx::Rect content_rect_;
-  LameCaptureOverlayChromeOS::OnceRenderer overlay_renderer_;
+  SlowCaptureOverlayChromeOS::OnceRenderer overlay_renderer_;
 
   DISALLOW_COPY_AND_ASSIGN(InFlightFrame);
 };
 
-void LameWindowCapturerChromeOS::OnOverlayConnectionLost(
-    LameCaptureOverlayChromeOS* overlay) {
+void SlowWindowCapturerChromeOS::OnOverlayConnectionLost(
+    SlowCaptureOverlayChromeOS* overlay) {
   if (overlay_.get() == overlay) {
     overlay_.reset();
   }
 }
 
-void LameWindowCapturerChromeOS::CaptureNextFrame() {
+void SlowWindowCapturerChromeOS::CaptureNextFrame() {
   // If the maximum frame in-flight count has been reached, skip this frame.
   if (in_flight_count_ >= kMaxFramesInFlight) {
     return;
@@ -292,7 +292,7 @@ void LameWindowCapturerChromeOS::CaptureNextFrame() {
   auto request = std::make_unique<viz::CopyOutputRequest>(
       // Note: As of this writing, I420_PLANES is not supported external to VIZ.
       viz::CopyOutputRequest::ResultFormat::RGBA_BITMAP,
-      base::BindOnce(&LameWindowCapturerChromeOS::DidCopyFrame,
+      base::BindOnce(&SlowWindowCapturerChromeOS::DidCopyFrame,
                      weak_factory_.GetWeakPtr(), std::move(in_flight_frame)));
   request->set_source(copy_request_source_);
   request->set_area(gfx::Rect(source_size));
@@ -303,7 +303,7 @@ void LameWindowCapturerChromeOS::CaptureNextFrame() {
   target_->layer()->RequestCopyOfOutput(std::move(request));
 }
 
-void LameWindowCapturerChromeOS::DidCopyFrame(
+void SlowWindowCapturerChromeOS::DidCopyFrame(
     std::unique_ptr<InFlightFrame> in_flight_frame,
     std::unique_ptr<viz::CopyOutputResult> result) {
   // Populate the VideoFrame from the CopyOutputResult.
@@ -337,7 +337,7 @@ void LameWindowCapturerChromeOS::DidCopyFrame(
   DeliverFrame(std::move(in_flight_frame));
 }
 
-void LameWindowCapturerChromeOS::DeliverFrame(
+void SlowWindowCapturerChromeOS::DeliverFrame(
     std::unique_ptr<InFlightFrame> in_flight_frame) {
   auto* const frame = in_flight_frame->video_frame();
   DCHECK(frame);
@@ -376,7 +376,7 @@ void LameWindowCapturerChromeOS::DeliverFrame(
                              std::move(callbacks));
 }
 
-void LameWindowCapturerChromeOS::OnWindowDestroying(aura::Window* window) {
+void SlowWindowCapturerChromeOS::OnWindowDestroying(aura::Window* window) {
   if (window == target_) {
     target_->RemoveObserver(this);
     target_ = nullptr;
