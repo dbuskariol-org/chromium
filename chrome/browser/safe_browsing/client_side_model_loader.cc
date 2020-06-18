@@ -148,6 +148,10 @@ void ModelLoader::StartFetch() {
     return;
   }
 
+  // |url_loader_factory_| can be null in tests.
+  if (!url_loader_factory_)
+    return;
+
   // Start fetching the model either from the cache or possibly from the
   // network if the model isn't in the cache.
 
