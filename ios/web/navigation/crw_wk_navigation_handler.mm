@@ -206,7 +206,7 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
     }
   }
 
-  self.webProcessCrashed = NO;
+  _webProcessCrashed = NO;
   if (self.beingDestroyed) {
     decisionHandler(WKNavigationActionPolicyCancel);
     return;
@@ -1192,7 +1192,7 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
   [self didReceiveWKNavigationDelegateCallback];
 
   _certVerificationErrors->Clear();
-  self.webProcessCrashed = YES;
+  _webProcessCrashed = YES;
   self.webStateImpl->GetWebFramesManagerImpl().RemoveAllWebFrames();
 
   [self.delegate navigationHandlerWebProcessDidCrash:self];
@@ -2456,9 +2456,7 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
                                        originalContext {
   DCHECK(!base::FeatureList::IsEnabled(web::features::kUseJSForErrorPage));
   GURL placeholderURL = CreatePlaceholderUrlForUrl(originalURL);
-  // TODO(crbug.com/956511): Remove this code when NativeContent support is
-  // removed.
-  [self.delegate ensureWebViewCreatedForWebViewHandler:self];
+
   WKWebView* webView = [self.delegate webViewForWebViewHandler:self];
 
   NSURLRequest* request =
@@ -2513,8 +2511,7 @@ void ReportOutOfSyncURLInDidStartProvisionalNavigation(
     currentItem->SetReferrer(referrer);
   }
 
-  // TODO(crbug.com/956511): This shouldn't be called for hash state or
-  // push/replaceState.
+  // TODO(crbug.com/956511): This shouldn't be called for push/replaceState.
   [self resetDocumentSpecificState];
 
   [self.delegate navigationHandlerDidStartLoading:self];
