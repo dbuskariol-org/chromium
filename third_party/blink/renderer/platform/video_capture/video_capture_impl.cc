@@ -511,8 +511,7 @@ void VideoCaptureImpl::OnBufferReady(
   }
 
   base::TimeTicks reference_time;
-  media::VideoFrameMetadata frame_metadata;
-  frame_metadata.MergeInternalValuesFrom(info->metadata);
+  media::VideoFrameMetadata frame_metadata = info->metadata;
   const bool success = frame_metadata.GetTimeTicks(
       media::VideoFrameMetadata::REFERENCE_TIME, &reference_time);
   DCHECK(success);
@@ -675,7 +674,8 @@ void VideoCaptureImpl::OnVideoFrameReady(
   if (info->color_space.has_value() && info->color_space->IsValid())
     frame->set_color_space(info->color_space.value());
 
-  frame->metadata()->MergeInternalValuesFrom(info->metadata);
+  media::VideoFrameMetadata metadata = info->metadata;
+  frame->metadata()->MergeMetadataFrom(&metadata);
 
   // TODO(qiangchen): Dive into the full code path to let frame metadata hold
   // reference time rather than using an extra parameter.

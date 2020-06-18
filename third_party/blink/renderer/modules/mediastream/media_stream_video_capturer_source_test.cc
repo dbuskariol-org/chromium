@@ -90,8 +90,7 @@ class FakeMediaStreamVideoSink : public MediaStreamVideoSink {
   void OnVideoFrame(scoped_refptr<media::VideoFrame> frame,
                     base::TimeTicks capture_time) {
     *capture_time_ = capture_time;
-    metadata_->Clear();
-    metadata_->MergeMetadataFrom(frame->metadata());
+    *metadata_ = *frame->metadata();
     std::move(got_frame_cb_).Run();
   }
 

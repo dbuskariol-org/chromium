@@ -573,8 +573,7 @@ TEST_F(VideoSenderTest, PopulatesResourceUtilizationInFrameMetadata) {
 
   for (int i = 0; i < 3; ++i) {
     scoped_refptr<media::VideoFrame> video_frame = GetNewVideoFrame();
-    ASSERT_FALSE(video_frame->metadata()->HasKey(
-        media::VideoFrameMetadata::RESOURCE_UTILIZATION));
+    ASSERT_FALSE(video_frame->metadata()->resource_utilization.has_value());
 
     const base::TimeTicks reference_time = testing_clock_.NowTicks();
     video_sender_->InsertRawVideoFrame(video_frame, reference_time);

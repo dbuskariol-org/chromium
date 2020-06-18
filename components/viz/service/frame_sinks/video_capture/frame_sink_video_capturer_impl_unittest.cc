@@ -175,7 +175,7 @@ class MockConsumer : public mojom::FrameSinkVideoConsumer {
             const_cast<uint8_t*>(static_cast<const uint8_t*>(mapping.memory())),
             mapping.size(), info->timestamp);
     ASSERT_TRUE(frame);
-    frame->metadata()->MergeInternalValuesFrom(info->metadata);
+    frame->set_metadata(info->metadata);
     if (info->color_space.has_value())
       frame->set_color_space(info->color_space.value());
 
@@ -664,7 +664,7 @@ TEST_F(FrameSinkVideoCapturerTest, CapturesCompositedFrames) {
                                        &capture_end_time));
     EXPECT_EQ(expected_capture_end_time, capture_end_time);
     EXPECT_EQ(gfx::ColorSpace::CreateREC709(), frame->ColorSpace());
-    EXPECT_TRUE(metadata->HasKey(VideoFrameMetadata::FRAME_DURATION));
+    EXPECT_TRUE(metadata->frame_duration.has_value());
     // FRAME_DURATION is an estimate computed by the VideoCaptureOracle, so it
     // its exact value is not being checked here.
     double frame_rate = 0.0;

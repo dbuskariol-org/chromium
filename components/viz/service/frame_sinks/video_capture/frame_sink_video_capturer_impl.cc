@@ -873,7 +873,7 @@ void FrameSinkVideoCapturerImpl::MaybeDeliverFrame(
   // the consumer.
   media::mojom::VideoFrameInfoPtr info = media::mojom::VideoFrameInfo::New();
   info->timestamp = frame->timestamp();
-  info->metadata = frame->metadata()->GetInternalValues().Clone();
+  info->metadata = *(frame->metadata());
   info->pixel_format = frame->format();
   info->coded_size = frame->coded_size();
   info->visible_rect = frame->visible_rect();

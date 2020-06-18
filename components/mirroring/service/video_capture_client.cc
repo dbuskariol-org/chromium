@@ -149,8 +149,7 @@ void VideoCaptureClient::OnBufferReady(int32_t buffer_id,
   }
 
   base::TimeTicks reference_time;
-  media::VideoFrameMetadata frame_metadata;
-  frame_metadata.MergeInternalValuesFrom(info->metadata);
+  media::VideoFrameMetadata frame_metadata = info->metadata;
   const bool success = frame_metadata.GetTimeTicks(
       media::VideoFrameMetadata::REFERENCE_TIME, &reference_time);
   DCHECK(success);
@@ -239,7 +238,7 @@ void VideoCaptureClient::OnBufferReady(int32_t buffer_id,
       base::BindOnce(&VideoCaptureClient::DidFinishConsumingFrame,
                      frame->metadata(), std::move(buffer_finished_callback)));
 
-  frame->metadata()->MergeInternalValuesFrom(info->metadata);
+  frame->set_metadata(info->metadata);
   if (info->color_space.has_value())
     frame->set_color_space(info->color_space.value());
 

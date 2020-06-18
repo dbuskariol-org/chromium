@@ -160,7 +160,7 @@ class TextureDeviceExerciser : public VirtualDeviceExerciser {
     info->pixel_format = media::PIXEL_FORMAT_ARGB;
     info->coded_size = kDummyFrameCodedSize;
     info->visible_rect = gfx::Rect(kDummyFrameCodedSize);
-    info->metadata = metadata.GetInternalValues().Clone();
+    info->metadata = metadata;
 
     frame_being_consumed_[dummy_frame_index_] = true;
     virtual_device_->OnFrameReadyInBuffer(dummy_frame_index_,
@@ -309,7 +309,7 @@ class SharedMemoryDeviceExerciser : public VirtualDeviceExerciser,
     info->pixel_format = media::PIXEL_FORMAT_I420;
     info->coded_size = kDummyFrameCodedSize;
     info->visible_rect = kDummyFrameVisibleRect;
-    info->metadata = metadata.GetInternalValues().Clone();
+    info->metadata = metadata;
     info->strides = strides_.Clone();
 
     const base::WritableSharedMemoryMapping& outgoing_buffer =

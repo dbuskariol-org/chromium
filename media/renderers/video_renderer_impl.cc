@@ -599,7 +599,7 @@ void VideoRendererImpl::FrameReady(VideoDecoderStream::ReadStatus status,
     // RemoveFramesForUnderflowOrBackgroundRendering() below to actually expire
     // this frame if it's too far behind the current media time. Without this,
     // we may resume too soon after a track change in the low delay case.
-    if (!frame->metadata()->HasKey(VideoFrameMetadata::FRAME_DURATION)) {
+    if (!frame->metadata()->frame_duration.has_value()) {
       frame->metadata()->SetTimeDelta(VideoFrameMetadata::FRAME_DURATION,
                                       video_decoder_stream_->AverageDuration());
     }

@@ -32,9 +32,8 @@ media::mojom::VideoFrameInfoPtr GetVideoFrameInfo(const gfx::Size& size) {
   metadata.SetTimeTicks(media::VideoFrameMetadata::REFERENCE_TIME,
                         base::TimeTicks());
   return media::mojom::VideoFrameInfo::New(
-      base::TimeDelta(), metadata.GetInternalValues().Clone(),
-      media::PIXEL_FORMAT_I420, size, gfx::Rect(size),
-      gfx::ColorSpace::CreateREC709(), nullptr);
+      base::TimeDelta(), metadata, media::PIXEL_FORMAT_I420, size,
+      gfx::Rect(size), gfx::ColorSpace::CreateREC709(), nullptr);
 }
 
 }  // namespace
