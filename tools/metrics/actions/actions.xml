@@ -18077,6 +18077,12 @@ should be able to be added at any place in this file.
 </action>
 
 <action name="PageLoad" not_user_triggered="true">
+  <obsolete>
+    Deprecated. Not a good representation of user behaviour for page loads.
+    Check the count of PageLoad.ParseTiming.NavigationToParseStart or
+    IOS.PageLoadCount.Counts (on that platform) for a better approximation of
+    page loads.
+  </obsolete>
   <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
   <description>
     When a page load starts. This can include page loads that are not completed,
