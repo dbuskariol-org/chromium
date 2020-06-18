@@ -217,6 +217,10 @@
       },
     },
 
+    'android_wpr_record_replay_tests': {
+      'chrome_java_test_wpr_tests': {},
+    },
+
     'aura_gtests': {
       'aura_unittests': {},
       'compositor_unittests': {},
@@ -4268,6 +4272,21 @@
       'android_modern_smoke_tests',
       'android_smoke_tests',
       'android_specific_chromium_gtests',  # Already includes gl_gtests.
+      'chromium_gtests',
+      'chromium_gtests_for_devices_with_graphical_output',
+      'linux_flavor_specific_chromium_gtests',
+      'network_service_android_gtests',
+      'vr_platform_specific_chromium_gtests',
+      'weblayer_android_gtests',
+      'weblayer_gtests',
+    ],
+
+    # the diff from android_lollipop_marshmallow_gtests is the wpr test.
+    'android_marshmallow_wpr_gtests': [
+      'android_modern_smoke_tests',
+      'android_smoke_tests',
+      'android_specific_chromium_gtests',  # Already includes gl_gtests.
+      'android_wpr_record_replay_tests', # only enabled on Marshmallow
       'chromium_gtests',
       'chromium_gtests_for_devices_with_graphical_output',
       'linux_flavor_specific_chromium_gtests',
