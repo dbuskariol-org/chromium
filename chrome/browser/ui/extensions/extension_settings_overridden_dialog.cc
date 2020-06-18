@@ -61,13 +61,15 @@ ExtensionSettingsOverriddenDialog::Params::Params(
     const char* extension_acknowledged_preference_name,
     const char* dialog_result_histogram_name,
     base::string16 dialog_title,
-    base::string16 dialog_message)
+    base::string16 dialog_message,
+    const gfx::VectorIcon* icon)
     : controlling_extension_id(std::move(controlling_extension_id)),
       extension_acknowledged_preference_name(
           extension_acknowledged_preference_name),
       dialog_result_histogram_name(dialog_result_histogram_name),
       dialog_title(std::move(dialog_title)),
-      dialog_message(std::move(dialog_message)) {}
+      dialog_message(std::move(dialog_message)),
+      icon(icon) {}
 ExtensionSettingsOverriddenDialog::Params::~Params() = default;
 ExtensionSettingsOverriddenDialog::Params::Params(Params&& params) = default;
 
@@ -119,7 +121,7 @@ ExtensionSettingsOverriddenDialog::GetShowParams() {
 
   DCHECK(extension);
 
-  return {params_.dialog_title, params_.dialog_message};
+  return {params_.dialog_title, params_.dialog_message, params_.icon};
 }
 
 void ExtensionSettingsOverriddenDialog::OnDialogShown() {
@@ -150,6 +152,7 @@ void ExtensionSettingsOverriddenDialog::HandleDialogResult(
       AcknowledgeControllingExtension();
       break;
     case DialogResult::kDialogDismissed:
+    case DialogResult::kDialogClosedWithoutUserAction:
       // Do nothing; the dialog will display on the next run of Chrome.
       break;
   }
