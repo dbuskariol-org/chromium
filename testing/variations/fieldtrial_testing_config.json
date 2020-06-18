@@ -6488,26 +6488,6 @@
             ]
         }
     ],
-    "SyncUSSNigori": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "ios",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "SyncUSSNigori"
-                    ]
-                }
-            ]
-        }
-    ],
     "SynchronousPageFlipTesting": [
         {
             "platforms": [
