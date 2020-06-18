@@ -481,6 +481,55 @@ TEST_F(ConcurrentMarkingTest, PopFromDeque) {
   PopFromCollection<HeapDequeAdapter<Member<IntegerObject>>>();
 }
 
+namespace {
+
+class RegisteredMixin;
+
+class CollectsMixins : public GarbageCollected<CollectsMixins> {
+  using MixinSet = HeapHashSet<Member<RegisteredMixin>>;
+
+ public:
+  CollectsMixins() : set_(MakeGarbageCollected<MixinSet>()) {}
+  void RegisterMixin(RegisteredMixin* mixin) { set_->insert(mixin); }
+  void Trace(Visitor* visitor) const { visitor->Trace(set_); }
+
+ private:
+  Member<MixinSet> set_;
+};
+
+class RegisteredMixin : public GarbageCollectedMixin {
+ public:
+  RegisteredMixin(CollectsMixins* collector) { collector->RegisterMixin(this); }
+};
+
+class GCedWithRegisteredMixin
+    : public GarbageCollected<GCedWithRegisteredMixin>,
+      public RegisteredMixin {
+  USING_GARBAGE_COLLECTED_MIXIN(GCedWithRegisteredMixin);
+
+ public:
+  GCedWithRegisteredMixin(CollectsMixins* collector)
+      : RegisteredMixin(collector) {}
+  void Trace(Visitor*) const override {}
+};
+
+}  // namespace
+
+TEST_F(ConcurrentMarkingTest, MarkingInConstructionMixin) {
+  constexpr int kIterations = 10;
+  IncrementalMarkingTestDriver driver(ThreadState::Current());
+  Persistent<CollectsMixins> collector = MakeGarbageCollected<CollectsMixins>();
+  driver.Start();
+  for (int i = 0; i < kIterations; ++i) {
+    driver.SingleConcurrentStep();
+    for (int j = 0; j < kIterations; ++j) {
+      MakeGarbageCollected<GCedWithRegisteredMixin>(collector.Get());
+    }
+  }
+  driver.FinishSteps();
+  driver.FinishGC();
+}
+
 }  // namespace concurrent_marking_test
 }  // namespace blink
 

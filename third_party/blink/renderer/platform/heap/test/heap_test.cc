@@ -5291,19 +5291,6 @@ TEST_F(HeapTest, GarbageCollectedMixinInConstruction) {
   }));
 }
 
-TEST_F(HeapTest, GarbageCollectedMixinIsAliveDuringConstruction) {
-  using O = ObjectWithMixinWithCallbackBeforeInitializer<IntWrapper>;
-  MakeGarbageCollected<O>(base::BindOnce([](O::Mixin* thiz) {
-    LivenessBroker broker = internal::LivenessBrokerFactory::Create();
-    CHECK(broker.IsHeapObjectAlive(thiz));
-  }));
-
-  using P = HeapVector<Member<HeapLinkedHashSet<Member<IntWrapper>>>>;
-  MakeGarbageCollected<P>();
-  using Q = HeapVector<Member<HeapNewLinkedHashSet<Member<IntWrapper>>>>;
-  MakeGarbageCollected<Q>();
-}
-
 TEST_F(HeapTest, PersistentAssignsDeletedValue) {
   // Regression test: https://crbug.com/982313
 
