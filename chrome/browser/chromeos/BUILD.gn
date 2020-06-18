@@ -102,6 +102,7 @@ source_set("chromeos") {
     "//chromeos/attestation",
     "//chromeos/audio",
     "//chromeos/components/account_manager",
+    "//chromeos/components/cdm_factory_daemon:cdm_factory_daemon_browser",
     "//chromeos/components/drivefs",
     "//chromeos/components/drivefs/mojom",
     "//chromeos/components/help_app_ui",

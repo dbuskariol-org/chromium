@@ -4044,6 +4044,7 @@ static_library("browser") {
       "//ash/public/cpp/external_arc",
       "//chrome/browser/chromeos",
       "//chromeos/components/account_manager",
+      "//chromeos/components/cdm_factory_daemon:cdm_factory_daemon_browser",
       "//chromeos/components/quick_answers",
       "//chromeos/components/sync_wifi",
       "//chromeos/services/assistant/public/cpp",
