@@ -19,7 +19,6 @@ android_resources("weblayer_resources") {
     "res/layout/weblayer_url_bar.xml",
     "res/values/colors.xml",
     "res/values/dimens.xml",
-    "res/values/ids.xml",
     "res/values/styles.xml",
     "res/values/styles.xml",
   ]
