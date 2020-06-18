@@ -4,7 +4,10 @@
 
 // https://github.com/WICG/web-codecs
 
-dictionary VideoEncoderTuneOptions {
+dictionary VideoEncoderConfig {
+  required DOMString codec;
+  DOMString profile;
+
   unsigned long long bitrate;
 
   double framerate;
