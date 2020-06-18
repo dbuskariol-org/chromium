@@ -280,7 +280,7 @@ class TestGCScope : public TestGCCollectGarbageScope {
 class SimpleObject : public GarbageCollected<SimpleObject> {
  public:
   SimpleObject() = default;
-  void Trace(Visitor* visitor) const {}
+  virtual void Trace(Visitor* visitor) const {}
   char GetPayload(int i) { return payload[i]; }
   // This virtual method is unused but it is here to make sure
   // that this object has a vtable. This object is used
@@ -312,8 +312,8 @@ class HeapTestOtherSuperClass {
 
 static const size_t kClassMagic = 0xABCDDBCA;
 
-class HeapTestSubClass : public HeapTestOtherSuperClass,
-                         public HeapTestSuperClass {
+class HeapTestSubClass : public HeapTestSuperClass,
+                         public HeapTestOtherSuperClass {
  public:
   HeapTestSubClass() : magic_(kClassMagic) {}
   ~HeapTestSubClass() override {
@@ -662,7 +662,7 @@ class Bar : public GarbageCollected<Bar> {
  public:
   Bar() : magic_(kMagic) { live_++; }
 
-  void FinalizeGarbageCollectedObject() {
+  virtual ~Bar() {
     EXPECT_TRUE(magic_ == kMagic);
     magic_ = 0;
     live_--;
@@ -694,25 +694,26 @@ class Baz : public GarbageCollected<Baz> {
   Member<Bar> bar_;
 };
 
-class Foo : public Bar {
+class Foo final : public Bar {
  public:
   Foo(Bar* bar) : Bar(), bar_(bar), points_to_foo_(false) {}
 
   Foo(Foo* foo) : Bar(), bar_(foo), points_to_foo_(true) {}
 
   void Trace(Visitor* visitor) const override {
+    Bar::Trace(visitor);
     if (points_to_foo_)
-      visitor->Trace(static_cast<const Foo*>(bar_));
+      visitor->Trace(static_cast<const Foo*>(bar_.Get()));
     else
       visitor->Trace(bar_);
   }
 
  private:
-  const Bar* bar_;
+  const Member<Bar> bar_;
   const bool points_to_foo_;
 };
 
-class Bars : public Bar {
+class Bars final : public Bar {
  public:
   Bars() : width_(0) {
     for (unsigned i = 0; i < kWidth; i++) {
@@ -722,6 +723,7 @@ class Bars : public Bar {
   }
 
   void Trace(Visitor* visitor) const override {
+    Bar::Trace(visitor);
     for (unsigned i = 0; i < width_; i++)
       visitor->Trace(bars_[i]);
   }
@@ -812,8 +814,8 @@ class RefCountedAndGarbageCollected final
 int RefCountedAndGarbageCollected::destructor_calls_ = 0;
 
 class RefCountedAndGarbageCollected2 final
-    : public HeapTestOtherSuperClass,
-      public GarbageCollected<RefCountedAndGarbageCollected2> {
+    : public GarbageCollected<RefCountedAndGarbageCollected2>,
+      public HeapTestOtherSuperClass {
  public:
   RefCountedAndGarbageCollected2() : keep_alive_(PERSISTENT_FROM_HERE) {}
   ~RefCountedAndGarbageCollected2() { ++destructor_calls_; }
@@ -846,12 +848,13 @@ class RefCountedAndGarbageCollected2 final
 
 int RefCountedAndGarbageCollected2::destructor_calls_ = 0;
 
-class Weak : public Bar {
+class Weak final : public Bar {
  public:
   Weak(Bar* strong_bar, Bar* weak_bar)
       : Bar(), strong_bar_(strong_bar), weak_bar_(weak_bar) {}
 
   void Trace(Visitor* visitor) const override {
+    Bar::Trace(visitor);
     visitor->Trace(strong_bar_);
     visitor->template RegisterWeakCallbackMethod<Weak, &Weak::ZapWeakMembers>(
         this);
@@ -867,15 +870,16 @@ class Weak : public Bar {
 
  private:
   Member<Bar> strong_bar_;
-  Bar* weak_bar_;
+  UntracedMember<Bar> weak_bar_;
 };
 
-class WithWeakMember : public Bar {
+class WithWeakMember final : public Bar {
  public:
   WithWeakMember(Bar* strong_bar, Bar* weak_bar)
       : Bar(), strong_bar_(strong_bar), weak_bar_(weak_bar) {}
 
   void Trace(Visitor* visitor) const override {
+    Bar::Trace(visitor);
     visitor->Trace(strong_bar_);
     visitor->Trace(weak_bar_);
   }
@@ -981,7 +985,10 @@ class PreFinalizerSubClass : public PreFinalizerBase, public PreFinalizerMixin {
  public:
   PreFinalizerSubClass() : was_destructed_(false) {}
   ~PreFinalizerSubClass() override { was_destructed_ = true; }
-  void Trace(Visitor* visitor) const override {}
+  void Trace(Visitor* visitor) const override {
+    PreFinalizerBase::Trace(visitor);
+    PreFinalizerMixin::Trace(visitor);
+  }
   void Dispose() {
     EXPECT_FALSE(g_dispose_was_called_for_pre_finalizer_base);
     EXPECT_FALSE(g_dispose_was_called_for_pre_finalizer_sub_class);
@@ -1016,7 +1023,7 @@ class FinalizationObserver : public GarbageCollected<FinalizationObserver<T>> {
   }
 
  private:
-  WeakMember<T> data_;
+  UntracedMember<T> data_;
   bool did_call_will_finalize_;
 };
 
@@ -1026,16 +1033,16 @@ class FinalizationObserverWithHashMap {
                       std::unique_ptr<FinalizationObserverWithHashMap>>
       ObserverMap;
 
-  explicit FinalizationObserverWithHashMap(Observable& target)
+  explicit FinalizationObserverWithHashMap(Observable* target)
       : target_(target) {}
   ~FinalizationObserverWithHashMap() {
-    target_.WillFinalize();
+    target_->WillFinalize();
     did_call_will_finalize_ = true;
   }
 
-  static ObserverMap& Observe(Observable& target) {
+  static ObserverMap& Observe(Observable* target) {
     ObserverMap& map = Observers();
-    ObserverMap::AddResult result = map.insert(&target, nullptr);
+    ObserverMap::AddResult result = map.insert(target, nullptr);
     if (result.is_new_entry) {
       result.stored_value->value =
           std::make_unique<FinalizationObserverWithHashMap>(target);
@@ -1061,7 +1068,7 @@ class FinalizationObserverWithHashMap {
     return **observer_map_;
   }
 
-  Observable& target_;
+  UntracedMember<Observable> target_;
   static Persistent<ObserverMap>* observer_map_;
 };
 
@@ -1197,18 +1204,6 @@ class VectorObject {
 
 class VectorObjectInheritedTrace : public VectorObject {};
 
-class VectorObjectNoTrace {
-  DISALLOW_NEW();
-
- public:
-  VectorObjectNoTrace() {
-    value_ = MakeGarbageCollected<SimpleFinalizedObject>();
-  }
-
- private:
-  Member<SimpleFinalizedObject> value_;
-};
-
 class TerminatedArrayItem {
   DISALLOW_NEW();
 
@@ -1234,7 +1229,6 @@ WTF_ALLOW_MOVE_INIT_AND_COMPARE_WITH_MEM_FUNCTIONS(blink::TerminatedArrayItem)
 WTF_ALLOW_MOVE_INIT_AND_COMPARE_WITH_MEM_FUNCTIONS(blink::VectorObject)
 WTF_ALLOW_MOVE_INIT_AND_COMPARE_WITH_MEM_FUNCTIONS(
     blink::VectorObjectInheritedTrace)
-WTF_ALLOW_MOVE_INIT_AND_COMPARE_WITH_MEM_FUNCTIONS(blink::VectorObjectNoTrace)
 
 namespace blink {
 
@@ -1267,7 +1261,7 @@ class DynamicallySizedObject : public GarbageCollected<DynamicallySizedObject> {
 class FinalizationAllocator final
     : public GarbageCollected<FinalizationAllocator> {
  public:
-  FinalizationAllocator(Persistent<IntWrapper>* wrapper) : wrapper_(wrapper) {}
+  FinalizationAllocator(Persistent<IntWrapper>* wrapper) { wrapper_ = wrapper; }
 
   ~FinalizationAllocator() {
     for (int i = 0; i < 10; ++i)
@@ -1281,8 +1275,10 @@ class FinalizationAllocator final
   void Trace(Visitor* visitor) const {}
 
  private:
-  Persistent<IntWrapper>* wrapper_;
+  static Persistent<IntWrapper>* wrapper_;
 };
+
+Persistent<IntWrapper>* FinalizationAllocator::wrapper_;
 
 class PreFinalizerBackingShrinkForbidden final
     : public GarbageCollected<PreFinalizerBackingShrinkForbidden> {
@@ -2243,12 +2239,6 @@ class Container final : public GarbageCollected<Container> {
     visitor->Trace(vector_uw);
     visitor->Trace(deque);
   }
-};
-
-struct NeedsTracingTrait {
-  explicit NeedsTracingTrait(IntWrapper* wrapper) : wrapper_(wrapper) {}
-  void Trace(Visitor* visitor) const { visitor->Trace(wrapper_); }
-  Member<IntWrapper> wrapper_;
 };
 
 TEST_F(HeapTest, HeapVectorFilledWithValue) {
@@ -3663,7 +3653,7 @@ TEST_F(HeapTest, FinalizationObserver) {
   FinalizationObserverWithHashMap::did_call_will_finalize_ = false;
   auto* foo = MakeGarbageCollected<Observable>(MakeGarbageCollected<Bar>());
   FinalizationObserverWithHashMap::ObserverMap& map =
-      FinalizationObserverWithHashMap::Observe(*foo);
+      FinalizationObserverWithHashMap::Observe(foo);
   EXPECT_EQ(1u, map.size());
   foo = nullptr;
   // FinalizationObserverWithHashMap doesn't have a strong reference to
@@ -3854,17 +3844,37 @@ TEST_F(HeapTest, CollectionNesting) {
   EXPECT_EQ(1, IntWrapper::destructor_calls_);
 }
 
+namespace {
+class DisableHeapVerificationScope {
+ public:
+  DisableHeapVerificationScope(const char*) {
+    ThreadState::Current()->EnterNoHeapVerificationScopeForTesting();
+  }
+  ~DisableHeapVerificationScope() {
+    ThreadState::Current()->LeaveNoHeapVerificationScopeForTesting();
+  }
+};
+}  // namespace
+
 TEST_F(HeapTest, GarbageCollectedMixin) {
   ClearOutOldGarbage();
 
   Persistent<UseMixin> usemixin = MakeGarbageCollected<UseMixin>();
   EXPECT_EQ(0, UseMixin::trace_count_);
-  PreciselyCollectGarbage();
+  {
+    DisableHeapVerificationScope scope(
+        "Avoid tracing UseMixin during verification");
+    PreciselyCollectGarbage();
+  }
   EXPECT_EQ(1, UseMixin::trace_count_);
 
   Persistent<Mixin> mixin = usemixin;
   usemixin = nullptr;
-  PreciselyCollectGarbage();
+  {
+    DisableHeapVerificationScope scope(
+        "Avoid tracing UseMixin during verification");
+    PreciselyCollectGarbage();
+  }
   EXPECT_EQ(2, UseMixin::trace_count_);
 
   Persistent<HeapHashSet<WeakMember<Mixin>>> weak_map =
@@ -4414,7 +4424,11 @@ TEST_F(HeapTest, Bind) {
   base::OnceClosure mixin_closure =
       WTF::Bind(static_cast<void (Mixin::*)(Visitor*) const>(&Mixin::Trace),
                 WrapPersistent(mixin), nullptr);
-  PreciselyCollectGarbage();
+  {
+    DisableHeapVerificationScope scope(
+        "Avoid tracing UseMixin during verification");
+    PreciselyCollectGarbage();
+  }
   // The closure should have a persistent handle to the mixin.
   EXPECT_EQ(1, UseMixin::trace_count_);
 }
@@ -4658,12 +4672,12 @@ class AllocatesOnAssignment {
 
   inline bool IsDeleted() const { return value_.IsHashTableDeletedValue(); }
 
-  void Trace(Visitor* visitor) const { visitor->Trace(value_); }
+  void Trace(Visitor* visitor) const {}
 
   int Value() { return value_->Value(); }
 
  private:
-  Member<IntWrapper> value_;
+  Persistent<IntWrapper> value_;
 
   friend bool operator==(const AllocatesOnAssignment&,
                          const AllocatesOnAssignment&);
@@ -5357,7 +5371,7 @@ class GCBase : public GarbageCollected<GCBase> {
 class GCDerived final : public GCBase {
  public:
   static int destructor_called;
-  void Trace(Visitor*) const override {}
+  void Trace(Visitor* visitor) const override { GCBase::Trace(visitor); }
   ~GCDerived() { ++destructor_called; }
 };
 

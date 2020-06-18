@@ -128,17 +128,28 @@ class AlternatingThreadTester {
   }
 };
 
-class MemberSameThreadCheckTester : public AlternatingThreadTester {
+class MemberSameThreadCheckTester final : public AlternatingThreadTester {
+ public:
+  MemberSameThreadCheckTester()
+      : object_wrapper_(MakeGarbageCollected<ObjectWrapper>()) {}
+
  private:
+  class ObjectWrapper : public GarbageCollected<ObjectWrapper> {
+   public:
+    void Trace(Visitor* visitor) const { visitor->Trace(object_); }
+
+    Member<Object> object_;
+  };
+
   void MainThreadMain() override { SwitchToWorkerThread(); }
 
   void WorkerThreadMain() override {
     // Setting an object created on the worker thread to a Member allocated on
     // the main thread is not allowed.
-    object_ = MakeGarbageCollected<Object>();
+    object_wrapper_->object_ = MakeGarbageCollected<Object>();
   }
 
-  Member<Object> object_;
+  ObjectWrapper* object_wrapper_;
 };
 
 #if DCHECK_IS_ON()

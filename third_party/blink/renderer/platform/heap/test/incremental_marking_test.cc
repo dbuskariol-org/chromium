@@ -94,6 +94,8 @@ class IncrementalMarkingScopeBase {
 };
 
 class IncrementalMarkingScope : public IncrementalMarkingScopeBase {
+  STACK_ALLOCATED();
+
  public:
   explicit IncrementalMarkingScope(ThreadState* thread_state)
       : IncrementalMarkingScopeBase(thread_state),
@@ -251,16 +253,14 @@ class Object : public LinkedObject {
     return HeapObjectHeader::FromPayload(this)->IsMarked();
   }
 
-  void Trace(Visitor* visitor) const { LinkedObject::Trace(visitor); }
+  void Trace(Visitor* visitor) const override { LinkedObject::Trace(visitor); }
 };
 
 class ObjectWithWriteBarrier : public GarbageCollected<ObjectWithWriteBarrier> {
  public:
   void Trace(Visitor* v) const { v->Trace(object_); }
 
-  void Set(Object* object) {
-    object_ = object;
-  }
+  void Set(Object* object) { object_ = object; }
 
  private:
   Member<Object> object_;
