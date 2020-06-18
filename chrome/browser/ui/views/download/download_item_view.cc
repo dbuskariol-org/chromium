@@ -439,7 +439,7 @@ void DownloadItemView::OnDownloadUpdated() {
     return;
   }
 
-  base::string16 new_tip = model_->GetTooltipText(font_list_, kTooltipMaxWidth);
+  base::string16 new_tip = model_->GetTooltipText();
   if (new_tip != tooltip_text_) {
     tooltip_text_ = new_tip;
     TooltipTextChanged();
