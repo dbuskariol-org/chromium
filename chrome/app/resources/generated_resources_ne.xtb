@@ -435,6 +435,7 @@
 <translation id="1546452108651444655"><ph name="CHILD_NAME" /> एउटा <ph name="EXTENSION_TYPE" /> स्थापना गर्न चाहन्छन् जसले निम्न काम गर्न सक्छ:</translation>
 <translation id="1549275686094429035">ARC सक्षम पारिएको छ</translation>
 <translation id="1549788673239553762"><ph name="APP_NAME" /> ले <ph name="VOLUME_NAME" /> पहुँच गर्न चाहन्छ। यसले तपाईँका फाइलहरू परिमार्जन गर्न वा मेटाउन सक्छ।</translation>
+<translation id="1552301827267621511">"<ph name="EXTENSION_NAME" />" एक्सटेन्सनले सर्च इन्जिन परिवर्तन गरी <ph name="SEARCH_PROVIDER_DOMAIN" /> बनाएको छ</translation>
 <translation id="1553538517812678578">असीमित</translation>
 <translation id="1554390798506296774"><ph name="HOST" /> मा सधैँ स्यान्डबक्स हटाइएका प्लगइनहरूलाई अनुमति दिनुहोस्</translation>
 <translation id="1555130319947370107">नीलो</translation>
@@ -1675,6 +1676,7 @@
 <translation id="3101126716313987672">मधुरो प्रकाश</translation>
 <translation id="3101709781009526431">मिति र समय</translation>
 <translation id="3103941660000130485">Linux को स्तरवृद्धि गर्ने क्रममा त्रुटि भयो</translation>
+<translation id="3105796011181310544">फेरि Google प्रयोग गर्ने हो?</translation>
 <translation id="310671807099593501">साइटले ब्लुटुथ प्रयोग गर्दै छ</translation>
 <translation id="3115147772012638511">क्यासको प्रतीक्षामा ...</translation>
 <translation id="3115580024857770654">सबै संक्षिप्त गर्नुहोस्</translation>
@@ -2993,6 +2995,7 @@
 <translation id="4833683849865011483">प्रिन्ट सर्भरमा १ प्रिन्टर फेला पर्‍यो</translation>
 <translation id="4835385943915508971">Chrome सँग अनुरोध गरिएको स्रोत माथिको पहुँच छैन।</translation>
 <translation id="4836504898754963407">फिंगरप्रिन्टहरूको व्यवस्थापन गर्नुहोस्</translation>
+<translation id="4837128290434901661">फेरि Google खोज प्रयोग गर्ने हो?</translation>
 <translation id="4837926214103741331">तपाईंलाई यो यन्त्र प्रयोग गर्ने अधिकार दिइएको छैन। साइन-इन अनुमतिको लागि यन्त्र मालिकसँग सम्पर्क गर्नुहोस्।</translation>
 <translation id="4837952862063191349">तपाईँको स्थानीय डेटा पुनर्स्थापना गर्न, कृपया तपाईँको पुरानो <ph name="DEVICE_TYPE" /> पासवर्ड प्रविष्टि गर्नुहोस्।</translation>
 <translation id="4838836835474292213">क्लिपबोर्ड पढ्ने पहुँच दिइयो</translation>
@@ -4961,6 +4964,7 @@
 <translation id="7396845648024431313"><ph name="APP_NAME" /> सिस्टम स्टार्टअपमा लन्च हुनेछ र तपाईंले अन्य सबै <ph name="PRODUCT_NAME" /> विन्डोहरू बन्द गरिसक्नुभएपछि समेत पृष्ठभूमिमा चल्न जारी राख्नेछ।</translation>
 <translation id="7399045143794278225">सिंक आफू अनुकूल पार्नुहोस्</translation>
 <translation id="7400418766976504921">URL</translation>
+<translation id="7400447915166857470">फेरि <ph name="OLD_SEARCH_PROVIDER" /> प्रयोग गर्ने हो?</translation>
 <translation id="7400839060291901923">आफ्नो <ph name="PHONE_NAME" /> मा जडान सेटअप गर्नुहोस्</translation>
 <translation id="7401778920660465883">यो सन्देश हटाउनुहोस्</translation>
 <translation id="7403642243184989645">स्रोतहरू डाउनलोड गर्दै</translation>
@@ -5217,6 +5221,7 @@
 <translation id="7728570244950051353">शयन मोडबाट स्क्रिन लक गर्ने विकल्प</translation>
 <translation id="7728668285692163452">च्यानल परिवर्तन अलि पछि लागू हुनेछ</translation>
 <translation id="7730449930968088409">तपाइँको स्क्रिनको सामग्री खिच्नुहोस्</translation>
+<translation id="7730683939467795481"><ph name="EXTENSION_NAME" /> एक्स्टेन्सनले यो पृष्ठ परिवर्तन गरेको छ</translation>
 <translation id="7732111077498238432">नेटवर्क नीतिद्वारा नियन्त्रित छ</translation>
 <translation id="7737115349420013392">"<ph name="DEVICE_NAME" />" सँग जोडा बनाउँदै ...</translation>
 <translation id="7737238973539693982">Linux (बिटा) मेटनुहोस्</translation>
@@ -5558,6 +5563,7 @@
 <translation id="8136269678443988272">तपाईंले प्रविष्टि गर्नुभएका PIN हरू मेल खाँदैनन्</translation>
 <translation id="8137559199583651773">विस्तार व्यवस्थापन गर्नुहोस्</translation>
 <translation id="8138082791834443598">वैकल्पिक - नयाँ प्रविष्टि गर्नुहोस् वा भएको जानकारी यस यन्त्रसँग सम्बन्धित हुन अद्यावधिक गर्नुहोस्।</translation>
+<translation id="8138217203226449454">तपाईंले आफ्नो खोज प्रदायक परिवर्तन गर्न खोज्नुभएको हो?</translation>
 <translation id="813913629614996137">सुरुवात गर्दै...</translation>
 <translation id="8140778357236808512">एक अवस्थित निरीक्षण गरिएको प्रयोगकर्ता आयात गर्नुहोस्</translation>
 <translation id="8141584439523427891">अहिले वैकल्पिक ब्राउजरमा खोल्दै</translation>
@@ -6243,6 +6249,7 @@
 <translation id="9004952710076978168">एक अज्ञात प्रिन्टरका लागि जानकारी प्राप्त।</translation>
 <translation id="9008201768610948239">बेवास्ता गर्नुहोस्</translation>
 <translation id="9009369504041480176">(<ph name="PROGRESS_PERCENT" />%) अपलोड गर्दै...</translation>
+<translation id="9009708085379296446">तपाईंले यो पृष्ठ परिवर्तन गर्न खोज्नुभएको हो?</translation>
 <translation id="9011163749350026987">सधैँ आइकन देखाउनुहोस्</translation>
 <translation id="9013037634206938463">Linux प्रयोग गर्न कम्तीमा पनि <ph name="INSTALL_SIZE" /> खाली ठाउँ आवश्यक पर्छ। थप ठाउँ खाली गर्न आफ्नो यन्त्रमा भएका फाइलहरू मेटाउनुहोस्।</translation>
 <translation id="9013707997379828817">तपाईंको प्रशासकले यो यन्त्रलाई पहिलेको स्थितिमा फर्काउनुभयो। कृपया महत्त्वपूर्ण फाइलहरू सुरक्षित गरी पुनः सुरु गर्नुहोस्। यन्त्रमा रहेका सम्पूर्ण डेटा मेटाइने छ।</translation>

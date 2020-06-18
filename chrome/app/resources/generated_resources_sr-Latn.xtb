@@ -434,6 +434,7 @@
 <translation id="1546452108651444655"><ph name="CHILD_NAME" /> želi da instalira <ph name="EXTENSION_TYPE" /> koji može:</translation>
 <translation id="1549275686094429035">Vreme izvršavanja aplikacije za Chrome je omogućeno</translation>
 <translation id="1549788673239553762"><ph name="APP_NAME" /> želi da pristupa <ph name="VOLUME_NAME" />. Možda će da menja ili briše datoteke.</translation>
+<translation id="1552301827267621511">Dodatak „<ph name="EXTENSION_NAME" />“ je promenio pretragu tako da koristi <ph name="SEARCH_PROVIDER_DOMAIN" /></translation>
 <translation id="1553538517812678578">neograničeno</translation>
 <translation id="1554390798506296774">Uvek dozvoljavaj dodatne komponente koje su izvan zaštićenog okruženja na <ph name="HOST" /></translation>
 <translation id="1555130319947370107">Plava</translation>
@@ -1675,6 +1676,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="3101126716313987672">Prigušite svetlo</translation>
 <translation id="3101709781009526431">Datum i vreme</translation>
 <translation id="3103941660000130485">Greška pri nadograđivanju Linux-a</translation>
+<translation id="3105796011181310544">Želite li da se vratite na Google?</translation>
 <translation id="310671807099593501">Sajt koristi Bluetooth</translation>
 <translation id="3115147772012638511">Čeka se keš memorija...</translation>
 <translation id="3115580024857770654">Skupi sve</translation>
@@ -2994,6 +2996,7 @@ Možete da upravljate podešavanjima ovog naloga ako instalirate aplikaciju Fami
 <translation id="4833683849865011483">Pronađen je 1 štampač sa servera za štampanje</translation>
 <translation id="4835385943915508971">Chrome nema pristup zahtevanom resursu.</translation>
 <translation id="4836504898754963407">Upravljajte otiscima prstiju</translation>
+<translation id="4837128290434901661">Želite li da se vratite na Google pretragu?</translation>
 <translation id="4837926214103741331">Nemate ovlašćenje za korišćenje ovog uređaja. Kontaktirajte vlasnika uređaja da biste dobili dozvolu za prijavljivanje.</translation>
 <translation id="4837952862063191349">Da biste otključali pristup lokalnim podacima i vratili ih, unesite staru lozinku za uređaj <ph name="DEVICE_TYPE" />.</translation>
 <translation id="4838836835474292213">Pristup za čitanje privremene memorije je dozvoljen</translation>
@@ -4964,6 +4967,7 @@ Vodite računa da ne otkrijete nikakve osetljive informacije.</translation>
 <translation id="7396845648024431313"><ph name="APP_NAME" /> će se pokrenuti prilikom pokretanja sistema i nastaviti da radi u pozadini čak i kada zatvorite sve ostale <ph name="PRODUCT_NAME" /> prozore.</translation>
 <translation id="7399045143794278225">Prilagodite sinhronizaciju</translation>
 <translation id="7400418766976504921">URL adresa</translation>
+<translation id="7400447915166857470">Želite li da se vratite na <ph name="OLD_SEARCH_PROVIDER" />?</translation>
 <translation id="7400839060291901923">Podesite vezu na telefonu <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Odbaci ovu poruku</translation>
 <translation id="7403642243184989645">Preuzimanje resursa</translation>
@@ -5220,6 +5224,7 @@ Vodite računa da ne otkrijete nikakve osetljive informacije.</translation>
 <translation id="7728570244950051353">Zaključavanje ekrana iz režima spavanja</translation>
 <translation id="7728668285692163452">Promena kanala će biti primenjena kasnije</translation>
 <translation id="7730449930968088409">Snimanje sadržaja ekrana</translation>
+<translation id="7730683939467795481">Ovu stranicu je promenio dodatak „<ph name="EXTENSION_NAME" />“</translation>
 <translation id="7732111077498238432">Mrežu kontrolišu smernice</translation>
 <translation id="7737115349420013392">Uparuje se sa „<ph name="DEVICE_NAME" />“ ...</translation>
 <translation id="7737238973539693982">Izbrišite Linux (beta)</translation>
@@ -5562,6 +5567,7 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="8136269678443988272">Uneti PIN-ovi se ne podudaraju</translation>
 <translation id="8137559199583651773">Upravljaj dodacima</translation>
 <translation id="8138082791834443598">Opcionalno – unesite nove ili ažurirajte postojeće informacije koje će biti povezane sa ovim uređajem.</translation>
+<translation id="8138217203226449454">Da li ste namerno promenili dobavljača pretrage?</translation>
 <translation id="813913629614996137">Pokreće se…</translation>
 <translation id="8140778357236808512">Uvezi postojećeg korisnika pod nadzorom</translation>
 <translation id="8141584439523427891">Sada se otvara u alternativnom pregledaču</translation>
@@ -6247,6 +6253,7 @@ Datoteka ključa: <ph name="KEY_FILE" />
 <translation id="9004952710076978168">Primljeno je obaveštenje za nepoznati štampač.</translation>
 <translation id="9008201768610948239">Ignoriši</translation>
 <translation id="9009369504041480176">Otpremanje (<ph name="PROGRESS_PERCENT" />%)...</translation>
+<translation id="9009708085379296446">Da li ste želeli da promenite ovu stranicu?</translation>
 <translation id="9011163749350026987">Uvek prikazuj ikonu</translation>
 <translation id="9013037634206938463">Treba vam <ph name="INSTALL_SIZE" /> slobodnog prostora da biste instalirali Linux. Da biste oslobodili prostor, izbrišite datoteke sa uređaja.</translation>
 <translation id="9013707997379828817">Administrator je vratio ovaj uređaj na raniju verziju. Sačuvajte važne datoteke, pa restartujte. Svi podaci na uređaju će biti izbrisani.</translation>

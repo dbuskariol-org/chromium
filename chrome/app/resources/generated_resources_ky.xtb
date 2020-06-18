@@ -437,6 +437,7 @@
 <translation id="1546452108651444655"><ph name="CHILD_NAME" /> төмөнкүлөрдү аткара алган <ph name="EXTENSION_TYPE" /> кеңейтүүсүн орноткону жатат:</translation>
 <translation id="1549275686094429035">ARC иштетилди</translation>
 <translation id="1549788673239553762"><ph name="APP_NAME" /> колдонмосу <ph name="VOLUME_NAME" /> дегенге мүмкүнчүлүк алгысы келет. Ал файлдарыңызды өзгөртүп же жок кылышы мүмкүн.</translation>
+<translation id="1552301827267621511">"<ph name="EXTENSION_NAME" />" кеңейтүүсү эми издөө үчүн <ph name="SEARCH_PROVIDER_DOMAIN" /> колдонула тургандай кылып өзгөртүп койду</translation>
 <translation id="1553538517812678578">чексиз</translation>
 <translation id="1554390798506296774"><ph name="HOST" /> ичиндеги сынамык чөйрөсүнөн тышкары плагиндерге ар дайым уруксат берилсин</translation>
 <translation id="1555130319947370107">Көк</translation>
@@ -1678,6 +1679,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="3101126716313987672">Күңүрт жарык</translation>
 <translation id="3101709781009526431">Күнү, убактысы</translation>
 <translation id="3103941660000130485">Linux'ту жаңыртуу учурундагы ката</translation>
+<translation id="3105796011181310544">Google кайтарылсынбы?</translation>
 <translation id="310671807099593501">Сайт bluetooth'ду колдонууда</translation>
 <translation id="3115147772012638511">Кешти күтүү…</translation>
 <translation id="3115580024857770654">Баарын жыйыштыруу</translation>
@@ -2997,6 +2999,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="4833683849865011483">Басып чыгаруу серверинен 1 принтер табылды</translation>
 <translation id="4835385943915508971">Суралган булакка Chrome’дун кирүү мүмкүнчүлүгү жок.</translation>
 <translation id="4836504898754963407">Манжа издерин башкаруу</translation>
+<translation id="4837128290434901661">Google Издөө кайтарылсынбы?</translation>
 <translation id="4837926214103741331">Бул түзмөктү пайдаланууга уруксатыңыз жок. Кирүүгө уруксат алуу үчүн түзмөк ээсине кайрылыңыз.</translation>
 <translation id="4837952862063191349">Кулпуну ачып жана жергиликтүү дайын-даректериңизди калыбына келтирүү үчүн, эски <ph name="DEVICE_TYPE" /> сырсөзүңүздү киргизиңиз.</translation>
 <translation id="4838836835474292213">Алмашуу буферин окууга уруксат берилди</translation>
@@ -4966,6 +4969,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7396845648024431313"><ph name="APP_NAME" /> тутум иштеп баштаганда ишке киргизилет жана башка <ph name="PRODUCT_NAME" /> терезелеринин баары жабылганда да фондо иштей берет.</translation>
 <translation id="7399045143794278225">Шайкештирүүнү ыңгайлаштыруу</translation>
 <translation id="7400418766976504921">URL</translation>
+<translation id="7400447915166857470"><ph name="OLD_SEARCH_PROVIDER" /> кайтарылсынбы?</translation>
 <translation id="7400839060291901923"><ph name="PHONE_NAME" /> телефонуңуздагы байланышты жөндөп алыңыз</translation>
 <translation id="7401778920660465883">Бул билдирүүнү четке кагуу</translation>
 <translation id="7403642243184989645">Ресурстар жүктөлүп алынууда</translation>
@@ -5222,6 +5226,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7728570244950051353">Уйку режиминде экранды кулпулоо</translation>
 <translation id="7728668285692163452">Канал кийинчерээк өзгөртүлөт</translation>
 <translation id="7730449930968088409">Экраныңыздын мазмунун тартып алыңыз</translation>
+<translation id="7730683939467795481">Бул баракты "<ph name="EXTENSION_NAME" />" кеңейтүүсү өзгөрттү</translation>
 <translation id="7732111077498238432">Тармак саясат аркылуу көзөмөлдөнөт</translation>
 <translation id="7737115349420013392">"<ph name="DEVICE_NAME" />" менен жупташтырылууда...</translation>
 <translation id="7737238973539693982">Linux'ту (бета-версиясы) жок кылуу</translation>
@@ -5563,6 +5568,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="8136269678443988272">Киргизилген PIN коддор дал келген жок</translation>
 <translation id="8137559199583651773">Кеңейтүүлөрдү башкаруу</translation>
 <translation id="8138082791834443598">Кошумча – бул түзмөккө байланыштыруу үчүн жаңы маалымат киргизип же учурдагысын жаңыртыңыз.</translation>
+<translation id="8138217203226449454">Издөө кызматын башкага өзгөртөйүн дедиңиз беле?</translation>
 <translation id="813913629614996137">Баштапкы маанини берүүдө...</translation>
 <translation id="8140778357236808512">Учурдагы көзөмөлдөнгөн колдонуучуну импорттоо</translation>
 <translation id="8141584439523427891">Кошумча серепчи азыр ачылууда</translation>
@@ -6248,6 +6254,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="9004952710076978168">Белгисиз принтер үчүн эскертме алынды.</translation>
 <translation id="9008201768610948239">Этибарга албоо</translation>
 <translation id="9009369504041480176">Жүктөлүп берилүүдө (<ph name="PROGRESS_PERCENT" />%)…</translation>
+<translation id="9009708085379296446">Бул баракты өзгөртөйүн дедиңиз беле?</translation>
 <translation id="9011163749350026987">Ар дайым сүрөтчөнү көрсөтүү</translation>
 <translation id="9013037634206938463">Linux'ту орнотуу үчүн <ph name="INSTALL_SIZE" /> бош орун талап кылынат. Орун бошотуу үчүн түзмөгүңүздөн файлдарды жок кылыңыз.</translation>
 <translation id="9013707997379828817">Администраторуңуз бул түзмөктү баштапкы абалга келтирди. Бардык маанилүү файлдарды сактап, түзмөктү өчүрүп-күйгүзүңүз. Түзмөктөгү бардык дайындар өчүрүлөт.</translation>

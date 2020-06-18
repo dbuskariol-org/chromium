@@ -437,6 +437,7 @@
 <translation id="1546452108651444655"><ph name="CHILD_NAME" /> さんが次の処理を行う<ph name="EXTENSION_TYPE" />のインストールを求めています。</translation>
 <translation id="1549275686094429035">ARC は有効になっています</translation>
 <translation id="1549788673239553762">「<ph name="APP_NAME" />」が <ph name="VOLUME_NAME" /> へのアクセスを求めています。ファイルが変更または削除される可能性があります。</translation>
+<translation id="1552301827267621511">「<ph name="EXTENSION_NAME" />」拡張機能により <ph name="SEARCH_PROVIDER_DOMAIN" /> を使用して検索するよう変更されました</translation>
 <translation id="1553538517812678578">無制限</translation>
 <translation id="1554390798506296774"><ph name="HOST" /> でサンドボックスの無効化プラグインを常に許可する</translation>
 <translation id="1555130319947370107">青</translation>
@@ -1678,6 +1679,7 @@
 <translation id="3101126716313987672">ライトを暗くする</translation>
 <translation id="3101709781009526431">日時</translation>
 <translation id="3103941660000130485">Linux のアップグレード中にエラーが発生しました</translation>
+<translation id="3105796011181310544">Google に戻しますか？</translation>
 <translation id="310671807099593501">サイトで Bluetooth が使用されています</translation>
 <translation id="3115147772012638511">キャッシュを待機しています...</translation>
 <translation id="3115580024857770654">すべて折りたたむ</translation>
@@ -2997,6 +2999,7 @@
 <translation id="4833683849865011483">プリント サーバーで 1 個のプリンタが見つかりました</translation>
 <translation id="4835385943915508971">Chrome はリクエストされたリソースにアクセスできません。</translation>
 <translation id="4836504898754963407">フィンガープリントの管理</translation>
+<translation id="4837128290434901661">Google 検索に戻しますか？</translation>
 <translation id="4837926214103741331">このデバイスを使用する権限がありません。ログイン権限については、デバイスの所有者にお問い合わせください。</translation>
 <translation id="4837952862063191349">ロックを解除してローカルデータを復元するには、<ph name="DEVICE_TYPE" /> の以前のパスワードを入力してください。</translation>
 <translation id="4838836835474292213">クリップボードへの読み取りアクセスが許可されています</translation>
@@ -4966,6 +4969,7 @@
 <translation id="7396845648024431313"><ph name="APP_NAME" /> はシステム起動時に開始され、他の <ph name="PRODUCT_NAME" /> ウィンドウをすべて閉じてもバックグラウンドで動作し続けます。</translation>
 <translation id="7399045143794278225">同期をカスタマイズする</translation>
 <translation id="7400418766976504921">URL</translation>
+<translation id="7400447915166857470"><ph name="OLD_SEARCH_PROVIDER" /> に戻しますか？</translation>
 <translation id="7400839060291901923">「<ph name="PHONE_NAME" />」で接続設定を行ってください</translation>
 <translation id="7401778920660465883">このメッセージを表示しない</translation>
 <translation id="7403642243184989645">リソースのダウンロード</translation>
@@ -5222,6 +5226,7 @@
 <translation id="7728570244950051353">スリープモードからの復帰時にロック画面を表示</translation>
 <translation id="7728668285692163452">チャンネルの変更は後で適用されます</translation>
 <translation id="7730449930968088409">画面のコンテンツをキャプチャする</translation>
+<translation id="7730683939467795481">このページは「<ph name="EXTENSION_NAME" />」拡張機能によって変更されました</translation>
 <translation id="7732111077498238432">ネットワークはポリシーによって管理されています</translation>
 <translation id="7737115349420013392">「<ph name="DEVICE_NAME" />」とペア設定しています…</translation>
 <translation id="7737238973539693982">Linux（ベータ版）の削除</translation>
@@ -5564,6 +5569,7 @@
 <translation id="8136269678443988272">入力した PIN が一致しません</translation>
 <translation id="8137559199583651773">拡張機能を管理</translation>
 <translation id="8138082791834443598">省略可 - このデバイスに関連付ける新しい情報を入力するか、既存の情報を更新します。</translation>
+<translation id="8138217203226449454">検索プロバイダを変更するつもりでしたか？</translation>
 <translation id="813913629614996137">初期化しています...</translation>
 <translation id="8140778357236808512">既存の監視対象ユーザーをインポートする</translation>
 <translation id="8141584439523427891">まもなく代替ブラウザで開きます</translation>
@@ -6249,6 +6255,7 @@
 <translation id="9004952710076978168">不明なプリンタのメッセージを受け取りました。</translation>
 <translation id="9008201768610948239">無視する</translation>
 <translation id="9009369504041480176">アップロード中（<ph name="PROGRESS_PERCENT" /> %）...</translation>
+<translation id="9009708085379296446">このページを変更するつもりでしたか？</translation>
 <translation id="9011163749350026987">アイコンを常に表示</translation>
 <translation id="9013037634206938463">Linux をインストールするには <ph name="INSTALL_SIZE" /> の空き容量が必要です。空き容量を増やすには、デバイスからファイルを削除してください。</translation>
 <translation id="9013707997379828817">管理者がこのデバイスをロールバックしました。重要なファイルを保存してから、再起動してください。デバイス上のデータはすべて削除されます。</translation>

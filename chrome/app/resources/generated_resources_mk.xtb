@@ -437,6 +437,7 @@
 <translation id="1546452108651444655"><ph name="CHILD_NAME" /> сака да инсталира <ph name="EXTENSION_TYPE" /> што може:</translation>
 <translation id="1549275686094429035">ARC е овозможена</translation>
 <translation id="1549788673239553762"><ph name="APP_NAME" /> сака да пристапи на <ph name="VOLUME_NAME" />. Тоа може да ги измени или да ги избрише вашите датотеки.</translation>
+<translation id="1552301827267621511">Екстензијата „<ph name="EXTENSION_NAME" />“ го смени пребарувачот и ќе го користи <ph name="SEARCH_PROVIDER_DOMAIN" /></translation>
 <translation id="1553538517812678578">неограничено</translation>
 <translation id="1554390798506296774">Секогаш дозволувај неизолирани приклучоци на <ph name="HOST" /></translation>
 <translation id="1555130319947370107">Сина</translation>
@@ -1678,6 +1679,7 @@
 <translation id="3101126716313987672">Затемни светло</translation>
 <translation id="3101709781009526431">Датум и време</translation>
 <translation id="3103941660000130485">Грешка при надградувањето на Linux</translation>
+<translation id="3105796011181310544">Да се врати на Google?</translation>
 <translation id="310671807099593501">Сајтот користи Bluetooth</translation>
 <translation id="3115147772012638511">Се чека кешот...</translation>
 <translation id="3115580024857770654">Собери ги сите</translation>
@@ -2997,6 +2999,7 @@
 <translation id="4833683849865011483">Најден е 1 печатач од серверот за печатење</translation>
 <translation id="4835385943915508971">Chrome нема пристап до бараниот ресурс.</translation>
 <translation id="4836504898754963407">Управувајте со отпечатоците</translation>
+<translation id="4837128290434901661">Да се врати на „Пребарување на Google“?</translation>
 <translation id="4837926214103741331">Немате дозвола да го користите овој уред. Контактирајте го сопственикот на уредот за дозвола за пријавување.</translation>
 <translation id="4837952862063191349">За да ги отклучите и обновите локалните податоци, внесете ја старата лозинка од <ph name="DEVICE_TYPE" />.</translation>
 <translation id="4838836835474292213">Дозволен е пристапот за читање на привремената меморија</translation>
@@ -4966,6 +4969,7 @@
 <translation id="7396845648024431313"><ph name="APP_NAME" /> ќе стартува при подигнувањето на системот и ќе продолжи да се извршува во заднина дури и откако сте ги затвориле останатите прозорци на <ph name="PRODUCT_NAME" />.</translation>
 <translation id="7399045143794278225">Приспособете ја синхронизацијата</translation>
 <translation id="7400418766976504921">URL</translation>
+<translation id="7400447915166857470">Да се врати на <ph name="OLD_SEARCH_PROVIDER" />?</translation>
 <translation id="7400839060291901923">Поставете врска на вашиот <ph name="PHONE_NAME" /></translation>
 <translation id="7401778920660465883">Отфрлете ја поракава</translation>
 <translation id="7403642243184989645">Се преземаат ресурси</translation>
@@ -5222,6 +5226,7 @@
 <translation id="7728570244950051353">Заклучен екран од режим во мирување</translation>
 <translation id="7728668285692163452">Промената на канал ќе се примени подоцна</translation>
 <translation id="7730449930968088409">Снимете содржина од својот екран</translation>
+<translation id="7730683939467795481">Екстензијата „<ph name="EXTENSION_NAME" />“ ја промени страницава</translation>
 <translation id="7732111077498238432">Мрежата се контролира со правило</translation>
 <translation id="7737115349420013392">Се спарува со „<ph name="DEVICE_NAME" />“…</translation>
 <translation id="7737238973539693982">Избриши Linux (Бета)</translation>
@@ -5563,6 +5568,7 @@
 <translation id="8136269678443988272">PIN-кодовите што ги внесовте не се совпаѓаат</translation>
 <translation id="8137559199583651773">Управувај со наставки</translation>
 <translation id="8138082791834443598">Изборно - внесете нови или ажурирајте ги постоечките информации за да се поврзат со уредов.</translation>
+<translation id="8138217203226449454">Дали сакавте да го смените пребарувачот?</translation>
 <translation id="813913629614996137">Се иницијализира…</translation>
 <translation id="8140778357236808512">Увоз на постоечки надгледуван корисник</translation>
 <translation id="8141584439523427891">Се отвора во алтернативен прелистувач сега</translation>
@@ -6251,6 +6257,7 @@
 <translation id="9004952710076978168">Примивме известување за непознат печатач.</translation>
 <translation id="9008201768610948239">Игнорирај</translation>
 <translation id="9009369504041480176">Се поставува (<ph name="PROGRESS_PERCENT" />%)...</translation>
+<translation id="9009708085379296446">Дали мислевте да ја промените страницава?</translation>
 <translation id="9011163749350026987">Секогаш прикажувај ја иконата</translation>
 <translation id="9013037634206938463">Потребни се <ph name="INSTALL_SIZE" /> слободен простор за инсталирање на Linux. За да го зголемите слободниот простор, избришете датотеки од уредот.</translation>
 <translation id="9013707997379828817">Администраторот го врати уредов на фабричките поставки. Зачувајте ги важните датотеки, а потоа рестартирајте. Ќе се избришат сите податоци на уредот.</translation>

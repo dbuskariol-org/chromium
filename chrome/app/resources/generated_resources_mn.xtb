@@ -434,6 +434,7 @@
 <translation id="1546452108651444655"><ph name="CHILD_NAME" /> нь <ph name="EXTENSION_TYPE" /> өргөтгөлийг суулгахыг хүсэж байгаа бөгөөд энэ нь дараахыг хийх боломжтой:</translation>
 <translation id="1549275686094429035">ARC-г идэвхжүүлсэн</translation>
 <translation id="1549788673239553762"><ph name="APP_NAME" /> нь <ph name="VOLUME_NAME" /> руу нэвтрэхийг хүсч байна. Энэ нь таны файлуудыг өөрчилж эсвэл устгаж болно.</translation>
+<translation id="1552301827267621511">"<ph name="EXTENSION_NAME" />" өргөтгөл хайлтыг <ph name="SEARCH_PROVIDER_DOMAIN" />-г ашиглах болгож өөрчилсөн байна</translation>
 <translation id="1553538517812678578">хязгааргүй</translation>
 <translation id="1554390798506296774"><ph name="HOST" /> дээр хамгаалалтгүй нэмэлт өргөтгөлүүдийг ашиглахыг үргэлж зөвшөөрөх</translation>
 <translation id="1555130319947370107">Цэнхэр</translation>
@@ -1673,6 +1674,7 @@
 <translation id="3101126716313987672">Бүдэг гэрэл</translation>
 <translation id="3101709781009526431">Огноо ба цаг</translation>
 <translation id="3103941660000130485">Linux-г дэвшүүлэхэд алдаа гарлаа</translation>
+<translation id="3105796011181310544">Google рүү буцааж өөрчлөх үү?</translation>
 <translation id="310671807099593501">Сайт bluetooth-г ашиглаж байна</translation>
 <translation id="3115147772012638511">Кэш хүлээж байна...</translation>
 <translation id="3115580024857770654">Бүгдийг буулгах</translation>
@@ -2991,6 +2993,7 @@
 <translation id="4833683849865011483">Хэвлэх серверээс 1 хэвлэгч олдлоо</translation>
 <translation id="4835385943915508971">Chrome хүсэлт тавьсан нөөцөд хандах эрхгүй.</translation>
 <translation id="4836504898754963407">Хурууны хээг удирдах</translation>
+<translation id="4837128290434901661">Google Хайлт руу буцааж өөрчлөх үү?</translation>
 <translation id="4837926214103741331">Та энэ төхөөрөмжийг ашиглах эрхгүй байна. Нэвтрэх зөвшөөрөл авахын тулд төхөөрөмжийн эзэмшигчтэй холбогдоно уу.</translation>
 <translation id="4837952862063191349">Суурин өгөгдлийн түгжээг тайлж сэргээхийн тулд хуучин <ph name="DEVICE_TYPE" /> нууц үгээ оруулна уу.</translation>
 <translation id="4838836835474292213">Түр санах ой унших хандалтыг зөвшөөрсөн</translation>
@@ -4960,6 +4963,7 @@
 <translation id="7396845648024431313"><ph name="APP_NAME" /> программыг систем эхлэхэд эхлүүлээд бусад <ph name="PRODUCT_NAME" /> цонхууд хаагдсан байсан ч программыг үргэлжлүүл.</translation>
 <translation id="7399045143794278225">Синк хийхийг өөрчлөх</translation>
 <translation id="7400418766976504921">URL</translation>
+<translation id="7400447915166857470"><ph name="OLD_SEARCH_PROVIDER" /> руу буцааж өөрчлөх үү?</translation>
 <translation id="7400839060291901923"><ph name="PHONE_NAME" />-д холболт тохируулах</translation>
 <translation id="7401778920660465883">Энэ зурвасыг хаах</translation>
 <translation id="7403642243184989645">Нөөцүүдийг татаж байна</translation>
@@ -5216,6 +5220,7 @@
 <translation id="7728570244950051353">Амраах горимын түгжигдсэн дэлгэц</translation>
 <translation id="7728668285692163452">Сувагт орсон өөрчлөлт дараа хийгдэнэ</translation>
 <translation id="7730449930968088409">Дэлгэцийнхээ агуулгыг аваарай</translation>
+<translation id="7730683939467795481">Энэ хуудсыг "<ph name="EXTENSION_NAME" />" өргөтгөлөөр өөрчилсөн байна</translation>
 <translation id="7732111077498238432">Сүлжээг удирдамжаар хянадаг</translation>
 <translation id="7737115349420013392">"<ph name="DEVICE_NAME" />"-тай хослуулж байна ...</translation>
 <translation id="7737238973539693982">Linux (Бэта)-г устгах</translation>
@@ -5554,6 +5559,7 @@
 <translation id="8136269678443988272">Таны оруулсан ПИН-үүд хоорондоо таарахгүй байна</translation>
 <translation id="8137559199583651773">Өргөтгөлүүдийг удирдах</translation>
 <translation id="8138082791834443598">Нэмэлт - энэ төхөөрөмжид холбогдох мэдээллийг шинээр нэмэх эсвэл байгаа мэдээллийг шинэчлэх.</translation>
+<translation id="8138217203226449454">Та хайлтын үйлчилгээ үзүүлэгчээ өөрчлөх гэж байсан уу?</translation>
 <translation id="813913629614996137">Эхлүүлж байна…</translation>
 <translation id="8140778357236808512">Одоо байгаа хяналттай хэрэглэгчийг импортолж авчрах</translation>
 <translation id="8141584439523427891">Одоо өөр хөтчид нээж байна</translation>
@@ -6237,6 +6243,7 @@
 <translation id="9004952710076978168">Үл мэдэгдэх принтерийн талаарх мэдэгдэл хүлээн авсан.</translation>
 <translation id="9008201768610948239">Алгас</translation>
 <translation id="9009369504041480176">Татаж оруулах ( <ph name="PROGRESS_PERCENT" /> %) ...</translation>
+<translation id="9009708085379296446">Та энэ хуудсыг өөрчлөх гэж байсан уу?</translation>
 <translation id="9011163749350026987">Байнга дүрс тэмдэг харуулах</translation>
 <translation id="9013037634206938463">Linux-г суулгахад <ph name="INSTALL_SIZE" />-н сул зай шаардлагатай байна. Сул зайг нэмэгдүүлэхийн тулд төхөөрөмжөөсөө файлуудыг устгана уу.</translation>
 <translation id="9013707997379828817">Таны админ энэ төхөөрөмжийг буцаан шилжүүллээ. Чухал файлуудаа хадгалаад дахин эхлүүлнэ үү. Төхөөрөмж дээрх бүх өгөгдөл устах болно.</translation>
