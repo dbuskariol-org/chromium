@@ -7970,6 +7970,11 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="Within subtree"/>
 </enum>
 
+<enum name="BooleanYesNo">
+  <int value="0" label="No"/>
+  <int value="1" label="Yes"/>
+</enum>
+
 <enum name="BoringSSLReasonCode">
   <obsolete>
     Removed in March 2016.
