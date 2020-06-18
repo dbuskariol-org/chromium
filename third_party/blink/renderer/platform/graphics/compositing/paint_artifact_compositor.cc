@@ -125,7 +125,6 @@ std::unique_ptr<JSONObject> PaintArtifactCompositor::GetLayersAsJSON(
         const auto& foreign_layer_display_item =
             static_cast<const ForeignLayerDisplayItem&>(display_item);
         layer = foreign_layer_display_item.GetLayer();
-        json_client = foreign_layer_display_item.GetLayerAsJSONClient();
       }
       // Need to retrieve the transform from |pending_layers_| so that
       // any decomposition is not double-reported via |layer|'s
