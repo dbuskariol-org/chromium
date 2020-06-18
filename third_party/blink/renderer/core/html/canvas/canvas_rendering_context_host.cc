@@ -317,7 +317,7 @@ ScriptPromise CanvasRenderingContextHost::convertToBlob(
 
   base::TimeTicks start_time = base::TimeTicks::Now();
   scoped_refptr<StaticBitmapImage> image_bitmap =
-      RenderingContext()->GetImage(RasterModeHint::kPreferCPU);
+      RenderingContext()->GetImage();
   if (image_bitmap) {
     auto* resolver = MakeGarbageCollected<ScriptPromiseResolver>(script_state);
     CanvasAsyncBlobCreator::ToBlobFunctionType function_type =
