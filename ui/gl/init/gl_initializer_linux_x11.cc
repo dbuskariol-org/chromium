@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/gl/init/gl_initializer.h"
+#include "ui/gl/init/gl_initializer_linux_x11.h"
 
 #include "base/command_line.h"
 #include "base/logging.h"
@@ -45,7 +45,7 @@ const char kEGLSwiftShaderLibraryName[] = "libEGL.so";
 #endif
 
 bool InitializeStaticGLXInternal() {
-  base::NativeLibrary library = NULL;
+  base::NativeLibrary library = nullptr;
   const base::CommandLine* command_line =
       base::CommandLine::ForCurrentProcess();
 
@@ -142,7 +142,7 @@ bool InitializeStaticEGLInternal(GLImplementation implementation) {
 
 }  // namespace
 
-bool InitializeGLOneOffPlatform() {
+bool InitializeGLOneOffPlatformX11() {
   switch (GetGLImplementation()) {
     case kGLImplementationDesktopGL:
       if (!GLSurfaceGLX::InitializeOneOff()) {
@@ -155,8 +155,8 @@ bool InitializeGLOneOffPlatform() {
     case kGLImplementationEGLANGLE:
       // Set utility class that helps to initialize egl platform.
       gl::GLDisplayEglUtil::SetInstance(gl::GLDisplayEglUtilX11::GetInstance());
-      if (!GLSurfaceEGL::InitializeOneOff(
-              EGLDisplayPlatform(gfx::GetXDisplay()))) {
+      if (!GLSurfaceEGL::InitializeOneOff(EGLDisplayPlatform(
+              reinterpret_cast<EGLNativeDisplayType>(gfx::GetXDisplay())))) {
         LOG(ERROR) << "GLSurfaceEGL::InitializeOneOff failed.";
         return false;
       }
@@ -166,7 +166,7 @@ bool InitializeGLOneOffPlatform() {
   }
 }
 
-bool InitializeStaticGLBindings(GLImplementation implementation) {
+bool InitializeStaticGLBindingsX11(GLImplementation implementation) {
   // Prevent reinitialization with a different implementation. Once the gpu
   // unit tests have initialized with kGLImplementationMock, we don't want to
   // later switch to another GL implementation.
@@ -197,7 +197,7 @@ bool InitializeStaticGLBindings(GLImplementation implementation) {
   return false;
 }
 
-void ShutdownGLPlatform() {
+void ShutdownGLPlatformX11() {
   GLSurfaceEGL::ShutdownOneOff();
   GLSurfaceGLX::ShutdownOneOff();
   ClearBindingsEGL();

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/gl/init/gl_factory.h"
+#include "ui/gl/init/gl_factory_linux_x11.h"
 
 #include "base/trace_event/trace_event.h"
 #include "ui/gl/gl_context.h"
@@ -23,7 +23,7 @@
 namespace gl {
 namespace init {
 
-std::vector<GLImplementation> GetAllowedGLImplementations() {
+std::vector<GLImplementation> GetAllowedGLImplementationsX11() {
   std::vector<GLImplementation> impls;
   impls.push_back(kGLImplementationDesktopGL);
   impls.push_back(kGLImplementationEGLGLES2);
@@ -32,8 +32,8 @@ std::vector<GLImplementation> GetAllowedGLImplementations() {
   return impls;
 }
 
-bool GetGLWindowSystemBindingInfo(const GLVersionInfo& gl_info,
-                                  GLWindowSystemBindingInfo* info) {
+bool GetGLWindowSystemBindingInfoX11(const GLVersionInfo& gl_info,
+                                     GLWindowSystemBindingInfo* info) {
   switch (GetGLImplementation()) {
     case kGLImplementationDesktopGL:
       return GetGLWindowSystemBindingInfoGLX(gl_info, info);
@@ -45,9 +45,9 @@ bool GetGLWindowSystemBindingInfo(const GLVersionInfo& gl_info,
   }
 }
 
-scoped_refptr<GLContext> CreateGLContext(GLShareGroup* share_group,
-                                         GLSurface* compatible_surface,
-                                         const GLContextAttribs& attribs) {
+scoped_refptr<GLContext> CreateGLContextX11(GLShareGroup* share_group,
+                                            GLSurface* compatible_surface,
+                                            const GLContextAttribs& attribs) {
   TRACE_EVENT0("gpu", "gl::init::CreateGLContext");
   switch (GetGLImplementation()) {
     case kGLImplementationDesktopGL:
@@ -72,7 +72,7 @@ scoped_refptr<GLContext> CreateGLContext(GLShareGroup* share_group,
   }
 }
 
-scoped_refptr<GLSurface> CreateViewGLSurface(gfx::AcceleratedWidget window) {
+scoped_refptr<GLSurface> CreateViewGLSurfaceX11(gfx::AcceleratedWidget window) {
   TRACE_EVENT0("gpu", "gl::init::CreateViewGLSurface");
   switch (GetGLImplementation()) {
     case kGLImplementationDesktopGL:
@@ -93,8 +93,9 @@ scoped_refptr<GLSurface> CreateViewGLSurface(gfx::AcceleratedWidget window) {
   }
 }
 
-scoped_refptr<GLSurface> CreateOffscreenGLSurfaceWithFormat(
-    const gfx::Size& size, GLSurfaceFormat format) {
+scoped_refptr<GLSurface> CreateOffscreenGLSurfaceWithFormatX11(
+    const gfx::Size& size,
+    GLSurfaceFormat format) {
   TRACE_EVENT0("gpu", "gl::init::CreateOffscreenGLSurface");
   switch (GetGLImplementation()) {
     case kGLImplementationDesktopGL:
@@ -119,7 +120,7 @@ scoped_refptr<GLSurface> CreateOffscreenGLSurfaceWithFormat(
   }
 }
 
-void SetDisabledExtensionsPlatform(const std::string& disabled_extensions) {
+void SetDisabledExtensionsPlatformX11(const std::string& disabled_extensions) {
   GLImplementation implementation = GetGLImplementation();
   DCHECK_NE(kGLImplementationNone, implementation);
   switch (implementation) {
@@ -139,7 +140,7 @@ void SetDisabledExtensionsPlatform(const std::string& disabled_extensions) {
   }
 }
 
-bool InitializeExtensionSettingsOneOffPlatform() {
+bool InitializeExtensionSettingsOneOffPlatformX11() {
   GLImplementation implementation = GetGLImplementation();
   DCHECK_NE(kGLImplementationNone, implementation);
   switch (implementation) {
