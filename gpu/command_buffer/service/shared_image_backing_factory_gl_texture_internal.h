@@ -144,16 +144,10 @@ class SharedImageBackingGLTexture : public SharedImageBacking {
 
  private:
   // SharedImageBacking:
-  void Update(std::unique_ptr<gfx::GpuFence> in_fence) override;
   void OnMemoryDump(const std::string& dump_name,
                     base::trace_event::MemoryAllocatorDump* dump,
                     base::trace_event::ProcessMemoryDump* pmd,
                     uint64_t client_tracing_id) override;
-  std::unique_ptr<SharedImageRepresentationSkia> ProduceSkia(
-      SharedImageManager* manager,
-      MemoryTypeTracker* tracker,
-      scoped_refptr<SharedContextState> context_state) override;
-
   gfx::Rect ClearedRect() const final;
   void SetClearedRect(const gfx::Rect& cleared_rect) final;
   bool ProduceLegacyMailbox(MailboxManager* mailbox_manager) final;
@@ -167,6 +161,11 @@ class SharedImageBackingGLTexture : public SharedImageBacking {
       SharedImageManager* manager,
       MemoryTypeTracker* tracker,
       WGPUDevice device) final;
+  std::unique_ptr<SharedImageRepresentationSkia> ProduceSkia(
+      SharedImageManager* manager,
+      MemoryTypeTracker* tracker,
+      scoped_refptr<SharedContextState> context_state) override;
+  void Update(std::unique_ptr<gfx::GpuFence> in_fence) override;
 
   bool IsPassthrough() const { return is_passthrough_; }
 
@@ -205,20 +204,11 @@ class SharedImageBackingGLImage : public SharedImageBacking {
 
  private:
   // SharedImageBacking:
-  void Update(std::unique_ptr<gfx::GpuFence> in_fence) override;
+  scoped_refptr<gfx::NativePixmap> GetNativePixmap() override;
   void OnMemoryDump(const std::string& dump_name,
                     base::trace_event::MemoryAllocatorDump* dump,
                     base::trace_event::ProcessMemoryDump* pmd,
                     uint64_t client_tracing_id) override;
-  scoped_refptr<gfx::NativePixmap> GetNativePixmap() override;
-  std::unique_ptr<SharedImageRepresentationSkia> ProduceSkia(
-      SharedImageManager* manager,
-      MemoryTypeTracker* tracker,
-      scoped_refptr<SharedContextState> context_state) override;
-  std::unique_ptr<SharedImageRepresentationGLTexture>
-  ProduceRGBEmulationGLTexture(SharedImageManager* manager,
-                               MemoryTypeTracker* tracker) override;
-
   gfx::Rect ClearedRect() const final;
   void SetClearedRect(const gfx::Rect& cleared_rect) final;
   bool ProduceLegacyMailbox(MailboxManager* mailbox_manager) final;
@@ -232,6 +222,14 @@ class SharedImageBackingGLImage : public SharedImageBacking {
       SharedImageManager* manager,
       MemoryTypeTracker* tracker,
       WGPUDevice device) final;
+  std::unique_ptr<SharedImageRepresentationSkia> ProduceSkia(
+      SharedImageManager* manager,
+      MemoryTypeTracker* tracker,
+      scoped_refptr<SharedContextState> context_state) override;
+  std::unique_ptr<SharedImageRepresentationGLTexture>
+  ProduceRGBEmulationGLTexture(SharedImageManager* manager,
+                               MemoryTypeTracker* tracker) override;
+  void Update(std::unique_ptr<gfx::GpuFence> in_fence) override;
 
   void BeginSkiaReadAccess();
   bool IsPassthrough() const { return is_passthrough_; }
