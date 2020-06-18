@@ -2879,6 +2879,11 @@
     "expiry_milestone": -1
   },
   {
+    "name": "intensive-wake-up-throttling",
+    "owners": [ "fdoray" ],
+    "expiry_milestone": 88
+  },
+  {
     "name": "intent-handling-sharing",
     "owners": [ "chromeos-apps-foundation-team@google.com" ],
     "expiry_milestone": 90

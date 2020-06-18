@@ -1048,6 +1048,9 @@ extern const char kDelayAsyncScriptExecutionDescription[];
 extern const char kPrefetchPrivacyChangesName[];
 extern const char kPrefetchPrivacyChangesDescription[];
 
+extern const char kIntensiveWakeUpThrottlingName[];
+extern const char kIntensiveWakeUpThrottlingDescription[];
+
 extern const char kPrinterStatusName[];
 extern const char kPrinterStatusDescription[];
 

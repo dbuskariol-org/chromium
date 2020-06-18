@@ -3703,6 +3703,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kPrefetchPrivacyChangesDescription, kOsAll,
      FEATURE_VALUE_TYPE(blink::features::kPrefetchPrivacyChanges)},
 
+    {"intensive-wake-up-throttling",
+     flag_descriptions::kIntensiveWakeUpThrottlingName,
+     flag_descriptions::kIntensiveWakeUpThrottlingDescription, kOsAll,
+     FEATURE_VALUE_TYPE(blink::features::kIntensiveWakeUpThrottling)},
+
 #if defined(OS_ANDROID)
     {"omnibox-spare-renderer", flag_descriptions::kOmniboxSpareRendererName,
      flag_descriptions::kOmniboxSpareRendererDescription, kOsAndroid,

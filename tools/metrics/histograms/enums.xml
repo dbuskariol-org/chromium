@@ -39982,6 +39982,7 @@ from previous Chrome versions.
   <int value="-945806012" label="DownloadsUi:enabled"/>
   <int value="-943304570" label="PaintHolding:enabled"/>
   <int value="-938178614" label="enable-suggestions-with-substring-match"/>
+  <int value="-937430451" label="IntensiveWakeUpThrottling:disabled"/>
   <int value="-933377608"
       label="OmniboxUIExperimentHideSteadyStateUrlScheme:enabled"/>
   <int value="-933316841" label="enable-permissions-blacklist"/>
@@ -40692,6 +40693,7 @@ from previous Chrome versions.
   <int value="-120091289" label="CrostiniAppSearch:enabled"/>
   <int value="-119055644" label="GenericSensor:enabled"/>
   <int value="-118993417" label="TLS13HardeningForLocalAnchors:disabled"/>
+  <int value="-118897826" label="IntensiveWakeUpThrottling:enabled"/>
   <int value="-116692797" label="HTTPAuthCommittedInterstitials:enabled"/>
   <int value="-115834377" label="EnableUnifiedMultiDeviceSetup:disabled"/>
   <int value="-114807608" label="TerminalSystemApp:disabled"/>
