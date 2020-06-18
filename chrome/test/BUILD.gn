@@ -3313,6 +3313,7 @@ test("unit_tests") {
     "../browser/policy/messaging_layer/public/report_client_unittest.cc",
     "../browser/policy/messaging_layer/public/report_queue_configuration_unittest.cc",
     "../browser/policy/messaging_layer/public/report_queue_unittest.cc",
+    "../browser/policy/messaging_layer/storage/storage_queue_unittest.cc",
     "../browser/policy/messaging_layer/storage/test_storage_module.cc",
     "../browser/policy/messaging_layer/storage/test_storage_module.h",
     "../browser/policy/messaging_layer/util/status_macros_unittest.cc",
