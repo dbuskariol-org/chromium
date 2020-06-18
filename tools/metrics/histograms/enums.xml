@@ -72772,6 +72772,17 @@ Called by update_scheduler_enums.py.-->
   <int value="1" label="WebViewClientCompat (via AndroidX)"/>
 </enum>
 
+<enum name="WebViewDrawAndSubmissionType">
+  <int value="0" label="No invalidate + no submission + same params"/>
+  <int value="1" label="Params changed"/>
+  <int value="2" label="Frame submitted"/>
+  <int value="3" label="Frame submitted + params changed"/>
+  <int value="4" label="Invalidate"/>
+  <int value="5" label="Invalidate + params changed"/>
+  <int value="6" label="Invalidate + frame submitted"/>
+  <int value="7" label="Invalidate + frame submitted + params changed"/>
+</enum>
+
 <enum name="WebViewExtraHeaders">
   <int value="0" label="Added headers in StartRequest"/>
   <int value="1" label="Kept headers through same-origin redirect"/>
