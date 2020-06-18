@@ -174,7 +174,8 @@
     "structures": [1820],
   },
   "chrome/browser/resources/signin/profile_picker/profile_picker_resources.grd": {
-    "structures": [1840],
+    "includes": [1840],
+    "structures": [1850],
   },
   "chrome/browser/resources/tab_strip/tab_strip_resources.grd": {
     "structures": [1860],
