@@ -22,6 +22,14 @@ js_type_check("closure_compile") {
     ":files_tooltip",
     ":folder_shortcuts",
     ":format_dialog",
+    ":gear_menu",
+    ":grid_view",
+    ":install_linux_package_dialog",
+    ":keyboard_operations",
+    ":launcher_search",
+    ":metadata",
+    ":metrics",
+    ":my_files",
   ]
 }
 
@@ -100,6 +108,46 @@ js_library("folder_shortcuts") {
 }
 
 js_library("format_dialog") {
+  testonly = true
+  deps = []
+}
+
+js_library("gear_menu") {
+  testonly = true
+  deps = []
+}
+
+js_library("grid_view") {
+  testonly = true
+  deps = []
+}
+
+js_library("install_linux_package_dialog") {
+  testonly = true
+  deps = []
+}
+
+js_library("keyboard_operations") {
+  testonly = true
+  deps = []
+}
+
+js_library("launcher_search") {
+  testonly = true
+  deps = []
+}
+
+js_library("metadata") {
+  testonly = true
+  deps = []
+}
+
+js_library("metrics") {
+  testonly = true
+  deps = []
+}
+
+js_library("my_files") {
   testonly = true
   deps = []
 }
