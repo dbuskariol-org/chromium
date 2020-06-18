@@ -25579,6 +25579,8 @@ should be able to be added at any place in this file.
   <suffix name="ContextualSearchPromoteTap"
       label="For ContextualSearchPromoteTap feature."/>
   <suffix name="ContextualSearchTap" label="For ContextualSearchTap feature."/>
+  <suffix name="ContextualSearchTappedButShouldLongpress"
+      label="For ContextualSearchTappedButShouldLongpress feature."/>
   <suffix name="ContextualSearchWebSearch"
       label="For ContextualSearchWebSearch feature."/>
   <suffix name="ContextualSearchWebSearch"
