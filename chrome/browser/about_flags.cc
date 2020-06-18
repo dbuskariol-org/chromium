@@ -4282,11 +4282,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kSyncDeviceInfoInTransportModeDescription, kOsAll,
      FEATURE_VALUE_TYPE(switches::kSyncDeviceInfoInTransportMode)},
 
-    {"enable-lookalike-url-navigation-suggestions",
-     flag_descriptions::kLookalikeUrlNavigationSuggestionsName,
-     flag_descriptions::kLookalikeUrlNavigationSuggestionsDescription, kOsAll,
-     FEATURE_VALUE_TYPE(features::kLookalikeUrlNavigationSuggestionsUI)},
-
     {"enable-resampling-input-events",
      flag_descriptions::kEnableResamplingInputEventsName,
      flag_descriptions::kEnableResamplingInputEventsDescription, kOsAll,

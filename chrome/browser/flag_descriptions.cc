@@ -1235,12 +1235,6 @@ const char kLogJsConsoleMessagesDescription[] =
     "Enable logging JS console messages in system logs, please note that they "
     "may contain PII.";
 
-const char kLookalikeUrlNavigationSuggestionsName[] =
-    "Navigation suggestions for lookalike URLs";
-const char kLookalikeUrlNavigationSuggestionsDescription[] =
-    "Enable navigation suggestions for URLs that are visually similar to "
-    "popular domains or to domains with a site engagement score.";
-
 const char kMarkHttpAsName[] = "Mark non-secure origins as non-secure";
 const char kMarkHttpAsDescription[] = "Change the UI treatment for HTTP pages";
 

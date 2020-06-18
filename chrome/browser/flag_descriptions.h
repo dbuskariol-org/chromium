@@ -731,9 +731,6 @@ extern const char kLoadMediaRouterComponentExtensionDescription[];
 extern const char kLogJsConsoleMessagesName[];
 extern const char kLogJsConsoleMessagesDescription[];
 
-extern const char kLookalikeUrlNavigationSuggestionsName[];
-extern const char kLookalikeUrlNavigationSuggestionsDescription[];
-
 extern const char kMarkHttpAsName[];
 extern const char kMarkHttpAsDescription[];
 extern const char kMarkHttpAsDangerous[];

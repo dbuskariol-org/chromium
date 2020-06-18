@@ -1793,11 +1793,6 @@
     "expiry_milestone": -1
   },
   {
-    "name": "enable-lookalike-url-navigation-suggestions",
-    "owners": [ "jdeblasio", "meacer", "livvielin" ],
-    "expiry_milestone": 84
-  },
-  {
     "name": "enable-mark-http-as",
     "owners": [ "cthomp", "estark" ],
     "expiry_milestone": 86
