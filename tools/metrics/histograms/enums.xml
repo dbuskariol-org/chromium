@@ -57115,6 +57115,11 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="4" label="Required but not shown - grace exceeded"/>
 </enum>
 
+<enum name="QueryTilesGroupPruneReason">
+  <int value="0" label="Expired"/>
+  <int value="1" label="InvalidLocale"/>
+</enum>
+
 <enum name="QueryTilesGroupStatus">
   <int value="0" label="Success"/>
   <int value="1" label="Uninitialized"/>
