@@ -51,7 +51,7 @@ class MessageView {
 
   MessageView& operator=(MessageView&& other) = default;
 
-  ~MessageView() {}
+  ~MessageView() = default;
 
   const void* data() const {
     return static_cast<const char*>(message_->data()) + offset_;
