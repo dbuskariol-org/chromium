@@ -159,6 +159,9 @@
     "includes": [1700],
     "structures": [1720],
   },
+  "chrome/browser/resources/print_preview/print_preview_pdf_resources.grd": {
+    "includes": [1730],
+  },
   "chrome/browser/resources/settings/os_settings_resources_vulcanized.grd": {
     "includes": [1740],
   },
