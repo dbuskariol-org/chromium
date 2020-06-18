@@ -838,6 +838,24 @@ Your Google account may have other forms of browsing history like searches and a
       <message name="IDS_PREFS_SAFETY_CHECK" desc="Title of the Safety check element in settings, allowing the user to check multiple areas of browser safety. [CHAR-LIMIT=32]">
         Safety check
       </message>
+      <message name="IDS_SAFETY_CHECK_DESCRIPTION" desc="Introduces the safety check categories to the user. Followed by several items, such as 'Safe Browsing', 'Updates', 'Passwords'.">
+        Chrome can check if your settings are protecting you from:
+      </message>
+      <message name="IDS_SAFETY_CHECK_SAFE_BROWSING_TITLE" desc="Title for the Safe Browsing section.">
+        Safe Browsing
+      </message>
+      <message name="IDS_SAFETY_CHECK_UPDATES_TITLE" desc="Title for the updates section.">
+        Updates
+      </message>
+      <message name="IDS_SAFETY_CHECK_PASSWORDS_TITLE" desc="Title for the passwords section.">
+        Passwords
+      </message>
+      <message name="IDS_SAFETY_CHECK_BUTTON" desc="Text for the button to start Safety check.">
+        Check now
+      </message>
+      <message name="IDS_SAFETY_CHECK_UNCHECKED" desc="A given element has not been checked.">
+        Unchecked
+      </message>
 
       <!-- Accessibility preferences -->
       <message name="IDS_PREFS_ACCESSIBILITY" desc="Title of Accessibility settings, which allows the user to change webpage font sizes. [CHAR-LIMIT=32]">
