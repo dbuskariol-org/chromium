@@ -14,7 +14,6 @@ struct SuggestionDetails {
   base::string16 text;
   size_t confirmed_length;
   bool show_tab;
-  bool show_setting_link;
 };
 
 }  // namespace ime
