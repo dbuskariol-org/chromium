@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_EXCLUSIVE_ACCESS_FULLSCREEN_CONTROLLER_TEST_H_
-#define CHROME_BROWSER_UI_EXCLUSIVE_ACCESS_FULLSCREEN_CONTROLLER_TEST_H_
+#ifndef CHROME_BROWSER_UI_EXCLUSIVE_ACCESS_EXCLUSIVE_ACCESS_TEST_H_
+#define CHROME_BROWSER_UI_EXCLUSIVE_ACCESS_EXCLUSIVE_ACCESS_TEST_H_
 
 #include <vector>
 
@@ -54,26 +54,24 @@ class FullscreenNotificationObserver : public FullscreenObserver {
 
 // Test fixture with convenience functions for fullscreen, keyboard lock, and
 // mouse lock.
-// TODO(mustaq): Fix the class name, it's misleading to call it "fullscreen*".
-class FullscreenControllerTest : public InProcessBrowserTest {
+class ExclusiveAccessTest : public InProcessBrowserTest {
  protected:
-  FullscreenControllerTest();
-  ~FullscreenControllerTest() override;
+  ExclusiveAccessTest();
+  ~ExclusiveAccessTest() override;
 
   void SetUpOnMainThread() override;
   void TearDownOnMainThread() override;
 
   bool RequestKeyboardLock(bool esc_key_locked);
-  void RequestToLockMouse(bool user_gesture,
-                          bool last_unlocked_by_target);
+  void RequestToLockMouse(bool user_gesture, bool last_unlocked_by_target);
   void SetWebContentsGrantedSilentMouseLockPermission();
   void CancelKeyboardLock();
   void LostMouseLock();
-  bool SendEscapeToFullscreenController();
+  bool SendEscapeToExclusiveAccessManager();
   bool IsFullscreenForBrowser();
   bool IsWindowFullscreenForTabOrPending();
   ExclusiveAccessBubbleType GetExclusiveAccessBubbleType();
-  bool IsFullscreenBubbleDisplayed();
+  bool IsExclusiveAccessBubbleDisplayed();
   void GoBack();
   void Reload();
   void SetPrivilegedFullscreen(bool is_privileged);
@@ -119,9 +117,9 @@ class FullscreenControllerTest : public InProcessBrowserTest {
 
   base::test::ScopedFeatureList scoped_feature_list_;
 
-  base::WeakPtrFactory<FullscreenControllerTest> weak_ptr_factory_{this};
+  base::WeakPtrFactory<ExclusiveAccessTest> weak_ptr_factory_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(FullscreenControllerTest);
+  DISALLOW_COPY_AND_ASSIGN(ExclusiveAccessTest);
 };
 
-#endif  // CHROME_BROWSER_UI_EXCLUSIVE_ACCESS_FULLSCREEN_CONTROLLER_TEST_H_
+#endif  // CHROME_BROWSER_UI_EXCLUSIVE_ACCESS_EXCLUSIVE_ACCESS_TEST_H_
