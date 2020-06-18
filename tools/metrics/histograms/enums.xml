@@ -61778,6 +61778,13 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="34" label="CONTENT_DELETE"/>
 </enum>
 
+<enum name="ServiceWorkerOfflineCapability">
+  <int value="0" label="kNoServiceWorker"/>
+  <int value="1" label="kServiceWorkerNoFetchHandler"/>
+  <int value="2" label="kServiceWorkerNoOfflineSupport"/>
+  <int value="3" label="kServiceWorkerWithOfflineSupport"/>
+</enum>
+
 <enum name="ServiceWorkerPreparationType">
   <obsolete>
     Removed on June 2019
