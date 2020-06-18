@@ -97,6 +97,14 @@ autofill::PasswordForm MakePasswordForm(const std::string& signon_realm) {
   return form;
 }
 
+autofill::PasswordForm MakeBlacklistedForm(const std::string& signon_realm) {
+  autofill::PasswordForm form;
+  form.url = GURL("http://www.origin.com");
+  form.signon_realm = signon_realm;
+  form.blacklisted_by_user = true;
+  return form;
+}
+
 // A mini database class the supports Add/Update/Remove functionality. It also
 // supports an auto increment primary key that starts from 1. It will be used to
 // empower the MockPasswordStoreSync be forwarding all database calls to an
@@ -902,11 +910,14 @@ TEST_F(PasswordSyncBridgeTest, ShouldNotifyUnsyncedCredentialsIfAccountStore) {
   const std::string kPrimaryKeyUnsyncedCredentialStr = "1000";
   const std::string kPrimaryKeySyncedCredentialStr = "1001";
   const std::string kPrimaryKeyUnsyncedDeletionStr = "1002";
+  const std::string kPrimaryKeyUnsyncedBlacklistStr = "1003";
   ON_CALL(mock_processor(), IsEntityUnsynced(kPrimaryKeyUnsyncedCredentialStr))
       .WillByDefault(Return(true));
   ON_CALL(mock_processor(), IsEntityUnsynced(kPrimaryKeySyncedCredentialStr))
       .WillByDefault(Return(false));
   ON_CALL(mock_processor(), IsEntityUnsynced(kPrimaryKeyUnsyncedDeletionStr))
+      .WillByDefault(Return(true));
+  ON_CALL(mock_processor(), IsEntityUnsynced(kPrimaryKeyUnsyncedBlacklistStr))
       .WillByDefault(Return(true));
 
   sync_pb::EntityMetadata is_deletion_metadata;
@@ -925,6 +936,9 @@ TEST_F(PasswordSyncBridgeTest, ShouldNotifyUnsyncedCredentialsIfAccountStore) {
         batch->AddMetadata(
             kPrimaryKeyUnsyncedDeletionStr,
             std::make_unique<sync_pb::EntityMetadata>(is_deletion_metadata));
+        batch->AddMetadata(kPrimaryKeyUnsyncedBlacklistStr,
+                           std::make_unique<sync_pb::EntityMetadata>(
+                               is_not_deletion_metadata));
         return batch;
       });
 
@@ -932,15 +946,20 @@ TEST_F(PasswordSyncBridgeTest, ShouldNotifyUnsyncedCredentialsIfAccountStore) {
   // because the deletion is supposed to have already removed such form.
   const int kPrimaryKeyUnsyncedCredential = 1000;
   const int kPrimaryKeySyncedCredential = 1001;
+  const int kPrimaryKeyUnsyncedBlacklist = 1003;
   autofill::PasswordForm unsynced_credential = MakePasswordForm(kSignonRealm1);
   autofill::PasswordForm synced_credential = MakePasswordForm(kSignonRealm2);
+  autofill::PasswordForm unsynced_blacklist =
+      MakeBlacklistedForm(kSignonRealm3);
   fake_db()->AddLoginForPrimaryKey(kPrimaryKeyUnsyncedCredential,
                                    unsynced_credential);
   fake_db()->AddLoginForPrimaryKey(kPrimaryKeySyncedCredential,
                                    synced_credential);
+  fake_db()->AddLoginForPrimaryKey(kPrimaryKeyUnsyncedBlacklist,
+                                   unsynced_blacklist);
 
   // The notification should only contain new credentials that are unsynced,
-  // ignoring both synced ones and deletion entries.
+  // ignoring both synced ones, deletion entries and blacklists.
   EXPECT_CALL(*mock_password_store_sync(),
               NotifyUnsyncedCredentialsWillBeDeleted(
                   UnorderedElementsAre(unsynced_credential)));
