@@ -827,6 +827,10 @@ void PasswordSyncBridge::ApplyStopSyncChanges(
   password_store_sync_->DeleteAndRecreateDatabaseFile();
   password_store_sync_->NotifyLoginsChanged(password_store_changes);
 
+  base::UmaHistogramCounts100(
+      "PasswordManager.AccountStorage.UnsyncedPasswordsFoundDuringSignOut",
+      unsynced_logins_being_deleted.size());
+
   if (!unsynced_logins_being_deleted.empty()) {
     password_store_sync_->NotifyUnsyncedCredentialsWillBeDeleted(
         unsynced_logins_being_deleted);

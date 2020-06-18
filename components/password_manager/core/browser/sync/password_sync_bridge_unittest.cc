@@ -12,6 +12,7 @@
 #include "base/bind_helpers.h"
 #include "base/strings/utf_string_conversions.h"
 #include "base/test/bind_test_util.h"
+#include "base/test/metrics/histogram_tester.h"
 #include "base/test/mock_callback.h"
 #include "build/build_config.h"
 #include "components/password_manager/core/browser/password_store_sync.h"
@@ -904,6 +905,7 @@ TEST_F(PasswordSyncBridgeTest, ShouldNotNotifyOnSyncDisableIfProfileStore) {
 }
 
 TEST_F(PasswordSyncBridgeTest, ShouldNotifyUnsyncedCredentialsIfAccountStore) {
+  base::HistogramTester histogram_tester;
   ON_CALL(*mock_password_store_sync(), IsAccountStore())
       .WillByDefault(Return(true));
 
@@ -966,10 +968,15 @@ TEST_F(PasswordSyncBridgeTest, ShouldNotifyUnsyncedCredentialsIfAccountStore) {
 
   // The content of the metadata change list does not matter in this case.
   bridge()->ApplyStopSyncChanges(bridge()->CreateMetadataChangeList());
+
+  histogram_tester.ExpectUniqueSample(
+      "PasswordManager.AccountStorage.UnsyncedPasswordsFoundDuringSignOut", 1,
+      1);
 }
 
 TEST_F(PasswordSyncBridgeTest,
        ShouldNotNotifyUnsyncedCredentialsIfProfileStore) {
+  base::HistogramTester histogram_tester;
   ON_CALL(*mock_password_store_sync(), IsAccountStore())
       .WillByDefault(Return(false));
 
@@ -999,6 +1006,9 @@ TEST_F(PasswordSyncBridgeTest,
 
   // The content of the metadata change list does not matter in this case.
   bridge()->ApplyStopSyncChanges(bridge()->CreateMetadataChangeList());
+
+  histogram_tester.ExpectTotalCount(
+      "PasswordManager.AccountStorage.UnsyncedPasswordsFoundDuringSignOut", 0);
 }
 
 }  // namespace password_manager
