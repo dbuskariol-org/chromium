@@ -47,7 +47,7 @@
 #include "ios/chrome/browser/browser_state/chrome_browser_state_manager_impl.h"
 #include "ios/chrome/browser/chrome_paths.h"
 #include "ios/chrome/browser/component_updater/ios_component_updater_configurator.h"
-#include "ios/chrome/browser/crash_report/breadcrumbs/application_breadcrumbs_logger.h"
+#import "ios/chrome/browser/crash_report/breadcrumbs/application_breadcrumbs_logger.h"
 #include "ios/chrome/browser/crash_report/breadcrumbs/breadcrumb_manager.h"
 #include "ios/chrome/browser/crash_report/breadcrumbs/features.h"
 #include "ios/chrome/browser/gcm/ios_chrome_gcm_profile_service_factory.h"
@@ -75,6 +75,10 @@
 #include "services/network/public/cpp/network_connection_tracker.h"
 #include "services/network/public/mojom/network_service.mojom.h"
 #include "ui/base/resource/resource_bundle.h"
+
+#if !defined(__has_feature) || !__has_feature(objc_arc)
+#error "This file requires ARC support."
+#endif
 
 namespace {
 
