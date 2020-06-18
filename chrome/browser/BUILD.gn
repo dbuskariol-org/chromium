@@ -6018,6 +6018,8 @@ static_library("test_support") {
       "chooser_controller/fake_usb_chooser_controller.h",
       "download/test_download_shelf.cc",
       "download/test_download_shelf.h",
+      "hid/mock_hid_device_observer.cc",
+      "hid/mock_hid_device_observer.h",
       "profile_resetter/profile_resetter_test_base.cc",
       "profile_resetter/profile_resetter_test_base.h",
       "sessions/session_restore_test_helper.cc",
