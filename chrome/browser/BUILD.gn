@@ -484,6 +484,8 @@ static_library("browser") {
     "enterprise/util/managed_browser_utils.cc",
     "enterprise/util/managed_browser_utils.h",
     "expired_flags_list.h",
+    "external_protocol/auto_launch_protocols_policy_handler.cc",
+    "external_protocol/auto_launch_protocols_policy_handler.h",
     "external_protocol/external_protocol_handler.cc",
     "external_protocol/external_protocol_handler.h",
     "external_protocol/external_protocol_observer.cc",
