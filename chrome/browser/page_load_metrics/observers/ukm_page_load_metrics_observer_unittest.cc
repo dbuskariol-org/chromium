@@ -1155,6 +1155,35 @@ TEST_F(UkmPageLoadMetricsObserverTest, InputTiming) {
   }
 }
 
+TEST_F(UkmPageLoadMetricsObserverTest, FirstScrollDelay) {
+  page_load_metrics::mojom::PageLoadTiming timing;
+  page_load_metrics::InitPageLoadTimingForTest(&timing);
+  timing.navigation_start = base::Time::FromDoubleT(1);
+  timing.interactive_timing->first_scroll_delay =
+      base::TimeDelta::FromMilliseconds(50);
+  timing.interactive_timing->first_scroll_timestamp =
+      base::TimeDelta::FromMilliseconds(70);
+  PopulateRequiredTimingFields(&timing);
+
+  NavigateAndCommit(GURL(kTestUrl1));
+  tester()->SimulateTimingUpdate(timing);
+
+  // Simulate closing the tab.
+  DeleteContents();
+
+  std::map<ukm::SourceId, ukm::mojom::UkmEntryPtr> merged_entries =
+      tester()->test_ukm_recorder().GetMergedEntriesByName(
+          PageLoad::kEntryName);
+  EXPECT_EQ(1ul, merged_entries.size());
+
+  for (const auto& kv : merged_entries) {
+    tester()->test_ukm_recorder().ExpectEntrySourceHasUrl(kv.second.get(),
+                                                          GURL(kTestUrl1));
+    tester()->test_ukm_recorder().ExpectEntryMetric(
+        kv.second.get(), PageLoad::kInteractiveTiming_FirstScrollDelayName, 50);
+  }
+}
+
 TEST_F(UkmPageLoadMetricsObserverTest, MultiplePageLoads) {
   page_load_metrics::mojom::PageLoadTiming timing1;
   page_load_metrics::InitPageLoadTimingForTest(&timing1);

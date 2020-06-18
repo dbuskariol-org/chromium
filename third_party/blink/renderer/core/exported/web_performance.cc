@@ -232,6 +232,14 @@ base::Optional<base::TimeDelta> WebPerformance::FirstInputProcessingTime()
   return private_->timing()->FirstInputProcessingTime();
 }
 
+base::Optional<base::TimeDelta> WebPerformance::FirstScrollDelay() const {
+  return private_->timing()->FirstScrollDelay();
+}
+
+base::Optional<base::TimeDelta> WebPerformance::FirstScrollTimestamp() const {
+  return private_->timing()->FirstScrollTimestamp();
+}
+
 double WebPerformance::ParseStart() const {
   return MillisecondsToSeconds(private_->timing()->ParseStart());
 }

@@ -109,6 +109,13 @@ struct InteractiveTiming {
   // The timestamp of the event whose delay is reported as longest_input_delay.
   mojo_base.mojom.TimeDelta? longest_input_timestamp;
 
+  // The latency between user input and display update for the first scroll after
+  // a navigation.
+  mojo_base.mojom.TimeDelta? first_scroll_delay;
+
+  // The timestamp of the user's first scroll after a navigation.
+  mojo_base.mojom.TimeDelta? first_scroll_timestamp;
+
   // The duration of event handlers processing the first input event.
   mojo_base.mojom.TimeDelta? first_input_processing_time;
 };

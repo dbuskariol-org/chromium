@@ -440,6 +440,12 @@ void UkmPageLoadMetricsObserver::RecordTimingMetrics(
     builder.SetInteractiveTiming_LongestInputTimestamp4(
         longest_input_timestamp.InMilliseconds());
   }
+  if (timing.interactive_timing->first_scroll_delay) {
+    base::TimeDelta first_scroll_delay =
+        timing.interactive_timing->first_scroll_delay.value();
+    builder.SetInteractiveTiming_FirstScrollDelay(
+        first_scroll_delay.InMilliseconds());
+  }
   if (timing.interactive_timing->first_input_processing_time) {
     base::TimeDelta first_input_processing_time =
         timing.interactive_timing->first_input_processing_time.value();

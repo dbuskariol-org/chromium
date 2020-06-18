@@ -429,6 +429,13 @@ MetricsRenderFrameObserver::Timing MetricsRenderFrameObserver::GetTiming()
     timing->interactive_timing->first_input_processing_time =
         *perf.FirstInputProcessingTime();
   }
+  if (perf.FirstScrollDelay().has_value()) {
+    timing->interactive_timing->first_scroll_delay = *perf.FirstScrollDelay();
+  }
+  if (perf.FirstScrollTimestamp().has_value()) {
+    timing->interactive_timing->first_scroll_timestamp =
+        ClampDelta((*perf.FirstScrollTimestamp()).InSecondsF(), start);
+  }
   if (perf.ResponseStart() > 0.0)
     timing->response_start = ClampDelta(perf.ResponseStart(), start);
   if (perf.DomContentLoadedEventStart() > 0.0) {

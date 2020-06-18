@@ -7958,6 +7958,13 @@ be describing additional metrics about the same event.
       detailed explanation. In ms.
     </summary>
   </metric>
+  <metric name="InteractiveTiming.FirstScrollDelay">
+    <summary>
+      Measures the time, in milliseconds, from when a user starts scrolling
+      until the result shows up on screen if the scroll was the first scroll
+      since navigation.
+    </summary>
+  </metric>
   <metric name="InteractiveTiming.LongestInputDelay">
     <obsolete>
       Deprecated on January 2019 in favor of

@@ -194,6 +194,16 @@ internal::PageLoadTimingStatus IsValidPageLoadTiming(
     return internal::INVALID_NULL_FIRST_INPUT_DELAY;
   }
 
+  if (timing.interactive_timing->first_scroll_delay.has_value() &&
+      !timing.interactive_timing->first_scroll_timestamp.has_value()) {
+    return internal::INVALID_NULL_FIRST_SCROLL_TIMESTAMP;
+  }
+
+  if (!timing.interactive_timing->first_scroll_delay.has_value() &&
+      timing.interactive_timing->first_scroll_timestamp.has_value()) {
+    return internal::INVALID_NULL_FIRST_SCROLL_DELAY;
+  }
+
   if (timing.interactive_timing->longest_input_delay.has_value() &&
       !timing.interactive_timing->longest_input_timestamp.has_value()) {
     return internal::INVALID_NULL_LONGEST_INPUT_TIMESTAMP;
@@ -377,6 +387,14 @@ class PageLoadTimingMerger {
         target_interactive_timing->longest_input_timestamp =
             new_longest_input_timestamp;
       }
+    }
+
+    // Update First Scroll Delay.
+    if (MaybeUpdateTimeDelta(&target_interactive_timing->first_scroll_timestamp,
+                             navigation_start_offset,
+                             new_interactive_timing.first_scroll_timestamp)) {
+      target_interactive_timing->first_scroll_delay =
+          new_interactive_timing.first_scroll_delay;
     }
   }
 
