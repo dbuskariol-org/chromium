@@ -40,6 +40,14 @@ js_type_check("closure_compile") {
     ":restore_prefs",
     ":search",
     ":share_and_manage_dialog",
+    ":sort_columns",
+    ":suggest_app_dialog",
+    ":tab_index",
+    ":tasks",
+    ":toolbar",
+    ":transfer",
+    ":traverse",
+    ":zip_files",
   ]
 }
 
@@ -213,6 +221,46 @@ js_library("search") {
 }
 
 js_library("share_and_manage_dialog") {
+  testonly = true
+  deps = []
+}
+
+js_library("sort_columns") {
+  testonly = true
+  deps = []
+}
+
+js_library("suggest_app_dialog") {
+  testonly = true
+  deps = []
+}
+
+js_library("tab_index") {
+  testonly = true
+  deps = []
+}
+
+js_library("tasks") {
+  testonly = true
+  deps = []
+}
+
+js_library("toolbar") {
+  testonly = true
+  deps = []
+}
+
+js_library("transfer") {
+  testonly = true
+  deps = []
+}
+
+js_library("traverse") {
+  testonly = true
+  deps = []
+}
+
+js_library("zip_files") {
   testonly = true
   deps = []
 }
