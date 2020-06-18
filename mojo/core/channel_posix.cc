@@ -47,7 +47,7 @@ class MessageView {
     DCHECK(!message_->data_num_bytes() || message_->data_num_bytes() > offset_);
   }
 
-  MessageView(MessageView&& other) { *this = std::move(other); }
+  MessageView(MessageView&& other) = default;
 
   MessageView& operator=(MessageView&& other) = default;
 
