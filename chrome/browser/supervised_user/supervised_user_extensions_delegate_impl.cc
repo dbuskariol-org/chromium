@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/supervised_user/supervised_user_service_management_api_delegate.h"
+#include "chrome/browser/supervised_user/supervised_user_extensions_delegate_impl.h"
 
 #include <memory>
 #include <utility>
@@ -18,23 +18,23 @@
 namespace {
 
 void OnParentPermissionDialogComplete(
-    extensions::SupervisedUserServiceDelegate::
+    extensions::SupervisedUserExtensionsDelegate::
         ParentPermissionDialogDoneCallback delegate_done_callback,
     ParentPermissionDialog::Result result) {
   switch (result) {
     case ParentPermissionDialog::Result::kParentPermissionReceived:
       std::move(delegate_done_callback)
-          .Run(extensions::SupervisedUserServiceDelegate::
+          .Run(extensions::SupervisedUserExtensionsDelegate::
                    ParentPermissionDialogResult::kParentPermissionReceived);
       break;
     case ParentPermissionDialog::Result::kParentPermissionCanceled:
       std::move(delegate_done_callback)
-          .Run(extensions::SupervisedUserServiceDelegate::
+          .Run(extensions::SupervisedUserExtensionsDelegate::
                    ParentPermissionDialogResult::kParentPermissionCanceled);
       break;
     case ParentPermissionDialog::Result::kParentPermissionFailed:
       std::move(delegate_done_callback)
-          .Run(extensions::SupervisedUserServiceDelegate::
+          .Run(extensions::SupervisedUserExtensionsDelegate::
                    ParentPermissionDialogResult::kParentPermissionFailed);
       break;
   }
@@ -44,13 +44,13 @@ void OnParentPermissionDialogComplete(
 
 namespace extensions {
 
-SupervisedUserServiceManagementAPIDelegate::
-    SupervisedUserServiceManagementAPIDelegate() = default;
+SupervisedUserExtensionsDelegateImpl::SupervisedUserExtensionsDelegateImpl() =
+    default;
 
-SupervisedUserServiceManagementAPIDelegate::
-    ~SupervisedUserServiceManagementAPIDelegate() = default;
+SupervisedUserExtensionsDelegateImpl::~SupervisedUserExtensionsDelegateImpl() =
+    default;
 
-bool SupervisedUserServiceManagementAPIDelegate::IsChild(
+bool SupervisedUserExtensionsDelegateImpl::IsChild(
     content::BrowserContext* context) const {
   SupervisedUserService* supervised_user_service =
       SupervisedUserServiceFactory::GetForBrowserContext(context);
@@ -58,7 +58,7 @@ bool SupervisedUserServiceManagementAPIDelegate::IsChild(
   return supervised_user_service->IsChild();
 }
 
-bool SupervisedUserServiceManagementAPIDelegate::
+bool SupervisedUserExtensionsDelegateImpl::
     IsSupervisedChildWhoMayInstallExtensions(
         content::BrowserContext* context) const {
   SupervisedUserService* supervised_user_service =
@@ -68,7 +68,7 @@ bool SupervisedUserServiceManagementAPIDelegate::
          supervised_user_service->CanInstallExtensions();
 }
 
-bool SupervisedUserServiceManagementAPIDelegate::IsExtensionAllowedByParent(
+bool SupervisedUserExtensionsDelegateImpl::IsExtensionAllowedByParent(
     const extensions::Extension& extension,
     content::BrowserContext* context) const {
   SupervisedUserService* supervised_user_service =
@@ -77,7 +77,7 @@ bool SupervisedUserServiceManagementAPIDelegate::IsExtensionAllowedByParent(
          supervised_user_service->IsExtensionAllowed(extension);
 }
 
-void SupervisedUserServiceManagementAPIDelegate::
+void SupervisedUserExtensionsDelegateImpl::
     ShowParentPermissionDialogForExtension(
         const extensions::Extension& extension,
         content::BrowserContext* context,
@@ -94,7 +94,7 @@ void SupervisedUserServiceManagementAPIDelegate::
   parent_permission_dialog_->ShowDialog();
 }
 
-void SupervisedUserServiceManagementAPIDelegate::
+void SupervisedUserExtensionsDelegateImpl::
     ShowExtensionEnableBlockedByParentDialogForExtension(
         const extensions::Extension* extension,
         content::WebContents* contents,
@@ -106,7 +106,7 @@ void SupervisedUserServiceManagementAPIDelegate::
       contents, std::move(done_callback));
 }
 
-void SupervisedUserServiceManagementAPIDelegate::
+void SupervisedUserExtensionsDelegateImpl::
     RecordExtensionEnableBlockedByParentDialogUmaMetric() {
   SupervisedUserExtensionsMetricsRecorder::RecordEnablementUmaMetrics(
       SupervisedUserExtensionsMetricsRecorder::EnablementState::

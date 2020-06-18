@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_VIEWS_PARENT_PERMISSION_DIALOG_VIEW_H_
-#define CHROME_BROWSER_UI_VIEWS_PARENT_PERMISSION_DIALOG_VIEW_H_
+#ifndef CHROME_BROWSER_UI_VIEWS_SUPERVISED_USER_PARENT_PERMISSION_DIALOG_VIEW_H_
+#define CHROME_BROWSER_UI_VIEWS_SUPERVISED_USER_PARENT_PERMISSION_DIALOG_VIEW_H_
 
 #include <vector>
 
@@ -203,4 +203,4 @@ class TestParentPermissionDialogViewObserver {
       ParentPermissionDialogView* view) = 0;
 };
 
-#endif  // CHROME_BROWSER_UI_VIEWS_PARENT_PERMISSION_DIALOG_VIEW_H_
+#endif  // CHROME_BROWSER_UI_VIEWS_SUPERVISED_USER_PARENT_PERMISSION_DIALOG_VIEW_H_

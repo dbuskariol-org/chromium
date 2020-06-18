@@ -22,7 +22,7 @@
 #include "chrome/browser/ui/browser.h"
 #include "chrome/browser/ui/browser_window.h"
 #include "chrome/browser/ui/test/test_browser_dialog.h"
-#include "chrome/browser/ui/views/parent_permission_dialog_view.h"
+#include "chrome/browser/ui/views/supervised_user/parent_permission_dialog_view.h"
 #include "chrome/test/base/mixin_based_in_process_browser_test.h"
 #include "components/signin/public/identity_manager/identity_test_environment.h"
 #include "content/public/test/browser_test.h"
@@ -32,7 +32,7 @@
 
 // End to end test of ParentPermissionDialog that exercises the dialog's
 // internal logic the orchestrates the parental permission process.
-class ParentPermissionDialogBrowserTest
+class ParentPermissionDialogViewTest
     : public SupportsTestDialog<MixinBasedInProcessBrowserTest>,
       public TestParentPermissionDialogViewObserver {
  public:
@@ -42,13 +42,13 @@ class ParentPermissionDialogBrowserTest
     kAccept,
   };
 
-  ParentPermissionDialogBrowserTest()
+  ParentPermissionDialogViewTest()
       : TestParentPermissionDialogViewObserver(this) {}
 
-  ParentPermissionDialogBrowserTest(const ParentPermissionDialogBrowserTest&) =
+  ParentPermissionDialogViewTest(const ParentPermissionDialogViewTest&) =
       delete;
-  ParentPermissionDialogBrowserTest& operator=(
-      const ParentPermissionDialogBrowserTest&) = delete;
+  ParentPermissionDialogViewTest& operator=(
+      const ParentPermissionDialogViewTest&) = delete;
 
   void OnParentPermissionDialogDone(ParentPermissionDialog::Result result) {
     result_ = result;
@@ -156,7 +156,7 @@ class ParentPermissionDialogBrowserTest
     base::RunLoop run_loop;
     on_dialog_done_closure_ = run_loop.QuitClosure();
     ParentPermissionDialog::DoneCallback callback = base::BindOnce(
-        &ParentPermissionDialogBrowserTest::OnParentPermissionDialogDone,
+        &ParentPermissionDialogViewTest::OnParentPermissionDialogDone,
         base::Unretained(this));
 
     SkBitmap icon =
@@ -180,7 +180,7 @@ class ParentPermissionDialogBrowserTest
     on_dialog_done_closure_ = run_loop.QuitClosure();
 
     ParentPermissionDialog::DoneCallback callback = base::BindOnce(
-        &ParentPermissionDialogBrowserTest::OnParentPermissionDialogDone,
+        &ParentPermissionDialogViewTest::OnParentPermissionDialogDone,
         base::Unretained(this));
 
     SkBitmap icon =
@@ -230,51 +230,51 @@ class ParentPermissionDialogBrowserTest
 
 // Tests that a plain dialog widget is shown using the TestBrowserUi
 // infrastructure.
-IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest, InvokeUi_default) {
+IN_PROC_BROWSER_TEST_F(ParentPermissionDialogViewTest, InvokeUi_default) {
   ShowAndVerifyUi();
 }
 
 // Tests that the extension-parameterized dialog widget is shown using the
 // TestBrowserUi infrastructure.
-IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest, InvokeUi_extension) {
+IN_PROC_BROWSER_TEST_F(ParentPermissionDialogViewTest, InvokeUi_extension) {
   ShowAndVerifyUi();
 }
 
-IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest, PermissionReceived) {
+IN_PROC_BROWSER_TEST_F(ParentPermissionDialogViewTest, PermissionReceived) {
   set_next_reauth_status(GaiaAuthConsumer::ReAuthProofTokenStatus::kSuccess);
   set_next_dialog_action(
-      ParentPermissionDialogBrowserTest::NextDialogAction::kAccept);
+      ParentPermissionDialogViewTest::NextDialogAction::kAccept);
   ShowPrompt();
   CheckResult(ParentPermissionDialog::Result::kParentPermissionReceived);
 }
 
-IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest,
+IN_PROC_BROWSER_TEST_F(ParentPermissionDialogViewTest,
                        PermissionFailedInvalidPassword) {
   set_next_reauth_status(
       GaiaAuthConsumer::ReAuthProofTokenStatus::kInvalidGrant);
   set_next_dialog_action(
-      ParentPermissionDialogBrowserTest::NextDialogAction::kAccept);
+      ParentPermissionDialogViewTest::NextDialogAction::kAccept);
   ShowPrompt();
   CheckInvalidCredentialWasReceived();
   CheckResult(ParentPermissionDialog::Result::kParentPermissionFailed);
 }
 
-IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest,
+IN_PROC_BROWSER_TEST_F(ParentPermissionDialogViewTest,
                        PermissionDialogCanceled) {
   set_next_dialog_action(
-      ParentPermissionDialogBrowserTest::NextDialogAction::kCancel);
+      ParentPermissionDialogViewTest::NextDialogAction::kCancel);
   ShowPrompt();
   CheckResult(ParentPermissionDialog::Result::kParentPermissionCanceled);
 }
 
-IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest,
+IN_PROC_BROWSER_TEST_F(ParentPermissionDialogViewTest,
                        PermissionReceivedForExtension) {
   base::HistogramTester histogram_tester;
   base::UserActionTester user_action_tester;
 
   set_next_reauth_status(GaiaAuthConsumer::ReAuthProofTokenStatus::kSuccess);
   set_next_dialog_action(
-      ParentPermissionDialogBrowserTest::NextDialogAction::kAccept);
+      ParentPermissionDialogViewTest::NextDialogAction::kAccept);
   ShowPromptForExtension();
   CheckResult(ParentPermissionDialog::Result::kParentPermissionReceived);
 
@@ -304,7 +304,7 @@ IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest,
                        kParentPermissionDialogParentApprovedActionName));
 }
 
-IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest,
+IN_PROC_BROWSER_TEST_F(ParentPermissionDialogViewTest,
                        PermissionFailedInvalidPasswordForExtension) {
   base::HistogramTester histogram_tester;
   base::UserActionTester user_action_tester;
@@ -312,7 +312,7 @@ IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest,
   set_next_reauth_status(
       GaiaAuthConsumer::ReAuthProofTokenStatus::kInvalidGrant);
   set_next_dialog_action(
-      ParentPermissionDialogBrowserTest::NextDialogAction::kAccept);
+      ParentPermissionDialogViewTest::NextDialogAction::kAccept);
   ShowPromptForExtension();
   CheckInvalidCredentialWasReceived();
   CheckResult(ParentPermissionDialog::Result::kParentPermissionFailed);
@@ -339,13 +339,13 @@ IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest,
                        kParentPermissionDialogOpenedActionName));
 }
 
-IN_PROC_BROWSER_TEST_F(ParentPermissionDialogBrowserTest,
+IN_PROC_BROWSER_TEST_F(ParentPermissionDialogViewTest,
                        PermissionDialogCanceledForExtension) {
   base::HistogramTester histogram_tester;
   base::UserActionTester user_action_tester;
 
   set_next_dialog_action(
-      ParentPermissionDialogBrowserTest::NextDialogAction::kCancel);
+      ParentPermissionDialogViewTest::NextDialogAction::kCancel);
 
   ShowPromptForExtension();
   CheckResult(ParentPermissionDialog::Result::kParentPermissionCanceled);

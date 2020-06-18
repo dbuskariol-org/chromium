@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_SUPERVISED_USER_SUPERVISED_USER_SERVICE_MANAGEMENT_API_DELEGATE_H_
-#define CHROME_BROWSER_SUPERVISED_USER_SUPERVISED_USER_SERVICE_MANAGEMENT_API_DELEGATE_H_
+#ifndef CHROME_BROWSER_SUPERVISED_USER_SUPERVISED_USER_EXTENSIONS_DELEGATE_IMPL_H_
+#define CHROME_BROWSER_SUPERVISED_USER_SUPERVISED_USER_EXTENSIONS_DELEGATE_IMPL_H_
 
-#include "extensions/browser/api/management/supervised_user_service_delegate.h"
+#include "extensions/browser/supervised_user_extensions_delegate.h"
 
 namespace content {
 class BrowserContext;
@@ -15,13 +15,13 @@ class ParentPermissionDialog;
 
 namespace extensions {
 
-class SupervisedUserServiceManagementAPIDelegate
-    : public extensions::SupervisedUserServiceDelegate {
+class SupervisedUserExtensionsDelegateImpl
+    : public extensions::SupervisedUserExtensionsDelegate {
  public:
-  SupervisedUserServiceManagementAPIDelegate();
-  ~SupervisedUserServiceManagementAPIDelegate() override;
+  SupervisedUserExtensionsDelegateImpl();
+  ~SupervisedUserExtensionsDelegateImpl() override;
 
-  // extensions::SupervisedUserServiceDelegate overrides
+  // extensions::SupervisedUserExtensionsDelegate overrides
   bool IsChild(content::BrowserContext* context) const override;
 
   bool IsSupervisedChildWhoMayInstallExtensions(
@@ -35,7 +35,7 @@ class SupervisedUserServiceManagementAPIDelegate
       const extensions::Extension& extension,
       content::BrowserContext* context,
       content::WebContents* contents,
-      extensions::SupervisedUserServiceDelegate::
+      extensions::SupervisedUserExtensionsDelegate::
           ParentPermissionDialogDoneCallback done_callback) override;
 
   void ShowExtensionEnableBlockedByParentDialogForExtension(
@@ -51,4 +51,4 @@ class SupervisedUserServiceManagementAPIDelegate
 
 }  // namespace extensions
 
-#endif  // CHROME_BROWSER_SUPERVISED_USER_SUPERVISED_USER_SERVICE_MANAGEMENT_API_DELEGATE_H_
+#endif  // CHROME_BROWSER_SUPERVISED_USER_SUPERVISED_USER_EXTENSIONS_DELEGATE_IMPL_H_

@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef EXTENSIONS_BROWSER_API_MANAGEMENT_SUPERVISED_USER_SERVICE_DELEGATE_H_
-#define EXTENSIONS_BROWSER_API_MANAGEMENT_SUPERVISED_USER_SERVICE_DELEGATE_H_
+#ifndef EXTENSIONS_BROWSER_SUPERVISED_USER_EXTENSIONS_DELEGATE_H_
+#define EXTENSIONS_BROWSER_SUPERVISED_USER_EXTENSIONS_DELEGATE_H_
 
 #include "base/callback.h"
 #include "extensions/common/extension.h"
@@ -15,9 +15,9 @@ class WebContents;
 
 namespace extensions {
 
-class SupervisedUserServiceDelegate {
+class SupervisedUserExtensionsDelegate {
  public:
-  virtual ~SupervisedUserServiceDelegate() = default;
+  virtual ~SupervisedUserExtensionsDelegate() = default;
 
   // Returns true if |context| represents a supervised child account.
   virtual bool IsChild(content::BrowserContext* context) const = 0;
@@ -65,4 +65,4 @@ class SupervisedUserServiceDelegate {
 
 }  // namespace extensions
 
-#endif  // EXTENSIONS_BROWSER_API_MANAGEMENT_SUPERVISED_USER_SERVICE_DELEGATE_H_
+#endif  // EXTENSIONS_BROWSER_SUPERVISED_USER_EXTENSIONS_DELEGATE_H_
