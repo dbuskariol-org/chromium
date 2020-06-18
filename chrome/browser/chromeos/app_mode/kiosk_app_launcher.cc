@@ -6,7 +6,13 @@
 
 namespace chromeos {
 
+KioskAppLauncher::KioskAppLauncher() = default;
+
 KioskAppLauncher::KioskAppLauncher(KioskAppLauncher::Delegate* delegate)
     : delegate_(delegate) {}
+
+void KioskAppLauncher::SetDelegate(Delegate* delegate) {
+  delegate_ = delegate;
+}
 
 }  // namespace chromeos

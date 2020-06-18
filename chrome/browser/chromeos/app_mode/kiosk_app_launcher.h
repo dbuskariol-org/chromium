@@ -40,6 +40,7 @@ class KioskAppLauncher {
     // Whether app launch flow can assume all required apps are installed, and
     // skip app installation steps.
     virtual bool ShouldSkipAppInstallation() const = 0;
+    virtual void OnAppDataUpdated() {}
     virtual void OnAppInstalling() {}
     virtual void OnAppPrepared() {}
     virtual void OnAppLaunched() {}
@@ -49,10 +50,13 @@ class KioskAppLauncher {
    protected:
     virtual ~Delegate() {}
   };
+  KioskAppLauncher();
   explicit KioskAppLauncher(Delegate* delegate);
   KioskAppLauncher(const KioskAppLauncher&) = delete;
   KioskAppLauncher& operator=(const KioskAppLauncher&) = delete;
   virtual ~KioskAppLauncher() = default;
+
+  void SetDelegate(Delegate* delegate);
   // Determine the initial configuration.
   virtual void Initialize() = 0;
   // This has to be called after launcher asked to configure network.
@@ -63,7 +67,7 @@ class KioskAppLauncher {
   virtual void LaunchApp() = 0;
 
  protected:
-  Delegate* const delegate_;  // Not owned, owns us.
+  Delegate* delegate_ = nullptr;  // Not owned, owns us.
 };
 }  // namespace chromeos
 
