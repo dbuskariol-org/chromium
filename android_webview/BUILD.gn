@@ -362,10 +362,7 @@ java_group("android_webview_java") {
   deps = [ ":android_webview_no_weblayer_java" ]
 
   if (webview_includes_weblayer) {
-    deps += [
-      "//components/viz/service:service_java",
-      "//weblayer/browser/java",
-    ]
+    deps += [ "//weblayer/browser/java" ]
   }
 }
 
@@ -550,6 +547,7 @@ android_library("browser_java") {
     "//components/variations/android:variations_java",
     "//components/version_info/android:version_constants_java",
     "//components/viz/common:common_java",
+    "//components/viz/service:service_java",
     "//content/public/android:content_java",
     "//device/gamepad:java",
     "//mojo/public/java:system_java",
