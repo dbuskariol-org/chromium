@@ -444,6 +444,8 @@ source_set("chromeos") {
     "app_mode/kiosk_app_icon_loader.h",
     "app_mode/kiosk_app_launch_error.cc",
     "app_mode/kiosk_app_launch_error.h",
+    "app_mode/kiosk_app_launcher.cc",
+    "app_mode/kiosk_app_launcher.h",
     "app_mode/kiosk_app_manager.cc",
     "app_mode/kiosk_app_manager.h",
     "app_mode/kiosk_app_manager_base.cc",

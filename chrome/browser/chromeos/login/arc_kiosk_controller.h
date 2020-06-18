@@ -44,7 +44,7 @@ class ArcKioskController : public KioskProfileLoader::Delegate,
   void CleanUp();
   void CloseSplashScreen();
 
-  // UserSessionManagerDelegate implementation:
+  // KioskProfileLoader implementation:
   void OnProfileLoaded(Profile* profile) override;
   void OnProfileLoadFailed(KioskAppLaunchError::Error error) override;
   void OnOldEncryptionDetected(const UserContext& user_context) override;
