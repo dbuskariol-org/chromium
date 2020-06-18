@@ -72,6 +72,7 @@ buildflag_header("buildflags") {
   flags = [
     "CLANG_PGO=$chrome_pgo_phase",
     "ENABLE_KALEIDOSCOPE=$enable_kaleidoscope",
+    "USE_THIN_LTO=$use_thin_lto",
   ]
 }
 
