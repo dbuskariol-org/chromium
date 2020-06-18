@@ -9,13 +9,16 @@
 
 #include "base/memory/ptr_util.h"
 #include "chrome/browser/password_manager/password_store_factory.h"
+#include "chrome/browser/signin/identity_manager_factory.h"
 #include "chrome/browser/ui/views/passwords/password_bubble_view_test_base.h"
+#include "chrome/grit/generated_resources.h"
 #include "components/password_manager/core/browser/mock_password_feature_manager.h"
 #include "components/password_manager/core/browser/mock_password_store.h"
 #include "components/password_manager/core/browser/password_manager_test_utils.h"
 #include "content/public/test/navigation_simulator.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "ui/base/l10n/l10n_util.h"
 #include "ui/views/controls/combobox/combobox.h"
 
 using ::testing::Return;
@@ -28,6 +31,7 @@ class PasswordSaveUpdateWithAccountStoreViewTest
   ~PasswordSaveUpdateWithAccountStoreViewTest() override = default;
 
   void CreateViewAndShow();
+  void SimulateSignIn();
 
   void TearDown() override {
     view_->GetWidget()->CloseWithReason(
@@ -78,6 +82,13 @@ void PasswordSaveUpdateWithAccountStoreViewTest::CreateViewAndShow() {
   views::BubbleDialogDelegateView::CreateBubble(view_)->Show();
 }
 
+void PasswordSaveUpdateWithAccountStoreViewTest::SimulateSignIn() {
+  signin::IdentityManager* identity_manager =
+      IdentityManagerFactory::GetForProfile(profile());
+  AccountInfo info =
+      signin::MakePrimaryAccountAvailable(identity_manager, "test@email.com");
+}
+
 TEST_F(PasswordSaveUpdateWithAccountStoreViewTest, HasTitleAndTwoButtons) {
   CreateViewAndShow();
   EXPECT_TRUE(view()->ShouldShowWindowTitle());
@@ -85,58 +96,54 @@ TEST_F(PasswordSaveUpdateWithAccountStoreViewTest, HasTitleAndTwoButtons) {
   EXPECT_TRUE(view()->GetCancelButton());
 }
 
-// TODO(crbug.com/1054629): Flakily times out on all platforms.
-TEST_F(PasswordSaveUpdateWithAccountStoreViewTest,
-       DISABLED_ShouldNotShowAccountPicker) {
+TEST_F(PasswordSaveUpdateWithAccountStoreViewTest, ShouldNotShowAccountPicker) {
   ON_CALL(*feature_manager_mock(), ShouldShowPasswordStorePicker)
       .WillByDefault(Return(false));
   CreateViewAndShow();
   EXPECT_FALSE(account_picker());
 }
 
-// TODO(crbug.com/1054629): Flakily times out on all platforms.
-TEST_F(PasswordSaveUpdateWithAccountStoreViewTest,
-       DISABLED_ShouldShowAccountPicker) {
+TEST_F(PasswordSaveUpdateWithAccountStoreViewTest, ShouldShowAccountPicker) {
   ON_CALL(*feature_manager_mock(), ShouldShowPasswordStorePicker)
       .WillByDefault(Return(true));
+  SimulateSignIn();
   CreateViewAndShow();
   ASSERT_TRUE(account_picker());
   EXPECT_EQ(0, account_picker()->GetSelectedIndex());
 }
 
-// TODO(crbug.com/1054629): Flakily times out on all platforms.
 TEST_F(PasswordSaveUpdateWithAccountStoreViewTest,
-       DISABLED_ShouldSelectAccountStoreByDefault) {
+       ShouldSelectAccountStoreByDefault) {
   ON_CALL(*feature_manager_mock(), ShouldShowPasswordStorePicker)
       .WillByDefault(Return(true));
   ON_CALL(*feature_manager_mock(), GetDefaultPasswordStore)
       .WillByDefault(Return(autofill::PasswordForm::Store::kAccountStore));
 
-  CoreAccountInfo account_info =
-      identity_test_env()->SetUnconsentedPrimaryAccount("test@email.com");
+  SimulateSignIn();
 
   CreateViewAndShow();
 
   ASSERT_TRUE(account_picker());
   EXPECT_EQ(0, account_picker()->GetSelectedIndex());
   EXPECT_EQ(
-      base::ASCIIToUTF16(account_info.email),
+      l10n_util::GetStringUTF16(
+          IDS_PASSWORD_MANAGER_DESTINATION_DROPDOWN_SAVE_TO_ACCOUNT),
       account_picker()->GetTextForRow(account_picker()->GetSelectedIndex()));
 }
 
-// TODO(crbug.com/1054629): Flakily times out on all platforms.
 TEST_F(PasswordSaveUpdateWithAccountStoreViewTest,
-       DISABLED_ShouldSelectProfileStoreByDefault) {
+       ShouldSelectProfileStoreByDefault) {
   ON_CALL(*feature_manager_mock(), ShouldShowPasswordStorePicker)
       .WillByDefault(Return(true));
   ON_CALL(*feature_manager_mock(), GetDefaultPasswordStore)
       .WillByDefault(Return(autofill::PasswordForm::Store::kProfileStore));
+  SimulateSignIn();
   CreateViewAndShow();
   ASSERT_TRUE(account_picker());
   EXPECT_EQ(1, account_picker()->GetSelectedIndex());
-  // TODO(crbug.com/1044038): Use an internationalized string instead.
   EXPECT_EQ(
-      base::ASCIIToUTF16("Local"),
+      l10n_util::GetStringUTF16(
+          IDS_PASSWORD_MANAGER_DESTINATION_DROPDOWN_SAVE_TO_DEVICE),
       account_picker()->GetTextForRow(account_picker()->GetSelectedIndex()));
 }
 
