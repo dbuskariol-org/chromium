@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.media.ui;
+package org.chromium.components.browser_ui.media;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -27,7 +27,6 @@ import androidx.core.app.NotificationManagerCompat;
 import org.chromium.base.CollectionUtil;
 import org.chromium.base.ContextUtils;
 import org.chromium.base.Log;
-import org.chromium.chrome.R;
 import org.chromium.components.browser_ui.notifications.ChromeNotification;
 import org.chromium.components.browser_ui.notifications.ChromeNotificationBuilder;
 import org.chromium.components.browser_ui.notifications.ForegroundServiceUtils;
@@ -72,45 +71,45 @@ public class MediaNotificationController {
     // Overrides N detection. The production code will use |null|, which uses the Android version
     // code. Otherwise, |isRunningAtLeastN()| will return whatever value is set.
     @VisibleForTesting
-    static Boolean sOverrideIsRunningNForTesting;
+    public static Boolean sOverrideIsRunningNForTesting;
 
     // ListenerService running for the notification. Only non-null when showing.
     @VisibleForTesting
-    Service mService;
+    public Service mService;
 
     @VisibleForTesting
-    Delegate mDelegate;
+    public Delegate mDelegate;
 
     private SparseArray<MediaButtonInfo> mActionToButtonInfo;
 
     @VisibleForTesting
-    ChromeNotificationBuilder mNotificationBuilder;
+    public ChromeNotificationBuilder mNotificationBuilder;
 
     @VisibleForTesting
-    Bitmap mDefaultNotificationLargeIcon;
+    public Bitmap mDefaultNotificationLargeIcon;
 
     // |mMediaNotificationInfo| should be not null if and only if the notification is showing.
     @VisibleForTesting
-    MediaNotificationInfo mMediaNotificationInfo;
+    public MediaNotificationInfo mMediaNotificationInfo;
 
     @VisibleForTesting
-    MediaSessionCompat mMediaSession;
+    public MediaSessionCompat mMediaSession;
 
     @VisibleForTesting
-    Throttler mThrottler;
+    public Throttler mThrottler;
 
     @VisibleForTesting
-    static class Throttler {
+    public static class Throttler {
         @VisibleForTesting
-        static final int THROTTLE_MILLIS = 500;
+        public static final int THROTTLE_MILLIS = 500;
 
         @VisibleForTesting
-        MediaNotificationController mController;
+        public MediaNotificationController mController;
 
         private final Handler mHandler;
 
         @VisibleForTesting
-        Throttler(@NonNull MediaNotificationController manager) {
+        public Throttler(@NonNull MediaNotificationController manager) {
             mController = manager;
             mHandler = new Handler();
         }
@@ -120,12 +119,12 @@ public class MediaNotificationController {
         // mLastPendingInfo. When |mTask| fires, it will call {@link showNotification()} with
         // the latest queued notification info.
         @VisibleForTesting
-        Runnable mTask;
+        public Runnable mTask;
 
         // The last pending info. If non-null, it will be the latest notification info.
         // Otherwise, the latest notification info will be |mController.mMediaNotificationInfo|.
         @VisibleForTesting
-        MediaNotificationInfo mLastPendingInfo;
+        public MediaNotificationInfo mLastPendingInfo;
 
         /**
          * Queue |mediaNotificationInfo| for update. In unthrottled state (i.e. |mTask| != null),
@@ -164,7 +163,7 @@ public class MediaNotificationController {
         }
 
         @VisibleForTesting
-        void showNotificationImmediately(MediaNotificationInfo mediaNotificationInfo) {
+        public void showNotificationImmediately(MediaNotificationInfo mediaNotificationInfo) {
             // If no notification hasn't been updated in the last THROTTLE_MILLIS, update
             // immediately and queue a task for blocking further updates.
             mController.showNotification(mediaNotificationInfo);
@@ -230,13 +229,23 @@ public class MediaNotificationController {
         }
     };
 
-    // On O, if startForegroundService() was called, the app MUST call startForeground on the
-    // created service no matter what or it will crash. Show the minimal notification. The caller is
-    // responsible for hiding it afterwards.
-    public static void finishStartingForegroundService(Service s, ChromeNotification notification) {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return;
-        ForegroundServiceUtils.getInstance().startForeground(s, notification.getMetadata().id,
+    /**
+     * Finishes starting the service on O+.
+     *
+     * If startForegroundService() was called, the app MUST call startForeground on the created
+     * service no matter what or it will crash.
+     *
+     * @param service the {@link Service} on which {@link Context#startForegroundService()} has been
+     *         called.
+     * @param notification a minimal version of the notification associated with the service.
+     * @return true if {@link Service#startForeground()} was called.
+     */
+    public static boolean finishStartingForegroundServiceOnO(
+            Service service, ChromeNotification notification) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return false;
+        ForegroundServiceUtils.getInstance().startForeground(service, notification.getMetadata().id,
                 notification.getNotification(), 0 /* foregroundServiceType */);
+        return true;
     }
 
     private PendingIntent createPendingIntent(String action) {
@@ -272,9 +281,12 @@ public class MediaNotificationController {
     }
 
     /** An interface for separating embedder-specific logic. */
-    interface Delegate {
+    public interface Delegate {
         /** Returns an intent that will start a Service which listens to notification actions. */
         Intent createServiceIntent();
+
+        /** Returns the name of the embedding app. */
+        String getAppName();
 
         /** Returns the notification group name used to prevent automatic grouping. */
         String getNotificationGroupName();
@@ -289,8 +301,7 @@ public class MediaNotificationController {
         void logNotificationShown(ChromeNotification notification);
     }
 
-    @VisibleForTesting
-    MediaNotificationController(Delegate delegate) {
+    public MediaNotificationController(Delegate delegate) {
         mDelegate = delegate;
 
         mActionToButtonInfo = new SparseArray<>();
@@ -325,8 +336,7 @@ public class MediaNotificationController {
      *
      * @param service the service that was started
      */
-    @VisibleForTesting
-    void onServiceStarted(Service service) {
+    public void onServiceStarted(Service service) {
         if (mService == service) return;
 
         mService = service;
@@ -334,8 +344,7 @@ public class MediaNotificationController {
     }
 
     /** Handles the service destruction. */
-    @VisibleForTesting
-    void onServiceDestroyed() {
+    public void onServiceDestroyed() {
         mService = null;
     }
 
@@ -376,7 +385,7 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    void onPlay(int actionSource) {
+    public void onPlay(int actionSource) {
         // MediaSessionCompat calls this sometimes when `mMediaNotificationInfo`
         // is no longer available. It's unclear if it is a Support Library issue
         // or something that isn't properly cleaned up but given that the
@@ -386,7 +395,7 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    void onPause(int actionSource) {
+    public void onPause(int actionSource) {
         // MediaSessionCompat calls this sometimes when `mMediaNotificationInfo`
         // is no longer available. It's unclear if it is a Support Library issue
         // or something that isn't properly cleaned up but given that the
@@ -396,7 +405,7 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    void onStop(int actionSource) {
+    public void onStop(int actionSource) {
         // MediaSessionCompat calls this sometimes when `mMediaNotificationInfo`
         // is no longer available. It's unclear if it is a Support Library issue
         // or something that isn't properly cleaned up but given that the
@@ -406,7 +415,7 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    void onMediaSessionAction(int action) {
+    public void onMediaSessionAction(int action) {
         // MediaSessionCompat calls this sometimes when `mMediaNotificationInfo`
         // is no longer available. It's unclear if it is a Support Library issue
         // or something that isn't properly cleaned up but given that the
@@ -426,7 +435,7 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    void showNotification(MediaNotificationInfo mediaNotificationInfo) {
+    public void showNotification(MediaNotificationInfo mediaNotificationInfo) {
         if (shouldIgnoreMediaNotificationInfo(mMediaNotificationInfo, mediaNotificationInfo)) {
             return;
         }
@@ -455,11 +464,11 @@ public class MediaNotificationController {
         if (newInfo.mediaSessionActions.isEmpty()) return true;
 
         return newInfo.equals(oldInfo)
-                || ((newInfo.isPaused && oldInfo != null && newInfo.tabId != oldInfo.tabId));
+                || ((newInfo.isPaused && oldInfo != null
+                        && newInfo.instanceId != oldInfo.instanceId));
     }
 
-    @VisibleForTesting
-    void clearNotification() {
+    public void clearNotification() {
         mThrottler.clearPendingNotifications();
         if (mMediaNotificationInfo == null) return;
 
@@ -480,13 +489,15 @@ public class MediaNotificationController {
         mThrottler.queueNotification(mediaNotificationInfo);
     }
 
-    public void hideNotification(int tabId) {
-        if (mMediaNotificationInfo == null || tabId != mMediaNotificationInfo.tabId) return;
+    public void hideNotification(int instanceId) {
+        if (mMediaNotificationInfo == null || instanceId != mMediaNotificationInfo.instanceId) {
+            return;
+        }
         clearNotification();
     }
 
     @VisibleForTesting
-    void stopListenerService() {
+    public void stopListenerService() {
         if (mService == null) return;
 
         ForegroundServiceUtils.getInstance().stopForeground(
@@ -496,7 +507,7 @@ public class MediaNotificationController {
 
     @NonNull
     @VisibleForTesting
-    MediaMetadataCompat createMetadata() {
+    public MediaMetadataCompat createMetadata() {
         // Can't return null as {@link MediaSessionCompat#setMetadata()} will crash in some versions
         // of the Android compat library.
         MediaMetadataCompat.Builder metadataBuilder = new MediaMetadataCompat.Builder();
@@ -528,12 +539,12 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    void updateNotification(boolean serviceStarting, boolean shouldLogNotification) {
+    public void updateNotification(boolean serviceStarting, boolean shouldLogNotification) {
         if (mService == null) return;
 
         if (mMediaNotificationInfo == null) {
             if (serviceStarting) {
-                finishStartingForegroundService(mService,
+                finishStartingForegroundServiceOnO(mService,
                         mDelegate.createChromeNotificationBuilder().buildChromeNotification());
                 ForegroundServiceUtils.getInstance().stopForeground(
                         mService, Service.STOP_FOREGROUND_REMOVE);
@@ -547,11 +558,8 @@ public class MediaNotificationController {
 
         // On O, finish starting the foreground service nevertheless, or Android will
         // crash Chrome.
-        boolean foregroundedService = false;
-        if (serviceStarting) {
-            finishStartingForegroundService(mService, notification);
-            foregroundedService = true;
-        }
+        boolean finishedForegroundingService =
+                serviceStarting && finishStartingForegroundServiceOnO(mService, notification);
 
         // We keep the service as a foreground service while the media is playing. When it is not,
         // the service isn't stopped but is no longer in foreground, thus at a lower priority.
@@ -562,7 +570,7 @@ public class MediaNotificationController {
                     mService, Service.STOP_FOREGROUND_DETACH);
             NotificationManagerProxy manager = new NotificationManagerProxyImpl(getContext());
             manager.notify(notification);
-        } else if (!foregroundedService) {
+        } else if (!finishedForegroundingService) {
             ForegroundServiceUtils.getInstance().startForeground(mService,
                     mMediaNotificationInfo.id, notification.getNotification(),
                     0 /*foregroundServiceType*/);
@@ -573,7 +581,7 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    void updateNotificationBuilder() {
+    public void updateNotificationBuilder() {
         assert (mMediaNotificationInfo != null);
 
         mNotificationBuilder = mDelegate.createChromeNotificationBuilder();
@@ -597,7 +605,7 @@ public class MediaNotificationController {
         // TODO(avayvod) work out what we should do in this case. See https://crbug.com/585395.
         if (mMediaNotificationInfo.contentIntent != null) {
             mNotificationBuilder.setContentIntent(PendingIntent.getActivity(getContext(),
-                    mMediaNotificationInfo.tabId, mMediaNotificationInfo.contentIntent,
+                    mMediaNotificationInfo.instanceId, mMediaNotificationInfo.contentIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT));
             // Set FLAG_UPDATE_CURRENT so that the intent extras is updated, otherwise the
             // intent extras will stay the same for the same tab.
@@ -609,12 +617,12 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    void updateMediaSession() {
+    public void updateMediaSession() {
         if (!mMediaNotificationInfo.supportsPlayPause()) return;
 
         if (mMediaSession == null) mMediaSession = createMediaSession();
 
-        activateAndroidMediaSession(mMediaNotificationInfo.tabId);
+        activateAndroidMediaSession(mMediaNotificationInfo.instanceId);
 
         mDelegate.onMediaSessionUpdated(mMediaSession);
 
@@ -624,7 +632,7 @@ public class MediaNotificationController {
     }
 
     @VisibleForTesting
-    PlaybackStateCompat createPlaybackState() {
+    public PlaybackStateCompat createPlaybackState() {
         PlaybackStateCompat.Builder playbackStateBuilder =
                 new PlaybackStateCompat.Builder().setActions(computeMediaSessionActions());
 
@@ -667,17 +675,21 @@ public class MediaNotificationController {
     }
 
     private MediaSessionCompat createMediaSession() {
-        Context context = getContext();
         MediaSessionCompat mediaSession =
-                new MediaSessionCompat(context, context.getString(R.string.app_name));
+                new MediaSessionCompat(getContext(), mDelegate.getAppName());
         mediaSession.setCallback(mMediaSessionCallback);
         mediaSession.setActive(true);
         return mediaSession;
     }
 
-    public void activateAndroidMediaSession(int tabId) {
+    /**
+     * Activates the media session.
+     * @param instanceId the instance of the notification to activate. If it doesn't match the
+     *         active notification, this method will no-op.
+     */
+    public void activateAndroidMediaSession(int instanceId) {
         if (mMediaNotificationInfo == null) return;
-        if (mMediaNotificationInfo.tabId != tabId) return;
+        if (mMediaNotificationInfo.instanceId != instanceId) return;
         if (!mMediaNotificationInfo.supportsPlayPause() || mMediaNotificationInfo.isPaused) return;
         if (mMediaSession == null) return;
         mMediaSession.setActive(true);
@@ -757,7 +769,7 @@ public class MediaNotificationController {
             } else {
                 // App name is automatically added to the title from Android N,
                 // but needs to be added explicitly for prior versions.
-                builder.setContentTitle(getContext().getString(R.string.app_name))
+                builder.setContentTitle(mDelegate.getAppName())
                         .setContentText(getContext().getResources().getString(
                                 R.string.media_notification_incognito));
             }

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.media.ui;
+package org.chromium.components.browser_ui.media;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -15,7 +15,7 @@ import org.chromium.base.SysUtils;
 
 /** A collection of utilities and constants for the images used in MediaSession notifications. */
 public class MediaNotificationImageUtils {
-    static final int MINIMAL_MEDIA_IMAGE_SIZE_PX = 114;
+    public static final int MINIMAL_MEDIA_IMAGE_SIZE_PX = 114;
 
     // The media artwork image resolution on high-end devices.
     private static final int HIGH_IMAGE_SIZE_PX = 512;

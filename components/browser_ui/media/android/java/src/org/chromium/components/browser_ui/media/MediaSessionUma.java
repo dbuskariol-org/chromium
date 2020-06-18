@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.metrics;
+package org.chromium.components.browser_ui.media;
 
 import androidx.annotation.IntDef;
 
@@ -11,10 +11,8 @@ import org.chromium.base.metrics.RecordHistogram;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-/**
- * Centralizes UMA data collection for Android-specific MediaSession features.
- */
-public class MediaSessionUMA {
+/** Centralizes UMA data collection for Android-specific MediaSession features. */
+public class MediaSessionUma {
     // MediaSessionAction defined in tools/metrics/histograms/histograms.xml.
     @IntDef({MediaSessionActionSource.MEDIA_NOTIFICATION, MediaSessionActionSource.MEDIA_SESSION,
             MediaSessionActionSource.HEADSET_UNPLUG})

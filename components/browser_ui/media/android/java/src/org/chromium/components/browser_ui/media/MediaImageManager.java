@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.media.ui;
+package org.chromium.components.browser_ui.media;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
@@ -120,12 +120,11 @@ public class MediaImageManager implements ImageDownloadCallback {
         // through JNI. |maxBitmapSize| does not prevent huge images to be downloaded. It is used to
         // filter/rescale the download images. See documentation of
         // {@link WebContents#downloadImage()} for details.
-        mRequestId = mWebContents.downloadImage(
-                image.getSrc(),                // url
-                false,                         // isFavicon
-                MAX_BITMAP_SIZE_FOR_DOWNLOAD,  // maxBitmapSize
-                false,                         // bypassCache
-                this);                         // callback
+        mRequestId = mWebContents.downloadImage(image.getSrc(), // url
+                false, // isFavicon
+                MAX_BITMAP_SIZE_FOR_DOWNLOAD, // maxBitmapSize
+                false, // bypassCache
+                this); // callback
     }
 
     /**

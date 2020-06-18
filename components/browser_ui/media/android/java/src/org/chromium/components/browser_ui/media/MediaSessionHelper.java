@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.media.ui;
+package org.chromium.components.browser_ui.media;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -17,9 +17,6 @@ import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
 import org.chromium.base.SysUtils;
-import org.chromium.chrome.R;
-import org.chromium.chrome.browser.metrics.MediaNotificationUma;
-import org.chromium.chrome.browser.metrics.MediaSessionUMA;
 import org.chromium.components.url_formatter.UrlFormatter;
 import org.chromium.content_public.browser.MediaSession;
 import org.chromium.content_public.browser.MediaSessionObserver;
@@ -44,18 +41,18 @@ public class MediaSessionHelper implements MediaImageCallback {
 
     private static final String UNICODE_PLAY_CHARACTER = "\u25B6";
     @VisibleForTesting
-    static final int HIDE_NOTIFICATION_DELAY_MILLIS = 2500;
+    public static final int HIDE_NOTIFICATION_DELAY_MILLIS = 2500;
 
     private Delegate mDelegate;
     private WebContents mWebContents;
     @VisibleForTesting
-    WebContentsObserver mWebContentsObserver;
+    public WebContentsObserver mWebContentsObserver;
     @VisibleForTesting
-    MediaSessionObserver mMediaSessionObserver;
+    public MediaSessionObserver mMediaSessionObserver;
     private MediaImageManager mMediaImageManager;
     private Bitmap mPageMediaImage;
     @VisibleForTesting
-    Bitmap mFavicon;
+    public Bitmap mFavicon;
     private Bitmap mCurrentMediaImage;
     private String mOrigin;
     private int mPreviousVolumeControlStream = AudioManager.USE_DEFAULT_STREAM_TYPE;
@@ -79,20 +76,14 @@ public class MediaSessionHelper implements MediaImageCallback {
     // Used to override the MediaSession object get from WebContents. This is to work around the
     // static getter {@link MediaSession#fromWebContents()}.
     @VisibleForTesting
-    static MediaSession sOverriddenMediaSession;
-
-    @VisibleForTesting
-    @Nullable
-    MediaSessionObserver getMediaSessionObserverForTesting() {
-        return mMediaSessionObserver;
-    }
+    public static MediaSession sOverriddenMediaSession;
 
     private MediaNotificationListener mControlsListener = new MediaNotificationListener() {
         @Override
         public void onPlay(int actionSource) {
             if (isNotificationHidingOrHidden()) return;
 
-            MediaSessionUMA.recordPlay(
+            MediaSessionUma.recordPlay(
                     MediaSessionHelper.convertMediaActionSourceToUMA(actionSource));
 
             if (mMediaSessionObserver.getMediaSession() == null) return;
@@ -104,7 +95,7 @@ public class MediaSessionHelper implements MediaImageCallback {
         public void onPause(int actionSource) {
             if (isNotificationHidingOrHidden()) return;
 
-            MediaSessionUMA.recordPause(
+            MediaSessionUma.recordPause(
                     MediaSessionHelper.convertMediaActionSourceToUMA(actionSource));
 
             if (mMediaSessionObserver.getMediaSession() == null) return;
@@ -116,7 +107,7 @@ public class MediaSessionHelper implements MediaImageCallback {
         public void onStop(int actionSource) {
             if (isNotificationHidingOrHidden()) return;
 
-            MediaSessionUMA.recordStop(
+            MediaSessionUma.recordStop(
                     MediaSessionHelper.convertMediaActionSourceToUMA(actionSource));
 
             if (mMediaSessionObserver.getMediaSession() != null) {
@@ -271,7 +262,7 @@ public class MediaSessionHelper implements MediaImageCallback {
         };
     }
 
-    void setWebContents(@NonNull WebContents webContents) {
+    public void setWebContents(@NonNull WebContents webContents) {
         mWebContents = webContents;
 
         if (mWebContentsObserver != null) mWebContentsObserver.destroy();
@@ -373,7 +364,7 @@ public class MediaSessionHelper implements MediaImageCallback {
         void activateAndroidMediaSession();
     }
 
-    MediaSessionHelper(@NonNull WebContents webContents, @NonNull Delegate delegate) {
+    public MediaSessionHelper(@NonNull WebContents webContents, @NonNull Delegate delegate) {
         mDelegate = delegate;
         mMediaImageManager =
                 new MediaImageManager(MediaNotificationImageUtils.MINIMAL_MEDIA_IMAGE_SIZE_PX,
@@ -391,7 +382,7 @@ public class MediaSessionHelper implements MediaImageCallback {
      * Called when this object should no longer manage a media session because owning code no longer
      * requires it.
      */
-    void destroy() {
+    public void destroy() {
         cleanupMediaSessionObserver();
         hideNotificationImmediately();
         if (mWebContentsObserver != null) mWebContentsObserver.destroy();
@@ -412,23 +403,23 @@ public class MediaSessionHelper implements MediaImageCallback {
 
     /**
      * Converts the {@link MediaNotificationListener} action source enum into the
-     * {@link MediaSessionUMA} one to ensure matching the histogram values.
+     * {@link MediaSessionUma} one to ensure matching the histogram values.
      * @param source the source id, must be one of the ACTION_SOURCE_* constants defined in the
      *               {@link MediaNotificationListener} interface.
      * @return the corresponding histogram value.
      */
-    public static @MediaSessionUMA.MediaSessionActionSource int convertMediaActionSourceToUMA(
+    public static @MediaSessionUma.MediaSessionActionSource int convertMediaActionSourceToUMA(
             int source) {
         if (source == MediaNotificationListener.ACTION_SOURCE_MEDIA_NOTIFICATION) {
-            return MediaSessionUMA.MediaSessionActionSource.MEDIA_NOTIFICATION;
+            return MediaSessionUma.MediaSessionActionSource.MEDIA_NOTIFICATION;
         } else if (source == MediaNotificationListener.ACTION_SOURCE_MEDIA_SESSION) {
-            return MediaSessionUMA.MediaSessionActionSource.MEDIA_SESSION;
+            return MediaSessionUma.MediaSessionActionSource.MEDIA_SESSION;
         } else if (source == MediaNotificationListener.ACTION_SOURCE_HEADSET_UNPLUG) {
-            return MediaSessionUMA.MediaSessionActionSource.HEADSET_UNPLUG;
+            return MediaSessionUma.MediaSessionActionSource.HEADSET_UNPLUG;
         }
 
         assert false;
-        return MediaSessionUMA.MediaSessionActionSource.NUM_ENTRIES;
+        return MediaSessionUma.MediaSessionActionSource.NUM_ENTRIES;
     }
 
     private Activity getActivity() {
@@ -440,7 +431,7 @@ public class MediaSessionHelper implements MediaImageCallback {
     }
 
     /** Returns true if a large favicon might be found. */
-    boolean fetchLargeFaviconImage() {
+    private boolean fetchLargeFaviconImage() {
         // The page does not have a favicon yet to fetch since onFaviconUpdated was never called.
         // Don't waste time trying to find it.
         if (!mMaybeHasFavicon) return false;
@@ -452,7 +443,7 @@ public class MediaSessionHelper implements MediaImageCallback {
      * Updates the best favicon if the given icon is better and the favicon is shown in
      * notification.
      */
-    void updateFavicon(Bitmap icon) {
+    public void updateFavicon(Bitmap icon) {
         if (icon == null) return;
 
         mMaybeHasFavicon = true;
@@ -476,7 +467,7 @@ public class MediaSessionHelper implements MediaImageCallback {
     }
 
     /** Sets an icon which will preferentially be used in place of a smaller favicon. */
-    void setLargeIcon(Bitmap icon) {
+    public void setLargeIcon(Bitmap icon) {
         if (isNotificationHidingOrHidden()) return;
 
         if (icon == null) {

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.media.ui;
+package org.chromium.components.browser_ui.media;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -10,7 +10,6 @@ import android.text.TextUtils;
 
 import androidx.annotation.Nullable;
 
-import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.services.media_session.MediaMetadata;
 import org.chromium.services.media_session.MediaPosition;
 
@@ -40,7 +39,7 @@ public class MediaNotificationInfo {
     public static final int ACTION_SWIPEAWAY = 1 << 2;
 
     /**
-     * The invalid notification id.
+     * A value that represents an invalid ID.
      */
     public static final int INVALID_ID = -1;
 
@@ -48,11 +47,10 @@ public class MediaNotificationInfo {
      * Use this class to construct an instance of {@link MediaNotificationInfo}.
      */
     public static final class Builder {
-
         private MediaMetadata mMetadata;
         private boolean mIsPaused;
         private String mOrigin = "";
-        private int mTabId = Tab.INVALID_TAB_ID;
+        private int mInstanceId = INVALID_ID;
         private boolean mIsPrivate = true;
         private int mNotificationSmallIcon;
         private Bitmap mNotificationLargeIcon;
@@ -68,15 +66,14 @@ public class MediaNotificationInfo {
         /**
          * Initializes the builder with the default values.
          */
-        public Builder() {
-        }
+        public Builder() {}
 
         public MediaNotificationInfo build() {
             assert mMetadata != null;
             assert mOrigin != null;
             assert mListener != null;
 
-            return new MediaNotificationInfo(mMetadata, mIsPaused, mOrigin, mTabId, mIsPrivate,
+            return new MediaNotificationInfo(mMetadata, mIsPaused, mOrigin, mInstanceId, mIsPrivate,
                     mNotificationSmallIcon, mNotificationLargeIcon, mDefaultNotificationLargeIcon,
                     mMediaSessionImage, mActions, mId, mContentIntent, mListener,
                     mMediaSessionActions, mMediaPosition);
@@ -97,8 +94,8 @@ public class MediaNotificationInfo {
             return this;
         }
 
-        public Builder setTabId(int tabId) {
-            mTabId = tabId;
+        public Builder setInstanceId(int instanceId) {
+            mInstanceId = instanceId;
             return this;
         }
 
@@ -179,9 +176,12 @@ public class MediaNotificationInfo {
     public final String origin;
 
     /**
-     * The id of the tab containing the media.
+     * An identifier that helps distinguish different instances of the same type of media
+     * notification. The {@link id} is shared by different MediaNotificationInfo instances for the
+     * same media type, but this identifier provides an extra layer of differentiation. In Chrome,
+     * for example, this corresponds to the source tab.
      */
-    public final int tabId;
+    public final int instanceId;
 
     /**
      * Whether the media notification should be considered as private.
@@ -210,7 +210,7 @@ public class MediaNotificationInfo {
     public final Bitmap mediaSessionImage;
 
     /**
-     * The id to use for the notification itself.
+     * The id to use for the Android Notification.
      */
     public final int id;
 
@@ -260,7 +260,7 @@ public class MediaNotificationInfo {
      * @param metadata The metadata associated with the media.
      * @param isPaused The current state of the media, paused or not.
      * @param origin The origin of the tab containing the media.
-     * @param tabId The id of the tab containing the media.
+     * @param instanceId The id of the tab containing the media.
      * @param isPrivate Whether the media notification should be considered as private.
      * @param notificationSmallIcon The small icon used in the notification.
      * @param notificationLargeIcon The large icon used in the notification.
@@ -276,20 +276,23 @@ public class MediaNotificationInfo {
      * @param mediaPosition The current position of the media.
      */
     private MediaNotificationInfo(MediaMetadata metadata, boolean isPaused, String origin,
-            int tabId, boolean isPrivate, int notificationSmallIcon, Bitmap notificationLargeIcon,
-            int defaultNotificationLargeIcon, Bitmap mediaSessionImage, int actions, int id,
-            Intent contentIntent, MediaNotificationListener listener,
-            Set<Integer> mediaSessionActions, @Nullable MediaPosition mediaPosition) {
+            int instanceId, boolean isPrivate, int notificationSmallIcon,
+            Bitmap notificationLargeIcon, int defaultNotificationLargeIcon,
+            Bitmap mediaSessionImage, int actions, int id, Intent contentIntent,
+            MediaNotificationListener listener, Set<Integer> mediaSessionActions,
+            @Nullable MediaPosition mediaPosition) {
         this.metadata = metadata;
         this.isPaused = isPaused;
         this.origin = origin;
-        this.tabId = tabId;
+        assert instanceId != INVALID_ID;
+        this.instanceId = instanceId;
         this.isPrivate = isPrivate;
         this.notificationSmallIcon = notificationSmallIcon;
         this.notificationLargeIcon = notificationLargeIcon;
         this.defaultNotificationLargeIcon = defaultNotificationLargeIcon;
         this.mediaSessionImage = mediaSessionImage;
         this.mActions = actions;
+        assert id != INVALID_ID;
         this.id = id;
         this.contentIntent = contentIntent;
         this.listener = listener;
@@ -306,7 +309,8 @@ public class MediaNotificationInfo {
         if (!(obj instanceof MediaNotificationInfo)) return false;
 
         MediaNotificationInfo other = (MediaNotificationInfo) obj;
-        return isPaused == other.isPaused && isPrivate == other.isPrivate && tabId == other.tabId
+        return isPaused == other.isPaused && isPrivate == other.isPrivate
+                && instanceId == other.instanceId
                 && notificationSmallIcon == other.notificationSmallIcon
                 && (notificationLargeIcon == other.notificationLargeIcon
                         || (notificationLargeIcon != null
@@ -334,10 +338,10 @@ public class MediaNotificationInfo {
         result = 31 * result + (metadata == null ? 0 : metadata.hashCode());
         result = 31 * result + (origin == null ? 0 : origin.hashCode());
         result = 31 * result + (contentIntent == null ? 0 : contentIntent.hashCode());
-        result = 31 * result + tabId;
+        result = 31 * result + instanceId;
         result = 31 * result + notificationSmallIcon;
-        result = 31 * result + (notificationLargeIcon == null
-                ? 0 : notificationLargeIcon.hashCode());
+        result = 31 * result
+                + (notificationLargeIcon == null ? 0 : notificationLargeIcon.hashCode());
         result = 31 * result + defaultNotificationLargeIcon;
         result = 31 * result + (mediaSessionImage == null ? 0 : mediaSessionImage.hashCode());
         result = 31 * result + mActions;
