@@ -2191,7 +2191,7 @@
     A factory error has been detected
   </message>
   <message name="IDS_WRONG_HWID_SCREEN_MESSAGE_FIRST_PART" desc="Warning message shown on screen notifying about malformed hardware ID. First paragraph.">
-    Unfortunately, your computer is configured with a malformed hardware ID. This prevents Chrome OS from updating with the latest security fixes and your computer <ph name="BEGIN_BOLD">$1</ph>may be vulnerable to malicious attacks<ph name="END_BOLD">$2</ph>.
+    Unfortunately, your computer is configured with a malformed hardware ID. This prevents Chrome OS from updating with the latest security fixes and your computer <ph name="BEGIN_BOLD">&lt;b&gt;</ph>may be vulnerable to malicious attacks<ph name="END_BOLD">&lt;/b&gt;</ph>.
   </message>
   <message name="IDS_WRONG_HWID_SCREEN_MESSAGE_SECOND_PART" desc="Warning message shown on screen notifying about malformed hardware ID. Second paragraph.">
     Please contact your hardware manufacturer immediately to send your computer to a repair facility.
