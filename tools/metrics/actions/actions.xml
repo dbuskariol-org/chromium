@@ -24531,6 +24531,24 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="TouchMode.EnteredNonTouchMode">
+  <owner>collinbaker@chromium.org</owner>
+  <owner>chrome-desktop-ui@google.com</owner>
+  <description>
+    The user switched away from primarily using touch input or the browser
+    started in non-touch mode.
+  </description>
+</action>
+
+<action name="TouchMode.EnteredTouchMode">
+  <owner>collinbaker@chromium.org</owner>
+  <owner>chrome-desktop-ui@google.com</owner>
+  <description>
+    The user switched to primarily using touch input or the browser started in
+    touch mode.
+  </description>
+</action>
+
 <action name="Touchpad_Gesture_Overview">
   <owner>Please list the metric's owners. Add more owner tags as needed.</owner>
   <description>Please enter the description of this user action.</description>
