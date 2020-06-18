@@ -379,10 +379,10 @@ jumbo_static_library("test_support") {
     "//components/viz/host",
     "//content/app:for_content_tests",
     "//content/browser:for_content_tests",
-    "//content/browser/speech/proto",
     "//content/child:for_content_tests",
     "//content/gpu",
     "//content/public/browser",
+    "//content/public/browser:proto",
     "//content/public/child",
     "//content/public/common",
     "//content/public/common:client_hints_mojom",
@@ -1445,7 +1445,7 @@ test("content_browsertests") {
       "../browser/storage_service_sandbox_browsertest.cc",
       "../browser/zoom_browsertest.cc",
     ]
-    deps += [ "//content/browser/speech/proto" ]
+    deps += [ "//content/public/browser:proto" ]
   }
   if (is_posix) {
     deps += [ "//services/tracing:test_utils" ]
@@ -2112,11 +2112,11 @@ test("content_unittests") {
     "//content/browser/devtools:devtools_background_services_proto",
     "//content/browser/notifications:notification_proto",
     "//content/browser/service_worker:service_worker_proto",
-    "//content/browser/speech/proto",
     "//content/child:for_content_tests",
     "//content/common:buildflags",
     "//content/gpu",
     "//content/public/browser",
+    "//content/public/browser:proto",
     "//content/public/child",
     "//content/public/common",
     "//content/public/common:service_names",
