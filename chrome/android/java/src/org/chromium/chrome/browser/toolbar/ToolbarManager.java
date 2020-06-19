@@ -316,7 +316,7 @@ public class ToolbarManager implements UrlFocusChangeListener, ThemeColorObserve
 
         mToolbar = new TopToolbarCoordinator(controlContainer, mActivity.findViewById(R.id.toolbar),
                 identityDiscController, mLocationBarModel, mToolbarTabController,
-                new UserEducationHelper(mActivity), buttonDataProviders,
+                new UserEducationHelper(mActivity, mHandler), buttonDataProviders,
                 mActivity.isTablet() ? mAppThemeColorProvider : mTabThemeColorProvider,
                 mAppThemeColorProvider);
 

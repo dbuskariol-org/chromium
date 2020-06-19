@@ -11,6 +11,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -105,6 +106,8 @@ public class FeedSurfaceCoordinator implements FeedSurfaceProvider {
 
     // Used for the feed header menu.
     private UserEducationHelper mUserEducationHelper;
+
+    private final Handler mHandler = new Handler();
 
     private static class BasicSnackbarApi implements SnackbarApi {
         private final SnackbarManager mManager;
@@ -348,7 +351,7 @@ public class FeedSurfaceCoordinator implements FeedSurfaceProvider {
             mFeedStreamSurface.surfaceOpened();
         }
 
-        mUserEducationHelper = new UserEducationHelper(mActivity);
+        mUserEducationHelper = new UserEducationHelper(mActivity, mHandler);
     }
 
     @Override
