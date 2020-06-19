@@ -182,6 +182,8 @@ class PepperExternalWidgetClient : public blink::WebExternalWidgetClient {
     return widget_->HasCurrentImeGuard(request_to_show_virtual_keyboard);
   }
 
+  void FocusChanged(bool enabled) override { widget_->FocusChanged(enabled); }
+
  private:
   RenderWidgetFullscreenPepper* widget_;
 };

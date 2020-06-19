@@ -428,6 +428,14 @@ void WebPagePopupImpl::RequestCompositionUpdates(bool immediate_request,
   widget_base_->RequestCompositionUpdates(immediate_request, monitor_updates);
 }
 
+void WebPagePopupImpl::SetFocus(bool focus) {
+  widget_base_->SetFocus(focus);
+}
+
+bool WebPagePopupImpl::HasFocus() {
+  return widget_base_->has_focus();
+}
+
 void WebPagePopupImpl::SetCompositorVisible(bool visible) {
   widget_base_->SetCompositorVisible(visible);
 }
@@ -726,12 +734,13 @@ WebInputEventResult WebPagePopupImpl::HandleInputEvent(
   return PageWidgetDelegate::HandleInputEvent(*this, event, &MainFrame());
 }
 
-void WebPagePopupImpl::SetFocus(bool enable) {
+void WebPagePopupImpl::FocusChanged(bool enable) {
   if (!page_)
     return;
   if (enable)
     page_->GetFocusController().SetActive(true);
   page_->GetFocusController().SetFocused(enable);
+  WidgetClient()->FocusChanged(enable);
 }
 
 WebURL WebPagePopupImpl::GetURLForDebugTrace() {

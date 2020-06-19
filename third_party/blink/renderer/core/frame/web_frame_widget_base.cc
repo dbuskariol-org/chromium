@@ -1227,6 +1227,14 @@ void WebFrameWidgetBase::ClearTextInputState() {
   widget_base_->ClearTextInputState();
 }
 
+void WebFrameWidgetBase::SetFocus(bool focus) {
+  widget_base_->SetFocus(focus);
+}
+
+bool WebFrameWidgetBase::HasFocus() {
+  return widget_base_->has_focus();
+}
+
 void WebFrameWidgetBase::SetToolTipText(const String& tooltip_text,
                                         TextDirection dir) {
   widget_base_->SetToolTipText(tooltip_text, dir);

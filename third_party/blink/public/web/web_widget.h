@@ -151,6 +151,9 @@ class WebWidget {
   // Called to inform the WebWidget that it has gained or lost keyboard focus.
   virtual void SetFocus(bool) {}
 
+  // Returns the state of focus for the WebWidget.
+  virtual bool HasFocus() { return false; }
+
   // Sets the display mode, which comes from the top-level browsing context and
   // is applied to all widgets.
   virtual void SetDisplayMode(mojom::DisplayMode) {}

@@ -160,6 +160,9 @@ class WidgetBaseClient {
   // Determine if there is a IME guard.
   virtual bool HasCurrentImeGuard(bool request_to_show_virtual_keyboard) = 0;
 
+  // Called to inform the Widget that it has gained or lost keyboard focus.
+  virtual void FocusChanged(bool) = 0;
+
   // Test-specific methods below this point.
   virtual void ScheduleAnimationForWebTests() {}
 };

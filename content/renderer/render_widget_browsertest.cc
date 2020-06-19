@@ -56,7 +56,7 @@ class RenderWidgetTest : public RenderViewTest {
     base::RunLoop().RunUntilIdle();
   }
 
-  void SetFocus(bool focused) { widget()->OnSetFocus(focused); }
+  void SetFocus(bool focused) { GetWebWidget()->SetFocus(focused); }
 
   gfx::PointF GetCenterPointOfElement(const blink::WebString& id) {
     auto rect =

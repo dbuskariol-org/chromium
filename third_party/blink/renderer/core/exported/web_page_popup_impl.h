@@ -138,6 +138,7 @@ class CORE_EXPORT WebPagePopupImpl final : public WebPagePopup,
   void SendCompositionRangeChanged(
       const gfx::Range& range,
       const std::vector<gfx::Rect>& character_bounds) override;
+  void FocusChanged(bool enabled) override;
 
   // WebWidget implementation.
   // NOTE: The WebWidget may still be used after requesting the popup to be
@@ -153,6 +154,7 @@ class CORE_EXPORT WebPagePopupImpl final : public WebPagePopup,
              base::OnceCallback<void()> cleanup_task) override;
   WebInputEventResult HandleInputEvent(const WebCoalescedInputEvent&) override;
   void SetFocus(bool) override;
+  bool HasFocus() override;
   WebURL GetURLForDebugTrace() override;
   WebHitTestResult HitTestResultAt(const gfx::PointF&) override { return {}; }
   cc::LayerTreeHost* InitializeCompositing(

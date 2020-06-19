@@ -153,6 +153,8 @@ class PLATFORM_EXPORT WidgetBase : public mojom::blink::Widget,
   void ForceTextInputStateUpdate();
   void RequestCompositionUpdates(bool immediate_request, bool monitor_updates);
   void UpdateCompositionInfo(bool immediate_request);
+  void SetFocus(bool enable);
+  bool has_focus() const { return has_focus_; }
 
  private:
   bool CanComposeInline();
@@ -172,6 +174,7 @@ class PLATFORM_EXPORT WidgetBase : public mojom::blink::Widget,
       render_widget_scheduling_state_;
   bool first_update_visual_state_after_hidden_ = false;
   base::TimeTicks was_shown_time_ = base::TimeTicks::Now();
+  bool has_focus_ = false;
   WidgetBaseInputHandler input_handler_{this};
 
   // Stores the current selection bounds.

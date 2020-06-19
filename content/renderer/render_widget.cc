@@ -598,7 +598,7 @@ bool RenderWidget::Send(IPC::Message* message) {
 
 bool RenderWidget::ShouldHandleImeEvents() const {
   if (delegate())
-    return has_focus_;
+    return GetWebWidget()->HasFocus();
   if (for_child_local_root_frame_) {
     // TODO(ekaramad): We track page focus in all RenderViews on the page but
     // the RenderWidgets corresponding to child local roots do not get the
@@ -1144,12 +1144,12 @@ void RenderWidget::OnSetActive(bool active) {
 }
 
 void RenderWidget::OnSetFocus(bool enable) {
+  GetWebWidget()->SetFocus(enable);
+}
+
+void RenderWidget::FocusChanged(bool enable) {
   if (delegate())
     delegate()->DidReceiveSetFocusEventForWidget();
-
-  has_focus_ = enable;
-
-  GetWebWidget()->SetFocus(enable);
 
   for (auto& observer : render_frames_)
     observer.RenderWidgetSetFocus(enable);

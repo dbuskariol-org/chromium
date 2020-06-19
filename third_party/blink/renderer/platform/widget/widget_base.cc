@@ -480,6 +480,11 @@ bool WidgetBase::ProcessTouchAction(cc::TouchAction touch_action) {
   return input_handler_.ProcessTouchAction(touch_action);
 }
 
+void WidgetBase::SetFocus(bool enable) {
+  has_focus_ = enable;
+  client_->FocusChanged(enable);
+}
+
 void WidgetBase::UpdateCompositionInfo(bool immediate_request) {
   if (!monitor_composition_info_ && !immediate_request)
     return;  // Do not calculate composition info if not requested.

@@ -61,6 +61,8 @@ class WebExternalWidgetImpl : public WebExternalWidget,
   void ForceTextInputStateUpdate() override;
   void RequestCompositionUpdates(bool immediate_request,
                                  bool monitor_updates) override;
+  bool HasFocus() override;
+  void SetFocus(bool focus) override;
 
   // WebExternalWidget overrides:
   void SetRootLayer(scoped_refptr<cc::Layer>) override;
@@ -91,6 +93,7 @@ class WebExternalWidgetImpl : public WebExternalWidget,
   void SendCompositionRangeChanged(
       const gfx::Range& range,
       const std::vector<gfx::Rect>& character_bounds) override;
+  void FocusChanged(bool enabled) override;
 
  private:
   WebExternalWidgetClient* const client_;

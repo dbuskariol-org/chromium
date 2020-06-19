@@ -361,6 +361,7 @@ class CONTENT_EXPORT RenderWidget
   bool ShouldDispatchImeEventsToPepper() override;
   blink::WebTextInputType GetPepperTextInputType() override;
   gfx::Rect GetPepperCaretBounds() override;
+  void FocusChanged(bool enable) override;
 
   // Returns the scale being applied to the document in blink by the device
   // emulator. Returns 1 if there is no emulation active. Use this to position
@@ -420,9 +421,6 @@ class CONTENT_EXPORT RenderWidget
 
   // Called when the Widget has changed size as a result of an auto-resize.
   void DidAutoResize(const gfx::Size& new_size);
-
-  // Indicates whether this widget has focus.
-  bool has_focus() const { return has_focus_; }
 
   MouseLockDispatcher* mouse_lock_dispatcher() const {
     return mouse_lock_dispatcher_.get();
@@ -851,9 +849,6 @@ class CONTENT_EXPORT RenderWidget
   std::unique_ptr<MouseLockDispatcher::LockTarget> webwidget_mouse_lock_target_;
 
   viz::LocalSurfaceIdAllocation local_surface_id_allocation_from_parent_;
-
-  // Indicates whether this widget has focus.
-  bool has_focus_ = false;
 
   // Whether this widget is for a child local root frame. This excludes widgets
   // that are not for a frame (eg popups) and excludes the widget for the main

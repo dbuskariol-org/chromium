@@ -91,6 +91,10 @@ class WebExternalWidgetClient {
   virtual bool HasCurrentImeGuard(bool request_to_show_virtual_keyboard) {
     return false;
   }
+
+  // The state of the focus has changed for the WebWidget. |enabled|
+  // is the new state.
+  virtual void FocusChanged(bool enabled) {}
 };
 
 }  // namespace blink

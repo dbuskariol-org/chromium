@@ -227,6 +227,8 @@ class CORE_EXPORT WebFrameWidgetBase
   void ShowVirtualKeyboard() override;
   void RequestCompositionUpdates(bool immediate_request,
                                  bool monitor_updates) override;
+  bool HasFocus() override;
+  void SetFocus(bool focus) override;
 
   // WidgetBaseClient methods.
   void DispatchRafAlignedInput(base::TimeTicks frame_time) override;

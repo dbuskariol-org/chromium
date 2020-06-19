@@ -137,6 +137,14 @@ void WebExternalWidgetImpl::RequestCompositionUpdates(bool immediate_request,
   widget_base_->RequestCompositionUpdates(immediate_request, monitor_updates);
 }
 
+void WebExternalWidgetImpl::SetFocus(bool focus) {
+  widget_base_->SetFocus(focus);
+}
+
+bool WebExternalWidgetImpl::HasFocus() {
+  return widget_base_->has_focus();
+}
+
 void WebExternalWidgetImpl::DidOverscrollForTesting(
     const gfx::Vector2dF& overscroll_delta,
     const gfx::Vector2dF& accumulated_overscroll,
@@ -207,6 +215,10 @@ void WebExternalWidgetImpl::SendCompositionRangeChanged(
     const gfx::Range& range,
     const std::vector<gfx::Rect>& character_bounds) {
   client_->SendCompositionRangeChanged(range, character_bounds);
+}
+
+void WebExternalWidgetImpl::FocusChanged(bool enabled) {
+  client_->FocusChanged(enabled);
 }
 
 }  // namespace blink
