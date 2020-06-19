@@ -87,12 +87,34 @@ bool PropertyNode::IsArray() const {
   return name_or_value == base::ASCIIToUTF16("[]");
 }
 
+bool PropertyNode::IsDict() const {
+  return name_or_value == base::ASCIIToUTF16("{}");
+}
+
 base::Optional<int> PropertyNode::AsInt() const {
   int value = 0;
   if (!base::StringToInt(name_or_value, &value)) {
     return base::nullopt;
   }
   return value;
+}
+
+base::Optional<base::string16> PropertyNode::FindKey(const char* refkey) const {
+  for (const auto& param : parameters) {
+    if (param.key == base::ASCIIToUTF16(refkey)) {
+      return param.name_or_value;
+    }
+  }
+  return base::nullopt;
+}
+
+base::Optional<int> PropertyNode::FindIntKey(const char* refkey) const {
+  for (const auto& param : parameters) {
+    if (param.key == base::ASCIIToUTF16(refkey)) {
+      return param.AsInt();
+    }
+  }
+  return base::nullopt;
 }
 
 std::string PropertyNode::ToString() const {

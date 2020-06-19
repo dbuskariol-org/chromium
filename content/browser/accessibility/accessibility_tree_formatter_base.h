@@ -67,7 +67,10 @@ class CONTENT_EXPORT PropertyNode final {
 
   // Argument conversion methods.
   bool IsArray() const;
+  bool IsDict() const;
   base::Optional<int> AsInt() const;
+  base::Optional<base::string16> FindKey(const char* refkey) const;
+  base::Optional<int> FindIntKey(const char* key) const;
 
   std::string ToString() const;
 
