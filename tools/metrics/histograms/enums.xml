@@ -10142,6 +10142,7 @@ histogram as enum -->
   <int value="12" label="WebAPK"/>
   <int value="13" label="Yahoo Mail"/>
   <int value="14" label="Viber"/>
+  <int value="15" label="YouTube"/>
 </enum>
 
 <enum name="ClientCertSelectionResult">
