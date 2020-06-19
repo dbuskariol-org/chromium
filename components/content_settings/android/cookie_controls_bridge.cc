@@ -2,15 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/android/preferences/cookie_controls_bridge.h"
+#include "components/content_settings/android/cookie_controls_bridge.h"
 
 #include <memory>
 
-#include "chrome/android/chrome_jni_headers/CookieControlsBridge_jni.h"
+#include "components/content_settings/android/content_settings_jni_headers/CookieControlsBridge_jni.h"
 #include "components/content_settings/core/browser/cookie_settings.h"
 #include "components/embedder_support/android/browser_context/browser_context_handle.h"
 #include "components/permissions/permissions_client.h"
 #include "content/public/browser/browser_context.h"
+
+namespace content_settings {
 
 using base::android::JavaParamRef;
 
@@ -23,11 +25,14 @@ CookieControlsBridge::CookieControlsBridge(
     : jobject_(obj) {
   content::WebContents* web_contents =
       content::WebContents::FromJavaWebContents(jweb_contents_android);
-  content::BrowserContext* context =
+  content::BrowserContext* original_context =
       browser_context::BrowserContextFromJavaHandle(
           joriginal_browser_context_handle);
-  controller_ =
-      std::make_unique<CookieControlsController>(web_contents, context);
+  auto* permissions_client = permissions::PermissionsClient::Get();
+  controller_ = std::make_unique<CookieControlsController>(
+      permissions_client->GetCookieSettings(web_contents->GetBrowserContext()),
+      original_context ? permissions_client->GetCookieSettings(original_context)
+                       : nullptr);
   observer_.Add(controller_.get());
   controller_->Update(web_contents);
 }
@@ -97,3 +102,5 @@ static jlong JNI_CookieControlsBridge_Init(
   return reinterpret_cast<intptr_t>(new CookieControlsBridge(
       env, obj, jweb_contents_android, joriginal_browser_context_handle));
 }
+
+}  // namespace content_settings

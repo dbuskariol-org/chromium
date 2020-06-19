@@ -2,12 +2,14 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_COOKIE_CONTROLS_COOKIE_CONTROLS_VIEW_H_
-#define CHROME_BROWSER_UI_COOKIE_CONTROLS_COOKIE_CONTROLS_VIEW_H_
+#ifndef COMPONENTS_CONTENT_SETTINGS_BROWSER_UI_COOKIE_CONTROLS_VIEW_H_
+#define COMPONENTS_CONTENT_SETTINGS_BROWSER_UI_COOKIE_CONTROLS_VIEW_H_
 
 #include "base/observer_list_types.h"
 #include "components/content_settings/core/common/cookie_controls_enforcement.h"
 #include "components/content_settings/core/common/cookie_controls_status.h"
+
+namespace content_settings {
 
 // Interface for the CookieControls UI.
 class CookieControlsView : public base::CheckedObserver {
@@ -18,4 +20,6 @@ class CookieControlsView : public base::CheckedObserver {
   virtual void OnBlockedCookiesCountChanged(int blocked_cookies) = 0;
 };
 
-#endif  // CHROME_BROWSER_UI_COOKIE_CONTROLS_COOKIE_CONTROLS_VIEW_H_
+}  // namespace content_settings
+
+#endif  // COMPONENTS_CONTENT_SETTINGS_BROWSER_UI_COOKIE_CONTROLS_VIEW_H_

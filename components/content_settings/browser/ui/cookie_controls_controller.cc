@@ -2,43 +2,38 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/cookie_controls/cookie_controls_controller.h"
+#include "components/content_settings/browser/ui/cookie_controls_controller.h"
 
 #include <memory>
+
 #include "base/bind.h"
 #include "base/metrics/user_metrics.h"
 #include "base/metrics/user_metrics_action.h"
-#include "chrome/browser/content_settings/cookie_settings_factory.h"
-#include "chrome/browser/ui/cookie_controls/cookie_controls_view.h"
 #include "components/browsing_data/content/local_shared_objects_container.h"
 #include "components/content_settings/browser/tab_specific_content_settings.h"
+#include "components/content_settings/browser/ui/cookie_controls_view.h"
+#include "components/content_settings/core/browser/content_settings_utils.h"
 #include "components/content_settings/core/browser/cookie_settings.h"
 #include "components/content_settings/core/common/content_settings.h"
 #include "components/content_settings/core/common/cookie_controls_enforcement.h"
 #include "components/content_settings/core/common/cookie_controls_status.h"
 #include "components/content_settings/core/common/pref_names.h"
-#include "components/permissions/permissions_client.h"
 #include "components/prefs/pref_service.h"
 #include "content/public/browser/browser_context.h"
 #include "content/public/browser/reload_type.h"
 #include "content/public/browser/web_contents.h"
 #include "content/public/common/url_constants.h"
-#include "extensions/common/constants.h"
 
 using base::UserMetricsAction;
 
+namespace content_settings {
+
 CookieControlsController::CookieControlsController(
-    content::WebContents* web_contents,
-    content::BrowserContext* original_context) {
-  DCHECK(web_contents);
-  cookie_settings_ = permissions::PermissionsClient::Get()->GetCookieSettings(
-      web_contents->GetBrowserContext());
+    scoped_refptr<CookieSettings> cookie_settings,
+    scoped_refptr<CookieSettings> original_cookie_settings)
+    : cookie_settings_(cookie_settings),
+      original_cookie_settings_(original_cookie_settings) {
   cookie_observer_.Add(cookie_settings_.get());
-  if (original_context) {
-    original_cookie_settings_ =
-        permissions::PermissionsClient::Get()->GetCookieSettings(
-            original_context);
-  }
 }
 
 CookieControlsController::~CookieControlsController() = default;
@@ -52,9 +47,8 @@ void CookieControlsController::OnUiClosing() {
 
 void CookieControlsController::Update(content::WebContents* web_contents) {
   DCHECK(web_contents);
-  if (!tab_observer_ || GetWebContents() != web_contents) {
+  if (!tab_observer_ || GetWebContents() != web_contents)
     tab_observer_ = std::make_unique<TabObserver>(this, web_contents);
-  }
   auto status = GetStatus(web_contents);
   int blocked_count = GetBlockedCookieCount();
   for (auto& observer : observers_)
@@ -69,12 +63,12 @@ CookieControlsController::GetStatus(content::WebContents* web_contents) {
   }
   const GURL& url = web_contents->GetURL();
   if (url.SchemeIs(content::kChromeUIScheme) ||
-      url.SchemeIs(extensions::kExtensionScheme)) {
+      url.SchemeIs(kExtensionScheme)) {
     return {CookieControlsStatus::kDisabled,
             CookieControlsEnforcement::kNoEnforcement};
   }
 
-  content_settings::SettingSource source;
+  SettingSource source;
   bool is_allowed = cookie_settings_->IsThirdPartyAccessAllowed(
       web_contents->GetURL(), &source);
 
@@ -82,7 +76,7 @@ CookieControlsController::GetStatus(content::WebContents* web_contents) {
                                     ? CookieControlsStatus::kDisabledForSite
                                     : CookieControlsStatus::kEnabled;
   CookieControlsEnforcement enforcement;
-  if (source == content_settings::SETTING_SOURCE_POLICY) {
+  if (source == SETTING_SOURCE_POLICY) {
     enforcement = CookieControlsEnforcement::kEnforcedByPolicy;
   } else if (is_allowed && original_cookie_settings_ &&
              original_cookie_settings_->ShouldBlockThirdPartyCookies() &&
@@ -163,3 +157,5 @@ CookieControlsController::TabObserver::TabObserver(
 void CookieControlsController::TabObserver::OnSiteDataAccessed() {
   cookie_controls_->PresentBlockedCookieCounter();
 }
+
+}  // namespace content_settings

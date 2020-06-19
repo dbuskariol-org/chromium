@@ -2,21 +2,20 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.site_settings;
+package org.chromium.components.content_settings;
 
 import androidx.annotation.Nullable;
 
 import org.chromium.base.annotations.CalledByNative;
+import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
-import org.chromium.components.content_settings.CookieControlsEnforcement;
-import org.chromium.components.content_settings.CookieControlsObserver;
-import org.chromium.components.content_settings.CookieControlsStatus;
 import org.chromium.components.embedder_support.browser_context.BrowserContextHandle;
 import org.chromium.content_public.browser.WebContents;
 
 /**
  * Communicates between CookieControlsController (C++ backend) and PageInfoView (Java UI).
  */
+@JNINamespace("content_settings")
 public class CookieControlsBridge {
     private long mNativeCookieControlsBridge;
     private CookieControlsObserver mObserver;

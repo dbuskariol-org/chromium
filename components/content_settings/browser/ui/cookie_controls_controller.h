@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_COOKIE_CONTROLS_COOKIE_CONTROLS_CONTROLLER_H_
-#define CHROME_BROWSER_UI_COOKIE_CONTROLS_COOKIE_CONTROLS_CONTROLLER_H_
+#ifndef COMPONENTS_CONTENT_SETTINGS_BROWSER_UI_COOKIE_CONTROLS_CONTROLLER_H_
+#define COMPONENTS_CONTENT_SETTINGS_BROWSER_UI_COOKIE_CONTROLS_CONTROLLER_H_
 
 #include "base/memory/scoped_refptr.h"
 #include "base/observer_list.h"
@@ -15,21 +15,23 @@
 #include "content/public/browser/web_contents.h"
 
 namespace content {
-class BrowserContext;
 class WebContents;
-}
+}  // namespace content
 
 namespace content_settings {
-class CookieSettings;
-}
 
+class CookieSettings;
 class CookieControlsView;
 
 // Handles the tab specific state for cookie controls.
 class CookieControlsController : content_settings::CookieSettings::Observer {
  public:
-  CookieControlsController(content::WebContents* web_contents,
-                           content::BrowserContext* original_context);
+  CookieControlsController(
+      scoped_refptr<content_settings::CookieSettings> cookie_settings,
+      scoped_refptr<content_settings::CookieSettings> original_cookie_settings);
+  CookieControlsController(const CookieControlsController& other) = delete;
+  CookieControlsController& operator=(const CookieControlsController& other) =
+      delete;
   ~CookieControlsController() override;
 
   // Called when the web_contents has changed.
@@ -41,7 +43,6 @@ class CookieControlsController : content_settings::CookieSettings::Observer {
   // Called when the user clicks on the button to enable/disable cookie
   // blocking.
   void OnCookieBlockingEnabledForSite(bool block_third_party_cookies);
-
 
   void AddObserver(CookieControlsView* obs);
   void RemoveObserver(CookieControlsView* obs);
@@ -98,8 +99,8 @@ class CookieControlsController : content_settings::CookieSettings::Observer {
   bool should_reload_ = false;
 
   base::ObserverList<CookieControlsView> observers_;
-
-  DISALLOW_COPY_AND_ASSIGN(CookieControlsController);
 };
 
-#endif  // CHROME_BROWSER_UI_COOKIE_CONTROLS_COOKIE_CONTROLS_CONTROLLER_H_
+}  // namespace content_settings
+
+#endif  // COMPONENTS_CONTENT_SETTINGS_BROWSER_UI_COOKIE_CONTROLS_CONTROLLER_H_
