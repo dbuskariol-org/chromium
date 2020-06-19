@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>Test for autoplay of whitelisted frames</title>
+<title>Test for autoplay of urls not in webapp scope</title>
 <script src="../resources/testharness.js"></script>
 <script src="../resources/testharnessreport.js"></script>
 <script src="media-controls.js"></script>
@@ -14,8 +14,7 @@ test(function() {
 
 internals.settings.setAutoplayPolicy('user-gesture-required');
 internals.settings.setWebAppScope(
-    document.URL.substring(0, document.URL.lastIndexOf('/') + 1)
-    );
+    document.URL.substring(0, document.URL.lastIndexOf('/') + 1) + "foo/");
 
 function createMediaElement(type) {
   var e = document.createElement(type);
@@ -36,34 +35,40 @@ async_test(function(t) {
   e.autoplay = true;
   document.body.appendChild(e);
 
-  var expectedEvents = [ 'canplay', 'play', 'playing'];
+  var expectedEvents = [ 'canplay' ];
   var eventWatcher = new EventWatcher(t, e, expectedEvents);
   eventWatcher.wait_for(expectedEvents).then(
       t.step_func_done(function() {
-        assert_false(e.paused);
+        assert_true(e.paused);
       }));
-}, "Test that a video with an autoplay attribute autoplays when whitelisted.");
+}, "Test that a video with an autoplay attribute doesn't autoplay when not in webapp scope.");
 
-promise_test(function() {
-  return createVideoElement().play();
-}, "Test that play() on a video succeeds without gesture when whitelisted.");
+promise_test(function(t) {
+  return promise_rejects_dom(
+      t,
+      'NotAllowedError',
+      createVideoElement().play());
+}, "Test that play() on a video fails without gesture when not in webapp scope.");
 
 async_test(function(t) {
   var e = createAudioElement();
   e.autoplay = true;
   document.body.appendChild(e);
 
-  var expectedEvents = [ 'canplay', 'play', 'playing'];
+  var expectedEvents = [ 'canplay' ];
   var eventWatcher = new EventWatcher(t, e, expectedEvents);
   eventWatcher.wait_for(expectedEvents).then(
       t.step_func_done(function() {
-        assert_false(e.paused);
+        assert_true(e.paused);
       }));
-}, "Test that an audio with an autoplay attribute autoplays when whitelisted.");
+}, "Test that an audio with an autoplay attribute doesn't autoplay when not in webapp scope.");
 
-promise_test(function() {
-  return createAudioElement().play();
-}, "Test that play() on an audio succeeds without gesture when whitelisted.");
+promise_test(function(t) {
+  return promise_rejects_dom(
+      t,
+      'NotAllowedError',
+      createAudioElement().play());
+}, "Test that play() on an audio fails without gesture when not in webapp scope.");
 
 </script>
 </body>
