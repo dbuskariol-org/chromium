@@ -1434,6 +1434,10 @@ if (!is_android) {
       deps += [ "//chrome/app:chrome_dll_resources" ]
     }
 
+    if (is_mac) {
+      sources += [ "../browser/metrics/power_metrics_provider_mac_unittest.cc" ]
+    }
+
     if (is_chromeos) {
       data += [
         # TODO(GYP): figure out which of these things are
