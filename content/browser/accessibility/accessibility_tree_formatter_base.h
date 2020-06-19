@@ -47,7 +47,14 @@ class CONTENT_EXPORT PropertyNode final {
   PropertyNode& operator=(PropertyNode&& other);
   explicit operator bool() const;
 
+  // Key name in case of { key: value } dictionary.
+  base::string16 key;
+
+  // Value or a property name, for example 3 or AXLineForIndex
   base::string16 name_or_value;
+
+  // Parameters if it's a property, for example, it is a vector of a single
+  // value 3 in case of AXLineForIndex(3)
   std::vector<PropertyNode> parameters;
 
   // Used to store the origianl unparsed property including invocation
@@ -67,8 +74,14 @@ class CONTENT_EXPORT PropertyNode final {
  private:
   using iterator = base::string16::const_iterator;
 
-  explicit PropertyNode(const base::string16&);
+  explicit PropertyNode(iterator key_begin,
+                        iterator key_end,
+                        const base::string16&);
   PropertyNode(iterator begin, iterator end);
+  PropertyNode(iterator key_begin,
+               iterator key_end,
+               iterator value_begin,
+               iterator value_end);
 
   // Builds a property node struct for a string of NAME(ARG1, ..., ARGN) format,
   // where each ARG is a scalar value or a string of the same format.

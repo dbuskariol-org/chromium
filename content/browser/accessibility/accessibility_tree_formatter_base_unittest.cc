@@ -62,6 +62,14 @@ TEST_F(AccessibilityTreeFormatterBaseTest, ParseProperty) {
   ParseAndCheck("[3, 4]", "[](3, 4)");
   ParseAndCheck("Cell([3, 4])", "Cell([](3, 4))");
 
+  // Arguments
+  ParseAndCheck("Text({val: 1})", "Text({}(val: 1))");
+  ParseAndCheck("Text({lat: 1, len: 1})", "Text({}(lat: 1, len: 1))");
+  ParseAndCheck("Text({dict: {val: 1}})", "Text({}(dict: {}(val: 1)))");
+  ParseAndCheck("Text({dict: {val: 1}, 3})", "Text({}(dict: {}(val: 1), 3))");
+  ParseAndCheck("Text({dict: [1, 2]})", "Text({}(dict: [](1, 2)))");
+  ParseAndCheck("Text({dict: ValueFor(1)})", "Text({}(dict: ValueFor(1)))");
+
   // Line indexes filter.
   ParseAndCheck(":3,:5;AXDOMClassList", ":3,:5;AXDOMClassList");
 
