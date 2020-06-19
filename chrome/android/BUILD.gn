@@ -90,7 +90,7 @@ chrome_jni_for_test_registration_header = "$root_build_dir/gen/chrome/browser/an
 
 # Chosen to match what CQ bots exist.
 _enable_libs_and_assets_verification =
-    !is_component_build &&
+    public_android_sdk && !is_component_build &&
     ((target_cpu == "arm" && android_channel == "stable") ||
      (target_cpu == "arm64" && android_channel == "default" &&
       # Disable checks in official arm64 builds due to unwind assets.
