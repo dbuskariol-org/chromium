@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.fullscreen;
+package org.chromium.chrome.browser.browser_controls;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
-import static org.chromium.chrome.browser.fullscreen.BrowserStateBrowserControlsVisibilityDelegate.MINIMUM_SHOW_DURATION_MS;
+import static org.chromium.chrome.browser.browser_controls.BrowserStateBrowserControlsVisibilityDelegate.MINIMUM_SHOW_DURATION_MS;
 
 import android.os.SystemClock;
 
@@ -24,7 +24,6 @@ import org.robolectric.shadows.ShadowLooper;
 import org.chromium.base.Callback;
 import org.chromium.base.supplier.ObservableSupplierImpl;
 import org.chromium.base.test.BaseRobolectricTestRunner;
-import org.chromium.base.test.util.Feature;
 import org.chromium.content_public.common.BrowserControlsState;
 
 /**
@@ -60,7 +59,6 @@ public class BrowserStateBrowserControlsVisibilityDelegateTest {
     }
 
     @Test
-    @Feature("Fullscreen")
     public void testTransientShow() {
         assertEquals(BrowserControlsState.BOTH, constraints());
         mDelegate.showControlsTransient();
@@ -73,7 +71,6 @@ public class BrowserStateBrowserControlsVisibilityDelegateTest {
     }
 
     @Test
-    @Feature("Fullscreen")
     public void testShowPersistentTokenWithDelayedHide() {
         assertEquals(BrowserControlsState.BOTH, constraints());
         int token = mDelegate.showControlsPersistent();
@@ -88,7 +85,6 @@ public class BrowserStateBrowserControlsVisibilityDelegateTest {
     }
 
     @Test
-    @Feature("Fullscreen")
     public void testShowPersistentTokenWithImmediateHide() {
         assertEquals(BrowserControlsState.BOTH, constraints());
         int token = mDelegate.showControlsPersistent();
@@ -106,7 +102,6 @@ public class BrowserStateBrowserControlsVisibilityDelegateTest {
     }
 
     @Test
-    @Feature("Fullscreen")
     public void testShowPersistentBeyondRequiredMinDurationAndShowTransient() {
         assertEquals(BrowserControlsState.BOTH, constraints());
         int token = mDelegate.showControlsPersistent();
@@ -125,7 +120,6 @@ public class BrowserStateBrowserControlsVisibilityDelegateTest {
     }
 
     @Test
-    @Feature("Fullscreen")
     public void testShowPersistentBelowRequiredMinDurationAndShowTransient() {
         assertEquals(BrowserControlsState.BOTH, constraints());
         int token = mDelegate.showControlsPersistent();
@@ -148,7 +142,6 @@ public class BrowserStateBrowserControlsVisibilityDelegateTest {
     }
 
     @Test
-    @Feature("Fullscreen")
     public void testShowPersistentMultipleTimes() {
         assertEquals(BrowserControlsState.BOTH, constraints());
         int firstToken = mDelegate.showControlsPersistent();
@@ -175,7 +168,6 @@ public class BrowserStateBrowserControlsVisibilityDelegateTest {
     }
 
     @Test
-    @Feature("Fullscreen")
     public void testGlobalPersistentMode() {
         assertEquals(BrowserControlsState.BOTH, constraints());
         mPersistentModeSupplier.set(true);

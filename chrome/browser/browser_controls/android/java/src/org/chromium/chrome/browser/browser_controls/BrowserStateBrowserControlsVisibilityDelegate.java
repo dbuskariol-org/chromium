@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.fullscreen;
+package org.chromium.chrome.browser.browser_controls;
 
 import android.os.Handler;
 import android.os.SystemClock;
@@ -64,7 +64,8 @@ public class BrowserStateBrowserControlsVisibilityDelegate
         if (currentShowingTime >= MINIMUM_SHOW_DURATION_MS) return;
 
         final int temporaryToken = mTokenHolder.acquireToken();
-        mHandler.postDelayed(() -> mTokenHolder.releaseToken(temporaryToken),
+        mHandler.postDelayed(()
+                                     -> mTokenHolder.releaseToken(temporaryToken),
                 MINIMUM_SHOW_DURATION_MS - currentShowingTime);
     }
 
