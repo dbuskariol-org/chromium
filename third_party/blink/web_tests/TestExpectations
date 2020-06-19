@@ -6819,9 +6819,9 @@ crbug.com/1092975 http/tests/inspector-protocol/target/target-expose-devtools-pr
 
 crbug.com/1096493 external/wpt/webaudio/the-audio-api/the-audiocontext-interface/processing-after-resume.https.html [ Failure ]
 
-crbug.com/1097005 http/tests/devtools/console/console-object-preview.js [ Pass Failure ]
-crbug.com/1097005 http/tests/devtools/console/console-preserve-scroll.js [ Pass Failure ]
-crbug.com/1097005 http/tests/devtools/console/console-search.js [ Pass Failure ]
+crbug.com/1097005 http/tests/devtools/console/console-object-preview.js [ Pass Failure Crash Timeout ]
+crbug.com/1097005 http/tests/devtools/console/console-preserve-scroll.js [ Pass Failure Crash Timeout ]
+crbug.com/1097005 http/tests/devtools/console/console-search.js [ Pass Failure Crash Timeout ]
 
 crbug.com/1093445 http/tests/loading/pdf-commit-load-callbacks.html [ Pass Failure ]
 crbug.com/1093497 http/tests/history/client-redirect-after-push-state.html [ Pass Failure ]
