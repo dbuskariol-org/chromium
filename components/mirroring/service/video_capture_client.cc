@@ -148,11 +148,7 @@ void VideoCaptureClient::OnBufferReady(int32_t buffer_id,
     return;
   }
 
-  base::TimeTicks reference_time;
-  media::VideoFrameMetadata frame_metadata = info->metadata;
-  const bool success = frame_metadata.GetTimeTicks(
-      media::VideoFrameMetadata::REFERENCE_TIME, &reference_time);
-  DCHECK(success);
+  base::TimeTicks reference_time = *info->metadata.reference_time;
 
   if (first_frame_ref_time_.is_null())
     first_frame_ref_time_ = reference_time;
@@ -280,13 +276,8 @@ void VideoCaptureClient::DidFinishConsumingFrame(
     BufferFinishedCallback callback) {
   // Note: This function may be called on any thread by the VideoFrame
   // destructor.  |metadata| is still valid for read-access at this point.
-  double consumer_resource_utilization = -1.0;
-  if (!metadata->GetDouble(media::VideoFrameMetadata::RESOURCE_UTILIZATION,
-                           &consumer_resource_utilization)) {
-    consumer_resource_utilization = -1.0;
-  }
   DCHECK(!callback.is_null());
-  std::move(callback).Run(consumer_resource_utilization);
+  std::move(callback).Run(metadata->resource_utilization.value_or(-1.0));
 }
 
 }  // namespace mirroring

@@ -291,8 +291,7 @@ TEST(VideoFrame, CreateFrame) {
 
   // Test an empty frame.
   frame = VideoFrame::CreateEOSFrame();
-  EXPECT_TRUE(
-      frame->metadata()->IsTrue(VideoFrameMetadata::END_OF_STREAM));
+  EXPECT_TRUE(frame->metadata()->end_of_stream);
 }
 
 TEST(VideoFrame, CreateZeroInitializedFrame) {
@@ -328,8 +327,7 @@ TEST(VideoFrame, CreateBlackFrame) {
 
   // Test basic properties.
   EXPECT_EQ(0, frame->timestamp().InMicroseconds());
-  EXPECT_FALSE(
-      frame->metadata()->IsTrue(VideoFrameMetadata::END_OF_STREAM));
+  EXPECT_FALSE(frame->metadata()->end_of_stream);
 
   // Test |frame| properties.
   EXPECT_EQ(PIXEL_FORMAT_I420, frame->format());
@@ -371,8 +369,7 @@ TEST(VideoFrame, WrapVideoFrame) {
 
     gfx::Rect visible_rect(1, 1, 1, 1);
     gfx::Size natural_size = visible_rect.size();
-    wrapped_frame->metadata()->SetTimeDelta(
-        media::VideoFrameMetadata::FRAME_DURATION, kFrameDuration);
+    wrapped_frame->metadata()->frame_duration = kFrameDuration;
     frame = media::VideoFrame::WrapVideoFrame(
         wrapped_frame, wrapped_frame->format(), visible_rect, natural_size);
     wrapped_frame->AddDestructionObserver(
@@ -386,11 +383,7 @@ TEST(VideoFrame, WrapVideoFrame) {
     EXPECT_EQ(natural_size, frame->natural_size());
 
     // Verify metadata was copied to the wrapped frame.
-    base::TimeDelta frame_duration;
-    ASSERT_TRUE(frame->metadata()->GetTimeDelta(
-        media::VideoFrameMetadata::FRAME_DURATION, &frame_duration));
-
-    EXPECT_EQ(frame_duration, kFrameDuration);
+    EXPECT_EQ(*frame->metadata()->frame_duration, kFrameDuration);
 
     // Verify the metadata copy was a deep copy.
     wrapped_frame->clear_metadata();

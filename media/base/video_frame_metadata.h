@@ -63,30 +63,6 @@ class MEDIA_EXPORT VideoFrameMetadata {
 
   VideoFrameMetadata(const VideoFrameMetadata& other);
 
-  // Setters.  Overwrites existing value, if present.
-  void SetBoolean(Key key, bool value);
-  void SetInteger(Key key, int value);
-  void SetDouble(Key key, double value);
-  void SetRotation(Key key, VideoRotation value);
-  void SetTimeDelta(Key key, const base::TimeDelta& value);
-  void SetTimeTicks(Key key, const base::TimeTicks& value);
-  void SetUnguessableToken(Key key, const base::UnguessableToken& value);
-  void SetRect(Key key, const gfx::Rect& value);
-
-  // Getters.  Returns true if |key| is present, and its value has been set.
-  bool GetBoolean(Key key, bool* value) const WARN_UNUSED_RESULT;
-  bool GetInteger(Key key, int* value) const WARN_UNUSED_RESULT;
-  bool GetDouble(Key key, double* value) const WARN_UNUSED_RESULT;
-  bool GetRotation(Key key, VideoRotation* value) const WARN_UNUSED_RESULT;
-  bool GetTimeDelta(Key key, base::TimeDelta* value) const WARN_UNUSED_RESULT;
-  bool GetTimeTicks(Key key, base::TimeTicks* value) const WARN_UNUSED_RESULT;
-  bool GetUnguessableToken(Key key, base::UnguessableToken* value) const
-      WARN_UNUSED_RESULT;
-  bool GetRect(Key key, gfx::Rect* value) const WARN_UNUSED_RESULT;
-
-  // Convenience method that returns true if |key| exists and is set to true.
-  bool IsTrue(Key key) const WARN_UNUSED_RESULT;
-
   // Merges internal values from |metadata_source|.
   void MergeMetadataFrom(const VideoFrameMetadata* metadata_source);
 

@@ -151,9 +151,8 @@ class TextureDeviceExerciser : public VirtualDeviceExerciser {
         access_permission_proxy.InitWithNewPipeAndPassReceiver());
 
     media::VideoFrameMetadata metadata;
-    metadata.SetDouble(media::VideoFrameMetadata::FRAME_RATE, kDummyFrameRate);
-    metadata.SetTimeTicks(media::VideoFrameMetadata::REFERENCE_TIME,
-                          base::TimeTicks::Now());
+    metadata.frame_rate = kDummyFrameRate;
+    metadata.reference_time = base::TimeTicks::Now();
 
     media::mojom::VideoFrameInfoPtr info = media::mojom::VideoFrameInfo::New();
     info->timestamp = timestamp;
@@ -300,9 +299,8 @@ class SharedMemoryDeviceExerciser : public VirtualDeviceExerciser,
       return;
 
     media::VideoFrameMetadata metadata;
-    metadata.SetDouble(media::VideoFrameMetadata::FRAME_RATE, kDummyFrameRate);
-    metadata.SetTimeTicks(media::VideoFrameMetadata::REFERENCE_TIME,
-                          base::TimeTicks::Now());
+    metadata.frame_rate = kDummyFrameRate;
+    metadata.reference_time = base::TimeTicks::Now();
 
     media::mojom::VideoFrameInfoPtr info = media::mojom::VideoFrameInfo::New();
     info->timestamp = timestamp;

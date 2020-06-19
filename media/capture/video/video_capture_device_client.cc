@@ -528,8 +528,8 @@ void VideoCaptureDeviceClient::OnIncomingCapturedBufferExt(
   DFAKE_SCOPED_RECURSIVE_LOCK(call_from_producer_);
 
   VideoFrameMetadata metadata = additional_metadata;
-  metadata.SetDouble(VideoFrameMetadata::FRAME_RATE, format.frame_rate);
-  metadata.SetTimeTicks(VideoFrameMetadata::REFERENCE_TIME, reference_time);
+  metadata.frame_rate = format.frame_rate;
+  metadata.reference_time = reference_time;
 
   mojom::VideoFrameInfoPtr info = mojom::VideoFrameInfo::New();
   info->timestamp = timestamp;
