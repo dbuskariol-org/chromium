@@ -14,10 +14,7 @@
 #include "base/containers/flat_set.h"
 #include "net/base/completion_once_callback.h"
 #include "net/cert/cert_verifier.h"
-
-namespace net {
-struct SHA256HashValue;
-}  // namespace net
+#include "services/network/public/cpp/spki_hash_set.h"
 
 namespace network {
 
@@ -27,9 +24,6 @@ namespace network {
 class COMPONENT_EXPORT(NETWORK_SERVICE) IgnoreErrorsCertVerifier
     : public net::CertVerifier {
  public:
-  // SPKIHashSet is a set of SHA-256 SPKI fingerprints (RFC 7469, Section 2.4).
-  using SPKIHashSet = base::flat_set<net::SHA256HashValue>;
-
   // If the |user_data_dir_switch| is passed in as a valid pointer but
   // --user-data-dir flag is missing, or --ignore-certificate-errors-spki-list
   // flag is missing then MaybeWrapCertVerifier returns the supplied verifier.
@@ -43,11 +37,6 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) IgnoreErrorsCertVerifier
       const base::CommandLine& command_line,
       const char* user_data_dir_switch,
       std::unique_ptr<net::CertVerifier> verifier);
-
-  // MakeWhitelist converts a vector of Base64-encoded SHA-256 SPKI fingerprints
-  // into an SPKIHashSet. Invalid fingerprints are logged and skipped.
-  static SPKIHashSet MakeWhitelist(
-      const std::vector<std::string>& fingerprints);
 
   IgnoreErrorsCertVerifier(std::unique_ptr<net::CertVerifier> verifier,
                            SPKIHashSet whitelist);
@@ -67,7 +56,8 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) IgnoreErrorsCertVerifier
 
  private:
   friend class IgnoreErrorsCertVerifierTest;
-  void set_whitelist(const SPKIHashSet& whitelist);  // Testing only.
+
+  void SetWhitelistForTesting(const SPKIHashSet& whitelist);
 
   std::unique_ptr<net::CertVerifier> verifier_;
   SPKIHashSet whitelist_;

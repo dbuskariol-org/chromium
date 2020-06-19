@@ -20,6 +20,7 @@
 #include "net/cert/x509_certificate.h"
 #include "net/cert/x509_util.h"
 #include "services/network/public/cpp/network_switches.h"
+#include "services/network/public/cpp/spki_hash_set.h"
 
 using ::net::CertVerifier;
 using ::net::HashValue;
@@ -42,30 +43,12 @@ std::unique_ptr<CertVerifier> IgnoreErrorsCertVerifier::MaybeWrapCertVerifier(
                             switches::kIgnoreCertificateErrorsSPKIList),
                         ",", base::TRIM_WHITESPACE, base::SPLIT_WANT_ALL);
   return std::make_unique<IgnoreErrorsCertVerifier>(
-      std::move(verifier), IgnoreErrorsCertVerifier::MakeWhitelist(spki_list));
-}
-
-// static
-IgnoreErrorsCertVerifier::SPKIHashSet IgnoreErrorsCertVerifier::MakeWhitelist(
-    const std::vector<std::string>& fingerprints) {
-  IgnoreErrorsCertVerifier::SPKIHashSet whitelist;
-  for (const std::string& fingerprint : fingerprints) {
-    HashValue hash;
-    if (!hash.FromString("sha256/" + fingerprint)) {
-      LOG(ERROR) << "Invalid SPKI: " << fingerprint;
-      continue;
-    }
-    SHA256HashValue sha256;
-    DCHECK_EQ(hash.size(), sizeof(sha256));
-    memcpy(&sha256, hash.data(), sizeof(sha256));
-    whitelist.insert(sha256);
-  }
-  return whitelist;
+      std::move(verifier), CreateSPKIHashSet(spki_list));
 }
 
 IgnoreErrorsCertVerifier::IgnoreErrorsCertVerifier(
     std::unique_ptr<CertVerifier> verifier,
-    IgnoreErrorsCertVerifier::SPKIHashSet whitelist)
+    SPKIHashSet whitelist)
     : verifier_(std::move(verifier)), whitelist_(std::move(whitelist)) {}
 
 IgnoreErrorsCertVerifier::~IgnoreErrorsCertVerifier() {}
@@ -136,7 +119,8 @@ void IgnoreErrorsCertVerifier::SetConfig(const Config& config) {
   verifier_->SetConfig(config);
 }
 
-void IgnoreErrorsCertVerifier::set_whitelist(const SPKIHashSet& whitelist) {
+void IgnoreErrorsCertVerifier::SetWhitelistForTesting(
+    const SPKIHashSet& whitelist) {
   whitelist_ = whitelist;
 }
 

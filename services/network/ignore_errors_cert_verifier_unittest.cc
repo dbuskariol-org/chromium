@@ -22,6 +22,7 @@
 #include "net/test/gtest_util.h"
 #include "net/test/test_data_directory.h"
 #include "services/network/public/cpp/network_switches.h"
+#include "services/network/public/cpp/spki_hash_set.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -68,14 +69,12 @@ class IgnoreErrorsCertVerifierTest : public ::testing::Test {
  public:
   IgnoreErrorsCertVerifierTest()
       : mock_verifier_(new MockCertVerifier()),
-        verifier_(base::WrapUnique(mock_verifier_),
-                  IgnoreErrorsCertVerifier::SPKIHashSet()) {}
+        verifier_(base::WrapUnique(mock_verifier_), SPKIHashSet()) {}
   ~IgnoreErrorsCertVerifierTest() override {}
 
  protected:
   void SetUp() override {
-    verifier_.set_whitelist(
-        IgnoreErrorsCertVerifier::MakeWhitelist(MakeWhitelist()));
+    verifier_.SetWhitelistForTesting(CreateSPKIHashSet(MakeWhitelist()));
   }
 
   // The wrapped CertVerifier. Defaults to returning ERR_CERT_INVALID. Owned by
