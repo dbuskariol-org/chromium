@@ -7085,7 +7085,7 @@ void RenderFrameHostImpl::AccessibilityHitTestCallback(
   }
 
   auto frame_or_proxy = LookupRenderFrameHostOrProxy(
-      GetProcess()->GetID(), hit_test_response->hit_frame_routing_id);
+      GetProcess()->GetID(), hit_test_response->hit_frame_token);
   RenderFrameHostImpl* hit_frame =
       frame_or_proxy.proxy
           ? frame_or_proxy.proxy->frame_tree_node()->current_frame_host()
@@ -7099,7 +7099,7 @@ void RenderFrameHostImpl::AccessibilityHitTestCallback(
 
   // If the hit node's routing ID is the same frame, we're done. If a
   // callback was provided, call it with the information about the hit node.
-  if (hit_frame->GetRoutingID() == routing_id_) {
+  if (hit_frame->GetFrameToken() == frame_token_) {
     if (opt_callback) {
       std::move(opt_callback)
           .Run(hit_frame->browser_accessibility_manager(),
