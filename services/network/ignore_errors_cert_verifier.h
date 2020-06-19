@@ -19,7 +19,7 @@
 namespace network {
 
 // IgnoreErrorsCertVerifier wraps another CertVerifier in order to ignore
-// verification errors from certificate chains that match a whitelist of SPKI
+// verification errors from certificate chains that match a allowlist of SPKI
 // fingerprints.
 class COMPONENT_EXPORT(NETWORK_SERVICE) IgnoreErrorsCertVerifier
     : public net::CertVerifier {
@@ -28,7 +28,7 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) IgnoreErrorsCertVerifier
   // --user-data-dir flag is missing, or --ignore-certificate-errors-spki-list
   // flag is missing then MaybeWrapCertVerifier returns the supplied verifier.
   // Otherwise it returns an IgnoreErrorsCertVerifier wrapping the supplied
-  // verifier using the whitelist from the
+  // verifier using the allowlist from the
   // --ignore-certificate-errors-spki-list flag.
   //
   // As the --user-data-dir flag is embedder defined, the flag to check for
@@ -39,13 +39,13 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) IgnoreErrorsCertVerifier
       std::unique_ptr<net::CertVerifier> verifier);
 
   IgnoreErrorsCertVerifier(std::unique_ptr<net::CertVerifier> verifier,
-                           SPKIHashSet whitelist);
+                           SPKIHashSet allowlist);
 
   ~IgnoreErrorsCertVerifier() override;
 
   // Verify skips certificate verification and returns OK if any of the
   // certificates from the chain in |params| match one of the SPKI fingerprints
-  // from the whitelist. Otherwise, it invokes Verify on the wrapped verifier
+  // from the allowlist. Otherwise, it invokes Verify on the wrapped verifier
   // and returns the result.
   int Verify(const RequestParams& params,
              net::CertVerifyResult* verify_result,
@@ -57,10 +57,10 @@ class COMPONENT_EXPORT(NETWORK_SERVICE) IgnoreErrorsCertVerifier
  private:
   friend class IgnoreErrorsCertVerifierTest;
 
-  void SetWhitelistForTesting(const SPKIHashSet& whitelist);
+  void SetAllowlistForTesting(const SPKIHashSet& whitelist);
 
   std::unique_ptr<net::CertVerifier> verifier_;
-  SPKIHashSet whitelist_;
+  SPKIHashSet allowlist_;
 
   DISALLOW_COPY_AND_ASSIGN(IgnoreErrorsCertVerifier);
 };

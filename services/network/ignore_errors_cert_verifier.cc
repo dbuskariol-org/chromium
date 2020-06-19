@@ -48,8 +48,8 @@ std::unique_ptr<CertVerifier> IgnoreErrorsCertVerifier::MaybeWrapCertVerifier(
 
 IgnoreErrorsCertVerifier::IgnoreErrorsCertVerifier(
     std::unique_ptr<CertVerifier> verifier,
-    SPKIHashSet whitelist)
-    : verifier_(std::move(verifier)), whitelist_(std::move(whitelist)) {}
+    SPKIHashSet allowlist)
+    : verifier_(std::move(verifier)), allowlist_(std::move(allowlist)) {}
 
 IgnoreErrorsCertVerifier::~IgnoreErrorsCertVerifier() {}
 
@@ -78,17 +78,17 @@ int IgnoreErrorsCertVerifier::Verify(const RequestParams& params,
     }
   }
 
-  // Intersect SPKI hashes from the chain with the whitelist.
-  auto whitelist_begin = whitelist_.begin();
-  auto whitelist_end = whitelist_.end();
+  // Intersect SPKI hashes from the chain with the allowlist.
+  auto allowlist_begin = allowlist_.begin();
+  auto allowlist_end = allowlist_.end();
   auto fingerprints_begin = spki_fingerprints.begin();
   auto fingerprints_end = spki_fingerprints.end();
   bool ignore_errors = false;
-  while (whitelist_begin != whitelist_end &&
+  while (allowlist_begin != allowlist_end &&
          fingerprints_begin != fingerprints_end) {
-    if (*whitelist_begin < *fingerprints_begin) {
-      ++whitelist_begin;
-    } else if (*fingerprints_begin < *whitelist_begin) {
+    if (*allowlist_begin < *fingerprints_begin) {
+      ++allowlist_begin;
+    } else if (*fingerprints_begin < *allowlist_begin) {
       ++fingerprints_begin;
     } else {
       ignore_errors = true;
@@ -119,9 +119,9 @@ void IgnoreErrorsCertVerifier::SetConfig(const Config& config) {
   verifier_->SetConfig(config);
 }
 
-void IgnoreErrorsCertVerifier::SetWhitelistForTesting(
-    const SPKIHashSet& whitelist) {
-  whitelist_ = whitelist;
+void IgnoreErrorsCertVerifier::SetAllowlistForTesting(
+    const SPKIHashSet& allowlist) {
+  allowlist_ = allowlist;
 }
 
 }  // namespace network
