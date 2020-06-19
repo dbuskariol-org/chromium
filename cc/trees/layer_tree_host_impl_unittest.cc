@@ -32,6 +32,7 @@
 #include "cc/input/browser_controls_offset_manager.h"
 #include "cc/input/main_thread_scrolling_reason.h"
 #include "cc/input/page_scale_animation.h"
+#include "cc/input/scroll_utils.h"
 #include "cc/layers/append_quads_data.h"
 #include "cc/layers/heads_up_display_layer_impl.h"
 #include "cc/layers/layer_impl.h"
@@ -16292,21 +16293,21 @@ TEST_P(ScrollUnifiedLayerTreeHostImplTest, PercentBasedScrollbarDeltasDSF3) {
 
   LayerImpl* content_layer = AddContentLayer();
   LayerImpl* scroll_layer = AddScrollableLayer(
-      content_layer, gfx::Size(185, 200), gfx::Size(185, 3800));
+      content_layer, gfx::Size(185, 500), gfx::Size(185, 3800));
 
   auto* scrollbar = AddLayer<PaintedScrollbarLayerImpl>(
       host_impl_->active_tree(), VERTICAL, false, true);
   SetupScrollbarLayer(scroll_layer, scrollbar);
 
-  scrollbar->SetBounds(gfx::Size(15, 200));
+  scrollbar->SetBounds(gfx::Size(15, 500));
 
   scrollbar->SetThumbThickness(15);
   scrollbar->SetThumbLength(50);
-  scrollbar->SetTrackRect(gfx::Rect(0, 15, 15, 185));
+  scrollbar->SetTrackRect(gfx::Rect(0, 15, 15, 485));
 
   scrollbar->SetBackButtonRect(gfx::Rect(gfx::Point(0, 0), gfx::Size(15, 15)));
   scrollbar->SetForwardButtonRect(
-      gfx::Rect(gfx::Point(0, 185), gfx::Size(15, 15)));
+      gfx::Rect(gfx::Point(0, 485), gfx::Size(15, 15)));
   scrollbar->SetOffsetToTransformParent(gfx::Vector2dF(185, 0));
 
   DrawFrame();
@@ -16315,13 +16316,13 @@ TEST_P(ScrollUnifiedLayerTreeHostImplTest, PercentBasedScrollbarDeltasDSF3) {
   host_impl_->BindToClient(&input_handler_client);
 
   // Test scrolling with device scale factor = 3.
-  const float expected_delta = kPercentDeltaForDirectionalScroll * 200u;
+  const float expected_delta = floorf(kPercentDeltaForDirectionalScroll * 500);
 
   host_impl_->active_tree()->set_painted_device_scale_factor(3);
 
   InputHandlerPointerResult scroll_result =
-      host_impl_->MouseDown(gfx::PointF(190, 190), false);
-  host_impl_->MouseUp(gfx::PointF(190, 190));
+      host_impl_->MouseDown(gfx::PointF(190, 490), false);
+  host_impl_->MouseUp(gfx::PointF(190, 490));
 
   EXPECT_EQ(scroll_result.scroll_offset.y(), expected_delta);
   EXPECT_FALSE(GetScrollNode(scroll_layer)->main_thread_scrolling_reasons);
@@ -16331,8 +16332,8 @@ TEST_P(ScrollUnifiedLayerTreeHostImplTest, PercentBasedScrollbarDeltasDSF3) {
   host_impl_->active_tree()->set_painted_device_scale_factor(1);
 
   InputHandlerPointerResult scroll_with_dsf_1 =
-      host_impl_->MouseDown(gfx::PointF(190, 190), false);
-  host_impl_->MouseUp(gfx::PointF(190, 190));
+      host_impl_->MouseDown(gfx::PointF(190, 490), false);
+  host_impl_->MouseUp(gfx::PointF(190, 490));
 
   EXPECT_EQ(scroll_with_dsf_1.scroll_offset.y(), expected_delta);
   EXPECT_FALSE(GetScrollNode(scroll_layer)->main_thread_scrolling_reasons);
