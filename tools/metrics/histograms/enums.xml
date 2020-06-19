@@ -695,6 +695,16 @@ uploading your change for review.  These are checked by presubmit scripts.
   <int value="245" label="UMA_API_WINDOW_GET_ISTOPMOST">
     UIA Window.get_IsTopmost
   </int>
+  <int value="246" label="UMA_API_ELEMENT_PROVIDER_FROM_POINT">
+    UIA FragmentRoot.ElementProviderFromPoint
+  </int>
+  <int value="247" label="UMA_API_GET_FOCUS">UIA FragmentRoot.GetFocus</int>
+  <int value="248" label="UMA_API_ADVISE_EVENT_ADDED">
+    UIA AdviseEvents.AdviseEventAdded
+  </int>
+  <int value="249" label="UMA_API_ADVISE_EVENT_REMOVED">
+    UIA AdviseEvents.AdviseEventRemoved
+  </int>
 </enum>
 
 <enum name="AccessibilityWinAPIGetPropertyValueEnum">
