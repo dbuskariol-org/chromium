@@ -1381,8 +1381,6 @@ class CORE_EXPORT Document : public ContainerNode,
   void AddConsoleMessage(ConsoleMessage* message,
                          bool discard_duplicates = false) const;
 
-  LocalFrame* ExecutingFrame();
-
   DocumentLifecycle& Lifecycle() { return lifecycle_; }
   const DocumentLifecycle& Lifecycle() const { return lifecycle_; }
   bool IsActive() const { return lifecycle_.IsActive(); }

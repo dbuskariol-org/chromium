@@ -1413,13 +1413,6 @@ LocalDOMWindow* Document::ExecutingWindow() const {
   return nullptr;
 }
 
-LocalFrame* Document::ExecutingFrame() {
-  LocalDOMWindow* window = ExecutingWindow();
-  if (!window)
-    return nullptr;
-  return window->GetFrame();
-}
-
 DocumentFragment* Document::createDocumentFragment() {
   return DocumentFragment::Create(*this);
 }
