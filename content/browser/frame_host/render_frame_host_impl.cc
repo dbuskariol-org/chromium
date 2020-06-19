@@ -2678,6 +2678,26 @@ void RenderFrameHostImpl::DidFocusFrame() {
   if (!IsCurrent())
     return;
 
+  // TODO(https://crbug.com/1093943): Remove this once closed.
+  if (IsPendingDeletion()) {
+    // FrameTree::SetFocusedFrame() is going to be called soon. This function
+    // will access the RenderFrameProxyHost of this frame seen from the
+    // SiteInstance of every active frames. In theory, they must always exist.
+    // However this is not guaranteed if this frame is pending deletion.
+    //
+    // Next block checks whether or not a crash will happen and replace it by a
+    // DumpWithoutCrashing and a return.
+    // https://bugs.chromium.org/p/chromium/issues/detail?id=1093943#c18
+    for (FrameTreeNode* node : frame_tree()->Nodes()) {
+      SiteInstance* instance = node->current_frame_host()->GetSiteInstance();
+      if (instance != site_instance_.get() &&
+          !frame_tree_node()->render_manager()->GetRenderFrameProxyHost(
+              instance)) {
+        base::debug::DumpWithoutCrashing();
+        return;
+      }
+    }
+  }
   // We need to handle receiving this IPC from a frame that is inside a portal
   // despite there being a renderer side check (see Document::IsFocusAllowed).
   // This is because the IPC to notify a page that it is inside a portal (see
