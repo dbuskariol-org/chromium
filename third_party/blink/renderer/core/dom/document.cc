@@ -319,6 +319,7 @@
 #include "third_party/blink/renderer/platform/weborigin/origin_access_entry.h"
 #include "third_party/blink/renderer/platform/weborigin/scheme_registry.h"
 #include "third_party/blink/renderer/platform/weborigin/security_origin.h"
+#include "third_party/blink/renderer/platform/widget/frame_widget.h"
 #include "third_party/blink/renderer/platform/wtf/cross_thread_functional.h"
 #include "third_party/blink/renderer/platform/wtf/functional.h"
 #include "third_party/blink/renderer/platform/wtf/hash_functions.h"
@@ -5299,6 +5300,10 @@ void Document::NotifyFocusedElementChanged(Element* old_focused_element,
     if (old_document && old_document != this && old_document->GetFrame())
       old_document->GetFrame()->Client()->FocusedElementChanged(nullptr);
 
+    // Ensures that further text input state can be sent even when previously
+    // focused input and the newly focused input share the exact same state.
+    if (GetFrame()->GetWidgetForLocalRoot())
+      GetFrame()->GetWidgetForLocalRoot()->ClearTextInputState();
     GetFrame()->Client()->FocusedElementChanged(new_focused_element);
 
     GetPage()->GetChromeClient().SetKeyboardFocusURL(new_focused_element);

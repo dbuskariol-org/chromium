@@ -403,6 +403,31 @@ void WebPagePopupImpl::ProcessInputEventSynchronously(
   widget_base_->input_handler().HandleInputEvent(event, std::move(callback));
 }
 
+void WebPagePopupImpl::UpdateTextInputState() {
+  widget_base_->UpdateTextInputState();
+}
+
+void WebPagePopupImpl::UpdateCompositionInfo() {
+  widget_base_->UpdateCompositionInfo(/*immediate_request=*/false);
+}
+
+void WebPagePopupImpl::UpdateSelectionBounds() {
+  widget_base_->UpdateSelectionBounds();
+}
+
+void WebPagePopupImpl::ShowVirtualKeyboard() {
+  widget_base_->ShowVirtualKeyboard();
+}
+
+void WebPagePopupImpl::ForceTextInputStateUpdate() {
+  widget_base_->ForceTextInputStateUpdate();
+}
+
+void WebPagePopupImpl::RequestCompositionUpdates(bool immediate_request,
+                                                 bool monitor_updates) {
+  widget_base_->RequestCompositionUpdates(immediate_request, monitor_updates);
+}
+
 void WebPagePopupImpl::SetCompositorVisible(bool visible) {
   widget_base_->SetCompositorVisible(visible);
 }
@@ -572,6 +597,17 @@ void WebPagePopupImpl::GetWidgetInputHandler(
     mojo::PendingReceiver<mojom::blink::WidgetInputHandler> request,
     mojo::PendingRemote<mojom::blink::WidgetInputHandlerHost> host) {
   WidgetClient()->GetWidgetInputHandler(std::move(request), std::move(host));
+}
+
+bool WebPagePopupImpl::HasCurrentImeGuard(
+    bool request_to_show_virtual_keyboard) {
+  return WidgetClient()->HasCurrentImeGuard(request_to_show_virtual_keyboard);
+}
+
+void WebPagePopupImpl::SendCompositionRangeChanged(
+    const gfx::Range& range,
+    const std::vector<gfx::Rect>& character_bounds) {
+  WidgetClient()->SendCompositionRangeChanged(range, character_bounds);
 }
 
 WebInputEventResult WebPagePopupImpl::HandleCharEvent(
