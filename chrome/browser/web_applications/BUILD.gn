@@ -58,6 +58,8 @@ source_set("web_applications") {
     "external_web_app_manager.h",
     "file_utils_wrapper.cc",
     "file_utils_wrapper.h",
+    "os_integration_manager.cc",
+    "os_integration_manager.h",
     "pending_app_install_task.cc",
     "pending_app_install_task.h",
     "pending_app_manager_impl.cc",
