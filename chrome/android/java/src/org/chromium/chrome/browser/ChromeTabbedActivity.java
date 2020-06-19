@@ -280,6 +280,11 @@ public class ChromeTabbedActivity extends ChromeActivity<ChromeActivityComponent
     // Time at which an intent was received and handled.
     private long mIntentHandlingTimeMs;
 
+    /**
+     * Whether the StartSurface is shown when Chrome is launched.
+     */
+    private boolean mOverviewShownOnStart;
+
     private OverviewModeBehavior.OverviewModeObserver mOverviewModeObserver;
 
     private ObservableSupplierImpl<EphemeralTabCoordinator> mEphemeralTabCoordinatorSupplier =
@@ -1066,11 +1071,13 @@ public class ChromeTabbedActivity extends ChromeActivity<ChromeActivityComponent
                 mStartSurface.getController().enableRecordingFirstMeaningfulPaint(
                         getOnCreateTimestampMs());
             }
+            mOverviewShownOnStart = true;
             showOverview(OverviewModeState.SHOWING_START);
             return;
         }
 
         if (getActivityTab() == null && !isOverviewVisible) {
+            mOverviewShownOnStart = true;
             showOverview(OverviewModeState.SHOWING_START);
         }
 
@@ -1709,6 +1716,12 @@ public class ChromeTabbedActivity extends ChromeActivity<ChromeActivityComponent
             ChromeSurveyController.initialize(mTabModelSelectorImpl);
 
             HomepagePromoVariationManager.getInstance().tagSyntheticHomepagePromoSeenGroup();
+        });
+
+        DeferredStartupHandler.getInstance().addDeferredTask(() -> {
+            if (mStartSurface != null && mOverviewShownOnStart) {
+                mStartSurface.onOverviewShownAtLaunch(getOnCreateTimestampUptimeMs());
+            }
         });
     }
 
