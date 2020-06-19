@@ -150,7 +150,7 @@ android_library("java") {
     ":weblayer_resources",
     "//base:base_java",
     "//base:jni_java",
-    "//components/autofill/android:provider_java",
+    "//components/autofill/android/provider:java",
     "//components/browser_ui/http_auth/android:java",
     "//components/browser_ui/modaldialog/android:java",
     "//components/browser_ui/notifications/android:java",

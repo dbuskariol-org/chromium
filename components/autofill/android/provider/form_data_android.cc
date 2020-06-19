@@ -2,11 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/autofill/android/form_data_android.h"
+#include "components/autofill/android/provider/form_data_android.h"
 
 #include "base/android/jni_string.h"
-#include "components/autofill/android/form_field_data_android.h"
-#include "components/autofill/android/jni_headers/FormData_jni.h"
+#include "components/autofill/android/provider/form_field_data_android.h"
+#include "components/autofill/android/provider/jni_headers/FormData_jni.h"
 #include "components/autofill/core/browser/form_structure.h"
 
 using base::android::AttachCurrentThread;
