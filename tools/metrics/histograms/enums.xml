@@ -1461,6 +1461,22 @@ Unknown properties are collapsed to zero. -->
   <int value="1" label="NEON support"/>
 </enum>
 
+<enum name="AndroidDefaultBrowserPromoOutcomeType">
+  <int value="0" label="No Default"/>
+  <int value="1" label="Other Default"/>
+  <int value="2" label="Chrome Default"/>
+</enum>
+
+<enum name="AndroidDefaultBrowserPromoType">
+  <int value="0" label="No Default"/>
+  <int value="1" label="Other Default"/>
+</enum>
+
+<enum name="AndroidDefaultBrowserPromoUserActionType">
+  <int value="0" label="Change Default"/>
+  <int value="1" label="No Thanks"/>
+</enum>
+
 <enum name="AndroidDownloadExtensionType">
   <int value="0" label="Other"/>
   <int value="1" label="APK"/>
