@@ -3205,19 +3205,27 @@ group("validate_expectations") {
   if (_enable_libs_and_assets_verification) {
     deps += [
       "//chrome/android:chrome_modern_public_bundle__base_libs_and_assets_expectations",
-      "//chrome/android:monochrome_public_bundle__base_libs_and_assets_expectations",
-      "//chrome/android:trichrome_chrome_bundle__base_libs_and_assets_expectations",
       "//chrome/android:trichrome_library_apk_libs_and_assets_expectations",
     ]
+    if (public_android_sdk) {
+      deps += [
+        "//chrome/android:monochrome_public_bundle__base_libs_and_assets_expectations",
+        "//chrome/android:trichrome_chrome_bundle__base_libs_and_assets_expectations",
+      ]
+    }
   }
   if (_enable_manifest_verification) {
     deps += [
       "//android_webview:system_webview_apk_manifest_expectations",
       "//android_webview:trichrome_webview_apk_manifest_expectations",
-      "//chrome/android:monochrome_public_bundle__base_bundle_module_manifest_expectations",
-      "//chrome/android:monochrome_public_bundle_proguard_expectations",
-      "//chrome/android:trichrome_chrome_bundle__base_bundle_module_manifest_expectations",
       "//chrome/android:trichrome_library_apk_manifest_expectations",
     ]
+    if (public_android_sdk) {
+      deps += [
+        "//chrome/android:monochrome_public_bundle__base_bundle_module_manifest_expectations",
+        "//chrome/android:monochrome_public_bundle_proguard_expectations",
+        "//chrome/android:trichrome_chrome_bundle__base_bundle_module_manifest_expectations",
+      ]
+    }
   }
 }
