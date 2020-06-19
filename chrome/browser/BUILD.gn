@@ -4129,6 +4129,8 @@ static_library("browser") {
       "sync/roaming_profile_directory_deleter_win.h",
       "taskbar/taskbar_decorator_win.cc",
       "taskbar/taskbar_decorator_win.h",
+      "win/icon_reader_service.cc",
+      "win/icon_reader_service.h",
       "win/parental_controls.cc",
       "win/parental_controls.h",
       "win/util_win_service.cc",
