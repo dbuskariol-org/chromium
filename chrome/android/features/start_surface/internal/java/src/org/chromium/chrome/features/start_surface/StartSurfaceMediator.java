@@ -544,6 +544,13 @@ class StartSurfaceMediator
 
     void onOverviewShownAtLaunch(long activityCreationTimeMs) {
         mController.onOverviewShownAtLaunch(activityCreationTimeMs);
+        if (mPropertyModel != null) {
+            FeedSurfaceCoordinator feedSurfaceCoordinator =
+                    mPropertyModel.get(FEED_SURFACE_COORDINATOR);
+            if (feedSurfaceCoordinator != null) {
+                feedSurfaceCoordinator.onOverviewShownAtLaunch(activityCreationTimeMs);
+            }
+        }
     }
 
     // Implements TabSwitcher.OverviewModeObserver.

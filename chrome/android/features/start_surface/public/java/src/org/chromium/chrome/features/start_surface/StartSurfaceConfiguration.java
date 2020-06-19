@@ -109,9 +109,12 @@ public class StartSurfaceConfiguration {
     }
 
     /**
-     * Record histograms of showing StartSurface.
+     * Records histograms of showing the StartSurface. Nothing will be recorded if timeDurationMs
+     * isn't valid.
      */
     public static void recordHistogram(String name, long timeDurationMs, boolean isInstantStart) {
+        if (timeDurationMs < 0) return;
+
         RecordHistogram.recordTimesHistogram(
                 getHistogramName(name, isInstantStart), timeDurationMs);
     }

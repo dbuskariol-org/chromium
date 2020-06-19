@@ -55,7 +55,6 @@ public class FeedLoadingCoordinator {
     void onOverviewShownAtLaunch(long activityCreationTimeMs) {
         long layoutInflationCompleteMs = mFeedLoadingView.getLayoutInflationCompleteMs();
         assert layoutInflationCompleteMs >= activityCreationTimeMs;
-        if (layoutInflationCompleteMs < activityCreationTimeMs) return;
 
         StartSurfaceConfiguration.recordHistogram(FEEDS_LOADING_PLACEHOLDER_SHOWN_TIME_UMA,
                 layoutInflationCompleteMs - activityCreationTimeMs, true);
