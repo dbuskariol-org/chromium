@@ -133,7 +133,7 @@ class TestResultSink(object):
             the value is a dict with the absolute file path.
         """
         ret = {}
-        base_dir = self._port.artifacts_directory()
+        base_dir = self._port.results_directory()
         for name, paths in result.artifacts.artifacts.iteritems():
             for p in paths:
                 art_id = name
