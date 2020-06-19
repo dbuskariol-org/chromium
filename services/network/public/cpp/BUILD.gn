@@ -49,6 +49,8 @@ jumbo_component("cpp") {
     "cross_thread_pending_shared_url_loader_factory.h",
     "data_pipe_to_source_stream.cc",
     "data_pipe_to_source_stream.h",
+    "empty_url_loader_client.cc",
+    "empty_url_loader_client.h",
     "features.cc",
     "features.h",
     "header_util.cc",
