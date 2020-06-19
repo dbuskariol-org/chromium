@@ -5,13 +5,16 @@
 #include <string>
 
 #include "base/strings/sys_string_conversions.h"
+#include "components/safe_browsing/core/common/safe_browsing_prefs.h"
 #include "components/safe_browsing/core/features.h"
 #import "ios/chrome/test/earl_grey/chrome_earl_grey.h"
+#import "ios/chrome/test/earl_grey/chrome_earl_grey_app_interface.h"
 #import "ios/chrome/test/earl_grey/chrome_matchers.h"
 #import "ios/chrome/test/earl_grey/chrome_test_case.h"
 #include "ios/testing/earl_grey/app_launch_configuration.h"
 #import "ios/testing/earl_grey/earl_grey_test.h"
 #import "ios/web/common/features.h"
+#include "ios/web/public/test/element_selector.h"
 #include "net/test/embedded_test_server/embedded_test_server.h"
 
 #if !defined(__has_feature) || !__has_feature(objc_arc)
@@ -157,6 +160,40 @@
 
   [ChromeEarlGrey tapWebStateElementWithID:@"proceed-link"];
   [ChromeEarlGrey waitForWebStateContainingText:_phishingContent];
+}
+
+// Tests that the proceed option is not shown when
+// kSafeBrowsingProceedAnywayDisabled is enabled.
+- (void)testProceedAlwaysDisabled {
+  // Enable the pref.
+  NSString* prefName =
+      base::SysUTF8ToNSString(prefs::kSafeBrowsingProceedAnywayDisabled);
+  [ChromeEarlGreyAppInterface setBoolValue:YES forUserPref:prefName];
+
+  // Load the a malware safe browsing error page.
+  [ChromeEarlGrey loadURL:_malwareURL];
+  [ChromeEarlGrey
+      waitForWebStateContainingText:"The site ahead contains malware"];
+
+  [ChromeEarlGrey tapWebStateElementWithID:@"details-button"];
+  [ChromeEarlGrey waitForWebStateContainingText:
+                      "Google Safe Browsing recently detected malware"];
+
+  // Verify that the proceed-link element is not found.  When the proceed link
+  // is disabled, the entire second paragraph hidden.
+  NSString* selector =
+      @"(function() {"
+       "  var element = document.getElementById('final-paragraph');"
+       "  if (element.classList.contains('hidden')) return true;"
+       "  return false;"
+       "})()";
+  NSString* description = @"Hidden proceed-anyway link.";
+  ElementSelector* proceedLink =
+      [ElementSelector selectorWithScript:selector
+                      selectorDescription:description];
+  GREYAssert(
+      [ChromeEarlGreyAppInterface webStateContainsElement:proceedLink],
+      @"Proceed anyway link shown despite kSafeBrowsingProceedAnywayDisabled");
 }
 
 @end
