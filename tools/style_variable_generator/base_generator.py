@@ -75,10 +75,13 @@ class BaseGenerator:
     def AddJSONFileToModel(self, path):
         self.in_files.append(path)
         with open(path, 'r') as f:
-            # TODO(calamity): Add allow_duplicate_keys=False once pyjson5 is
-            # rolled.
-            data = json5.loads(
-                f.read(), object_pairs_hook=collections.OrderedDict)
+            self.AddJSONToModel(f.read())
+
+    def AddJSONToModel(self, json_string):
+        # TODO(calamity): Add allow_duplicate_keys=False once pyjson5 is
+        # rolled.
+        data = json5.loads(json_string,
+                           object_pairs_hook=collections.OrderedDict)
 
         try:
             for name, value in data['colors'].items():
@@ -103,7 +106,7 @@ class BaseGenerator:
         return template.render(params)
 
     def Validate(self):
-        def CheckIsInDefaultModel(name):
+        def CheckColorInDefaultMode(name):
             if name not in self._mode_variables[self._default_mode].colors:
                 raise ValueError(
                     "%s not defined in '%s' mode" % (name, self._default_mode))
@@ -112,10 +115,11 @@ class BaseGenerator:
         # default mode.
         for m in self._mode_variables.values():
             for name, value in m.colors.items():
+                CheckColorInDefaultMode(name)
                 if value.var:
-                    CheckIsInDefaultModel(value.var)
+                    CheckColorInDefaultMode(value.var)
                 if value.rgb_var:
-                    CheckIsInDefaultModel(value.rgb_var[:-4])
+                    CheckColorInDefaultMode(value.rgb_var[:-4])
 
         # TODO(calamity): Check for circular references.
 
