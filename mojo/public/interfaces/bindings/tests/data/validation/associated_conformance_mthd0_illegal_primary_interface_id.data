@@ -20,5 +20,5 @@
 [dist4]interface_id_array  // num_bytes
 [u4]2                      // num_elements
 [u4]3
-[u4]0                      // Unexpected master interface ID.
+[u4]0                      // Unexpected primary interface ID.
 [anchr]interface_id_array
