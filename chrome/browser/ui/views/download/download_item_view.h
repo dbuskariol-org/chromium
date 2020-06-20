@@ -75,6 +75,7 @@ class DownloadItemView : public views::View,
 
   // Returns the DownloadUIModel object belonging to this item.
   DownloadUIModel* model() { return model_.get(); }
+  const DownloadUIModel* model() const { return model_.get(); }
 
   // Submits download to download feedback service if the user has approved and
   // the download is suitable for submission, then apply |download_command|.

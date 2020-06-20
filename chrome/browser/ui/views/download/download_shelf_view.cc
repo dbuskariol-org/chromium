@@ -42,8 +42,19 @@ using download::DownloadItem;
 
 namespace {
 
+// TODO(pkasting): Replace these with LayoutProvider constants
+
 // Padding above the content.
 constexpr int kTopPadding = 1;
+
+// Padding from left edge and first download view.
+constexpr int kStartPadding = 4;
+
+// Padding from right edge and close button/show downloads link.
+constexpr int kEndPadding = 6;
+
+// Padding between the show all link and close button.
+constexpr int kCloseAndLinkPadding = 6;
 
 // Sets size->width() to view's preferred width + size->width().
 // Sets size->height() to the max of the view's preferred height and
@@ -149,8 +160,8 @@ void DownloadShelfView::RemoveDownloadView(View* view) {
   delete view;
   if (download_views_.empty())
     Close();
-  else if (CanAutoClose())
-    mouse_watcher_.Start(GetWidget()->GetNativeWindow());
+  else
+    AutoClose();
   Layout();
   SchedulePaint();
 }
@@ -185,8 +196,9 @@ void DownloadShelfView::OnPaintBorder(gfx::Canvas* canvas) {
                        ThemeProperties::COLOR_TOOLBAR_CONTENT_AREA_SEPARATOR));
 }
 
-void DownloadShelfView::OpenedDownload() {
-  if (CanAutoClose())
+void DownloadShelfView::AutoClose() {
+  if (std::all_of(download_views_.cbegin(), download_views_.cend(),
+                  [](const auto* view) { return view->model()->GetOpened(); }))
     mouse_watcher_.Start(GetWidget()->GetNativeWindow());
 }
 
@@ -222,28 +234,64 @@ void DownloadShelfView::AnimationProgressed(const gfx::Animation* animation) {
 }
 
 void DownloadShelfView::AnimationEnded(const gfx::Animation *animation) {
-  if (animation == &shelf_animation_) {
-    parent_->SetDownloadShelfVisible(shelf_animation_.IsShowing());
-    if (!shelf_animation_.IsShowing())
-      Closed();
+  if (animation != &shelf_animation_)
+    return;
+
+  const bool shown = shelf_animation_.IsShowing();
+  parent_->SetDownloadShelfVisible(shown);
+
+  // If the shelf was explicitly closed by the user, there are further steps to
+  // take to complete closing.
+  if (shown || is_hidden())
+    return;
+
+  // When the close animation is complete, remove all completed downloads.
+  size_t i = 0;
+  while (i < download_views_.size()) {
+    DownloadUIModel* download = download_views_[i]->model();
+    DownloadItem::DownloadState state = download->GetState();
+    bool is_transfer_done = state == DownloadItem::COMPLETE ||
+                            state == DownloadItem::CANCELLED ||
+                            state == DownloadItem::INTERRUPTED;
+    if (is_transfer_done && !download->IsDangerous()) {
+      RemoveDownloadView(download_views_[i]);
+    } else {
+      // Treat the item as opened when we close. This way if we get shown again
+      // the user need not open this item for the shelf to auto-close.
+      download->SetOpened(true);
+      ++i;
+    }
   }
+
+  // If we had keyboard focus, calling SetVisible(false) causes keyboard focus
+  // to be completely lost. To prevent this, we focus another view: the web
+  // contents. TODO(collinbaker): https://crbug.com/846466 Fix
+  // AccessiblePaneView::SetVisible or FocusManager to make this unnecessary.
+  auto* focus_manager = GetFocusManager();
+  if (focus_manager && Contains(focus_manager->GetFocusedView())) {
+    parent_->contents_web_view()->RequestFocus();
+  }
+
+  SetVisible(false);
 }
 
 void DownloadShelfView::Layout() {
   // Let our base class layout our child views
   views::View::Layout();
 
-  // If there is not enough room to show the first download item, show the
-  // "Show all downloads" link to the left to make it more visible that there is
-  // something to see.
-  bool show_link_only = !CanFitFirstDownloadItem();
-
   gfx::Size close_button_size = close_button_->GetPreferredSize();
   gfx::Size show_all_size = show_all_view_->GetPreferredSize();
   int max_download_x =
       std::max<int>(0, width() - kEndPadding - close_button_size.width() -
                            kCloseAndLinkPadding - show_all_size.width());
+  // If there is not enough room to show the first download item, show the
+  // "Show all downloads" link to the left to make it more visible that there is
+  // something to see.
+  bool show_link_only = !download_views_.empty() &&
+                        (download_views_.back()->GetPreferredSize().width() >
+                         (max_download_x - kStartPadding));
   int next_x = show_link_only ? kStartPadding : max_download_x;
+
   show_all_view_->SetBounds(next_x,
                             CenterPosition(show_all_size.height(), height()),
                             show_all_size.width(),
@@ -285,29 +333,8 @@ void DownloadShelfView::Layout() {
   }
 }
 
-bool DownloadShelfView::CanFitFirstDownloadItem() {
-  if (download_views_.empty())
-    return true;
-
-  gfx::Size close_button_size = close_button_->GetPreferredSize();
-  gfx::Size show_all_size = show_all_view_->GetPreferredSize();
-
-  // Let's compute the width available for download items, which is the width
-  // of the shelf minus the "Show all downloads" link, arrow and close button
-  // and the padding.
-  int available_width = width() - kEndPadding - close_button_size.width() -
-                        kCloseAndLinkPadding - show_all_size.width() -
-                        kStartPadding;
-  if (available_width <= 0)
-    return false;
-
-  gfx::Size item_size = (*download_views_.rbegin())->GetPreferredSize();
-  return item_size.width() < available_width;
-}
-
-void DownloadShelfView::UpdateColorsFromTheme() {
-  if (!GetThemeProvider())
-    return;
+void DownloadShelfView::OnThemeChanged() {
+  views::AccessiblePaneView::OnThemeChanged();
 
   ConfigureButtonForTheme(show_all_view_);
 
@@ -317,15 +344,6 @@ void DownloadShelfView::UpdateColorsFromTheme() {
   views::SetImageFromVectorIcon(
       close_button_, vector_icons::kCloseRoundedIcon,
       GetThemeProvider()->GetColor(ThemeProperties::COLOR_BOOKMARK_TEXT));
-}
-
-void DownloadShelfView::AddedToWidget() {
-  UpdateColorsFromTheme();
-}
-
-void DownloadShelfView::OnThemeChanged() {
-  views::AccessiblePaneView::OnThemeChanged();
-  UpdateColorsFromTheme();
 }
 
 void DownloadShelfView::ButtonPressed(
@@ -366,47 +384,4 @@ void DownloadShelfView::DoUnhide() {
   SetVisible(true);
   parent_->ToolbarSizeChanged(true);
   parent_->SetDownloadShelfVisible(true);
-}
-
-void DownloadShelfView::Closed() {
-  // Don't remove completed downloads if the shelf is just being auto-hidden
-  // rather than explicitly closed by the user.
-  if (is_hidden())
-    return;
-  // When the close animation is complete, remove all completed downloads.
-  size_t i = 0;
-  while (i < download_views_.size()) {
-    DownloadUIModel* download = download_views_[i]->model();
-    DownloadItem::DownloadState state = download->GetState();
-    bool is_transfer_done = state == DownloadItem::COMPLETE ||
-                            state == DownloadItem::CANCELLED ||
-                            state == DownloadItem::INTERRUPTED;
-    if (is_transfer_done && !download->IsDangerous()) {
-      RemoveDownloadView(download_views_[i]);
-    } else {
-      // Treat the item as opened when we close. This way if we get shown again
-      // the user need not open this item for the shelf to auto-close.
-      download->SetOpened(true);
-      ++i;
-    }
-  }
-
-  // If we had keyboard focus, calling SetVisible(false) causes keyboard focus
-  // to be completely lost. To prevent this, we focus another view: the web
-  // contents. TODO(collinbaker): https://crbug.com/846466 Fix
-  // AccessiblePaneView::SetVisible or FocusManager to make this unnecessary.
-  auto* focus_manager = GetFocusManager();
-  if (focus_manager && Contains(focus_manager->GetFocusedView())) {
-    get_parent()->contents_web_view()->RequestFocus();
-  }
-
-  SetVisible(false);
-}
-
-bool DownloadShelfView::CanAutoClose() {
-  for (size_t i = 0; i < download_views_.size(); ++i) {
-    if (!download_views_[i]->model()->GetOpened())
-      return false;
-  }
-  return true;
 }

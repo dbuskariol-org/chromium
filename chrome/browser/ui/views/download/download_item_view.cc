@@ -551,7 +551,7 @@ void DownloadItemView::OnDownloadOpened() {
       base::TimeDelta::FromSeconds(3));
 
   // Notify our parent.
-  shelf_->OpenedDownload();
+  shelf_->AutoClose();
 }
 
 // View overrides
