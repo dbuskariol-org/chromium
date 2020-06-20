@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-<link id="master" rel="import" href="import-master.html">
+<link id="client" rel="import" href="import-client.html">
 </head>
 <body>
-<h1 style="dipslay: none;">Importing Master</h1>
+<h1 style="dipslay: none;">Importing client</h1>
 <pre id="resultConsole"></screen>
 <script>
 if (window.testRunner)
     testRunner.dumpAsText();
 
 if (document == document.currentScript.ownerDocument) {
-    if (master.import.querySelector('h1').innerHTML != "Importing Master")
+    if (client.import.querySelector('h1').innerHTML != "Importing client")
        resultConsole.innerHTML += "FAIL: Loaded wrong nested document.\n";
     else
        resultConsole.innerHTML += "PASS\n";
     
-    if (master.import.querySelector('#master').import != master.import)
+    if (client.import.querySelector('#client').import != client.import)
        resultConsole.innerHTML += "FAIL: Imported object is shared with nested one.\n";
     else
        resultConsole.innerHTML += "PASS\n";

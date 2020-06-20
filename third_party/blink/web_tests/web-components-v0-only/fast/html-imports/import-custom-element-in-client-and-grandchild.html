@@ -9,8 +9,8 @@
 <script>
 var Hello = registerTestingCustomElement('x-hello');
 var numberOfLinks = 3;
-var t1 = async_test('Custom elements in an indirect import and the master are both upgraded.');
-var t2 = async_test('Custom elements in an indirect import and the master are both resolved.');
+var t1 = async_test('Custom elements in an indirect import and the client are both upgraded.');
+var t2 = async_test('Custom elements in an indirect import and the client are both resolved.');
 var latch = new ImportTestLatch(function() {
     t1.step(function() {
         assert_array_equals(Hello.ids.slice(0).sort(), ['hello-1', 'hello-2', 'hello-root-1', 'hello-root-2'], 'All custom elements are upgraded');
