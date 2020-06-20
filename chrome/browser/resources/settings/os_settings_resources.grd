@@ -370,7 +370,8 @@
                  compress="false" type="chrome_html" />
       <structure name="IDR_OS_SETTINGS_CR_SETTINGS_SUBPAGE_JS"
                  file="settings_page/settings_subpage.js"
-                 compress="false" type="chrome_html" />
+                 compress="false" type="chrome_html"
+                 preprocess="true" />
       <structure name="IDR_OS_SETTINGS_CR_SETTINGS_PAGE_CSS_HTML"
                  file="settings_page_css.html"
                  compress="false" type="chrome_html" />
