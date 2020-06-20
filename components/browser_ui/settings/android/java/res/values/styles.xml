@@ -29,12 +29,6 @@
         <item name="android:textAppearance">@style/TextAppearance.TextMedium.Secondary</item>
     </style>
 
-    <!-- TODO(crbug.com/1077375): Consider removing this text style. -->
-    <style name="TextAppearance.PreferenceMediumText" tools:ignore="UnusedResources">
-        <item name="android:textSize">18sp</item>
-        <item name="android:textColor">?android:attr/textColorPrimary</item>
-    </style>
-
     <style name="PreferenceLayout">
         <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
         <item name="android:minHeight">?android:attr/listPreferredItemHeightSmall</item>
