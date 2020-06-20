@@ -20,7 +20,6 @@ android_resources("weblayer_resources") {
     "res/values/colors.xml",
     "res/values/dimens.xml",
     "res/values/styles.xml",
-    "res/values/styles.xml",
   ]
   custom_package = "org.chromium.weblayer_private"
   deps = [
