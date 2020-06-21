@@ -29,36 +29,36 @@ class MdTextButton;
 //
 // DownloadShelfView does not hold an infinite number of download views, rather
 // it'll automatically remove views once a certain point is reached.
-class DownloadShelfView : public views::AccessiblePaneView,
+class DownloadShelfView : public DownloadShelf,
+                          public views::AccessiblePaneView,
                           public views::AnimationDelegateViews,
-                          public DownloadShelf,
                           public views::ButtonListener,
                           public views::MouseWatcherListener {
  public:
   DownloadShelfView(Browser* browser, BrowserView* parent);
   ~DownloadShelfView() override;
-  // Sent from the DownloadItemView when the user opens an item.
-  void AutoClose();
-
-  // views::View:
-  gfx::Size CalculatePreferredSize() const override;
-  void Layout() override;
-
-  // views::AnimationDelegateViews.
-  void AnimationProgressed(const gfx::Animation* animation) override;
-  void AnimationEnded(const gfx::Animation* animation) override;
-
-  // views::ButtonListener:
-  // Invoked when the user clicks the close button. Asks the browser to
-  // hide the download shelf.
-  void ButtonPressed(views::Button* button, const ui::Event& event) override;
 
   // DownloadShelf:
   bool IsShowing() const override;
   bool IsClosing() const override;
 
+  // views::AccessiblePaneView:
+  // TODO(crbug.com/1005568): Replace these with a LayoutManager
+  gfx::Size CalculatePreferredSize() const override;
+  void Layout() override;
+
+  // views::AnimationDelegateViews:
+  void AnimationProgressed(const gfx::Animation* animation) override;
+  void AnimationEnded(const gfx::Animation* animation) override;
+
+  // views::ButtonListener:
+  void ButtonPressed(views::Button* button, const ui::Event& event) override;
+
   // views::MouseWatcherListener:
   void MouseMovedOutOfHost() override;
+
+  // Sent from the DownloadItemView when the user opens an item.
+  void AutoClose();
 
   // Removes a specified download view. The supplied view is deleted after
   // it's removed.
@@ -68,9 +68,6 @@ class DownloadShelfView : public views::AccessiblePaneView,
   void ConfigureButtonForTheme(views::MdTextButton* button);
 
  protected:
-  // views::View:
-  void OnThemeChanged() override;
-
   // DownloadShelf:
   void DoAddDownload(DownloadUIModel::DownloadUIModelPtr download) override;
   void DoOpen() override;
@@ -79,6 +76,8 @@ class DownloadShelfView : public views::AccessiblePaneView,
   void DoUnhide() override;
 
   // views::AccessiblePaneView:
+  void OnPaintBorder(gfx::Canvas* canvas) override;
+  void OnThemeChanged() override;
   views::View* GetDefaultFocusableChild() override;
 
  private:
@@ -90,9 +89,6 @@ class DownloadShelfView : public views::AccessiblePaneView,
   // DownloadShelfView takes ownership of the View, and will delete it as
   // necessary.
   void AddDownloadView(DownloadItemView* view);
-
-  // views::AccessiblePaneView:
-  void OnPaintBorder(gfx::Canvas* canvas) override;
 
   // The animation for adding new items to the shelf.
   gfx::SlideAnimation new_item_animation_;
