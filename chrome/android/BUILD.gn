@@ -3146,6 +3146,7 @@ native_java_unittests_tests = [
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/AutocompleteMediatorUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/AutocompleteResultUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/DropdownItemViewInfoListBuilderUnitTest.java",
+  "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/DropdownItemViewInfoListManagerUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/basic/BasicSuggestionProcessorUnitTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/suggestions/clipboard/ClipboardSuggestionProcessorTest.java",
   "native_java_unittests/src/org/chromium/chrome/browser/omnibox/status/StatusMediatorUnitTest.java",
