@@ -14782,6 +14782,18 @@ to ensure that the crash string is shown properly on the user-facing crash UI.
   <int value="31"
       label="Arrived at settings menu by HTTPS Preview Infobar: entered on,
              exited on"/>
+  <int value="32"
+      label="Arrived at settings menu by HTTPS image compression Infobar:
+             entered off, exited off"/>
+  <int value="33"
+      label="Arrived at settings menu by HTTPS image compression Infobar:
+             entered off, exited on"/>
+  <int value="34"
+      label="Arrived at settings menu by HTTPS image compression Infobar:
+             entered on, exited off"/>
+  <int value="35"
+      label="Arrived at settings menu by HTTPS image compression Infobar:
+             entered on, exited on"/>
 </enum>
 
 <enum name="DataReductionProxyWarmupURLFetchAttemptEvent">
@@ -34105,6 +34117,12 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="14" label="CLEAR_SERVER_NETWORK_STATS"/>
 </enum>
 
+<enum name="HttpsImageCompressionInfoBarAction">
+  <int value="0" label="Infobar shown"/>
+  <int value="1" label="Infobar dismissed by user"/>
+  <int value="2" label="Infobar 'Settings' clicked"/>
+</enum>
+
 <enum name="HttpSocketType">
   <int value="0" label="UNUSED">newly connected socket</int>
   <int value="1" label="UNUSED_IDLE">
@@ -34992,6 +35010,9 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="95" label="SMS_RECEIVER_INFOBAR_DELEGATE"/>
   <int value="96" label="KNOWN_INTERCEPTION_DISCLOSURE_INFOBAR_DELEGATE"/>
   <int value="97" label="SYNC_ERROR_INFOBAR_DELEGATE_ANDROID"/>
+  <int value="98" label="MIXED_CONTENT_DOWNLOAD_INFOBAR_DELEGATE_ANDROID"/>
+  <int value="99" label="CONDITIONAL_TAB_STRIP_INFOBAR_ANDROID"/>
+  <int value="100" label="LITE_MODE_HTTPS_IMAGE_COMPRESSION_INFOBAR_ANDROID"/>
 </enum>
 
 <enum name="InfoBarResponse">
