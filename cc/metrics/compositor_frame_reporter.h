@@ -94,6 +94,13 @@ class CC_EXPORT CompositorFrameReporter {
     kStartDrawToSwapStart = 2,
     kSwapStartToSwapEnd = 3,
     kSwapEndToPresentationCompositorFrame = 4,
+
+    // This is a breakdown of SwapStartToSwapEnd stage which is optionally
+    // recorded if querying these timestamps is supported by the platform.
+    kSwapStartToBufferAvailable = 5,
+    kBufferAvailableToBufferReady = 6,
+    kBufferReadyToLatch = 7,
+    kLatchToSwapEnd = 8,
     kBreakdownCount
   };
 

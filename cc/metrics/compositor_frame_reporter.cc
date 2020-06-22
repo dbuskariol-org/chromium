@@ -60,6 +60,14 @@ constexpr const char* GetVizBreakdownName(VizBreakdown stage) {
       return "Swap";
     case VizBreakdown::kSwapEndToPresentationCompositorFrame:
       return "SwapEndToPresentationCompositorFrame";
+    case VizBreakdown::kSwapStartToBufferAvailable:
+      return "SwapStartToBufferAvailable";
+    case VizBreakdown::kBufferAvailableToBufferReady:
+      return "BufferAvailableToBufferReady";
+    case VizBreakdown::kBufferReadyToLatch:
+      return "BufferReadyToLatch";
+    case VizBreakdown::kLatchToSwapEnd:
+      return "LatchToSwapEnd";
     case VizBreakdown::kBreakdownCount:
       NOTREACHED();
       return "";
@@ -230,6 +238,36 @@ void ReportOffsetBetweenDeadlineAndPresentationTime(
       base::TimeDelta::FromMilliseconds(1),
       base::TimeDelta::FromMilliseconds(32), /*bucket_count=*/16);
 }
+
+#define REPORT_VIZ_TRACE_EVENT(start_time, end_time, index, trace_func) \
+  if (start_time <= end_time) {                                         \
+    const char* substage_name =                                         \
+        GetVizBreakdownName(static_cast<VizBreakdown>(index));          \
+    trace_func(start_time, end_time, substage_name);                    \
+  }
+
+#define REPORT_VIZ_BREAKDOWN_TRACES(trace_func)                                \
+  size_t start_to_buffer_available =                                           \
+      static_cast<size_t>(VizBreakdown::kSwapStartToBufferAvailable);          \
+  bool has_ready_timings = !!viz_breakdown_list_[start_to_buffer_available];   \
+  for (size_t i = 0; i < start_to_buffer_available; i++) {                     \
+    if (!viz_breakdown_list_[i])                                               \
+      break;                                                                   \
+                                                                               \
+    if (i == static_cast<size_t>(VizBreakdown::kSwapStartToSwapEnd) &&         \
+        has_ready_timings) {                                                   \
+      size_t latch_to_swap_end =                                               \
+          static_cast<size_t>(VizBreakdown::kLatchToSwapEnd);                  \
+      for (size_t j = start_to_buffer_available; j <= latch_to_swap_end;       \
+           j++) {                                                              \
+        REPORT_VIZ_TRACE_EVENT(viz_breakdown_list_[j]->first,                  \
+                               viz_breakdown_list_[j]->second, j, trace_func); \
+      }                                                                        \
+    } else {                                                                   \
+      REPORT_VIZ_TRACE_EVENT(viz_breakdown_list_[i]->first,                    \
+                             viz_breakdown_list_[i]->second, i, trace_func);   \
+    }                                                                          \
+  }
 
 }  // namespace
 
@@ -761,20 +799,13 @@ void CompositorFrameReporter::ReportCompositorLatencyTraceEvents() const {
                         stage.start_time);
       if (stage.stage_type ==
           StageType::kSubmitCompositorFrameToPresentationCompositorFrame) {
-        for (size_t i = 0; i < base::size(viz_breakdown_list_); i++) {
-          if (!viz_breakdown_list_[i])
-            break;
-          const base::TimeTicks start_time = viz_breakdown_list_[i]->first;
-          const base::TimeTicks end_time = viz_breakdown_list_[i]->second;
-          // Do not report events with negative time span.
-          if (start_time > end_time)
-            continue;
-          const char* substage_name =
-              GetVizBreakdownName(static_cast<VizBreakdown>(i));
+        REPORT_VIZ_BREAKDOWN_TRACES([&](base::TimeTicks start_time,
+                                        base::TimeTicks end_time,
+                                        const char* substage_name) {
           TRACE_EVENT_BEGIN("cc,benchmark", substage_name, trace_track,
                             start_time);
           TRACE_EVENT_END("cc,benchmark", trace_track, end_time);
-        }
+        });
       }
       TRACE_EVENT_END("cc,benchmark", trace_track, stage.end_time);
     }
@@ -830,21 +861,14 @@ void CompositorFrameReporter::ReportEventLatencyTraceEvents() const {
 
       if (stage_it->stage_type ==
           StageType::kSubmitCompositorFrameToPresentationCompositorFrame) {
-        for (size_t i = 0; i < base::size(viz_breakdown_list_); i++) {
-          if (!viz_breakdown_list_[i])
-            break;
-          const base::TimeTicks start_time = viz_breakdown_list_[i]->first;
-          const base::TimeTicks end_time = viz_breakdown_list_[i]->second;
-          // Do not report events with negative time span.
-          if (start_time > end_time)
-            continue;
-          const char* substage_name =
-              GetVizBreakdownName(static_cast<VizBreakdown>(i));
+        REPORT_VIZ_BREAKDOWN_TRACES([&](base::TimeTicks start_time,
+                                        base::TimeTicks end_time,
+                                        const char* substage_name) {
           TRACE_EVENT_NESTABLE_ASYNC_BEGIN_WITH_TIMESTAMP0(
               "cc,input", substage_name, trace_id, start_time);
           TRACE_EVENT_NESTABLE_ASYNC_END_WITH_TIMESTAMP0(
               "cc,input", substage_name, trace_id, end_time);
-        }
+        });
       }
 
       TRACE_EVENT_NESTABLE_ASYNC_END_WITH_TIMESTAMP0(
@@ -922,6 +946,23 @@ void CompositorFrameReporter::PopulateVizBreakdownList() {
       VizBreakdown::kSwapEndToPresentationCompositorFrame)] =
       std::make_pair(viz_breakdown_.swap_timings.swap_end,
                      viz_breakdown_.presentation_feedback.timestamp);
+
+  if (viz_breakdown_.presentation_feedback.ready_timestamp.is_null())
+    return;
+  viz_breakdown_list_[static_cast<int>(
+      VizBreakdown::kSwapStartToBufferAvailable)] =
+      std::make_pair(viz_breakdown_.swap_timings.swap_start,
+                     viz_breakdown_.presentation_feedback.available_timestamp);
+  viz_breakdown_list_[static_cast<int>(
+      VizBreakdown::kBufferAvailableToBufferReady)] =
+      std::make_pair(viz_breakdown_.presentation_feedback.available_timestamp,
+                     viz_breakdown_.presentation_feedback.ready_timestamp);
+  viz_breakdown_list_[static_cast<int>(VizBreakdown::kBufferReadyToLatch)] =
+      std::make_pair(viz_breakdown_.presentation_feedback.ready_timestamp,
+                     viz_breakdown_.presentation_feedback.latch_timestamp);
+  viz_breakdown_list_[static_cast<int>(VizBreakdown::kLatchToSwapEnd)] =
+      std::make_pair(viz_breakdown_.presentation_feedback.latch_timestamp,
+                     viz_breakdown_.swap_timings.swap_end);
 }
 
 base::TimeDelta CompositorFrameReporter::SumOfStageHistory() const {
