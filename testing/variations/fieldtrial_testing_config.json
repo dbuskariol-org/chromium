@@ -3274,21 +3274,6 @@
             ]
         }
     ],
-    "IOSWebPageTextAccessibility": [
-        {
-            "platforms": [
-                "ios"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "enable_features": [
-                        "WebPageTextAccessibility"
-                    ]
-                }
-            ]
-        }
-    ],
     "IdentityDiscIPH": [
         {
             "platforms": [
