@@ -8,7 +8,6 @@
 #include <string>
 
 #include "base/optional.h"
-#include "third_party/blink/public/platform/web_media_stream.h"
 #include "third_party/blink/renderer/modules/mediastream/mock_media_stream_video_source.h"
 #include "third_party/blink/renderer/platform/mediastream/media_stream_descriptor.h"
 
@@ -35,11 +34,7 @@ class MockMediaStreamRegistry final {
   MockMediaStreamVideoSource* AddVideoTrack(const std::string& track_id);
   void AddAudioTrack(const std::string& track_id);
 
-  // TODO(https://crbug.com/704136): Switch to return MediaStreamDescriptor and
-  // rename this method.
-  const WebMediaStream test_stream() const {
-    return WebMediaStream(descriptor_);
-  }
+  MediaStreamDescriptor* test_stream() const { return descriptor_.Get(); }
 
   void reset() { descriptor_ = nullptr; }
 
