@@ -51175,6 +51175,8 @@ Called by update_net_trust_anchors.py.-->
   <int value="21" label="Cellular: Automatically Connect To Network"/>
   <int value="22" label="Instant Tethering: On/Off"/>
   <int value="23" label="Disconnect Tether Network"/>
+  <int value="24" label="Wi-Fi: Metered Network"/>
+  <int value="25" label="Cellular: Metered Network"/>
   <int value="100" label="Bluetooth: On/Off"/>
   <int value="101" label="Bluetooth: Connect To Device"/>
   <int value="102" label="Bluetooth: Disconnect From Device"/>

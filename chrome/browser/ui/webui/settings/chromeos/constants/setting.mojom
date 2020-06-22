@@ -32,6 +32,8 @@ enum Setting {
   kCellularAutoConnectToNetwork = 21,
   kInstantTetheringOnOff = 22,
   kDisconnectTetherNetwork = 23,
+  kWifiMetered = 24,
+  kCellularMetered = 25,
 
   // Bluetooth section.
   kBluetoothOnOff = 100,

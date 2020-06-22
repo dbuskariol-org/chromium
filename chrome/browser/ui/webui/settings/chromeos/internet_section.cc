@@ -194,6 +194,12 @@ const std::vector<SearchConcept>& GetWifiConnectedSearchConcepts() {
        {.setting = mojom::Setting::kWifiAutoConnectToNetwork},
        {IDS_OS_SETTINGS_TAG_AUTO_CONNECT_NETWORK_ALT1,
         SearchConcept::kAltTagEnd}},
+      {IDS_SETTINGS_INTERNET_NETWORK_METERED,
+       mojom::kWifiDetailsSubpagePath,
+       mojom::SearchResultIcon::kWifi,
+       mojom::SearchResultDefaultRank::kMedium,
+       mojom::SearchResultType::kSetting,
+       {.setting = mojom::Setting::kWifiMetered}},
   });
   return *tags;
 }
@@ -299,6 +305,12 @@ const std::vector<SearchConcept>& GetCellularConnectedSearchConcepts() {
        {.setting = mojom::Setting::kCellularAutoConnectToNetwork},
        {IDS_OS_SETTINGS_TAG_AUTO_CONNECT_NETWORK_ALT1,
         SearchConcept::kAltTagEnd}},
+      {IDS_SETTINGS_INTERNET_NETWORK_METERED,
+       mojom::kCellularDetailsSubpagePath,
+       mojom::SearchResultIcon::kCellular,
+       mojom::SearchResultDefaultRank::kMedium,
+       mojom::SearchResultType::kSetting,
+       {.setting = mojom::Setting::kCellularMetered}},
   });
   return *tags;
 }
@@ -392,6 +404,7 @@ const std::vector<mojom::Setting>& GetWifiDetailsSettings() {
       mojom::Setting::kWifiDns,
       mojom::Setting::kWifiProxy,
       mojom::Setting::kWifiAutoConnectToNetwork,
+      mojom::Setting::kWifiMetered,
   });
   return *settings;
 }
@@ -406,6 +419,7 @@ const std::vector<mojom::Setting>& GetCellularDetailsSettings() {
       mojom::Setting::kCellularDns,
       mojom::Setting::kCellularProxy,
       mojom::Setting::kCellularAutoConnectToNetwork,
+      mojom::Setting::kCellularMetered,
   });
   return *settings;
 }
