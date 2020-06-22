@@ -12,6 +12,8 @@
 
 namespace local_search_service {
 
+enum class IndexId { kCrosSettings = 0, kMaxValue = kCrosSettings };
+
 struct Content {
   // An identifier for the content in Data.
   std::string id;
