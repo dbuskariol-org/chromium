@@ -2,26 +2,27 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_FUCHSIA_METRICS_FUCHSIA_PLAYBACK_EVENTS_RECORDER_H_
-#define MEDIA_FUCHSIA_METRICS_FUCHSIA_PLAYBACK_EVENTS_RECORDER_H_
+#ifndef MEDIA_MOJO_SERVICES_PLAYBACK_EVENTS_RECORDER_H_
+#define MEDIA_MOJO_SERVICES_PLAYBACK_EVENTS_RECORDER_H_
 
 #include "media/mojo/mojom/playback_events_recorder.mojom.h"
+#include "media/mojo/services/media_mojo_export.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "mojo/public/cpp/bindings/remote.h"
 
 namespace media {
 
-class FuchsiaPlaybackEventsRecorder : public mojom::PlaybackEventsRecorder {
+class MEDIA_MOJO_EXPORT PlaybackEventsRecorder : public mojom::PlaybackEventsRecorder {
  public:
   static void Create(
       mojo::PendingReceiver<mojom::PlaybackEventsRecorder> receiver);
 
-  FuchsiaPlaybackEventsRecorder();
-  ~FuchsiaPlaybackEventsRecorder() final;
+  PlaybackEventsRecorder();
+  ~PlaybackEventsRecorder() final;
 
-  FuchsiaPlaybackEventsRecorder(const FuchsiaPlaybackEventsRecorder&) = delete;
-  FuchsiaPlaybackEventsRecorder& operator=(
-      const FuchsiaPlaybackEventsRecorder&) = delete;
+  PlaybackEventsRecorder(const PlaybackEventsRecorder&) = delete;
+  PlaybackEventsRecorder& operator=(const PlaybackEventsRecorder&) =
+      delete;
 
   // mojom::PlaybackEventsRecorder implementation.
   void OnPlaying() final;
@@ -67,4 +68,4 @@ class FuchsiaPlaybackEventsRecorder : public mojom::PlaybackEventsRecorder {
 
 }  // namespace media
 
-#endif  // MEDIA_FUCHSIA_METRICS_FUCHSIA_PLAYBACK_EVENTS_RECORDER_H_
+#endif  // MEDIA_MOJO_SERVICES_PLAYBACK_EVENTS_RECORDER_H_

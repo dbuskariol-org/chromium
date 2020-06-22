@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "media/fuchsia/metrics/fuchsia_playback_events_recorder.h"
+#include "media/mojo/services/playback_events_recorder.h"
 
 #include "base/metrics/user_metrics.h"
 #include "base/test/simple_test_tick_clock.h"
@@ -13,9 +13,9 @@ namespace media {
 
 constexpr base::TimeDelta kSecond = base::TimeDelta::FromSeconds(1);
 
-class FuchsiaPlaybackEventsRecorderTest : public testing::Test {
+class PlaybackEventsRecorderTest : public testing::Test {
  public:
-  FuchsiaPlaybackEventsRecorderTest()
+  PlaybackEventsRecorderTest()
       : task_environment_(base::test::TaskEnvironment::MainThreadType::IO,
                           base::test::TaskEnvironment::TimeSource::MOCK_TIME) {
     time_base_ = base::TimeTicks::Now();
@@ -23,11 +23,11 @@ class FuchsiaPlaybackEventsRecorderTest : public testing::Test {
     base::SetRecordActionTaskRunner(
         task_environment_.GetMainThreadTaskRunner());
     action_callback_ = base::BindRepeating(
-        &FuchsiaPlaybackEventsRecorderTest::OnAction, base::Unretained(this));
+        &PlaybackEventsRecorderTest::OnAction, base::Unretained(this));
     base::AddActionCallback(action_callback_);
   }
 
-  ~FuchsiaPlaybackEventsRecorderTest() override {
+  ~PlaybackEventsRecorderTest() override {
     base::RemoveActionCallback(action_callback_);
   }
 
@@ -61,11 +61,11 @@ class FuchsiaPlaybackEventsRecorderTest : public testing::Test {
   base::TimeTicks time_base_;
 
   base::ActionCallback action_callback_;
-  FuchsiaPlaybackEventsRecorder recorder_;
+  PlaybackEventsRecorder recorder_;
   std::vector<Event> recorded_events_;
 };
 
-TEST_F(FuchsiaPlaybackEventsRecorderTest, PlayPause) {
+TEST_F(PlaybackEventsRecorderTest, PlayPause) {
   recorder_.OnNaturalSizeChanged(gfx::Size(640, 480));
   recorder_.OnPlaying();
   task_environment_.AdvanceClock(2 * kSecond);
@@ -78,7 +78,7 @@ TEST_F(FuchsiaPlaybackEventsRecorderTest, PlayPause) {
   });
 }
 
-TEST_F(FuchsiaPlaybackEventsRecorderTest, Error) {
+TEST_F(PlaybackEventsRecorderTest, Error) {
   recorder_.OnPlaying();
   task_environment_.AdvanceClock(2 * kSecond);
   recorder_.OnError(PIPELINE_ERROR_DECODE);
@@ -89,7 +89,7 @@ TEST_F(FuchsiaPlaybackEventsRecorderTest, Error) {
   });
 }
 
-TEST_F(FuchsiaPlaybackEventsRecorderTest, Buffering) {
+TEST_F(PlaybackEventsRecorderTest, Buffering) {
   recorder_.OnPlaying();
   recorder_.OnBufferingComplete();
   task_environment_.AdvanceClock(2 * kSecond);
@@ -105,7 +105,7 @@ TEST_F(FuchsiaPlaybackEventsRecorderTest, Buffering) {
   });
 }
 
-TEST_F(FuchsiaPlaybackEventsRecorderTest, Bitrate) {
+TEST_F(PlaybackEventsRecorderTest, Bitrate) {
   recorder_.OnPlaying();
   recorder_.OnBufferingComplete();
 
@@ -127,7 +127,7 @@ TEST_F(FuchsiaPlaybackEventsRecorderTest, Bitrate) {
   });
 }
 
-TEST_F(FuchsiaPlaybackEventsRecorderTest, BitrateAfterPause) {
+TEST_F(PlaybackEventsRecorderTest, BitrateAfterPause) {
   recorder_.OnPlaying();
   recorder_.OnBufferingComplete();
 
@@ -163,7 +163,7 @@ TEST_F(FuchsiaPlaybackEventsRecorderTest, BitrateAfterPause) {
   });
 }
 
-TEST_F(FuchsiaPlaybackEventsRecorderTest, BitrateAfterBuffering) {
+TEST_F(PlaybackEventsRecorderTest, BitrateAfterBuffering) {
   recorder_.OnPlaying();
   recorder_.OnBufferingComplete();
 

@@ -2,9 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "media/fuchsia/metrics/fuchsia_playback_events_recorder.h"
+#include "media/mojo/services/playback_events_recorder.h"
 
 #include "base/metrics/user_metrics.h"
+#include "base/strings/strcat.h"
+#include "base/strings/string_number_conversions.h"
 #include "base/strings/stringprintf.h"
 #include "mojo/public/cpp/bindings/self_owned_receiver.h"
 
@@ -15,8 +17,9 @@ namespace {
 void RecordEventWithValueAt(const char* name,
                             int64_t value,
                             base::TimeTicks time) {
-  base::RecordComputedActionAt(
-      base::StringPrintf("WebEngine.Media.%s:%ld", name, value), time);
+  base::RecordComputedActionAt(base::StrCat({"WebEngine.Media.", name, ":",
+                                             base::NumberToString(value)}),
+                               time);
 }
 
 void RecordEventWithValue(const char* name, int64_t value) {
@@ -28,10 +31,10 @@ constexpr base::TimeDelta kBitrateReportPeriod =
 
 }  // namespace
 
-FuchsiaPlaybackEventsRecorder::BitrateEstimator::BitrateEstimator() {}
-FuchsiaPlaybackEventsRecorder::BitrateEstimator::~BitrateEstimator() {}
+PlaybackEventsRecorder::BitrateEstimator::BitrateEstimator() {}
+PlaybackEventsRecorder::BitrateEstimator::~BitrateEstimator() {}
 
-void FuchsiaPlaybackEventsRecorder::BitrateEstimator::Update(
+void PlaybackEventsRecorder::BitrateEstimator::Update(
     const PipelineStatistics& stats) {
   base::TimeTicks now = base::TimeTicks::Now();
 
@@ -63,38 +66,38 @@ void FuchsiaPlaybackEventsRecorder::BitrateEstimator::Update(
   last_stats_time_ = now;
 }
 
-void FuchsiaPlaybackEventsRecorder::BitrateEstimator::OnPause() {
+void PlaybackEventsRecorder::BitrateEstimator::OnPause() {
   last_stats_ = {};
 }
 
 // static
-void FuchsiaPlaybackEventsRecorder::Create(
+void PlaybackEventsRecorder::Create(
     mojo::PendingReceiver<mojom::PlaybackEventsRecorder> receiver) {
-  mojo::MakeSelfOwnedReceiver(std::make_unique<FuchsiaPlaybackEventsRecorder>(),
+  mojo::MakeSelfOwnedReceiver(std::make_unique<PlaybackEventsRecorder>(),
                               std::move(receiver));
 }
 
-FuchsiaPlaybackEventsRecorder::FuchsiaPlaybackEventsRecorder() = default;
-FuchsiaPlaybackEventsRecorder::~FuchsiaPlaybackEventsRecorder() = default;
+PlaybackEventsRecorder::PlaybackEventsRecorder() = default;
+PlaybackEventsRecorder::~PlaybackEventsRecorder() = default;
 
-void FuchsiaPlaybackEventsRecorder::OnPlaying() {
+void PlaybackEventsRecorder::OnPlaying() {
   base::RecordComputedAction("WebEngine.Media.Playing");
 }
 
-void FuchsiaPlaybackEventsRecorder::OnPaused() {
+void PlaybackEventsRecorder::OnPaused() {
   base::RecordComputedAction("WebEngine.Media.Pause");
   bitrate_estimator_.OnPause();
 }
 
-void FuchsiaPlaybackEventsRecorder::OnSeeking() {
+void PlaybackEventsRecorder::OnSeeking() {
   buffering_state_ = BufferingState::kInitialBuffering;
 }
 
-void FuchsiaPlaybackEventsRecorder::OnEnded() {
+void PlaybackEventsRecorder::OnEnded() {
   base::RecordComputedAction("WebEngine.Media.Ended");
 }
 
-void FuchsiaPlaybackEventsRecorder::OnBuffering() {
+void PlaybackEventsRecorder::OnBuffering() {
   DCHECK(buffering_state_ == BufferingState::kBuffered);
 
   buffering_start_time_ = base::TimeTicks::Now();
@@ -103,7 +106,7 @@ void FuchsiaPlaybackEventsRecorder::OnBuffering() {
   bitrate_estimator_.OnPause();
 }
 
-void FuchsiaPlaybackEventsRecorder::OnBufferingComplete() {
+void PlaybackEventsRecorder::OnBufferingComplete() {
   auto now = base::TimeTicks::Now();
 
   if (buffering_state_ == BufferingState::kBuffering) {
@@ -121,17 +124,16 @@ void FuchsiaPlaybackEventsRecorder::OnBufferingComplete() {
   last_buffering_end_time_ = now;
 }
 
-void FuchsiaPlaybackEventsRecorder::OnError(PipelineStatus status) {
+void PlaybackEventsRecorder::OnError(PipelineStatus status) {
   RecordEventWithValue("Error", status);
 }
 
-void FuchsiaPlaybackEventsRecorder::OnNaturalSizeChanged(
-    const gfx::Size& size) {
+void PlaybackEventsRecorder::OnNaturalSizeChanged(const gfx::Size& size) {
   base::RecordComputedAction(base::StringPrintf(
       "WebEngine.Media.VideoResolution:%dx%d", size.width(), size.height()));
 }
 
-void FuchsiaPlaybackEventsRecorder::OnPipelineStatistics(
+void PlaybackEventsRecorder::OnPipelineStatistics(
     const PipelineStatistics& stats) {
   bitrate_estimator_.Update(stats);
 }
