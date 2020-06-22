@@ -32,6 +32,7 @@
 #include "components/embedder_support/android/metrics/android_metrics_service_client.h"
 #include "components/metrics/metrics_pref_names.h"
 #include "components/metrics/persistent_histograms.h"
+#include "components/policy/core/browser/configuration_policy_pref_store.h"
 #include "components/pref_registry/pref_registry_syncable.h"
 #include "components/prefs/in_memory_pref_store.h"
 #include "components/prefs/json_pref_store.h"
@@ -91,7 +92,27 @@ base::FilePath GetPrefStorePath() {
   return path;
 }
 
-std::unique_ptr<PrefService> CreatePrefService() {
+void CountOrRecordRestartsWithStaleSeed(PrefService* local_state,
+                                        bool is_loaded_seed_fresh) {
+  int restarts = local_state->GetInteger(prefs::kRestartsWithStaleSeed);
+  if (!is_loaded_seed_fresh) {
+    // If the seed isn't fresh, increase the restart count pref.
+    local_state->SetInteger(prefs::kRestartsWithStaleSeed, restarts + 1);
+  } else if (restarts > 0) {
+    // If the seed is fresh and the last restart had a stale seed, record and
+    // reset the restart count.
+    local_state->SetInteger(prefs::kRestartsWithStaleSeed, 0);
+    UMA_HISTOGRAM_COUNTS_100("Variations.RestartsWithStaleSeed", restarts);
+  }
+}
+}  // namespace
+
+AwFeatureListCreator::AwFeatureListCreator()
+    : aw_field_trials_(std::make_unique<AwFieldTrials>()) {}
+
+AwFeatureListCreator::~AwFeatureListCreator() {}
+
+std::unique_ptr<PrefService> AwFeatureListCreator::CreatePrefService() {
   auto pref_registry = base::MakeRefCounted<user_prefs::PrefRegistrySyncable>();
 
   AwMetricsServiceClient::RegisterPrefs(pref_registry.get());
@@ -119,6 +140,13 @@ std::unique_ptr<PrefService> CreatePrefService() {
       base::MakeRefCounted<JsonPrefStore>(GetPrefStorePath()), persistent_prefs,
       mojo::Remote<::prefs::mojom::TrackedPreferenceValidationDelegate>()));
 
+  pref_service_factory.set_managed_prefs(
+      base::MakeRefCounted<policy::ConfigurationPolicyPrefStore>(
+          browser_policy_connector_.get(),
+          browser_policy_connector_->GetPolicyService(),
+          browser_policy_connector_->GetHandlerList(),
+          policy::POLICY_LEVEL_MANDATORY));
+
   pref_service_factory.set_read_error_callback(
       base::BindRepeating(&HandleReadError));
 
@@ -130,27 +158,6 @@ std::unique_ptr<PrefService> CreatePrefService() {
                           base::TimeDelta::FromMinutes(1), 50);
   return service;
 }
-
-void CountOrRecordRestartsWithStaleSeed(PrefService* local_state,
-                                        bool is_loaded_seed_fresh) {
-  int restarts = local_state->GetInteger(prefs::kRestartsWithStaleSeed);
-  if (!is_loaded_seed_fresh) {
-    // If the seed isn't fresh, increase the restart count pref.
-    local_state->SetInteger(prefs::kRestartsWithStaleSeed, restarts + 1);
-  } else if (restarts > 0) {
-    // If the seed is fresh and the last restart had a stale seed, record and
-    // reset the restart count.
-    local_state->SetInteger(prefs::kRestartsWithStaleSeed, 0);
-    UMA_HISTOGRAM_COUNTS_100("Variations.RestartsWithStaleSeed", restarts);
-  }
-}
-
-}  // namespace
-
-AwFeatureListCreator::AwFeatureListCreator()
-    : aw_field_trials_(std::make_unique<AwFieldTrials>()) {}
-
-AwFeatureListCreator::~AwFeatureListCreator() {}
 
 void AwFeatureListCreator::SetUpFieldTrials() {
   auto* metrics_client = AwMetricsServiceClient::GetInstance();

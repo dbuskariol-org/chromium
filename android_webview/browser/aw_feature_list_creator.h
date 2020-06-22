@@ -45,6 +45,8 @@ class AwFeatureListCreator {
   }
 
  private:
+  std::unique_ptr<PrefService> CreatePrefService();
+
   // Sets up the field trials and related initialization.
   void SetUpFieldTrials();
 
