@@ -339,17 +339,13 @@ class CORE_EXPORT Document : public ContainerNode,
     return security_context_;
   }
 
-  // TODO(crbug.com/1029822): Temporary helpers to access ExecutionContext
-  // methods. These will need to be audited. Some might be useful permanent
-  // helpers.
+  // Helpers for getting state off of SecurityContext.
   const SecurityOrigin* GetSecurityOrigin() const;
   SecurityOrigin* GetMutableSecurityOrigin();
   ContentSecurityPolicy* GetContentSecurityPolicy() const;
   network::mojom::blink::WebSandboxFlags GetSandboxFlags() const;
   bool IsSandboxed(network::mojom::blink::WebSandboxFlags mask) const;
   SecureContextMode GetSecureContextMode() const;
-  bool IsSecureContext() const;
-  bool IsSecureContext(String& error_message) const;
   void SetSecureContextModeForTesting(SecureContextMode);
   OriginTrialContext* GetOriginTrialContext() const;
 
