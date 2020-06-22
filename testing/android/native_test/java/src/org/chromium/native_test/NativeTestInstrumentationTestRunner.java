@@ -18,7 +18,6 @@ import android.os.Process;
 import android.util.SparseArray;
 
 import org.chromium.base.Log;
-import org.chromium.base.test.util.UrlUtils;
 import org.chromium.test.reporter.TestStatusReceiver;
 
 import java.io.BufferedReader;
@@ -74,8 +73,6 @@ public class NativeTestInstrumentationTestRunner extends Instrumentation {
         mNativeTestActivity = arguments.getString(EXTRA_NATIVE_TEST_ACTIVITY);
         if (mNativeTestActivity == null) mNativeTestActivity = DEFAULT_NATIVE_TEST_ACTIVITY;
         mTransparentArguments.remove(EXTRA_NATIVE_TEST_ACTIVITY);
-
-        UrlUtils.setPathsFromBundle(arguments);
 
         String shardNanoTimeout = arguments.getString(EXTRA_SHARD_NANO_TIMEOUT);
         if (shardNanoTimeout != null) mShardNanoTimeout = Long.parseLong(shardNanoTimeout);
