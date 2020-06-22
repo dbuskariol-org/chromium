@@ -9315,6 +9315,30 @@
       If the policy is set to False or not set, the privacy warning notification will be pinned until the user dismisses it.''',
     },
     {
+      'name': 'ManagedGuestSessionPrivacyWarningsEnabled',
+      'owners': ['file: //components/policy/resources/OWNERS', 'ayaelattar@chromium.org'],
+      'device_only': True,
+      'type': 'main',
+      'schema': { 'type': 'boolean' },
+      'supported_on': ['chrome_os: 84-' ],
+      'features': {
+        'can_be_recommended': False,
+        'dynamic_refresh': True,
+        'per_profile': False,
+      },
+      'example_value': False,
+      'id': 723,
+      'caption': '''Reduce Managed-guest session auto-launch notifications''',
+      'tags': [],
+      'desc': ''' Controls the privacy warning of the managed-guest session on <ph name="PRODUCT_OS_NAME">$2<ex>Google Chrome OS</ex></ph>.
+
+      If this policy is set to False, the privacy warnings on the login screen and the auto-launch notification inside the managed-guest session will get deactivated.
+
+      This policy should not be used for devices used by the general public.
+
+      If the policy is set to True or not set, the privacy warning notification in the auto-launched managed-guest session will be pinned until the user dismisses it.''',
+    },
+    {
       'name': 'BackgroundModeEnabled',
       'owners': ['file://components/policy/resources/OWNERS'],
       'type': 'main',
@@ -21963,6 +21987,7 @@ The recommended way to configure policy on Windows is via GPO, although provisio
     'RequiredClientCertificateForDevice': 'required_client_certificate_for_device.required_client_certificate_for_device',
     'DeviceCrostiniArcAdbSideloadingAllowed': 'device_crostini_arc_adb_sideloading_allowed.mode',
     'MinimumChromeVersionEolMessage' : 'minimum_chrome_version_eol_message.value',
+    'ManagedGuestSessionPrivacyWarningsEnabled' : 'managed_guest_session_privacy_warnings.enabled',
   },
   'policy_atomic_group_definitions': [
     {
@@ -22428,6 +22453,6 @@ The recommended way to configure policy on Windows is via GPO, although provisio
   ],
   'placeholders': [],
   'deleted_policy_ids': [412, 476, 546, 562, 569, 578],
-  'highest_id_currently_used': 722,
+  'highest_id_currently_used': 723,
   'highest_atomic_group_id_currently_used': 38
 }

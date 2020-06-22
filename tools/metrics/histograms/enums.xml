@@ -20662,6 +20662,7 @@ Called by update_document_policy_enum.py.-->
   <int value="720" label="DeletePrintJobHistoryAllowed"/>
   <int value="721" label="EmojiSuggestionEnabled"/>
   <int value="722" label="AutoLaunchProtocolsFromOrigins"/>
+  <int value="723" label="ManagedGuestSessionPrivacyWarningsEnabled"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
