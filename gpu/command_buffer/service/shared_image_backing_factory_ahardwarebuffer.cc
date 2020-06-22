@@ -583,8 +583,9 @@ bool SharedImageBackingAHB::ProduceLegacyMailbox(
   DCHECK(!is_writing_);
   DCHECK_EQ(size_t{0}, active_readers_.size());
   DCHECK(hardware_buffer_handle_.is_valid());
-  legacy_texture_ = GenGLTexture(hardware_buffer_handle_.get(), GL_TEXTURE_2D,
-                                 color_space(), size(), ClearedRect());
+  legacy_texture_ =
+      GenGLTexture(hardware_buffer_handle_.get(), GL_TEXTURE_2D, color_space(),
+                   size(), estimated_size(), ClearedRect());
   if (!legacy_texture_)
     return false;
   // Make sure our |legacy_texture_| has the right initial cleared rect.
@@ -611,8 +612,9 @@ SharedImageBackingAHB::ProduceGLTexture(SharedImageManager* manager,
   // doesn't supports it. As per the egl documentation -
   // https://www.khronos.org/registry/OpenGL/extensions/OES/OES_EGL_image_external.txt
   // if GL_OES_EGL_image is supported then <target> may also be TEXTURE_2D.
-  auto* texture = GenGLTexture(hardware_buffer_handle_.get(), GL_TEXTURE_2D,
-                               color_space(), size(), ClearedRect());
+  auto* texture =
+      GenGLTexture(hardware_buffer_handle_.get(), GL_TEXTURE_2D, color_space(),
+                   size(), estimated_size(), ClearedRect());
   if (!texture)
     return nullptr;
 
@@ -644,8 +646,9 @@ SharedImageBackingAHB::ProduceSkia(
   }
   DCHECK(context_state->GrContextIsGL());
   DCHECK(hardware_buffer_handle_.is_valid());
-  auto* texture = GenGLTexture(hardware_buffer_handle_.get(), GL_TEXTURE_2D,
-                               color_space(), size(), ClearedRect());
+  auto* texture =
+      GenGLTexture(hardware_buffer_handle_.get(), GL_TEXTURE_2D, color_space(),
+                   size(), estimated_size(), ClearedRect());
   if (!texture)
     return nullptr;
   auto gl_representation =
