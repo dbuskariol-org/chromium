@@ -55650,10 +55650,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="11"
       label="Preview Allowed without server rule check (obsolete)."/>
   <int value="12" label="Committed Preview."/>
-  <int value="13" label="Received no-transform directive.">
-    Response header had Cache-Control:no-transform directive (developer
-    opt-out).
-  </int>
+  <int value="13" label="Received cache-control:no-transform directive."/>
   <int value="14"
       label="Network is not slow per session threshold (obsolete)."/>
   <int value="15" label="Device was reported as offline."/>
