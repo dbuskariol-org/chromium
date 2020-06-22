@@ -417,7 +417,7 @@ crbug.com/1050993 [ Linux ] virtual/gpu-rasterization/images/drag-image-descenda
 crbug.com/1054894 http/tests/images/image-decode-in-frame.html [ Pass Timeout ]
 
 # Flaky test.
-crbug.com/1097332 external/wpt/measure-memory/detached.tentative.window.html [ Failure ]
+crbug.com/1097332 external/wpt/measure-memory/detached.tentative.window.html [ Pass Failure ]
 
 # ====== Paint team owned tests to here ======
 
