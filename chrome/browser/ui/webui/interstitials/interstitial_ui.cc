@@ -266,9 +266,13 @@ std::unique_ptr<LookalikeUrlBlockingPage> CreateLookalikeInterstitialPage(
     content::WebContents* web_contents) {
   GURL request_url("https://example.net");
   GURL safe_url("https://example.com");
-
+  std::string url_param;
+  if (net::GetValueForKeyInQuery(web_contents->GetURL(), "no-safe-url",
+                                 &url_param)) {
+    safe_url = GURL();
+  }
   return std::make_unique<LookalikeUrlBlockingPage>(
-      web_contents, safe_url, ukm::kInvalidSourceId,
+      web_contents, safe_url, request_url, ukm::kInvalidSourceId,
       LookalikeUrlMatchType::kNone,
       std::make_unique<LookalikeUrlControllerClient>(web_contents, request_url,
                                                      safe_url));
