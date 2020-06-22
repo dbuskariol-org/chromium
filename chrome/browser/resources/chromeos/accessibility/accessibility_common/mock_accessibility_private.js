@@ -33,7 +33,7 @@ var MockAccessibilityPrivate = {
   },
 
   /**
-   * Called when Autoclick finds scrollable bounds at a point.
+   * Called when AccessibilityCommon finds scrollable bounds at a point.
    * @param {!chrome.accessibilityPrivate.ScreenRect} bounds
    */
   onScrollableBoundsForPointFound: (bounds) => {
@@ -42,8 +42,8 @@ var MockAccessibilityPrivate = {
   },
 
   /**
-   * Called when Autoclick wants to set the focus rings. We can assume that
-   * it is only setting one set of rings at a time, and safely extract
+   * Called when AccessibilityCommon wants to set the focus rings. We can assume
+   * that it is only setting one set of rings at a time, and safely extract
    * focusRingInfos[0].rects.
    * @param {!Array<!FocusRingInfo>} focusRingInfos
    */
@@ -54,9 +54,9 @@ var MockAccessibilityPrivate = {
   // Methods for testing. //
 
   /**
-   * Called to get the autoclick extension to use the Automation API to find
-   * the scrollable bounds at a point. In Automatic Clicks, this would actually
-   * be initiated by ash/autoclick/autoclick_controller calling the
+   * Called to get the AccessibilityCommon extension to use the Automation API
+   * to find the scrollable bounds at a point. In Automatic Clicks, this would
+   * actually be initiated by ash/autoclick/autoclick_controller calling the
    * AccessibilityPrivate API call.
    * When the bounds are found, onScrollableBoundsForPointFoundCallback will
    * be called to inform the test that work is complete.
@@ -72,7 +72,8 @@ var MockAccessibilityPrivate = {
       },
 
   /**
-   * Gets the scrollable bounds which were found by the Autoclick extension.
+   * Gets the scrollable bounds which were found by the AccessibilityCommon
+   * extension.
    * @return {Array<!chrome.AccessibilityPrivate.ScreenRect>}
    */
   getScrollableBounds: () => {
@@ -80,7 +81,8 @@ var MockAccessibilityPrivate = {
   },
 
   /**
-   * Gets the focus rings bounds which were set by the Autoclick extension.
+   * Gets the focus rings bounds which were set by the AccessibilityCommon
+   * extension.
    * @return {Array<!chrome.AccessibilityPrivate.ScreenRect>}
    */
   getFocusRings: () => {

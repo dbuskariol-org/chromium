@@ -11,16 +11,17 @@ import("//third_party/closure_compiler/compile_js.gni")
 
 assert(is_chromeos)
 
-autoclick_dir = "$root_out_dir/resources/chromeos/accessibility/autoclick"
+accessibility_common_dir =
+    "$root_out_dir/resources/chromeos/accessibility/accessibility_common"
 
 group("build") {
-  deps = [ ":autoclick_copied_files" ]
+  deps = [ ":accessibility_common_copied_files" ]
 }
 
 # Instead of setting up copy targets, use a script to copy all files.
-run_jsbundler("autoclick_copied_files") {
+run_jsbundler("accessibility_common_copied_files") {
   mode = "copy"
-  dest_dir = autoclick_dir
+  dest_dir = accessibility_common_dir
   sources = [ "autoclick.js" ]
   rewrite_rules = [
     rebase_path(".", root_build_dir) + ":",
@@ -32,25 +33,25 @@ source_set("browser_tests") {
   testonly = true
   assert(enable_extensions)
 
-  deps = [ ":autoclick_extjs_tests" ]
+  deps = [ ":accessibility_common_extjs_tests" ]
 
   data = [
     "$root_out_dir/chrome_100_percent.pak",
     "$root_out_dir/chrome_200_percent.pak",
     "$root_out_dir/locales/en-US.pak",
     "$root_out_dir/resources.pak",
-    "$root_out_dir/resources/chromeos/accessibility/autoclick/",
-    "$root_out_dir/test_data/chrome/browser/resources/chromeos/accessibility/autoclick/",
+    "$root_out_dir/resources/chromeos/accessibility/accessibility_common/",
+    "$root_out_dir/test_data/chrome/browser/resources/chromeos/accessibility/accessibility_common/",
 
     # The test uses data from the original location, not the copied one.
-    "//chrome/browser/resources/chromeos/accessibility/autoclick/",
+    "//chrome/browser/resources/chromeos/accessibility/accessibility_common/",
     "//chrome/browser/resources/chromeos/accessibility/common/",
     "//ui/webui/resources/js/cr.js",
   ]
   data += js2gtest_js_libraries
 }
 
-js2gtest("autoclick_extjs_tests") {
+js2gtest("accessibility_common_extjs_tests") {
   test_type = "extension"
   sources = [ "autoclick_test.js" ]
   gen_include_files = [
@@ -70,10 +71,10 @@ js2gtest("autoclick_extjs_tests") {
 }
 
 js_type_check("closure_compile") {
-  deps = [ ":autoclick" ]
+  deps = [ ":accessibility_common" ]
 }
 
-js_library("autoclick") {
+js_library("accessibility_common") {
   deps = []
   externs_list = [
     "$externs_path/accessibility_private.js",

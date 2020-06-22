@@ -40,7 +40,7 @@ AutoclickE2ETest = class extends testing.Test {
           base::Unretained(chromeos::AccessibilityManager::Get()),
           true);
   chromeos::AccessibilityManager::Get()->EnableAutoclick(true);
-  WaitForExtension(extension_misc::kAutoclickExtensionId, load_cb);
+  WaitForExtension(extension_misc::kAccessibilityCommonExtensionId, load_cb);
     `);
   }
 

@@ -37,9 +37,7 @@ class Autoclick {
   }
 
   /**
-   * Initializes the autoclick extension.
-   * TODO(crbug.com/978163): Set up listeners for AccessibilityPrivate events
-   * related to autoclicks.
+   * Initializes the AccessibilityCommon extension.
    * @private
    */
   init_() {
@@ -146,5 +144,5 @@ class Autoclick {
   }
 }
 
-// Initialize the Autoclick extension.
+// Initialize the AccessibilityCommon extension.
 var autoclick = new Autoclick(true /* blink focus rings */);

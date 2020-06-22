@@ -3,15 +3,15 @@
   "key": "{{key}}",
 {% endif %}
   "manifest_version": 2,
-  "name": "Automatic Clicks",
+  "name": "Accessibility Common",
   "version": "{{set_version}}",
-  "description": "Automatic clicks extension to communicate with the Automation API",
+  "description": "Accessibility Common extension to communicate with the Automation API",
 {% if is_guest_manifest == '1' %}
   "incognito": "split",
 {% endif %}
   "background": {
     "scripts": [
-      "autoclick/autoclick.js"
+      "accessibility_common/autoclick.js"
     ]
   },
   "permissions": [
