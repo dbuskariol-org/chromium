@@ -195,6 +195,7 @@ class COMPONENTS_DOWNLOAD_EXPORT DownloadItemImpl
       base::Time last_access_time,
       bool transient,
       const std::vector<DownloadItem::ReceivedSlice>& received_slices,
+      base::Optional<DownloadSchedule> download_schedule,
       std::unique_ptr<DownloadEntry> download_entry);
 
   // Constructing for a regular download.

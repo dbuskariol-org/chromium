@@ -314,6 +314,7 @@ DownloadItemImpl::DownloadItemImpl(
     base::Time last_access_time,
     bool transient,
     const std::vector<DownloadItem::ReceivedSlice>& received_slices,
+    base::Optional<DownloadSchedule> download_schedule,
     std::unique_ptr<DownloadEntry> download_entry)
     : request_info_(url_chain,
                     referrer_url,
@@ -352,7 +353,8 @@ DownloadItemImpl::DownloadItemImpl(
       last_modified_time_(last_modified),
       etag_(etag),
       received_slices_(received_slices),
-      is_updating_observers_(false) {
+      is_updating_observers_(false),
+      download_schedule_(std::move(download_schedule)) {
   delegate_->Attach();
   DCHECK(state_ == COMPLETE_INTERNAL || state_ == INTERRUPTED_INTERNAL ||
          state_ == CANCELLED_INTERNAL);
