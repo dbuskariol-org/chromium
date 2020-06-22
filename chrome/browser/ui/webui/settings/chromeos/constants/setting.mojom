@@ -16,7 +16,7 @@ enum Setting {
   kDisconnectWifiNetwork = 5,
   kPreferWifiNetwork = 6,
   kForgetWifiNetwork = 7,
-  kConfigureWifi = 8,
+  kWifiAddNetwork = 8,
   kWifiAutoConfigureIp = 9,
   kWifiDns = 10,
   kWifiProxy = 11,

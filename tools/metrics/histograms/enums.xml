@@ -51159,7 +51159,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="5" label="Disconnect Wi-Fi Network"/>
   <int value="6" label="Prefer Wi-Fi Network"/>
   <int value="7" label="Forget Wi-Fi Network"/>
-  <int value="8" label="Configure Wi-Fi"/>
+  <int value="8" label="Wi-Fi: Add Network"/>
   <int value="9" label="Wi-Fi: Automatically Configure IP Address"/>
   <int value="10" label="Wi-Fi: DNS"/>
   <int value="11" label="Wi-Fi: Proxy"/>

@@ -115,6 +115,12 @@ const std::vector<SearchConcept>& GetWifiOnSearchConcepts() {
        mojom::SearchResultType::kSetting,
        {.setting = mojom::Setting::kWifiOnOff},
        {IDS_OS_SETTINGS_TAG_WIFI_TURN_OFF_ALT1, SearchConcept::kAltTagEnd}},
+      {IDS_OS_SETTINGS_TAG_ADD_WIFI,
+       mojom::kWifiNetworksSubpagePath,
+       mojom::SearchResultIcon::kWifi,
+       mojom::SearchResultDefaultRank::kMedium,
+       mojom::SearchResultType::kSetting,
+       {.setting = mojom::Setting::kWifiAddNetwork}},
   });
   return *tags;
 }
@@ -148,12 +154,6 @@ const std::vector<SearchConcept>& GetWifiConnectedSearchConcepts() {
        {.setting = mojom::Setting::kPreferWifiNetwork},
        {IDS_OS_SETTINGS_TAG_PREFER_WIFI_NETWORK_ALT1,
         SearchConcept::kAltTagEnd}},
-      {IDS_OS_SETTINGS_TAG_WIFI_CONFIGURE,
-       mojom::kWifiDetailsSubpagePath,
-       mojom::SearchResultIcon::kWifi,
-       mojom::SearchResultDefaultRank::kMedium,
-       mojom::SearchResultType::kSetting,
-       {.setting = mojom::Setting::kConfigureWifi}},
       {IDS_OS_SETTINGS_TAG_FORGET_WIFI,
        mojom::kWifiDetailsSubpagePath,
        mojom::SearchResultIcon::kWifi,
@@ -388,7 +388,6 @@ const std::vector<mojom::Setting>& GetWifiDetailsSettings() {
       mojom::Setting::kDisconnectWifiNetwork,
       mojom::Setting::kPreferWifiNetwork,
       mojom::Setting::kForgetWifiNetwork,
-      mojom::Setting::kConfigureWifi,
       mojom::Setting::kWifiAutoConfigureIp,
       mojom::Setting::kWifiDns,
       mojom::Setting::kWifiProxy,
@@ -678,8 +677,12 @@ void InternetSection::RegisterHierarchy(HierarchyGenerator* generator) const {
       IDS_SETTINGS_INTERNET_WIFI_NETWORKS, mojom::Subpage::kWifiNetworks,
       mojom::SearchResultIcon::kWifi, mojom::SearchResultDefaultRank::kMedium,
       mojom::kWifiNetworksSubpagePath);
-  generator->RegisterNestedSetting(mojom::Setting::kWifiOnOff,
-                                   mojom::Subpage::kWifiNetworks);
+  static constexpr mojom::Setting kWifiNetworksSettings[] = {
+      mojom::Setting::kWifiOnOff,
+      mojom::Setting::kWifiAddNetwork,
+  };
+  RegisterNestedSettingBulk(mojom::Subpage::kWifiNetworks,
+                            kWifiNetworksSettings, generator);
   generator->RegisterTopLevelAltSetting(mojom::Setting::kWifiOnOff);
 
   // Wi-Fi details.
