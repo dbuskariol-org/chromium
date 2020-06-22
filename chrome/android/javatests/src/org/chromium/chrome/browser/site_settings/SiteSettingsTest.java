@@ -442,7 +442,8 @@ public class SiteSettingsTest {
         final String url = mPermissionRule.getURL("/chrome/test/data/android/cookie.html");
 
         // Load the page and clear any set cookies.
-        mPermissionRule.loadUrl(url + "#clear");
+        mPermissionRule.loadUrl(url);
+        mPermissionRule.runJavaScriptCodeInCurrentTab("clearCookie()");
         Assert.assertEquals("\"\"", mPermissionRule.runJavaScriptCodeInCurrentTab("getCookie()"));
         mPermissionRule.runJavaScriptCodeInCurrentTab("setCookie()");
         Assert.assertEquals(
@@ -469,7 +470,8 @@ public class SiteSettingsTest {
         final String url = mPermissionRule.getURL("/chrome/test/data/android/cookie.html");
 
         // Load the page and clear any set cookies.
-        mPermissionRule.loadUrl(url + "#clear");
+        mPermissionRule.loadUrl(url);
+        mPermissionRule.runJavaScriptCodeInCurrentTab("clearCookie()");
         Assert.assertEquals("\"\"", mPermissionRule.runJavaScriptCodeInCurrentTab("getCookie()"));
         mPermissionRule.runJavaScriptCodeInCurrentTab("setCookie()");
         Assert.assertEquals("\"\"", mPermissionRule.runJavaScriptCodeInCurrentTab("getCookie()"));
@@ -483,7 +485,6 @@ public class SiteSettingsTest {
      * Blocks specific sites from setting cookies and ensures that no cookies can be set.
      */
     @Test
-    @DisabledTest(message = "crbug.com/1090274")
     @SmallTest
     @Feature({"Preferences"})
     // Todo(eokoyomon) figure out how to set and test third party cookie setting in this test
@@ -498,7 +499,8 @@ public class SiteSettingsTest {
         final String url = mPermissionRule.getURL("/chrome/test/data/android/cookie.html");
 
         // Load the page and clear any set cookies.
-        mPermissionRule.loadUrl(url + "#clear");
+        mPermissionRule.loadUrl(url);
+        mPermissionRule.runJavaScriptCodeInCurrentTab("clearCookie()");
         Assert.assertEquals("\"\"", mPermissionRule.runJavaScriptCodeInCurrentTab("getCookie()"));
 
         // Check cookies can be set for this website when there is no rule.
@@ -507,7 +509,8 @@ public class SiteSettingsTest {
                 "\"Foo=Bar\"", mPermissionRule.runJavaScriptCodeInCurrentTab("getCookie()"));
 
         // Set specific rule to block site and ensure it cannot set cookies.
-        mPermissionRule.loadUrl(url + "#clear");
+        mPermissionRule.loadUrl(url);
+        mPermissionRule.runJavaScriptCodeInCurrentTab("clearCookie()");
         settingsActivity =
                 SiteSettingsTestUtils.startSiteSettingsCategory(SiteSettingsCategory.Type.COOKIES);
         setBlockCookiesSiteException(settingsActivity, url, false);
