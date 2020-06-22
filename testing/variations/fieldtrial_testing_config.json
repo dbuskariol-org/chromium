@@ -6966,28 +6966,6 @@
             ]
         }
     ],
-    "TrustTokenOriginTrial": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "Enabled",
-                    "params": {
-                        "TrustTokenOperationsRequiringOriginTrial": "only-issuance-requires-origin-trial"
-                    },
-                    "enable_features": [
-                        "TrustTokens"
-                    ]
-                }
-            ]
-        }
-    ],
     "TrustedTypes": [
         {
             "platforms": [
