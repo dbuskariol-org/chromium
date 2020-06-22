@@ -7,7 +7,7 @@ http://
 http://127
 http://127.0.0.1:8
 
-# This should be ignored, because explicit entries are checked before online whitelist
+# This should be ignored, because explicit entries are checked before online allowlist
 counter.php?cached
 
 # This should work normally.
