@@ -6,12 +6,39 @@
 
 #include <utility>
 
+#include "base/metrics/histogram_functions.h"
 #include "chrome/browser/browser_process.h"
 #include "chrome/browser/chromeos/local_search_service/linear_map_search.h"
 
 namespace local_search_service {
 
+namespace {
+
+void LogSearchResultsStats(const std::string& histogram_prefix,
+                           ResponseStatus status,
+                           size_t num_results) {
+  base::UmaHistogramEnumeration(histogram_prefix + ".ResponseStatus", status);
+  if (status == ResponseStatus::kSuccess) {
+    // Only logs number of results if search is a success.
+    base::UmaHistogramCounts100(histogram_prefix + ".NumberResults",
+                                num_results);
+  }
+}
+
+std::string IndexIdBasedHistogramPrefix(IndexId index_id) {
+  const std::string prefix = "LocalSearchService.";
+  switch (index_id) {
+    case IndexId::kCrosSettings:
+      return prefix + "CrosSettings";
+    default:
+      return "";
+  }
+}
+
+}  // namespace
+
 Index::Index(IndexId index_id) : index_id_(index_id) {
+  histogram_prefix_ = IndexIdBasedHistogramPrefix(*index_id_);
   linear_map_search_ = std::make_unique<LinearMapSearch>();
   if (!g_browser_process || !g_browser_process->local_state()) {
     return;
@@ -46,8 +73,11 @@ ResponseStatus Index::Find(const base::string16& query,
                            std::vector<Result>* results) {
   DCHECK(linear_map_search_);
   ResponseStatus status = linear_map_search_->Find(query, max_results, results);
+  if (!histogram_prefix_.empty())
+    LogSearchResultsStats(histogram_prefix_, status, results->size());
   if (reporter_)
     reporter_->OnSearchPerformed();
+
   return status;
 }
 

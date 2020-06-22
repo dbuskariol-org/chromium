@@ -58,6 +58,7 @@ class Index {
   SearchParams GetSearchParamsForTesting();
  private:
   base::Optional<IndexId> index_id_;
+  std::string histogram_prefix_;
   std::unique_ptr<SearchMetricsReporter> reporter_;
   // TODO(jiameng): Currently linear map is the only backend supported. We will
   // add inverted index in the next CLs.

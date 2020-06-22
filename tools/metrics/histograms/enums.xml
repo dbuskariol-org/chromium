@@ -38688,6 +38688,13 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="1" label="SinkNeverStarted"/>
 </enum>
 
+<enum name="LocalSearchServiceResponseStatus">
+  <int value="0" label="UnknownError"/>
+  <int value="1" label="Success"/>
+  <int value="2" label="EmptyQuery"/>
+  <int value="3" label="EmptyIndex"/>
+</enum>
+
 <enum name="LocalSiteCharacteristicsDBInitStatus">
   <int value="0" label="Success"/>
   <int value="1" label="Corruption"/>
