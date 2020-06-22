@@ -96,34 +96,27 @@
 #     e.g. the name of the caption of ProxyServerDisabled:
 #       IDS_POLICY_ENUM_PROXYSERVERDISABLED_CAPTION
 #
-# Products and versions:
-#   Each policy has the list of products and version numbers where it is
-#   supported under the key 'supported_on'. Each item of this list has the
-#   form of 'product:since_version-until_version', which means that support
-#   for the policy in 'product' was introduced in 'since_version' and removed
-#   after 'until_version'. Product names may contain a suffix specifying a
-#   platform name, e.g.: 'chrome.win' is read as 'Chrome on Windows'. Version
-#   numbers can be any string that does not contain ':' or '-' characters.
+#   Each policy has the list of platforms where it is supported under the key
+#   'supported_on' or 'future_on'. The 'supported_on' lists all released
+#   platforms while the 'future_on' is used to enumerate platforms where the
+#   feature is not yet ready for use in production environments. Any unreleased
+#   platforms is hidden from policy templates and documentation. The policy
+#   defination in the source code is generated for platforms in both lists.
 #
-#   Currently supported product names:
-#       'chrome_frame', 'chrome_os', 'android', 'webview_android', 'ios',
-#       'chrome.win', 'chrome.win7', 'chrome.linux', 'chrome.mac', 'chrome.*'
-#     For example if 'chrome.*:5-10' is specified for a policy, then it should
-#     be read as:
-#       'chrome.linux:5-10', 'chrome.mac:5-10', 'chrome.win:5-10'
+#   The format of the 'supported_on' is '<platform>:<since_version>-<until_version>'.
+#   It means the policy is officially released on the |platform| from
+#   |since_version| and is removed after |until_version|. |until_version|
+#   is optional.
 #
-#   The product name also affects in which templates the policy is included:
-#     chrome.*, chrome.win, chrome_frame -> ADM, ADMX, ADML, doc
-#     chrome.*, chrome.linux -> JSON, doc
-#     chrome.*, chrome.mac, ios -> plist, plist_strings, doc
-#     everything else -> doc
+#   The format of the 'futured_on' list entries is '<platform>'.
+#   There is no version range attached to it and the policy is available in the
+#   Dev and Canary channel only unless it's listed in the
+#   EnableExperimentalPolicies policy.
 #
-#   The default list of policies supported by Chrome is also generated based
-#   on the product names:
-#     chrome.* -> Chrome policy definition list
-#     chrome_os -> Chrome policy definition list, when building OS_CHROMEOS
-#
-#   Note: chrome_frame is deprecated.
+#   Currently supported platforms:
+#       'chrome.win', 'chrome.win7', 'chrome.mac', 'chrome.linux', 'chrome.*'
+#       'chrome_os', 'android', 'webview_android', 'ios', 'chrome_frame'
+#   Note that 'chrome_frame' has been deprecated.
 #
 # Annotations:
 #   Additional information is specified under keys 'features' and
@@ -158,12 +151,8 @@
 #   that a policy can reference, in bytes. This annotation is compulsory for
 #   policies of type 'external'. It is ignored for all other policy types.
 #
-#   The 'future' key is used to indicate that a policy isn't yet ready for
-#   usage. It defaults to False, and currently affects the generated policy
-#   templates and documentation. The policy definition list that Chrome sees
-#   will include policies marked with 'future'. If a WIP policy isn't meant to
-#   be seen by the policy providers either, the 'supported_on' key should be set
-#   to an empty list.
+#   The 'future' key has been deprecated, please use 'future_on' instead for
+#   unreleased policies.
 #
 # Schemas:
 #   All policies have a key 'schema' which describes the schema of the policy.
