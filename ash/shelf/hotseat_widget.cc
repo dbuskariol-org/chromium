@@ -661,16 +661,20 @@ void HotseatWidget::CalculateTargetBounds() {
   const gfx::Size status_size =
       shelf_->status_area_widget()->GetTargetBounds().size();
   const gfx::Rect shelf_bounds = shelf_->shelf_widget()->GetTargetBounds();
-  const int horizontal_edge_spacing =
-      ShelfConfig::Get()->control_button_edge_spacing(
-          shelf_->IsHorizontalAlignment());
-  const int vertical_edge_spacing =
-      ShelfConfig::Get()->control_button_edge_spacing(
-          !shelf_->IsHorizontalAlignment());
   gfx::Rect nav_bounds = shelf_->navigation_widget()->GetTargetBounds();
+
   gfx::Point hotseat_origin;
   int hotseat_width;
   int hotseat_height;
+
+  // The navigation widget has extra padding on the hotseat side, to center the
+  // buttons inside of it. Make sure to get the extra nav widget padding and
+  // take it into account when calculating the hotseat size.
+  const int nav_widget_padding =
+      nav_bounds.size().IsEmpty()
+          ? 0
+          : ShelfConfig::Get()->control_button_edge_spacing(
+                true /* is_primary_axis_edge */);
 
   // The minimum gap between hotseat widget and other shelf components including
   // the status area widget and shelf navigation widget (or the edge of display,
@@ -678,14 +682,13 @@ void HotseatWidget::CalculateTargetBounds() {
   const int group_margin = ShelfConfig::Get()->app_icon_group_margin();
 
   if (shelf_->IsHorizontalAlignment()) {
-    hotseat_width = shelf_bounds.width() - nav_bounds.size().width() -
-                    horizontal_edge_spacing - 2 * group_margin -
-                    status_size.width();
+    hotseat_width = shelf_bounds.width() -
+                    (nav_bounds.size().width() - nav_widget_padding) -
+                    2 * group_margin - status_size.width();
     int hotseat_x =
         base::i18n::IsRTL()
-            ? nav_bounds.x() - horizontal_edge_spacing - group_margin -
-                  hotseat_width
-            : nav_bounds.right() + horizontal_edge_spacing + group_margin;
+            ? nav_bounds.x() + nav_widget_padding - group_margin - hotseat_width
+            : nav_bounds.right() - nav_widget_padding + group_margin;
     if (hotseat_target_state != HotseatState::kShownHomeLauncher &&
         hotseat_target_state != HotseatState::kShownClamshell) {
       // Give the hotseat more space if it is shown outside of the shelf.
@@ -698,11 +701,11 @@ void HotseatWidget::CalculateTargetBounds() {
   } else {
     hotseat_origin =
         gfx::Point(shelf_bounds.x(),
-                   nav_bounds.bottom() + vertical_edge_spacing + group_margin);
+                   nav_bounds.bottom() - nav_widget_padding + group_margin);
     hotseat_width = shelf_bounds.width();
-    hotseat_height = shelf_bounds.height() - nav_bounds.size().height() -
-                     vertical_edge_spacing - 2 * group_margin -
-                     status_size.height();
+    hotseat_height = shelf_bounds.height() -
+                     (nav_bounds.size().height() - nav_widget_padding) -
+                     2 * group_margin - status_size.height();
   }
   target_bounds_ =
       gfx::Rect(hotseat_origin, gfx::Size(hotseat_width, hotseat_height));
