@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/performance_manager/policies/dynamic_tcmalloc_policy_linux.h"
+#include "chrome/browser/performance_manager/policies/dynamic_tcmalloc_policy_chromeos.h"
 
 #include <algorithm>
 

@@ -2680,14 +2680,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kPluginVmShowMicrophonePermissionsDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(
          chromeos::features::kPluginVmShowMicrophonePermissions)},
-#endif  // OS_CHROMEOS
-#if defined(OS_CHROMEOS) || defined(OS_LINUX)
 #if BUILDFLAG(USE_TCMALLOC)
     {"dynamic-tcmalloc-tuning", flag_descriptions::kDynamicTcmallocName,
-     flag_descriptions::kDynamicTcmallocDescription, kOsCrOS | kOsLinux,
+     flag_descriptions::kDynamicTcmallocDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(performance_manager::features::kDynamicTcmallocTuning)},
 #endif  // BUILDFLAG(USE_TCMALLOC)
-#endif  // OS_CHROMEOS || OS_LINUX
+#endif  // OS_CHROMEOS
 #if defined(OS_ANDROID)
     {"enable-credit-card-assist", flag_descriptions::kCreditCardAssistName,
      flag_descriptions::kCreditCardAssistDescription, kOsAndroid,

@@ -4299,13 +4299,15 @@ static_library("browser") {
       deps += [ "//ui/gfx/x" ]
     }
     deps += [ "//services/service_manager/zygote" ]
+  }
 
+  if (is_chromeos) {
     if (use_allocator == "tcmalloc") {
       deps += [ "//chrome/common/performance_manager/mojom" ]
 
       sources += [
-        "performance_manager/policies/dynamic_tcmalloc_policy_linux.cc",
-        "performance_manager/policies/dynamic_tcmalloc_policy_linux.h",
+        "performance_manager/policies/dynamic_tcmalloc_policy_chromeos.cc",
+        "performance_manager/policies/dynamic_tcmalloc_policy_chromeos.h",
       ]
     }
   }
