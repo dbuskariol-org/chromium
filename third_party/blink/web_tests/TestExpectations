@@ -6739,6 +6739,10 @@ crbug.com/1097765 external/wpt/wasm/webapi/instantiateStreaming.any.serviceworke
 crbug.com/1097765 external/wpt/wasm/webapi/instantiateStreaming.any.sharedworker.html [ Failure Pass ]
 crbug.com/1097765 external/wpt/wasm/webapi/instantiateStreaming.any.worker.html [ Failure Pass ]
 
+# Disabled for enabling Wasm multi-value support
+crbug.com/1097717 external/wpt/wasm/jsapi/constructor/multi-value.any.html [ Failure Pass ]
+crbug.com/1097717 external/wpt/wasm/jsapi/constructor/multi-value.any.worker.html [ Failure Pass ]
+
 # Disabled for landing DevTools change
 crbug.com/1011811 http/tests/devtools/network/network-xhr-data-received-async-response-type-blob.js [ Pass Failure ]
 crbug.com/1011811 http/tests/devtools/network/download.js [ Pass Failure ]
