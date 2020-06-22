@@ -699,8 +699,8 @@ class CONTENT_EXPORT RenderWidgetHostImpl
   // there are any queued messages belonging to it, they will be processed.
   void DidProcessFrame(uint32_t frame_token);
 
-  viz::mojom::InputTargetClient* input_target_client() {
-    return input_target_client_.get();
+  mojo::Remote<viz::mojom::InputTargetClient>& input_target_client() {
+    return input_target_client_;
   }
 
   void SetInputTargetClient(
