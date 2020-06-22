@@ -9,6 +9,8 @@
 
 #include "base/bind.h"
 #include "base/files/file_util.h"
+#include "base/json/json_parser.h"
+#include "base/json/json_writer.h"
 #include "base/logging.h"
 #include "base/memory/ptr_util.h"
 #include "base/strings/string_number_conversions.h"

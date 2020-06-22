@@ -10,6 +10,7 @@
 #include <utility>
 #include <vector>
 
+#include "base/json/json_parser.h"
 #include "base/no_destructor.h"
 #include "base/strings/string_number_conversions.h"
 #include "components/schema_org/common/improved_metadata.mojom.h"

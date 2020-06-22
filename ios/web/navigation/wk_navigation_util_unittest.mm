@@ -139,8 +139,7 @@ TEST_F(WKNavigationUtilTest, CreateRestoreSessionUrlForLargeSession) {
   // Extract session JSON from restoration URL.
   base::JSONReader::ValueWithError value_with_error =
       ExtractSessionDict(restore_session_url);
-  ASSERT_EQ(base::ValueDeserializer::kErrorCodeNoError,
-            value_with_error.error_code);
+  ASSERT_EQ(base::JSONReader::JSON_NO_ERROR, value_with_error.error_code);
   ASSERT_TRUE(value_with_error.value.has_value());
 
   // Verify that all titles and URLs are present.
@@ -175,8 +174,7 @@ TEST_F(WKNavigationUtilTest, CreateRestoreSessionUrlForExtraLargeForwardList) {
   // Extract session JSON from restoration URL.
   base::JSONReader::ValueWithError value_with_error =
       ExtractSessionDict(restore_session_url);
-  ASSERT_EQ(base::ValueDeserializer::kErrorCodeNoError,
-            value_with_error.error_code);
+  ASSERT_EQ(base::JSONReader::JSON_NO_ERROR, value_with_error.error_code);
   ASSERT_TRUE(value_with_error.value.has_value());
 
   // Verify that first kMaxSessionSize titles and URLs are present.
@@ -221,8 +219,7 @@ TEST_F(WKNavigationUtilTest, CreateRestoreSessionUrlForExtraLargeBackList) {
   // Extract session JSON from restoration URL.
   base::JSONReader::ValueWithError value_with_error =
       ExtractSessionDict(restore_session_url);
-  ASSERT_EQ(base::ValueDeserializer::kErrorCodeNoError,
-            value_with_error.error_code);
+  ASSERT_EQ(base::JSONReader::JSON_NO_ERROR, value_with_error.error_code);
   ASSERT_TRUE(value_with_error.value.has_value());
 
   // Verify that last kMaxSessionSize titles and URLs are present.
@@ -268,8 +265,7 @@ TEST_F(WKNavigationUtilTest,
   // Extract session JSON from restoration URL.
   base::JSONReader::ValueWithError value_with_error =
       ExtractSessionDict(restore_session_url);
-  ASSERT_EQ(base::ValueDeserializer::kErrorCodeNoError,
-            value_with_error.error_code);
+  ASSERT_EQ(base::JSONReader::JSON_NO_ERROR, value_with_error.error_code);
   ASSERT_TRUE(value_with_error.value.has_value());
 
   // Verify that last kMaxSessionSize titles and URLs are present.
