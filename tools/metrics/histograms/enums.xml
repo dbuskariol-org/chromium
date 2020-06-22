@@ -23616,6 +23616,14 @@ Called by update_extension_histograms.py.-->
   <int value="5" label="NOTIFICATION_TYPE_CUSTOM"/>
 </enum>
 
+<enum name="ExtensionNoUpdatesInfo">
+  <int value="0" label="Unknown"/>
+  <int value="1" label="Empty"/>
+  <int value="2" label="Rate limit"/>
+  <int value="3" label="Disabled by client"/>
+  <int value="4" label="Bandwidth limit"/>
+</enum>
+
 <enum name="ExtensionPermission">
   <int value="0" label="UNKNOWN"/>
   <int value="1" label="NONE"/>
