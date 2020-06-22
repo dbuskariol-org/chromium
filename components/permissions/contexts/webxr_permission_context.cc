@@ -2,18 +2,19 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/vr/webxr_permission_context.h"
+#include "components/permissions/contexts/webxr_permission_context.h"
 
 #include "base/check.h"
 #include "third_party/blink/public/mojom/feature_policy/feature_policy.mojom.h"
 
 #if defined(OS_ANDROID)
-#include "chrome/browser/permissions/permission_update_infobar_delegate_android.h"
 #include "components/permissions/android/android_permission_util.h"
 #include "components/permissions/permission_request_id.h"
+#include "components/permissions/permissions_client.h"
 #include "content/public/browser/web_contents.h"
 #endif
 
+namespace permissions {
 WebXrPermissionContext::WebXrPermissionContext(
     content::BrowserContext* browser_context,
     ContentSettingsType content_settings_type)
@@ -43,10 +44,10 @@ bool WebXrPermissionContext::IsRestrictedToSecureOrigins() const {
 // mimic that flow, but keep all logic contained into the permission context
 // class.
 void WebXrPermissionContext::NotifyPermissionSet(
-    const permissions::PermissionRequestID& id,
+    const PermissionRequestID& id,
     const GURL& requesting_origin,
     const GURL& embedding_origin,
-    permissions::BrowserPermissionCallback callback,
+    BrowserPermissionCallback callback,
     bool persist,
     ContentSetting content_setting) {
   // Only AR needs to check for additional permissions, and then only if it was
@@ -82,11 +83,10 @@ void WebXrPermissionContext::NotifyPermissionSet(
   // Otherwise, the user granted permission to use AR, so now we need to check
   // if we need to prompt for android system permissions.
   std::vector<ContentSettingsType> permission_type = {content_settings_type_};
-  permissions::PermissionRepromptState reprompt_state =
-      permissions::ShouldRepromptUserForPermissions(web_contents,
-                                                    permission_type);
+  PermissionRepromptState reprompt_state =
+      ShouldRepromptUserForPermissions(web_contents, permission_type);
   switch (reprompt_state) {
-    case permissions::PermissionRepromptState::kNoNeed:
+    case PermissionRepromptState::kNoNeed:
       // We have already returned if permission was denied by the user, and this
       // indicates that we have all the OS permissions we need.
       OnAndroidPermissionDecided(id, requesting_origin, embedding_origin,
@@ -94,7 +94,7 @@ void WebXrPermissionContext::NotifyPermissionSet(
                                  true /*permission_granted*/);
       return;
 
-    case permissions::PermissionRepromptState::kCannotShow:
+    case PermissionRepromptState::kCannotShow:
       // If we cannot show the info bar, then we have to assume we don't have
       // the permissions we need.
       OnAndroidPermissionDecided(id, requesting_origin, embedding_origin,
@@ -102,9 +102,9 @@ void WebXrPermissionContext::NotifyPermissionSet(
                                  false /*permission_granted*/);
       return;
 
-    case permissions::PermissionRepromptState::kShow:
+    case PermissionRepromptState::kShow:
       // Otherwise, prompt the user that we need additional permissions.
-      PermissionUpdateInfoBarDelegate::Create(
+      PermissionsClient::Get()->RepromptForAndroidPermissions(
           web_contents, permission_type,
           base::BindOnce(&WebXrPermissionContext::OnAndroidPermissionDecided,
                          weak_ptr_factory_.GetWeakPtr(), id, requesting_origin,
@@ -114,10 +114,10 @@ void WebXrPermissionContext::NotifyPermissionSet(
 }
 
 void WebXrPermissionContext::OnAndroidPermissionDecided(
-    const permissions::PermissionRequestID& id,
+    const PermissionRequestID& id,
     const GURL& requesting_origin,
     const GURL& embedding_origin,
-    permissions::BrowserPermissionCallback callback,
+    BrowserPermissionCallback callback,
     bool permission_granted) {
   // If we were supposed to persist the setting we've already done so in the
   // initial override of |NotifyPermissionSet|. At this point, if the user
@@ -128,8 +128,9 @@ void WebXrPermissionContext::OnAndroidPermissionDecided(
   ContentSetting setting = permission_granted
                                ? ContentSetting::CONTENT_SETTING_ALLOW
                                : ContentSetting::CONTENT_SETTING_BLOCK;
-  permissions::PermissionContextBase::NotifyPermissionSet(
+  PermissionContextBase::NotifyPermissionSet(
       id, requesting_origin, embedding_origin, std::move(callback),
       false /*persist*/, setting);
 }
 #endif  // defined(OS_ANDROID)
+}  // namespace permissions

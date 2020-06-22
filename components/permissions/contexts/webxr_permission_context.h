@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_VR_WEBXR_PERMISSION_CONTEXT_H_
-#define CHROME_BROWSER_VR_WEBXR_PERMISSION_CONTEXT_H_
+#ifndef COMPONENTS_PERMISSIONS_CONTEXTS_WEBXR_PERMISSION_CONTEXT_H_
+#define COMPONENTS_PERMISSIONS_CONTEXTS_WEBXR_PERMISSION_CONTEXT_H_
 
 #include "base/macros.h"
 #include "base/memory/weak_ptr.h"
@@ -11,7 +11,8 @@
 #include "components/content_settings/core/common/content_settings_types.h"
 #include "components/permissions/permission_context_base.h"
 
-class WebXrPermissionContext : public permissions::PermissionContextBase {
+namespace permissions {
+class WebXrPermissionContext : public PermissionContextBase {
  public:
   WebXrPermissionContext(content::BrowserContext* browser_context,
                          ContentSettingsType content_settings_type);
@@ -32,19 +33,18 @@ class WebXrPermissionContext : public permissions::PermissionContextBase {
   // https://immersive-web.github.io/webxr/#dom-xrsystem-requestsession
   // When implementing navigator.xr.permission methods, we should ensure that
   // GetPermissionStatus is also updated to check these permissions.
-  void NotifyPermissionSet(const permissions::PermissionRequestID& id,
+  void NotifyPermissionSet(const PermissionRequestID& id,
                            const GURL& requesting_origin,
                            const GURL& embedding_origin,
-                           permissions::BrowserPermissionCallback callback,
+                           BrowserPermissionCallback callback,
                            bool persist,
                            ContentSetting content_setting) override;
 
-  void OnAndroidPermissionDecided(
-      const permissions::PermissionRequestID& id,
-      const GURL& requesting_origin,
-      const GURL& embedding_origin,
-      permissions::BrowserPermissionCallback callback,
-      bool permission_granted);
+  void OnAndroidPermissionDecided(const PermissionRequestID& id,
+                                  const GURL& requesting_origin,
+                                  const GURL& embedding_origin,
+                                  BrowserPermissionCallback callback,
+                                  bool permission_granted);
 #endif
 
   ContentSettingsType content_settings_type_;
@@ -54,4 +54,6 @@ class WebXrPermissionContext : public permissions::PermissionContextBase {
   base::WeakPtrFactory<WebXrPermissionContext> weak_ptr_factory_{this};
 };
 
-#endif  // CHROME_BROWSER_VR_WEBXR_PERMISSION_CONTEXT_H_
+}  // namespace permissions
+
+#endif  // COMPONENTS_PERMISSIONS_CONTEXTS_WEBXR_PERMISSION_CONTEXT_H_
