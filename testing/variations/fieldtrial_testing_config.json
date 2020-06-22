@@ -2031,7 +2031,8 @@
     "DefaultPassthroughCommandDecoder": [
         {
             "platforms": [
-                "linux"
+                "linux",
+                "mac"
             ],
             "experiments": [
                 {
