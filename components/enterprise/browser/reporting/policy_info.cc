@@ -2,21 +2,18 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/enterprise/reporting/policy_info.h"
+#include "components/enterprise/browser/reporting/policy_info.h"
 
 #include <string>
 
 #include "base/json/json_writer.h"
 #include "build/build_config.h"
-#include "chrome/browser/browser_process.h"
-#include "chrome/browser/policy/chrome_browser_policy_connector.h"
 #include "components/policy/core/browser/policy_conversions.h"
 #include "components/policy/core/common/cloud/cloud_policy_client.h"
 #include "components/policy/core/common/cloud/cloud_policy_constants.h"
 #include "components/policy/core/common/cloud/machine_level_user_cloud_policy_manager.h"
 #include "components/policy/core/common/policy_types.h"
 #include "components/strings/grit/components_strings.h"
-#include "ui/base/l10n/l10n_util.h"
 
 namespace em = enterprise_management;
 
@@ -129,11 +126,9 @@ void AppendExtensionPolicyInfoIntoProfileReport(
 }
 
 void AppendMachineLevelUserCloudPolicyFetchTimestamp(
-    em::ChromeUserProfileInfo* profile_info) {
+    em::ChromeUserProfileInfo* profile_info,
+    policy::MachineLevelUserCloudPolicyManager* manager) {
 #if !defined(OS_CHROMEOS)
-  policy::MachineLevelUserCloudPolicyManager* manager =
-      g_browser_process->browser_policy_connector()
-          ->machine_level_user_cloud_policy_manager();
   if (!manager || !manager->IsClientRegistered())
     return;
   auto* timestamp = profile_info->add_policy_fetched_timestamps();
@@ -141,7 +136,7 @@ void AppendMachineLevelUserCloudPolicyFetchTimestamp(
       policy::dm_protocol::kChromeMachineLevelExtensionCloudPolicyType);
   timestamp->set_timestamp(
       manager->core()->client()->last_policy_timestamp().ToJavaTime());
-#endif
+#endif  // !defined(OS_CHROMEOS)
 }
 
 }  // namespace enterprise_reporting

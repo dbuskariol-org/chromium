@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_ENTERPRISE_REPORTING_POLICY_INFO_H_
-#define CHROME_BROWSER_ENTERPRISE_REPORTING_POLICY_INFO_H_
+#ifndef COMPONENTS_ENTERPRISE_BROWSER_REPORTING_POLICY_INFO_H_
+#define COMPONENTS_ENTERPRISE_BROWSER_REPORTING_POLICY_INFO_H_
 
 #include "components/policy/proto/device_management_backend.pb.h"
 
@@ -11,6 +11,12 @@ namespace base {
 class Value;
 }
 
+namespace policy {
+class MachineLevelUserCloudPolicyManager;
+}
+
+// Unit tests are in chrome\browser\enterprise\reporting\policy_info_unittest.cc
+// TODO(crbug.com/1096499): Move the tests to this directory.
 namespace enterprise_reporting {
 
 void AppendChromePolicyInfoIntoProfileReport(
@@ -22,8 +28,9 @@ void AppendExtensionPolicyInfoIntoProfileReport(
     enterprise_management::ChromeUserProfileInfo* profile_info);
 
 void AppendMachineLevelUserCloudPolicyFetchTimestamp(
-    enterprise_management::ChromeUserProfileInfo* profile_info);
+    enterprise_management::ChromeUserProfileInfo* profile_info,
+    policy::MachineLevelUserCloudPolicyManager* manager);
 
 }  // namespace enterprise_reporting
 
-#endif  // CHROME_BROWSER_ENTERPRISE_REPORTING_POLICY_INFO_H_
+#endif  // COMPONENTS_ENTERPRISE_BROWSER_REPORTING_POLICY_INFO_H_
