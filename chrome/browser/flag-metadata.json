@@ -2730,6 +2730,11 @@
     "expiry_milestone": 90
   },
   {
+    "name": "global-media-controls-seamless-transfer",
+    "owners": [ "noahrose@google.com", "steimel", "media-dev" ],
+    "expiry_milestone": 93
+  },
+  {
     "name": "google-password-manager",
     "owners": [ "ioanap", "jdoerrie" ],
     "expiry_milestone": 87

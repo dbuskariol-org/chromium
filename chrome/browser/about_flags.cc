@@ -5070,6 +5070,12 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kGlobalMediaControlsPictureInPictureDescription,
      kOsWin | kOsMac | kOsLinux | kOsCrOS,
      FEATURE_VALUE_TYPE(media::kGlobalMediaControlsPictureInPicture)},
+
+    {"global-media-controls-seamless-transfer",
+     flag_descriptions::kGlobalMediaControlsSeamlessTransferName,
+     flag_descriptions::kGlobalMediaControlsSeamlessTransferDescription,
+     kOsWin | kOsMac | kOsLinux,
+     FEATURE_VALUE_TYPE(media::kGlobalMediaControlsSeamlessTransfer)},
 #endif  // defined(OS_WIN) || defined(OS_MACOSX) || defined(OS_LINUX)
 
 #if BUILDFLAG(ENABLE_SPELLCHECK) && defined(OS_WIN)

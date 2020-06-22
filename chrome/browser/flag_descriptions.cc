@@ -1118,6 +1118,13 @@ const char kGlobalMediaControlsPictureInPictureDescription[] =
     "Requires "
     "#global-media-controls to also be enabled.";
 
+const char kGlobalMediaControlsSeamlessTransferName[] =
+    "Global Media Controls Seamless Transfer";
+const char kGlobalMediaControlsSeamlessTransferDescription[] =
+    "Enables selection of audio output device to play media through in "
+    "the Global Media Controls UI. Requires #global-media-controls to "
+    "also be enabled.";
+
 const char kGpuRasterizationName[] = "GPU rasterization";
 const char kGpuRasterizationDescription[] = "Use GPU to rasterize web content.";
 

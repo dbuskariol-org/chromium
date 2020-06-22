@@ -655,6 +655,9 @@ extern const char kGlobalMediaControlsForCastDescription[];
 extern const char kGlobalMediaControlsPictureInPictureName[];
 extern const char kGlobalMediaControlsPictureInPictureDescription[];
 
+extern const char kGlobalMediaControlsSeamlessTransferName[];
+extern const char kGlobalMediaControlsSeamlessTransferDescription[];
+
 extern const char kGpuRasterizationName[];
 extern const char kGpuRasterizationDescription[];
 

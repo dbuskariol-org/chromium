@@ -39024,6 +39024,7 @@ from previous Chrome versions.
   <int value="-1982700103" label="EnableAppsGridGapFeature:enabled"/>
   <int value="-1980328793" label="trace-upload-url"/>
   <int value="-1977496883" label="ViewPasswords:enabled"/>
+  <int value="-1975719988" label="GlobalMediaControlsSeamlessTransfer:enabled"/>
   <int value="-1973722176" label="VoiceSearchOnLocalNtp:enabled"/>
   <int value="-1972383451" label="disable-pinch"/>
   <int value="-1972312724" label="OfflinePagesLoadSignalCollecting:enabled"/>
@@ -41567,6 +41568,7 @@ from previous Chrome versions.
   <int value="811726957" label="SlideTopChromeWithPageScrolls:enabled"/>
   <int value="812710781" label="SyncUSSBookmarks:disabled"/>
   <int value="813999334" label="HistoryManipulationIntervention:enabled"/>
+  <int value="816907702" label="GlobalMediaControlsSeamlessTransfer:disabled"/>
   <int value="820650704" label="disable-ntp-popular-sites"/>
   <int value="821192723" label="show-fps-counter"/>
   <int value="824961931" label="use-simple-cache-backend"/>
