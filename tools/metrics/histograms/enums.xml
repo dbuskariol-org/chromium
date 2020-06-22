@@ -52533,6 +52533,12 @@ Called by update_net_trust_anchors.py.-->
   <int value="2" label="Skipped"/>
 </enum>
 
+<enum name="PasswordManager.Store">
+  <int value="0" label="Not set"/>
+  <int value="1" label="Profile store"/>
+  <int value="2" label="Account store"/>
+</enum>
+
 <enum name="PasswordManagerActionsTaken">
   <obsolete>
     Deprecated as of Chrome 32. See PasswordManagerActionsTakenWithPsl
