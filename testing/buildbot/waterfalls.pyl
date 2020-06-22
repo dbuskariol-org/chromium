@@ -4092,7 +4092,7 @@
     'machines': {
       'Mac Builder': {
         'additional_compile_targets': [
-          'pdf_fuzzers',
+          'all',
         ],
         'test_suites': {
           'scripts': 'chromium_mac_scripts',
