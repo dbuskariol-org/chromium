@@ -630,10 +630,10 @@ try_.chromium_mac_ios_builder(
 try_.chromium_mac_ios_builder(
     name = 'ios13-sdk-simulator',
     executable = 'recipe:chromium_trybot',
-    caches = [xcode_cache.x11e608c],
+    caches = [xcode_cache.x11n700h],
     os = os.MAC_10_15,
     properties = {
-        'xcode_build_version': '11e608c'
+        'xcode_build_version': '11n700h'
     }
 )
 

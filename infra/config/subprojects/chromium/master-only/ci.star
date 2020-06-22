@@ -1777,11 +1777,11 @@ ci.fyi_ios_builder(
         category = 'iOS|iOS13',
         short_name = 'dev',
     ),
-    caches = [xcode_cache.x11e608c],
+    caches = [xcode_cache.x11n700h],
     executable = 'recipe:chromium',
     os = os.MAC_10_15,
     properties = {
-        'xcode_build_version': '11e608c',
+        'xcode_build_version': '11n700h',
     },
 )
 
@@ -1791,11 +1791,11 @@ ci.fyi_ios_builder(
         category = 'iOS|iOS13',
         short_name = 'sim',
     ),
-    caches = [xcode_cache.x11e608c],
+    caches = [xcode_cache.x11n700h],
     executable = 'recipe:chromium',
     os = os.MAC_10_15,
     properties = {
-        'xcode_build_version': '11e608c'
+        'xcode_build_version': '11n700h'
     }
 )
 
