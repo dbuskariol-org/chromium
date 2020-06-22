@@ -531,6 +531,8 @@ bool StyleCascade::ShouldRevert(const CSSProperty& property,
          (state_.GetDocument().InForcedColorsMode() &&
           state_.Style()->ForcedColorAdjust() != EForcedColorAdjust::kNone &&
           property.IsAffectedByForcedColors() &&
+          !(property.PropertyID() == CSSPropertyID::kBackgroundImage &&
+            value.MayContainUrl()) &&
           origin >= CascadeOrigin::kAuthor);
 }
 
