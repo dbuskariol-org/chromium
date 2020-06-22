@@ -869,9 +869,6 @@ extern const char kOmniboxUIHideSteadyStateUrlSchemeDescription[];
 extern const char kOmniboxUIHideSteadyStateUrlTrivialSubdomainsName[];
 extern const char kOmniboxUIHideSteadyStateUrlTrivialSubdomainsDescription[];
 
-extern const char kOmniboxUIHideSteadyStateUrlPathQueryAndRefName[];
-extern const char kOmniboxUIHideSteadyStateUrlPathQueryAndRefDescription[];
-
 extern const char kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverName[];
 extern const char
     kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverDescription[];

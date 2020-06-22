@@ -3616,11 +3616,6 @@ const FeatureEntry kFeatureEntries[] = {
          kOmniboxUIHideSteadyStateUrlTrivialSubdomainsDescription,
      kOsAll, FEATURE_VALUE_TYPE(omnibox::kHideSteadyStateUrlTrivialSubdomains)},
 
-    {"omnibox-ui-hide-steady-state-url-path-query-and-ref",
-     flag_descriptions::kOmniboxUIHideSteadyStateUrlPathQueryAndRefName,
-     flag_descriptions::kOmniboxUIHideSteadyStateUrlPathQueryAndRefDescription,
-     kOsAll, FEATURE_VALUE_TYPE(omnibox::kHideSteadyStateUrlPathQueryAndRef)},
-
     {"omnibox-ui-reveal-steady-state-url-path-query-and-ref-on-hover",
      flag_descriptions::
          kOmniboxUIRevealSteadyStateUrlPathQueryAndRefOnHoverName,
