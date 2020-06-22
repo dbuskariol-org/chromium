@@ -1172,6 +1172,15 @@ void FormStructure::LogQualityMetrics(
       did_autofill_some_possible_fields = true;
     else if (!field->only_fill_when_focused())
       did_autofill_all_possible_fields = false;
+
+    // If the form was submitted, record if field types have been filled and
+    // subsequently edited by the user.
+    if (observed_submission) {
+      if (field->is_autofilled || field->previously_autofilled()) {
+        AutofillMetrics::LogEditedAutofilledFieldAtSubmission(
+            form_interactions_ukm_logger, *this, *field);
+      }
+    }
   }
 
   AutofillMetrics::LogNumberOfEditedAutofilledFields(
