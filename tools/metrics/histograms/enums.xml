@@ -51245,6 +51245,7 @@ Called by update_net_trust_anchors.py.-->
   <int value="431" label="Touchscreen Calibration"/>
   <int value="432" label="Night Light Color Temperature"/>
   <int value="433" label="Power Idle Behavior While On Battery"/>
+  <int value="434" label="Display: Overscan"/>
   <int value="500" label="Open Wallpaper"/>
   <int value="501" label="Ambient Mode On/Off"/>
   <int value="502" label="Ambient Mode Source"/>

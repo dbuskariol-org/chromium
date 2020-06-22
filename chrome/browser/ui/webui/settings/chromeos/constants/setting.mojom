@@ -110,6 +110,7 @@ enum Setting {
   kTouchscreenCalibration = 431,
   kNightLightColorTemperature = 432,
   kPowerIdleBehaviorWhileOnBattery = 433,
+  kDisplayOverscan = 434,
 
   // Personalization section.
   kOpenWallpaper = 500,

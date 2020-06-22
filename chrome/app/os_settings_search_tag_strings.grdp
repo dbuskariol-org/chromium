@@ -590,6 +590,9 @@
   <message name="IDS_OS_SETTINGS_TAG_DISPLAY_REFRESH_RATE_ALT2" desc="Text for search result item which, when clicked, navigates the user to display settings, with a dropdown to select screen refresh rate. Alternate phrase for: 'Display refresh rate', 'Monitor refresh rate'">
     Screen refresh rate
   </message>
+  <message name="IDS_OS_SETTINGS_TAG_DISPLAY_OVERSCAN" desc="Text for search result item which, when clicked, navigates the user to display settings, with an option to adjust monitor overscan.">
+    Overscan
+  </message>
 
   <!-- Personalization section. -->
   <message name="IDS_OS_SETTINGS_TAG_PERSONALIZATION" desc="Text for search result item which, when clicked, navigates the user to personalization settings. Alternate phrase for: 'Customization', 'Personal'">
