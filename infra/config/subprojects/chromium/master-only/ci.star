@@ -551,6 +551,15 @@ ci.chromiumos_builder(
     ),
 )
 
+ci.chromiumos_builder(
+    name = 'chromeos-kevin-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'simple|release',
+        short_name = 'kvn',
+    ),
+    main_console_view = 'main',
+)
+
 
 ci.clang_builder(
     name = 'CFI Linux CF',
