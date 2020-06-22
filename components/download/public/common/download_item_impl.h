@@ -570,6 +570,10 @@ class COMPONENTS_DOWNLOAD_EXPORT DownloadItemImpl
 
   void OnTargetResolved();
 
+  // If |download_schedule_| presents, maybe interrupt the download and start
+  // later. Returns whether the download should be started later.
+  bool MaybeDownloadLater();
+
   // If all pre-requisites have been met, complete download processing, i.e. do
   // internal cleanup, file rename, and potentially auto-open.  (Dangerous
   // downloads still may block on user acceptance after this point.)
