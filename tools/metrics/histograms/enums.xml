@@ -27844,6 +27844,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3324" label="HiddenBackfaceWithPreserve3D"/>
   <int value="3325" label="CSSAtRuleScrollTimeline"/>
   <int value="3326" label="FetchUploadStreaming"/>
+  <int value="3327" label="WebkitLineClampWithoutWebkitBox"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
