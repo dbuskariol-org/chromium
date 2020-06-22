@@ -8,7 +8,6 @@
 #include <iosfwd>
 #include <string>
 
-#include "base/logging.h"
 #include "base/values.h"
 #include "chrome/common/media_router/media_sink.h"
 #include "chrome/common/media_router/media_source.h"
