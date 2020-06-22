@@ -9425,7 +9425,12 @@
       'owners': ['file://components/policy/resources/OWNERS'],
       'type': 'main',
       'schema': { 'type': 'boolean' },
-      'supported_on': ['chrome.*:22-', 'chrome_os:22-', 'android:30-'],
+      'supported_on': [
+        'chrome.*:22-',
+        'chrome_os:22-',
+        'android:30-',
+        'ios:85-'
+      ],
       'features': {
         'dynamic_refresh': True,
         'per_profile': True,
