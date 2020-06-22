@@ -8124,8 +8124,26 @@ bool RenderFrameHostImpl::DidCommitNavigationInternal(
   accessibility_reset_count_ = 0;
   appcache_handle_ = navigation_request->TakeAppCacheHandle();
 
-  if (!is_same_document_navigation &&
-      !navigation_request->IsServedFromBackForwardCache()) {
+  bool created_new_document =
+      !is_same_document_navigation &&
+      !navigation_request->IsServedFromBackForwardCache();
+
+  if (created_new_document) {
+    // IsWaitingToCommit can be false inside DidCommitNavigationInternal only in
+    // specific circumstances listed above, and specifically for the fake
+    // initial navigations triggered by the blank window.open() and creating a
+    // blank iframe. In that case we do not want to reset the per-document
+    // states as we are not really creating a new Document and we want to
+    // preserve the states set by WebContentsCreated delegate notification
+    // (which among other things create tab helpers) or RenderFrameCreated.
+    if (!navigation_request->IsWaitingToCommit())
+      created_new_document = false;
+  }
+
+  // TODO(crbug.com/936696): Remove this after we have RenderDocument.
+  if (created_new_document) {
+    TRACE_EVENT1("content", "DidCommitProvisionalLoad_StateResetForNewDocument",
+                 "render_frame_host", this);
     if (navigation_request->IsInMainFrame()) {
       render_view_host_->ResetPerPageState();
     }
@@ -9109,6 +9127,9 @@ void RenderFrameHostImpl::SetLifecycleStateToActive() {
 }
 
 void RenderFrameHostImpl::SetLifecycleState(LifecycleState state) {
+  TRACE_EVENT2("content", "RenderFrameHostImpl::SetLifecycleState",
+               "render_frame_host", this, "state",
+               LifecycleStateToString(state));
 #if DCHECK_IS_ON()
   static const base::NoDestructor<StateTransitions<LifecycleState>>
       allowed_transitions(
