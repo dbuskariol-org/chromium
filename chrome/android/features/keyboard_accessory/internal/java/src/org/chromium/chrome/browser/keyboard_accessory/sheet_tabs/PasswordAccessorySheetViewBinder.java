@@ -50,6 +50,8 @@ class PasswordAccessorySheetViewBinder {
                 return new PasswordsInfoViewHolder(parent);
             case AccessorySheetDataPiece.Type.FOOTER_COMMAND:
                 return new FooterCommandViewHolder(parent);
+            case AccessorySheetDataPiece.Type.OPTION_TOGGLE:
+                return AccessorySheetTabViewBinder.create(parent, viewType);
         }
         assert false : "Unhandled type of data piece: " + viewType;
         return null;

@@ -5,6 +5,7 @@
 package org.chromium.chrome.browser.keyboard_accessory.tab_layout_component;
 
 import android.content.Context;
+import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -64,6 +65,27 @@ class KeyboardAccessoryTabLayoutView extends TabLayout {
     void setTabSelectionAdapter(TabLayout.OnTabSelectedListener tabSelectionCallbacks) {
         clearOnTabSelectedListeners();
         addOnTabSelectedListener(tabSelectionCallbacks);
+    }
+
+    /**
+     * Applies the previous tabs properties to the replaced tabs, if such properties exist. This
+     * helps customize the appearance of the active tab if the tabs have been replaced without the
+     * active tab changing.
+     * @param colorFilters Icon color filters previously applied to the tabs' icons.
+     * @param tabDescriptions Content descriptions for the tabs.
+     */
+    void applyColorFiltersAndDescriptions(
+            ColorFilter[] colorFilters, CharSequence[] tabDescriptions) {
+        // If tabs were added/removed, the old color filters and tab descriptions might not match
+        // the new order.
+        if (colorFilters.length != getTabCount() || tabDescriptions.length != getTabCount()) return;
+
+        for (int i = getTabCount() - 1; i >= 0; i--) {
+            TabLayout.Tab t = getTabAt(i);
+            if (t == null || t.getIcon() == null) continue;
+            t.getIcon().setColorFilter(colorFilters[i]);
+            t.setContentDescription(tabDescriptions[i]);
+        }
     }
 
     /**

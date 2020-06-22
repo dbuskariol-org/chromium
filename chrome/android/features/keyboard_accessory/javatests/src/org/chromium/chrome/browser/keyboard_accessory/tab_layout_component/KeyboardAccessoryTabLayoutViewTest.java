@@ -13,6 +13,9 @@ import static org.chromium.chrome.browser.keyboard_accessory.tab_layout_componen
 import static org.chromium.chrome.browser.keyboard_accessory.tab_layout_component.KeyboardAccessoryTabLayoutProperties.TAB_SELECTION_CALLBACKS;
 import static org.chromium.content_public.browser.test.util.TestThreadUtils.runOnUiThreadBlocking;
 
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.Drawable;
 import android.widget.FrameLayout;
 
 import androidx.test.filters.MediumTest;
@@ -32,6 +35,7 @@ import org.chromium.chrome.test.ChromeJUnit4ClassRunner;
 import org.chromium.content_public.browser.test.util.CriteriaHelper;
 import org.chromium.ui.modelutil.ListModel;
 import org.chromium.ui.modelutil.PropertyModel;
+import org.chromium.ui.modelutil.PropertyModelChangeProcessor;
 import org.chromium.ui.test.util.DummyUiActivity;
 import org.chromium.ui.test.util.DummyUiActivityTestCase;
 
@@ -76,7 +80,8 @@ public class KeyboardAccessoryTabLayoutViewTest extends DummyUiActivityTestCase 
             mView = (KeyboardAccessoryTabLayoutView) ((FrameLayout) getActivity().findViewById(
                                                               android.R.id.content))
                             .getChildAt(0);
-            KeyboardAccessoryTabLayoutCoordinator.createTabViewBinder(mModel, mView);
+            PropertyModelChangeProcessor.create(
+                    mModel, mView, KeyboardAccessoryTabLayoutViewBinder::bind);
         });
     }
 
@@ -119,5 +124,33 @@ public class KeyboardAccessoryTabLayoutViewTest extends DummyUiActivityTestCase 
         assertThat(getTabDescriptionAt(0), is("FirstTab"));
         assertThat(getTabDescriptionAt(1), is("SecondTab"));
         assertThat(getTabDescriptionAt(2), is("ThirdTab"));
+    }
+
+    @Test
+    @MediumTest
+    public void testTabSelectedAfterIconChange() {
+        runOnUiThreadBlocking(() -> {
+            mModel.get(TABS).set(new KeyboardAccessoryData.Tab[] {
+                    createTestTab("FirstTab"), createTestTab("SecondTab")});
+
+            // Call |bind| so that the icon change observers are registered to the newly added tabs.
+            KeyboardAccessoryTabLayoutViewBinder.bind(mModel, mView, TABS);
+
+            mModel.set(ACTIVE_TAB, 0);
+        });
+
+        // Make sure that the tab is selected before changing the icon.
+        CriteriaHelper.pollUiThread(() -> mView.getTabAt(0).isSelected());
+
+        Drawable icon = getActivity().getResources().getDrawable(android.R.drawable.ic_menu_add);
+        runOnUiThreadBlocking(() -> mModel.get(TABS).get(0).setIcon(icon));
+
+        CriteriaHelper.pollUiThread(() -> mView.getTabAt(0).getIcon().equals(icon));
+
+        PorterDuffColorFilter expectedColorFilter = new PorterDuffColorFilter(
+                mView.getTabTextColors().getColorForState(new int[] {android.R.attr.state_selected},
+                        mView.getTabTextColors().getDefaultColor()),
+                PorterDuff.Mode.SRC_IN);
+        assertThat(icon.getColorFilter(), is(expectedColorFilter));
     }
 }

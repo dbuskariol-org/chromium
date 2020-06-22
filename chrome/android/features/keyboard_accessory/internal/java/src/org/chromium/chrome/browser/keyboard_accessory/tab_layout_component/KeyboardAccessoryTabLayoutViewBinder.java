@@ -8,6 +8,8 @@ import static org.chromium.chrome.browser.keyboard_accessory.tab_layout_componen
 import static org.chromium.chrome.browser.keyboard_accessory.tab_layout_component.KeyboardAccessoryTabLayoutProperties.TABS;
 import static org.chromium.chrome.browser.keyboard_accessory.tab_layout_component.KeyboardAccessoryTabLayoutProperties.TAB_SELECTION_CALLBACKS;
 
+import android.graphics.ColorFilter;
+
 import com.google.android.material.tabs.TabLayout;
 
 import org.chromium.chrome.browser.keyboard_accessory.R;
@@ -46,12 +48,33 @@ class KeyboardAccessoryTabLayoutViewBinder
 
     private void updateAllTabs(
             KeyboardAccessoryTabLayoutView view, ListModel<KeyboardAccessoryData.Tab> model) {
+        ColorFilter[] colorFilters = getTabIconsColorFilters(view);
+        CharSequence[] tabDescriptions = getTabDescriptions(view);
         view.removeAllTabs();
         if (model.size() <= 0) return;
         for (int i = 0; i < model.size(); i++) {
             KeyboardAccessoryData.Tab tab = model.get(i);
             view.addTabAt(i, tab.getIcon(), tab.getContentDescription());
         }
+        view.applyColorFiltersAndDescriptions(colorFilters, tabDescriptions);
+    }
+
+    private ColorFilter[] getTabIconsColorFilters(KeyboardAccessoryTabLayoutView view) {
+        ColorFilter[] filters = new ColorFilter[view.getTabCount()];
+        for (int i = view.getTabCount() - 1; i >= 0; i--) {
+            TabLayout.Tab t = view.getTabAt(i);
+            filters[i] = t.getIcon().getColorFilter();
+        }
+        return filters;
+    }
+
+    private CharSequence[] getTabDescriptions(KeyboardAccessoryTabLayoutView view) {
+        CharSequence[] descriptions = new String[view.getTabCount()];
+        for (int i = view.getTabCount() - 1; i >= 0; i--) {
+            TabLayout.Tab t = view.getTabAt(i);
+            descriptions[i] = t.getContentDescription();
+        }
+        return descriptions;
     }
 
     private void registerTabIconObservers(
