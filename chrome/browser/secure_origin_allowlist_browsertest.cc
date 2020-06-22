@@ -21,7 +21,7 @@
 #include "services/network/public/cpp/network_switches.h"
 
 namespace {
-// SecureOriginWhitelistBrowsertests differ in the setup of the browser. Since
+// SecureOriginAllowlistBrowsertests differ in the setup of the browser. Since
 // the setup is done before the actual test is run, we need to parameterize our
 // tests outside of the actual test bodies. We use test variants for this,
 // instead of the usual setup of mulitple tests.
@@ -36,10 +36,9 @@ enum class TestVariant {
 };
 }  // namespace
 
-// End-to-end browser test that ensures the secure origin whitelist works when
+// End-to-end browser test that ensures the secure origin allowlist works when
 // supplied via command-line or policy.
-// SecureOriginWhitelistUnittest will test the list parsing.
-class SecureOriginWhitelistBrowsertest
+class SecureOriginAllowlistBrowsertest
     : public InProcessBrowserTest,
       public testing::WithParamInterface<TestVariant> {
  public:
@@ -125,8 +124,8 @@ class SecureOriginWhitelistBrowsertest
   policy::MockConfigurationPolicyProvider provider_;
 };
 
-INSTANTIATE_TEST_SUITE_P(SecureOriginWhitelistBrowsertest,
-                         SecureOriginWhitelistBrowsertest,
+INSTANTIATE_TEST_SUITE_P(SecureOriginAllowlistBrowsertest,
+                         SecureOriginAllowlistBrowsertest,
                          testing::Values(TestVariant::kNone,
                                          TestVariant::kCommandline,
 // The legacy policy isn't defined on ChromeOS or Android, so skip tests that
@@ -139,9 +138,9 @@ INSTANTIATE_TEST_SUITE_P(SecureOriginWhitelistBrowsertest,
                                          TestVariant::kPolicy2,
                                          TestVariant::kPolicy3));
 
-IN_PROC_BROWSER_TEST_P(SecureOriginWhitelistBrowsertest, Simple) {
+IN_PROC_BROWSER_TEST_P(SecureOriginAllowlistBrowsertest, Simple) {
   GURL url = embedded_test_server()->GetURL(
-      "example.com", "/secure_origin_whitelist_browsertest.html");
+      "example.com", "/secure_origin_allowlist_browsertest.html");
   ui_test_utils::NavigateToURL(browser(), url);
 
   base::string16 secure(base::ASCIIToUTF16("secure context"));
@@ -161,7 +160,7 @@ IN_PROC_BROWSER_TEST_P(SecureOriginWhitelistBrowsertest, Simple) {
     ui_test_utils::NavigateToURL(
         browser(),
         embedded_test_server()->GetURL(
-            "otherexample.com", "/secure_origin_whitelist_browsertest.html"));
+            "otherexample.com", "/secure_origin_allowlist_browsertest.html"));
     EXPECT_EQ(next_title_watcher.WaitAndGetTitle(), secure);
   } else {
     EXPECT_EQ(title_watcher.WaitAndGetTitle(),
@@ -169,10 +168,10 @@ IN_PROC_BROWSER_TEST_P(SecureOriginWhitelistBrowsertest, Simple) {
   }
 }
 
-class SecureOriginWhitelistBrowsertestWithMarkHttpDangerous
-    : public SecureOriginWhitelistBrowsertest {
+class SecureOriginAllowlistBrowsertestWithMarkHttpDangerous
+    : public SecureOriginAllowlistBrowsertest {
  public:
-  SecureOriginWhitelistBrowsertestWithMarkHttpDangerous() {
+  SecureOriginAllowlistBrowsertestWithMarkHttpDangerous() {
     // TODO(crbug.com/917693): Remove this forced feature/param when the feature
     // fully launches.
     feature_list_.InitAndEnableFeatureWithParameters(
@@ -186,7 +185,7 @@ class SecureOriginWhitelistBrowsertestWithMarkHttpDangerous
 };
 
 INSTANTIATE_TEST_SUITE_P(All,
-                         SecureOriginWhitelistBrowsertestWithMarkHttpDangerous,
+                         SecureOriginAllowlistBrowsertestWithMarkHttpDangerous,
                          testing::Values(TestVariant::kNone,
                                          TestVariant::kCommandline,
 // The legacy policy isn't defined on ChromeOS or Android, so skip tests that
@@ -199,14 +198,14 @@ INSTANTIATE_TEST_SUITE_P(All,
                                          TestVariant::kPolicy2,
                                          TestVariant::kPolicy3));
 
-// Tests that whitelisted insecure origins are correctly set as security level
+// Tests that allowlisted insecure origins are correctly set as security level
 // NONE instead of the default level DANGEROUS.
-IN_PROC_BROWSER_TEST_P(SecureOriginWhitelistBrowsertestWithMarkHttpDangerous,
+IN_PROC_BROWSER_TEST_P(SecureOriginAllowlistBrowsertestWithMarkHttpDangerous,
                        SecurityIndicators) {
   ui_test_utils::NavigateToURL(
       browser(),
       embedded_test_server()->GetURL(
-          "example.com", "/secure_origin_whitelist_browsertest.html"));
+          "example.com", "/secure_origin_allowlist_browsertest.html"));
   auto* helper = SecurityStateTabHelper::FromWebContents(
       browser()->tab_strip_model()->GetActiveWebContents());
   ASSERT_TRUE(helper);
@@ -217,7 +216,7 @@ IN_PROC_BROWSER_TEST_P(SecureOriginWhitelistBrowsertestWithMarkHttpDangerous,
     ui_test_utils::NavigateToURL(
         browser(),
         embedded_test_server()->GetURL(
-            "otherexample.com", "/secure_origin_whitelist_browsertest.html"));
+            "otherexample.com", "/secure_origin_allowlist_browsertest.html"));
     EXPECT_EQ(security_state::NONE, helper->GetSecurityLevel());
   } else {
     EXPECT_EQ(ExpectSecureContext() ? security_state::NONE

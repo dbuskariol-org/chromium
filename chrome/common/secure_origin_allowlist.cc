@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/common/secure_origin_whitelist.h"
+#include "chrome/common/secure_origin_allowlist.h"
 
 #include <set>
 #include <string>
@@ -11,7 +11,7 @@
 #include "components/prefs/pref_registry_simple.h"
 #include "extensions/common/constants.h"
 
-namespace secure_origin_whitelist {
+namespace secure_origin_allowlist {
 
 std::set<std::string> GetSchemesBypassingSecureContextCheck() {
   std::set<std::string> schemes;
@@ -24,4 +24,4 @@ void RegisterPrefs(PrefRegistrySimple* local_state) {
                                   /* default_value */ "");
 }
 
-}  // namespace secure_origin_whitelist
+}  // namespace secure_origin_allowlist

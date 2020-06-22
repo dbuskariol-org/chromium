@@ -178,7 +178,7 @@
 #include "chrome/common/profiler/stack_sampling_configuration.h"
 #include "chrome/common/render_messages.h"
 #include "chrome/common/renderer_configuration.mojom.h"
-#include "chrome/common/secure_origin_whitelist.h"
+#include "chrome/common/secure_origin_allowlist.h"
 #include "chrome/common/url_constants.h"
 #include "chrome/common/webui_url_constants.h"
 #include "chrome/grit/browser_resources.h"
@@ -3634,9 +3634,9 @@ void ChromeContentBrowserClient::GetAdditionalAllowedSchemesForFileSystem(
   }
 }
 
-void ChromeContentBrowserClient::GetSchemesBypassingSecureContextCheckWhitelist(
+void ChromeContentBrowserClient::GetSchemesBypassingSecureContextCheckAllowlist(
     std::set<std::string>* schemes) {
-  *schemes = secure_origin_whitelist::GetSchemesBypassingSecureContextCheck();
+  *schemes = secure_origin_allowlist::GetSchemesBypassingSecureContextCheck();
 }
 
 void ChromeContentBrowserClient::GetURLRequestAutoMountHandlers(
