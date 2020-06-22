@@ -96,8 +96,17 @@ class Storage::QueueUploaderInterface : public StorageQueue::UploaderInterface {
  public:
   QueueUploaderInterface(
       Priority priority,
-      scoped_refptr<Storage::UploaderInterface> storage_interface)
-      : priority_(priority), storage_interface_(storage_interface) {}
+      std::unique_ptr<Storage::UploaderInterface> storage_interface)
+      : priority_(priority), storage_interface_(std::move(storage_interface)) {}
+
+  // Factory method.
+  static StatusOr<std::unique_ptr<StorageQueue::UploaderInterface>>
+  ProvideUploader(Priority priority, StartUploadCb start_upload_cb) {
+    ASSIGN_OR_RETURN(std::unique_ptr<Storage::UploaderInterface> uploader,
+                     start_upload_cb.Run(priority));
+    return std::make_unique<QueueUploaderInterface>(priority,
+                                                    std::move(uploader));
+  }
 
   void ProcessBlob(StatusOr<base::span<const uint8_t>> data,
                    base::OnceCallback<void(bool)> processed_cb) override {
@@ -107,20 +116,9 @@ class Storage::QueueUploaderInterface : public StorageQueue::UploaderInterface {
     storage_interface_->Completed(priority_, final_status);
   }
 
-  // Factory method.
-  static StatusOr<scoped_refptr<StorageQueue::UploaderInterface>>
-  ProvideUploader(Priority priority, StartUploadCb start_upload_cb) {
-    ASSIGN_OR_RETURN(scoped_refptr<Storage::UploaderInterface> uploader,
-                     start_upload_cb.Run(priority));
-    return base::MakeRefCounted<QueueUploaderInterface>(priority,
-                                                        std::move(uploader));
-  }
-
  private:
-  ~QueueUploaderInterface() override = default;  // Mandated by base::RefCounted
-
   const Priority priority_;
-  const scoped_refptr<Storage::UploaderInterface> storage_interface_;
+  const std::unique_ptr<Storage::UploaderInterface> storage_interface_;
 };
 
 void Storage::Create(

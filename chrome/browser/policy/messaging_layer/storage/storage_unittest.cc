@@ -155,8 +155,6 @@ class MockUploadClient : public Storage::UploaderInterface {
   };
 
  private:
-  ~MockUploadClient() override = default;  // Mandated by base::RefCounted
-
   Sequence test_upload_sequence_;
 };
 
@@ -182,9 +180,9 @@ class StorageTest : public ::testing::Test {
         base::FilePath(location_.GetPath()));
   }
 
-  StatusOr<scoped_refptr<Storage::UploaderInterface>> BuildMockUploader(
+  StatusOr<std::unique_ptr<Storage::UploaderInterface>> BuildMockUploader(
       Priority priority) {
-    auto uploader = base::MakeRefCounted<MockUploadClient>();
+    auto uploader = std::make_unique<MockUploadClient>();
     set_mock_uploader_expectations_.Call(priority, uploader.get());
     return uploader;
   }

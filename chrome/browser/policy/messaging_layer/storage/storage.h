@@ -31,12 +31,13 @@ class Storage : public base::RefCountedThreadSafe<Storage> {
   // |StartUpload| callback (see below).
   // Every time Storage starts an upload (by timer or immediately after Write)
   // it uses this interface to hand available records over to the actual
-  // uploader.
-  // Similar to StorageQueue::UploaderInterface, but with added priority
-  // parameter.
-  class UploaderInterface
-      : public base::RefCountedThreadSafe<UploaderInterface> {
+  // uploader. Storage takes ownership of it and automatically discards after
+  // |Completed| returns. Similar to StorageQueue::UploaderInterface, but with
+  // added priority parameter.
+  class UploaderInterface {
    public:
+    virtual ~UploaderInterface() = default;
+
     // Asynchronously processes every record (e.g. serializes and adds to the
     // network message). Expects |processed_cb| to be called after the record
     // has been processed, with true if next record needs to be delivered and
@@ -47,18 +48,11 @@ class Storage : public base::RefCountedThreadSafe<Storage> {
     // Finalizes the upload (e.g. sends the message to the server and gets
     // response).
     virtual void Completed(Priority priority, Status final_status) = 0;
-
-   protected:
-    // Non-public destructor is required by RefCounted.
-    virtual ~UploaderInterface() = default;
-
-   private:
-    friend class base::RefCountedThreadSafe<UploaderInterface>;
   };
 
   // Callback type for UploadInterface provider for specified queue.
   using StartUploadCb =
-      base::RepeatingCallback<StatusOr<scoped_refptr<UploaderInterface>>(
+      base::RepeatingCallback<StatusOr<std::unique_ptr<UploaderInterface>>(
           Priority priority)>;
 
   // Options class allowing to set parameters individually, e.g.:
