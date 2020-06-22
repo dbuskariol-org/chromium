@@ -327,6 +327,25 @@ class CupsPrintersManagerImpl
       return;
     }
 
+    // For USB printers, return NO ERROR if the printer is connected or PRINTER
+    // UNREACHABLE if the printer is disconnected.
+    if (printer->IsUsbProtocol()) {
+      CupsPrinterStatus printer_status(printer_id);
+      if (FindDetectedPrinter(printer_id)) {
+        printer_status.AddStatusReason(
+            CupsPrinterStatus::CupsPrinterStatusReason::Reason::kNoError,
+            CupsPrinterStatus::CupsPrinterStatusReason::Severity::
+                kUnknownSeverity);
+      } else {
+        printer_status.AddStatusReason(
+            CupsPrinterStatus::CupsPrinterStatusReason::Reason::
+                kPrinterUnreachable,
+            CupsPrinterStatus::CupsPrinterStatusReason::Severity::kError);
+      }
+      std::move(cb).Run(std::move(printer_status));
+      return;
+    }
+
     base::Optional<UriComponents> parsed_uri = ParseUri(printer->uri());
     // Behavior for querying a non-IPP uri is undefined and disallowed.
     if (!parsed_uri || !IsIppUri(printer->uri())) {
