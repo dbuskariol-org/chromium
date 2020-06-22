@@ -3140,8 +3140,8 @@ ChromeContentBrowserClient::GetTtsControllerDelegate() {
   TtsControllerDelegateImpl* delegate =
       TtsControllerDelegateImpl::GetInstance();
 #if !defined(OS_ANDROID)
-  TtsExtensionEngine* tts_extension_engine = TtsExtensionEngine::GetInstance();
-  delegate->SetTtsEngineDelegate(tts_extension_engine);
+  content::TtsController::GetInstance()->SetTtsEngineDelegate(
+      TtsExtensionEngine::GetInstance());
 #endif
   return delegate;
 }
