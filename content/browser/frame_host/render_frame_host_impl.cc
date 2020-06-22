@@ -47,6 +47,7 @@
 #include "content/browser/contacts/contacts_manager_impl.h"
 #include "content/browser/data_url_loader_factory.h"
 #include "content/browser/devtools/devtools_instrumentation.h"
+#include "content/browser/devtools/protocol/audits.h"
 #include "content/browser/dom_storage/dom_storage_context_wrapper.h"
 #include "content/browser/download/data_url_blob_reader.h"
 #include "content/browser/download/mhtml_generation_manager.h"
@@ -3496,6 +3497,16 @@ ukm::SourceId RenderFrameHostImpl::GetPageUkmSourceId() {
 
 BrowserContext* RenderFrameHostImpl::GetBrowserContext() {
   return GetProcess()->GetBrowserContext();
+}
+
+// TODO(crbug.com/1091720): Would be better to do this directly in the chrome
+// layer.  See referenced bug for further details.
+void RenderFrameHostImpl::ReportHeavyAdIssue(
+    blink::mojom::HeavyAdResolutionStatus resolution,
+    blink::mojom::HeavyAdReason reason) {
+  auto issue =
+      devtools_instrumentation::GetHeavyAdIssue(this, resolution, reason);
+  devtools_instrumentation::ReportBrowserInitiatedIssue(this, issue.get());
 }
 
 StoragePartition* RenderFrameHostImpl::GetStoragePartition() {

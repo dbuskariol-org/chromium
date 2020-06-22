@@ -44,6 +44,7 @@
 #include "services/metrics/public/cpp/metrics_utils.h"
 #include "services/metrics/public/cpp/ukm_builders.h"
 #include "services/metrics/public/cpp/ukm_recorder.h"
+#include "third_party/blink/public/mojom/devtools/inspector_issue.mojom-blink.h"
 #include "third_party/blink/public/mojom/web_feature/web_feature.mojom.h"
 #include "ui/base/page_transition_types.h"
 #include "ui/gfx/geometry/size.h"
@@ -140,6 +141,21 @@ void RecordHeavyAdInterventionDisallowedByBlocklist(bool disallowed) {
 using ResourceMimeType = AdsPageLoadMetricsObserver::ResourceMimeType;
 const char kIgnoredByReloadHistogramName[] =
     "PageLoad.Clients.Ads.HeavyAds.IgnoredByReload";
+
+blink::mojom::HeavyAdReason GetHeavyAdReason(FrameData::HeavyAdStatus status) {
+  switch (status) {
+    case FrameData::HeavyAdStatus::kNetwork:
+      return blink::mojom::HeavyAdReason::kNetworkTotalLimit;
+    case FrameData::HeavyAdStatus::kTotalCpu:
+      return blink::mojom::HeavyAdReason::kCpuTotalLimit;
+    case FrameData::HeavyAdStatus::kPeakCpu:
+      return blink::mojom::HeavyAdReason::kCpuPeakLimit;
+    case FrameData::HeavyAdStatus::kNone:
+      NOTREACHED();
+      return blink::mojom::HeavyAdReason::kNetworkTotalLimit;
+  }
+}
+
 }  // namespace
 
 // static
@@ -1123,9 +1139,12 @@ void AdsPageLoadMetricsObserver::MaybeTriggerHeavyAdIntervention(
       base::FeatureList::IsEnabled(features::kHeavyAdIntervention);
 
   if (will_report_adframe) {
-    const char kReportId[] = "HeavyAdIntervention";
-    std::string report_message =
-        GetHeavyAdReportMessage(*frame_data, will_unload_adframe);
+    // Add an inspector issue for the root of the ad subtree.
+    render_frame_host->ReportHeavyAdIssue(
+        will_unload_adframe
+            ? blink::mojom::HeavyAdResolutionStatus::kHeavyAdBlocked
+            : blink::mojom::HeavyAdResolutionStatus::kHeavyAdWarning,
+        GetHeavyAdReason(frame_data->heavy_ad_status_with_noise()));
 
     // Report to all child frames that will be unloaded. Once all reports are
     // queued, the frame will be unloaded. Because the IPC messages are ordered
@@ -1133,6 +1152,9 @@ void AdsPageLoadMetricsObserver::MaybeTriggerHeavyAdIntervention(
     // error page. Reports will be added to ReportingObserver queues
     // synchronously when the IPC message is handled, which guarantees they will
     // be available in the the unload handler.
+    const char kReportId[] = "HeavyAdIntervention";
+    std::string report_message =
+        GetHeavyAdReportMessage(*frame_data, will_unload_adframe);
     for (content::RenderFrameHost* reporting_frame :
          render_frame_host->GetFramesInSubtree()) {
       reporting_frame->SendInterventionReport(kReportId, report_message);

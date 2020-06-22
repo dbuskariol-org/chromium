@@ -92,6 +92,35 @@ FrameTreeNode* GetFtnForNetworkRequest(int process_id, int routing_id) {
       RenderFrameHost::GetFrameTreeNodeIdForRoutingId(process_id, routing_id));
 }
 
+std::unique_ptr<protocol::Audits::HeavyAdIssueDetails> GetHeavyAdIssueHelper(
+    RenderFrameHostImpl* frame,
+    blink::mojom::HeavyAdResolutionStatus resolution,
+    blink::mojom::HeavyAdReason reason) {
+  protocol::String status =
+      (resolution == blink::mojom::HeavyAdResolutionStatus::kHeavyAdBlocked)
+          ? protocol::Audits::HeavyAdResolutionStatusEnum::HeavyAdBlocked
+          : protocol::Audits::HeavyAdResolutionStatusEnum::HeavyAdWarning;
+  protocol::String reason_string;
+  switch (reason) {
+    case blink::mojom::HeavyAdReason::kNetworkTotalLimit:
+      reason_string = protocol::Audits::HeavyAdReasonEnum::NetworkTotalLimit;
+      break;
+    case blink::mojom::HeavyAdReason::kCpuTotalLimit:
+      reason_string = protocol::Audits::HeavyAdReasonEnum::CpuTotalLimit;
+      break;
+    case blink::mojom::HeavyAdReason::kCpuPeakLimit:
+      reason_string = protocol::Audits::HeavyAdReasonEnum::CpuPeakLimit;
+      break;
+  }
+  return protocol::Audits::HeavyAdIssueDetails::Create()
+      .SetReason(reason_string)
+      .SetResolution(status)
+      .SetFrame(protocol::Audits::AffectedFrame::Create()
+                    .SetFrameId(frame->GetDevToolsFrameToken().ToString())
+                    .Build())
+      .Build();
+}
+
 }  // namespace
 
 void OnResetNavigationRequest(NavigationRequest* navigation_request) {
@@ -806,6 +835,19 @@ void ReportBrowserInitiatedIssue(RenderFrameHostImpl* frame,
     return;
 
   DispatchToAgents(ftn, &protocol::AuditsHandler::OnIssueAdded, issue);
+}
+
+std::unique_ptr<protocol::Audits::InspectorIssue> GetHeavyAdIssue(
+    RenderFrameHostImpl* frame,
+    blink::mojom::HeavyAdResolutionStatus resolution,
+    blink::mojom::HeavyAdReason reason) {
+  auto issue_details = protocol::Audits::InspectorIssueDetails::Create();
+  issue_details.SetHeavyAdIssueDetails(
+      GetHeavyAdIssueHelper(frame, resolution, reason));
+  return protocol::Audits::InspectorIssue::Create()
+      .SetCode(protocol::Audits::InspectorIssueCodeEnum::HeavyAdIssue)
+      .SetDetails(issue_details.Build())
+      .Build();
 }
 
 void OnQuicTransportHandshakeFailed(

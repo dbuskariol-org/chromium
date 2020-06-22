@@ -198,6 +198,12 @@ void ReportSameSiteCookieIssue(
 void ReportBrowserInitiatedIssue(RenderFrameHostImpl* frame,
                                  protocol::Audits::InspectorIssue* issue);
 
+// Produces a Heavy Ad Issue based on the parameters passed in.
+std::unique_ptr<protocol::Audits::InspectorIssue> GetHeavyAdIssue(
+    RenderFrameHostImpl* frame,
+    blink::mojom::HeavyAdResolutionStatus resolution,
+    blink::mojom::HeavyAdReason reason);
+
 void OnQuicTransportHandshakeFailed(
     RenderFrameHostImpl* frame_host,
     const GURL& url,

@@ -1805,9 +1805,15 @@ TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdFeatureOff_UMARecorded) {
   RenderFrameHost* ad_frame_none =
       CreateAndNavigateSubFrame(kAdUrl, main_frame);
   RenderFrameHost* ad_frame_net = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester_net =
+      content::RenderFrameHostTester::For(ad_frame_net);
   RenderFrameHost* ad_frame_cpu = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester_cpu =
+      content::RenderFrameHostTester::For(ad_frame_cpu);
   RenderFrameHost* ad_frame_total_cpu =
       CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester_total_cpu =
+      content::RenderFrameHostTester::For(ad_frame_total_cpu);
 
   // Load some bytes in each frame so they are considered ad iframes.
   ResourceDataUpdate(ad_frame_none, ResourceCached::kNotCached, 1);
@@ -1825,6 +1831,17 @@ TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdFeatureOff_UMARecorded) {
   UseCpuTimeUnderThreshold(
       ad_frame_total_cpu,
       base::TimeDelta::FromMilliseconds(heavy_ad_thresholds::kMaxCpuTime));
+
+  // Check the intervention issues
+  EXPECT_EQ(rfh_tester_net->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            0);
+  EXPECT_EQ(rfh_tester_cpu->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            0);
+  EXPECT_EQ(rfh_tester_total_cpu->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            0);
 
   // Navigate again to trigger histograms.
   NavigateFrame(kNonAdUrl, main_frame);
@@ -1879,6 +1896,8 @@ TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdNetworkUsage_InterventionFired) {
 
   RenderFrameHost* main_frame = NavigateMainFrame(kNonAdUrl);
   RenderFrameHost* ad_frame = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester =
+      content::RenderFrameHostTester::For(ad_frame);
 
   // Load just under the threshold amount of bytes.
   ResourceDataUpdate(ad_frame, ResourceCached::kNotCached,
@@ -1907,6 +1926,12 @@ TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdNetworkUsage_InterventionFired) {
   histogram_tester().ExpectUniqueSample(
       SuffixedHistogram("HeavyAds.InterventionType2"),
       FrameData::HeavyAdStatus::kNetwork, 1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kNetworkTotal),
+            1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            1);
 
   // Verify that unloading a heavy ad due to network usage logs the network
   // bytes to UMA.
@@ -1927,12 +1952,17 @@ TEST_F(AdsPageLoadMetricsObserverTest,
   OverrideHeavyAdNoiseProvider(
       std::make_unique<MockNoiseProvider>(2048 /* network noise */));
   RenderFrameHost* ad_frame = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester =
+      content::RenderFrameHostTester::For(ad_frame);
 
   // Load just under the threshold amount of bytes with noise included.
   ResourceDataUpdate(ad_frame, ResourceCached::kNotCached,
                      (heavy_ad_thresholds::kMaxNetworkBytes / 1024) + 1);
   histogram_tester().ExpectTotalCount(
       SuffixedHistogram("HeavyAds.InterventionType2"), 0);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            0);
 
   // Histogram is not logged before the intervention is fired.
   histogram_tester().ExpectTotalCount(
@@ -1947,6 +1977,12 @@ TEST_F(AdsPageLoadMetricsObserverTest,
   histogram_tester().ExpectUniqueSample(
       SuffixedHistogram("HeavyAds.InterventionType2"),
       FrameData::HeavyAdStatus::kNetwork, 1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kNetworkTotal),
+            1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            1);
   histogram_tester().ExpectUniqueSample(
       SuffixedHistogram("HeavyAds.DisallowedByBlocklist"), false, 1);
 
@@ -1999,12 +2035,17 @@ TEST_F(AdsPageLoadMetricsObserverTest,
   OverrideHeavyAdNoiseProvider(
       std::make_unique<MockNoiseProvider>(2048 /* network noise */));
   RenderFrameHost* ad_frame = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester =
+      content::RenderFrameHostTester::For(ad_frame);
 
   // Load network bytes that trip the heavy ad threshold without noise.
   ResourceDataUpdate(ad_frame, ResourceCached::kNotCached,
                      heavy_ad_thresholds::kMaxNetworkBytes / 1024 + 1);
   histogram_tester().ExpectTotalCount(
       SuffixedHistogram("HeavyAds.InterventionType2"), 0);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            0);
 
   // Verify the frame can still trip the CPU threshold.
   UseCpuTimeUnderThreshold(ad_frame, base::TimeDelta::FromMilliseconds(
@@ -2021,6 +2062,12 @@ TEST_F(AdsPageLoadMetricsObserverTest,
       SuffixedHistogram("HeavyAds.InterventionType2"),
       FrameData::HeavyAdStatus::kTotalCpu, 1);
   EXPECT_EQ(kReportOnlyMessage, PopLastInterventionReportMessage());
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kCpuTotal),
+            1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            1);
 
   // Navigate again to trigger histograms.
   NavigateFrame(kNonAdUrl, main_frame);
@@ -2040,6 +2087,8 @@ TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdTotalCpuUsage_InterventionFired) {
 
   RenderFrameHost* main_frame = NavigateMainFrame(kNonAdUrl);
   RenderFrameHost* ad_frame = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester =
+      content::RenderFrameHostTester::For(ad_frame);
 
   // Add some data to the ad frame so it get reported.
   ResourceDataUpdate(ad_frame, ResourceCached::kNotCached, 1);
@@ -2064,6 +2113,12 @@ TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdTotalCpuUsage_InterventionFired) {
   histogram_tester().ExpectUniqueSample(
       SuffixedHistogram("HeavyAds.InterventionType2"),
       FrameData::HeavyAdStatus::kTotalCpu, 1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kCpuTotal),
+            1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            1);
 }
 
 TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdPeakCpuUsage_InterventionFired) {
@@ -2073,6 +2128,8 @@ TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdPeakCpuUsage_InterventionFired) {
 
   RenderFrameHost* main_frame = NavigateMainFrame(kNonAdUrl);
   RenderFrameHost* ad_frame = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester =
+      content::RenderFrameHostTester::For(ad_frame);
 
   // Add some data to the ad frame so it get reported.
   ResourceDataUpdate(ad_frame, ResourceCached::kNotCached, 1);
@@ -2096,6 +2153,12 @@ TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdPeakCpuUsage_InterventionFired) {
   histogram_tester().ExpectUniqueSample(
       SuffixedHistogram("HeavyAds.InterventionType2"),
       FrameData::HeavyAdStatus::kPeakCpu, 1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kCpuPeak),
+            1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            1);
 
   // Verify we do not record UMA specific to network byte interventions when
   // the intervention triggers for CPU.
@@ -2318,6 +2381,8 @@ TEST_F(AdsPageLoadMetricsObserverTest,
 
   RenderFrameHost* main_frame = NavigateMainFrame(kNonAdUrl);
   RenderFrameHost* ad_frame = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester =
+      content::RenderFrameHostTester::For(ad_frame);
 
   // Add enough data to trigger the intervention.
   ErrorPageWaiter waiter(web_contents());
@@ -2329,6 +2394,12 @@ TEST_F(AdsPageLoadMetricsObserverTest,
   histogram_tester().ExpectUniqueSample(
       SuffixedHistogram("HeavyAds.InterventionType2"),
       FrameData::HeavyAdStatus::kNetwork, 1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kNetworkTotal),
+            1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            1);
   histogram_tester().ExpectTotalCount(
       SuffixedHistogram("HeavyAds.IgnoredByReload"), 0);
 
@@ -2384,6 +2455,8 @@ TEST_F(AdsPageLoadMetricsObserverTest,
 
   RenderFrameHost* main_frame = NavigateMainFrame(kNonAdUrl);
   RenderFrameHost* ad_frame = CreateAndNavigateSubFrame(kAdUrl, main_frame);
+  content::RenderFrameHostTester* rfh_tester =
+      content::RenderFrameHostTester::For(ad_frame);
 
   ErrorPageWaiter waiter(web_contents());
 
@@ -2407,6 +2480,12 @@ TEST_F(AdsPageLoadMetricsObserverTest,
   histogram_tester().ExpectUniqueSample(
       SuffixedHistogram("HeavyAds.InterventionType2"),
       FrameData::HeavyAdStatus::kNetwork, 1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kNetworkTotal),
+            1);
+  EXPECT_EQ(rfh_tester->GetHeavyAdIssueCount(
+                RenderFrameHostTester::HeavyAdIssueType::kAll),
+            1);
 }
 
 TEST_F(AdsPageLoadMetricsObserverTest, HeavyAdReportingDisabled_NoReportSent) {
