@@ -1770,13 +1770,6 @@ ContentSecurityPolicy* FrameLoader::CreateCSP(
   if (origin_policy)
     ApplyOriginPolicy(csp, origin_policy.value());
 
-  // Check CSP frame-ancestor:
-  if (!base::FeatureList::IsEnabled(
-          network::features::kOutOfBlinkFrameAncestors)) {
-    if (!csp->AllowAncestors(frame_, response.CurrentRequestUrl()))
-      return nullptr;  // Document blocked.
-  }
-
   // Plugin inherits plugin's CSP from their navigation initiator.
   DocumentInit::Type document_type =
       DocumentInit::ComputeDocumentType(frame_, url, response.MimeType());
