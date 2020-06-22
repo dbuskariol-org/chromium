@@ -52409,6 +52409,9 @@ Called by update_net_trust_anchors.py.-->
   <int value="0" label="Password"/>
   <int value="1" label="Manage passwords"/>
   <int value="2" label="Generate password"/>
+  <int value="3" label="Unlock account-store to fill password"/>
+  <int value="4" label="Unlock account-store to generate password"/>
+  <int value="5" label="Re-Signin to unlock account-stored passwords"/>
 </enum>
 
 <enum name="PasswordDropdownState">
