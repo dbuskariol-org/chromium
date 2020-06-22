@@ -400,6 +400,9 @@ Try tapping the mic to ask me anything.
       <message name="IDS_PRINT_MANAGEMENT_CLEAR_ALL_POLICY_PRINT_JOB_INDICATOR_MESSAGE" desc="The message shown to indicate that a user policy is in place to prevent the user from deleting their print job history.">
         This action is managed by your administrator
       </message>
+      <message name="IDS_PRINT_MANAGEMENT_CANCEL_PRINT_JOB_BUTTON_LABEL" desc="The label for the button that cancels a print job.">
+        Cancel print job
+      </message>
     </messages>
   </release>
 </grit>
