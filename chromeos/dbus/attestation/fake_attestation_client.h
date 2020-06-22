@@ -7,6 +7,8 @@
 
 #include "chromeos/dbus/attestation/attestation_client.h"
 
+#include <deque>
+
 #include "base/component_export.h"
 #include "chromeos/dbus/attestation/interface.pb.h"
 #include "dbus/object_proxy.h"
@@ -89,8 +91,15 @@ class COMPONENT_EXPORT(CHROMEOS_DBUS_ATTESTATION) FakeAttestationClient
       GetCertifiedNvIndexCallback callback) override;
 
   // AttestationClient::TestInterface:
+  void ConfigureEnrollmentPreparations(bool is_prepared) override;
+  void ConfigureEnrollmentPreparationsSequence(
+      std::deque<bool> sequence) override;
 
   AttestationClient::TestInterface* GetTestInterface() override;
+
+ private:
+  bool is_prepared_{false};
+  std::deque<bool> preparation_sequences_;
 };
 
 }  // namespace chromeos

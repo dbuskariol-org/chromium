@@ -5,6 +5,8 @@
 #ifndef CHROMEOS_DBUS_ATTESTATION_ATTESTATION_CLIENT_H_
 #define CHROMEOS_DBUS_ATTESTATION_ATTESTATION_CLIENT_H_
 
+#include <deque>
+
 #include "base/callback.h"
 #include "base/component_export.h"
 #include "chromeos/dbus/attestation/interface.pb.h"
@@ -73,6 +75,15 @@ class COMPONENT_EXPORT(CHROMEOS_DBUS_ATTESTATION) AttestationClient {
   // only implemented in the fake implementation.
   class TestInterface {
    public:
+    // Sets the preparation status to |is_prepared|. If no injected sequence by
+    // |ConfigureEnrollmentPreparationsSequence| the enrollment preparations
+    // always returns |is_prepared|.
+    virtual void ConfigureEnrollmentPreparations(bool is_prepared) = 0;
+    // Injects |sequence| of enrollment preparations. Once injected, the
+    // returned enrollment preparations status will be the element popped from
+    // the |sequence| one-by-one until all the elements are consumed.
+    virtual void ConfigureEnrollmentPreparationsSequence(
+        std::deque<bool> sequence) = 0;
   };
 
   // Not copyable or movable.

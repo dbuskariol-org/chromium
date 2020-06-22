@@ -79,7 +79,18 @@ void FakeAttestationClient::RegisterKeyWithChapsToken(
 void FakeAttestationClient::GetEnrollmentPreparations(
     const ::attestation::GetEnrollmentPreparationsRequest& request,
     GetEnrollmentPreparationsCallback callback) {
-  NOTIMPLEMENTED();
+  bool is_prepared = is_prepared_;
+  // Override the state if there is a customized sequence.
+  if (!preparation_sequences_.empty()) {
+    is_prepared = preparation_sequences_.front();
+    preparation_sequences_.pop_front();
+  }
+
+  ::attestation::GetEnrollmentPreparationsReply reply;
+  if (is_prepared) {
+    (*reply.mutable_enrollment_preparations())[request.aca_type()] = true;
+  }
+  PostProtoResponse(std::move(callback), reply);
 }
 
 void FakeAttestationClient::GetStatus(
@@ -168,6 +179,15 @@ void FakeAttestationClient::GetCertifiedNvIndex(
     const ::attestation::GetCertifiedNvIndexRequest& request,
     GetCertifiedNvIndexCallback callback) {
   NOTIMPLEMENTED();
+}
+
+void FakeAttestationClient::ConfigureEnrollmentPreparations(bool is_prepared) {
+  is_prepared_ = is_prepared;
+}
+
+void FakeAttestationClient::ConfigureEnrollmentPreparationsSequence(
+    std::deque<bool> sequence) {
+  preparation_sequences_ = std::move(sequence);
 }
 
 AttestationClient::TestInterface* FakeAttestationClient::GetTestInterface() {
