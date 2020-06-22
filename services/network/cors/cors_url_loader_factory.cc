@@ -402,12 +402,16 @@ bool CorsURLLoaderFactory::IsValidRequest(const ResourceRequest& request,
     case InitiatorLockCompatibility::kIncorrectLock:
       // Requests from the renderer need to always specify a correct initiator.
       NOTREACHED();
-      url::debug::ScopedOriginCrashKey initiator_lock_crash_key(
-          debug::GetRequestInitiatorSiteLockCrashKey(),
-          base::OptionalOrNullptr(request_initiator_site_lock_));
-      mojo::ReportBadMessage(
-          "CorsURLLoaderFactory: lock VS initiator mismatch");
-      return false;
+      if (base::FeatureList::IsEnabled(
+              features::kRequestInitiatorSiteLockEnfocement)) {
+        url::debug::ScopedOriginCrashKey initiator_lock_crash_key(
+            debug::GetRequestInitiatorSiteLockCrashKey(),
+            base::OptionalOrNullptr(request_initiator_site_lock_));
+        mojo::ReportBadMessage(
+            "CorsURLLoaderFactory: lock VS initiator mismatch");
+        return false;
+      }
+      break;
   }
 
   if (context_ && !GetAllowAnyCorsExemptHeaderForBrowser() &&
