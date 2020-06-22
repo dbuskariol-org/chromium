@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/gtk/print_dialog_gtk.h"
+#include "ui/gtk/printing/print_dialog_gtk.h"
 
 #include <gtk/gtkunixprint.h>
 
@@ -31,7 +31,7 @@
 #include "ui/gtk/gtk_ui.h"
 #include "ui/gtk/gtk_ui_delegate.h"
 #include "ui/gtk/gtk_util.h"
-#include "ui/gtk/printing_gtk_util.h"
+#include "ui/gtk/printing/printing_gtk_util.h"
 
 #if defined(USE_CUPS)
 #include "printing/mojom/print.mojom.h"
