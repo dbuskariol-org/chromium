@@ -416,6 +416,9 @@ crbug.com/1050993 [ Linux ] virtual/gpu-rasterization/images/drag-image-descenda
 # Flaky test.
 crbug.com/1054894 http/tests/images/image-decode-in-frame.html [ Pass Timeout ]
 
+# Flaky test.
+crbug.com/1097332 external/wpt/measure-memory/detached.tentative.window.html [ Failure ]
+
 # ====== Paint team owned tests to here ======
 
 crbug.com/922249 virtual/android/fullscreen/compositor-touch-hit-rects-fullscreen-video-controls.html [ Failure Pass ]
