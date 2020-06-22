@@ -3004,14 +3004,6 @@ To change this setting, <ph name="BEGIN_LINK">&lt;resetlink&gt;</ph>reset sync<p
         All Chrome’s app data will be deleted permanently. This includes all files, settings, accounts, databases, etc.
       </message>
 
-      <!-- Client certificate selection failure strings. -->
-      <message name="IDS_CLIENT_CERT_UNSUPPORTED_TITLE" desc="Title of a dialog box for when the operating system does not support client SSL certificate selection">
-        Unable to select certificate.
-      </message>
-      <message name="IDS_CLIENT_CERT_UNSUPPORTED_MESSAGE" desc="The message in a dialog box for when the operating system does not support client SSL certificate selection">
-        Client side certificate selection is not supported by the operating system.
-      </message>
-
       <!-- WebUsb Picker UI strings -->
       <message name="IDS_USB_CHOOSER_DIALOG_PROMPT" desc="The text that is used to introduce the USB chooser dialog to the user.">
         <ph name="SITE">%1$s<ex>https://www.google.com</ex></ph> wants to connect

@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "components/browser_ui/client_certificate/android/ssl_client_certificate_request.h"
+
 #include <stddef.h>
 #include <utility>
 
@@ -13,14 +15,13 @@
 #include "base/containers/queue.h"
 #include "base/logging.h"
 #include "base/memory/ref_counted.h"
-#include "chrome/android/chrome_jni_headers/SSLClientCertificateRequest_jni.h"
-#include "chrome/browser/ssl/ssl_client_certificate_selector.h"
-#include "chrome/browser/vr/vr_tab_helper.h"
+#include "components/browser_ui/client_certificate/android/jni_headers/SSLClientCertificateRequest_jni.h"
 #include "content/public/browser/browser_task_traits.h"
 #include "content/public/browser/browser_thread.h"
 #include "content/public/browser/client_certificate_delegate.h"
 #include "content/public/browser/navigation_handle.h"
 #include "content/public/browser/web_contents_observer.h"
+#include "content/public/browser/web_contents_user_data.h"
 #include "net/base/host_port_pair.h"
 #include "net/cert/cert_database.h"
 #include "net/cert/x509_certificate.h"
@@ -31,12 +32,10 @@
 #include "ui/android/view_android.h"
 #include "ui/android/window_android.h"
 
+namespace browser_ui {
+namespace {
 using base::android::JavaParamRef;
 using base::android::ScopedJavaLocalRef;
-
-namespace chrome {
-
-namespace {
 
 class SSLClientCertPendingRequests;
 
@@ -195,11 +194,10 @@ static void StartClientCertificateRequest(
   // Pass the address of the delegate through to Java.
   jlong request_id = reinterpret_cast<intptr_t>(request.get());
 
-  if (!chrome::android::
-          Java_SSLClientCertificateRequest_selectClientCertificate(
-              env, request_id, window->GetJavaObject(), key_types_ref,
-              principals_ref, host_name_ref,
-              request->cert_request_info()->host_and_port.port())) {
+  if (!Java_SSLClientCertificateRequest_selectClientCertificate(
+          env, request_id, window->GetJavaObject(), key_types_ref,
+          principals_ref, host_name_ref,
+          request->cert_request_info()->host_and_port.port())) {
     return;
   }
 
@@ -241,11 +239,11 @@ void SSLClientCertPendingRequests::RequestComplete(
   // port differ from those of the completed request.
   const std::string host_and_port = info->host_and_port.ToString();
   auto should_keep = [host_and_port](ClientCertRequest* req) {
-                       return host_and_port != req->cert_request_info()->host_and_port.ToString();
-                     };
+    return host_and_port != req->cert_request_info()->host_and_port.ToString();
+  };
   auto on_drop = [cert, key](ClientCertRequest* req) {
-                   req->CertificateSelected(cert, key);
-                 };
+    req->CertificateSelected(cert, key);
+  };
   FilterPendingRequests(should_keep, on_drop);
 
   PumpRequests();
@@ -304,8 +302,6 @@ void ClientCertRequest::OnCancel() {
 
 }  // namespace
 
-namespace android {
-
 // Called from JNI on request completion/result.
 // |env| is the current thread's JNIEnv.
 // |clazz| is the SSLClientCertificateRequest JNI class reference.
@@ -337,8 +333,8 @@ static void JNI_SSLClientCertificateRequest_OnSystemRequestCompletion(
   // Convert the encoded chain to a vector of strings.
   std::vector<std::string> encoded_chain_strings;
   if (encoded_chain_ref) {
-    base::android::JavaArrayOfByteArrayToStringVector(
-        env, encoded_chain_ref, &encoded_chain_strings);
+    base::android::JavaArrayOfByteArrayToStringVector(env, encoded_chain_ref,
+                                                      &encoded_chain_strings);
   }
 
   std::vector<base::StringPiece> encoded_chain;
@@ -379,21 +375,10 @@ JNI_SSLClientCertificateRequest_NotifyClientCertificatesChangedOnIOThread(
   }
 }
 
-}  // namespace android
-
 base::OnceClosure ShowSSLClientCertificateSelector(
     content::WebContents* contents,
     net::SSLCertRequestInfo* cert_request_info,
-    net::ClientCertIdentityList unused_client_certs,
     std::unique_ptr<content::ClientCertificateDelegate> delegate) {
-  // TODO(asimjour): This should be removed once we have proper
-  // implementation of SSL client certificate selector in VR.
-  if (vr::VrTabHelper::IsUiSuppressedInVr(
-          contents, vr::UiSuppressedElement::kSslClientCertificate)) {
-    delegate->ContinueWithCertificate(nullptr, nullptr);
-    return base::OnceClosure();
-  }
-
   SSLClientCertPendingRequests::CreateForWebContents(contents);
   SSLClientCertPendingRequests* active_requests =
       SSLClientCertPendingRequests::FromWebContents(contents);
@@ -406,4 +391,4 @@ base::OnceClosure ShowSSLClientCertificateSelector(
   return cancellation_callback;
 }
 
-}  // namespace chrome
+}  // namespace browser_ui
