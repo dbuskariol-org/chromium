@@ -376,6 +376,7 @@ class RootNodeWrapper extends SARootNode {
     const interestingChildren = RootNodeWrapper.getInterestingChildren(root);
 
     if (interestingChildren.length < 1) {
+      setTimeout(NavigationManager.moveToValidNode, 0);
       throw SwitchAccess.error(
           SAConstants.ErrorType.NO_CHILDREN,
           'Root node must have at least 1 interesting child.');

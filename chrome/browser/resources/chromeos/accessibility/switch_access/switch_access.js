@@ -9,7 +9,7 @@
  */
 class SwitchAccess {
   static initialize() {
-    window.switchAccess = new SwitchAccess();
+    SwitchAccess.instance = new SwitchAccess();
     chrome.virtualKeyboardPrivate.setKeyboardState(
         chrome.virtualKeyboardPrivate.KeyboardState.ENABLED);
 
@@ -23,13 +23,9 @@ class SwitchAccess {
       SwitchAccessPreferences.initialize();
       TextNavigationManager.initialize();
 
+      // This can throw an error, so it is done last.
       KeyboardRootNode.startWatchingVisibility();
     });
-  }
-
-  // TODO(anastasi): Remove once new menu is being used.
-  static get instance() {
-    return window.switchAccess;
   }
 
   /** @private */

@@ -28,10 +28,11 @@ class FocusRingManager {
    */
   setColor(color) {
     if (this.colorPattern_.test(color) !== true) {
-      throw SwitchAccess.error(
+      console.error(SwitchAccess.error(
           SAConstants.ErrorType.INVALID_COLOR,
           'Problem setting focus ring color: ' + color + ' is not' +
-              'a valid CSS color string.');
+              'a valid CSS color string.'));
+      return;
     }
     this.rings_.forEach((ring) => ring.color = color);
   }
@@ -62,6 +63,7 @@ class FocusRingManager {
     }
 
     if (!primary.location) {
+      setTimeout(NavigationManager.moveToValidNode, 0);
       throw SwitchAccess.error(
           SAConstants.ErrorType.MISSING_LOCATION,
           'Cannot set focus rings if node location is undefined');
