@@ -235,18 +235,26 @@ class PDFiumPage {
     std::string note_text;
   };
 
+  // Represents a form field within the page.
+  struct FormField {
+    FormField();
+    FormField(const FormField& other);
+    ~FormField();
+
+    pp::Rect bounding_rect;
+    // Represents the name of form field as defined in the field dictionary.
+    std::string name;
+    // Represents the flags of form field as defined in the field dictionary.
+    int flags;
+  };
+
   // Represents a text field within the page.
-  struct TextField {
+  struct TextField : FormField {
     TextField();
     TextField(const TextField& other);
     ~TextField();
 
-    // Represents the name of form field as defined in the field dictionary.
-    std::string name;
     std::string value;
-    pp::Rect bounding_rect;
-    // Represents the flags of form field as defined in the field dictionary.
-    int flags;
   };
 
   // Returns a link index if the given character index is over a link, or -1
@@ -266,6 +274,8 @@ class PDFiumPage {
   void PopulateHighlight(FPDF_ANNOTATION annot);
   // Populate |text_fields_| with |annot|.
   void PopulateTextField(FPDF_ANNOTATION annot);
+  // Populate form fields like text field on the page.
+  void PopulateFormField(FPDF_ANNOTATION annot);
   // Returns link type and fills target associated with a destination. Returns
   // NONSELECTABLE_AREA if detection failed.
   Area GetDestinationTarget(FPDF_DEST destination, LinkTarget* target);
@@ -305,6 +315,8 @@ class PDFiumPage {
   static uint32_t CountLinkHighlightOverlaps(
       const std::vector<Link>& links,
       const std::vector<Highlight>& highlights);
+  bool PopulateFormFieldProperties(FPDF_ANNOTATION annot,
+                                   FormField* form_field);
 
   PDFiumEngine* engine_;
   ScopedFPDFPage page_;
