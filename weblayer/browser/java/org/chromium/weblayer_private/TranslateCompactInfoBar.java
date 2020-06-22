@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.google.android.material.tabs.TabLayout;
 
+import org.chromium.base.StrictModeContext;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
@@ -139,9 +140,13 @@ public class TranslateCompactInfoBar extends InfoBar
 
     @Override
     protected void createCompactLayoutContent(InfoBarCompactLayout parent) {
-        LinearLayout content = (LinearLayout) LayoutInflater.from(getContext())
-                                       .inflate(R.layout.weblayer_infobar_translate_compact_content,
-                                               parent, false);
+        LinearLayout content;
+        // LayoutInflater may trigger accessing the disk.
+        try (StrictModeContext ignored = StrictModeContext.allowDiskReads()) {
+            content = (LinearLayout) LayoutInflater.from(getContext())
+                              .inflate(R.layout.weblayer_infobar_translate_compact_content, parent,
+                                      false);
+        }
 
         // When parent tab is being switched out (view detached), dismiss all menus and snackbars.
         content.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
