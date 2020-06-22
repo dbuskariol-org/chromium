@@ -2434,7 +2434,7 @@
     <ph name="REFRESH_RATE">$1<ex>60</ex></ph> Hz - interlaced
   </message>
   <message name="IDS_SETTINGS_DISPLAY_ZOOM_TITLE" desc="In Device Settings > Displays, the title for the section for changing the display's zoom.">
-    Display Size
+    Display size
   </message>
   <message name="IDS_SETTINGS_DISPLAY_ZOOM_SUBLABEL" desc="In Device Settings > Displays, the text describing the display's zoom.">
     Make items on your screen smaller or larger
