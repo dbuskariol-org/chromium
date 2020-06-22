@@ -970,8 +970,7 @@ class CONTENT_EXPORT RenderWidgetHostImpl
       blink::mojom::InputEventResultSource ack_source) override;
   void DidOverscroll(const ui::DidOverscrollParams& params) override;
   void DidStartScrollingViewport() override;
-  void OnSetWhiteListedTouchAction(
-      cc::TouchAction white_listed_touch_action) override {}
+  void OnSetCompositorAllowedTouchAction(cc::TouchAction) override {}
   void OnInvalidInputEventSource() override;
 
   // Dispatch input events with latency information
