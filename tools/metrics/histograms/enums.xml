@@ -11907,6 +11907,7 @@ Called by update_net_error_codes.py.-->
   <int value="1" label="Adding cookie to DB failed."/>
   <int value="2" label="Updating access time of cookie failed."/>
   <int value="3" label="Deleting cookie failed."/>
+  <int value="4" label="Committing the transaction failed"/>
 </enum>
 
 <enum name="CookieControlsMode">
