@@ -17,6 +17,7 @@ import android.util.Log;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 
+import org.chromium.base.ContextUtils;
 import org.chromium.base.ThreadUtils;
 import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.JNINamespace;
@@ -211,10 +212,10 @@ public class SSLClientCertificateRequest {
      */
     @VisibleForTesting
     static class CertSelectionFailureDialog {
-        private final Activity mActivity;
+        private final Context mContext;
 
-        public CertSelectionFailureDialog(Activity activity) {
-            mActivity = activity;
+        public CertSelectionFailureDialog(Context context) {
+            mContext = context;
         }
 
         /**
@@ -222,7 +223,7 @@ public class SSLClientCertificateRequest {
          */
         public void show() {
             final AlertDialog.Builder builder = new UiUtils.CompatibleAlertDialogBuilder(
-                    mActivity, R.style.Theme_Chromium_AlertDialog);
+                    mContext, R.style.Theme_Chromium_AlertDialog);
             builder.setTitle(R.string.client_cert_unsupported_title)
                     .setMessage(R.string.client_cert_unsupported_message)
                     .setNegativeButton(R.string.close,
@@ -252,7 +253,10 @@ public class SSLClientCertificateRequest {
             final int port) {
         ThreadUtils.assertOnUiThread();
 
-        final Activity activity = window.getActivity().get();
+        // Use the context for the failure dialog in case the activity doesn't have the correct
+        // resources.
+        final Context context = window.getContext().get();
+        final Activity activity = ContextUtils.activityFromContext(context);
         if (activity == null) {
             Log.w(TAG, "Certificate request on GC'd activity.");
             return false;
@@ -276,7 +280,7 @@ public class SSLClientCertificateRequest {
                 new KeyChainCertSelectionCallback(activity.getApplicationContext(), nativePtr);
         KeyChainCertSelectionWrapper keyChain = new KeyChainCertSelectionWrapper(
                 activity, callback, keyTypes, principals, hostName, port, null);
-        maybeShowCertSelection(keyChain, callback, new CertSelectionFailureDialog(activity));
+        maybeShowCertSelection(keyChain, callback, new CertSelectionFailureDialog(context));
 
         // We've taken ownership of the native ssl request object.
         return true;
