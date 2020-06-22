@@ -286,7 +286,7 @@ using ExplicitlySetAttrElementsMap =
 class CORE_EXPORT Document : public ContainerNode,
                              public TreeScope,
                              public UseCounter,
-                             public FeaturePolicyParserDelegate,
+                             public FeatureContext,
                              public Supplementable<Document> {
   DEFINE_WRAPPERTYPEINFO();
   USING_GARBAGE_COLLECTED_MIXIN(Document);
@@ -323,13 +323,9 @@ class CORE_EXPORT Document : public ContainerNode,
 
   network::mojom::ReferrerPolicy GetReferrerPolicy() const;
 
-  // FeaturePolicyParserDelegate override
-  // TODO(crbug.com/1029822) FeaturePolicyParserDelegate overrides, these
-  // should migrate to LocalDOMWindow.
+  // FeatureContext override
+  // TODO(crbug.com/1029822): this should migrate to LocalDOMWindow.
   bool FeatureEnabled(OriginTrialFeature) const override;
-  void CountFeaturePolicyUsage(mojom::WebFeature feature) override;
-  bool FeaturePolicyFeatureObserved(
-      mojom::blink::FeaturePolicyFeature feature) override;
 
   bool DocumentPolicyFeatureObserved(
       mojom::blink::DocumentPolicyFeature feature);
