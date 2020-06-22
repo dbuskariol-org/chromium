@@ -199,9 +199,10 @@ ResourceRequest FrameLoader::ResourceRequestForReload(
   // was initiated by something in the current document and should therefore
   // show the current document's url as the referrer.
   if (client_redirect_policy == ClientRedirectPolicy::kClientRedirect) {
-    LocalDOMWindow* window = frame_->DomWindow();
     Referrer referrer = SecurityPolicy::GenerateReferrer(
-        window->GetReferrerPolicy(), window->Url(), window->OutgoingReferrer());
+        frame_->GetDocument()->GetReferrerPolicy(),
+        frame_->GetDocument()->Url(),
+        frame_->GetDocument()->OutgoingReferrer());
     request.SetReferrerString(referrer.referrer);
     request.SetReferrerPolicy(referrer.referrer_policy);
   }
