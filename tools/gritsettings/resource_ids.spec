@@ -204,6 +204,9 @@
     # Big alignment at start of section.
     "META": {"align": 100},
     "includes": [2000],
+  },
+  "chrome/browser/media/kaleidoscope/internal/kaleidoscope_strings.grd": {
+    "META": {"sizes": {"messages": [50],}},  # Relies on src-internal.
     "messages": [2010],
   },
   "chrome/browser/resources/bluetooth_internals/resources.grd": {
