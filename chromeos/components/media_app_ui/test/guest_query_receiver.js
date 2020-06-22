@@ -154,10 +154,8 @@ function installTestHandlers() {
   });
 
   parentMessagePipe.registerHandler('get-last-loaded-files', () => {
-    //  Note: the `ReceivedFileList` has methods stripped since it gets sent
-    //  over a pipe so just send the underlying files.
     return /** @type {LastLoadedFilesResponse} */ (
-        {fileList: lastReceivedFileList.files});
+        {fileList: lastReceivedFileList});
   });
 
   // Log errors, rather than send them to console.error. This allows the error

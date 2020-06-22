@@ -63,13 +63,6 @@ class ReceivedFile {
 }
 
 /**
- * Source of truth for what files are loaded in the app and writable. This can
- * be appended to via `ReceivedFileList.addFiles()`.
- * @type {?ReceivedFileList}
- */
-let lastLoadedReceivedFileList = null;
-
-/**
  * A file list consisting of all files received from the parent. Exposes the
  * currently writable file and all other readable files in the current
  * directory.
@@ -94,8 +87,6 @@ class ReceivedFileList {
     this.files = files.map(f => new ReceivedFile(f));
     /** @type {number} */
     this.writableFileIndex = 0;
-    /** @type {!Array<function(!mediaApp.AbstractFileList): void>} */
-    this.observers = [];
   }
 
   /** @override */
@@ -105,7 +96,6 @@ class ReceivedFileList {
 
   /**
    * Returns the file which is currently writable or null if there isn't one.
-   * @override
    * @return {?mediaApp.AbstractFile}
    */
   getCurrentlyWritable() {
@@ -114,7 +104,6 @@ class ReceivedFileList {
 
   /**
    * Loads in the next file in the list as a writable.
-   * @override
    * @return {!Promise<undefined>}
    */
   async loadNext() {
@@ -127,44 +116,16 @@ class ReceivedFileList {
 
   /**
    * Loads in the previous file in the list as a writable.
-   * @override
    * @return {!Promise<undefined>}
    */
   async loadPrev() {
     await parentMessagePipe.sendMessage(Message.NAVIGATE, {direction: -1});
   }
-
-  /** @override */
-  addObserver(observer) {
-    this.observers.push(observer);
-  }
-
-  /** @param {!Array<!ReceivedFile>} files */
-  addFiles(files) {
-    if (files.length === 0) {
-      return;
-    }
-    this.files = [...this.files, ...files];
-    this.length = this.files.length;
-    // Call observers with the new underlying files.
-    this.observers.map(o => o(this));
-  }
 }
 
 parentMessagePipe.registerHandler(Message.LOAD_FILES, async (message) => {
   const filesMessage = /** @type {!LoadFilesMessage} */ (message);
-  lastLoadedReceivedFileList = new ReceivedFileList(filesMessage);
-  await loadFiles(lastLoadedReceivedFileList);
-});
-
-// Load extra files by appending to the current `ReceivedFileList`.
-parentMessagePipe.registerHandler(Message.LOAD_EXTRA_FILES, async (message) => {
-  if (!lastLoadedReceivedFileList) {
-    return;
-  }
-  const extraFilesMessage = /** @type {!LoadFilesMessage} */ (message);
-  const newFiles = extraFilesMessage.files.map(f => new ReceivedFile(f));
-  lastLoadedReceivedFileList.addFiles(newFiles);
+  await loadFiles(new ReceivedFileList(filesMessage));
 });
 
 // As soon as the LOAD_FILES handler is installed, signal readiness to the

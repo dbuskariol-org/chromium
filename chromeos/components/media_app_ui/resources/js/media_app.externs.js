@@ -105,11 +105,6 @@ mediaApp.AbstractFileList.prototype.loadNext = function() {};
  * @return {!Promise<undefined>}
  */
 mediaApp.AbstractFileList.prototype.loadPrev = function() {};
-/**
- * @param {function(!mediaApp.AbstractFileList): void} observer invoked when the
- *     size or contents of the file list changes.
- */
-mediaApp.AbstractFileList.prototype.addObserver = function(observer) {};
 
 /**
  * The delegate which exposes open source privileged WebUi functions to
