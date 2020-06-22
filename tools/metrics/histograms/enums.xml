@@ -44199,6 +44199,7 @@ Called by update_use_counter_css.py.-->
   <int value="668" label="start"/>
   <int value="669" label="end"/>
   <int value="670" label="time-range"/>
+  <int value="671" label="scrollbar-gutter"/>
 </enum>
 
 <enum name="MappedEditingCommands">
