@@ -10,6 +10,7 @@
 #include "base/optional.h"
 #include "third_party/blink/public/platform/web_media_stream.h"
 #include "third_party/blink/renderer/modules/mediastream/mock_media_stream_video_source.h"
+#include "third_party/blink/renderer/platform/mediastream/media_stream_descriptor.h"
 
 namespace blink {
 
@@ -34,12 +35,16 @@ class MockMediaStreamRegistry final {
   MockMediaStreamVideoSource* AddVideoTrack(const std::string& track_id);
   void AddAudioTrack(const std::string& track_id);
 
-  const WebMediaStream test_stream() const { return test_stream_; }
+  // TODO(https://crbug.com/704136): Switch to return MediaStreamDescriptor and
+  // rename this method.
+  const WebMediaStream test_stream() const {
+    return WebMediaStream(descriptor_);
+  }
 
-  void reset() { test_stream_.Reset(); }
+  void reset() { descriptor_ = nullptr; }
 
  private:
-  WebMediaStream test_stream_;
+  Persistent<MediaStreamDescriptor> descriptor_;
 };
 
 }  // namespace blink
