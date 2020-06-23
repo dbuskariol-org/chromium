@@ -21357,6 +21357,10 @@ If set to False, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not 
             'policy_version': {
               'description': 'The client should not interpret this data and should forward it verbatim. The DMServer uses policy_version to verify that the policy view of DMServer matches the view of Chrome OS device.',
               'type': 'string'
+            },
+            'enable_remote_attestation_check': {
+              'description': 'Enable an additional security check based on remote attestation (optional, default: True).',
+              'type': 'boolean'
             }
           },
           'required': ['cert_profile_id', 'key_algorithm']
@@ -21370,7 +21374,7 @@ If set to False, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not 
         'can_be_recommended': False,
         'can_be_mandatory' : True,
       },
-      'example_value': [{'name': 'Certificate Profile 1', 'cert_profile_id':'cert_profile_id_1', 'key_algorithm':'rsa', 'renewal_period_seconds': 2592000, 'policy_version': 'some_hash'}],
+      'example_value': [{'name': 'Certificate Profile 1', 'cert_profile_id':'cert_profile_id_1', 'key_algorithm':'rsa', 'renewal_period_seconds': 2592000, 'policy_version': 'some_hash', 'enable_remote_attestation_check': True}],
       'id': 680,
       'caption': '''Required Client Certificates''',
       'tags': [],
@@ -21405,6 +21409,10 @@ If set to False, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not 
             'policy_version': {
               'description': 'The client should not interpret this data and should forward it verbatim. The DMServer uses policy_version to verify that the policy view of DMServer matches the view of Chrome OS device.',
               'type': 'string'
+            },
+            'enable_remote_attestation_check': {
+              'description': 'Enable an additional security check based on remote attestation (optional, default: True).',
+              'type': 'boolean'
             }
           },
           'required': ['cert_profile_id', 'key_algorithm']
@@ -21418,7 +21426,7 @@ If set to False, <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph> will not 
         'can_be_recommended': False,
         'can_be_mandatory' : True,
       },
-      'example_value': [{'name': 'Certificate Profile 1', 'cert_profile_id':'cert_profile_id_1', 'key_algorithm':'rsa', 'renewal_period_seconds': 2592000, 'policy_version': 'some_hash'}],
+      'example_value': [{'name': 'Certificate Profile 1', 'cert_profile_id':'cert_profile_id_1', 'key_algorithm':'rsa', 'renewal_period_seconds': 2592000, 'policy_version': 'some_hash', 'enable_remote_attestation_check': True}],
       'id': 681,
       'caption': '''Required device-wide Client Certificates''',
       'tags': [],

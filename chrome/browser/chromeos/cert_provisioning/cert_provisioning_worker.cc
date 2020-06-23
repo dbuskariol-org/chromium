@@ -30,10 +30,12 @@ namespace cert_provisioning {
 
 namespace {
 
-const base::TimeDelta kMinumumTryAgainLaterDelay =
+constexpr unsigned int kNonVaKeyModulusLengthBits = 2048;
+
+constexpr base::TimeDelta kMinumumTryAgainLaterDelay =
     base::TimeDelta::FromSeconds(10);
 
-const net::BackoffEntry::Policy kBackoffPolicy{
+constexpr net::BackoffEntry::Policy kBackoffPolicy{
     /*num_errors_to_ignore=*/0,
     /*initial_delay_ms=*/30 * 1000 /* (30 seconds) */,
     /*multiply_factor=*/2.0,
@@ -268,7 +270,7 @@ void CertProvisioningWorkerImpl::DoStep() {
       StartCsr();
       return;
     case CertProvisioningWorkerState::kStartCsrResponseReceived:
-      BuildVaChallengeResponse();
+      ProcessStartCsrResponse();
       return;
     case CertProvisioningWorkerState::kVaChallengeFinished:
       RegisterKey();
@@ -319,6 +321,35 @@ void CertProvisioningWorkerImpl::UpdateState(
 }
 
 void CertProvisioningWorkerImpl::GenerateKey() {
+  if (cert_profile_.is_va_enabled) {
+    GenerateKeyForVa();
+  } else {
+    GenerateRegularKey();
+  }
+}
+
+void CertProvisioningWorkerImpl::GenerateRegularKey() {
+  platform_keys_service_->GenerateRSAKey(
+      GetPlatformKeysTokenId(cert_scope_), kNonVaKeyModulusLengthBits,
+      base::Bind(&CertProvisioningWorkerImpl::OnGenerateRegularKeyDone,
+                 weak_factory_.GetWeakPtr()));
+}
+
+void CertProvisioningWorkerImpl::OnGenerateRegularKeyDone(
+    const std::string& public_key_spki_der,
+    const std::string& error_message) {
+  if (!error_message.empty() || public_key_spki_der.empty()) {
+    LOG(ERROR) << "Failed to prepare a non-VA key: " << error_message;
+    UpdateState(CertProvisioningWorkerState::kFailed);
+    return;
+  }
+
+  public_key_ = public_key_spki_der;
+  UpdateState(CertProvisioningWorkerState::kKeypairGenerated);
+  DoStep();
+}
+
+void CertProvisioningWorkerImpl::GenerateKeyForVa() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   tpm_challenge_key_subtle_impl_ =
@@ -327,11 +358,11 @@ void CertProvisioningWorkerImpl::GenerateKey() {
       GetVaKeyType(cert_scope_),
       GetVaKeyName(cert_scope_, cert_profile_.profile_id), profile_,
       GetVaKeyNameForSpkac(cert_scope_, cert_profile_.profile_id),
-      base::BindOnce(&CertProvisioningWorkerImpl::OnGenerateKeyDone,
+      base::BindOnce(&CertProvisioningWorkerImpl::OnGenerateKeyForVaDone,
                      weak_factory_.GetWeakPtr(), base::TimeTicks::Now()));
 }
 
-void CertProvisioningWorkerImpl::OnGenerateKeyDone(
+void CertProvisioningWorkerImpl::OnGenerateKeyForVaDone(
     base::TimeTicks start_time,
     const attestation::TpmChallengeKeyResult& result) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
@@ -388,6 +419,12 @@ void CertProvisioningWorkerImpl::OnStartCsrDone(
     return;
   }
 
+  if (cert_profile_.is_va_enabled && va_challenge.empty()) {
+    LOG(ERROR) << "VA challenge is required, but not included";
+    UpdateState(CertProvisioningWorkerState::kFailed);
+    return;
+  }
+
   csr_ = data_to_sign;
   invalidation_topic_ = invalidation_topic;
   va_challenge_ = va_challenge;
@@ -398,14 +435,18 @@ void CertProvisioningWorkerImpl::OnStartCsrDone(
   DoStep();
 }
 
-void CertProvisioningWorkerImpl::BuildVaChallengeResponse() {
-  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
-
-  if (va_challenge_.empty()) {
-    UpdateState(CertProvisioningWorkerState::kVaChallengeFinished);
+void CertProvisioningWorkerImpl::ProcessStartCsrResponse() {
+  if (!cert_profile_.is_va_enabled) {
+    UpdateState(CertProvisioningWorkerState::kKeyRegistered);
     DoStep();
     return;
   }
+
+  BuildVaChallengeResponse();
+}
+
+void CertProvisioningWorkerImpl::BuildVaChallengeResponse() {
+  DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
 
   tpm_challenge_key_subtle_impl_->StartSignChallengeStep(
       va_challenge_, /*include_signed_public_key=*/true,
@@ -772,8 +813,13 @@ void CertProvisioningWorkerImpl::HandleSerialization() {
     case CertProvisioningWorkerState::kKeypairGenerated:
       CertProvisioningSerializer::SerializeWorkerToPrefs(pref_service_, *this);
       break;
-
     case CertProvisioningWorkerState::kStartCsrResponseReceived:
+      // StartCSR response contains VA challenge and data to sign. It is allowed
+      // to build only one VA challenge response and sign only one data with the
+      // same key. To make sure that the key is not used again after
+      // deserialization, the serialized state should be deleted here. Also
+      // lifetime of the VA challenge is very short and most likely it would not
+      // survive long enough anyway.
       CertProvisioningSerializer::DeleteWorkerFromPrefs(pref_service_, *this);
       break;
     case CertProvisioningWorkerState::kVaChallengeFinished:

@@ -66,15 +66,17 @@ using CertProfileId = std::string;
 // RequiredClientCertificateForUser policies in policy_templates.json file.
 const char kCertProfileIdKey[] = "cert_profile_id";
 const char kCertProfilePolicyVersionKey[] = "policy_version";
+const char kCertProfileIsVaEnabledKey[] = "enable_remote_attestation_check";
 
 struct CertProfile {
   CertProfileId profile_id;
   std::string policy_version;
+  bool is_va_enabled = true;
 
   // IMPORTANT:
   // Increment this when you add/change any member in CertProfile (and update
   // all functions that fail to compile because of it).
-  static constexpr int kVersion = 2;
+  static constexpr int kVersion = 3;
 
   static base::Optional<CertProfile> MakeFromValue(const base::Value& value);
   bool operator==(const CertProfile& other) const;
