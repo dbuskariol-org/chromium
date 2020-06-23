@@ -64,12 +64,7 @@ void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
   is_notification_ = event_data->notification_key.has_value();
   is_input_method_window_ = event_data->is_input_method_window;
 
-  // The following loops perform caching to prepare for AXTreeSerializer.
-  // First, we cache the windows.
-  // Next, we cache the nodes. To compute importance table, we want a mapping
-  // from node id to an index in event_data->node_data is needed to avoid O(N^2)
-  // computation, iterate it twice.
-  // Finally, we cache each node's computed bounds, based on its descendants.
+  // Prepare the wrapper objects of mojom data from Android.
   CHECK(event_data->window_data);
   root_id_ = event_data->window_data->at(0)->window_id;
   for (size_t i = 0; i < event_data->window_data->size(); ++i) {
@@ -106,6 +101,7 @@ void AXTreeSourceArc::NotifyAccessibilityEvent(AXEventData* event_data) {
     }
   }
 
+  // Compute each node's bounds, based on its descendants.
   // Assuming |nodeData| is in pre-order, compute cached bounds in post-order to
   // avoid an O(n^2) amount of work as the computed bounds uses descendant
   // bounds.
