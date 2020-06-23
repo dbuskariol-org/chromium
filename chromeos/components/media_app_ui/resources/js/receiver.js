@@ -121,6 +121,11 @@ class ReceivedFileList {
   async loadPrev() {
     await parentMessagePipe.sendMessage(Message.NAVIGATE, {direction: -1});
   }
+
+  /** @override */
+  addObserver(observer) {
+    // TODO(b/158043802): Implement me.
+  }
 }
 
 parentMessagePipe.registerHandler(Message.LOAD_FILES, async (message) => {
