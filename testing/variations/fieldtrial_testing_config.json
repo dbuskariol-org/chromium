@@ -6201,19 +6201,6 @@
             ]
         }
     ],
-    "SettingsEnforcement": [
-        {
-            "platforms": [
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "enforce_always_with_extensions_and_dse"
-                }
-            ]
-        }
-    ],
     "SettingsResetPrompt": [
         {
             "platforms": [
