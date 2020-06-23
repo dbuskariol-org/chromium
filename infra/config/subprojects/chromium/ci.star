@@ -658,6 +658,7 @@ ci.fyi_builder(
         short_name = 'arm64',
     ),
     main_console_view = None,
+    os = os.MAC_ANY,
 )
 
 ci.fyi_ios_builder(
