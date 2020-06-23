@@ -97,12 +97,14 @@ void FidoDeviceAuthenticator::InitializeAuthenticatorDone(
 
 void FidoDeviceAuthenticator::MakeCredential(CtapMakeCredentialRequest request,
                                              MakeCredentialCallback callback) {
-  RunTask<MakeCredentialTask>(std::move(request), std::move(callback));
+  RunTask<MakeCredentialTask, AuthenticatorMakeCredentialResponse,
+          CtapMakeCredentialRequest>(std::move(request), std::move(callback));
 }
 
 void FidoDeviceAuthenticator::GetAssertion(CtapGetAssertionRequest request,
                                            GetAssertionCallback callback) {
-  RunTask<GetAssertionTask>(std::move(request), std::move(callback));
+  RunTask<GetAssertionTask, AuthenticatorGetAssertionResponse,
+          CtapGetAssertionRequest>(std::move(request), std::move(callback));
 }
 
 void FidoDeviceAuthenticator::GetNextAssertion(GetAssertionCallback callback) {
@@ -468,9 +470,9 @@ void FidoDeviceAuthenticator::OperationClearProxy(
 
 // RunTask starts a |FidoTask| and ensures that |task_| is reset when the given
 // callback is called.
-template <typename Task, typename Request, typename Response>
+template <typename Task, typename Response, typename... RequestArgs>
 void FidoDeviceAuthenticator::RunTask(
-    Request request,
+    RequestArgs&&... request_args,
     base::OnceCallback<void(CtapDeviceResponseCode, base::Optional<Response>)>
         callback) {
   DCHECK(!task_);
@@ -479,7 +481,7 @@ void FidoDeviceAuthenticator::RunTask(
       << "InitializeAuthenticator() must be called first.";
 
   task_ = std::make_unique<Task>(
-      device_.get(), std::move(request),
+      device_.get(), std::forward<RequestArgs>(request_args)...,
       base::BindOnce(
           &FidoDeviceAuthenticator::TaskClearProxy<CtapDeviceResponseCode,
                                                    base::Optional<Response>>,

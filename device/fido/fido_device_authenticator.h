@@ -159,8 +159,8 @@ class COMPONENT_EXPORT(DEVICE_FIDO) FidoDeviceAuthenticator
   template <typename... Args>
   void OperationClearProxy(base::OnceCallback<void(Args...)> callback,
                            Args... args);
-  template <typename Task, typename Request, typename Response>
-  void RunTask(Request request,
+  template <typename Task, typename Response, typename... RequestArgs>
+  void RunTask(RequestArgs&&... request_args,
                base::OnceCallback<void(CtapDeviceResponseCode,
                                        base::Optional<Response>)> callback);
   template <typename Request, typename Response>
