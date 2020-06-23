@@ -375,6 +375,21 @@ std::vector<device::CableDiscoveryData> GetTestCableExtension() {
   return ret;
 }
 
+device::AuthenticatorData AuthDataFromMakeCredentialResponse(
+    const MakeCredentialAuthenticatorResponsePtr& response) {
+  base::Optional<Value> attestation_value =
+      Reader::Read(response->attestation_object);
+  CHECK(attestation_value);
+  const auto& attestation = attestation_value->GetMap();
+
+  const auto auth_data_it = attestation.find(Value(device::kAuthDataKey));
+  CHECK(auth_data_it != attestation.end());
+  const std::vector<uint8_t>& auth_data = auth_data_it->second.GetBytestring();
+  base::Optional<device::AuthenticatorData> parsed_auth_data =
+      device::AuthenticatorData::DecodeAuthenticatorData(auth_data);
+  return std::move(parsed_auth_data.value());
+}
+
 }  // namespace
 
 class AuthenticatorTestBase : public content::RenderViewHostTestHarness {
@@ -1929,19 +1944,14 @@ class AuthenticatorContentBrowserClientTest : public AuthenticatorImplTest {
         continue;
       }
 
+      const device::AuthenticatorData auth_data =
+          AuthDataFromMakeCredentialResponse(callback_receiver.value());
+
       base::Optional<Value> attestation_value =
           Reader::Read(callback_receiver.value()->attestation_object);
       ASSERT_TRUE(attestation_value);
       ASSERT_TRUE(attestation_value->is_map());
       const auto& attestation = attestation_value->GetMap();
-
-      base::Optional<device::AuthenticatorData> auth_data = base::nullopt;
-      const auto auth_data_it = attestation.find(Value("authData"));
-      if (auth_data_it != attestation.end() &&
-          auth_data_it->second.is_bytestring()) {
-        auth_data = device::AuthenticatorData::DecodeAuthenticatorData(
-            auth_data_it->second.GetBytestring());
-      }
 
       switch (test.expected_attestation) {
         case AttestationType::ANY:
@@ -1951,13 +1961,13 @@ class AuthenticatorContentBrowserClientTest : public AuthenticatorImplTest {
         case AttestationType::NONE:
           ASSERT_STREQ("", test.expected_certificate_substring);
           ExpectMapHasKeyWithStringValue(attestation, "fmt", "none");
-          EXPECT_TRUE(auth_data->attested_data()->IsAaguidZero());
+          EXPECT_TRUE(auth_data.attested_data()->IsAaguidZero());
           break;
 
         case AttestationType::NONE_WITH_NONZERO_AAGUID:
           ASSERT_STREQ("", test.expected_certificate_substring);
           ExpectMapHasKeyWithStringValue(attestation, "fmt", "none");
-          EXPECT_FALSE(auth_data->attested_data()->IsAaguidZero());
+          EXPECT_FALSE(auth_data.attested_data()->IsAaguidZero());
           break;
 
         case AttestationType::U2F:
@@ -1984,7 +1994,7 @@ class AuthenticatorContentBrowserClientTest : public AuthenticatorImplTest {
                       attestation_statement.end());
           ASSERT_TRUE(attestation_statement.find(Value("ecdaaKeyId")) ==
                       attestation_statement.end());
-          EXPECT_TRUE(auth_data->attested_data()->IsAaguidZero());
+          EXPECT_TRUE(auth_data.attested_data()->IsAaguidZero());
           break;
         }
         case AttestationType::SELF_WITH_NONZERO_AAGUID: {
@@ -2003,7 +2013,7 @@ class AuthenticatorContentBrowserClientTest : public AuthenticatorImplTest {
                       attestation_statement.end());
           ASSERT_TRUE(attestation_statement.find(Value("ecdaaKeyId")) ==
                       attestation_statement.end());
-          EXPECT_FALSE(auth_data->attested_data()->IsAaguidZero());
+          EXPECT_FALSE(auth_data.attested_data()->IsAaguidZero());
           break;
         }
       }
@@ -2958,26 +2968,15 @@ TEST_F(AuthenticatorImplTest, ExtensionHMACSecret) {
       callback_receiver.WaitForCallback();
       EXPECT_EQ(AuthenticatorStatus::SUCCESS, callback_receiver.status());
 
-      base::Optional<Value> attestation_value =
-          Reader::Read(callback_receiver.value()->attestation_object);
-      ASSERT_TRUE(attestation_value);
-      ASSERT_TRUE(attestation_value->is_map());
-      const auto& attestation = attestation_value->GetMap();
-
-      const auto auth_data_it = attestation.find(Value(device::kAuthDataKey));
-      ASSERT_TRUE(auth_data_it != attestation.end());
-      ASSERT_TRUE(auth_data_it->second.is_bytestring());
-      const std::vector<uint8_t>& auth_data =
-          auth_data_it->second.GetBytestring();
-      base::Optional<device::AuthenticatorData> parsed_auth_data =
-          device::AuthenticatorData::DecodeAuthenticatorData(auth_data);
+      device::AuthenticatorData parsed_auth_data =
+          AuthDataFromMakeCredentialResponse(callback_receiver.value());
 
       // The virtual CTAP2 device always echos the hmac-secret extension on
       // registrations. Therefore, if |hmac_secret| was set above it should be
       // serialised in the CBOR and correctly passed all the way back around to
       // the reply's authenticator data.
       bool has_hmac_secret = false;
-      const auto& extensions = parsed_auth_data->extensions();
+      const auto& extensions = parsed_auth_data.extensions();
       if (extensions) {
         CHECK(extensions->is_map());
         const cbor::Value::MapValue& extensions_map = extensions->GetMap();
@@ -3529,19 +3528,8 @@ class UVAuthenticatorImplTest : public AuthenticatorImplTest {
 
   static bool HasUV(const TestMakeCredentialCallback& callback) {
     DCHECK_EQ(AuthenticatorStatus::SUCCESS, callback.status());
-    base::Optional<Value> attestation_value =
-        Reader::Read(callback.value()->attestation_object);
-    DCHECK(attestation_value);
-    DCHECK(attestation_value->is_map());
-    const auto& attestation = attestation_value->GetMap();
-
-    const auto auth_data_it = attestation.find(Value("authData"));
-    DCHECK(auth_data_it != attestation.end() &&
-           auth_data_it->second.is_bytestring());
-    base::Optional<device::AuthenticatorData> auth_data =
-        device::AuthenticatorData::DecodeAuthenticatorData(
-            auth_data_it->second.GetBytestring());
-    return auth_data->obtained_user_verification();
+    return AuthDataFromMakeCredentialResponse(callback.value())
+        .obtained_user_verification();
   }
 
   static bool HasUV(const TestGetAssertionCallback& callback) {
