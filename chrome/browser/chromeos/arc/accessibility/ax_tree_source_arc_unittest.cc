@@ -1401,6 +1401,8 @@ TEST_F(AXTreeSourceArcTest, SerializeAndUnserialize) {
   // |node2| is ignored by default because
   // AXBooleanProperty::IMPORTANCE has a default false value.
 
+  SetScreenReaderMode(true);
+
   CallNotifyAccessibilityEvent(event.get());
   EXPECT_EQ(1, GetDispatchedEventCount(ax::mojom::Event::kFocus));
   ExpectTree(
