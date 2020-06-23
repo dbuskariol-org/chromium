@@ -14,12 +14,10 @@ import os
 import subprocess
 import sys
 
-from gpu_tests import path_util
-
 
 class SkiaGoldProperties(object):
   def __init__(self, args):
-    """Class to validate and store properties related to Skia Gold.
+    """Abstract class to validate and store properties related to Skia Gold.
 
     Args:
       args: The parsed arguments from an argparse.ArgumentParser.
@@ -78,6 +76,10 @@ class SkiaGoldProperties(object):
   def bypass_skia_gold_functionality(self):
     return self._bypass_skia_gold_functionality
 
+  @staticmethod
+  def _GetGitOriginMasterHeadSha1():
+    raise NotImplementedError()
+
   def _GetGitRevision(self):
     if not self._git_revision:
       # Automated tests should always pass the revision, so assume we're on
@@ -85,7 +87,7 @@ class SkiaGoldProperties(object):
       if not self._IsLocalRun():
         raise RuntimeError(
             '--git-revision was not passed when running on a bot')
-      revision = _GetGitOriginMasterHeadSha1()
+      revision = self._GetGitOriginMasterHeadSha1()
       if not revision or len(revision) != 40:
         raise RuntimeError(
             '--git-revision not passed and unable to determine from git')
@@ -135,16 +137,3 @@ class SkiaGoldProperties(object):
       raise RuntimeError(
           '--gerrit-issue passed, but --buildbucket-id not passed.')
     self._job_id = args.buildbucket_id
-
-
-def _IsWin():
-  return sys.platform == 'win32'
-
-
-def _GetGitOriginMasterHeadSha1():
-  try:
-    return subprocess.check_output(['git', 'rev-parse', 'origin/master'],
-                                   shell=_IsWin(),
-                                   cwd=path_util.GetChromiumSrcDir()).strip()
-  except subprocess.CalledProcessError:
-    return None

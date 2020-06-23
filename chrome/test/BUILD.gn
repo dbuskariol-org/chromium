@@ -6806,6 +6806,9 @@ if (!is_fuchsia && !is_android) {
       "//testing/scripts/common.py",
       "//testing/xvfb.py",
       "//testing/scripts/run_telemetry_as_googletest.py",
+      
+      # For Skia Gold code, which has some GPU-specific unittests.
+      "//testing/skia_gold_common/",
     ]
   }
 }

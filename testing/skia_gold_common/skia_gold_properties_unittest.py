@@ -10,8 +10,8 @@ import unittest
 
 import mock
 
-from gpu_tests.skia_gold import skia_gold_properties
-from gpu_tests.skia_gold import unittest_utils
+from skia_gold_common import skia_gold_properties
+from skia_gold_common import unittest_utils
 
 createSkiaGoldArgs = unittest_utils.createSkiaGoldArgs
 
@@ -132,9 +132,8 @@ class SkiaGoldPropertiesCalculationTest(unittest.TestCase):
   def testGetGitRevision_findValidRevision(self):
     args = createSkiaGoldArgs(local_pixel_tests=True)
     sgp = skia_gold_properties.SkiaGoldProperties(args)
-    with mock.patch(
-        'gpu_tests.skia_gold.skia_gold_properties._GetGitOriginMasterHeadSha1'
-    ) as patched_head:
+    with mock.patch.object(skia_gold_properties.SkiaGoldProperties,
+                           '_GetGitOriginMasterHeadSha1') as patched_head:
       expected = 'a' * 40
       patched_head.return_value = expected
       self.assertEqual(sgp.git_revision, expected)
@@ -150,9 +149,8 @@ class SkiaGoldPropertiesCalculationTest(unittest.TestCase):
   def testGetGitRevision_findEmptyRevision(self):
     args = createSkiaGoldArgs(local_pixel_tests=True)
     sgp = skia_gold_properties.SkiaGoldProperties(args)
-    with mock.patch(
-        'gpu_tests.skia_gold.skia_gold_properties._GetGitOriginMasterHeadSha1'
-    ) as patched_head:
+    with mock.patch.object(skia_gold_properties.SkiaGoldProperties,
+                           '_GetGitOriginMasterHeadSha1') as patched_head:
       patched_head.return_value = ''
       with self.assertRaises(RuntimeError):
         _ = sgp.git_revision
@@ -160,9 +158,8 @@ class SkiaGoldPropertiesCalculationTest(unittest.TestCase):
   def testGetGitRevision_findMalformedRevision(self):
     args = createSkiaGoldArgs(local_pixel_tests=True)
     sgp = skia_gold_properties.SkiaGoldProperties(args)
-    with mock.patch(
-        'gpu_tests.skia_gold.skia_gold_properties._GetGitOriginMasterHeadSha1'
-    ) as patched_head:
+    with mock.patch.object(skia_gold_properties.SkiaGoldProperties,
+                           '_GetGitOriginMasterHeadSha1') as patched_head:
       patched_head.return_value = 'a' * 39
       with self.assertRaises(RuntimeError):
         _ = sgp.git_revision

@@ -12,11 +12,11 @@ import unittest
 
 import mock
 
-from gpu_tests.skia_gold import skia_gold_properties
-from gpu_tests.skia_gold import skia_gold_session
-from gpu_tests.skia_gold import unittest_utils
-
 from pyfakefs import fake_filesystem_unittest
+
+from skia_gold_common import skia_gold_properties
+from skia_gold_common import skia_gold_session
+from skia_gold_common import unittest_utils
 
 createSkiaGoldArgs = unittest_utils.createSkiaGoldArgs
 
@@ -133,7 +133,8 @@ class SkiaGoldSessionRunComparisonTest(fake_filesystem_unittest.TestCase):
       json.dump({}, f)
     session = skia_gold_session.SkiaGoldSession(self._working_dir, sgp,
                                                 keys_file, None, None)
-    status, error = session.RunComparison(None, None)
+    status, error = session.RunComparison(None, None,
+                                          'Definitely an output manager')
     self.assertEqual(
         status,
         skia_gold_session.SkiaGoldSession.StatusCodes.COMPARISON_FAILURE_LOCAL)
@@ -159,7 +160,8 @@ class SkiaGoldSessionRunComparisonTest(fake_filesystem_unittest.TestCase):
       json.dump({}, f)
     session = skia_gold_session.SkiaGoldSession(self._working_dir, sgp,
                                                 keys_file, None, None)
-    status, error = session.RunComparison(None, None)
+    status, error = session.RunComparison(None, None,
+                                          'Definitely an output manager')
     self.assertEqual(
         status,
         skia_gold_session.SkiaGoldSession.StatusCodes.LOCAL_DIFF_FAILURE)
@@ -169,6 +171,31 @@ class SkiaGoldSessionRunComparisonTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(compare_mock.call_count, 1)
     self.assertEqual(diff_mock.call_count, 1)
 
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, 'Diff')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, 'Compare')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, 'Initialize')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, 'Authenticate')
+  def test_noOutputManagerLocal(self, auth_mock, init_mock, compare_mock,
+                                diff_mock):
+    auth_mock.return_value = (0, None)
+    init_mock.return_value = (0, None)
+    compare_mock.return_value = (1, 'Compare failed')
+    diff_mock.return_value = (0, None)
+    args = createSkiaGoldArgs(local_pixel_tests=True)
+    sgp = skia_gold_properties.SkiaGoldProperties(args)
+    keys_file = os.path.join(self._working_dir, 'keys.json')
+    with open(os.path.join(self._working_dir, 'keys.json'), 'w') as f:
+      json.dump({}, f)
+    session = skia_gold_session.SkiaGoldSession(self._working_dir, sgp,
+                                                keys_file, None, None)
+    status, error = session.RunComparison(None, None, None)
+    self.assertEqual(
+        status, skia_gold_session.SkiaGoldSession.StatusCodes.NO_OUTPUT_MANAGER)
+    self.assertEqual(error, 'No output manager for local diff images')
+    self.assertEqual(auth_mock.call_count, 1)
+    self.assertEqual(compare_mock.call_count, 1)
+    self.assertEqual(diff_mock.call_count, 0)
+
 
 class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
   """Tests the functionality of SkiaGoldSession.Authenticate."""
@@ -177,7 +204,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     self.setUpPyfakefs()
     self._working_dir = tempfile.mkdtemp()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandOutputReturned(self, cmd_mock):
     cmd_mock.return_value = (1, 'Something bad :(')
     args = createSkiaGoldArgs(git_revision='a')
@@ -189,7 +216,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(rc, 1)
     self.assertEqual(stdout, 'Something bad :(')
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_bypassSkiaGoldFunctionality(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a',
@@ -201,7 +228,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(rc, 0)
     cmd_mock.assert_not_called()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_shortCircuitAlreadyAuthenticated(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -213,7 +240,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(rc, 0)
     cmd_mock.assert_not_called()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_successSetsShortCircuit(self, cmd_mock):
     cmd_mock.return_value = (0, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -226,7 +253,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     self.assertTrue(session._authenticated)
     cmd_mock.assert_called_once()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_failureDoesNotSetShortCircuit(self, cmd_mock):
     cmd_mock.return_value = (1, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -239,7 +266,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     self.assertFalse(session._authenticated)
     cmd_mock.assert_called_once()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandWithUseLuciTrue(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -249,7 +276,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     session.Authenticate(use_luci=True)
     self.assertIn('--luci', cmd_mock.call_args[0][0])
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandWithUseLuciFalse(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a', local_pixel_tests=True)
@@ -259,7 +286,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     session.Authenticate(use_luci=False)
     self.assertNotIn('--luci', cmd_mock.call_args[0][0])
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandWithUseLuciFalseNotLocal(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a', local_pixel_tests=False)
@@ -269,7 +296,7 @@ class SkiaGoldSessionAuthenticateTest(fake_filesystem_unittest.TestCase):
     with self.assertRaises(RuntimeError):
       session.Authenticate(use_luci=False)
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandCommonArgs(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -289,7 +316,7 @@ class SkiaGoldSessionInitializeTest(fake_filesystem_unittest.TestCase):
     self.setUpPyfakefs()
     self._working_dir = tempfile.mkdtemp()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_bypassSkiaGoldFunctionality(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a',
@@ -301,7 +328,7 @@ class SkiaGoldSessionInitializeTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(rc, 0)
     cmd_mock.assert_not_called()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_shortCircuitAlreadyInitialized(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -313,7 +340,7 @@ class SkiaGoldSessionInitializeTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(rc, 0)
     cmd_mock.assert_not_called()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_successSetsShortCircuit(self, cmd_mock):
     cmd_mock.return_value = (0, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -326,7 +353,7 @@ class SkiaGoldSessionInitializeTest(fake_filesystem_unittest.TestCase):
     self.assertTrue(session._initialized)
     cmd_mock.assert_called_once()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_failureDoesNotSetShortCircuit(self, cmd_mock):
     cmd_mock.return_value = (1, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -339,7 +366,7 @@ class SkiaGoldSessionInitializeTest(fake_filesystem_unittest.TestCase):
     self.assertFalse(session._initialized)
     cmd_mock.assert_called_once()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandCommonArgs(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -361,7 +388,7 @@ class SkiaGoldSessionInitializeTest(fake_filesystem_unittest.TestCase):
     assertArgWith(self, call_args, '--failure-file', session._triage_link_file)
     assertArgWith(self, call_args, '--commit', 'a')
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandTryjobArgs(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a',
@@ -379,7 +406,7 @@ class SkiaGoldSessionInitializeTest(fake_filesystem_unittest.TestCase):
     assertArgWith(self, call_args, '--crs', 'gerrit')
     assertArgWith(self, call_args, '--cis', 'buildbucket')
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandTryjobArgsMissing(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -402,7 +429,7 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
     self.setUpPyfakefs()
     self._working_dir = tempfile.mkdtemp()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandOutputReturned(self, cmd_mock):
     cmd_mock.return_value = (1, 'Something bad :(')
     args = createSkiaGoldArgs(git_revision='a')
@@ -414,7 +441,7 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(rc, 1)
     self.assertEqual(stdout, 'Something bad :(')
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_bypassSkiaGoldFunctionality(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a',
@@ -426,7 +453,7 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(rc, 0)
     cmd_mock.assert_not_called()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandWithLocalPixelTestsTrue(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a', local_pixel_tests=True)
@@ -436,7 +463,7 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
     session.Compare(None, None)
     self.assertIn('--dryrun', cmd_mock.call_args[0][0])
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandWithLocalPixelTestsFalse(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a', local_pixel_tests=False)
@@ -446,7 +473,7 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
     session.Compare(None, None)
     self.assertNotIn('--dryrun', cmd_mock.call_args[0][0])
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_commandCommonArgs(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -464,7 +491,7 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
     assertArgWith(self, call_args, '--png-file', 'png_file')
     assertArgWith(self, call_args, '--work-dir', self._working_dir)
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_noLinkOnSuccess(self, cmd_mock):
     cmd_mock.return_value = (0, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -477,7 +504,7 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
     self.assertNotEqual(
         session._comparison_results['name'].triage_link_omission_reason, None)
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_clLinkOnTrybot(self, cmd_mock):
     cmd_mock.return_value = (1, None)
     args = createSkiaGoldArgs(git_revision='a',
@@ -485,16 +512,20 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
                               gerrit_patchset=2,
                               buildbucket_id=3)
     sgp = skia_gold_properties.SkiaGoldProperties(args)
-    session = skia_gold_session.SkiaGoldSession(self._working_dir, sgp,
-                                                'keys_file', None, None)
+    session = skia_gold_session.SkiaGoldSession(self._working_dir,
+                                                sgp,
+                                                'keys_file',
+                                                None,
+                                                instance='instance')
     rc, _ = session.Compare('name', 'png_file')
     self.assertEqual(rc, 1)
     self.assertNotEqual(session._comparison_results['name'].triage_link, None)
-    self.assertIn('issue=1', session._comparison_results['name'].triage_link)
+    self.assertEqual(session._comparison_results['name'].triage_link,
+                     'https://instance-gold.skia.org/cl/gerrit/1')
     self.assertEqual(
         session._comparison_results['name'].triage_link_omission_reason, None)
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_individualLinkOnCi(self, cmd_mock):
     args = createSkiaGoldArgs(git_revision='a')
     sgp = skia_gold_properties.SkiaGoldProperties(args)
@@ -514,7 +545,7 @@ class SkiaGoldSessionCompareTest(fake_filesystem_unittest.TestCase):
     self.assertEqual(
         session._comparison_results['name'].triage_link_omission_reason, None)
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_validOmissionOnIoError(self, cmd_mock):
     cmd_mock.return_value = (1, None)
     args = createSkiaGoldArgs(git_revision='a')
@@ -544,19 +575,20 @@ class SkiaGoldSessionDiffTest(fake_filesystem_unittest.TestCase):
     self.setUpPyfakefs()
     self._working_dir = tempfile.mkdtemp()
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
-  def test_commandOutputReturned(self, cmd_mock):
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_StoreDiffLinks')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
+  def test_commandOutputReturned(self, cmd_mock, _):
     cmd_mock.return_value = (1, 'Something bad :(')
     args = createSkiaGoldArgs(git_revision='a', local_pixel_tests=False)
     sgp = skia_gold_properties.SkiaGoldProperties(args)
     session = skia_gold_session.SkiaGoldSession(self._working_dir, sgp, None,
                                                 None, None)
-    rc, stdout = session.Diff(None, None)
+    rc, stdout = session.Diff(None, None, None)
     self.assertEqual(cmd_mock.call_count, 1)
     self.assertEqual(rc, 1)
     self.assertEqual(stdout, 'Something bad :(')
 
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
+  @mock.patch.object(skia_gold_session.SkiaGoldSession, '_RunCmdForRcAndOutput')
   def test_bypassSkiaGoldFunctionality(self, cmd_mock):
     cmd_mock.return_value = (None, None)
     args = createSkiaGoldArgs(git_revision='a',
@@ -565,68 +597,50 @@ class SkiaGoldSessionDiffTest(fake_filesystem_unittest.TestCase):
     session = skia_gold_session.SkiaGoldSession(self._working_dir, sgp, None,
                                                 None, None)
     with self.assertRaises(RuntimeError):
-      session.Diff(None, None)
-
-  @mock.patch('gpu_tests.skia_gold.skia_gold_session._RunCmdForRcAndOutput')
-  def test_commandCommonArgs(self, cmd_mock):
-    cmd_mock.return_value = (None, None)
-    args = createSkiaGoldArgs(git_revision='a', local_pixel_tests=False)
-    sgp = skia_gold_properties.SkiaGoldProperties(args)
-    session = skia_gold_session.SkiaGoldSession(self._working_dir,
-                                                sgp,
-                                                None,
-                                                'corpus',
-                                                instance='instance')
-    session.Diff('name', 'png_file')
-    call_args = cmd_mock.call_args[0][0]
-    self.assertIn('diff', call_args)
-    assertArgWith(self, call_args, '--corpus', 'corpus')
-    assertArgWith(self, call_args, '--instance', 'instance')
-    assertArgWith(self, call_args, '--input', 'png_file')
-    assertArgWith(self, call_args, '--test', 'name')
-    assertArgWith(self, call_args, '--work-dir', self._working_dir)
-    i = call_args.index('--out-dir')
-    # The output directory should not be a subdirectory of the working
-    # directory.
-    self.assertNotIn(self._working_dir, call_args[i + 1])
+      session.Diff(None, None, None)
 
 
-class SkiaGoldSessionTriageLinkOmissionTest(unittest.TestCase):
+class SkiaGoldSessionRunComparisonTest(fake_filesystem_unittest.TestCase):
   """Tests the functionality of SkiaGoldSession.GetTriageLinkOmissionReason."""
 
-  # Avoid having to bother with the working directory.
-  class FakeGoldSession(skia_gold_session.SkiaGoldSession):
-    def __init__(self):  # pylint: disable=super-init-not-called
-      self._comparison_results = {
-          'foo': skia_gold_session.SkiaGoldSession.ComparisonResults(),
-      }
+  def setUp(self):
+    self.setUpPyfakefs()
+    self._working_dir = tempfile.mkdtemp()
+
+  def _CreateSession(self):
+    session = skia_gold_session.SkiaGoldSession(self._working_dir, None, None,
+                                                None, None)
+    session._comparison_results = {
+        'foo': skia_gold_session.SkiaGoldSession.ComparisonResults(),
+    }
+    return session
 
   def test_noComparison(self):
-    session = self.FakeGoldSession()
+    session = self._CreateSession()
     session._comparison_results = {}
     reason = session.GetTriageLinkOmissionReason('foo')
     self.assertEqual(reason, 'No image comparison performed for foo')
 
   def test_validReason(self):
-    session = self.FakeGoldSession()
+    session = self._CreateSession()
     session._comparison_results['foo'].triage_link_omission_reason = 'bar'
     reason = session.GetTriageLinkOmissionReason('foo')
     self.assertEqual(reason, 'bar')
 
   def test_onlyLocal(self):
-    session = self.FakeGoldSession()
+    session = self._CreateSession()
     session._comparison_results['foo'].local_diff_given_image = 'bar'
     reason = session.GetTriageLinkOmissionReason('foo')
     self.assertEqual(reason, 'Gold only used to do a local image diff')
 
   def test_onlyWithoutTriageLink(self):
-    session = self.FakeGoldSession()
+    session = self._CreateSession()
     session._comparison_results['foo'].triage_link = 'bar'
     with self.assertRaises(AssertionError):
       session.GetTriageLinkOmissionReason('foo')
 
   def test_resultsShouldNotExist(self):
-    session = self.FakeGoldSession()
+    session = self._CreateSession()
     with self.assertRaises(RuntimeError):
       session.GetTriageLinkOmissionReason('foo')
 

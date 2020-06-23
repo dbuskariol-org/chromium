@@ -5,18 +5,19 @@
 
 #pylint: disable=protected-access
 
+import json
 import os
 import tempfile
 import unittest
 
 import mock
 
-from gpu_tests.skia_gold import skia_gold_properties
-from gpu_tests.skia_gold import skia_gold_session
-from gpu_tests.skia_gold import skia_gold_session_manager
-from gpu_tests.skia_gold import unittest_utils
-
 from pyfakefs import fake_filesystem_unittest
+
+from skia_gold_common import skia_gold_properties
+from skia_gold_common import skia_gold_session
+from skia_gold_common import skia_gold_session_manager
+from skia_gold_common import unittest_utils
 
 createSkiaGoldArgs = unittest_utils.createSkiaGoldArgs
 
@@ -27,6 +28,11 @@ class SkiaGoldSessionManagerGetSessionTest(fake_filesystem_unittest.TestCase):
   def setUp(self):
     self.setUpPyfakefs()
     self._working_dir = tempfile.mkdtemp()
+    self._patcher = mock.patch.object(
+        skia_gold_session_manager.SkiaGoldSessionManager, '_GetSessionClass')
+    self._session_class_mock = self._patcher.start()
+    self._session_class_mock.return_value = skia_gold_session.SkiaGoldSession
+    self.addCleanup(self._patcher.stop)
 
   def test_ArgsForwardedToSession(self):
     args = createSkiaGoldArgs()
@@ -61,6 +67,19 @@ class SkiaGoldSessionManagerGetSessionTest(fake_filesystem_unittest.TestCase):
     self.assertTrue(session._keys_file.startswith(self._working_dir))
     self.assertEqual(session._corpus, 'instance')
     self.assertEqual(session._instance, 'instance')
+
+  @mock.patch.object(skia_gold_session_manager.SkiaGoldSessionManager,
+                     '_GetDefaultInstance')
+  def test_getDefaultInstance(self, default_instance_mock):
+    default_instance_mock.return_value = 'default'
+    args = createSkiaGoldArgs()
+    sgp = skia_gold_properties.SkiaGoldProperties(args)
+    sgsm = skia_gold_session_manager.SkiaGoldSessionManager(
+        self._working_dir, sgp)
+    session = sgsm.GetSkiaGoldSession({}, None, None)
+    self.assertTrue(session._keys_file.startswith(self._working_dir))
+    self.assertEqual(session._corpus, 'default')
+    self.assertEqual(session._instance, 'default')
 
   @mock.patch.object(skia_gold_session.SkiaGoldSession, '__init__')
   def test_matchingSessionReused(self, session_mock):
@@ -113,6 +132,44 @@ class SkiaGoldSessionManagerGetSessionTest(fake_filesystem_unittest.TestCase):
     session2 = sgsm.GetSkiaGoldSession({}, 'corpus', 'instance2')
     self.assertNotEqual(session1, session2)
     self.assertEqual(session_mock.call_count, 2)
+
+
+class SkiaGoldSessionManagerKeyConversionTest(fake_filesystem_unittest.TestCase
+                                              ):
+  def setUp(self):
+    self.setUpPyfakefs()
+    self._working_dir = tempfile.mkdtemp()
+
+  def test_getKeysAsDict(self):
+    keys_dict = {'foo': 'bar'}
+    keys_file_contents = {'bar': 'baz'}
+    keys_file = tempfile.NamedTemporaryFile(delete=False).name
+    with open(keys_file, 'w') as f:
+      json.dump(keys_file_contents, f)
+
+    self.assertEqual(skia_gold_session_manager._GetKeysAsDict(keys_dict),
+                     keys_dict)
+    self.assertEqual(skia_gold_session_manager._GetKeysAsDict(keys_file),
+                     keys_file_contents)
+    with self.assertRaises(AssertionError):
+      skia_gold_session_manager._GetKeysAsDict(1)
+
+  def test_getKeysAsJson(self):
+    keys_dict = {'foo': 'bar'}
+    keys_file_contents = {'bar': 'baz'}
+    keys_file = tempfile.NamedTemporaryFile(delete=False).name
+    with open(keys_file, 'w') as f:
+      json.dump(keys_file_contents, f)
+
+    self.assertEqual(skia_gold_session_manager._GetKeysAsJson(keys_file, None),
+                     keys_file)
+    keys_dict_as_json = skia_gold_session_manager._GetKeysAsJson(
+        keys_dict, self._working_dir)
+    self.assertTrue(keys_dict_as_json.startswith(self._working_dir))
+    with open(keys_dict_as_json) as f:
+      self.assertEqual(json.load(f), keys_dict)
+    with self.assertRaises(AssertionError):
+      skia_gold_session_manager._GetKeysAsJson(1, None)
 
 
 if __name__ == '__main__':
