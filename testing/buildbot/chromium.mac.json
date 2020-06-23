@@ -3,7 +3,7 @@
   "AAAAA2 See generate_buildbot_json.py to make changes": {},
   "Mac Builder": {
     "additional_compile_targets": [
-      "all"
+      "pdf_fuzzers"
     ],
     "scripts": [
       {
