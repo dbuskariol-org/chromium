@@ -3676,10 +3676,12 @@ RenderFrameImpl::CreateWorkerContentSettingsClient() {
 
 #if !defined(OS_ANDROID)
 std::unique_ptr<media::SpeechRecognitionClient>
-RenderFrameImpl::CreateSpeechRecognitionClient() {
+RenderFrameImpl::CreateSpeechRecognitionClient(
+    media::SpeechRecognitionClient::OnReadyCallback callback) {
   if (!frame_ || !frame_->View())
     return nullptr;
-  return GetContentClient()->renderer()->CreateSpeechRecognitionClient(this);
+  return GetContentClient()->renderer()->CreateSpeechRecognitionClient(
+      this, std::move(callback));
 }
 #endif
 
