@@ -6873,4 +6873,4 @@ crbug.com/1098067 [ Fuchsia ] external/wpt/shadow-dom/untriaged/shadow-trees/upp
 crbug.com/1098067 [ Fuchsia ] virtual/text-antialias/bidi-isolate-nextlinebreak-failure.html [ Pass Crash ]
 
 # Sheriff 2020-06-23
-crbug.com/1098067 [ Linux ] virtual/android/fullscreen/video-fixed-background.html [ Failure ]
+crbug.com/1098136 [ Linux ] virtual/android/fullscreen/video-fixed-background.html [ Failure ]
