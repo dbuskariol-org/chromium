@@ -272,6 +272,7 @@ public class PageInfoController implements ModalDialogProperties.Controller,
                     new PageInfoCookiesController(this, view2, viewParams.cookieControlsShown);
         } else {
             mView.showPerformanceInfo(mDelegate.shouldShowPerformanceBadge(mFullUrl));
+            mView.showHttpsImageCompressionInfo(mDelegate.isHttpsImageCompressionApplied());
 
             CookieControlsView.CookieControlsParams cookieControlsParams =
                     new CookieControlsView.CookieControlsParams();

@@ -74,6 +74,7 @@ public class ChromePageInfoControllerDelegate extends PageInfoControllerDelegate
         mPreviewPageState = getPreviewPageStateAndRecordUma();
         initOfflinePageParams();
         mOfflinePageLoadUrlDelegate = offlinePageLoadUrlDelegate;
+        initHttpsImageCompressionStateAndRecordUMA();
     }
 
     private Profile profile() {
@@ -119,6 +120,14 @@ public class ChromePageInfoControllerDelegate extends PageInfoControllerDelegate
                 DateFormat df = DateFormat.getDateInstance(DateFormat.MEDIUM);
                 mOfflinePageCreationDate = df.format(creationDate);
             }
+        }
+    }
+
+    private void initHttpsImageCompressionStateAndRecordUMA() {
+        mIsHttpsImageCompressionApplied =
+                PreviewsAndroidBridge.getInstance().isHttpsImageCompressionApplied(mWebContents);
+        if (mIsHttpsImageCompressionApplied) {
+            PreviewsUma.recordHttpsImageCompressionPageInfoOpened();
         }
     }
 

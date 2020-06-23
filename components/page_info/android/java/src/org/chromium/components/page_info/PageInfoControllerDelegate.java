@@ -48,6 +48,7 @@ public class PageInfoControllerDelegate {
     private final boolean mCookieControlsShown;
     protected @PreviewPageState int mPreviewPageState;
     protected @OfflinePageState int mOfflinePageState;
+    protected boolean mIsHttpsImageCompressionApplied;
     protected String mOfflinePageUrl;
 
     public PageInfoControllerDelegate(Supplier<ModalDialogManager> modalDialogManager,
@@ -58,6 +59,7 @@ public class PageInfoControllerDelegate {
         mVrHandler = vrHandler;
         mIsSiteSettingsAvailable = isSiteSettingsAvailable;
         mCookieControlsShown = cookieControlsShown;
+        mIsHttpsImageCompressionApplied = false;
 
         // These sometimes get overwritten by derived classes.
         mPreviewPageState = PreviewPageState.NOT_PREVIEW;
@@ -116,6 +118,13 @@ public class PageInfoControllerDelegate {
      */
     public boolean isInstantAppAvailable(String url) {
         return false;
+    }
+
+    /**
+     * Returns whether LiteMode https image compression was applied on this page
+     */
+    public boolean isHttpsImageCompressionApplied() {
+        return mIsHttpsImageCompressionApplied;
     }
 
     /**
