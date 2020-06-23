@@ -89,4 +89,19 @@ IN_PROC_BROWSER_TEST_F(IconLoaderBrowserTest, LoadExeIcon) {
   runner.Run();
   EXPECT_TRUE(test_loader.load_succeeded());
 }
+
+const base::FilePath::CharType kNotExistingExeFile[] =
+    FILE_PATH_LITERAL("unlikely-to-exist-file.exe");
+
+IN_PROC_BROWSER_TEST_F(IconLoaderBrowserTest, LoadDefaultExeIcon) {
+  base::RunLoop runner;
+
+  TestIconLoader test_loader(runner.QuitClosure());
+
+  test_loader.TryLoadIcon(base::FilePath(kNotExistingExeFile),
+                          IconLoader::NORMAL);
+
+  runner.Run();
+  EXPECT_TRUE(test_loader.load_succeeded());
+}
 #endif  // OS_WIN
