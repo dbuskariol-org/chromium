@@ -23616,6 +23616,7 @@ Called by update_extension_histograms.py.-->
   <int value="1481" label="AUTOTESTPRIVATE_DISABLESWITCHACCESSDIALOG"/>
   <int value="1482" label="ENTERPRISE_NETWORKINGATTRIBUTES_GETNETWORKDETAILS"/>
   <int value="1483" label="INPUTMETHODPRIVATE_SETAUTOCORRECTRANGE"/>
+  <int value="1484" label="PLATFORMKEYSINTERNAL_GETPUBLICKEYBYSPKI"/>
 </enum>
 
 <enum name="ExtensionIconState">
