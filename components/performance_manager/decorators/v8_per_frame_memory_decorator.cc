@@ -458,4 +458,26 @@ void V8PerFrameMemoryDecorator::UpdateProcessMeasurementSchedules() const {
   }
 }
 
+V8PerFrameMemoryRequest::V8PerFrameMemoryRequest(
+    const base::TimeDelta& sample_frequency)
+    : request_(std::make_unique<V8PerFrameMemoryDecorator::MeasurementRequest>(
+          sample_frequency)) {
+  // Unretained is safe since the destructor will run on the same sequence as
+  // StartMeasurement.
+  PerformanceManager::CallOnGraph(
+      FROM_HERE,
+      base::BindOnce(
+          &V8PerFrameMemoryDecorator::MeasurementRequest::StartMeasurement,
+          base::Unretained(request_.get())));
+}
+
+V8PerFrameMemoryRequest::~V8PerFrameMemoryRequest() {
+  PerformanceManager::CallOnGraph(
+      FROM_HERE,
+      base::BindOnce(
+          [](std::unique_ptr<V8PerFrameMemoryDecorator::MeasurementRequest>
+                 request) { request.reset(); },
+          std::move(request_)));
+}
+
 }  // namespace performance_manager

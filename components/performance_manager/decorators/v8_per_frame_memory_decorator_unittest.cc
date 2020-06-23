@@ -12,9 +12,11 @@
 #include "components/performance_manager/graph/frame_node_impl.h"
 #include "components/performance_manager/graph/page_node_impl.h"
 #include "components/performance_manager/graph/process_node_impl.h"
+#include "components/performance_manager/public/performance_manager.h"
 #include "components/performance_manager/public/render_process_host_proxy.h"
 #include "components/performance_manager/test_support/graph_test_harness.h"
 #include "components/performance_manager/test_support/mock_graphs.h"
+#include "components/performance_manager/test_support/performance_manager_test_harness.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
 
@@ -172,6 +174,8 @@ class V8PerFrameMemoryDecoratorTest : public GraphTestHarness {
 
 class V8PerFrameMemoryDecoratorDeathTest
     : public V8PerFrameMemoryDecoratorTest {};
+
+class V8PerFrameMemoryRequestTest : public PerformanceManagerTestHarness {};
 
 constexpr base::TimeDelta
     V8PerFrameMemoryDecoratorTest::kMinTimeBetweenRequests;
@@ -905,6 +909,62 @@ TEST_F(V8PerFrameMemoryDecoratorDeathTest,
         kMinTimeBetweenRequests, graph());
     request.StartMeasurement(graph());
   });
+}
+
+TEST_F(V8PerFrameMemoryRequestTest, RequestIsSequenceSafe) {
+  base::RunLoop run_loop;
+
+  // Precondition: CallOnGraph must run on a different sequence.  Note that all
+  // tasks passed to CallOnGraph will only run when run_loop.Run() is called
+  // below.
+  ASSERT_TRUE(task_environment()
+                  ->GetMainThreadTaskRunner()
+                  ->RunsTasksInCurrentSequence());
+  PerformanceManager::CallOnGraph(
+      FROM_HERE, base::BindLambdaForTesting([this] {
+        EXPECT_FALSE(this->task_environment()
+                         ->GetMainThreadTaskRunner()
+                         ->RunsTasksInCurrentSequence());
+      }));
+
+  // Decorator should not exist before creating a request.
+  PerformanceManager::CallOnGraph(
+      FROM_HERE, base::BindOnce([](Graph* graph) {
+        EXPECT_FALSE(V8PerFrameMemoryDecorator::GetFromGraph(graph));
+      }));
+
+  // This object is created on the main sequence but should cause a
+  // MeasurementRequest to be created on the graph sequence after the above
+  // task.
+  auto request = std::make_unique<V8PerFrameMemoryRequest>(
+      V8PerFrameMemoryDecoratorTest::kMinTimeBetweenRequests);
+
+  // Decorator now exists and has the request frequency set, proving that the
+  // MeasurementRequest was created.
+  PerformanceManager::CallOnGraph(
+      FROM_HERE, base::BindOnce([](Graph* graph) {
+        auto* decorator = V8PerFrameMemoryDecorator::GetFromGraph(graph);
+        ASSERT_TRUE(decorator);
+        EXPECT_EQ(V8PerFrameMemoryDecoratorTest::kMinTimeBetweenRequests,
+                  decorator->GetMinTimeBetweenRequestsPerProcess());
+      }));
+
+  // Destroying the object on the main sequence should cause the wrapped
+  // MeasurementRequest to be destroyed on the graph sequence after the above
+  // tasks.
+  request.reset();
+
+  // Request frequency is reset, proving the MeasurementRequest was destroyed.
+  PerformanceManager::CallOnGraph(
+      FROM_HERE, base::BindOnce([](Graph* graph) {
+        auto* decorator = V8PerFrameMemoryDecorator::GetFromGraph(graph);
+        ASSERT_TRUE(decorator);
+        EXPECT_TRUE(decorator->GetMinTimeBetweenRequestsPerProcess().is_zero());
+      }));
+
+  // Now execute all the queued CallOnGraph tasks and exit.
+  PerformanceManager::CallOnGraph(FROM_HERE, run_loop.QuitClosure());
+  run_loop.Run();
 }
 
 }  // namespace performance_manager

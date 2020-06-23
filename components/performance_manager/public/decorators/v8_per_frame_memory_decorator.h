@@ -179,6 +179,20 @@ class V8PerFrameMemoryDecorator::ProcessData {
   uint64_t unassociated_v8_bytes_used_ = 0;
 };
 
+// Wrapper that can instantiate a V8PerFrameMemoryDecorator::MeasurementRequest
+// from any sequence.
+class V8PerFrameMemoryRequest {
+ public:
+  explicit V8PerFrameMemoryRequest(const base::TimeDelta& sample_frequency);
+  ~V8PerFrameMemoryRequest();
+
+  V8PerFrameMemoryRequest(const V8PerFrameMemoryRequest&) = delete;
+  V8PerFrameMemoryRequest& operator=(const V8PerFrameMemoryRequest&) = delete;
+
+ private:
+  std::unique_ptr<V8PerFrameMemoryDecorator::MeasurementRequest> request_;
+};
+
 }  // namespace performance_manager
 
 #endif  // COMPONENTS_PERFORMANCE_MANAGER_PUBLIC_DECORATORS_V8_PER_FRAME_MEMORY_DECORATOR_H_
