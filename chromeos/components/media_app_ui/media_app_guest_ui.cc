@@ -11,6 +11,7 @@
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_ui.h"
 #include "content/public/browser/web_ui_data_source.h"
+#include "services/network/public/mojom/content_security_policy.mojom.h"
 
 namespace chromeos {
 
@@ -41,14 +42,19 @@ content::WebUIDataSource* CreateMediaAppUntrustedDataSource() {
 
   source->AddFrameAncestor(GURL(kChromeUIMediaAppURL));
   // By default, prevent all network access.
-  source->OverrideContentSecurityPolicyDefaultSrc("default-src blob: 'self';");
+  source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::DefaultSrc,
+      "default-src blob: 'self';");
   // Need to explicitly set |worker-src| because CSP falls back to |child-src|
   // which is none.
-  source->OverrideContentSecurityPolicyWorkerSrc("worker-src 'self';");
+  source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::WorkerSrc, "worker-src 'self';");
   // Allow images to also handle data urls.
-  source->OverrideContentSecurityPolicyImgSrc("img-src blob: data: 'self';");
+  source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::ImgSrc, "img-src blob: data: 'self';");
   // Allow styles to include inline styling needed for Polymer elements.
-  source->OverrideContentSecurityPolicyStyleSrc("style-src 'unsafe-inline';");
+  source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::StyleSrc, "style-src 'unsafe-inline';");
   return source;
 }
 

@@ -14,6 +14,7 @@
 #include "content/public/browser/web_contents.h"
 #include "content/public/browser/web_ui.h"
 #include "content/public/browser/web_ui_data_source.h"
+#include "services/network/public/mojom/content_security_policy.mojom.h"
 #include "ui/base/webui/web_ui_util.h"
 #include "ui/resources/grit/webui_resources.h"
 
@@ -78,7 +79,8 @@ PrintManagementUI::PrintManagementUI(
       bind_pending_receiver_callback_(std::move(callback)) {
   auto html_source = base::WrapUnique(
       content::WebUIDataSource::Create(kChromeUIPrintManagementHost));
-  html_source->OverrideContentSecurityPolicyScriptSrc(
+  html_source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::ScriptSrc,
       "script-src chrome://resources chrome://test 'self';");
 
   html_source->AddResourcePath("print_management.js", IDR_PRINT_MANAGEMENT_JS);

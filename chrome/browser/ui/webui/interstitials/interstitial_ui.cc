@@ -53,6 +53,7 @@
 #include "net/ssl/ssl_info.h"
 #include "services/metrics/public/cpp/ukm_source_id.h"
 #include "services/network/public/cpp/origin_policy.h"
+#include "services/network/public/mojom/content_security_policy.mojom.h"
 #include "ui/base/resource/resource_bundle.h"
 #include "ui/base/webui/web_ui_util.h"
 
@@ -100,9 +101,8 @@ class InterstitialHTMLSource : public content::URLDataSource {
   // content::URLDataSource:
   std::string GetMimeType(const std::string& mime_type) override;
   std::string GetSource() override;
-  std::string GetContentSecurityPolicyScriptSrc() override;
-  std::string GetContentSecurityPolicyStyleSrc() override;
-  std::string GetContentSecurityPolicyImgSrc() override;
+  std::string GetContentSecurityPolicy(
+      const network::mojom::CSPDirectiveName directive) override;
   void StartDataRequest(
       const GURL& url,
       const content::WebContents::Getter& wc_getter,
@@ -466,17 +466,18 @@ std::string InterstitialHTMLSource::GetSource() {
   return chrome::kChromeUIInterstitialHost;
 }
 
-std::string InterstitialHTMLSource::GetContentSecurityPolicyScriptSrc() {
-  // 'unsafe-inline' is added to script-src.
-  return "script-src chrome://resources 'self' 'unsafe-inline';";
-}
+std::string InterstitialHTMLSource::GetContentSecurityPolicy(
+    const network::mojom::CSPDirectiveName directive) {
+  if (directive == network::mojom::CSPDirectiveName::ScriptSrc) {
+    // 'unsafe-inline' is added to script-src.
+    return "script-src chrome://resources 'self' 'unsafe-inline';";
+  } else if (directive == network::mojom::CSPDirectiveName::StyleSrc) {
+    return "style-src 'self' 'unsafe-inline';";
+  } else if (directive == network::mojom::CSPDirectiveName::ImgSrc) {
+    return "img-src data:;";
+  }
 
-std::string InterstitialHTMLSource::GetContentSecurityPolicyStyleSrc() {
-  return "style-src 'self' 'unsafe-inline';";
-}
-
-std::string InterstitialHTMLSource::GetContentSecurityPolicyImgSrc() {
-  return "img-src data:;";
+  return content::URLDataSource::GetContentSecurityPolicy(directive);
 }
 
 void InterstitialHTMLSource::StartDataRequest(

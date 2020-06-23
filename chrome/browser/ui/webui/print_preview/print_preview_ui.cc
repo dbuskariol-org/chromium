@@ -63,6 +63,7 @@
 #include "extensions/common/constants.h"
 #include "printing/mojom/print.mojom.h"
 #include "printing/print_job_constants.h"
+#include "services/network/public/mojom/content_security_policy.mojom.h"
 #include "ui/base/l10n/l10n_util.h"
 #include "ui/base/webui/web_ui_util.h"
 #include "ui/gfx/geometry/rect.h"
@@ -429,9 +430,11 @@ void SetupPrintPreviewPlugin(content::WebUIDataSource* source) {
 
   source->SetRequestFilter(base::BindRepeating(&ShouldHandleRequestCallback),
                            base::BindRepeating(&HandleRequestCallback));
-  source->OverrideContentSecurityPolicyChildSrc("child-src 'self';");
+  source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::ChildSrc, "child-src 'self';");
   source->DisableDenyXFrameOptions();
-  source->OverrideContentSecurityPolicyObjectSrc("object-src 'self';");
+  source->OverrideContentSecurityPolicy(
+      network::mojom::CSPDirectiveName::ObjectSrc, "object-src 'self';");
 }
 
 content::WebUIDataSource* CreatePrintPreviewUISource(Profile* profile) {
