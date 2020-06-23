@@ -132,6 +132,14 @@ void PrefetchManager::Start(const GURL& url,
   TryToLaunchPrefetchJobs();
 }
 
+void PrefetchManager::Stop(const GURL& url) {
+  DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
+  auto it = prefetch_info_.find(url);
+  if (it == prefetch_info_.end())
+    return;
+  it->second->was_canceled = true;
+}
+
 void PrefetchManager::PrefetchUrl(std::unique_ptr<PrefetchJob> job,
                                   network::SharedURLLoaderFactory& factory) {
   DCHECK(job);
@@ -221,7 +229,7 @@ void PrefetchManager::TryToLaunchPrefetchJobs() {
     // |this| owns all infos.
     DCHECK(info);
 
-    if (job->url.is_valid() && factory)
+    if (job->url.is_valid() && factory && !info->was_canceled)
       PrefetchUrl(std::move(job), *factory);
   }
 }

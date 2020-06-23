@@ -57,6 +57,7 @@ struct PrefetchInfo {
 
   GURL url;
   size_t job_count = 0;
+  bool was_canceled = false;
   std::unique_ptr<PrefetchStats> stats;
   // Owns |this|.
   PrefetchManager* const manager;
@@ -109,8 +110,9 @@ class PrefetchManager {
   // Starts prefetch jobs keyed by |url|.
   void Start(const GURL& url, std::vector<PrefetchRequest> requests);
 
-  // TODO(falken): Implement Stop().
-  // void Stop(const GURL& url);
+  // Stops further prefetch jobs keyed by |url|. Queued jobs will never start;
+  // started jobs will continue to completion.
+  void Stop(const GURL& url);
 
   base::WeakPtr<PrefetchManager> GetWeakPtr() {
     return weak_factory_.GetWeakPtr();
