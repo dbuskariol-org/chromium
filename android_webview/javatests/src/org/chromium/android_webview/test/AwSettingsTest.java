@@ -1559,6 +1559,9 @@ public class AwSettingsTest {
     }
 
     class AwSettingsCorsTestHelper {
+        public static final String ASSET_MAIN_URL = "file:///android_asset/cors.html";
+        public static final String RESOURCE_IMAGE_URL = "file:///android_res/raw/resource_icon.png";
+
         private static final String TEST_HTML_FILE_PATH = "android_webview/test/data/cors.html";
         private static final String TEST_IMAGE_FILE_PATH = "android_webview/test/data/chrome.png";
         private static final String TEST_HTML_CONTENT_PATH = "cors.html";
@@ -1612,6 +1615,14 @@ public class AwSettingsTest {
 
         public void allowUniversalAccessFromFileURLs() {
             mAwSettings.setAllowUniversalAccessFromFileURLs(true);
+        }
+
+        public void disallowFileAccess() {
+            mAwSettings.setAllowFileAccess(false);
+        }
+
+        public void disallowContentAccess() {
+            mAwSettings.setAllowContentAccess(false);
         }
     }
 
@@ -2092,15 +2103,35 @@ public class AwSettingsTest {
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mContentMainUrl, corsTestHelper.mFileImageUrl));
 
+        // Case b') content:// to file:///android_res/ should also fail.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", corsTestHelper.mContentMainUrl,
+                        AwSettingsCorsTestHelper.RESOURCE_IMAGE_URL));
+
         // Case c) file:// to content:// should fail.
         Assert.assertEquals("error",
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mFileMainUrl, corsTestHelper.mContentImageUrl));
 
+        // Case c') file:///android_asset/ to content:// should also fail.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mContentImageUrl));
+
         // Case d) file:// to file:// should fail.
         Assert.assertEquals("error",
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mFileMainUrl, corsTestHelper.mFileImageUrl));
+
+        // Case d') file:///android_asset/ to file:// should also fail.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mFileImageUrl));
+
+        // Case d'') file:///android_asset/ to file:///android_res/ should also fail.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        AwSettingsCorsTestHelper.RESOURCE_IMAGE_URL));
     }
 
     // Check if setAllowFileAccessFromFileURLs(true) allows same-scheme CORS accesses.
@@ -2121,15 +2152,35 @@ public class AwSettingsTest {
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mContentMainUrl, corsTestHelper.mFileImageUrl));
 
+        // Case b') content:// to file:///android_res/ should also fail.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", corsTestHelper.mContentMainUrl,
+                        AwSettingsCorsTestHelper.RESOURCE_IMAGE_URL));
+
         // Case c) file:// to content:// should fail.
         Assert.assertEquals("error",
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mFileMainUrl, corsTestHelper.mContentImageUrl));
 
+        // Case c') file:///android_asset/ to content:// should also fail.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mContentImageUrl));
+
         // Case d) file:// to file:// should pass.
         Assert.assertEquals("load",
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mFileMainUrl, corsTestHelper.mFileImageUrl));
+
+        // Case d') file:///android_asset/ to file:// should also pass.
+        Assert.assertEquals("load",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mFileImageUrl));
+
+        // Case d'') file:///android_asset/ to file:///android_res/ should also pass.
+        Assert.assertEquals("load",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        AwSettingsCorsTestHelper.RESOURCE_IMAGE_URL));
     }
 
     // Check if setAllowUniversalAccessFromFileURLs(true) allows any CORS access from file://.
@@ -2150,22 +2201,42 @@ public class AwSettingsTest {
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mContentMainUrl, corsTestHelper.mFileImageUrl));
 
+        // Case b') content:// to file:///android_res/ should also fail.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", corsTestHelper.mContentMainUrl,
+                        AwSettingsCorsTestHelper.RESOURCE_IMAGE_URL));
+
         // Case c) file:// to content:// should pass.
         Assert.assertEquals("load",
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mFileMainUrl, corsTestHelper.mContentImageUrl));
 
+        // Case c') file:///android_asset/ to content:// should also pass.
+        Assert.assertEquals("load",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mContentImageUrl));
+
         // Case d) file:// to file:// should pass.
         Assert.assertEquals("load",
                 corsTestHelper.getTestResult(
                         "xhr", corsTestHelper.mFileMainUrl, corsTestHelper.mFileImageUrl));
+
+        // Case d') file:///android_asset/ to file:// should also pass.
+        Assert.assertEquals("load",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mFileImageUrl));
+
+        // Case d'') file:///android_asset/ to file:///android_res/ should also pass.
+        Assert.assertEquals("load",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        AwSettingsCorsTestHelper.RESOURCE_IMAGE_URL));
     }
 
     // Check if the Fetch API always fails on file:// and content://.
     @Test
     @SmallTest
     @Feature({"AndroidWebView", "Preferences", "CORS"})
-    public void testContentUrlMakesFetchRequests() throws Throwable {
+    public void testContentUrlMakesFetchRequestsWithoutFileAccess() throws Throwable {
         final AwSettingsCorsTestHelper corsTestHelper = new AwSettingsCorsTestHelper();
         // Run tests with the most relaxed settings.
         corsTestHelper.allowFileAccessFromFileURLs();
@@ -2190,6 +2261,97 @@ public class AwSettingsTest {
         Assert.assertEquals("error",
                 corsTestHelper.getTestResult(
                         "fetch", corsTestHelper.mFileMainUrl, corsTestHelper.mFileImageUrl));
+    }
+
+    // Check if file:// and content:// can be accessible from
+    // file:///android_asset/ when the file and content access is disallowed.
+    @Test
+    @SmallTest
+    @Feature({"AndroidWebView", "Preferences", "CORS"})
+    public void testAndroidUrlMakesXhrRequestsWithoutFileAndContentAccesses() throws Throwable {
+        final AwSettingsCorsTestHelper corsTestHelper = new AwSettingsCorsTestHelper();
+        // file:///android_asset/ and file:///android_res can be accessible even
+        // if AllowFileAccess and AllowContentAccess are set to false.
+        corsTestHelper.disallowFileAccess();
+        corsTestHelper.disallowContentAccess();
+        corsTestHelper.allowFileAccessFromFileURLs();
+
+        // Case c') file:///android_asset/ to content:// should fail as
+        // content:// is still disallowed by AllowContentAccess.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mContentImageUrl));
+
+        // Case d') file:///android_asset/ to file:// should fail as file://
+        // is still disallowed by AllowFileAccess.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mFileImageUrl));
+
+        // Case d'') file:///android_asset/ to file:///android_res/ should pass.
+        Assert.assertEquals("load",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        AwSettingsCorsTestHelper.RESOURCE_IMAGE_URL));
+
+        // AllowUniversalAccessFromFileURLs should not help.
+        corsTestHelper.allowUniversalAccessFromFileURLs();
+
+        // Case c') file:///android_asset/ to content:// should fail as
+        // content:// is still disallowed by AllowContentAccess.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mContentImageUrl));
+
+        // Case d') file:///android_asset/ to file:// should fail as file://
+        // is still disallowed by AllowFileAccess.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mFileImageUrl));
+    }
+
+    // Check if file:// and content:// can be accessible from
+    // file:///android_asset/ when the file access is disallowed.
+    @Test
+    @SmallTest
+    @Feature({"AndroidWebView", "Preferences", "CORS"})
+    public void testAndroidUrlMakesXhrRequests() throws Throwable {
+        final AwSettingsCorsTestHelper corsTestHelper = new AwSettingsCorsTestHelper();
+        // file:///android_asset/ and file:///android_res can be accessible even
+        // if AllowFileAccess is set to false.
+        corsTestHelper.disallowFileAccess();
+        corsTestHelper.allowFileAccessFromFileURLs();
+
+        // Case c') file:///android_asset/ to content:// should fail as
+        // content:// is still accessible but CORS is not permitted.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mContentImageUrl));
+
+        // Case d') file:///android_asset/ to file:// should fail as file://
+        // is still disallowed by AllowFileAccess.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mFileImageUrl));
+
+        // Case d'') file:///android_asset/ to file:///android_res/ should pass.
+        Assert.assertEquals("load",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        AwSettingsCorsTestHelper.RESOURCE_IMAGE_URL));
+
+        // AllowUniversalAccessFromFileURLs should not help.
+        corsTestHelper.allowUniversalAccessFromFileURLs();
+
+        // Case c') file:///android_asset/ to content:// pass as CORS accesses
+        // are permitted now.
+        Assert.assertEquals("load",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mContentImageUrl));
+
+        // Case d') file:///android_asset/ to file:// should fail as file://
+        // is still disallowed by AllowFileAccess.
+        Assert.assertEquals("error",
+                corsTestHelper.getTestResult("xhr", AwSettingsCorsTestHelper.ASSET_MAIN_URL,
+                        corsTestHelper.mFileImageUrl));
     }
 
     @Test

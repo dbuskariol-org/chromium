@@ -112,6 +112,7 @@ android_assets("webview_instrumentation_apk_assets") {
     "shell/assets/asset_icon.png",
     "shell/assets/autofill.html",
     "shell/assets/cookie_test.html",
+    "shell/assets/cors.html",
     "shell/assets/full_screen_video.js",
     "shell/assets/full_screen_video_inside_div_test.html",
     "shell/assets/full_screen_video_test.html",
