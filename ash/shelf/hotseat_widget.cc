@@ -653,19 +653,24 @@ int HotseatWidget::CalculateHotseatYInScreen(
   return hotseat_y_in_shelf + shelf_y;
 }
 
-void HotseatWidget::CalculateTargetBounds() {
-  ShelfLayoutManager* layout_manager = shelf_->shelf_layout_manager();
-  const HotseatState hotseat_target_state =
-      layout_manager->CalculateHotseatState(layout_manager->visibility_state(),
-                                            layout_manager->auto_hide_state());
+gfx::Size HotseatWidget::CalculateTargetBoundsSize(
+    HotseatState hotseat_target_state) const {
+  const gfx::Rect shelf_bounds = shelf_->shelf_widget()->GetTargetBounds();
+
+  // |hotseat_size| is the height in horizontal alignment or the width in
+  // vertical alignment.
+  const int hotseat_size = GetHotseatSize();
+
+  if (hotseat_target_state != HotseatState::kShownHomeLauncher &&
+      hotseat_target_state != HotseatState::kShownClamshell) {
+    DCHECK(shelf_->IsHorizontalAlignment());
+    // Give the hotseat more space if it is shown outside of the shelf.
+    return gfx::Size(shelf_bounds.width(), hotseat_size);
+  }
+
   const gfx::Size status_size =
       shelf_->status_area_widget()->GetTargetBounds().size();
-  const gfx::Rect shelf_bounds = shelf_->shelf_widget()->GetTargetBounds();
-  gfx::Rect nav_bounds = shelf_->navigation_widget()->GetTargetBounds();
-
-  gfx::Point hotseat_origin;
-  int hotseat_width;
-  int hotseat_height;
+  const gfx::Rect nav_bounds = shelf_->navigation_widget()->GetTargetBounds();
 
   // The navigation widget has extra padding on the hotseat side, to center the
   // buttons inside of it. Make sure to get the extra nav widget padding and
@@ -682,33 +687,64 @@ void HotseatWidget::CalculateTargetBounds() {
   const int group_margin = ShelfConfig::Get()->app_icon_group_margin();
 
   if (shelf_->IsHorizontalAlignment()) {
-    hotseat_width = shelf_bounds.width() -
-                    (nav_bounds.size().width() - nav_widget_padding) -
-                    2 * group_margin - status_size.width();
-    int hotseat_x =
-        base::i18n::IsRTL()
-            ? nav_bounds.x() + nav_widget_padding - group_margin - hotseat_width
-            : nav_bounds.right() - nav_widget_padding + group_margin;
+    const int width = shelf_bounds.width() - nav_bounds.size().width() +
+                      nav_widget_padding - 2 * group_margin -
+                      status_size.width();
+    return gfx::Size(width, hotseat_size);
+  }
+
+  const int height = shelf_bounds.height() - nav_bounds.size().height() +
+                     nav_widget_padding - 2 * group_margin -
+                     status_size.height();
+  return gfx::Size(hotseat_size, height);
+}
+
+void HotseatWidget::CalculateTargetBounds() {
+  ShelfLayoutManager* layout_manager = shelf_->shelf_layout_manager();
+  const HotseatState hotseat_target_state =
+      layout_manager->CalculateHotseatState(layout_manager->visibility_state(),
+                                            layout_manager->auto_hide_state());
+  const gfx::Size hotseat_target_size =
+      CalculateTargetBoundsSize(hotseat_target_state);
+
+  if (hotseat_target_state == HotseatState::kShownHomeLauncher) {
+    target_size_for_shown_state_ = hotseat_target_size;
+  } else {
+    target_size_for_shown_state_ =
+        CalculateTargetBoundsSize(HotseatState::kShownHomeLauncher);
+  }
+
+  const gfx::Rect shelf_bounds = shelf_->shelf_widget()->GetTargetBounds();
+  const gfx::Rect status_area_bounds =
+      shelf_->status_area_widget()->GetTargetBounds();
+
+  // The minimum gap between hotseat widget and other shelf components including
+  // the status area widget and shelf navigation widget (or the edge of display,
+  // if the shelf navigation widget does not show).
+  const int group_margin = ShelfConfig::Get()->app_icon_group_margin();
+
+  gfx::Point hotseat_origin;
+  if (shelf_->IsHorizontalAlignment()) {
+    int hotseat_x;
     if (hotseat_target_state != HotseatState::kShownHomeLauncher &&
         hotseat_target_state != HotseatState::kShownClamshell) {
-      // Give the hotseat more space if it is shown outside of the shelf.
-      hotseat_width = shelf_bounds.width();
       hotseat_x = shelf_bounds.x();
+    } else {
+      hotseat_x = base::i18n::IsRTL()
+                      ? status_area_bounds.right() + group_margin
+                      : status_area_bounds.x() - group_margin -
+                            hotseat_target_size.width();
     }
+
     hotseat_origin =
         gfx::Point(hotseat_x, CalculateHotseatYInScreen(hotseat_target_state));
-    hotseat_height = GetHotseatSize();
   } else {
     hotseat_origin =
-        gfx::Point(shelf_bounds.x(),
-                   nav_bounds.bottom() - nav_widget_padding + group_margin);
-    hotseat_width = shelf_bounds.width();
-    hotseat_height = shelf_bounds.height() -
-                     (nav_bounds.size().height() - nav_widget_padding) -
-                     2 * group_margin - status_size.height();
+        gfx::Point(shelf_bounds.x(), status_area_bounds.y() - group_margin -
+                                         hotseat_target_size.height());
   }
-  target_bounds_ =
-      gfx::Rect(hotseat_origin, gfx::Size(hotseat_width, hotseat_height));
+
+  target_bounds_ = gfx::Rect(hotseat_origin, hotseat_target_size);
 
   // Check whether |target_bounds_| will change the state of app scaling. If
   // so, update |target_bounds_| here to avoid re-layout later.
@@ -812,8 +848,7 @@ int HotseatWidget::GetHotseatFullDragAmount() const {
 }
 
 bool HotseatWidget::UpdateTargetHotseatDensityIfNeeded() {
-  if (CalculateTargetHotseatDensity(target_bounds_.size(), state_) ==
-      target_hotseat_density_) {
+  if (CalculateTargetHotseatDensity() == target_hotseat_density_) {
     return false;
   }
 
@@ -868,8 +903,7 @@ HotseatWidget::LayoutInputs HotseatWidget::GetLayoutInputs() const {
 void HotseatWidget::MaybeAdjustTargetBoundsForAppScaling(
     HotseatState hotseat_target_state) {
   // Return early if app scaling state does not change.
-  HotseatDensity new_target_hotseat_density = CalculateTargetHotseatDensity(
-      target_bounds_.size(), hotseat_target_state);
+  HotseatDensity new_target_hotseat_density = CalculateTargetHotseatDensity();
   if (new_target_hotseat_density == target_hotseat_density_)
     return;
 
@@ -885,9 +919,7 @@ void HotseatWidget::MaybeAdjustTargetBoundsForAppScaling(
                 gfx::Size(target_bounds_.width(), GetHotseatSize()));
 }
 
-HotseatDensity HotseatWidget::CalculateTargetHotseatDensity(
-    const gfx::Size& available_size,
-    HotseatState hotseat_target_state) const {
+HotseatDensity HotseatWidget::CalculateTargetHotseatDensity() const {
   if (!ash::features::IsAppScalingEnabled())
     return HotseatDensity::kNormal;
 
@@ -896,12 +928,13 @@ HotseatDensity HotseatWidget::CalculateTargetHotseatDensity(
   if (ShelfConfig::Get()->is_dense())
     return target_hotseat_density_;
 
-  // Currently we only update app scaling in home launcher due to performance
-  // concerns in hotseat animation transition between home launcher state
-  // and extended state.
+  // Currently the scaling animation of hotseat bounds and that of shelf icons
+  // do not synchronize due to performance issue. As a result, shelf scaling is
+  // not applied to the hotseat state transition, such as the transition from
+  // the home launcher state to the extended state. Hotseat density relies
+  // on the hotseat bounds in the home launcher state instead of the current
+  // hotseat state.
   // TODO(crbug.com/1081476).
-  if (hotseat_target_state != HotseatState::kShownHomeLauncher)
-    return target_hotseat_density_;
 
   // Try candidate button sizes in decreasing order. If shelf buttons in one
   // size can show without scrolling, return the density type corresponding to
@@ -911,7 +944,7 @@ HotseatDensity HotseatWidget::CalculateTargetHotseatDensity(
                                                    HotseatDensity::kSemiDense};
   for (const auto& candidate : kCandidates) {
     if (!scrollable_shelf_view_->RequiresScrollingForItemSize(
-            available_size,
+            target_size_for_shown_state_,
             ShelfConfig::Get()->GetShelfButtonSize(candidate))) {
       return candidate;
     }
