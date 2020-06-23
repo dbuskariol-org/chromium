@@ -69,6 +69,7 @@
            file="${root_gen_dir}/chrome/browser/resources/settings/lifetime_browser_proxy.m.js"
            use_base_dir="false"
            compress="false"
+           preprocess="true"
            type="BINDATA"/>
   <include name="IDR_OS_SETTINGS_PREFS_M_JS"
            file="${root_gen_dir}/chrome/browser/resources/settings/prefs/prefs.m.js"
