@@ -226,8 +226,10 @@ bool TextFragmentAnchor::Invoke() {
 void TextFragmentAnchor::Installed() {}
 
 void TextFragmentAnchor::DidScroll(mojom::blink::ScrollType type) {
-  if (!IsExplicitScrollType(type))
+  if (type != mojom::blink::ScrollType::kUser &&
+      type != mojom::blink::ScrollType::kCompositor) {
     return;
+  }
 
   user_scrolled_ = true;
 

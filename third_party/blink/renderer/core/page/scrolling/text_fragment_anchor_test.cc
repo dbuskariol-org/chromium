@@ -873,8 +873,28 @@ TEST_F(TextFragmentAnchorTest, OneContextTerm) {
   EXPECT_EQ(10u, markers.at(0)->EndOffset());
 }
 
+class TextFragmentAnchorScrollTest
+    : public TextFragmentAnchorTest,
+      public testing::WithParamInterface<mojom::blink::ScrollType> {
+ protected:
+  bool IsUserScrollType() {
+    return GetParam() == mojom::blink::ScrollType::kCompositor ||
+           GetParam() == mojom::blink::ScrollType::kUser;
+  }
+};
+
+INSTANTIATE_TEST_SUITE_P(
+    ScrollTypes,
+    TextFragmentAnchorScrollTest,
+    testing::Values(mojom::blink::ScrollType::kUser,
+                    mojom::blink::ScrollType::kProgrammatic,
+                    mojom::blink::ScrollType::kClamping,
+                    mojom::blink::ScrollType::kCompositor,
+                    mojom::blink::ScrollType::kAnchoring,
+                    mojom::blink::ScrollType::kSequenced));
+
 // Test that a user scroll cancels the scroll into view.
-TEST_F(TextFragmentAnchorTest, ScrollCancelled) {
+TEST_P(TextFragmentAnchorScrollTest, ScrollCancelled) {
   SimRequest request("https://example.com/test.html#:~:text=test", "text/html");
   SimSubresourceRequest css_request("https://example.com/test.css", "text/css");
   SimSubresourceRequest img_request("https://example.com/test.png",
@@ -898,9 +918,11 @@ TEST_F(TextFragmentAnchorTest, ScrollCancelled) {
   )HTML");
 
   Compositor().PaintFrame();
+  mojom::blink::ScrollType scroll_type = GetParam();
+
   if (!RuntimeEnabledFeatures::BlockHTMLParserOnStyleSheetsEnabled()) {
-    GetDocument().View()->LayoutViewport()->ScrollBy(
-        ScrollOffset(0, 100), mojom::blink::ScrollType::kUser);
+    GetDocument().View()->LayoutViewport()->ScrollBy(ScrollOffset(0, 100),
+                                                     scroll_type);
     // Set the target text to visible and change its position to cause a layout
     // and invoke the fragment anchor in the next begin frame.
     css_request.Complete("p { visibility: visible; top: 1001px; }");
@@ -920,8 +942,8 @@ TEST_F(TextFragmentAnchorTest, ScrollCancelled) {
 
     // Before invoking again, perform a user scroll. This should abort future
     // scrolls during fragment invocation.
-    GetDocument().View()->LayoutViewport()->SetScrollOffset(
-        ScrollOffset(0, 0), mojom::blink::ScrollType::kUser);
+    GetDocument().View()->LayoutViewport()->SetScrollOffset(ScrollOffset(0, 0),
+                                                            scroll_type);
     ASSERT_FALSE(ViewportRect().Contains(BoundingRectInFrame(p)));
 
     img_request.Complete("");
@@ -936,7 +958,14 @@ TEST_F(TextFragmentAnchorTest, ScrollCancelled) {
   Compositor().BeginFrame();
 
   Element& p = *GetDocument().getElementById("text");
-  EXPECT_FALSE(ViewportRect().Contains(BoundingRectInFrame(p)));
+
+  // If the scroll was a user scroll then we shouldn't try to keep the fragment
+  // in view. Otherwise, we should.
+  if (IsUserScrollType()) {
+    EXPECT_FALSE(ViewportRect().Contains(BoundingRectInFrame(p)));
+  } else {
+    EXPECT_TRUE(ViewportRect().Contains(BoundingRectInFrame(p)));
+  }
 
   EXPECT_EQ(p, *GetDocument().CssTarget());
   EXPECT_EQ(1u, GetDocument().Markers().Markers().size());
