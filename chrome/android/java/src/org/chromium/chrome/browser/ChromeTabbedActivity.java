@@ -912,6 +912,12 @@ public class ChromeTabbedActivity
     public void onResumeWithNative() {
         super.onResumeWithNative();
 
+        // Switch to non incognito tab model to show the non incognito start surface if needed.
+        if (StartSurfaceConfiguration.isStartSurfaceStackTabSwitcherEnabled() && isWarmOnResume()
+                && shouldShowTabSwitcherOnStart() && mTabModelSelectorImpl.isIncognitoSelected()) {
+            mTabModelSelectorImpl.selectModel(false);
+        }
+
         if (IncognitoUtils.shouldDestroyIncognitoProfileOnStartup(
                     getTabModelSelector().getCurrentModel().isIncognito())) {
             Profile.getLastUsedRegularProfile().getOffTheRecordProfile().destroyWhenAppropriate();
