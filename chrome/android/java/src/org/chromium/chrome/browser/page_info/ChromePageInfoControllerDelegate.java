@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.text.SpannableString;
 import android.text.TextUtils;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 
@@ -55,9 +56,6 @@ public class ChromePageInfoControllerDelegate extends PageInfoControllerDelegate
     private final Context mContext;
     private String mOfflinePageCreationDate;
     private OfflinePageLoadUrlDelegate mOfflinePageLoadUrlDelegate;
-
-    // Bridge updating the CookieControlsView when cookie settings change.
-    private CookieControlsBridge mBridge;
 
     public ChromePageInfoControllerDelegate(Context context, WebContents webContents,
             Supplier<ModalDialogManager> modalDialogManagerSupplier,
@@ -254,26 +252,11 @@ public class ChromePageInfoControllerDelegate extends PageInfoControllerDelegate
      * {@inheritDoc}
      */
     @Override
-    public void createCookieControlsBridge(CookieControlsObserver observer) {
+    @NonNull
+    public CookieControlsBridge createCookieControlsBridge(CookieControlsObserver observer) {
         Profile profile = Profile.fromWebContents(mWebContents);
-        mBridge = new CookieControlsBridge(observer, mWebContents,
+        return new CookieControlsBridge(observer, mWebContents,
                 profile.isOffTheRecord() ? profile.getOriginalProfile() : null);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void onUiClosing() {
-        mBridge.onUiClosing();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void setThirdPartyCookieBlockingEnabledForSite(boolean blockCookies) {
-        mBridge.setThirdPartyCookieBlockingEnabledForSite(blockCookies);
     }
 
     @VisibleForTesting
