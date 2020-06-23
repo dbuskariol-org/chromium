@@ -1538,6 +1538,8 @@ const FeatureEntry::FeatureParam kHomepagePromoCardCompact[] = {
     {"promo-card-variation", "Compact"}};
 const FeatureEntry::FeatureParam kHomepagePromoCardSlim[] = {
     {"promo-card-variation", "Slim"}};
+const FeatureEntry::FeatureParam kHomepagePromoCardSupressing[] = {
+    {"suppressing_sign_in_promo", "SuppressingSignInPromo"}};
 
 const FeatureEntry::FeatureVariation kHomepagePromoCardVariations[] = {
     {"Large", kHomepagePromoCardLarge, base::size(kHomepagePromoCardLarge),
@@ -1545,7 +1547,9 @@ const FeatureEntry::FeatureVariation kHomepagePromoCardVariations[] = {
     {"Compact", kHomepagePromoCardCompact,
      base::size(kHomepagePromoCardCompact), nullptr},
     {"Slim", kHomepagePromoCardSlim, base::size(kHomepagePromoCardSlim),
-     nullptr}};
+     nullptr},
+    {"Compact_SuppressingSignInPromo", kHomepagePromoCardSupressing,
+     base::size(kHomepagePromoCardSupressing), nullptr}};
 #endif  // defined(OS_ANDROID)
 
 #if defined(OS_ANDROID)
