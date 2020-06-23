@@ -376,7 +376,7 @@ public final class AwBrowserProcess {
      * any recorded UMA metrics from nonembedded WebView services and transmit them back using
      * UMA APIs.
      */
-    public static void transmitRecordedMetrics() {
+    public static void collectNonembeddedMetrics() {
         final Context appContext = ContextUtils.getApplicationContext();
         if (AwMetricsServiceClient.isAppOptedOut(appContext)) {
             Log.d(TAG, "App opted out from metrics collection, not connecting to metrics service");
