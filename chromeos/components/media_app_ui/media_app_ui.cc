@@ -74,7 +74,7 @@ MediaAppUI::MediaAppUI(content::WebUI* web_ui,
       host_origin, ContentSettingsType::NATIVE_FILE_SYSTEM_WRITE_GUARD);
 
   content::WebUIDataSource* untrusted_source =
-      CreateMediaAppUntrustedDataSource();
+      CreateMediaAppUntrustedDataSource(delegate_.get());
   content::WebUIDataSource::Add(browser_context, untrusted_source);
 
   // Add ability to request chrome-untrusted: URLs.

@@ -4,6 +4,7 @@
 
 #include "chromeos/components/media_app_ui/media_app_guest_ui.h"
 
+#include "chromeos/components/media_app_ui/media_app_ui_delegate.h"
 #include "chromeos/components/media_app_ui/url_constants.h"
 #include "chromeos/grit/chromeos_media_app_bundle_resources.h"
 #include "chromeos/grit/chromeos_media_app_bundle_resources_map.h"
@@ -15,7 +16,8 @@
 
 namespace chromeos {
 
-content::WebUIDataSource* CreateMediaAppUntrustedDataSource() {
+content::WebUIDataSource* CreateMediaAppUntrustedDataSource(
+    MediaAppUIDelegate* delegate) {
   content::WebUIDataSource* source =
       content::WebUIDataSource::Create(kChromeUIMediaAppGuestURL);
   // Add resources from chromeos_media_app_resources.pak.
@@ -39,6 +41,9 @@ content::WebUIDataSource* CreateMediaAppUntrustedDataSource() {
     source->AddResourcePath(kChromeosMediaAppBundleResources[i].name,
                             kChromeosMediaAppBundleResources[i].value);
   }
+
+  delegate->PopulateLoadTimeData(source);
+  source->UseStringsJs();
 
   source->AddFrameAncestor(GURL(kChromeUIMediaAppURL));
   // By default, prevent all network access.
