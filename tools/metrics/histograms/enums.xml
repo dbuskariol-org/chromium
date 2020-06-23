@@ -8191,10 +8191,10 @@ Unknown properties are collapsed to zero. -->
   <obsolete>
     Removed in March 2016.
   </obsolete>
-  <details>
+  <summary>
     See include/openssl/ssl.h at the corresponding BoringSSL revision for the
     corresponding values.
-  </details>
+  </summary>
 </enum>
 
 <enum name="BottomSheet.StateChangeReason">
@@ -9369,8 +9369,6 @@ histogram as enum -->
   <int value="504" label="Shelf Alignment Bottom"/>
   <int value="505" label="Change Wallpaper"/>
   <int value="506" label="Display Settings"/>
-<!-- Please put in checks to ensure Command IDs are stable before adding them to this enum. -->
-
 </enum>
 
 <enum name="ChromeOSUsbEventTiming">
@@ -31996,8 +31994,7 @@ Called by update_feature_policy_enum.py.-->
 </enum>
 
 <enum name="GenericEnum">
-<!-- Generic enums where the label is just the raw number -->
-
+  <summary>Generic enums where the label is just the raw number</summary>
 </enum>
 
 <enum name="GeolocationAuthorizationAction">
@@ -50416,10 +50413,10 @@ Called by update_net_trust_anchors.py.-->
 <enum name="OfflinePagesPrefetchUsage">
   <int value="0" label="Deprecated: Has prefetched offline pages">
     <obsolete>
-      This state was never reported.
+      Deprecated: This state was never reported. No prefetched offline pages
+      were downloaded nor opened by the user in a day but there are some
+      available locally.
     </obsolete>
-    Deprecated: No prefetched offline pages were downloaded nor opened by the
-    user in a day but there are some available locally.
   </int>
   <int value="1" label="Only prefetched new offline pages">
     Prefetched offline pages were downloaded in a day but none were opened by
@@ -55842,9 +55839,7 @@ Called by update_net_trust_anchors.py.-->
     Currently Chrome simply ignores the download if the dialog is already
     presented.
   </summary>
-  <int value="0" label="Successful">
-
-  </int>
+  <int value="0" label="Successful"/>
   <int value="1" label="Another Add Passes View Controller Is Presented">
     The dialog cannot be presented, because another PKAddPassesViewController is
     already presented.
@@ -69023,10 +69018,11 @@ Full version information for the fingerprint enum values:
 </enum>
 
 <enum name="UkmEventNameHash">
-<!-- Placeholder enum. The values are UKM event name hashes truncated to 31
-     bits. This gets populated by the GetEnumsNodes function in merge_xml.py
-     when producing the merged XML file. -->
-
+  <summary>
+    Placeholder enum. The values are UKM event name hashes truncated to 31 bits.
+    This gets populated by the GetEnumsNodes function in merge_xml.py when
+    producing the merged XML file.
+  </summary>
 </enum>
 
 <enum name="UkmResetReason">
