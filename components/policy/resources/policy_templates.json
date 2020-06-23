@@ -21815,6 +21815,18 @@ The recommended way to configure policy on Windows is via GPO, although provisio
       'desc': '''Description shared by all deprecated policies, in Microsoft Windows' Group Policy Editor.''',
       'text': '''This policy is deprecated. Its usage is discouraged. Read more at https://support.google.com/chrome/a/answer/7643500'''
     },
+    'removed_policy_group_caption': {
+      'desc': '''Localized name for the removed policies folder, for Microsoft's Group Policy Editor.''',
+      'text': '''Removed policies''',
+    },
+    'removed_policy_group_desc': {
+      'desc': '''Localized description for the removed policies folder, for Microsoft's Group Policy Editor.''',
+      'text': '''These policies are included here to make them easy to remove.''',
+    },
+    'removed_policy_desc': {
+      'desc': '''Description shared by all removed policies, in Microsoft Windows' Group Policy Editor.''',
+      'text': '''This policy is removed. It is not compatible with this version of <ph name="PRODUCT_NAME">$1<ex>Google Chrome</ex></ph>. Read more at https://support.google.com/chrome/a/answer/7643500'''
+    },
   },
   # Legacy device policies that don't have a 1:1 mapping between template and
   # chrome_device_policy.proto or where the types don't map the same way as for
