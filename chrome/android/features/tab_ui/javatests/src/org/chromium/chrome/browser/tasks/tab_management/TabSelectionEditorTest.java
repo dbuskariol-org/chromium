@@ -334,6 +334,7 @@ public class TabSelectionEditorTest {
         mRobot.resultRobot.verifyTabSelectionEditorIsVisible();
 
         ChromeRenderTestRule.sanitize(mTabSelectionEditorLayout);
+        mRenderTestRule.setPixelDiffThreshold(5);
         mRenderTestRule.render(mTabSelectionEditorLayout, "grid_view");
     }
 
@@ -355,6 +356,7 @@ public class TabSelectionEditorTest {
         mRobot.resultRobot.verifyTabSelectionEditorIsVisible();
 
         ChromeRenderTestRule.sanitize(mTabSelectionEditorLayout);
+        mRenderTestRule.setPixelDiffThreshold(5);
         mRenderTestRule.render(mTabSelectionEditorLayout, "grid_view_one_selected_tab");
     }
 
@@ -376,6 +378,7 @@ public class TabSelectionEditorTest {
         mRobot.resultRobot.verifyTabSelectionEditorIsVisible();
 
         ChromeRenderTestRule.sanitize(mTabSelectionEditorLayout);
+        mRenderTestRule.setPixelDiffThreshold(5);
         mRenderTestRule.render(mTabSelectionEditorLayout, "grid_view_one_pre_selected_tab");
     }
 
@@ -397,6 +400,7 @@ public class TabSelectionEditorTest {
         mRobot.resultRobot.verifyTabSelectionEditorIsVisible();
 
         ChromeRenderTestRule.sanitize(mTabSelectionEditorLayout);
+        mRenderTestRule.setPixelDiffThreshold(5);
         mRenderTestRule.render(mTabSelectionEditorLayout, "grid_view_two_pre_selected_tab");
     }
 
@@ -418,6 +422,7 @@ public class TabSelectionEditorTest {
         mRobot.resultRobot.verifyTabSelectionEditorIsVisible();
 
         ChromeRenderTestRule.sanitize(mTabSelectionEditorLayout);
+        mRenderTestRule.setPixelDiffThreshold(5);
         mRenderTestRule.render(mTabSelectionEditorLayout, "grid_view_all_pre_selected_tab");
     }
 

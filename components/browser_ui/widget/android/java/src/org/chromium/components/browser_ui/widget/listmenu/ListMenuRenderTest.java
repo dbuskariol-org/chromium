@@ -44,7 +44,8 @@ public class ListMenuRenderTest extends DummyUiActivityTestCase {
             new NightModeTestUtils.NightModeParams().getParameters();
 
     @Rule
-    public RenderTestRule mRenderTestRule = new RenderTestRule();
+    public RenderTestRule mRenderTestRule =
+            new RenderTestRule("chrome/test/data/android/render_tests");
 
     private View mView;
 
