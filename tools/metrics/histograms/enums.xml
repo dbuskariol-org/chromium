@@ -36855,6 +36855,47 @@ Called by update_gpu_driver_bug_workaround_entries.py.-->
   <int value="15" label="Navigated To Link Not On SRP">
     The navigation off of the Google SRP was to a url that was not on the SRP.
   </int>
+  <int value="16" label="Prefetch Used, No Probe, Did NoStatePrefetch">
+    The url was prefetched and No State Prerendered and committed without a
+    probe to the origin.
+  </int>
+  <int value="17" label="Prefetch Used, Probe Success, Did NoStatePrefetch">
+    The url was prefetched and No State Prerendered and committed with a
+    successful probe to the origin.
+  </int>
+  <int value="18" label="Prefetch Not Used, Probe Failed, Did NoStatePrefetch">
+    The url was prefetched and No State Prerendered but the origin probe failed
+    and the prefetch was not used.
+  </int>
+  <int value="19"
+      label="Prefetch Used, No Probe, NoStatePrefetch Attempt Denied">
+    The url was prefetched but was not No State Prerendered despite attempting
+    to do so and committed without a probe to the origin.
+  </int>
+  <int value="20"
+      label="Prefetch Used, Probe Success, NoStatePrefetch Attempt Denied">
+    The url was prefetched but was not No State Prerendered despite attempting
+    to do so and committed with a successful probe to the origin.
+  </int>
+  <int value="21"
+      label="Prefetch Not Used, Probe Failed, NoStatePrefetch Attempt Denied">
+    The url was prefetched but was not No State Prerendered despite attempting
+    to do so, and the origin probe failed and the prefetch was not used.
+  </int>
+  <int value="22" label="Prefetch Used, No Probe, NoStatePrefetch Not Started">
+    The url was prefetched and eligible for NoStatePrerender but wasn't started
+    and committed without a probe to the origin.
+  </int>
+  <int value="23"
+      label="Prefetch Used, Probe Success, NoStatePrefetch Not Started">
+    The url was prefetched and eligible for NoStatePrerender but wasn't started
+    and committed with a successful probe to the origin.
+  </int>
+  <int value="24"
+      label="Prefetch Not Used, Probe Failed, NoStatePrefetch Not Started">
+    The url was prefetched and eligible for NoStatePrerender but wasn't started
+    and the origin probe failed and the prefetch was not used.
+  </int>
 </enum>
 
 <enum name="IsPinnedToTaskbarResult">
