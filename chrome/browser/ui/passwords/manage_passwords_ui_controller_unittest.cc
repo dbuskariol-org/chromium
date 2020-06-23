@@ -30,6 +30,7 @@
 #include "components/password_manager/core/browser/password_bubble_experiment.h"
 #include "components/password_manager/core/browser/password_form_metrics_recorder.h"
 #include "components/password_manager/core/browser/password_manager_client.h"
+#include "components/password_manager/core/browser/password_manager_metrics_util.h"
 #include "components/password_manager/core/browser/statistics_table.h"
 #include "components/password_manager/core/browser/stub_password_manager_client.h"
 #include "components/password_manager/core/common/password_manager_features.h"
@@ -1464,6 +1465,7 @@ TEST_F(ManagePasswordsUIControllerTest, DiscardUnsyncedCredentials) {
 }
 
 TEST_F(ManagePasswordsUIControllerTest, OpenBubbleForMovableForm) {
+  base::HistogramTester histogram_tester;
   std::vector<const PasswordForm*> matches = {&test_local_form()};
   auto test_form_manager = CreateFormManagerWithBestMatches(&matches);
   MockPasswordFormManagerForUI* form_manager = test_form_manager.get();
@@ -1480,6 +1482,11 @@ TEST_F(ManagePasswordsUIControllerTest, OpenBubbleForMovableForm) {
   controller()->MovePasswordToAccountStore();
   EXPECT_FALSE(controller()->opened_automatic_bubble());
   ExpectIconAndControllerStateIs(password_manager::ui::MANAGE_STATE);
+  histogram_tester.ExpectUniqueSample(
+      "PasswordManager.AccountStorage.MoveToAccountStoreFlowOffered",
+      password_manager::metrics_util::MoveToAccountStoreTrigger::
+          kSuccessfulLoginWithProfileStorePassword,
+      1);
 }
 
 TEST_F(ManagePasswordsUIControllerTest, OpenSafeStateBubble) {
