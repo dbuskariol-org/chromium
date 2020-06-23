@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef EXTENSIONS_BROWSER_DECLARATIVE_USER_SCRIPT_MASTER_H_
-#define EXTENSIONS_BROWSER_DECLARATIVE_USER_SCRIPT_MASTER_H_
+#ifndef EXTENSIONS_BROWSER_DECLARATIVE_USER_SCRIPT_SET_H_
+#define EXTENSIONS_BROWSER_DECLARATIVE_USER_SCRIPT_SET_H_
 
 #include <memory>
 #include <set>
@@ -27,11 +27,11 @@ struct UserScriptIDPair;
 // UserScriptLoader to which file loading and shared memory management
 // operations are delegated, and provides an interface for adding, removing,
 // and clearing scripts.
-class DeclarativeUserScriptMaster {
+class DeclarativeUserScriptSet {
  public:
-  DeclarativeUserScriptMaster(content::BrowserContext* browser_context,
-                              const HostID& host_id);
-  ~DeclarativeUserScriptMaster();
+  DeclarativeUserScriptSet(content::BrowserContext* browser_context,
+                           const HostID& host_id);
+  ~DeclarativeUserScriptSet();
 
   // Adds script to shared memory region. This may not happen right away if a
   // script load is in progress.
@@ -70,9 +70,9 @@ class DeclarativeUserScriptMaster {
   // and notifying renderers of script updates.
   std::unique_ptr<UserScriptLoader> loader_;
 
-  DISALLOW_COPY_AND_ASSIGN(DeclarativeUserScriptMaster);
+  DISALLOW_COPY_AND_ASSIGN(DeclarativeUserScriptSet);
 };
 
 }  // namespace extensions
 
-#endif  // EXTENSIONS_BROWSER_DECLARATIVE_USER_SCRIPT_MASTER_H_
+#endif  // EXTENSIONS_BROWSER_DECLARATIVE_USER_SCRIPT_SET_H_

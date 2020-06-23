@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "extensions/browser/declarative_user_script_master.h"
+#include "extensions/browser/declarative_user_script_set.h"
 
 #include "content/public/browser/browser_context.h"
 #include "extensions/browser/extension_user_script_loader.h"
@@ -12,7 +12,7 @@
 
 namespace extensions {
 
-DeclarativeUserScriptMaster::DeclarativeUserScriptMaster(
+DeclarativeUserScriptSet::DeclarativeUserScriptSet(
     content::BrowserContext* browser_context,
     const HostID& host_id)
     : host_id_(host_id) {
@@ -28,35 +28,33 @@ DeclarativeUserScriptMaster::DeclarativeUserScriptMaster(
   }
 }
 
-DeclarativeUserScriptMaster::~DeclarativeUserScriptMaster() {
-}
+DeclarativeUserScriptSet::~DeclarativeUserScriptSet() {}
 
-void DeclarativeUserScriptMaster::AddScript(
-    std::unique_ptr<UserScript> script) {
+void DeclarativeUserScriptSet::AddScript(std::unique_ptr<UserScript> script) {
   std::unique_ptr<UserScriptList> scripts(new UserScriptList());
   scripts->push_back(std::move(script));
   loader_->AddScripts(std::move(scripts));
 }
 
-void DeclarativeUserScriptMaster::AddScripts(
+void DeclarativeUserScriptSet::AddScripts(
     std::unique_ptr<UserScriptList> scripts,
     int render_process_id,
     int render_view_id) {
   loader_->AddScripts(std::move(scripts), render_process_id, render_view_id);
 }
 
-void DeclarativeUserScriptMaster::RemoveScript(const UserScriptIDPair& script) {
+void DeclarativeUserScriptSet::RemoveScript(const UserScriptIDPair& script) {
   std::set<UserScriptIDPair> scripts;
   scripts.insert(script);
   RemoveScripts(scripts);
 }
 
-void DeclarativeUserScriptMaster::RemoveScripts(
+void DeclarativeUserScriptSet::RemoveScripts(
     const std::set<UserScriptIDPair>& scripts) {
   loader_->RemoveScripts(scripts);
 }
 
-void DeclarativeUserScriptMaster::ClearScripts() {
+void DeclarativeUserScriptSet::ClearScripts() {
   loader_->ClearScripts();
 }
 
