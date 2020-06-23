@@ -4110,9 +4110,9 @@ bool AXObject::NameFromContents(bool recursive) const {
         //   would cause them to be double-announced.
         // 2.Containers with aria-activedescendant, where the focus is being
         //   forwarded somewhere else.
-        // TODO(accessibility) Scrollables are currently whitelisted here in
-        // order to keep the current behavior. In the future, this can be
-        // removed because this code will be handled in IsFocusable(), once
+        // TODO(accessibility) Scrollables are currently allowed here in order
+        // to keep the current behavior. In the future, this can be removed
+        // because this code will be handled in IsFocusable(), once
         // KeyboardFocusableScrollersEnabled is permanently enabled.
         // Note: this uses the same scrollable check that element.cc uses.
         bool is_focusable_scrollable =
