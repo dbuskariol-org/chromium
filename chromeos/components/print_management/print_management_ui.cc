@@ -97,6 +97,10 @@ PrintManagementUI::PrintManagementUI(
                                IDR_PRINT_MANAGEMENT_PRINT_JOB_ENTRY_HTML);
   html_source->AddResourcePath("print_job_entry.js",
                                IDR_PRINT_MANAGEMENT_PRINT_JOB_ENTRY_JS);
+  html_source->AddResourcePath("print_management_fonts_css.html",
+                               IDR_PRINT_MANAGEMENT_FONTS_CSS_HTML);
+  html_source->AddResourcePath("print_management_fonts_css.js",
+                               IDR_PRINT_MANAGEMENT_FONTS_CSS_JS);
   html_source->AddResourcePath("print_management_shared_css.html",
                                IDR_PRINT_MANAGEMENT_SHARED_CSS_HTML);
   html_source->AddResourcePath("print_management_shared_css.js",

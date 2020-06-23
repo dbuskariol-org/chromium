@@ -12,6 +12,7 @@ import 'chrome://resources/mojo/url/mojom/url.mojom-lite.js';
 import 'chrome://resources/polymer/v3_0/iron-icon/iron-icon.js';
 import 'chrome://resources/polymer/v3_0/paper-progress/paper-progress.js';
 import './icons.js';
+import './print_management_fonts_css.js';
 import './print_management_shared_css.js';
 import './printing_manager.mojom-lite.js';
 

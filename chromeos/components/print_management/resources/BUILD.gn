@@ -88,6 +88,12 @@ polymer_modulizer("print_management_shared_css") {
   html_type = "v3-ready"
 }
 
+polymer_modulizer("print_management_fonts_css") {
+  html_file = "print_management_fonts_css.html"
+  js_file = "print_management_fonts_css.js"
+  html_type = "v3-ready"
+}
+
 polymer_modulizer("print_job_clear_history_dialog") {
   html_file = "print_job_clear_history_dialog.html"
   js_file = "print_job_clear_history_dialog.js"
@@ -105,6 +111,7 @@ group("polymer3_elements") {
     ":icons_module",
     ":print_job_clear_history_dialog_module",
     ":print_job_entry_module",
+    ":print_management_fonts_css_module",
     ":print_management_module",
     ":print_management_shared_css_module",
     ":scanning_page_module",

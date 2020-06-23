@@ -1,4 +1,9 @@
-<style include="print-management-shared">
+<style include="print-management-shared print-management-fonts">
+  :host {
+    @apply --print-management-default-font;
+    color: var(--print-management-default-text-color);
+  }
+
   /* Override focus CSS for selectable items. */
   .list-item:focus,
   .list-item > :focus {
