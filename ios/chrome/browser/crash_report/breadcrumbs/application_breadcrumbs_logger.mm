@@ -29,6 +29,7 @@ ApplicationBreadcrumbsLogger::ApplicationBreadcrumbsLogger(
                               base::Unretained(this)))) {
   base::AddActionCallback(user_action_callback_);
   breakpad::MonitorBreadcrumbManager(breadcrumb_manager_);
+  breadcrumb_manager_->AddEvent("Startup");
 
   orientation_observer_ = [NSNotificationCenter.defaultCenter
       addObserverForName:UIDeviceOrientationDidChangeNotification
