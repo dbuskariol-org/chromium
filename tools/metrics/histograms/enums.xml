@@ -72603,18 +72603,19 @@ Called by update_scheduler_enums.py.-->
   <int value="-1688600161" label="/manageProfile"/>
   <int value="-1675675685" label="/content/clipboard"/>
   <int value="-1610814282" label="/content/popups"/>
+  <int value="-1589300908" label="/app-management/pluginVm/sharedPaths"/>
   <int value="-1575150353" label="/content/cookies"/>
   <int value="-1569772500" label="/manageAccessibility/tts"/>
   <int value="-1555301506" label="/content/notifications"/>
   <int value="-1484929503" label="/manageAccessibility/switchAccess"/>
   <int value="-1381133263" label="/passwords/check"/>
   <int value="-1312744606" label="/knownNetworks"/>
-  <int value="-1299234352" label="/pluginVm/details"/>
   <int value="-1297176639" label="/fonts"/>
   <int value="-1283080115" label="/content/backgroundSync"/>
   <int value="-1279337432" label="/power"/>
   <int value="-1231761426" label="/content/ar"/>
   <int value="-1227595649" label="/all"/>
+  <int value="-1206523744" label="/app-management/detail"/>
   <int value="-1204780990" label="/dateTime/timeZone"/>
   <int value="-1167413307" label="/inputMethods"/>
   <int value="-1165810228" label="/searchEngines"/>
@@ -72689,14 +72690,12 @@ Called by update_scheduler_enums.py.-->
   <int value="900733129" label="/content/microphone"/>
   <int value="912274271" label="/siteData"/>
   <int value="943458628" label="/triggeredResetProfileSettings"/>
-  <int value="1001064152" label="/pluginVm"/>
   <int value="1051104480" label="/cleanup"/>
   <int value="1114615837" label="/accessibility"/>
   <int value="1147116633" label="/networkConfig"/>
   <int value="1161126439" label="/content/midiDevices"/>
   <int value="1225485397" label="/content/unsandboxedPlugins"/>
   <int value="1258785570" label="/crostini/sharedPaths"/>
-  <int value="1289631391" label="/pluginVm/sharedPaths"/>
   <int value="1300569861" label="/keyboard-overlay"/>
   <int value="1364454971" label="/androidApps"/>
   <int value="1384165448" label="/stylus"/>
