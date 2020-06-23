@@ -1,4 +1,4 @@
-// Copyright 2019 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
@@ -20,39 +20,73 @@ const AUTOCLICK_FOCUS_RING_DISPLAY_TIME_MS = 250;
  * Class to manage Automatic Clicks' interaction with the accessibility tree.
  */
 class Autoclick {
-  constructor(blinkFocusRings) {
+  constructor() {
     /**
      * Whether to blink the focus rings. Disabled during tests due to
      * complications with callbacks.
      * @private {boolean}
      */
-    this.blinkFocusRings_ = blinkFocusRings;
+    this.blinkFocusRings_ = true;
 
     /**
      * @private {chrome.automation.AutomationNode}
      */
     this.desktop_;
 
+    /**
+     * @private {function(number, number)}
+     */
+    this.scrollableBoundsListener_ = null;
+
+    /**
+     * @private {function(AutomationEvent)}
+     */
+    this.hitTestListener_ = null;
+
     this.init_();
   }
 
+  setNoBlinkFocusRingsForTest() {
+    this.blinkFocusRings_ = false;
+  }
+
   /**
-   * Initializes the AccessibilityCommon extension.
+   * Destructor to remove any listeners.
+   * @public
+   */
+  onAutoclickDisabled() {
+    chrome.accessibilityPrivate.findScrollableBoundsForPoint.removeListener(
+        this.scrollableBoundsListener_);
+    this.scrollableBoundsListener_ = null;
+
+    if (this.desktop_) {
+      this.desktop_.removeEventListener(
+          chrome.automation.EventType.MOUSE_PRESSED, this.hitTestListener_);
+      this.hitTestListener_ = null;
+    }
+  }
+
+  /**
+   * Initializes Autoclick.
    * @private
    */
   init_() {
+    this.hitTestListener_ = this.onAutomationHitTestResult_.bind(this);
+    this.scrollableBoundsListener_ =
+        this.findScrollingContainerForPoint_.bind(this);
+
     chrome.automation.getDesktop((desktop) => {
       this.desktop_ = desktop;
 
       // We use a hit test at a point to determine what automation node is
       // at that point, in order to find the scrollable area.
       this.desktop_.addEventListener(
-          chrome.automation.EventType.MOUSE_PRESSED,
-          this.onAutomationHitTestResult_.bind(this), true);
+          chrome.automation.EventType.MOUSE_PRESSED, this.hitTestListener_,
+          true);
     });
 
     chrome.accessibilityPrivate.findScrollableBoundsForPoint.addListener(
-        this.findScrollingContainerForPoint_.bind(this));
+        this.scrollableBoundsListener_);
   }
 
   /**
@@ -143,6 +177,3 @@ class Autoclick {
     this.desktop_.hitTest(x, y, chrome.automation.EventType.MOUSE_PRESSED);
   }
 }
-
-// Initialize the AccessibilityCommon extension.
-var autoclick = new Autoclick(true /* blink focus rings */);
