@@ -394,6 +394,10 @@ const char kMultiWindowOpenInNewWindowHistogram[] =
 }
 
 - (void)sceneStateWillHideModalOverlay:(SceneState*)sceneState {
+  if (!self.blockingOverlayViewController) {
+    return;
+  }
+
   [self.blockingOverlayViewController.view removeFromSuperview];
   self.blockingOverlayViewController = nil;
 
@@ -402,8 +406,11 @@ const char kMultiWindowOpenInNewWindowHistogram[] =
   // it, and therefore needs updating.
   if (sceneState.activationLevel < SceneActivationLevelForegroundInactive) {
     if (@available(iOS 13, *)) {
-      [[UIApplication sharedApplication]
-          requestSceneSessionRefresh:sceneState.scene.session];
+      if (IsMultiwindowSupported()) {
+        DCHECK(sceneState.scene.session);
+        [[UIApplication sharedApplication]
+            requestSceneSessionRefresh:sceneState.scene.session];
+      }
     }
   }
 }
