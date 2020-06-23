@@ -6807,7 +6807,6 @@ crbug.com/1091829 [ Mac ] fast/scrolling/scroll-non-composited-scroller.html [ P
 crbug.com/1091829 [ Linux ] virtual/threaded-prefer-compositing/fast/scrolling/scroll-non-composited-scroller.html [ Pass Failure ]
 crbug.com/1091250 [ Win10 ] virtual/cors/http/tests/misc/resource-timing-sizes-multipart.html [ Pass Failure ]
 crbug.com/1091948 [ Linux ] external/wpt/html/canvas/element/manual/fill-and-stroke-styles/canvas_colorsandstyles_createlineargradient_001.htm [ Pass Timeout ]
-crbug.com/1092091 [ Mac ] virtual/dark-color-scheme/datetimelocal-picker/datetimelocal-open.html [ Pass Failure ]
 
 # Sheriff 2020-06-06
 crbug.com/1091843 fast/canvas/color-space/canvas-createImageBitmap-p3.html [ Pass Failure ]
