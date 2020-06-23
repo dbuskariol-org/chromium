@@ -28064,6 +28064,8 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3326" label="FetchUploadStreaming"/>
   <int value="3327" label="WebkitLineClampWithoutWebkitBox"/>
   <int value="3328" label="WebBluetoothGetDevices"/>
+  <int value="3329" label="DialogWithNonZeroScrollOffset"/>
+  <int value="3330" label="DialogHeightLargerThanViewport"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
