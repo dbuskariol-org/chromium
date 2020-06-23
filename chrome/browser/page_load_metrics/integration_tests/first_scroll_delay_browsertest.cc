@@ -4,13 +4,20 @@
 
 #include "chrome/browser/page_load_metrics/integration_tests/metric_integration_test.h"
 
+#include "build/build_config.h"
 #include "chrome/test/base/ui_test_utils.h"
 #include "content/public/test/browser_test.h"
 #include "services/metrics/public/cpp/ukm_builders.h"
 
 using ukm::builders::PageLoad;
 
-IN_PROC_BROWSER_TEST_F(MetricIntegrationTest, FirstScrollDelay) {
+// http://crbug.com/1098148
+#if defined(OS_MACOSX)
+#define MAYBE_FirstScrollDelay DISABLED_FirstScrollDelay
+#else
+#define MAYBE_FirstScrollDelay FirstScrollDelay
+#endif
+IN_PROC_BROWSER_TEST_F(MetricIntegrationTest, MAYBE_FirstScrollDelay) {
   LoadHTML(R"HTML(
 <div id="content">
   <p>This is some text</p>
