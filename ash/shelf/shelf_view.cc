@@ -1815,8 +1815,10 @@ void ShelfView::ShelfItemAdded(int model_index) {
   CalculateIdealBounds();
   view->SetBoundsRect(view_model_->ideal_bounds(model_index));
 
-  if (model_->is_current_mutation_user_triggered())
+  if (model_->is_current_mutation_user_triggered() &&
+      drag_and_drop_shelf_id_ != item.id) {
     view->ScrollViewToVisible();
+  }
 
   // The first animation moves all the views to their target position. |view|
   // is hidden, so it visually appears as though we are providing space for
