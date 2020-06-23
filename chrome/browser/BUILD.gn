@@ -4063,6 +4063,8 @@ static_library("browser") {
       "win/conflicts/module_inspector.h",
       "win/conflicts/third_party_metrics_recorder.cc",
       "win/conflicts/third_party_metrics_recorder.h",
+      "win/icon_reader_service.cc",
+      "win/icon_reader_service.h",
       "win/jumplist.cc",
       "win/jumplist.h",
       "win/jumplist_factory.cc",
