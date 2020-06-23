@@ -100,32 +100,30 @@ class PDFViewerPPElement extends PDFViewerBaseElement {
       return;
     }
 
-    switch (e.keyCode) {
-      case 9:  // Tab key.
+    switch (e.key) {
+      case 'Tab':
         this.toolbarManager_.showToolbarsForKeyboardNavigation();
         return;
-      case 27:  // Escape key.
+      case 'Escape':
         break;  // Ensure escape falls through to the print-preview handler.
-      case 65:  // 'a' key.
+      case 'a':
         if (e.ctrlKey || e.metaKey) {
           this.pluginController.selectAll();
           // Since we do selection ourselves.
           e.preventDefault();
         }
         return;
-      case 71:  // 'g' key.
-        return;
-      case 219:  // Left bracket key.
+      case '[':
         if (e.ctrlKey) {
           this.rotateCounterclockwise();
         }
         return;
-      case 220:  // Backslash key.
+      case '\\':
         if (e.ctrlKey) {
           this.getZoomToolbar().fitToggleFromHotKey();
         }
         return;
-      case 221:  // Right bracket key.
+      case ']':
         if (e.ctrlKey) {
           this.rotateClockwise();
         }

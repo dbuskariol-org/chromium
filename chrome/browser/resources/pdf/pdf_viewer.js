@@ -304,37 +304,37 @@ class PDFViewerElement extends PDFViewerBaseElement {
       return;
     }
 
-    switch (e.keyCode) {
-      case 9:  // Tab key.
+    switch (e.key) {
+      case 'Tab':
         this.toolbarManager_.showToolbarsForKeyboardNavigation();
         return;
-      case 27:  // Escape key.
+      case 'Escape':
         this.toolbarManager_.hideSingleToolbarLayer();
         return;
-      case 65:  // 'a' key.
+      case 'a':
         if (e.ctrlKey || e.metaKey) {
           this.pluginController.selectAll();
           // Since we do selection ourselves.
           e.preventDefault();
         }
         return;
-      case 71:  // 'g' key.
+      case 'g':
         if (this.toolbarEnabled_ && (e.ctrlKey || e.metaKey) && e.altKey) {
           this.toolbarManager_.showToolbars();
           this.getToolbar_().selectPageNumber();
         }
         return;
-      case 219:  // Left bracket key.
+      case '[':
         if (e.ctrlKey) {
           this.rotateCounterclockwise();
         }
         return;
-      case 220:  // Backslash key.
+      case '\\':
         if (e.ctrlKey) {
           this.getZoomToolbar().fitToggleFromHotKey();
         }
         return;
-      case 221:  // Right bracket key.
+      case ']':
         if (e.ctrlKey) {
           this.rotateClockwise();
         }

@@ -87,13 +87,13 @@ const tests = [
 
     dropdown.$.button.click();
     chrome.test.assertTrue(dropdown.dropdownOpen);
-    pressAndReleaseKeyOn(document, ESC_KEY);
+    pressAndReleaseKeyOn(document, ESC_KEY, '', 'Escape');
     chrome.test.assertFalse(
         dropdown.dropdownOpen, 'Escape key closes dropdown');
     chrome.test.assertTrue(
         toolbar.opened, 'First escape key does not close toolbar');
 
-    pressAndReleaseKeyOn(document, ESC_KEY);
+    pressAndReleaseKeyOn(document, ESC_KEY, '', 'Escape');
     chrome.test.assertFalse(toolbar.opened, 'Second escape key closes toolbar');
 
     chrome.test.succeed();
