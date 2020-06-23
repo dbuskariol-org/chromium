@@ -2222,6 +2222,11 @@
           'isolated_scripts': 'wpt_web_tests',
         },
       },
+      'mac-arm64': {
+        'additional_compile_targets': [
+          'all',
+        ],
+      },
       'mac-code-coverage': {
         'mixins': [
           'isolate_profile_data',

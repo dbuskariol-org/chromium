@@ -284,6 +284,7 @@
       'linux-perfetto-rel': 'perfetto_release_bot',
       'linux-upload-perfetto': 'release_bot',
       'linux-wpt-fyi-rel': 'release_bot_minimal_symbols',
+      'mac-arm64': 'mac_arm64_release_bot',
       'mac-autofill-captured-sites-rel': 'release_bot',
       'mac-code-coverage': 'clang_code_coverage',
       'mac-hermetic-upgrade-rel': 'release_bot',
@@ -2010,6 +2011,11 @@
     'libfuzzer_windows_asan_release_trybot': [
       'libfuzzer', 'asan', 'release_trybot', 'chrome_with_codecs', 'pdf_xfa', 'disable_nacl',
     ],
+
+    'mac_arm64_release_bot': [
+      'release_bot', 'arm64',
+    ],
+
 
     'msan_no_origins_release_bot': [
       'msan_no_origins', 'release_bot',

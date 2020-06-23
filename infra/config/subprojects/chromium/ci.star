@@ -651,6 +651,14 @@ ci.fyi_builder(
     triggered_by = [builder_name('Mac Builder')],
 )
 
+ci.fyi_builder(
+    name = 'mac-arm64',
+    console_view_entry = ci.console_view_entry(
+        category = 'mac',
+        short_name = 'arm64',
+    ),
+    main_console_view = None,
+)
 
 ci.fyi_ios_builder(
     name = 'ios-simulator-cronet',
