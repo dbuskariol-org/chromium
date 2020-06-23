@@ -28063,6 +28063,8 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3332" label="ContentVisibilityAuto"/>
   <int value="3333" label="ContentVisibilityHidden"/>
   <int value="3334" label="ContentVisibilityHiddenMatchable"/>
+  <int value="3335" label="InlineOverflowAutoWithInlineEndPadding"/>
+  <int value="3336" label="InlineOverflowScrollWithInlineEndPadding"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
