@@ -1310,7 +1310,7 @@ void TabStrip::SetTabData(int model_index, TabRendererData data) {
 
 void TabStrip::AddTabToGroup(base::Optional<tab_groups::TabGroupId> group,
                              int model_index) {
-  tab_at(model_index)->set_group(std::move(group));
+  tab_at(model_index)->set_group(group);
 
   // Expand the group if the tab that is getting grouped is the active tab. This
   // can result in the group expanding in a series of actions where the final
