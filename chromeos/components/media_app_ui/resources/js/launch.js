@@ -144,7 +144,11 @@ guestMessagePipe.registerHandler(Message.SAVE_COPY, async (message) => {
   /** @type {!ChooseFileSystemEntriesOptions} */
   const options = {
     type: 'save-file',
-    accepts: [{extension, mimeTypes: [blob.type]}]
+    accepts: [{extension, mimeTypes: [blob.type]}],
+
+    // Without this, the file picker defaults to "All files" and will refuse to
+    // provide an extension automatically. See crbug/1082624#c23.
+    excludeAcceptAllOption: true,
   };
   /** @type {!FileSystemHandle} */
   let fileSystemHandle;
