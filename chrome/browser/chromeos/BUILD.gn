@@ -161,6 +161,7 @@ source_set("chromeos") {
     "//chromeos/dbus/upstart",
     "//chromeos/disks",
     "//chromeos/geolocation",
+    "//chromeos/lacros/mojom",
     "//chromeos/login/auth",
     "//chromeos/login/login_state",
     "//chromeos/login/session",
