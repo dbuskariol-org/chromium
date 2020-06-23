@@ -6871,3 +6871,6 @@ crbug.com/1097810 [ Mac10.13 Debug ] external/wpt/editing/other/white-spaces-aft
 crbug.com/1098067 [ Fuchsia ] external/wpt/shadow-dom/Element-interface-shadowRoot-attribute.html [ Pass Crash ]
 crbug.com/1098067 [ Fuchsia ] external/wpt/shadow-dom/untriaged/shadow-trees/upper-boundary-encapsulation/dom-tree-accessors-002.html [ Pass Crash ]
 crbug.com/1098067 [ Fuchsia ] virtual/text-antialias/bidi-isolate-nextlinebreak-failure.html [ Pass Crash ]
+
+# Sheriff 2020-06-23
+crbug.com/1098067 [ Linux ] virtual/android/fullscreen/video-fixed-background.html [ Failure ]
