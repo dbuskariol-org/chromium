@@ -66,7 +66,8 @@
 # #include <xcb/xcb.h>
 # #include <xcb/xcbext.h>
 #
-# #include "base/logging.h"
+# #include "base/notreached.h"
+# #include "base/check_op.h"
 # #include "ui/gfx/x/xproto_internal.h"
 #
 # namespace x11 {
