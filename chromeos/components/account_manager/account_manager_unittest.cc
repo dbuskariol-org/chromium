@@ -116,37 +116,41 @@ class AccountManagerTest : public testing::Test {
   // parameters.
   void ResetAndInitializeAccountManager() {
     account_manager_ = std::make_unique<AccountManagerSpy>();
-    InitializeAccountManager(account_manager_.get(), base::DoNothing());
+    InitializeAccountManager(account_manager_.get());
   }
 
   // |account_manager| is a non-owning pointer.
-  // |initialization_callback| is called after initialization is complete.
-  void InitializeAccountManager(AccountManager* account_manager,
-                                base::OnceClosure initialization_callback) {
-    InitializeAccountManager(account_manager, tmp_dir_.GetPath(),
-                             std::move(initialization_callback));
+  void InitializeAccountManager(AccountManager* account_manager) {
+    InitializeAccountManager(account_manager, tmp_dir_.GetPath());
   }
 
   // |account_manager| is a non-owning pointer.
   // |home_dir| is the cryptohome root.
-  // |initialization_callback| is called after initialization is complete.
   void InitializeAccountManager(AccountManager* account_manager,
-                                const base::FilePath& home_dir,
-                                base::OnceClosure initialization_callback) {
-    account_manager->Initialize(
-        home_dir, test_url_loader_factory_.GetSafeWeakWrapper(),
-        immediate_callback_runner_, base::SequencedTaskRunnerHandle::Get(),
-        std::move(initialization_callback));
-    account_manager->SetPrefService(&pref_service_);
+                                const base::FilePath& home_dir) {
+    InitializeAccountManager(account_manager, home_dir,
+                             /* initialization_callback= */ base::DoNothing());
     task_environment_.RunUntilIdle();
     EXPECT_EQ(account_manager->init_state_,
               AccountManager::InitializationState::kInitialized);
     EXPECT_TRUE(account_manager->IsInitialized());
   }
 
+  // |account_manager| is a non-owning pointer.
+  // |initialization_callback| will be called after initialization is complete
+  // (when |task_environment_.RunUntilIdle();| is called).
+  void InitializeAccountManagerAsync(
+      AccountManager* account_manager,
+      base::OnceClosure initialization_callback) {
+    InitializeAccountManager(account_manager,
+                             /* home_dir= */ tmp_dir_.GetPath(),
+                             std::move(initialization_callback));
+  }
+
   // Check base/test/task_environment.h. This must be the first member /
   // declared before any member that cares about tasks.
-  base::test::TaskEnvironment task_environment_;
+  base::test::TaskEnvironment task_environment_{
+      base::test::TaskEnvironment::ThreadPoolExecutionMode::QUEUED};
   base::ScopedTempDir tmp_dir_;
   TestingPrefServiceSimple pref_service_;
   network::TestURLLoaderFactory test_url_loader_factory_;
@@ -162,6 +166,15 @@ class AccountManagerTest : public testing::Test {
           [](base::OnceClosure closure) -> void { std::move(closure).Run(); });
 
  private:
+  void InitializeAccountManager(AccountManager* account_manager,
+                                const base::FilePath& home_dir,
+                                base::OnceClosure initialization_callback) {
+    account_manager->Initialize(
+        home_dir, test_url_loader_factory_.GetSafeWeakWrapper(),
+        immediate_callback_runner_, base::SequencedTaskRunnerHandle::Get(),
+        std::move(initialization_callback));
+    account_manager->SetPrefService(&pref_service_);
+  }
   DISALLOW_COPY_AND_ASSIGN(AccountManagerTest);
 };
 
@@ -216,7 +229,7 @@ TEST_F(AccountManagerTest, TestInitializationCompletes) {
   EXPECT_EQ(account_manager.init_state_,
             AccountManager::InitializationState::kNotStarted);
   // Test assertions will be made inside the method.
-  InitializeAccountManager(&account_manager, base::DoNothing());
+  InitializeAccountManager(&account_manager);
 }
 
 TEST_F(AccountManagerTest, TestInitializationCallbackIsCalled) {
@@ -224,7 +237,8 @@ TEST_F(AccountManagerTest, TestInitializationCallbackIsCalled) {
   base::OnceClosure closure = base::BindLambdaForTesting(
       [&init_callback_was_called]() { init_callback_was_called = true; });
   AccountManager account_manager;
-  InitializeAccountManager(&account_manager, std::move(closure));
+  InitializeAccountManagerAsync(&account_manager, std::move(closure));
+  task_environment_.RunUntilIdle();
   ASSERT_TRUE(init_callback_was_called);
 }
 
@@ -235,13 +249,13 @@ TEST_F(AccountManagerTest,
        TestInitializationCallbackIsCalledIfAccountManagerIsAlreadyInitialized) {
   // Make sure that Account Manager is fully initialized.
   AccountManager account_manager;
-  InitializeAccountManager(&account_manager, base::DoNothing());
+  InitializeAccountManager(&account_manager);
 
   // Send a duplicate initialization call.
   bool init_callback_was_called = false;
   base::OnceClosure closure = base::BindLambdaForTesting(
       [&init_callback_was_called]() { init_callback_was_called = true; });
-  InitializeAccountManager(&account_manager, std::move(closure));
+  InitializeAccountManagerAsync(&account_manager, std::move(closure));
   ASSERT_TRUE(init_callback_was_called);
 }
 
@@ -277,16 +291,14 @@ TEST_F(AccountManagerTest, TestTokenTransience) {
   {
     // Create a scoped |AccountManager|.
     AccountManager account_manager;
-    InitializeAccountManager(&account_manager, home_dir,
-                             /* initialization_callback= */ base::DoNothing());
+    InitializeAccountManager(&account_manager, home_dir);
     account_manager.UpsertAccount(kGaiaAccountKey_, kRawUserEmail, kGaiaToken);
     task_environment_.RunUntilIdle();
   }
 
   // Create another |AccountManager| at the same path.
   AccountManager account_manager;
-  InitializeAccountManager(&account_manager, home_dir,
-                           /* initialization_callback= */ base::DoNothing());
+  InitializeAccountManager(&account_manager, home_dir);
 
   std::vector<AccountManager::Account> accounts =
       GetAccountsBlocking(&account_manager);
