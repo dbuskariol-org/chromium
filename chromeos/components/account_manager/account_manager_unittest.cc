@@ -292,20 +292,26 @@ TEST_F(AccountManagerTest, TestInitializationCallbackIsCalled) {
 }
 
 // Tests that |AccountManager::Initialize|'s callback parameter is called, if
-// |AccountManager::Initialize| is invoked after Account Manager has been fully
-// initialized.
+// |AccountManager::Initialize| is called twice.
 TEST_F(AccountManagerTest,
        TestInitializationCallbackIsCalledIfAccountManagerIsAlreadyInitialized) {
-  // Make sure that Account Manager is fully initialized.
   AccountManager account_manager;
-  InitializeAccountManager(&account_manager);
+  InitializeAccountManagerAsync(
+      &account_manager, /* initialization_callback= */ base::DoNothing());
+  EXPECT_FALSE(account_manager.IsInitialized());
 
   // Send a duplicate initialization call.
   bool init_callback_was_called = false;
   base::OnceClosure closure = base::BindLambdaForTesting(
       [&init_callback_was_called]() { init_callback_was_called = true; });
   InitializeAccountManagerAsync(&account_manager, std::move(closure));
-  ASSERT_TRUE(init_callback_was_called);
+
+  // Let initialization continue.
+  EXPECT_FALSE(account_manager.IsInitialized());
+  EXPECT_FALSE(init_callback_was_called);
+  RunAllPendingTasks();
+  EXPECT_TRUE(account_manager.IsInitialized());
+  EXPECT_TRUE(init_callback_was_called);
 }
 
 TEST_F(AccountManagerTest, TestUpsert) {
