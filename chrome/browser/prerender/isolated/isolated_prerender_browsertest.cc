@@ -705,7 +705,7 @@ class IsolatedPrerenderBrowserTest
 
 IN_PROC_BROWSER_TEST_F(
     IsolatedPrerenderBrowserTest,
-    DISABLE_ON_WIN_MAC_CHROMEOS(ServiceWorkerRegistrationIsObserved)) {
+    DISABLE_ON_WIN_MAC_CHROMEOS(ServiceWorkerRegistrationIsNotEligible)) {
   SetDataSaverEnabled(true);
 
   // Load a page that registers a service worker.
@@ -725,6 +725,24 @@ IN_PROC_BROWSER_TEST_F(
             isolated_prerender_service->service_workers_observer()
                 ->IsServiceWorkerRegisteredForOrigin(
                     url::Origin::Create(GURL("https://unregistered.com"))));
+
+  GURL prefetch_url = GetOriginServerURL("/title2.html");
+
+  GURL doc_url("https://www.google.com/search?q=test");
+  MakeNavigationPrediction(doc_url, {prefetch_url});
+  // No run loop is needed here since the service worker check is synchronous.
+
+  ui_test_utils::NavigateToURL(browser(), prefetch_url);
+
+  // Navigate again to trigger UKM recording.
+  ui_test_utils::NavigateToURL(browser(), GURL("about:blank"));
+
+  // 6 = |PrefetchStatus::kPrefetchNotEligibleUserHasServiceWorker|.
+  EXPECT_EQ(base::Optional<int64_t>(6),
+            GetUKMMetric(prefetch_url,
+                         ukm::builders::PrefetchProxy_AfterSRPClick::kEntryName,
+                         ukm::builders::PrefetchProxy_AfterSRPClick::
+                             kSRPClickPrefetchStatusName));
 }
 
 IN_PROC_BROWSER_TEST_F(IsolatedPrerenderBrowserTest,
