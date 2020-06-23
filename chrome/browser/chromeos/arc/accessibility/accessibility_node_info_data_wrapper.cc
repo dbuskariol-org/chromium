@@ -101,7 +101,7 @@ bool AccessibilityNodeInfoDataWrapper::CanBeAccessibilityFocused() const {
 
 bool AccessibilityNodeInfoDataWrapper::IsAccessibilityFocusableContainer()
     const {
-  if (!IsImportantInAndroid())
+  if (!IsImportantInAndroid() || (IsScrollableContainer() && !HasText()))
     return false;
 
   return GetProperty(AXBooleanProperty::SCREEN_READER_FOCUSABLE) ||

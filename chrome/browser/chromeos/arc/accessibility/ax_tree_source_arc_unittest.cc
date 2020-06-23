@@ -524,6 +524,16 @@ TEST_F(AXTreeSourceArcTest, AccessibleNameComputationFromDescendants) {
   data = GetSerializedNode(child2->id);
   ASSERT_TRUE(data.IsIgnored());
 
+  // Don't compute name from descendants for scrollable, e.g. ScrollView.
+  SetProperty(root, AXBooleanProperty::SCROLLABLE, true);
+
+  CallNotifyAccessibilityEvent(event.get());
+  data = GetSerializedNode(root->id);
+  ASSERT_FALSE(
+      data.GetStringAttribute(ax::mojom::StringAttribute::kName, &name));
+
+  SetProperty(root, AXBooleanProperty::SCROLLABLE, false);
+
   // If one child is clickable, do not use clickable child.
   SetProperty(child1, AXBooleanProperty::CLICKABLE, true);
 
