@@ -68924,6 +68924,11 @@ Full version information for the fingerprint enum values:
   <int value="3" label="Mainframe fetched using an auto-detected proxy"/>
 </enum>
 
+<enum name="TypeOfVideoInFrame">
+  <int value="0" label="Frame do not have video"/>
+  <int value="1" label="Frame has video (either inline or fullscreen)"/>
+</enum>
+
 <enum name="UIEventType">
   <int value="0" label="Unknown"/>
   <int value="1" label="Touch released"/>
