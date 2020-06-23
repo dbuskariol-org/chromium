@@ -3535,7 +3535,7 @@
 <translation id="5527474464531963247">आप किसी दूसरे नेटवर्क को भी चुन सकते हैं.</translation>
 <translation id="5530766185686772672">गुप्त टैब बंद करें</translation>
 <translation id="5532223876348815659">वैश्विक</translation>
-<translation id="5533001281916885985"><ph name="SITE_NAME" /> यह करना चाहती है:</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" /> को अनुमति चाहिए</translation>
 <translation id="5534304873398226603">फ़ोटो या वीडियो खारिज करें</translation>
 <translation id="5535941515421698170">इस डिवाइस से अपना मौजूदा डेटा भी निकालें</translation>
 <translation id="5539221284352502426">आपने जो पासवर्ड डाला है, उसे सर्वर ने अस्वीकार कर दिया है. संभावित कारण ये हो सकते हैं: पासवर्ड बहुत छोटा है. पासवर्ड में संख्याएं या चिह्न होने चाहिए. पासवर्ड, पिछले पासवर्ड से अलग होना चाहिए.</translation>
@@ -4995,6 +4995,7 @@
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" /> से कॉल करें</translation>
 <translation id="7431719494109538750">कोई भी एचआईडी डिवाइस नहीं मिला</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{सभी को &amp;नई विंडो में खोलें}=1{&amp;नई विंडो में खोलें}one{सभी (#) को &amp;नई विंडो में खोलें}other{सभी (#) को &amp;नई विंडो में खोलें}}</translation>
+<translation id="7433957986129316853">इसे बनाए रखें</translation>
 <translation id="7434509671034404296">डेवलपर</translation>
 <translation id="7434635829372401939">अपनी सेटिंग सिंक करें</translation>
 <translation id="7434757724413878233">माउस की रफ़्तार बढ़ाना</translation>

@@ -4994,6 +4994,7 @@
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" />에서 전화 걸기</translation>
 <translation id="7431719494109538750">HID 기기를 찾을 수 없음</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{모두 새 창에서 열기(N)}=1{새 창에서 열기(N)}other{#개 모두 새 창에서 열기(N)}}</translation>
+<translation id="7433957986129316853">유지</translation>
 <translation id="7434509671034404296">개발자 정보</translation>
 <translation id="7434635829372401939">설정 동기화</translation>
 <translation id="7434757724413878233">마우스 가속</translation>

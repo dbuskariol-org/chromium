@@ -3534,7 +3534,7 @@
 <translation id="5527474464531963247">你也可以選取其他網路。</translation>
 <translation id="5530766185686772672">關閉無痕式分頁</translation>
 <translation id="5532223876348815659">通用</translation>
-<translation id="5533001281916885985"><ph name="SITE_NAME" /> 要求下列權限：</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" />要求下列權限：</translation>
 <translation id="5534304873398226603">捨棄相片或影片</translation>
 <translation id="5535941515421698170">將你現有的資料從這個裝置上一併移除</translation>
 <translation id="5539221284352502426">輸入的密碼遭到伺服器拒絕。可能的原因包括：密碼長度不足、密碼必須包含數字或符號、新舊密碼必須有所不同。</translation>
@@ -4994,6 +4994,7 @@
 <translation id="7427798576651127129">用「<ph name="DEVICE_NAME" />」撥打電話</translation>
 <translation id="7431719494109538750">找不到 HID 裝置</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{在新視窗中開啟所有書籤(&amp;N)}=1{在新視窗中開啟(&amp;N)}other{在新視窗中開啟全部 # 個書籤(&amp;N)}}</translation>
+<translation id="7433957986129316853">保留</translation>
 <translation id="7434509671034404296">開發人員選項</translation>
 <translation id="7434635829372401939">同步處理你的設定</translation>
 <translation id="7434757724413878233">滑鼠加速</translation>

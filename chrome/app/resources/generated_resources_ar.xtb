@@ -158,7 +158,7 @@
 <translation id="1197088940767939838">برتقالي</translation>
 <translation id="1197979282329025000">حدث خطأ أثناء استرداد إمكانيات الطابعة للطابعة <ph name="PRINTER_NAME" />. تعذر تسجيل هذه الطابعة في <ph name="CLOUD_PRINT_NAME" />.</translation>
 <translation id="119944043368869598">محو الكل</translation>
-<translation id="1199814941632954229">يتم تزويد الشهادات لملفات تعريف الشهادات هذه</translation>
+<translation id="1199814941632954229">يتم تزويد الشهادات لنماذج الشهادات هذه</translation>
 <translation id="1201402288615127009">التالي</translation>
 <translation id="1202596434010270079">‏تم تحديث تطبيق Kiosk. يُرجى إزالة جهاز USB.</translation>
 <translation id="120368089816228251">نوتة موسيقية</translation>
@@ -1683,7 +1683,7 @@
 <translation id="310671807099593501">يستخدم الموقع الإلكتروني البلوتوث.</translation>
 <translation id="3115147772012638511">في انتظار ذاكرة التخزين المؤقت ...</translation>
 <translation id="3115580024857770654">تصغير الكل</translation>
-<translation id="3116968597797150452">ملف تعريف الشهادة</translation>
+<translation id="3116968597797150452">نموذج الشهادة</translation>
 <translation id="3117362587799608430">لا تتوافق محطة الإرساء بالكامل.</translation>
 <translation id="3118319026408854581">مساعدة <ph name="PRODUCT_NAME" /></translation>
 <translation id="3118654181216384296">‏يُرجى إعادة محاولة تشغيل نظام التشغيل Linux بعد بضع لحظات.</translation>
@@ -4995,6 +4995,7 @@
 <translation id="7427798576651127129">الاتصال من <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">‏لم يتم العثور على أجهزة HID</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{فتح الكل في &amp;نافذة جديدة}=1{فتح في &amp;نافذة جديدة}two{فتح كلا العنوانين (#) في &amp;نافذة جديدة}few{فتح كل الـ (#) عناوين في &amp;نافذة جديدة}many{فتح كل الـ (#) عنوانًا في &amp;نافذة جديدة}other{فتح كل الـ (#) عنوان في &amp;نافذة جديدة}}</translation>
+<translation id="7433957986129316853">تجاهل</translation>
 <translation id="7434509671034404296">المطوِّر</translation>
 <translation id="7434635829372401939">مزامنة إعداداتك</translation>
 <translation id="7434757724413878233">تسريع الماوس</translation>

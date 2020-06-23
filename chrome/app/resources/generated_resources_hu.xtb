@@ -4997,6 +4997,7 @@ Győződjön meg arról, hogy nem ad ki bizalmas adatokat.</translation>
 <translation id="7427798576651127129">Hívás a következőtől: <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Nem találhatók HID-eszközök</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Összes meg&amp;nyitása új ablakban}=1{Meg&amp;nyitás új ablakban}other{Összes (#) meg&amp;nyitása új ablakban}}</translation>
+<translation id="7433957986129316853">Megtartom</translation>
 <translation id="7434509671034404296">Fejlesztőknek</translation>
 <translation id="7434635829372401939">Beállítások szinkronizálása</translation>
 <translation id="7434757724413878233">Egér gyorsítása</translation>

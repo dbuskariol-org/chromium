@@ -4996,6 +4996,7 @@ Mesaj de la server: <ph name="SERVER_MSG" /></translation>
 <translation id="7427798576651127129">Apel de la <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Nu a fost găsit niciun dispozitiv HID</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Deschide-le pe toate într-o fereastră &amp;nouă}=1{Deschide într-o fereastră &amp;nouă}few{Deschide-le pe toate (#) într-o fereastră &amp;nouă}other{Deschide-le pe toate (#) într-o fereastră &amp;nouă}}</translation>
+<translation id="7433957986129316853">Păstreaz-o</translation>
 <translation id="7434509671034404296">Dezvoltator</translation>
 <translation id="7434635829372401939">Sincronizează setările</translation>
 <translation id="7434757724413878233">Accelerarea mouse-ului</translation>

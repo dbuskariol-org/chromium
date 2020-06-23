@@ -4997,6 +4997,7 @@ Certifique-se de que não revela informações confidenciais.</translation>
 <translation id="7427798576651127129">Chamada de <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Nenhum dispositivo HID encontrado.</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Abrir todos numa &amp;nova janela}=1{Abrir numa &amp;nova janela}other{Abrir todos (#) numa &amp;nova janela}}</translation>
+<translation id="7433957986129316853">Manter</translation>
 <translation id="7434509671034404296">Programador</translation>
 <translation id="7434635829372401939">Sincronize as suas definições</translation>
 <translation id="7434757724413878233">Aceleração do rato</translation>

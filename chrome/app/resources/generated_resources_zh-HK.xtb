@@ -4995,6 +4995,7 @@
 <translation id="7427798576651127129">透過 <ph name="DEVICE_NAME" /> 撥打電話</translation>
 <translation id="7431719494109538750">找不到 HID 裝置</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{在新視窗中開啟所有書籤(&amp;N)}=1{在新視窗中開啟(&amp;N)}other{在新視窗中開啟全部 # 個書籤(&amp;N)}}</translation>
+<translation id="7433957986129316853">保留</translation>
 <translation id="7434509671034404296">開發人員</translation>
 <translation id="7434635829372401939">同步您的設定</translation>
 <translation id="7434757724413878233">滑鼠加速</translation>

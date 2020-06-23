@@ -4997,6 +4997,7 @@ slettes permanent, når den administrerede bruger fjernes. Besøgte websites og 
 <translation id="7427798576651127129">Ring fra <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Der blev ikke fundet nogen HID-enheder</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Åbn alle i &amp;nyt vindue}=1{Åbn i &amp;nyt vindue}one{Åbn (#) i &amp;nyt vindue}other{Åbn alle (#) i &amp;nyt vindue}}</translation>
+<translation id="7433957986129316853">Behold den</translation>
 <translation id="7434509671034404296">Udvikler</translation>
 <translation id="7434635829372401939">Synkroniser dine indstillinger</translation>
 <translation id="7434757724413878233">Acceleration af mus</translation>

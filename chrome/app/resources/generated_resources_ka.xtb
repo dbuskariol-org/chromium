@@ -4995,6 +4995,7 @@
 <translation id="7427798576651127129">ზარი <ph name="DEVICE_NAME" />-ისგან</translation>
 <translation id="7431719494109538750">HID მოწყობილობები ვერ მოიძებნა</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{ყველას ა&amp;ხალ ფანჯარაში გახსნა}=1{ა&amp;ხალ ფანჯარაში გახსნა}other{#-ვეს ა&amp;ხალ ფანჯარაში გახსნა}}</translation>
+<translation id="7433957986129316853">შენარჩუნება</translation>
 <translation id="7434509671034404296">შემმუშავებელი</translation>
 <translation id="7434635829372401939">თქვენი პარამეტრების სინქრონიზაცია</translation>
 <translation id="7434757724413878233">მაუსის აჩქარება</translation>

@@ -4995,6 +4995,7 @@ Julkinen eksponentti (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bittiä):
 <translation id="7427798576651127129">Puhelu laitteesta <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">HID-laitteita ei löytynyt</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Avaa kaikki uudessa ikkunassa}=1{Avaa kaikki uudessa ikkunassa}other{Avaa kaikki # uudessa ikkunassa}}</translation>
+<translation id="7433957986129316853">Pidä tämä</translation>
 <translation id="7434509671034404296">Kehittäjille</translation>
 <translation id="7434635829372401939">Synkronoi asetuksesi</translation>
 <translation id="7434757724413878233">Hiiren nopeuttaminen</translation>

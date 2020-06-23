@@ -4994,6 +4994,7 @@
 <translation id="7427798576651127129">Позвонить с устройства "<ph name="DEVICE_NAME" />"</translation>
 <translation id="7431719494109538750">HID-устройства не найдены.</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Открыть все в &amp;новом окне}=1{Открыть в &amp;новом окне}one{Открыть все (#) в &amp;новом окне}few{Открыть все (#) в &amp;новом окне}many{Открыть все (#) в &amp;новом окне}other{Открыть все (#) в &amp;новом окне}}</translation>
+<translation id="7433957986129316853">Оставить так</translation>
 <translation id="7434509671034404296">Разработчикам</translation>
 <translation id="7434635829372401939">Синхронизация настроек</translation>
 <translation id="7434757724413878233">Ускорение мыши</translation>

@@ -3529,7 +3529,7 @@
 <translation id="5527474464531963247">আপুনি অন্য এটা নেটৱৰ্কো বাছনি কৰিব পাৰে।</translation>
 <translation id="5530766185686772672">ইনক’গনিট’ টেবসমূহ বন্ধ কৰক</translation>
 <translation id="5532223876348815659">গ্ল’বেল</translation>
-<translation id="5533001281916885985"><ph name="SITE_NAME" />এ এইকেইটা কৰিব বিচাৰে</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" />এ কৰিব বিচাৰে</translation>
 <translation id="5534304873398226603">ফট’ বা ভিডিঅ’ অগ্ৰাহ্য কৰক</translation>
 <translation id="5535941515421698170">এই ডিভাইচটোৰ পৰা আপোনাৰ পূর্বে থকা ডেটাও মচি পেলাওক</translation>
 <translation id="5539221284352502426">আপুনি দিয়া পাছৱর্ডটো ছার্ভাৰে অগ্ৰাহ্য কৰিছে। সম্ভাব্য কাৰণ: পাছৱৰ্ডটো যথেষ্ট চুটি। পাছৱর্ডটোত সংখ্যা বা চিহ্ন অন্তর্ভুক্ত হ'ব লাগিব। পাছৱর্ডটো পূর্বৱর্তী পাছৱর্ডসমূহতকৈ পৃথক হ'ব লাগিব।</translation>
@@ -4983,6 +4983,7 @@
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" />ৰ পৰা অহা কল</translation>
 <translation id="7431719494109538750">কোনো HID ডিভাইচ বিচাৰি পোৱা নগ’ল</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{নতু&amp;ন ৱিণ্ড’ত সকলো খোলক}=1{নতু&amp;ন ৱিণ্ড’ত খোলক}one{নতু&amp;ন ৱিণ্ড’ত সকলো (#) খোলক}other{নতু&amp;ন ৱিণ্ড’ত সকলো (#) খোলক}}</translation>
+<translation id="7433957986129316853">এয়া ৰাখক</translation>
 <translation id="7434509671034404296">বিকাশকৰ্তা</translation>
 <translation id="7434635829372401939">আপোনাৰ ছেটিংসমূহ ছিংক কৰক</translation>
 <translation id="7434757724413878233">মাউছৰ এক্সিলাৰেশ্বন</translation>

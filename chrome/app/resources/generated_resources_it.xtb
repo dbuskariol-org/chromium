@@ -2587,7 +2587,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="424963718355121712">Le app devono essere installate dall'host che controllano</translation>
 <translation id="4250229828105606438">Screenshot</translation>
 <translation id="4250680216510889253">No</translation>
-<translation id="4252035718262427477">Pagina web, file singolo (bundle web)</translation>
+<translation id="4252035718262427477">Pagina web, file singolo (Web Bundle)</translation>
 <translation id="4252852543720145436">Identificatori di contenuti protetti</translation>
 <translation id="4252899949534773101">Il Bluetooth è disabilitato</translation>
 <translation id="4252996741873942488"><ph name="WINDOW_TITLE" /> - Contenuti delle schede condivisi</translation>
@@ -4995,6 +4995,7 @@ Puoi gestire le impostazioni dell'account installando l'app Family Link su quest
 <translation id="7427798576651127129">Chiamata da <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Nessun dispositivo HID trovato</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Apri tutti in &amp;un'altra finestra}=1{Apri in &amp;un'altra finestra}other{Apri tutti (#) in &amp;un'altra finestra}}</translation>
+<translation id="7433957986129316853">Mantieni</translation>
 <translation id="7434509671034404296">Opzioni per sviluppatori</translation>
 <translation id="7434635829372401939">Sincronizza le impostazioni</translation>
 <translation id="7434757724413878233">Accelerazione del mouse</translation>

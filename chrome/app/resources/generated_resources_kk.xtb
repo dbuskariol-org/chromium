@@ -3533,7 +3533,7 @@
 <translation id="5527474464531963247">Басқа желіні таңдауыңызға да болады.</translation>
 <translation id="5530766185686772672">Жасырын қойындыларды жабу</translation>
 <translation id="5532223876348815659">Ғаламдық</translation>
-<translation id="5533001281916885985"><ph name="SITE_NAME" /> келесі рұқсаттарды сұрайды:</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" /> үшін қажетті әрекеттер:</translation>
 <translation id="5534304873398226603">Фотосурет не бейне жойылсын ба?</translation>
 <translation id="5535941515421698170">Сондай-ақ бұл құрылғыдағы деректерді өшіріңіз</translation>
 <translation id="5539221284352502426">Енгізген құпия сөзіңізді сервер қабылдамады. Себептері: Құпия сөз тым қысқа.  Құпия сөзде сандар немесе таңбалар болуы керек. Құпия сөз алдыңғы құпия сөздерден басқа болуы керек.</translation>
@@ -4993,6 +4993,7 @@
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" /> шалған қоңырау</translation>
 <translation id="7431719494109538750">HID құрылғылары табылмады.</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Барлығын &amp;жаңа терезеде ашу}=1{&amp;Жаңа терезеде ашу}other{Барлығын (#) &amp;жаңа терезеде ашу}}</translation>
+<translation id="7433957986129316853">Сақтау</translation>
 <translation id="7434509671034404296">Әзірлеуші</translation>
 <translation id="7434635829372401939">Параметрлерді синхрондау</translation>
 <translation id="7434757724413878233">Тінтуірді жылдамдату</translation>

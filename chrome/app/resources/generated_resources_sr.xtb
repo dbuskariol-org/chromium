@@ -4994,6 +4994,7 @@
 <translation id="7427798576651127129">Позив са уређаја <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Није пронађен ниједан уређај са интерфејсом</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Отвори све у &amp;новом прозору}=1{Отвори у &amp;новом прозору}one{Отвори све (#) у &amp;новом прозору}few{Отвори све (#) у &amp;новом прозору}other{Отвори све (#) у &amp;новом прозору}}</translation>
+<translation id="7433957986129316853">Задржи</translation>
 <translation id="7434509671034404296">Програмер</translation>
 <translation id="7434635829372401939">Синхронизујте подешавања</translation>
 <translation id="7434757724413878233">Убрзавање миша</translation>

@@ -4994,6 +4994,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="7427798576651127129">Zavolat ze zařízení <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Nebyla nalezena žádná zařízení HID</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Otevřít vše v &amp;novém okně}=1{Otevřít v &amp;novém okně}few{Otevřít vše (#) v &amp;novém okně}many{Otevřít vše (#) v &amp;novém okně}other{Otevřít vše (#) v &amp;novém okně}}</translation>
+<translation id="7433957986129316853">Zachovat</translation>
 <translation id="7434509671034404296">Vývojář</translation>
 <translation id="7434635829372401939">Synchronizace nastavení</translation>
 <translation id="7434757724413878233">Zrychlení myši</translation>

@@ -4995,6 +4995,7 @@ Ak chcete spravovať nastavenia tohto účtu, nainštalujte si do zariadenia apl
 <translation id="7427798576651127129">Volať zo zariadenia <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Neboli nájdené žiadne zariadenia HID</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Otvoriť všetky v novom okne}=1{Otvoriť v novom okne}few{Otvoriť všetky (#) v novom okne}many{Otvoriť všetky (#) v novom okne}other{Otvoriť všetky (#) v novom okne}}</translation>
+<translation id="7433957986129316853">Ponechať</translation>
 <translation id="7434509671034404296">Vývojár</translation>
 <translation id="7434635829372401939">Synchronizácia vašich nastavení</translation>
 <translation id="7434757724413878233">Zrýchlenie myši</translation>

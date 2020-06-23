@@ -3536,7 +3536,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="5527474464531963247">Be to, galite pasirinkti kitą tinklą.</translation>
 <translation id="5530766185686772672">Užd. inkognito skirt. lapus</translation>
 <translation id="5532223876348815659">Visuotinės</translation>
-<translation id="5533001281916885985"><ph name="SITE_NAME" /> nori</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" /> nori:</translation>
 <translation id="5534304873398226603">Atmesti nuotrauką arba vaizdo įrašą</translation>
 <translation id="5535941515421698170">Taip pat pašalinkite esamus duomenis iš šio įrenginio</translation>
 <translation id="5539221284352502426">Serveris atmetė įvestą slaptažodį. Taip galėjo nutikti dėl toliau išvardytų priežasčių. Slaptažodis yra per trumpas. Slaptažodį turi sudaryti ir skaičiai arba simboliai. Slaptažodis turi skirtis nuo ankstesnių slaptažodžių.</translation>
@@ -4997,6 +4997,7 @@ Ar norite paleisti „<ph name="CONTROL_PANEL_APPLET_NAME" />“?</translation>
 <translation id="7427798576651127129">Skambina <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Nerasta jokių HID įrenginių</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Atidaryti viską &amp;naujame lange}=1{Atidaryti &amp;naujame lange}one{Atidaryti viską (#) &amp;naujame lange}few{Atidaryti viską (#) &amp;naujame lange}many{Atidaryti viską (#) &amp;naujame lange}other{Atidaryti viską (#) &amp;naujame lange}}</translation>
+<translation id="7433957986129316853">Palikti</translation>
 <translation id="7434509671034404296">Vykdymo programa</translation>
 <translation id="7434635829372401939">Nustatymų sinchronizavimas</translation>
 <translation id="7434757724413878233">Pelės spartinimas</translation>

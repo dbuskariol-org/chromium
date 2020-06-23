@@ -4991,6 +4991,7 @@ Du kan administrere innstillingene for denne kontoen ved å installere Family Li
 <translation id="7427798576651127129">Ring fra <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Fant ingen HID-enheter</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Åpne alle i &amp;nye vinduer}=1{Åpne i et &amp;nytt vindu}other{Åpne alle (#) i &amp;nye vinduer}}</translation>
+<translation id="7433957986129316853">Nei</translation>
 <translation id="7434509671034404296">Utvikler</translation>
 <translation id="7434635829372401939">Synkroniser innstillingene dine</translation>
 <translation id="7434757724413878233">Museakselerasjon</translation>

@@ -4999,6 +4999,7 @@
 <translation id="7427798576651127129">Զանգել <ph name="DEVICE_NAME" />-ից</translation>
 <translation id="7431719494109538750">HID սարքեր չեն գտնվել</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Բացել բոլորը &amp;նոր պատուհանում}=1{Բացել &amp;նոր պատուհանում}one{Open All (#) in &amp;New Window}other{Բացել բոլորը (#) &amp;նոր պատուհանում}}</translation>
+<translation id="7433957986129316853">Պահպանել</translation>
 <translation id="7434509671034404296">Մշակողների համար</translation>
 <translation id="7434635829372401939">Կարգավորումների համաժամացում</translation>
 <translation id="7434757724413878233">Մկնիկի արագացում</translation>

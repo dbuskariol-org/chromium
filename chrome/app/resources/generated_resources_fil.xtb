@@ -4996,6 +4996,7 @@ Puwede mong pamahalaan ang mga setting ng account na ito sa pamamagitan ng pag-i
 <translation id="7427798576651127129">Tawag mula sa <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Walang nakitang HID device</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Buksan Lahat sa &amp;Bagong Window}=1{Buksan sa &amp;Bagong Window}one{Buksan Lahat (#) sa &amp;Bagong Window}other{Buksan Lahat (#) sa &amp;Bagong Window}}</translation>
+<translation id="7433957986129316853">Panatilihin ito</translation>
 <translation id="7434509671034404296">Bumubuo</translation>
 <translation id="7434635829372401939">I-sync ang iyong mga setting</translation>
 <translation id="7434757724413878233">Pag-accelerate ng mouse</translation>

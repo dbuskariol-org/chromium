@@ -4996,6 +4996,7 @@ Du kan hantera inställningarna för det här kontot genom att installera Family
 <translation id="7427798576651127129">Ring från <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Inga HID-enheter hittades</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Öppna alla i ett &amp;nytt fönster}=1{Öppna i ett &amp;nytt fönster}other{Öppna alla (#) i ett &amp;nytt fönster}}</translation>
+<translation id="7433957986129316853">Behåll den</translation>
 <translation id="7434509671034404296">Utvecklare</translation>
 <translation id="7434635829372401939">Synkronisera inställningar</translation>
 <translation id="7434757724413878233">Musacceleration</translation>

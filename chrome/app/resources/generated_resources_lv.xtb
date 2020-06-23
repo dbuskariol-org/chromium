@@ -3536,7 +3536,7 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="5527474464531963247">Varat arī atlasīt citu tīklu.</translation>
 <translation id="5530766185686772672">Aizvērt inkognito cilnes</translation>
 <translation id="5532223876348815659">Visā pasaulē</translation>
-<translation id="5533001281916885985">Vietne <ph name="SITE_NAME" /> vēlas:</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" /> pieprasa:</translation>
 <translation id="5534304873398226603">Atmest fotoattēlu vai video</translation>
 <translation id="5535941515421698170">Noņemt no šīs ierīces arī jūsu esošos datus</translation>
 <translation id="5539221284352502426">Ievadīto paroli noraidīja serveris. Iespējamie iemesli: parole ir pārāk īsa; parolē ir jābūt ietvertiem cipariem vai simboliem; parolei ir jāatšķiras no iepriekšējām parolēm.</translation>
@@ -4996,6 +4996,7 @@ Vai vēlaties palaist rīku <ph name="CONTROL_PANEL_APPLET_NAME" />?</translatio
 <translation id="7427798576651127129">Zvanīt no ierīces <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Netika atrasta neviena HID ierīce.</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Atvērt visas jaunā logā}=1{Atvērt jaunā logā}zero{Atvērt visas (#) jaunā logā}one{Atvērt visas (#) jaunā logā}other{Atvērt visas (#) jaunā logā}}</translation>
+<translation id="7433957986129316853">Paturēt</translation>
 <translation id="7434509671034404296">Izstrādātājs</translation>
 <translation id="7434635829372401939">Iestatījumu sinhronizācija</translation>
 <translation id="7434757724413878233">Peles darbības paātrinājums</translation>

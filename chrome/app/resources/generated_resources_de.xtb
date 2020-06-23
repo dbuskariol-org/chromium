@@ -4992,6 +4992,7 @@ Möchten Sie <ph name="CONTROL_PANEL_APPLET_NAME" /> starten?</translation>
 <translation id="7427798576651127129">Anruf von <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Keine HID-Geräte gefunden</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Alle in &amp;neuem Fenster öffnen}=1{In &amp;neuem Fenster öffnen}other{Alle (#) in &amp;neuem Fenster öffnen}}</translation>
+<translation id="7433957986129316853">Beibehalten</translation>
 <translation id="7434509671034404296">Entwickler</translation>
 <translation id="7434635829372401939">Einstellungen synchronisieren</translation>
 <translation id="7434757724413878233">Mausbeschleunigung</translation>

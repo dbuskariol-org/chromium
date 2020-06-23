@@ -4994,6 +4994,7 @@
 <translation id="7427798576651127129">ການໂທຈາກ <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">ບໍ່ພົບອຸປະກອນ HID ໃດ</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{ເປີດທັງໝົດໃນ&amp;ໜ້າຈໍໃໝ່}=1{ເປີດໃນ&amp;ໜ້າຈໍໃໝ່}other{ເປີດທັງໝົດ (#) ໃນ&amp;ໜ້າຈໍໃໝ່}}</translation>
+<translation id="7433957986129316853">ເກັບໄວ້</translation>
 <translation id="7434509671034404296">ຜູ້ພັດ​ທະ​ນາ</translation>
 <translation id="7434635829372401939">ຊິ້ງຂໍ້ມູນການຕັ້ງຄ່າຂອງທ່ານ</translation>
 <translation id="7434757724413878233">ການເລັ່ງຄວາມໄວເມົ້າ</translation>

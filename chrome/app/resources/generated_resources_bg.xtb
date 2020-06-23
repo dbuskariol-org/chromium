@@ -4996,6 +4996,7 @@
 <translation id="7427798576651127129">Обаждане от <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Няма намерени HID устройства</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Отваряне на всички в &amp;нов прозорец}=1{Отваряне в &amp;нов прозорец}other{Отваряне на всички (#) в &amp;нов прозорец}}</translation>
+<translation id="7433957986129316853">Запазване</translation>
 <translation id="7434509671034404296">Програмист</translation>
 <translation id="7434635829372401939">Синхронизиране на настройките ви</translation>
 <translation id="7434757724413878233">Ускоряване на мишката</translation>

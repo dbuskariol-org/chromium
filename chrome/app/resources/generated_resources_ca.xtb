@@ -4996,6 +4996,7 @@ Assegureu-vos que no es pugui accedir a informació sensible.</translation>
 <translation id="7427798576651127129">Truca des de: <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">No s'ha trobat cap dispositiu d'interfície humana</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Obre-les totes en una &amp;finestra nova}=1{Obre en una &amp;finestra nova}other{Obre-les totes (#) en una &amp;finestra nova}}</translation>
+<translation id="7433957986129316853">Mantén els canvis</translation>
 <translation id="7434509671034404296">Desenvolupador</translation>
 <translation id="7434635829372401939">Sincronitza la configuració</translation>
 <translation id="7434757724413878233">Acceleració del ratolí</translation>

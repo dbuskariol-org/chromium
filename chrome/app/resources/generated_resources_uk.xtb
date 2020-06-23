@@ -4996,6 +4996,7 @@
 <translation id="7427798576651127129">Телефонувати з пристрою <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Пристроїв HID не знайдено</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Відкрити всі у &amp;новому вікні}=1{Відкрити в &amp;новому вікні}one{Відкрити всі (#) у &amp;новому вікні}few{Відкрити всі (#) у &amp;новому вікні}many{Відкрити всі (#) у &amp;новому вікні}other{Відкрити всі (#) у &amp;новому вікні}}</translation>
+<translation id="7433957986129316853">Залишити</translation>
 <translation id="7434509671034404296">Для розробників</translation>
 <translation id="7434635829372401939">Синхронізація налаштувань</translation>
 <translation id="7434757724413878233">Прискорення миші</translation>

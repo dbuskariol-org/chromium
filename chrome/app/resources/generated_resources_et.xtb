@@ -4996,6 +4996,7 @@ kasutades juhtpaneeli funktsiooni <ph name="CONTROL_PANEL_APPLET_NAME" />.
 <translation id="7427798576651127129">Kõne seadmest <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">HID-seadmeid ei leitud</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Ava kõik &amp;uues aknas}=1{Ava &amp;uues aknas}other{Ava kõik (#) &amp;uues aknas}}</translation>
+<translation id="7433957986129316853">Säilita</translation>
 <translation id="7434509671034404296">Arendaja</translation>
 <translation id="7434635829372401939">Seadete sünkroonimine</translation>
 <translation id="7434757724413878233">Hiire kiirendus</translation>

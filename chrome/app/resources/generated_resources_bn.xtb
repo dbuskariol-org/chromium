@@ -4996,6 +4996,7 @@
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" /> থেকে কল করুন</translation>
 <translation id="7431719494109538750">কোনও HID ডিভাইস খুঁজে পাওয়া যায়নি</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{সবগুলি &amp;নতুন উইন্ডোতে খুলুন}=1{&amp;নতুন উইন্ডোতে খুলুন}one{সবগুলি (#টি) &amp;নতুন উইন্ডোতে খুলুন}other{সবগুলি (#টি) &amp;নতুন উইন্ডোতে খুলুন}}</translation>
+<translation id="7433957986129316853">এটি রাখতে চাই</translation>
 <translation id="7434509671034404296">ডেভেলপার</translation>
 <translation id="7434635829372401939">আপনার সেটিংস সিঙ্ক করুন</translation>
 <translation id="7434757724413878233">মাউস অ্যাক্সিলারেশন</translation>

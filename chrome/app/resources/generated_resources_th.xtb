@@ -4996,6 +4996,7 @@
 <translation id="7427798576651127129">โทรจาก <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">ไม่พบอุปกรณ์ HID</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{เปิดทั้งหมดใน&amp;หน้าต่างใหม่}=1{เปิดใน&amp;หน้าต่างใหม่}other{เปิดทั้งหมด (#) ใน&amp;หน้าต่างใหม่}}</translation>
+<translation id="7433957986129316853">เก็บไว้</translation>
 <translation id="7434509671034404296">นักพัฒนา</translation>
 <translation id="7434635829372401939">ซิงค์การตั้งค่า</translation>
 <translation id="7434757724413878233">การเร่งความเร็วเมาส์</translation>

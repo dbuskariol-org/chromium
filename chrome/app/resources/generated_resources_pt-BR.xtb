@@ -3536,7 +3536,7 @@ Para gerenciar as configurações dessa conta, instale o app Family Link no seu 
 <translation id="5527474464531963247">Também é possível selecionar outra rede.</translation>
 <translation id="5530766185686772672">Fechar guias anônimas</translation>
 <translation id="5532223876348815659">Global</translation>
-<translation id="5533001281916885985"><ph name="SITE_NAME" /> deseja</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" /> quer</translation>
 <translation id="5534304873398226603">Descartar foto ou vídeo</translation>
 <translation id="5535941515421698170">Remover também deste dispositivo os dados já existentes</translation>
 <translation id="5539221284352502426">A senha inserida foi recusada pelo servidor. Entre os possíveis motivos estão: a senha é muito curta, não inclui números ou símbolos ou é igual a senhas anteriores.</translation>
@@ -4998,6 +4998,7 @@ permanentemente excluídos assim que esse usuário for removido. Os websites vis
 <translation id="7427798576651127129">Chamada de <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Nenhum dispositivo HID encontrado</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Abrir tudo em &amp;Nova janela}=1{Abrir em &amp;Nova janela}one{Abrir tudo (#) em &amp;Nova janela}other{Abrir tudo (#) em &amp;Nova janela}}</translation>
+<translation id="7433957986129316853">Manter assim</translation>
 <translation id="7434509671034404296">Desenvolvedor</translation>
 <translation id="7434635829372401939">Sincronizar as configurações</translation>
 <translation id="7434757724413878233">Aceleração do mouse</translation>

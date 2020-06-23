@@ -3533,7 +3533,7 @@
 <translation id="5527474464531963247">तुम्ही वेगळे नेटवर्क देखील निवडू शकता.</translation>
 <translation id="5530766185686772672">गुप्त टॅब बंद करा</translation>
 <translation id="5532223876348815659">जागतिक</translation>
-<translation id="5533001281916885985"><ph name="SITE_NAME" /> हे करू इच्छिते</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" /> ला हे करायचे आहे</translation>
 <translation id="5534304873398226603">फोटो किंवा व्हिडिओ टाकून द्या</translation>
 <translation id="5535941515421698170">या डिव्हाइस मधून तुमचा विद्यमान डेटा देखील हटवा</translation>
 <translation id="5539221284352502426">तुम्ही टाकलेला पासवर्ड सर्व्हरने नाकारला होता. संभाव्य कारणांमध्ये याचा समावेश आहे: पासवर्ड खूप लहान आहे. पासवर्डमध्ये संख्या किंवा आयकन असणे आवश्यक आहे. पासवर्ड आधीच्या पासवर्डपेक्षा वेगळा असणे आवश्यक आहे.</translation>
@@ -4994,6 +4994,7 @@
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" /> चा कॉल</translation>
 <translation id="7431719494109538750">HID डिव्हाइस आढळली नाहीत</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{सर्व नवीन विंडोमध्ये उघडा}=1{ नवीन विंडोमध्ये उघडा}other{सर्व (#) नवीन विंडोमध्ये उघडा}}</translation>
+<translation id="7433957986129316853">ठेवा</translation>
 <translation id="7434509671034404296">डेव्हलपर</translation>
 <translation id="7434635829372401939">तुमच्या सेटिंग्ज सिंक करा</translation>
 <translation id="7434757724413878233">माउस अ‍ॅक्सिलरेशन</translation>

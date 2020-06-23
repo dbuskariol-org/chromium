@@ -4996,6 +4996,7 @@ You can manage this account’s settings by installing the Family Link app on yo
 <translation id="7427798576651127129">Call from <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">No HID devices found</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Open All in &amp;New Window}=1{Open in &amp;New Window}other{Open All (#) in &amp;New Window}}</translation>
+<translation id="7433957986129316853">Keep it</translation>
 <translation id="7434509671034404296">Developer</translation>
 <translation id="7434635829372401939">Sync your settings</translation>
 <translation id="7434757724413878233">Mouse acceleration</translation>

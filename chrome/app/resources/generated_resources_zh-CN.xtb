@@ -3531,7 +3531,7 @@
 <translation id="5527474464531963247">您也可以选择其他网络。</translation>
 <translation id="5530766185686772672">关闭隐身标签页</translation>
 <translation id="5532223876348815659">全局</translation>
-<translation id="5533001281916885985"><ph name="SITE_NAME" /> 想要</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" />想要</translation>
 <translation id="5534304873398226603">舍弃照片或视频</translation>
 <translation id="5535941515421698170">一并从这台设备中移除您的现有数据</translation>
 <translation id="5539221284352502426">您输入的密码被服务器拒绝了。可能的原因包括：此密码太短。此密码必须包含数字或符号，且必须不同于旧密码。</translation>
@@ -4991,6 +4991,7 @@
 <translation id="7427798576651127129">通过<ph name="DEVICE_NAME" />拨打电话</translation>
 <translation id="7431719494109538750">找不到任何 HID 设备</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{在新窗口中打开全部网址(&amp;N)}=1{在新窗口中打开 1 个网址(&amp;N)}other{在新窗口中打开全部（# 个）网址(&amp;N)}}</translation>
+<translation id="7433957986129316853">保持现状</translation>
 <translation id="7434509671034404296">开发者</translation>
 <translation id="7434635829372401939">同步您的设置</translation>
 <translation id="7434757724413878233">鼠标加速</translation>

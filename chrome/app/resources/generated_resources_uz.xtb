@@ -4994,6 +4994,7 @@ Ochiq eksponenta (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bit):
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" /> orqali telefon qilish</translation>
 <translation id="7431719494109538750">Hech qanday HID qurilmasi topilmadi</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Barchasini &amp;yangi oynada ochish}=1{&amp;Yangi oynada ochish}other{Barchasini (#) &amp;yangi oynada ochish}}</translation>
+<translation id="7433957986129316853">Saqlab qolinsin</translation>
 <translation id="7434509671034404296">Dasturchilar uchun</translation>
 <translation id="7434635829372401939">Sozlamalarni sinxronlash</translation>
 <translation id="7434757724413878233">Sichqonchani tezlatish</translation>

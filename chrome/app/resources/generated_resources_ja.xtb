@@ -4996,6 +4996,7 @@
 <translation id="7427798576651127129"><ph name="DEVICE_NAME" /> から発信</translation>
 <translation id="7431719494109538750">HID デバイスは見つかりませんでした</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{すべてを新しいウィンドウで開く(&amp;N)}=1{新しいウィンドウで開く(&amp;N)}other{すべて（# 件）を新しいウィンドウで開く(&amp;N)}}</translation>
+<translation id="7433957986129316853">そのままにする</translation>
 <translation id="7434509671034404296">開発 / 管理</translation>
 <translation id="7434635829372401939">設定の同期</translation>
 <translation id="7434757724413878233">マウス アクセラレーション</translation>

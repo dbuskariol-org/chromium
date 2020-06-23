@@ -4995,6 +4995,7 @@ Exponente público (<ph name="PUBLIC_EXPONENT_NUM_BITS" /> bits):
 <translation id="7427798576651127129">Llamar desde <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">No se ha encontrado ningún dispositivo HID</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Abrir todas en una &amp;nueva ventana}=1{Abrir en una &amp;nueva ventana}other{Abrir (#) en una &amp;nueva ventana}}</translation>
+<translation id="7433957986129316853">Conservar</translation>
 <translation id="7434509671034404296">Opciones para desarrolladores</translation>
 <translation id="7434635829372401939">Sincronizar tus ajustes</translation>
 <translation id="7434757724413878233">Aceleración del ratón</translation>

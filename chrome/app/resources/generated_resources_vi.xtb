@@ -4996,6 +4996,7 @@ Bạn có thể quản lý các tùy chọn cài đặt của tài khoản này 
 <translation id="7427798576651127129">Gọi từ <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Không tìm thấy thiết bị HID</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Mở tất cả trong &amp;cửa sổ mới}=1{Mở trong &amp;cửa sổ mới}other{Mở tất cả (#) trong &amp;cửa sổ mới}}</translation>
+<translation id="7433957986129316853">Giữ nguyên</translation>
 <translation id="7434509671034404296">Nhà phát triển</translation>
 <translation id="7434635829372401939">Đồng bộ hóa các tùy chọn cài đặt của bạn</translation>
 <translation id="7434757724413878233">Tăng tốc chuột</translation>

@@ -158,7 +158,7 @@
 <translation id="1197088940767939838">Naranja</translation>
 <translation id="1197979282329025000">Se produjo un error al recuperar las capacidades de la impresora <ph name="PRINTER_NAME" />. Esta impresora no se pudo registrar con <ph name="CLOUD_PRINT_NAME" />.</translation>
 <translation id="119944043368869598">Borrar todo</translation>
-<translation id="1199814941632954229">Se proporcionan los certificados para estos perfiles de certificados</translation>
+<translation id="1199814941632954229">Se instalan los certificados para estos perfiles de certificados</translation>
 <translation id="1201402288615127009">Siguiente</translation>
 <translation id="1202596434010270079">Se actualizó la aplicación de kiosco. Desconecta el dispositivo USB.</translation>
 <translation id="120368089816228251">Nota musical</translation>
@@ -4993,6 +4993,7 @@ Para administrar la configuración de esta cuenta, instala la app de Family Lin
 <translation id="7427798576651127129">Llamada de <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">No se encontraron dispositivos HID</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Abrir todo en una ventana &amp;nueva}=1{Abrir en una ventana &amp;nueva}other{Abrir todo (#) en una ventana &amp;nueva}}</translation>
+<translation id="7433957986129316853">Conservar el cambio</translation>
 <translation id="7434509671034404296">Opciones para desarrolladores</translation>
 <translation id="7434635829372401939">Sincroniza tu configuración</translation>
 <translation id="7434757724413878233">Aceleración del mouse</translation>

@@ -4997,6 +4997,7 @@ Assurez-vous de ne pas dévoiler d'informations sensibles.</translation>
 <translation id="7427798576651127129">Passer un appel avec <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Aucun appareil HID trouvé</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Tout ouvrir dans une &amp;nouvelle fenêtre}=1{Ouvrir dans une &amp;nouvelle fenêtre}one{Tout ouvrir (#) dans une &amp;nouvelle fenêtre}other{Tout ouvrir (#) dans une &amp;nouvelle fenêtre}}</translation>
+<translation id="7433957986129316853">Conserver</translation>
 <translation id="7434509671034404296">Options pour les développeurs</translation>
 <translation id="7434635829372401939">Synchroniser vos paramètres</translation>
 <translation id="7434757724413878233">Accélération du curseur</translation>

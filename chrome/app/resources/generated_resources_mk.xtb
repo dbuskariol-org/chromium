@@ -4996,6 +4996,7 @@
 <translation id="7427798576651127129">Јавете се од <ph name="DEVICE_NAME" /></translation>
 <translation id="7431719494109538750">Не се најдени HID-уреди</translation>
 <translation id="7433692219247014412">{COUNT,plural, =0{Отвори ги сите во &amp;нов прозорец}=1{Отвори во &amp;нов прозорец}one{Отвори ги сите (#) во &amp;нов прозорец}other{Отвори ги сите (#) во &amp;нов прозорец}}</translation>
+<translation id="7433957986129316853">Задржи</translation>
 <translation id="7434509671034404296">Програмер</translation>
 <translation id="7434635829372401939">Синхронизирајте ги поставките</translation>
 <translation id="7434757724413878233">Забрзување на глувчето</translation>
