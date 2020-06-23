@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef EXTENSIONS_BROWSER_SHARED_USER_SCRIPT_MASTER_H_
-#define EXTENSIONS_BROWSER_SHARED_USER_SCRIPT_MASTER_H_
+#ifndef EXTENSIONS_BROWSER_SHARED_USER_SCRIPT_MANAGER_H_
+#define EXTENSIONS_BROWSER_SHARED_USER_SCRIPT_MANAGER_H_
 
 #include <memory>
 #include <set>
@@ -25,10 +25,10 @@ namespace extensions {
 // Manages statically-defined user scripts for all extensions. Owns a
 // UserScriptLoader to which file loading and shared memory management
 // operations are delegated.
-class SharedUserScriptMaster : public ExtensionRegistryObserver {
+class SharedUserScriptManager : public ExtensionRegistryObserver {
  public:
-  explicit SharedUserScriptMaster(content::BrowserContext* browser_context);
-  ~SharedUserScriptMaster() override;
+  explicit SharedUserScriptManager(content::BrowserContext* browser_context);
+  ~SharedUserScriptManager() override;
 
   UserScriptLoader* script_loader() { return &loader_; }
 
@@ -54,9 +54,9 @@ class SharedUserScriptMaster : public ExtensionRegistryObserver {
   ScopedObserver<ExtensionRegistry, ExtensionRegistryObserver>
       extension_registry_observer_{this};
 
-  DISALLOW_COPY_AND_ASSIGN(SharedUserScriptMaster);
+  DISALLOW_COPY_AND_ASSIGN(SharedUserScriptManager);
 };
 
 }  // namespace extensions
 
-#endif  // EXTENSIONS_BROWSER_SHARED_USER_SCRIPT_MASTER_H_
+#endif  // EXTENSIONS_BROWSER_SHARED_USER_SCRIPT_MANAGER_H_
