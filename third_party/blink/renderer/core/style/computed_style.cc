@@ -82,7 +82,7 @@
 namespace blink {
 
 struct SameSizeAsBorderValue {
-  RGBA32 color_;
+  StyleColor color_;
   unsigned bitfield_;
 };
 
