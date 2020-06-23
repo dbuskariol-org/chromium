@@ -927,25 +927,34 @@ TEST_P(TextFragmentRelatedMetricTest, ElementIdSuccessFailureCounts) {
   // result of the element-id fragment if a text directive is successfully
   // parsed. If the feature is off we treat the text directive as an element-id
   // and should count the result.
-  const int kUncountedOrNotFound = GetParam() ? kUncounted : kNotFound;
   const int kUncountedOrFound = GetParam() ? kUncounted : kFound;
 
-  // When the TextFragmentAnchors feature is on, we'll strip the fragment
-  // directive (i.e. anything after :~:) leaving just the element anchor.
-  const int kFoundIfDirectiveStripped = GetParam() ? kFound : kNotFound;
+  // Note: We'll strip the fragment directive (i.e. anything after :~:) leaving
+  // just the element anchor. The fragment directive stripping behavior is now
+  // shipped unflagged so it should always be performed.
 
   Vector<std::pair<String, int>> test_cases = {
       {"", kUncounted},
       {"#element", kFound},
       {"#doesntExist", kNotFound},
-      {"#element:~:foo", kFoundIfDirectiveStripped},
+      // `:~:foo` will be stripped so #element will be found and #doesntexist
+      // ##element will be not found.
+      {"#element:~:foo", kFound},
       {"#doesntexist:~:foo", kNotFound},
       {"##element", kNotFound},
-      {"#element:~:text=doesntexist", kUncountedOrNotFound},
-      {"#element:~:text=page", kUncountedOrNotFound},
-      {"#:~:text=doesntexist", kUncountedOrNotFound},
-      {"#:~:text=page", kUncountedOrNotFound},
-      {"#:~:text=name", kUncountedOrFound},
+      // If the feature  is on, `:~:text=` will parse so we shouldn't count.
+      // Otherwise, it'll just be stripped so #element will be found.
+      {"#element:~:text=doesntexist", kUncountedOrFound},
+      {"#element:~:text=page", kUncountedOrFound},
+      // If the feature is on, `:~:text` is parsed so we don't count. If it's
+      // off the entire fragment is a directive that's stripped so no search is
+      // performed either.
+      {"#:~:text=doesntexist", kUncounted},
+      {"#:~:text=page", kUncounted},
+      {"#:~:text=name", kUncounted},
+      // If the feature is enabled, `:~:text` parses and we don't count the
+      // element-id. If the feature is off, we still strip the :~: directive
+      // and the remaining fragment does match an element id.
       {"#element:~:text=name", kUncountedOrFound}};
 
   const int kNotFoundSample = 0;
