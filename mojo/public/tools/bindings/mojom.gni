@@ -1108,33 +1108,7 @@ template("mojom") {
           }
           _typemap_config = typemap.config
           if (get_path_info(source, "abspath") == _typemap_config.mojom) {
-            enabled = false
-            if (!defined(_typemap_config.os_whitelist)) {
-              enabled = true
-            } else {
-              foreach(os, _typemap_config.os_whitelist) {
-                if (os == "android" && is_android) {
-                  enabled = true
-                } else if (os == "chromeos" && is_chromeos) {
-                  enabled = true
-                } else if (os == "fuchsia" && is_fuchsia) {
-                  enabled = true
-                } else if (os == "ios" && is_ios) {
-                  enabled = true
-                } else if (os == "linux" && is_linux) {
-                  enabled = true
-                } else if (os == "mac" && is_mac) {
-                  enabled = true
-                } else if (os == "posix" && is_posix) {
-                  enabled = true
-                } else if (os == "win" && is_win) {
-                  enabled = true
-                }
-              }
-            }
-            if (enabled) {
-              active_typemaps += [ typemap ]
-            }
+            active_typemaps += [ typemap ]
           }
         }
       }
