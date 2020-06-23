@@ -376,8 +376,6 @@ const char kMultiWindowOpenInNewWindowHistogram[] =
   if (sceneState.currentOrigin != WindowActivityRestoredOrigin) {
     if (IsMultiwindowSupported()) {
       if (@available(iOS 13, *)) {
-        // int origin =
-        //    static_cast<int>(sceneState.currentOrigin);
         base::UmaHistogramEnumeration(kMultiWindowOpenInNewWindowHistogram,
                                       sceneState.currentOrigin);
       }
