@@ -83,6 +83,10 @@ struct CertProfile {
   bool operator!=(const CertProfile& other) const;
 };
 
+struct CertProfileComparator {
+  bool operator()(const CertProfile& a, const CertProfile& b) const;
+};
+
 void RegisterProfilePrefs(PrefRegistrySimple* registry);
 void RegisterLocalStatePrefs(PrefRegistrySimple* registry);
 const char* GetPrefNameForSerialization(CertScope scope);

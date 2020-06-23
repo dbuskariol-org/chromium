@@ -88,6 +88,14 @@ bool CertProfile::operator!=(const CertProfile& other) const {
   return !(*this == other);
 }
 
+bool CertProfileComparator::operator()(const CertProfile& a,
+                                       const CertProfile& b) const {
+  static_assert(CertProfile::kVersion == 3, "This function should be updated");
+  return ((a.profile_id < b.profile_id) ||
+          (a.policy_version < b.policy_version) ||
+          (a.is_va_enabled < b.is_va_enabled));
+}
+
 //==============================================================================
 
 void RegisterProfilePrefs(PrefRegistrySimple* registry) {

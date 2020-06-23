@@ -213,27 +213,32 @@ CertProvisioningWorkerImpl::~CertProvisioningWorkerImpl() = default;
 
 bool CertProvisioningWorkerImpl::IsWaiting() const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   return is_waiting_;
 }
 
 const CertProfile& CertProvisioningWorkerImpl::GetCertProfile() const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   return cert_profile_;
 }
 
 const std::string& CertProvisioningWorkerImpl::GetPublicKey() const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   return public_key_;
 }
 
 CertProvisioningWorkerState CertProvisioningWorkerImpl::GetState() const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   return state_;
 }
 
 CertProvisioningWorkerState CertProvisioningWorkerImpl::GetPreviousState()
     const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   return prev_state_;
 }
 
@@ -243,6 +248,7 @@ base::Time CertProvisioningWorkerImpl::GetLastUpdateTime() const {
 
 void CertProvisioningWorkerImpl::Stop(CertProvisioningWorkerState state) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   DCHECK(IsFinalState(state));
 
   CancelScheduledTasks();
@@ -251,6 +257,7 @@ void CertProvisioningWorkerImpl::Stop(CertProvisioningWorkerState state) {
 
 void CertProvisioningWorkerImpl::Pause() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   CancelScheduledTasks();
   is_waiting_ = true;
 }
@@ -300,6 +307,7 @@ void CertProvisioningWorkerImpl::DoStep() {
 void CertProvisioningWorkerImpl::UpdateState(
     CertProvisioningWorkerState new_state) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   DCHECK(GetStateOrderedIndex(state_) < GetStateOrderedIndex(new_state));
 
   prev_state_ = state_;
@@ -482,6 +490,7 @@ void CertProvisioningWorkerImpl::OnBuildVaChallengeResponseDone(
 
 void CertProvisioningWorkerImpl::RegisterKey() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   tpm_challenge_key_subtle_impl_->StartRegisterKeyStep(
       base::BindOnce(&CertProvisioningWorkerImpl::OnRegisterKeyDone,
                      weak_factory_.GetWeakPtr()));
@@ -734,6 +743,7 @@ void CertProvisioningWorkerImpl::OnShouldContinue(ContinueReason reason) {
 
 void CertProvisioningWorkerImpl::CancelScheduledTasks() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   weak_factory_.InvalidateWeakPtrs();
 }
 
@@ -800,6 +810,7 @@ void CertProvisioningWorkerImpl::OnRemoveKeyDone(
 
 void CertProvisioningWorkerImpl::OnCleanUpDone() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   RecordResult(cert_scope_, state_, prev_state_);
   std::move(callback_).Run(cert_profile_, state_);
 }
@@ -853,6 +864,7 @@ void CertProvisioningWorkerImpl::InitAfterDeserialization() {
 
 void CertProvisioningWorkerImpl::RegisterForInvalidationTopic() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   DCHECK(invalidator_);
 
   // Can be empty after deserialization if no topic was received yet. Also
@@ -873,6 +885,7 @@ void CertProvisioningWorkerImpl::RegisterForInvalidationTopic() {
 
 void CertProvisioningWorkerImpl::UnregisterFromInvalidationTopic() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(sequence_checker_);
+
   DCHECK(invalidator_);
 
   invalidator_->Unregister();
