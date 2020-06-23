@@ -28,9 +28,7 @@ class ChromeSpeechRecognitionClient
     : public media::SpeechRecognitionClient,
       public media::mojom::SpeechRecognitionRecognizerClient {
  public:
-  explicit ChromeSpeechRecognitionClient(
-      content::RenderFrame* render_frame,
-      media::SpeechRecognitionClient::OnReadyCallback callback);
+  explicit ChromeSpeechRecognitionClient(content::RenderFrame* render_frame);
   ChromeSpeechRecognitionClient(const ChromeSpeechRecognitionClient&) = delete;
   ChromeSpeechRecognitionClient& operator=(
       const ChromeSpeechRecognitionClient&) = delete;
@@ -63,8 +61,6 @@ class ChromeSpeechRecognitionClient
   void ResetChannelMixer(const media::AudioBuffer& buffer);
   bool IsUrlBlocked(const std::string& url) const;
 
-  media::SpeechRecognitionClient::OnReadyCallback on_ready_callback_;
-
   mojo::Remote<media::mojom::SpeechRecognitionContext>
       speech_recognition_context_;
   mojo::Remote<media::mojom::SpeechRecognitionRecognizer>
@@ -81,10 +77,7 @@ class ChromeSpeechRecognitionClient
   std::unique_ptr<media::AudioBus> temp_audio_bus_;
 
   // Whether the browser is still requesting transcriptions.
-  bool is_browser_requesting_transcription_;
-
-  bool is_recognizer_bound_ = false;
-
+  bool is_browser_requesting_transcription_ = true;
   // The temporary audio bus used to mix multichannel audio into a single
   // channel.
   std::unique_ptr<media::AudioBus> monaural_audio_bus_;

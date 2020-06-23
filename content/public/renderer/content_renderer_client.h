@@ -305,9 +305,7 @@ class CONTENT_EXPORT ContentRendererClient {
 #if !defined(OS_ANDROID)
   // Creates a speech recognition client used to transcribe audio into captions.
   virtual std::unique_ptr<media::SpeechRecognitionClient>
-  CreateSpeechRecognitionClient(
-      RenderFrame* render_frame,
-      media::SpeechRecognitionClient::OnReadyCallback callback);
+  CreateSpeechRecognitionClient(RenderFrame* render_frame);
 #endif
 
   // Returns true if the page at |url| can use Pepper CameraDevice APIs.

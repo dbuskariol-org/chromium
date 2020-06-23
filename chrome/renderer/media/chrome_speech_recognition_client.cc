@@ -26,9 +26,8 @@ std::vector<std::string> GetBlockedURLs() {
 }
 
 ChromeSpeechRecognitionClient::ChromeSpeechRecognitionClient(
-    content::RenderFrame* render_frame,
-    media::SpeechRecognitionClient::OnReadyCallback callback)
-    : on_ready_callback_(std::move(callback)), blocked_urls_(GetBlockedURLs()) {
+    content::RenderFrame* render_frame)
+    : blocked_urls_(GetBlockedURLs()) {
   mojo::PendingReceiver<media::mojom::SpeechRecognitionContext>
       speech_recognition_context_receiver =
           speech_recognition_context_.BindNewPipeAndPassReceiver();
@@ -37,7 +36,6 @@ ChromeSpeechRecognitionClient::ChromeSpeechRecognitionClient(
       speech_recognition_client_receiver_.BindNewPipeAndPassRemote(),
       base::BindOnce(&ChromeSpeechRecognitionClient::OnRecognizerBound,
                      base::Unretained(this)));
-
   render_frame->GetBrowserInterfaceBroker()->GetInterface(
       std::move(speech_recognition_context_receiver));
   render_frame->GetBrowserInterfaceBroker()->GetInterface(
@@ -49,10 +47,6 @@ ChromeSpeechRecognitionClient::ChromeSpeechRecognitionClient(
 void ChromeSpeechRecognitionClient::OnRecognizerBound(
     bool is_multichannel_supported) {
   is_multichannel_supported_ = is_multichannel_supported;
-  is_recognizer_bound_ = true;
-
-  if (on_ready_callback_)
-    std::move(on_ready_callback_).Run();
 }
 
 ChromeSpeechRecognitionClient::~ChromeSpeechRecognitionClient() = default;
@@ -67,9 +61,9 @@ void ChromeSpeechRecognitionClient::AddAudio(
 }
 
 bool ChromeSpeechRecognitionClient::IsSpeechRecognitionAvailable() {
-  // TODO(evliu): Check if SODA is available.
   return !is_website_blocked_ && is_browser_requesting_transcription_ &&
-         is_recognizer_bound_ && speech_recognition_recognizer_.is_connected();
+         speech_recognition_recognizer_.is_bound() &&
+         speech_recognition_recognizer_.is_connected();
 }
 
 void ChromeSpeechRecognitionClient::OnSpeechRecognitionRecognitionEvent(

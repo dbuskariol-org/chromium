@@ -7,7 +7,6 @@
 
 #include <memory>
 
-#include "base/callback.h"
 #include "media/base/audio_buffer.h"
 #include "media/base/media_export.h"
 
@@ -17,8 +16,6 @@ namespace media {
 // captions.
 class MEDIA_EXPORT SpeechRecognitionClient {
  public:
-  using OnReadyCallback = base::OnceCallback<void()>;
-
   virtual ~SpeechRecognitionClient() = default;
 
   virtual void AddAudio(scoped_refptr<AudioBuffer> buffer) = 0;
