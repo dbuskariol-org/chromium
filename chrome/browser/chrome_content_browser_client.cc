@@ -135,7 +135,6 @@
 #include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
 #include "chrome/browser/ssl/ssl_client_auth_metrics.h"
 #include "chrome/browser/ssl/ssl_client_certificate_selector.h"
-#include "chrome/browser/ssl/typed_navigation_timing_throttle.h"
 #include "chrome/browser/subresource_filter/chrome_subresource_filter_client.h"
 #include "chrome/browser/sync_file_system/local/sync_file_system_backend.h"
 #include "chrome/browser/tab_contents/tab_util.h"
@@ -4016,10 +4015,6 @@ ChromeContentBrowserClient::CreateThrottlesForNavigation(
       base::BindOnce(&HandleSSLErrorWrapper), base::BindOnce(&IsInHostedApp)));
 
   throttles.push_back(std::make_unique<LoginNavigationThrottle>(handle));
-
-  MaybeAddThrottle(
-      TypedNavigationTimingThrottle::MaybeCreateThrottleFor(handle),
-      &throttles);
 
 #if !defined(OS_ANDROID)
   MaybeAddThrottle(DevToolsWindow::MaybeCreateNavigationThrottle(handle),
