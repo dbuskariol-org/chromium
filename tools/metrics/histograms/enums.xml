@@ -28062,6 +28062,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3325" label="CSSAtRuleScrollTimeline"/>
   <int value="3326" label="FetchUploadStreaming"/>
   <int value="3327" label="WebkitLineClampWithoutWebkitBox"/>
+  <int value="3328" label="WebBluetoothGetDevices"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
