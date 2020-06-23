@@ -6114,7 +6114,7 @@ void RenderFrameHostImpl::CommitNavigation(
       std::string partition_name;
       bool in_memory;
       GetContentClient()->browser()->GetStoragePartitionConfigForSite(
-          browser_context, site_instance_->GetSiteInfo().site_url(), true,
+          browser_context, site_instance_->GetSiteInfo().site_url(),
           &storage_domain, &partition_name, &in_memory);
     }
     non_network_url_loader_factories_.emplace(
