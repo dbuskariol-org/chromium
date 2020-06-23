@@ -1660,7 +1660,7 @@ crbug.com/123456 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/selec
 crbug.com/123456 [ Mac ] virtual/form-controls-refresh-disabled/fast/forms/select/popup-with-display-none-optgroup.html [ Skip ]
 
 crbug.com/1056027 [ Fuchsia ] virtual/text-antialias/small-caps-aat.html [ Failure Pass Timeout ]
-crbug.com/1057339 [ Fuchsia ] virtual/text-antialias/international/rtl-mark.html [ Failure Pass ]
+crbug.com/1057339 [ Fuchsia ] virtual/text-antialias/international/rtl-mark.html [ Failure Pass Crash ]
 
 # `hyphens: auto` not supported on Win/Linux/ChromeOS
 crbug.com/652964 [ Linux ] virtual/text-antialias/hyphens/hyphen-min-preferred-width-mock.html [ Skip ]
@@ -6869,3 +6869,7 @@ crbug.com/1093497 http/tests/history/client-redirect-after-push-state.html [ Pas
 
 crbug.com/1097094 external/wpt/window-segments/getWindowSegments-iframes.tentative.sub.html [ Pass Timeout ]
 crbug.com/1097810 [ Mac10.13 Debug ] external/wpt/editing/other/white-spaces-after-execCommand-delete.tentative.html [ Pass Timeout ]
+
+crbug.com/1098067 [ Fuchsia ] external/wpt/shadow-dom/Element-interface-shadowRoot-attribute.html [ Pass Crash ]
+crbug.com/1098067 [ Fuchsia ] external/wpt/shadow-dom/untriaged/shadow-trees/upper-boundary-encapsulation/dom-tree-accessors-002.html [ Pass Crash ]
+crbug.com/1098067 [ Fuchsia ] virtual/text-antialias/bidi-isolate-nextlinebreak-failure.html [ Pass Crash ]
