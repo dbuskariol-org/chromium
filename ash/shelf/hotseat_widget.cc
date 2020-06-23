@@ -904,6 +904,15 @@ bool HotseatWidget::IsShowingShelfMenu() const {
   return GetShelfView()->IsShowingMenu();
 }
 
+bool HotseatWidget::EventTargetsShelfView(const ui::LocatedEvent& event) const {
+  DCHECK_EQ(event.target(), GetNativeWindow());
+  gfx::Point location_in_shelf_view = event.location();
+  views::View::ConvertPointFromWidget(scrollable_shelf_view_,
+                                      &location_in_shelf_view);
+  return scrollable_shelf_view_->GetHotseatBackgroundBounds().Contains(
+      location_in_shelf_view);
+}
+
 const ShelfView* HotseatWidget::GetShelfView() const {
   return const_cast<const ShelfView*>(
       const_cast<HotseatWidget*>(this)->GetShelfView());

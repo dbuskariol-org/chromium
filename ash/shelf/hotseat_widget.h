@@ -126,6 +126,9 @@ class ASH_EXPORT HotseatWidget : public ShelfComponent,
 
   bool IsShowingShelfMenu() const;
 
+  // Whether the event is located in the hotseat area containing shelf apps.
+  bool EventTargetsShelfView(const ui::LocatedEvent& event) const;
+
   ShelfView* GetShelfView();
   const ShelfView* GetShelfView() const;
 
