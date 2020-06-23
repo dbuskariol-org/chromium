@@ -721,7 +721,7 @@ Na aplikace a obsah v jiných zařízeních tato akce nemá vliv.</translation
 <translation id="1885106732301550621">Místo na disku</translation>
 <translation id="1886996562706621347">Povolit dotazy stránek, zda je chcete použít jako výchozí obslužný nástroj protokolů (doporučeno)</translation>
 <translation id="1887442540531652736">Chyba přihlášení</translation>
-<translation id="1887597546629269384">Znovu řekněte „Hej Google“</translation>
+<translation id="1887597546629269384">Znovu řekněte „Hey Google“</translation>
 <translation id="1887850431809612466">Revize hardwaru</translation>
 <translation id="1890674179660343635">&lt;span&gt;ID: &lt;/span&gt;<ph name="EXTENSION_ID" /></translation>
 <translation id="189210018541388520">Otevřít v režimu celé obrazovky</translation>
@@ -2649,7 +2649,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="4348766275249686434">Shromažďování chyb</translation>
 <translation id="4349828822184870497">Užitečné</translation>
 <translation id="4350019051035968019">Toto zařízení nelze zaregistrovat do domény, do které patří váš účet, protože je označeno pro správu jinou doménou.</translation>
-<translation id="4350782034419308508">Hej Google</translation>
+<translation id="4350782034419308508">Hey Google</translation>
 <translation id="4351060348582610152">Web <ph name="ORIGIN" /> chce vyhledat zařízení Bluetooth v okolí. Byla nalezena následující zařízení:</translation>
 <translation id="4353114845960720315">V režimu virtuální reality tento web může získat následující informace:</translation>
 <translation id="4354073718307267720">Zeptat se, když chce web vytvořit 3D mapu vašeho okolí nebo sledovat polohu kamery</translation>
@@ -2782,7 +2782,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="452750746583162491">Zkontrolovat synchronizovaná data</translation>
 <translation id="4530494379350999373">Původ</translation>
 <translation id="4532646538815530781">Tento web používá senzory pohybu.</translation>
-<translation id="4533846798469727141">Teď řekněte „Hej Google“</translation>
+<translation id="4533846798469727141">Teď řekněte „Hey Google“</translation>
 <translation id="4533985347672295764">Doba využití procesoru</translation>
 <translation id="4534661889221639075">Zkuste to znovu.</translation>
 <translation id="4535127706710932914">Výchozí profil</translation>
@@ -3534,7 +3534,7 @@ Zpráva serveru: <ph name="SERVER_MSG" /></translation>
 <translation id="5527474464531963247">Můžete také vybrat jinou síť</translation>
 <translation id="5530766185686772672">Zavřít anonymní karty</translation>
 <translation id="5532223876348815659">Globální</translation>
-<translation id="5533001281916885985">Web <ph name="SITE_NAME" /> chce</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" /> vyžaduje</translation>
 <translation id="5534304873398226603">Zahodit fotku nebo video</translation>
 <translation id="5535941515421698170">Zároveň z tohoto zařízení odstranit vaše stávající údaje</translation>
 <translation id="5539221284352502426">Zadané heslo bylo serverem odmítnuto. Možné příčiny: Heslo je příliš krátké. Heslo musí obsahovat číslice nebo symboly. Heslo se musí lišit od předchozích hesel.</translation>

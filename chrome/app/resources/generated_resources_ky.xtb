@@ -5170,7 +5170,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="7663719505383602579">Алуучу: <ph name="ARC_PROCESS_NAME" /></translation>
 <translation id="7664620655576155379">Колдоого алынбаган Bluetooth түзмөгү: "<ph name="DEVICE_NAME" />".</translation>
 <translation id="7665082356120621510">Бир калыптагы өлчөмдү калтыруу</translation>
-<translation id="7665369617277396874">Аккаунтту кошуу</translation>
+<translation id="7665369617277396874">Аккаунт кошуу</translation>
 <translation id="7669825497510425694">{NUM_ATTEMPTS,plural, =1{PIN код туура эмес. Дагы бир жолу аракет кыла аласыз.}other{PIN код туура эмес. # жолу аракет кыла аласыз.}}</translation>
 <translation id="7671130400130574146">Тутумдун аталышынын тилкесин жана чектерди колдонуу</translation>
 <translation id="767127784612208024">Баштапкы абалга келтирүүнү ырастоо үчүн, басып коюңуз</translation>
@@ -6242,7 +6242,7 @@ Family Link колдонмосун түзмөгүңүзгө орнотуп, бу
 <translation id="899384117894244799">Чектелген колдонуучулардын тизмесинен алып салуу</translation>
 <translation id="899403249577094719">Netscape тастыктама негизинин URL</translation>
 <translation id="8995603266996330174"><ph name="DOMAIN" /> тарабынан башкарылат</translation>
-<translation id="8996526648899750015">Аккаунтту кошуу…</translation>
+<translation id="8996526648899750015">Аккаунт кошуу…</translation>
 <translation id="899657321862108550">Chrome'ду бардык жерде ала жүрүңүз</translation>
 <translation id="899676909165543803">Манжа изинин сенсору баскычтобуңуздун төмөнкү оң жагында жайгашкан. Ага манжаңыздын бирөө менен акырын тийип коюңуз.</translation>
 <translation id="8999560016882908256">Бөлүмдүн синтаксис катасы: <ph name="ERROR_LINE" /></translation>

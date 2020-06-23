@@ -3536,7 +3536,7 @@
 <translation id="5527474464531963247">Можна також вибрати іншу мережу.</translation>
 <translation id="5530766185686772672">Закрити анонімні вкладки</translation>
 <translation id="5532223876348815659">Загальні</translation>
-<translation id="5533001281916885985">Сайт <ph name="SITE_NAME" /> хоче</translation>
+<translation id="5533001281916885985"><ph name="SITE_NAME" /> хоче</translation>
 <translation id="5534304873398226603">Відхилити фото або відео</translation>
 <translation id="5535941515421698170">Також вилучити всі дані з цього пристрою</translation>
 <translation id="5539221284352502426">Сервер відхилив введений вами пароль. Можливі причини: пароль закороткий; пароль має містити цифри або символи; пароль має відрізнятися від попередніх.</translation>
@@ -4427,7 +4427,7 @@
 <translation id="6698810901424468597">Читати та змінювати свої дані на веб-сайтах <ph name="WEBSITE_1" /> і <ph name="WEBSITE_2" /></translation>
 <translation id="6699883973579689168">Тепер можна керувати всіма обліковими записами Google в одному додатку. Дозволи, які ви надали додаткам, веб-сайтам і розширенням у Chrome і Google Play, тепер можуть застосовуватися до всіх облікових записів, у які ви ввійшли. <ph name="LINK_BEGIN" />Докладніше<ph name="LINK_END" /></translation>
 <translation id="6700093763382332031">Блокування SIM-карти</translation>
-<translation id="6700480081846086223">Транслювати хост <ph name="HOST_NAME" /></translation>
+<translation id="6700480081846086223">Транслювати <ph name="HOST_NAME" /></translation>
 <translation id="6701535245008341853">Не вдалося завантажити профіль.</translation>
 <translation id="6702639462873609204">&amp;Редагувати...</translation>
 <translation id="6703966911896067184">Ілюстрація помилки реєстрації</translation>

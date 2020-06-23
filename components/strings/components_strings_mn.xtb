@@ -1098,7 +1098,7 @@
 <translation id="5580958916614886209">Хүчингүй болох сарыг шалгаад дахин оролдоно уу</translation>
 <translation id="5586446728396275693">Хадгалсан хаяг байхгүй</translation>
 <translation id="5595485650161345191">Хаягийг засах</translation>
-<translation id="5598944008576757369">Төлбөрийн төрөл сонгох</translation>
+<translation id="5598944008576757369">Төлбөрийн хэрэгсэл сонгох</translation>
 <translation id="560412284261940334">Удирдлагын зүгээс зөвшөөрөл олгоогүй байна</translation>
 <translation id="5605670050355397069">Тайлан</translation>
 <translation id="5607240918979444548">Архитектур-C</translation>
@@ -1685,9 +1685,9 @@
 <translation id="8094917007353911263">Таны ашиглаж буй сүлжээ таныг <ph name="BEGIN_BOLD" /><ph name="LOGIN_URL" /><ph name="END_BOLD" />-д нэвтрэхийг шаардах магадлалтай.</translation>
 <translation id="809898108652741896">A6</translation>
 <translation id="8100588592594801589">Хүчингүй картыг устгалаа</translation>
-<translation id="8103161714697287722">Төлбөрийн төрөл</translation>
+<translation id="8103161714697287722">Төлбөрийн хэрэгсэл</translation>
 <translation id="8105368624971345109">Унтраах</translation>
-<translation id="8118489163946903409">Төлбөрийн арга</translation>
+<translation id="8118489163946903409">Төлбөрийн хэрэгсэл</translation>
 <translation id="8127301229239896662">"<ph name="SOFTWARE_NAME" />"-г таны компьютер эсвэл сүлжээнд зөв суулгаагүй байна. Энэ асуудлыг шийдвэрлэхийн тулд админтайгаа холбогдоно уу.</translation>
 <translation id="8128526133099929547">Та дөнгөж сая сэжигтэй сайтад нууц үгээ орууллаа. Таны энэ нууц үгийг ашигладаг <ph name="WEBSITE_1" /> болон бусад сайт руу очиж, түүнийг одоо өөрчлөхийг Chrome зөвлөж байна.</translation>
 <translation id="8131740175452115882">Батлах</translation>
