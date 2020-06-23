@@ -250,6 +250,13 @@
       ],
     },
   },
+  'fuchsia_runner_logs': {
+    '$mixin_append': {
+      'args': [
+        '--runner-logs-dir=${ISOLATED_OUTDIR}/runner_logs',
+      ],
+    },
+  },
   'gpu_pool': {
     'swarming': {
       'dimensions': {
