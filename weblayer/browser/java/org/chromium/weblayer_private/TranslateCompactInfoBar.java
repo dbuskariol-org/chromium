@@ -490,17 +490,21 @@ public class TranslateCompactInfoBar extends InfoBar
             case ACTION_OVERFLOW_NEVER_LANGUAGE:
             case ACTION_AUTO_NEVER_LANGUAGE:
                 mUserInteracted = true;
-                // After applying this option, the infobar will dismiss.
+                mOptions.toggleNeverTranslateLanguageState(
+                        !mOptions.getTranslateState(TranslateOptions.Type.NEVER_LANGUAGE));
                 TranslateCompactInfoBarJni.get().applyBoolTranslateOption(
                         mNativeTranslateInfoBarPtr, TranslateCompactInfoBar.this,
-                        TranslateOption.NEVER_TRANSLATE, true);
+                        TranslateOption.NEVER_TRANSLATE,
+                        mOptions.getTranslateState(TranslateOptions.Type.NEVER_LANGUAGE));
                 return;
             case ACTION_OVERFLOW_NEVER_SITE:
                 mUserInteracted = true;
-                // After applying this option, the infobar will dismiss.
+                mOptions.toggleNeverTranslateDomainState(
+                        !mOptions.getTranslateState(TranslateOptions.Type.NEVER_DOMAIN));
                 TranslateCompactInfoBarJni.get().applyBoolTranslateOption(
                         mNativeTranslateInfoBarPtr, TranslateCompactInfoBar.this,
-                        TranslateOption.NEVER_TRANSLATE_SITE, true);
+                        TranslateOption.NEVER_TRANSLATE_SITE,
+                        mOptions.getTranslateState(TranslateOptions.Type.NEVER_DOMAIN));
                 return;
             default:
                 assert false : "Unsupported Menu Item Id, in handle post snackbar";
@@ -547,6 +551,18 @@ public class TranslateCompactInfoBar extends InfoBar
         } else {
             assert false;
         }
+    }
+
+    @CalledByNative
+    // Simulates a click of the overflow menu item for "never translate this language."
+    private void clickNeverTranslateLanguageMenuItemForTesting() {
+        onOverflowMenuItemClicked(TranslateMenu.ID_OVERFLOW_NEVER_LANGUAGE);
+    }
+
+    @CalledByNative
+    // Simulates a click of the overflow menu item for "never translate this site."
+    private void clickNeverTranslateSiteMenuItemForTesting() {
+        onOverflowMenuItemClicked(TranslateMenu.ID_OVERFLOW_NEVER_SITE);
     }
 
     @NativeMethods
