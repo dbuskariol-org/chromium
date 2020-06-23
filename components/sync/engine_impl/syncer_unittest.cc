@@ -472,7 +472,7 @@ TEST_F(SyncerTest, TestCallGatherUnsyncedEntries) {
   // regression for a very old bug.
 }
 
-TEST_F(SyncerTest, GetCommitIdsFiltersThrottledEntries) {
+TEST_F(SyncerTest, CommitFiltersThrottledEntries) {
   const ModelTypeSet throttled_types(BOOKMARKS);
   sync_pb::EntitySpecifics bookmark_data;
   AddDefaultFieldValue(BOOKMARKS, &bookmark_data);
@@ -695,105 +695,6 @@ TEST_F(SyncerTest, GetUpdatesPartialFailure) {
     VERIFY_ENTRY(2, false, false, false, 1, 31, 31, ids_, &rtrans);
     VERIFY_ENTRY(3, false, false, false, 1, 31, 31, ids_, &rtrans);
     VERIFY_ENTRY(4, false, false, false, 0, 30, 30, ids_, &rtrans);
-  }
-}
-
-// This test uses internal knowledge of the directory to test correctness of
-// GetCommitIds.  In almost every other test, the hierarchy is created from
-// parent to child order, and so parents always have metahandles that are
-// smaller than those of their children.  This makes it very difficult to test
-// some GetCommitIds edge cases, since it uses metahandle ordering as
-// a starting point.
-TEST_F(SyncerTest, GetCommitIds_VerifyDeletionCommitOrder) {
-  {
-    syncable::WriteTransaction trans(FROM_HERE, UNITTEST, directory());
-
-    // Create four bookmarks folders at the root node.
-    for (int i = 1; i < 5; ++i) {
-      MutableEntry entry(&trans, CREATE, BOOKMARKS, trans.root_id(), "");
-      entry.PutId(ids_.FromNumber(i));
-      entry.PutIsDir(true);
-      entry.PutBaseVersion(5);
-      entry.PutServerVersion(5);
-      entry.PutServerParentId(trans.root_id());
-      entry.PutServerIsDir(true);
-      entry.PutIsUnsynced(true);
-      entry.PutSpecifics(DefaultBookmarkSpecifics());
-    }
-
-    // Now iterate in reverse order make a hierarchy of them.
-    // While we're at it, also mark them as deleted.
-    syncable::Id parent_id = trans.root_id();
-    for (int i = 4; i > 0; --i) {
-      MutableEntry entry(&trans, GET_BY_ID, ids_.FromNumber(i));
-      entry.PutParentId(parent_id);
-      entry.PutServerParentId(parent_id);
-      entry.PutIsDel(true);
-      parent_id = ids_.FromNumber(i);
-    }
-  }
-
-  {
-    // Run GetCommitIds, the function being tested.
-    Directory::Metahandles result_handles;
-    syncable::ReadTransaction trans(FROM_HERE, directory());
-    GetCommitIdsForType(&trans, BOOKMARKS, 100, &result_handles);
-
-    // Now verify the output.  We expect four results in child to parent order.
-    ASSERT_EQ(4U, result_handles.size());
-
-    Entry entry0(&trans, GET_BY_HANDLE, result_handles[0]);
-    EXPECT_EQ(ids_.FromNumber(1), entry0.GetId());
-
-    Entry entry1(&trans, GET_BY_HANDLE, result_handles[1]);
-    EXPECT_EQ(ids_.FromNumber(2), entry1.GetId());
-
-    Entry entry2(&trans, GET_BY_HANDLE, result_handles[2]);
-    EXPECT_EQ(ids_.FromNumber(3), entry2.GetId());
-
-    Entry entry3(&trans, GET_BY_HANDLE, result_handles[3]);
-    EXPECT_EQ(ids_.FromNumber(4), entry3.GetId());
-  }
-}
-
-// Verify that if there are more deleted items than the maximum number of
-// entries, child to parent order is still preserved.
-TEST_F(SyncerTest, GetCommitIds_VerifyDeletionCommitOrderMaxEntries) {
-  {
-    syncable::WriteTransaction trans(FROM_HERE, UNITTEST, directory());
-
-    // Create a bookmark tree with one root, two second level, and three third
-    // level bookmarks, all folders.
-    for (int i = 1; i <= 6; ++i) {
-      MutableEntry entry(&trans, CREATE, BOOKMARKS, trans.root_id(), "");
-      entry.PutId(ids_.FromNumber(i));
-      entry.PutIsDir(true);
-      entry.PutBaseVersion(5);
-      entry.PutServerVersion(5);
-      entry.PutParentId(ids_.FromNumber(i / 2));
-      entry.PutServerParentId(ids_.FromNumber(i / 2));
-      entry.PutServerIsDir(true);
-      entry.PutIsUnsynced(true);
-      entry.PutSpecifics(DefaultBookmarkSpecifics());
-      entry.PutIsDel(true);
-    }
-  }
-
-  {
-    // Run GetCommitIds with a limit of 2 entries to commit.
-    Directory::Metahandles result_handles;
-    syncable::ReadTransaction trans(FROM_HERE, directory());
-    GetCommitIdsForType(&trans, BOOKMARKS, 2, &result_handles);
-
-    // Now verify the output.  We expect two results in child to parent order
-    // (descending id order).
-    ASSERT_EQ(2U, result_handles.size());
-
-    Entry entry0(&trans, GET_BY_HANDLE, result_handles[0]);
-    EXPECT_EQ(ids_.FromNumber(6), entry0.GetId());
-
-    Entry entry1(&trans, GET_BY_HANDLE, result_handles[1]);
-    EXPECT_EQ(ids_.FromNumber(5), entry1.GetId());
   }
 }
 
