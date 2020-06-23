@@ -399,7 +399,6 @@ void AddPrintPreviewFlags(content::WebUIDataSource* source, Profile* profile) {
 
 void SetupPrintPreviewPlugin(content::WebUIDataSource* source) {
   static constexpr webui::ResourcePath kPdfResources[] = {
-      {"pdf/bookmark_type.js", IDR_PDF_BOOKMARK_TYPE_JS},
       {"pdf/browser_api.js", IDR_PDF_BROWSER_API_JS},
       {"pdf/constants.js", IDR_PDF_CONSTANTS_JS},
       {"pdf/controller.js", IDR_PDF_CONTROLLER_JS},
@@ -413,13 +412,13 @@ void SetupPrintPreviewPlugin(content::WebUIDataSource* source) {
       {"pdf/gesture_detector.js", IDR_PDF_GESTURE_DETECTOR_JS},
       {"pdf/index.css", IDR_PDF_INDEX_CSS},
       {"pdf/index.html", IDR_PRINT_PREVIEW_PDF_INDEX_PP_HTML},
-      {"pdf/main_pp.js", IDR_PRINT_PREVIEW_PDF_MAIN_PP_JS},
-      {"pdf/main_util.js", IDR_PDF_MAIN_UTIL_JS},
+      {"pdf/main.js", IDR_PDF_MAIN_JS},
       {"pdf/metrics.js", IDR_PDF_METRICS_JS},
-      {"pdf/navigator.js", IDR_PDF_NAVIGATOR_JS},
       {"pdf/open_pdf_params_parser.js", IDR_PDF_OPEN_PDF_PARAMS_PARSER_JS},
       {"pdf/pdf_scripting_api.js", IDR_PDF_PDF_SCRIPTING_API_JS},
-      {"pdf/pdf_viewer.js", IDR_PDF_PDF_VIEWER_JS},
+      {"pdf/pdf_viewer_base.js", IDR_PDF_PDF_VIEWER_BASE_JS},
+      {"pdf/pdf_viewer.js", IDR_PRINT_PREVIEW_PDF_PDF_VIEWER_PP_JS},
+      {"pdf/pdf_viewer_shared_style.js", IDR_PDF_PDF_VIEWER_SHARED_STYLE_JS},
       {"pdf/pdf_viewer_utils.js", IDR_PDF_PDF_VIEWER_UTILS_JS},
       {"pdf/toolbar_manager.js", IDR_PDF_TOOLBAR_MANAGER_JS},
       {"pdf/viewport.js", IDR_PDF_VIEWPORT_JS},
