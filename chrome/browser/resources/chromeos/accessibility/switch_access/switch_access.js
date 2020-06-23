@@ -19,6 +19,7 @@ class SwitchAccess {
       NavigationManager.initialize(desktop);
 
       Commands.initialize();
+      FocusRingManager.initialize();
       MenuManager.initialize();
       SwitchAccessPreferences.initialize();
       TextNavigationManager.initialize();

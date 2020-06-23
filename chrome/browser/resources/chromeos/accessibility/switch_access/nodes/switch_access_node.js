@@ -159,6 +159,7 @@ class SAChildNode {
    */
   onFocus() {
     this.isFocused_ = true;
+    FocusRingManager.setFocusedNode(this);
   }
 
   /**

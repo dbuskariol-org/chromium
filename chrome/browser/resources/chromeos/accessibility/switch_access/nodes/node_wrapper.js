@@ -24,7 +24,7 @@ class NodeWrapper extends SAChildNode {
     this.isGroup_ = SwitchAccessPredicate.isGroup(this.baseNode_, parent);
 
     /** @private {function(chrome.automation.AutomationEvent)} */
-    this.locationChangedHandler_ = NavigationManager.refreshFocusRings;
+    this.locationChangedHandler_ = () => FocusRingManager.setFocusedNode(this);
   }
 
   // ================= Getters and setters =================
@@ -239,9 +239,6 @@ class RootNodeWrapper extends SARootNode {
 
     /** @private {function(chrome.automation.AutomationEvent)} */
     this.childrenChangedHandler_ = this.refresh.bind(this);
-
-    /** @private {function(chrome.automation.AutomationEvent)} */
-    this.locationChangedHandler_ = NavigationManager.refreshFocusRings;
   }
 
   // ================= Getters and setters =================
@@ -295,9 +292,6 @@ class RootNodeWrapper extends SARootNode {
     this.baseNode_.addEventListener(
         chrome.automation.EventType.CHILDREN_CHANGED,
         this.childrenChangedHandler_, false /* is_capture */);
-    this.baseNode_.addEventListener(
-        chrome.automation.EventType.LOCATION_CHANGED,
-        this.locationChangedHandler_, false /* is_capture */);
   }
 
   /** @override */
@@ -306,9 +300,6 @@ class RootNodeWrapper extends SARootNode {
     this.baseNode_.removeEventListener(
         chrome.automation.EventType.CHILDREN_CHANGED,
         this.childrenChangedHandler_, false /* is_capture */);
-    this.baseNode_.removeEventListener(
-        chrome.automation.EventType.LOCATION_CHANGED,
-        this.locationChangedHandler_, false /* is_capture */);
   }
 
   /** @override */
