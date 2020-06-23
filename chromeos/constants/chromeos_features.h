@@ -141,6 +141,8 @@ COMPONENT_EXPORT(CHROMEOS_CONSTANTS)
 extern const base::Feature kQuickAnswersRichUi;
 COMPONENT_EXPORT(CHROMEOS_CONSTANTS)
 extern const base::Feature kQuickAnswersTextAnnotator;
+COMPONENT_EXPORT(CHROMEOS_CONSTANTS)
+extern const base::Feature kQuickAnswersSubToggle;
 COMPONENT_EXPORT(CHROMEOS_CONSTANTS) extern const base::Feature kRar2Fs;
 COMPONENT_EXPORT(CHROMEOS_CONSTANTS)
 extern const base::Feature kReleaseNotes;
