@@ -7592,7 +7592,9 @@ be describing additional metrics about the same event.
   </metric>
   <metric name="ForegroundNumInputEvents">
     <summary>
-      The number of Input Events, recorded each time the page is backgrounded.
+      The number of Input Events, including click, tap, key press, cancellable
+      touchstart, or pointer down followed by apointer up. This metric gets
+      recorded each time the page is backgrounded.
     </summary>
     <aggregation>
       <history>
@@ -8096,7 +8098,8 @@ be describing additional metrics about the same event.
   </metric>
   <metric name="InteractiveTiming.NumInputEvents">
     <summary>
-      The number of Input Events.
+      The number of Input Events, including click, tap, key press, cancellable
+      touchstart, or pointer down followed by a pointer up.
     </summary>
     <aggregation>
       <history>
