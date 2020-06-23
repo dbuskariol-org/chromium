@@ -28069,6 +28069,9 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3329" label="DialogWithNonZeroScrollOffset"/>
   <int value="3330" label="DialogHeightLargerThanViewport"/>
   <int value="3331" label="OverlayPopup"/>
+  <int value="3332" label="ContentVisibilityAuto"/>
+  <int value="3333" label="ContentVisibilityHidden"/>
+  <int value="3334" label="ContentVisibilityHiddenMatchable"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
