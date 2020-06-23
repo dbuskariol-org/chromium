@@ -480,6 +480,15 @@ void ShelfView::LayoutIfAppIconsOffsetUpdates() {
     LayoutToIdealBounds();
 }
 
+ShelfAppButton* ShelfView::GetShelfItemViewWithContextMenu() {
+  if (context_menu_id_.IsNull())
+    return nullptr;
+  const int item_index = model_->ItemIndexByID(context_menu_id_);
+  if (item_index < 0)
+    return nullptr;
+  return static_cast<ShelfAppButton*>(view_model_->view_at(item_index));
+}
+
 bool ShelfView::ShouldHideTooltip(const gfx::Point& cursor_location) const {
   // There are thin gaps between launcher buttons but the tooltip shouldn't hide
   // in the gaps, but the tooltip should hide if the mouse moved totally outside

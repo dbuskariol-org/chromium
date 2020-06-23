@@ -14,6 +14,7 @@
 #include "ash/public/cpp/wallpaper_controller_observer.h"
 #include "ash/shelf/hotseat_transition_animator.h"
 #include "ash/shelf/scrollable_shelf_view.h"
+#include "ash/shelf/shelf_app_button.h"
 #include "ash/shelf/shelf_layout_manager.h"
 #include "ash/shelf/shelf_navigation_widget.h"
 #include "ash/shelf/shelf_view.h"
@@ -35,6 +36,7 @@
 #include "ui/gfx/color_utils.h"
 #include "ui/gfx/geometry/rounded_corners_f.h"
 #include "ui/views/layout/fill_layout.h"
+#include "ui/views/view_targeter_delegate.h"
 #include "ui/views/widget/widget_delegate.h"
 
 namespace ash {
@@ -260,13 +262,29 @@ class HotseatWindowTargeter : public aura::WindowTargeter {
 
 class HotseatWidget::DelegateView : public HotseatTransitionAnimator::Observer,
                                     public views::WidgetDelegateView,
+                                    public views::ViewTargeterDelegate,
                                     public OverviewObserver,
                                     public WallpaperControllerObserver {
  public:
   DelegateView() : translucent_background_(ui::LAYER_SOLID_COLOR) {
     translucent_background_.SetName("hotseat/Background");
+    SetEventTargeter(std::make_unique<views::ViewTargeter>(this));
   }
   ~DelegateView() override;
+
+  // views::ViewTargetDelegate:
+  View* TargetForRect(View* root, const gfx::Rect& rect) override {
+    // If a context menu for a shelf app button is shown, redirect all events to
+    // the shelf app button. Context menus generally capture all events, but
+    // shelf app buttons' context menu redirect gesture events to the hotseat
+    // widget so shelf app button can continue handling drag events.
+    // See also HotseatWidget::OnGestureEvent().
+    views::View* item_with_context_menu =
+        scrollable_shelf_view_->shelf_view()->GetShelfItemViewWithContextMenu();
+    if (item_with_context_menu)
+      return item_with_context_menu;
+    return views::ViewTargeterDelegate::TargetForRect(root, rect);
+  }
 
   // Initializes the view.
   void Init(ScrollableShelfView* scrollable_shelf_view,
@@ -568,8 +586,25 @@ void HotseatWidget::OnGestureEvent(ui::GestureEvent* event) {
   if (event->type() == ui::ET_GESTURE_TAP_DOWN)
     keyboard::KeyboardUIController::Get()->HideKeyboardImplicitlyByUser();
 
+  // Context menus for shelf app button forward gesture events to hotseat
+  // widget, so the shelf app button can continue handling drag even after the
+  // context menu starts capturing events. Ignore events not interesting to the
+  // shelf app button in this state.
+  ShelfAppButton* item_with_context_menu =
+      scrollable_shelf_view_->shelf_view()->GetShelfItemViewWithContextMenu();
+  if (item_with_context_menu &&
+      !ShelfAppButton::ShouldHandleEventFromContextMenu(event)) {
+    event->SetHandled();
+    return;
+  }
+
   if (!event->handled())
     views::Widget::OnGestureEvent(event);
+
+  // Ensure that the app button's drag state gets cleared on gesture end even if
+  // the event doesn't get delivered to the app button.
+  if (item_with_context_menu && event->type() == ui::ET_GESTURE_END)
+    item_with_context_menu->ClearDragStateOnGestureEnd();
 }
 
 bool HotseatWidget::OnNativeWidgetActivationChanged(bool active) {
