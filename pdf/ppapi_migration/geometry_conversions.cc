@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "pdf/geometry_conversions.h"
+#include "pdf/ppapi_migration/geometry_conversions.h"
 
 #include "ppapi/c/pp_rect.h"
 #include "ppapi/c/pp_size.h"
