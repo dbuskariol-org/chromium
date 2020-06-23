@@ -296,9 +296,10 @@ void IsolatedPrerenderProxyingURLLoaderFactory::OnEligibilityResult(
 
   // If this subresource is eligible for prefetching then it can be cached. If
   // not, it must still be put on the wire to avoid privacy attacks but should
-  // not be cached.
+  // not be cached or change any cookies.
   if (!eligible) {
     isolated_request.load_flags |= net::LOAD_DISABLE_CACHE;
+    isolated_request.credentials_mode = network::mojom::CredentialsMode::kOmit;
 
     // Don't report loaded resources that won't go in the cache.
     resource_load_successful_callback = base::DoNothing();
