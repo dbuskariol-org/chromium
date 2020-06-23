@@ -534,6 +534,20 @@ TEST_F(AXTreeSourceArcTest, AccessibleNameComputationFromDescendants) {
 
   SetProperty(root, AXBooleanProperty::SCROLLABLE, false);
 
+  // Don't compute name from descendants for virtual views, e.g. WebView.
+  root->is_virtual_node = true;
+  child1->is_virtual_node = true;
+  child2->is_virtual_node = true;
+
+  CallNotifyAccessibilityEvent(event.get());
+  data = GetSerializedNode(root->id);
+  ASSERT_FALSE(
+      data.GetStringAttribute(ax::mojom::StringAttribute::kName, &name));
+
+  root->is_virtual_node = false;
+  child1->is_virtual_node = false;
+  child2->is_virtual_node = false;
+
   // If one child is clickable, do not use clickable child.
   SetProperty(child1, AXBooleanProperty::CLICKABLE, true);
 

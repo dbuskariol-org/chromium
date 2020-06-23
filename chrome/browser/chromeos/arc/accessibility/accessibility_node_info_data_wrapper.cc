@@ -101,6 +101,11 @@ bool AccessibilityNodeInfoDataWrapper::CanBeAccessibilityFocused() const {
 
 bool AccessibilityNodeInfoDataWrapper::IsAccessibilityFocusableContainer()
     const {
+  if (IsVirtualNode()) {
+    return GetProperty(AXBooleanProperty::SCREEN_READER_FOCUSABLE) ||
+           GetProperty(AXBooleanProperty::FOCUSABLE);
+  }
+
   if (!IsImportantInAndroid() || (IsScrollableContainer() && !HasText()))
     return false;
 
@@ -633,6 +638,9 @@ bool AccessibilityNodeInfoDataWrapper::HasText() const {
 }
 
 bool AccessibilityNodeInfoDataWrapper::HasAccessibilityFocusableText() const {
+  if (IsVirtualNode())
+    return HasText();
+
   if (!IsImportantInAndroid() || !HasText())
     return false;
 
@@ -660,7 +668,7 @@ void AccessibilityNodeInfoDataWrapper::ComputeNameFromContents(
 
 void AccessibilityNodeInfoDataWrapper::ComputeNameFromContentsInternal(
     std::vector<std::string>* names) const {
-  if (IsAccessibilityFocusableContainer())
+  if (IsVirtualNode() || IsAccessibilityFocusableContainer())
     return;
 
   // Take the name from either content description or text. It's not clear
