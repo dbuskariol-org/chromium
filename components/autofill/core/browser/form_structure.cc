@@ -1084,7 +1084,10 @@ void FormStructure::RetrieveFromCache(
         bool is_credit_card_field =
             AutofillType(cached_field->second->Type().GetStorableType())
                 .group() == CREDIT_CARD;
-        if (should_keep_cached_value && is_credit_card_field) {
+        if (should_keep_cached_value &&
+            (is_credit_card_field ||
+             base::FeatureList::IsEnabled(
+                 features::kAutofillKeepInitialFormValuesInCache))) {
           field->value = cached_field->second->value;
           value_from_dynamic_change_form_ = true;
         } else if (field->value == cached_field->second->value) {
