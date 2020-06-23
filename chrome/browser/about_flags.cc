@@ -633,73 +633,6 @@ const FeatureEntry::Choice kSchedulerConfigurationChoices[] = {
 #endif  // OS_CHROMEOS
 
 #if defined(OS_ANDROID)
-const FeatureEntry::FeatureParam
-    kInterestFeedLargerImagesFeatureVariationConstant[] = {
-        {"feed_ui_enabled", "true"},
-        {"snippets_enabled", "false"},
-        {"undoable_actions_enabled", "false"},
-        {"manage_interests_enabled", "false"},
-        {"card_menu_tooltip_eligible", "false"}};
-const FeatureEntry::FeatureParam
-    kInterestFeedSnippetsFeatureVariationConstant[] = {
-        {"feed_ui_enabled", "false"},
-        {"snippets_enabled", "true"},
-        {"undoable_actions_enabled", "false"},
-        {"manage_interests_enabled", "false"},
-        {"card_menu_tooltip_eligible", "false"}};
-const FeatureEntry::FeatureParam
-    kInterestFeedLargeImagesAndSnippetsFeatureVariationConstant[] = {
-        {"feed_ui_enabled", "true"},
-        {"snippets_enabled", "true"},
-        {"undoable_actions_enabled", "false"},
-        {"manage_interests_enabled", "false"},
-        {"card_menu_tooltip_eligible", "false"}};
-const FeatureEntry::FeatureParam
-    kInterestFeedLargerImagesWithUndoableActionsFeatureVariationConstant[] = {
-        {"feed_ui_enabled", "true"},
-        {"snippets_enabled", "false"},
-        {"undoable_actions_enabled", "true"},
-        {"manage_interests_enabled", "true"},
-        {"card_menu_tooltip_eligible", "true"}};
-const FeatureEntry::FeatureParam
-    kInterestFeedSnippetsWithUndoableActionsFeatureVariationConstant[] = {
-        {"feed_ui_enabled", "false"},
-        {"snippets_enabled", "true"},
-        {"undoable_actions_enabled", "true"},
-        {"manage_interests_enabled", "true"},
-        {"card_menu_tooltip_eligible", "true"}};
-const FeatureEntry::FeatureParam
-    kInterestFeedLargeImagesAndSnippetsWithUndoableActionsFeatureVariationConstant
-        [] = {{"feed_ui_enabled", "true"},
-              {"snippets_enabled", "true"},
-              {"undoable_actions_enabled", "true"},
-              {"manage_interests_enabled", "true"},
-              {"card_menu_tooltip_eligible", "true"}};
-const FeatureEntry::FeatureVariation kInterestFeedFeatureVariations[] = {
-    {"(larger images)", kInterestFeedLargerImagesFeatureVariationConstant,
-     base::size(kInterestFeedLargerImagesFeatureVariationConstant), nullptr},
-    {"(snippets)", kInterestFeedSnippetsFeatureVariationConstant,
-     base::size(kInterestFeedSnippetsFeatureVariationConstant), nullptr},
-    {"(larger images and snippets)",
-     kInterestFeedLargeImagesAndSnippetsFeatureVariationConstant,
-     base::size(kInterestFeedLargeImagesAndSnippetsFeatureVariationConstant),
-     nullptr},
-    {"(larger images w/ undoable actions)",
-     kInterestFeedLargerImagesWithUndoableActionsFeatureVariationConstant,
-     base::size(
-         kInterestFeedLargerImagesWithUndoableActionsFeatureVariationConstant),
-     nullptr},
-    {"(snippets w/ undoable actions)",
-     kInterestFeedSnippetsWithUndoableActionsFeatureVariationConstant,
-     base::size(
-         kInterestFeedSnippetsWithUndoableActionsFeatureVariationConstant),
-     nullptr},
-    {"(larger images and snippets w/ undoable actions)",
-     kInterestFeedLargeImagesAndSnippetsWithUndoableActionsFeatureVariationConstant,
-     base::size(
-         kInterestFeedLargeImagesAndSnippetsWithUndoableActionsFeatureVariationConstant),
-     nullptr}};
-
 const FeatureEntry::FeatureParam kCompactSuggestions_SemicompactVariant[] = {
     {"omnibox_compact_suggestions_variant", "semi-compact"}};
 
@@ -3050,12 +2983,6 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kPostQuantumCECPQ2Description, kOsAll,
      FEATURE_VALUE_TYPE(net::features::kPostQuantumCECPQ2)},
 #if defined(OS_ANDROID)
-    {"interest-feed-content-suggestions",
-     flag_descriptions::kInterestFeedContentSuggestionsName,
-     flag_descriptions::kInterestFeedContentSuggestionsDescription, kOsAndroid,
-     FEATURE_WITH_PARAMS_VALUE_TYPE(feed::kInterestFeedContentSuggestions,
-                                    kInterestFeedFeatureVariations,
-                                    "InterestFeedContentSuggestions")},
     {"interest-feed-feedback", flag_descriptions::kInterestFeedFeedbackName,
      flag_descriptions::kInterestFeedFeedbackDescription, kOsAndroid,
      FEATURE_VALUE_TYPE(feed::kInterestFeedFeedback)},

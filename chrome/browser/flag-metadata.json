@@ -2901,7 +2901,7 @@
   {
     "name": "interest-feed-content-suggestions",
     "owners": [ "//chrome/android/feed/OWNERS", "feed@chromium.org" ],
-    "expiry_milestone": 90
+    "expiry_milestone": 84
   },
   {
     "name": "interest-feed-feedback",
