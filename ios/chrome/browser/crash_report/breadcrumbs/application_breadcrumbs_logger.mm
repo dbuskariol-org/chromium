@@ -25,6 +25,7 @@ ApplicationBreadcrumbsLogger::ApplicationBreadcrumbsLogger(
           base::BindRepeating(&ApplicationBreadcrumbsLogger::OnUserAction,
                               base::Unretained(this))),
       memory_pressure_listener_(std::make_unique<base::MemoryPressureListener>(
+          FROM_HERE,
           base::BindRepeating(&ApplicationBreadcrumbsLogger::OnMemoryPressure,
                               base::Unretained(this)))) {
   base::AddActionCallback(user_action_callback_);
