@@ -3299,7 +3299,8 @@
     "ImprovedCookieControls": [
         {
             "platforms": [
-                "android"
+                "android",
+                "android_weblayer"
             ],
             "experiments": [
                 {
