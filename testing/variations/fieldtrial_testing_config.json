@@ -4932,6 +4932,25 @@
             ]
         }
     ],
+    "PersistentHistogramsLocalMemory": [
+        {
+            "platforms": [
+                "android_webview"
+            ],
+            "experiments": [
+                {
+                    "name": "EnabledOnLocalMemory",
+                    "params": {
+                        "send_unreported_metrics": "yes",
+                        "storage": "LocalMemory"
+                    },
+                    "enable_features": [
+                        "PersistentHistograms"
+                    ]
+                }
+            ]
+        }
+    ],
     "PlayStoreAppSearch": [
         {
             "platforms": [
