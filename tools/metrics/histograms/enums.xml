@@ -71772,6 +71772,8 @@ Full version information for the fingerprint enum values:
   <int value="9" label="GATT connection established"/>
   <int value="10" label="caBLE handshake completed"/>
   <int value="11" label="caBLE device timed out"/>
+  <int value="12" label="Scanning for BLE advertisements failed"/>
+  <int value="13" label="Scanning for BLE advertisements stopped unexpectedly"/>
 </enum>
 
 <enum name="WebAuthenticationCableV1Event">
