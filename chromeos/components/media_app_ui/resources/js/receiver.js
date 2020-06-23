@@ -150,15 +150,12 @@ const DELEGATE = {
   },
   /**
    * @param {!mediaApp.AbstractFile} abstractFile
-   * @return {!Promise<?string>}
+   * @return {!Promise<undefined>}
    */
-  async saveCopy(abstractFile) {
+  async saveCopy(/** !mediaApp.AbstractFile */ abstractFile) {
     /** @type {!SaveCopyMessage} */
     const msg = {blob: abstractFile.blob, suggestedName: abstractFile.name};
-    const response =
-        /** @type {!SaveCopyResponse} */ (
-            await parentMessagePipe.sendMessage(Message.SAVE_COPY, msg));
-    return response.errorMessage;
+    await parentMessagePipe.sendMessage(Message.SAVE_COPY, msg);
   }
 };
 

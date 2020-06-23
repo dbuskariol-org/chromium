@@ -150,24 +150,11 @@ guestMessagePipe.registerHandler(Message.SAVE_COPY, async (message) => {
     // provide an extension automatically. See crbug/1082624#c23.
     excludeAcceptAllOption: true,
   };
+  // This may throw an error, but we can handle and recover from it on the
+  // unprivileged side.
   /** @type {!FileSystemHandle} */
-  let fileSystemHandle;
-  // chooseFileSystem is where recoverable errors happen, errors in the write
-  // process should be treated as unexpected and propagated through
-  // MessagePipe's standard exception handling.
-  try {
-    fileSystemHandle =
-        /** @type {!FileSystemHandle} */ (
-            await window.chooseFileSystemEntries(options));
-  } catch (/** @type {!DOMException} */ err) {
-    if (err.name !== 'SecurityError' && err.name !== 'AbortError') {
-      // Unknown error.
-      throw err;
-    }
-    console.log(`Aborting SAVE_COPY: ${err.message}`);
-    return err.name;
-  }
-
+  const fileSystemHandle = /** @type {!FileSystemHandle} */ (
+      await window.chooseFileSystemEntries(options));
   const {handle} = await getFileFromHandle(fileSystemHandle);
   // Note `handle` could be the same as a `FileSystemFileHandle` that exists in
   // `tokenMap`. Possibly even the `File` currently open. But that's OK. E.g.
