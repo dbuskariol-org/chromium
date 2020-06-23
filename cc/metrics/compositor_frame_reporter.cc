@@ -15,6 +15,7 @@
 #include "base/time/time.h"
 #include "base/trace_event/trace_event.h"
 #include "cc/base/rolling_time_delta_history.h"
+#include "cc/metrics/dropped_frame_counter.h"
 #include "cc/metrics/frame_sequence_tracker.h"
 #include "cc/metrics/latency_ukm_reporter.h"
 #include "services/tracing/public/cpp/perfetto/macros.h"
@@ -298,6 +299,7 @@ CompositorFrameReporter::CopyReporterAtBeginImplStage() const {
       StageType::kBeginImplFrameToSendBeginMainFrame;
   new_reporter->current_stage_.start_time = stage_history_.front().start_time;
   new_reporter->set_tick_clock(tick_clock_);
+  new_reporter->SetDroppedFrameCounter(dropped_frame_counter_);
   return new_reporter;
 }
 
@@ -447,6 +449,17 @@ void CompositorFrameReporter::TerminateReporter() {
     // Only report event latency histograms if the frame was presented.
     if (TestReportType(FrameReportType::kNonDroppedFrame))
       ReportEventLatencyHistograms();
+  }
+
+  if (dropped_frame_counter_) {
+    if (TestReportType(FrameReportType::kDroppedFrame)) {
+      dropped_frame_counter_->AddDroppedFrame();
+    } else {
+      if (has_partial_update_)
+        dropped_frame_counter_->AddPartialFrame();
+      else
+        dropped_frame_counter_->AddGoodFrame();
+    }
   }
 }
 

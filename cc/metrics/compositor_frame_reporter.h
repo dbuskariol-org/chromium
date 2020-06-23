@@ -27,6 +27,7 @@ struct FrameTimingDetails;
 }
 
 namespace cc {
+class DroppedFrameCounter;
 class LatencyUkmReporter;
 
 // This is used for tracing and reporting the duration of pipeline stages within
@@ -188,6 +189,11 @@ class CC_EXPORT CompositorFrameReporter {
     tick_clock_ = tick_clock;
   }
 
+  void SetDroppedFrameCounter(DroppedFrameCounter* counter) {
+    dropped_frame_counter_ = counter;
+  }
+  void SetHasPartialUpdate() { has_partial_update_ = true; }
+
   const viz::BeginFrameId& frame_id() const { return args_.frame_id; }
 
  private:
@@ -286,6 +292,9 @@ class CC_EXPORT CompositorFrameReporter {
   base::Optional<base::TimeTicks> main_frame_abort_time_;
 
   const base::TickClock* tick_clock_ = base::DefaultTickClock::GetInstance();
+
+  DroppedFrameCounter* dropped_frame_counter_ = nullptr;
+  bool has_partial_update_ = false;
 };
 
 }  // namespace cc
