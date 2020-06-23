@@ -231,6 +231,7 @@ void TextFragmentAnchor::DidScroll(mojom::blink::ScrollType type) {
     return;
   }
 
+  Dismiss();
   user_scrolled_ = true;
 
   if (did_non_zero_scroll_ &&

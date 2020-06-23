@@ -979,6 +979,55 @@ TEST_P(TextFragmentAnchorScrollTest, ScrollCancelled) {
   EXPECT_EQ(14u, markers.at(0)->EndOffset());
 }
 
+// Test that user scrolling dismisses the highlight.
+TEST_P(TextFragmentAnchorScrollTest, DismissTextHighlightOnUserScroll) {
+  SimRequest request(
+      "https://example.com/"
+      "test.html#:~:text=test%20page&text=more%20text",
+      "text/html");
+  LoadURL(
+      "https://example.com/"
+      "test.html#:~:text=test%20page&text=more%20text");
+  request.Complete(R"HTML(
+    <!DOCTYPE html>
+    <style>
+      body {
+        height: 2200px;
+      }
+      #first {
+        position: absolute;
+        top: 1000px;
+      }
+      #second {
+        position: absolute;
+        top: 2000px;
+      }
+    </style>
+    <p id="first">This is a test page</p>
+    <p id="second">With some more text</p>
+  )HTML");
+  RunAsyncMatchingTasks();
+
+  // Render two frames to handle the async step added by the beforematch event.
+  Compositor().BeginFrame();
+  Compositor().BeginFrame();
+
+  ASSERT_EQ(2u, GetDocument().Markers().Markers().size());
+
+  mojom::blink::ScrollType scroll_type = GetParam();
+  LayoutViewport()->ScrollBy(ScrollOffset(0, -10), scroll_type);
+
+  Compositor().BeginFrame();
+
+  if (IsUserScrollType()) {
+    EXPECT_EQ(0u, GetDocument().Markers().Markers().size());
+    EXPECT_FALSE(GetDocument().View()->GetFragmentAnchor());
+  } else {
+    EXPECT_EQ(2u, GetDocument().Markers().Markers().size());
+    EXPECT_TRUE(GetDocument().View()->GetFragmentAnchor());
+  }
+}
+
 // Ensure that the text fragment anchor has no effect in an iframe. This is
 // disabled in iframes by design, for security reasons.
 TEST_F(TextFragmentAnchorTest, DisabledInIframes) {
