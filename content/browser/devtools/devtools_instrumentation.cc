@@ -7,7 +7,9 @@
 #include "components/download/public/common/download_create_info.h"
 #include "components/download/public/common/download_item.h"
 #include "content/browser/devtools/browser_devtools_agent_host.h"
+#include "content/browser/devtools/devtools_issue_storage.h"
 #include "content/browser/devtools/devtools_url_loader_interceptor.h"
+#include "content/browser/devtools/protocol/audits.h"
 #include "content/browser/devtools/protocol/audits_handler.h"
 #include "content/browser/devtools/protocol/browser_handler.h"
 #include "content/browser/devtools/protocol/emulation_handler.h"
@@ -828,12 +830,28 @@ void ReportSameSiteCookieIssue(
           std::move(details)));
 }
 
+namespace {
+
+void AddIssueToIssueStorage(
+    RenderFrameHost* frame,
+    std::unique_ptr<protocol::Audits::InspectorIssue> issue) {
+  WebContents* web_contents = WebContents::FromRenderFrameHost(frame);
+  DevToolsIssueStorage* issue_storage =
+      DevToolsIssueStorage::GetOrCreateForWebContents(web_contents);
+
+  issue_storage->AddInspectorIssue(frame->GetFrameTreeNodeId(),
+                                   std::move(issue));
+}
+
+}  // namespace
+
 void ReportBrowserInitiatedIssue(RenderFrameHostImpl* frame,
                                  protocol::Audits::InspectorIssue* issue) {
   FrameTreeNode* ftn = frame->frame_tree_node();
   if (!ftn)
     return;
 
+  AddIssueToIssueStorage(frame, issue->clone());
   DispatchToAgents(ftn, &protocol::AuditsHandler::OnIssueAdded, issue);
 }
 
