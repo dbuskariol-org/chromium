@@ -516,6 +516,7 @@ jumbo_component("views") {
     "//ui/gfx/animation",
     "//ui/gfx/geometry",
     "//ui/views/resources",
+    "//ui/views/window/vector_icons",
   ]
 
   if (use_x11) {
