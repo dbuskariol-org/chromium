@@ -40,7 +40,7 @@ class CORE_EXPORT FetchRequestData final
   enum class ForServiceWorkerFetchEvent { kFalse, kTrue };
 
   static FetchRequestData* Create(ScriptState*,
-                                  const mojom::blink::FetchAPIRequest&,
+                                  mojom::blink::FetchAPIRequestPtr,
                                   ForServiceWorkerFetchEvent);
   FetchRequestData* Clone(ScriptState*, ExceptionState&);
   FetchRequestData* Pass(ScriptState*, ExceptionState&);

@@ -735,10 +735,11 @@ Request* Request::Create(ScriptState* script_state, FetchRequestData* request) {
 
 Request* Request::Create(
     ScriptState* script_state,
-    const mojom::blink::FetchAPIRequest& fetch_api_request,
+    mojom::blink::FetchAPIRequestPtr fetch_api_request,
     ForServiceWorkerFetchEvent for_service_worker_fetch_event) {
-  FetchRequestData* data = FetchRequestData::Create(
-      script_state, fetch_api_request, for_service_worker_fetch_event);
+  FetchRequestData* data =
+      FetchRequestData::Create(script_state, std::move(fetch_api_request),
+                               for_service_worker_fetch_event);
   return MakeGarbageCollected<Request>(script_state, data);
 }
 

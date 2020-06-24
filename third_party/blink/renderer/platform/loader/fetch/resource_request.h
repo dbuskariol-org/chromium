@@ -556,6 +556,9 @@ class PLATFORM_EXPORT ResourceRequestBody {
  public:
   ResourceRequestBody();
   explicit ResourceRequestBody(scoped_refptr<EncodedFormData> form_body);
+  explicit ResourceRequestBody(
+      mojo::PendingRemote<network::mojom::blink::ChunkedDataPipeGetter>
+          stream_body);
   ResourceRequestBody(const ResourceRequestBody&) = delete;
   ResourceRequestBody(ResourceRequestBody&&);
 
@@ -564,6 +567,7 @@ class PLATFORM_EXPORT ResourceRequestBody {
 
   ~ResourceRequestBody();
 
+  bool IsEmpty() const { return !form_body_ && !stream_body_; }
   const scoped_refptr<EncodedFormData>& FormBody() const { return form_body_; }
   void SetFormBody(scoped_refptr<EncodedFormData>);
 

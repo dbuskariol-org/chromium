@@ -1481,25 +1481,26 @@ void ServiceWorkerGlobalScope::StartFetchEvent(
                                 std::move(params->preload_handle));
   }
 
-  mojom::blink::FetchAPIRequest& fetch_request = *params->request;
   ScriptState::Scope scope(ScriptController()->GetScriptState());
   auto* wait_until_observer = MakeGarbageCollected<WaitUntilObserver>(
       this, WaitUntilObserver::kFetch, event_id);
   auto* respond_with_observer = MakeGarbageCollected<FetchRespondWithObserver>(
-      this, event_id, std::move(corp_checker), fetch_request,
+      this, event_id, std::move(corp_checker), *params->request,
       wait_until_observer);
-  Request* request =
-      Request::Create(ScriptController()->GetScriptState(), fetch_request,
-                      Request::ForServiceWorkerFetchEvent::kTrue);
-  request->getHeaders()->SetGuard(Headers::kImmutableGuard);
   FetchEventInit* event_init = FetchEventInit::Create();
   event_init->setCancelable(true);
-  event_init->setRequest(request);
   event_init->setClientId(
-      fetch_request.is_main_resource_load ? String() : params->client_id);
+      params->request->is_main_resource_load ? String() : params->client_id);
   event_init->setResultingClientId(
-      !fetch_request.is_main_resource_load ? String() : params->client_id);
-  event_init->setIsReload(fetch_request.is_reload);
+      !params->request->is_main_resource_load ? String() : params->client_id);
+  event_init->setIsReload(params->request->is_reload);
+
+  Request* request = Request::Create(
+      ScriptController()->GetScriptState(), std::move(params->request),
+      Request::ForServiceWorkerFetchEvent::kTrue);
+  request->getHeaders()->SetGuard(Headers::kImmutableGuard);
+  event_init->setRequest(request);
+
   ScriptState* script_state = ScriptController()->GetScriptState();
   FetchEvent* fetch_event = MakeGarbageCollected<FetchEvent>(
       script_state, event_type_names::kFetch, event_init, respond_with_observer,
