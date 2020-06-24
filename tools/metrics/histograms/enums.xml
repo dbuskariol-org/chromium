@@ -20850,6 +20850,7 @@ Called by update_document_policy_enum.py.-->
   <int value="722" label="AutoLaunchProtocolsFromOrigins"/>
   <int value="723" label="ManagedGuestSessionPrivacyWarningsEnabled"/>
   <int value="724" label="PluginVmRequiredFreeDiskSpace"/>
+  <int value="725" label="UserAgentClientHintsEnabled"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
