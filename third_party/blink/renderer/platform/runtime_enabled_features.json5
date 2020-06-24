@@ -1093,6 +1093,10 @@
       status: "test",
     },
     {
+      name: "MediaPreservesPitch",
+      status: "experimental",
+    },
+    {
       name: "MediaQueryNavigationControls",
     },
     {
