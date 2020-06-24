@@ -183,7 +183,8 @@ crbug.com/774873 [ Mac ] virtual/exotic-color-space/images/color-profile-border-
 crbug.com/774873 [ Linux ] virtual/exotic-color-space/images/color-profile-border-fade.html [ Pass Failure ]
 crbug.com/774873 [ Win ] virtual/exotic-color-space/images/color-profile-border-fade.html [ Pass Failure ]
 
-crbug.com/974652 [ Debug ] fast/canvas/OffscreenCanvas-copyImage.html [ Pass Failure ]
+crbug.com/1098369 fast/canvas/OffscreenCanvas-copyImage.html [ Pass Failure ]
+crbug.com/1098369 virtual/gpu/fast/canvas/OffscreenCanvas-copyImage.html [ Pass Failure ]
 
 crbug.com/1011060 virtual/gpu/fast/canvas/bug382588.html [ Pass Failure ]
 crbug.com/1011060 virtual/gpu/fast/canvas/canvas-lost-gpu-context.html [ Pass Failure Crash ]
