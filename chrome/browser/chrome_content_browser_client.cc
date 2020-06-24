@@ -1438,22 +1438,19 @@ bool ChromeContentBrowserClient::IsValidStoragePartitionId(
   return GURL(partition_id).is_valid();
 }
 
-void ChromeContentBrowserClient::GetStoragePartitionConfigForSite(
+content::StoragePartitionConfig
+ChromeContentBrowserClient::GetStoragePartitionConfigForSite(
     content::BrowserContext* browser_context,
-    const GURL& site,
-    std::string* partition_domain,
-    std::string* partition_name,
-    bool* in_memory) {
+    const GURL& site) {
   // Default to the browser-wide storage partition and override based on |site|
   // below.
-  partition_domain->clear();
-  partition_name->clear();
-  *in_memory = false;
+  content::StoragePartitionConfig storage_partition_config =
+      content::StoragePartitionConfig::CreateDefault();
 
 #if BUILDFLAG(ENABLE_EXTENSIONS)
   if (extensions::WebViewGuest::GetGuestPartitionConfigForSite(
-          site, partition_domain, partition_name, in_memory)) {
-    return;
+          site, &storage_partition_config)) {
+    return storage_partition_config;
   }
 
   if (site.SchemeIs(extensions::kExtensionScheme) &&
@@ -1462,12 +1459,12 @@ void ChromeContentBrowserClient::GetStoragePartitionConfigForSite(
     // For extensions with isolated storage, the the host of the |site| is
     // the |partition_domain|. The |in_memory| and |partition_name| are only
     // used in guest schemes so they are cleared here.
-    *partition_domain = site.host();
-    *in_memory = false;
-    partition_name->clear();
-    return;
+    return content::StoragePartitionConfig::Create(
+        site.host(), "" /* partition_name */, false /*in_memory */);
   }
 #endif
+
+  return storage_partition_config;
 }
 
 content::WebContentsViewDelegate*
