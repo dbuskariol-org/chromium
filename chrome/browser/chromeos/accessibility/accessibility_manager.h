@@ -290,6 +290,9 @@ class AccessibilityManager
   // Set the keys to be captured by Switch Access.
   void SetSwitchAccessKeys(const std::set<int>& key_codes);
 
+  // Unloads Switch Access.
+  void OnSwitchAccessDisabled();
+
   // Starts or stops dictation (type what you speak).
   bool ToggleDictation();
 

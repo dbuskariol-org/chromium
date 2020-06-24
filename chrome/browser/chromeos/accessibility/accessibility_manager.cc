@@ -985,10 +985,12 @@ void AccessibilityManager::OnSwitchAccessChanged() {
         profile_,
         base::BindRepeating(&AccessibilityManager::PostLoadSwitchAccess,
                             weak_ptr_factory_.GetWeakPtr()));
-  } else {
-    switch_access_loader_->Unload();
-    switch_access_event_handler_delegate_.reset(nullptr);
   }
+}
+
+void AccessibilityManager::OnSwitchAccessDisabled() {
+  switch_access_loader_->Unload();
+  switch_access_event_handler_delegate_.reset();
 }
 
 bool AccessibilityManager::IsBrailleDisplayConnected() const {
