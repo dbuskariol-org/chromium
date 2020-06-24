@@ -123,7 +123,7 @@ blink::mojom::ReferrerPtr Referrer::SanitizeForRequest(
   // and https://github.com/whatwg/fetch/issues/903.
   if (sanitized_referrer->url.spec().length() > 4096 ||
       (base::FeatureList::IsEnabled(
-           network::features::kCapReferrerToOriginOnCrossOrigin) &&
+           net::features::kCapReferrerToOriginOnCrossOrigin) &&
        !url::Origin::Create(sanitized_referrer->url)
             .IsSameOriginWith(url::Origin::Create(request)))) {
     sanitized_referrer->url = sanitized_referrer->url.GetOrigin();
