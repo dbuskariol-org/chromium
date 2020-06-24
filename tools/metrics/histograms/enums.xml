@@ -28070,6 +28070,7 @@ Called by update_use_counter_feature_enum.py.-->
   <int value="3334" label="ContentVisibilityHiddenMatchable"/>
   <int value="3335" label="InlineOverflowAutoWithInlineEndPadding"/>
   <int value="3336" label="InlineOverflowScrollWithInlineEndPadding"/>
+  <int value="3337" label="CSSSelectorPseudoWebKitDetailsMarker"/>
 </enum>
 
 <enum name="FeaturePolicyAllowlistType">
