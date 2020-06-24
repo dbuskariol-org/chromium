@@ -2,16 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.components.webapk.lib.client;
+package org.chromium.webapk.lib.client;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import static org.chromium.components.webapk.lib.common.WebApkMetaDataKeys.SCOPE;
-import static org.chromium.components.webapk.lib.common.WebApkMetaDataKeys.START_URL;
-import static org.chromium.components.webapk.lib.common.WebApkMetaDataKeys.WEB_MANIFEST_URL;
+import static org.chromium.webapk.lib.common.WebApkMetaDataKeys.SCOPE;
+import static org.chromium.webapk.lib.common.WebApkMetaDataKeys.START_URL;
+import static org.chromium.webapk.lib.common.WebApkMetaDataKeys.WEB_MANIFEST_URL;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -342,26 +342,11 @@ public class WebApkValidatorTest {
     @Test
     public void testIsValidWebApkCommentSignedFailures() {
         String[] filenames = {
-                "bad-sig.apk",
-                "bad-utf8-fname.apk",
-                "empty.apk",
-                "extra-field-too-large.apk",
-                "extra-len-too-large.apk",
-                "fcomment-too-large.apk",
-                "no-cd.apk",
-                "no-comment.apk",
-                "no-eocd.apk",
-                "no-lfh.apk",
-                "not-an.apk",
-                "too-many-metainf.apk",
-                "truncated.apk",
-                "zeros.apk",
-                "zeros-at-end.apk",
-                "block-before-first.apk",
-                "block-at-end.apk",
-                "block-before-eocd.apk",
-                "block-before-cd.apk",
-                "block-middle.apk",
+                "bad-sig.apk", "bad-utf8-fname.apk", "empty.apk", "extra-field-too-large.apk",
+                "extra-len-too-large.apk", "fcomment-too-large.apk", "no-cd.apk", "no-comment.apk",
+                "no-eocd.apk", "no-lfh.apk", "not-an.apk", "too-many-metainf.apk", "truncated.apk",
+                "zeros.apk", "zeros-at-end.apk", "block-before-first.apk", "block-at-end.apk",
+                "block-before-eocd.apk", "block-before-cd.apk", "block-middle.apk",
                 "v2-signed-too-large.apk",
         };
         String packageName = "com.webapk.a9c419502bb98fcb7";

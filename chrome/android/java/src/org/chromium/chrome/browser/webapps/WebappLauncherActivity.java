@@ -4,11 +4,6 @@
 
 package org.chromium.chrome.browser.webapps;
 
-import static org.chromium.components.webapk.lib.common.WebApkConstants.WEBAPK_PACKAGE_PREFIX;
-import static org.chromium.webapk.lib.common.WebApkConstants.EXTRA_RELAUNCH;
-import static org.chromium.webapk.lib.common.WebApkConstants.EXTRA_SPLASH_PROVIDED_BY_WEBAPK;
-import static org.chromium.webapk.lib.common.WebApkConstants.EXTRA_WEBAPK_PACKAGE_NAME;
-
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,7 +32,8 @@ import org.chromium.chrome.browser.browserservices.BrowserServicesIntentDataProv
 import org.chromium.chrome.browser.customtabs.BaseCustomTabActivity;
 import org.chromium.chrome.browser.document.ChromeLauncherActivity;
 import org.chromium.chrome.browser.firstrun.FirstRunFlowSequencer;
-import org.chromium.components.webapk.lib.client.WebApkValidator;
+import org.chromium.webapk.lib.client.WebApkValidator;
+import org.chromium.webapk.lib.common.WebApkConstants;
 
 import java.lang.ref.WeakReference;
 
@@ -158,7 +154,7 @@ public class WebappLauncherActivity extends Activity {
 
             // This is not a valid WebAPK. Modify the intent so that WebApkInfo#create() (in the
             // first run logic) returns null.
-            intent.removeExtra(EXTRA_WEBAPK_PACKAGE_NAME);
+            intent.removeExtra(WebApkConstants.EXTRA_WEBAPK_PACKAGE_NAME);
         }
 
         if (shouldRelaunchWebApk(intent, launchData)) {
@@ -187,7 +183,8 @@ public class WebappLauncherActivity extends Activity {
     private static LaunchData extractLaunchData(Intent intent) {
         String webApkPackageName = WebappIntentUtils.getWebApkPackageName(intent);
         boolean isSplashProvidedByWebApk = !TextUtils.isEmpty(webApkPackageName)
-                && IntentUtils.safeGetBooleanExtra(intent, EXTRA_SPLASH_PROVIDED_BY_WEBAPK, false);
+                && IntentUtils.safeGetBooleanExtra(
+                        intent, WebApkConstants.EXTRA_SPLASH_PROVIDED_BY_WEBAPK, false);
         return new LaunchData(WebappIntentUtils.getId(intent), WebappIntentUtils.getUrl(intent),
                 webApkPackageName, isSplashProvidedByWebApk);
     }
@@ -199,7 +196,7 @@ public class WebappLauncherActivity extends Activity {
     private static boolean shouldPreferLightweightFre(LaunchData launchData) {
         // Use lightweight FRE for unbound WebAPKs.
         return launchData != null && launchData.webApkPackageName != null
-                && !launchData.webApkPackageName.startsWith(WEBAPK_PACKAGE_PREFIX);
+                && !launchData.webApkPackageName.startsWith(WebApkConstants.WEBAPK_PACKAGE_PREFIX);
     }
 
     private static boolean shouldLaunchWebapp(Intent intent, LaunchData launchData) {
@@ -252,7 +249,7 @@ public class WebappLauncherActivity extends Activity {
      */
     private static boolean shouldRelaunchWebApk(Intent sourceIntent, LaunchData launchData) {
         return launchData != null && launchData.isForWebApk
-                && sourceIntent.hasExtra(EXTRA_RELAUNCH);
+                && sourceIntent.hasExtra(WebApkConstants.EXTRA_RELAUNCH);
     }
 
     /** Relaunches WebAPK. */

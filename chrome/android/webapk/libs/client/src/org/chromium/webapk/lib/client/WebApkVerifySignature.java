@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.components.webapk.lib.client;
+package org.chromium.webapk.lib.client;
 
 import static java.nio.ByteOrder.LITTLE_ENDIAN;
 
-import androidx.annotation.IntDef;
+import android.util.Log;
 
-import org.chromium.base.Log;
+import androidx.annotation.IntDef;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -88,10 +88,8 @@ public class WebApkVerifySignature {
     /** Maximum file comment length permitted. */
     private static final int MAX_FILE_COMMENT_LENGTH = 0;
 
-    /**
-     * Maximum extra field length permitted.
-     * Support .so alignment and a 64 bytes bytes for any extras.
-     */
+    /** Maximum extra field length permitted.
+     * Support .so alignment and a 64 bytes bytes for any extras. */
     private static final int MAX_EXTRA_LENGTH = 4096 + 64;
 
     /** The memory buffer we are going to read the zip from. */

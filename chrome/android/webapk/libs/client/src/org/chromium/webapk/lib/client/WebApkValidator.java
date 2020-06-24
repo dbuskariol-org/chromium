@@ -2,14 +2,13 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.components.webapk.lib.client;
+package org.chromium.webapk.lib.client;
 
-import static org.chromium.components.webapk.lib.common.WebApkConstants.WEBAPK_PACKAGE_PREFIX;
-import static org.chromium.components.webapk.lib.common.WebApkMetaDataKeys.SCOPE;
-import static org.chromium.components.webapk.lib.common.WebApkMetaDataKeys.START_URL;
-import static org.chromium.components.webapk.lib.common.WebApkMetaDataKeys.WEB_MANIFEST_URL;
+import static org.chromium.webapk.lib.common.WebApkConstants.WEBAPK_PACKAGE_PREFIX;
+import static org.chromium.webapk.lib.common.WebApkMetaDataKeys.SCOPE;
+import static org.chromium.webapk.lib.common.WebApkMetaDataKeys.START_URL;
+import static org.chromium.webapk.lib.common.WebApkMetaDataKeys.WEB_MANIFEST_URL;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -18,10 +17,9 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.Signature;
 import android.os.StrictMode;
 import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
-
-import org.chromium.base.Log;
 
 import java.io.IOException;
 import java.io.RandomAccessFile;
@@ -176,7 +174,6 @@ public class WebApkValidator {
      * @param webappPackageName The package name to check
      * @return true iff the WebAPK is installed and passes security checks
      */
-    @SuppressLint("PackageManagerGetSignatures")
     public static boolean isValidWebApk(Context context, String webappPackageName) {
         if ((sExpectedSignature == null || sCommentSignedPublicKeyBytes == null)
                 && !sDisableValidation) {
