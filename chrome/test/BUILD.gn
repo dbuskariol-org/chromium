@@ -1351,6 +1351,7 @@ if (!is_android) {
       "../browser/ui/webui/management_a11y_browsertest.cc",
       "../browser/ui/webui/management_a11y_browsertest.h",
       "../browser/ui/webui/management_ui_browsertest.cc",
+      "../browser/ui/webui/nearby_share/nearby_share_dialog_ui_browsertest.cc",
       "../browser/ui/webui/net_internals/net_internals_ui_browsertest.cc",
       "../browser/ui/webui/net_internals/net_internals_ui_browsertest.h",
       "../browser/ui/webui/new_tab_page/webui_ntp_browsertest.cc",
