@@ -85,6 +85,7 @@
 
 #if defined(USE_X11)
 #include "base/nix/xdg_util.h"
+#include "ui/base/ui_base_features.h"
 #endif
 
 namespace content {
@@ -575,14 +576,16 @@ base::FilePath DownloadManagerImpl::GetDefaultDownloadDirectory() {
   // distros with versions of GTK lower than 3.14.7 are no longer
   // supported.  This should happen when support for Ubuntu Trusty and
   // Debian Jessie are removed.
-  default_download_directory = GetTemporaryDownloadDirectory();
-#else
-  if (delegate_) {
+  if (!features::IsUsingOzonePlatform())
+    default_download_directory = GetTemporaryDownloadDirectory();
+#endif
+
+  if (delegate_ && default_download_directory.empty()) {
     base::FilePath website_save_directory;  // Unused
     delegate_->GetSaveDir(GetBrowserContext(), &website_save_directory,
                           &default_download_directory);
   }
-#endif
+
   if (default_download_directory.empty()) {
     // |default_download_directory| can still be empty if ContentBrowserClient
     // returned an empty path for the downloads directory.
