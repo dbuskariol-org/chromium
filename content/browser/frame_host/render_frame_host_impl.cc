@@ -6110,15 +6110,19 @@ void RenderFrameHostImpl::CommitNavigation(
 
     StoragePartition* partition =
         BrowserContext::GetStoragePartition(browser_context, GetSiteInstance());
-    auto storage_partition_config =
-        GetContentClient()->browser()->GetStoragePartitionConfigForSite(
-            browser_context, site_instance_->GetSiteInfo().site_url());
+    std::string storage_domain;
+    if (site_instance_) {
+      std::string partition_name;
+      bool in_memory;
+      GetContentClient()->browser()->GetStoragePartitionConfigForSite(
+          browser_context, site_instance_->GetSiteInfo().site_url(),
+          &storage_domain, &partition_name, &in_memory);
+    }
     non_network_url_loader_factories_.emplace(
         url::kFileSystemScheme,
         content::CreateFileSystemURLLoaderFactory(
             process_->GetID(), GetFrameTreeNodeId(),
-            partition->GetFileSystemContext(),
-            storage_partition_config.partition_domain()));
+            partition->GetFileSystemContext(), storage_domain));
 
     non_network_url_loader_factories_.emplace(
         url::kDataScheme, std::make_unique<DataURLLoaderFactory>());

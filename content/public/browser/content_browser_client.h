@@ -28,7 +28,6 @@
 #include "content/public/browser/allow_service_worker_result.h"
 #include "content/public/browser/certificate_request_result_type.h"
 #include "content/public/browser/generated_code_cache_settings.h"
-#include "content/public/browser/storage_partition_config.h"
 #include "content/public/common/page_visibility_state.h"
 #include "content/public/common/previews_state.h"
 #include "content/public/common/window_container_type.mojom-forward.h"
@@ -761,13 +760,21 @@ class CONTENT_EXPORT ContentBrowserClient {
   virtual bool IsValidStoragePartitionId(BrowserContext* browser_context,
                                          const std::string& partition_id);
 
-  // Allows the embedder to provide a storage partition configuration for a
+  // Allows the embedder to provide a storage parititon configuration for a
   // site. A storage partition configuration includes a domain of the embedder's
   // choice, an optional name within that domain, and whether the partition is
   // in-memory only.
-  virtual StoragePartitionConfig GetStoragePartitionConfigForSite(
-      BrowserContext* browser_context,
-      const GURL& site);
+  //
+  // The |partition_domain| is [a-z]* UTF-8 string, specifying the domain in
+  // which partitions live (similar to namespace). Within a domain, partitions
+  // can be uniquely identified by the combination of |partition_name| and
+  // |in_memory| values. When a partition is not to be persisted, the
+  // |in_memory| value must be set to true.
+  virtual void GetStoragePartitionConfigForSite(BrowserContext* browser_context,
+                                                const GURL& site,
+                                                std::string* partition_domain,
+                                                std::string* partition_name,
+                                                bool* in_memory);
 
   // Create and return a new quota permission context.
   virtual scoped_refptr<QuotaPermissionContext> CreateQuotaPermissionContext();

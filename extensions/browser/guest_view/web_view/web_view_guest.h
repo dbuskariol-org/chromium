@@ -23,10 +23,6 @@
 #include "extensions/browser/script_executor.h"
 #include "third_party/blink/public/mojom/frame/find_in_page.mojom.h"
 
-namespace content {
-class StoragePartitionConfig;
-}  // namespace content
-
 namespace extensions {
 
 class WebViewInternalFindFunction;
@@ -54,9 +50,10 @@ class WebViewGuest : public guest_view::GuestView<WebViewGuest> {
   // a specially formatted URL, based on the application it is hosted by and
   // the partition requested by it. The format for that URL is:
   // chrome-guest://partition_domain/persist?partition_name
-  static bool GetGuestPartitionConfigForSite(
-      const GURL& site,
-      content::StoragePartitionConfig* storage_partition_config);
+  static bool GetGuestPartitionConfigForSite(const GURL& site,
+                                             std::string* partition_domain,
+                                             std::string* partition_name,
+                                             bool* in_memory);
 
   // Opposite of GetGuestPartitionConfigForSite: Creates a specially formatted
   // URL used by the SiteInstance associated with the WebViewGuest. See

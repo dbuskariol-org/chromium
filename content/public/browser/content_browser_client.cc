@@ -491,12 +491,17 @@ bool ContentBrowserClient::IsValidStoragePartitionId(
   return partition_id.empty();
 }
 
-StoragePartitionConfig ContentBrowserClient::GetStoragePartitionConfigForSite(
+void ContentBrowserClient::GetStoragePartitionConfigForSite(
     BrowserContext* browser_context,
-    const GURL& site) {
+    const GURL& site,
+    std::string* partition_domain,
+    std::string* partition_name,
+    bool* in_memory) {
   DCHECK(browser_context);
 
-  return StoragePartitionConfig::CreateDefault();
+  partition_domain->clear();
+  partition_name->clear();
+  *in_memory = false;
 }
 
 MediaObserver* ContentBrowserClient::GetMediaObserver() {
