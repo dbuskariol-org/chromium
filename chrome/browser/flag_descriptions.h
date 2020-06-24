@@ -946,9 +946,6 @@ extern const char kOverlayStrategiesOccludedAndUnoccluded[];
 extern const char kUpdateHoverAtBeginFrameName[];
 extern const char kUpdateHoverAtBeginFrameDescription[];
 
-extern const char kUseNewAcceptLanguageHeaderName[];
-extern const char kUseNewAcceptLanguageHeaderDescription[];
-
 extern const char kOverscrollHistoryNavigationName[];
 extern const char kOverscrollHistoryNavigationDescription[];
 

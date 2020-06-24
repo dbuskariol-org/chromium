@@ -1616,12 +1616,6 @@ const char kOverlayStrategiesOccludedAndUnoccluded[] =
     "Occluded and unoccluded buffers "
     "(single-fullscreen,single-on-top,underlay)";
 
-const char kUseNewAcceptLanguageHeaderName[] = "Use new Accept-Language header";
-const char kUseNewAcceptLanguageHeaderDescription[] =
-    "Adds the base language code after other corresponding language+region "
-    "codes. This ensures that users receive content in their preferred "
-    "language.";
-
 const char kOverscrollHistoryNavigationName[] = "Overscroll history navigation";
 const char kOverscrollHistoryNavigationDescription[] =
     "History navigation in response to horizontal overscroll.";
