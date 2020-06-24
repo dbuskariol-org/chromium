@@ -194,6 +194,14 @@ std::unique_ptr<base::ListValue> BasicGpuInfoAsListValue(
   basic_info->Append(NewDescriptionValuePair(
       "NV12 overlay support",
       gpu::OverlaySupportToString(gpu_info.overlay_info.nv12_overlay_support)));
+  basic_info->Append(NewDescriptionValuePair(
+      "BGRA8 overlay support",
+      gpu::OverlaySupportToString(
+          gpu_info.overlay_info.bgra8_overlay_support)));
+  basic_info->Append(NewDescriptionValuePair(
+      "RGB10A2 overlay support",
+      gpu::OverlaySupportToString(
+          gpu_info.overlay_info.rgb10a2_overlay_support)));
 
   std::vector<gfx::PhysicalDisplaySize> display_sizes =
       gfx::GetPhysicalSizeForDisplays();
