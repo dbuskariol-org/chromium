@@ -5,9 +5,14 @@
 import {html, PolymerElement} from 'chrome://resources/polymer/v3_0/polymer/polymer_bundled.min.js';
 import {BrowserProxy} from './browser_proxy.js';
 
-class UntrustedIframeElement extends PolymerElement {
+/**
+ * @fileoverview Wrapper around <iframe> element that lets us mock out loading
+ * and postMessaging in tests.
+ */
+
+class IframeElement extends PolymerElement {
   static get is() {
-    return 'ntp-untrusted-iframe';
+    return 'ntp-iframe';
   }
 
   static get template() {
@@ -17,7 +22,7 @@ class UntrustedIframeElement extends PolymerElement {
   static get properties() {
     return {
       /** @type {string} */
-      path: {
+      src: {
         reflectToAttribute: true,
         type: String,
       },
@@ -25,7 +30,7 @@ class UntrustedIframeElement extends PolymerElement {
       /** @private */
       src_: {
         type: String,
-        computed: 'computeSrc_(path)',
+        computed: 'computeSrc_(src)',
       },
     };
   }
@@ -35,14 +40,17 @@ class UntrustedIframeElement extends PolymerElement {
    * @param {*} message
    */
   postMessage(message) {
-    this.$.iframe.contentWindow.postMessage(
-        message, 'chrome-untrusted://new-tab-page');
+    BrowserProxy.getInstance().postMessage(
+        this.$.iframe, message, new URL(this.src).origin);
   }
 
-  /** @private */
+  /**
+   * @return {string}
+   * @private
+   */
   computeSrc_() {
-    return BrowserProxy.getInstance().createUntrustedIframeSrc(this.path);
+    return BrowserProxy.getInstance().createIframeSrc(this.src);
   }
 }
 
-customElements.define(UntrustedIframeElement.is, UntrustedIframeElement);
+customElements.define(IframeElement.is, IframeElement);
