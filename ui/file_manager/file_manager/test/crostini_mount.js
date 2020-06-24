@@ -32,7 +32,7 @@ crostiniMount.testMountCrostiniSuccess = async (done) => {
 
   // Click on Linux files.
   assertTrue(test.fakeMouseClick(fakeRoot, 'click linux files'));
-  await test.waitForElement('files-spinner:not([hidden])');
+  await test.waitForElement('paper-progress:not([hidden])');
 
   // Ensure mountCrostini is called.
   await test.repeatUntil(() => {
