@@ -1819,6 +1819,8 @@ class IsolatedPrerenderWithNSPBrowserTest
 
 IN_PROC_BROWSER_TEST_F(IsolatedPrerenderWithNSPBrowserTest,
                        DISABLE_ON_WIN_MAC_CHROMEOS(SuccessfulNSPEndToEnd)) {
+  base::HistogramTester histogram_tester;
+
   SetDataSaverEnabled(true);
   GURL starting_page = GetOriginServerURL("/simple.html");
   ui_test_utils::NavigateToURL(browser(), starting_page);
@@ -1935,7 +1937,8 @@ IN_PROC_BROWSER_TEST_F(IsolatedPrerenderWithNSPBrowserTest,
   EXPECT_EQ(base::ASCIIToUTF16("JavaScript Executed"),
             GetWebContents()->GetTitle());
 
-  // Navigate again to trigger UKM recording.
+  // Navigate one more time to destroy the SubresourceManager so that its UMA is
+  // recorded and to trigger UKM recording.
   ui_test_utils::NavigateToURL(browser(), GURL("about:blank"));
 
   // 16 = |PrefetchStatus::kPrefetchUsedNoProbeWithNSP|.
@@ -1944,6 +1947,15 @@ IN_PROC_BROWSER_TEST_F(IsolatedPrerenderWithNSPBrowserTest,
                          ukm::builders::PrefetchProxy_AfterSRPClick::kEntryName,
                          ukm::builders::PrefetchProxy_AfterSRPClick::
                              kSRPClickPrefetchStatusName));
+
+  histogram_tester.ExpectUniqueSample(
+      "IsolatedPrerender.Prefetch.Subresources.NetError", net::OK, 2);
+  histogram_tester.ExpectUniqueSample(
+      "IsolatedPrerender.Prefetch.Subresources.Quantity", 4, 1);
+  histogram_tester.ExpectUniqueSample(
+      "IsolatedPrerender.Prefetch.Subresources.RespCode", 200, 2);
+  histogram_tester.ExpectUniqueSample(
+      "IsolatedPrerender.AfterClick.Subresources.UsedCache", true, 2);
 }
 
 IN_PROC_BROWSER_TEST_F(IsolatedPrerenderWithNSPBrowserTest,
