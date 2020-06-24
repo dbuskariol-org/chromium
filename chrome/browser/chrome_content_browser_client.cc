@@ -131,7 +131,6 @@
 #include "chrome/browser/signin/header_modification_delegate_impl.h"
 #include "chrome/browser/signin/identity_manager_factory.h"
 #include "chrome/browser/speech/chrome_speech_recognition_manager_delegate.h"
-#include "chrome/browser/speech/tts_controller_delegate_impl.h"
 #include "chrome/browser/ssl/chrome_security_blocking_page_factory.h"
 #include "chrome/browser/ssl/ssl_client_auth_metrics.h"
 #include "chrome/browser/ssl/ssl_client_certificate_selector.h"
@@ -573,6 +572,7 @@
 #if defined(OS_CHROMEOS)
 #include "chrome/browser/chromeos/app_mode/kiosk_settings_navigation_throttle.h"
 #include "chrome/browser/chromeos/child_accounts/time_limits/web_time_limit_navigation_throttle.h"
+#include "chrome/browser/speech/tts_controller_delegate_impl.h"
 #endif  // defined(OS_CHROMEOS)
 
 #if BUILDFLAG(ENABLE_MEDIA_REMOTING)
@@ -3126,18 +3126,18 @@ ChromeContentBrowserClient::CreateSpeechRecognitionManagerDelegate() {
   return new speech::ChromeSpeechRecognitionManagerDelegate();
 }
 
+#if defined(OS_CHROMEOS)
 content::TtsControllerDelegate*
 ChromeContentBrowserClient::GetTtsControllerDelegate() {
-  TtsControllerDelegateImpl* delegate =
-      TtsControllerDelegateImpl::GetInstance();
+  return TtsControllerDelegateImpl::GetInstance();
+}
+#endif
+
+content::TtsPlatform* ChromeContentBrowserClient::GetTtsPlatform() {
 #if !defined(OS_ANDROID)
   content::TtsController::GetInstance()->SetTtsEngineDelegate(
       TtsExtensionEngine::GetInstance());
 #endif
-  return delegate;
-}
-
-content::TtsPlatform* ChromeContentBrowserClient::GetTtsPlatform() {
 #ifdef OS_CHROMEOS
   return TtsPlatformImplChromeOs::GetInstance();
 #else

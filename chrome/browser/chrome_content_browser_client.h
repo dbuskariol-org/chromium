@@ -325,7 +325,9 @@ class ChromeContentBrowserClient : public content::ContentBrowserClient {
                        bool* no_javascript_access) override;
   content::SpeechRecognitionManagerDelegate*
   CreateSpeechRecognitionManagerDelegate() override;
+#if defined(OS_CHROMEOS)
   content::TtsControllerDelegate* GetTtsControllerDelegate() override;
+#endif
   content::TtsPlatform* GetTtsPlatform() override;
   void OverrideWebkitPrefs(content::RenderViewHost* rvh,
                            content::WebPreferences* prefs) override;

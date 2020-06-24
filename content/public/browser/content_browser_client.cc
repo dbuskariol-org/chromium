@@ -536,9 +536,11 @@ ContentBrowserClient::CreateSpeechRecognitionManagerDelegate() {
   return nullptr;
 }
 
+#if defined(OS_CHROMEOS)
 TtsControllerDelegate* ContentBrowserClient::GetTtsControllerDelegate() {
   return nullptr;
 }
+#endif
 
 TtsPlatform* ContentBrowserClient::GetTtsPlatform() {
   return nullptr;

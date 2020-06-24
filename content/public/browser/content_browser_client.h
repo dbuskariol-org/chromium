@@ -203,7 +203,6 @@ class SiteInstance;
 class SpeechRecognitionManagerDelegate;
 class StoragePartition;
 class TracingDelegate;
-class TtsControllerDelegate;
 class TtsPlatform;
 class URLLoaderRequestInterceptor;
 class VpnServiceProxy;
@@ -219,6 +218,10 @@ struct PepperPluginInfo;
 struct Referrer;
 struct SocketPermissionRequest;
 struct WebPreferences;
+
+#if defined(OS_CHROMEOS)
+class TtsControllerDelegate;
+#endif
 
 // Embedder API (or SPI) for participating in browser logic, to be implemented
 // by the client of the content browser. See ChromeContentBrowserClient for the
@@ -847,8 +850,10 @@ class CONTENT_EXPORT ContentBrowserClient {
   virtual SpeechRecognitionManagerDelegate*
   CreateSpeechRecognitionManagerDelegate();
 
+#if defined(OS_CHROMEOS)
   // Allows the embedder to return a delegate for the TtsController.
   virtual TtsControllerDelegate* GetTtsControllerDelegate();
+#endif
 
   // Allows the embedder to return a TTS platform implementation.
   virtual TtsPlatform* GetTtsPlatform();
