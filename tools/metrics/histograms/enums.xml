@@ -63386,6 +63386,14 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
       label="Signin primary account with force-sign-in policy enabled"/>
 </enum>
 
+<enum name="SigninReauthResult">
+  <int value="0" label="Success"/>
+  <int value="1" label="Account not signed in"/>
+  <int value="2" label="User dismissed Reauth"/>
+  <int value="3" label="Reauth page failed to load"/>
+  <int value="4" label="Reauth was cancelled"/>
+</enum>
+
 <enum name="SigninReauthStates">
   <int value="0" label="Account mismatch"/>
   <int value="1" label="Reauth Shown"/>
