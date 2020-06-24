@@ -357,6 +357,8 @@ void PopulateResourceRequest(const ResourceRequestHead& src,
     mojo::PendingRemote<network::mojom::ChunkedDataPipeGetter>
         network_stream_body(stream_body.PassPipe(), 0u);
     dest->request_body->SetToChunkedDataPipe(std::move(network_stream_body));
+    dest->request_body->SetAllowHTTP1ForStreamingUpload(
+        src.AllowHTTP1ForStreamingUpload());
   }
 
   if (resource_type == mojom::ResourceType::kStylesheet) {
