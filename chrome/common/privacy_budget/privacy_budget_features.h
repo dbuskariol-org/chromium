@@ -2,10 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PRIVACY_BUDGET_PRIVACY_BUDGET_FEATURES_H_
-#define CHROME_BROWSER_PRIVACY_BUDGET_PRIVACY_BUDGET_FEATURES_H_
+#ifndef CHROME_COMMON_PRIVACY_BUDGET_PRIVACY_BUDGET_FEATURES_H_
+#define CHROME_COMMON_PRIVACY_BUDGET_PRIVACY_BUDGET_FEATURES_H_
 
 #include <string>
+
 #include "base/feature_list.h"
 #include "base/metrics/field_trial_params.h"
 
@@ -67,12 +68,24 @@ extern const base::FeatureParam<std::string> kIdentifiabilityStudyBlockedTypes;
 // Parameter type: int
 extern const base::FeatureParam<int> kIdentifiabilityStudySurfaceSelectionRate;
 
+// Largest meaningful sampling denominator. Picked out of hat.
+constexpr int kMaxIdentifiabilityStudySurfaceSelectionRate = 1000000;
+
 // The maximum number of surfaces that can be included in the identifiability
 // study.
 //
 // Parameter name: "Max"
 // Parameter type: int
 extern const base::FeatureParam<int> kIdentifiabilityStudyMaxSurfaces;
+
+// This is a hardcoded maximum for the number of identifiable surfaces that
+// can be reported for a user. The actual ceiling for active surfaces cannot
+// exceed this value even if it's sent via a server-side configuration.
+//
+// In other words this is the maximum value that can be configured via
+// `kIdentifiabilityStudyMaxSurfaces`. Hence it's the
+// `kMaxIdentifiabilityStudyMaxSurfaces`.
+constexpr int kMaxIdentifiabilityStudyMaxSurfaces = 10;
 
 // Selection rate for clusters of related surfaces.
 //
@@ -98,4 +111,4 @@ extern const base::FeatureParam<std::string>
 
 }  // namespace features
 
-#endif  // CHROME_BROWSER_PRIVACY_BUDGET_PRIVACY_BUDGET_FEATURES_H_
+#endif  // CHROME_COMMON_PRIVACY_BUDGET_PRIVACY_BUDGET_FEATURES_H_

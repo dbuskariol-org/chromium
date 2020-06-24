@@ -2,10 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/privacy_budget/scoped_privacy_budget_config.h"
+#include "chrome/common/privacy_budget/scoped_privacy_budget_config.h"
 
-#include "chrome/browser/privacy_budget/field_trial_param_conversions.h"
-#include "chrome/browser/privacy_budget/privacy_budget_features.h"
+#include "chrome/common/privacy_budget/field_trial_param_conversions.h"
+#include "chrome/common/privacy_budget/privacy_budget_features.h"
 #include "third_party/blink/public/common/privacy_budget/identifiable_surface.h"
 
 namespace test {
@@ -14,6 +14,7 @@ ScopedPrivacyBudgetConfig::Parameters::Parameters() = default;
 ScopedPrivacyBudgetConfig::Parameters::Parameters(const Parameters&) = default;
 ScopedPrivacyBudgetConfig::Parameters::Parameters(Parameters&&) = default;
 ScopedPrivacyBudgetConfig::Parameters::~Parameters() = default;
+
 ScopedPrivacyBudgetConfig::~ScopedPrivacyBudgetConfig() = default;
 ScopedPrivacyBudgetConfig::ScopedPrivacyBudgetConfig() = default;
 

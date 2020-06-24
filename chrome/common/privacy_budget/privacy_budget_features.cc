@@ -2,9 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/privacy_budget/privacy_budget_features.h"
-
-#include "chrome/browser/privacy_budget/identifiability_study_state.h"
+#include "chrome/common/privacy_budget/privacy_budget_features.h"
 
 namespace features {
 
@@ -24,8 +22,7 @@ const base::FeatureParam<int> kIdentifiabilityStudySurfaceSelectionRate = {
     &kIdentifiabilityStudy, "Rho", 0};
 
 const base::FeatureParam<int> kIdentifiabilityStudyMaxSurfaces = {
-    &kIdentifiabilityStudy, "Max",
-    IdentifiabilityStudyState::kMaxSampledIdentifiableSurfaces};
+    &kIdentifiabilityStudy, "Max", kMaxIdentifiabilityStudyMaxSurfaces};
 
 const base::FeatureParam<std::string> kIdentifiabilityStudyPerSurfaceSettings =
     {&kIdentifiabilityStudy, "HashRate", ""};

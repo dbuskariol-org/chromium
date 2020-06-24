@@ -2,7 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/privacy_budget/field_trial_param_conversions.h"
+#include "chrome/common/privacy_budget/field_trial_param_conversions.h"
+
 #include <utility>
 
 bool DecodeIdentifiabilityType(const base::StringPiece s,

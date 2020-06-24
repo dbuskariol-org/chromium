@@ -2,16 +2,17 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PRIVACY_BUDGET_FIELD_TRIAL_PARAM_CONVERSIONS_H_
-#define CHROME_BROWSER_PRIVACY_BUDGET_FIELD_TRIAL_PARAM_CONVERSIONS_H_
+#ifndef CHROME_COMMON_PRIVACY_BUDGET_FIELD_TRIAL_PARAM_CONVERSIONS_H_
+#define CHROME_COMMON_PRIVACY_BUDGET_FIELD_TRIAL_PARAM_CONVERSIONS_H_
 
 #include <type_traits>
+
 #include "base/notreached.h"
 #include "base/strings/string_number_conversions.h"
 #include "base/strings/string_piece.h"
 #include "base/strings/string_split.h"
 #include "base/strings/string_util.h"
-#include "chrome/browser/privacy_budget/identifiability_study_state.h"
+#include "chrome/common/privacy_budget/privacy_budget_features.h"
 #include "third_party/blink/public/common/privacy_budget/identifiable_surface.h"
 
 // The Encode/Decode families of functions are meant to be used to encode
@@ -43,14 +44,14 @@ std::pair<V, bool> DecodeIdentifiabilityTypePair(base::StringPiece s) {
                              base::SplitResult::SPLIT_WANT_NONEMPTY);
   if (pieces.size() != 2)
     return {V(), false};
-  P from;
-  int to;
-  if (!DecodeIdentifiabilityType(pieces[0], &from) ||
-      !base::StringToInt(pieces[1], &to))
+  P type_id;
+  int rate;
+  if (!DecodeIdentifiabilityType(pieces[0], &type_id) ||
+      !base::StringToInt(pieces[1], &rate))
     return {V(), false};
-  if (to < 0 || to > IdentifiabilityStudyState::kMaxSamplingRateDenominator)
+  if (rate < 0 || rate > features::kMaxIdentifiabilityStudySurfaceSelectionRate)
     return {V(), false};
-  return {V(from, to), true};
+  return {V(type_id, rate), true};
 }
 
 template <
@@ -117,4 +118,4 @@ std::string EncodeIdentifiabilityFieldTrialParam(const T& source) {
   return base::JoinString(result, ",");
 }
 
-#endif  // CHROME_BROWSER_PRIVACY_BUDGET_FIELD_TRIAL_PARAM_CONVERSIONS_H_
+#endif  // CHROME_COMMON_PRIVACY_BUDGET_FIELD_TRIAL_PARAM_CONVERSIONS_H_

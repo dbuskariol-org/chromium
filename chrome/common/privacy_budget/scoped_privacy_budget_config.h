@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_PRIVACY_BUDGET_SCOPED_PRIVACY_BUDGET_CONFIG_H_
-#define CHROME_BROWSER_PRIVACY_BUDGET_SCOPED_PRIVACY_BUDGET_CONFIG_H_
+#ifndef CHROME_COMMON_PRIVACY_BUDGET_SCOPED_PRIVACY_BUDGET_CONFIG_H_
+#define CHROME_COMMON_PRIVACY_BUDGET_SCOPED_PRIVACY_BUDGET_CONFIG_H_
 
 #include <limits>
 #include <map>
@@ -15,9 +15,9 @@
 
 namespace test {
 
-// Configures the privacy budget feature settings. One can also configure the
-// service manually by controlling the global feature lists directly. This class
-// is merely a convenience.
+// Configures the privacy budget feature settings for testing. One can also
+// configure the service manually by setting the global feature lists
+// directly. This class is merely a convenience.
 //
 // For testing only.
 //
@@ -74,4 +74,4 @@ class ScopedPrivacyBudgetConfig {
 
 }  // namespace test
 
-#endif  // CHROME_BROWSER_PRIVACY_BUDGET_SCOPED_PRIVACY_BUDGET_CONFIG_H_
+#endif  // CHROME_COMMON_PRIVACY_BUDGET_SCOPED_PRIVACY_BUDGET_CONFIG_H_
