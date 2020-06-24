@@ -69,8 +69,9 @@ TEST_F(ProbeServiceTest, ProbeTelemetryInfoSuccess) {
         ASSERT_TRUE(ptr);
         ASSERT_TRUE(ptr->battery_result);
         ASSERT_TRUE(ptr->battery_result->is_battery_info());
-
-        EXPECT_EQ(ptr->battery_result->get_battery_info()->cycle_count,
+        ASSERT_TRUE(ptr->battery_result->get_battery_info());
+        ASSERT_TRUE(ptr->battery_result->get_battery_info()->cycle_count);
+        EXPECT_EQ(ptr->battery_result->get_battery_info()->cycle_count->value,
                   kCycleCount);
 
         run_loop.Quit();

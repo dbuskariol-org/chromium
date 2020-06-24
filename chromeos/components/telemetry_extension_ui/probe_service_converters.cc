@@ -51,6 +51,14 @@ health::mojom::ProbeErrorPtr Convert(cros_healthd::mojom::ProbeErrorPtr input) {
                                         std::move(input->msg));
 }
 
+health::mojom::DoubleValuePtr Convert(double input) {
+  return health::mojom::DoubleValue::New(input);
+}
+
+health::mojom::Int64ValuePtr Convert(int64_t input) {
+  return health::mojom::Int64Value::New(input);
+}
+
 health::mojom::UInt64ValuePtr Convert(
     cros_healthd::mojom::UInt64ValuePtr input) {
   if (!input) {
@@ -64,18 +72,19 @@ health::mojom::BatteryInfoPtr Convert(
   if (!input) {
     return nullptr;
   }
+
   auto output = health::mojom::BatteryInfo::New();
 
-  output->cycle_count = input->cycle_count;
-  output->voltage_now = input->voltage_now;
+  output->cycle_count = Convert(input->cycle_count);
+  output->voltage_now = Convert(input->voltage_now);
   output->vendor = std::move(input->vendor);
   output->serial_number = std::move(input->serial_number);
-  output->charge_full_design = input->charge_full_design;
-  output->charge_full = input->charge_full;
-  output->voltage_min_design = input->voltage_min_design;
+  output->charge_full_design = Convert(input->charge_full_design);
+  output->charge_full = Convert(input->charge_full);
+  output->voltage_min_design = Convert(input->voltage_min_design);
   output->model_name = std::move(input->model_name);
-  output->charge_now = input->charge_now;
-  output->current_now = input->current_now;
+  output->charge_now = Convert(input->charge_now);
+  output->current_now = Convert(input->current_now);
   output->technology = std::move(input->technology);
   output->status = std::move(input->status);
 

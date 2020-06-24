@@ -52,12 +52,22 @@ TEST(ProbeServiceConvertors, ProbeErrorPtr) {
                 health::mojom::ErrorType::kFileReadError, kMsg));
 }
 
+TEST(ProbeServiceConvertors, DoubleValuePtr) {
+  constexpr double kValue = 100500.500100;
+  EXPECT_EQ(Convert(kValue), health::mojom::DoubleValue::New(kValue));
+}
+
+TEST(ProbeServiceConvertors, Int64ValuePtr) {
+  constexpr int64_t kValue = 100500;
+  EXPECT_EQ(Convert(kValue), health::mojom::Int64Value::New(kValue));
+}
+
 TEST(ProbeServiceConvertors, UInt64ValuePtrNull) {
   EXPECT_TRUE(Convert(cros_healthd::mojom::UInt64ValuePtr()).is_null());
 }
 
 TEST(ProbeServiceConvertors, UInt64ValuePtr) {
-  constexpr uint64_t kValue = 100500;
+  constexpr uint64_t kValue = -100500;
   EXPECT_EQ(Convert(cros_healthd::mojom::UInt64Value::New(kValue)),
             health::mojom::UInt64Value::New(kValue));
 }
@@ -103,12 +113,17 @@ TEST(ProbeServiceConvertors, BatteryInfoPtr) {
 
   // Here we intentionaly use health::mojom::BatteryInfo::New to don't
   // forget to test new fields.
-  EXPECT_EQ(Convert(std::move(battery_info)),
-            health::mojom::BatteryInfo::New(
-                kCycleCount, kVoltageNow, kVendor, kSerialNumber,
-                kChargeFullDesign, kChargeFull, kVoltageMinDesign, kModelName,
-                kChargeNow, kCurrentNow, kTechnology, kStatus, kManufactureDate,
-                health::mojom::UInt64Value::New(kTemperature)));
+  EXPECT_EQ(
+      Convert(battery_info.Clone()),
+      health::mojom::BatteryInfo::New(
+          health::mojom::Int64Value::New(kCycleCount),
+          health::mojom::DoubleValue::New(kVoltageNow), kVendor, kSerialNumber,
+          health::mojom::DoubleValue::New(kChargeFullDesign),
+          health::mojom::DoubleValue::New(kChargeFull),
+          health::mojom::DoubleValue::New(kVoltageMinDesign), kModelName,
+          health::mojom::DoubleValue::New(kChargeNow),
+          health::mojom::DoubleValue::New(kCurrentNow), kTechnology, kStatus,
+          kManufactureDate, health::mojom::UInt64Value::New(kTemperature)));
 }
 
 TEST(ProbeServiceConvertors, BatteryResultPtrNull) {
@@ -146,9 +161,12 @@ TEST(ProbeServiceConvertors, TelemetryInfoPtrHasBatteryResult) {
   ASSERT_TRUE(telemetry_info_output);
   ASSERT_TRUE(telemetry_info_output->battery_result);
   ASSERT_TRUE(telemetry_info_output->battery_result->is_battery_info());
-  EXPECT_EQ(
-      telemetry_info_output->battery_result->get_battery_info()->cycle_count,
-      kCycleCount);
+  ASSERT_TRUE(telemetry_info_output->battery_result->get_battery_info());
+  ASSERT_TRUE(
+      telemetry_info_output->battery_result->get_battery_info()->cycle_count);
+  EXPECT_EQ(telemetry_info_output->battery_result->get_battery_info()
+                ->cycle_count->value,
+            kCycleCount);
 }
 
 TEST(ProbeServiceConvertors, TelemetryInfoPtrWithNullFields) {

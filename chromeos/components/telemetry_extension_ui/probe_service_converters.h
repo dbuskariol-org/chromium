@@ -30,6 +30,10 @@ health::mojom::ErrorType Convert(cros_healthd::mojom::ErrorType type);
 
 health::mojom::ProbeErrorPtr Convert(cros_healthd::mojom::ProbeErrorPtr input);
 
+health::mojom::DoubleValuePtr Convert(double input);
+
+health::mojom::Int64ValuePtr Convert(int64_t input);
+
 health::mojom::UInt64ValuePtr Convert(
     cros_healthd::mojom::UInt64ValuePtr input);
 
