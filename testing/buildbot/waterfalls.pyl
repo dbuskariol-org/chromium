@@ -1983,6 +1983,17 @@
           'gpu_telemetry_tests': 'fuchsia_gpu_telemetry_tests',
         },
       },
+      'ios-asan': {
+        'mixins': [
+          'mac_10.15',
+          'mac_toolchain',
+          'out_dir_arg',
+          'xcode_11e146'
+        ],
+        'test_suites': {
+          'isolated_scripts': 'ios_asan_tests',
+        }
+      },
       'ios-simulator-code-coverage': {
         'mixins': [
           'isolate_profile_data',

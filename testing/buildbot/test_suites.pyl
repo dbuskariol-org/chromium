@@ -5488,6 +5488,21 @@
       },
     },
 
+    'ios_asan_tests': {
+      'ios_common_tests': {
+        'variants': [
+          'SIM_IPHONE_X_13_4',
+          'SIM_IPAD_AIR_2_13_4',
+        ]
+      },
+      'ios_screen_size_dependent_tests': {
+        'variants': [
+          'SIM_IPHONE_X_13_4',
+          'SIM_IPAD_AIR_2_13_4',
+        ]
+      }
+    },
+
     'ios_clang_tot_device_tests': {
       'ios_clang_tests': {
         'variants': [
