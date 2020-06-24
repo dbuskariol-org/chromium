@@ -1485,8 +1485,7 @@
       'viz_unittests': {
         'mixins': ['fuchsia_runner_logs'],
         'args': [
-          # http://crbug.com/865172
-          '--child-arg=--ozone-platform=headless',
+          '--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.viz_unittests.filter',
         ],
       },
       'web_engine_browsertests': {

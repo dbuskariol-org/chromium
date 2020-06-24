@@ -13194,7 +13194,7 @@
       },
       {
         "args": [
-          "--child-arg=--ozone-platform=headless",
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.viz_unittests.filter",
           "--runner-logs-dir=${ISOLATED_OUTDIR}/runner_logs"
         ],
         "merge": {
@@ -14344,7 +14344,7 @@
       },
       {
         "args": [
-          "--child-arg=--ozone-platform=headless",
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.viz_unittests.filter",
           "--runner-logs-dir=${ISOLATED_OUTDIR}/runner_logs"
         ],
         "merge": {
@@ -15511,7 +15511,7 @@
       },
       {
         "args": [
-          "--child-arg=--ozone-platform=headless",
+          "--test-launcher-filter-file=../../testing/buildbot/filters/fuchsia.viz_unittests.filter",
           "--runner-logs-dir=${ISOLATED_OUTDIR}/runner_logs"
         ],
         "merge": {
