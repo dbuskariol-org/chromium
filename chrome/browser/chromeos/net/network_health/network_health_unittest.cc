@@ -60,14 +60,20 @@ class NetworkHealthTest : public ::testing::Test {
     const auto& initial_network_health_state =
         network_health_.GetNetworkHealthState();
 
-    ASSERT_EQ(1u, initial_network_health_state->networks.size());
+    ASSERT_EQ(std::size_t(2), initial_network_health_state->networks.size());
+
+    // Check that VPN device state is always reported even if no VPNs exist.
+    ASSERT_EQ(network_config::mojom::NetworkType::kVPN,
+              initial_network_health_state->networks[0]->type);
+    ASSERT_EQ(network_health::mojom::NetworkState::kNotConnected,
+              initial_network_health_state->networks[0]->state);
 
     // Check that the default wifi device created by CrosNetworkConfigTestHelper
     // exists.
     ASSERT_EQ(network_config::mojom::NetworkType::kWiFi,
-              initial_network_health_state->networks[0]->type);
+              initial_network_health_state->networks[1]->type);
     ASSERT_EQ(network_health::mojom::NetworkState::kNotConnected,
-              initial_network_health_state->networks[0]->state);
+              initial_network_health_state->networks[1]->state);
   }
 
   mojom::NetworkPtr GetNetworkHealthStateByType(
