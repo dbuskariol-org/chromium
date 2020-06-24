@@ -32,20 +32,20 @@ base::Optional<std::vector<WebApplicationIconInfo>> ParseWebAppIconInfos(
   return icon_infos;
 }
 
-base::Optional<WebApp::SyncData> ParseWebAppSyncDataStruct(
+base::Optional<WebApp::SyncFallbackData> ParseSyncFallbackDataStruct(
     const sync_pb::WebAppSpecifics& sync_proto) {
-  WebApp::SyncData parsed_sync_data;
+  WebApp::SyncFallbackData parsed_sync_fallback_data;
 
-  parsed_sync_data.name = sync_proto.name();
+  parsed_sync_fallback_data.name = sync_proto.name();
 
   if (sync_proto.has_theme_color())
-    parsed_sync_data.theme_color = sync_proto.theme_color();
+    parsed_sync_fallback_data.theme_color = sync_proto.theme_color();
 
   if (sync_proto.has_scope()) {
-    parsed_sync_data.scope = GURL(sync_proto.scope());
-    if (!parsed_sync_data.scope.is_valid()) {
+    parsed_sync_fallback_data.scope = GURL(sync_proto.scope());
+    if (!parsed_sync_fallback_data.scope.is_valid()) {
       DLOG(ERROR) << "WebAppSpecifics scope has invalid url: "
-                  << parsed_sync_data.scope.possibly_invalid_spec();
+                  << parsed_sync_fallback_data.scope.possibly_invalid_spec();
       return base::nullopt;
     }
   }
@@ -55,9 +55,9 @@ base::Optional<WebApp::SyncData> ParseWebAppSyncDataStruct(
   if (!parsed_icon_infos.has_value())
     return base::nullopt;
 
-  parsed_sync_data.icon_infos = std::move(parsed_icon_infos.value());
+  parsed_sync_fallback_data.icon_infos = std::move(parsed_icon_infos.value());
 
-  return parsed_sync_data;
+  return parsed_sync_fallback_data;
 }
 
 }  // namespace web_app
