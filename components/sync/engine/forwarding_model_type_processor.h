@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef COMPONENTS_SYNC_NIGORI_FORWARDING_MODEL_TYPE_PROCESSOR_H_
-#define COMPONENTS_SYNC_NIGORI_FORWARDING_MODEL_TYPE_PROCESSOR_H_
+#ifndef COMPONENTS_SYNC_ENGINE_FORWARDING_MODEL_TYPE_PROCESSOR_H_
+#define COMPONENTS_SYNC_ENGINE_FORWARDING_MODEL_TYPE_PROCESSOR_H_
 
 #include <memory>
 
@@ -42,4 +42,4 @@ class ForwardingModelTypeProcessor : public ModelTypeProcessor {
 
 }  // namespace syncer
 
-#endif  // COMPONENTS_SYNC_NIGORI_FORWARDING_MODEL_TYPE_PROCESSOR_H_
+#endif  // COMPONENTS_SYNC_ENGINE_FORWARDING_MODEL_TYPE_PROCESSOR_H_

@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "components/sync/nigori/forwarding_model_type_processor.h"
+#include "components/sync/engine/forwarding_model_type_processor.h"
 
 #include <utility>
 #include "base/callback.h"
