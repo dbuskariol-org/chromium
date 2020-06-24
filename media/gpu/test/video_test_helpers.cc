@@ -268,7 +268,7 @@ base::Optional<IvfFrameHeader> EncodedDataHelper::GetNextIvfFrameHeader()
     return base::nullopt;
   }
   return GetIvfFrameHeader(base::span<const uint8_t>(
-      reinterpret_cast<const uint8_t*>(data_[pos]), kIvfFrameHeaderSize));
+      reinterpret_cast<const uint8_t*>(&data_[pos]), kIvfFrameHeaderSize));
 }
 
 base::Optional<IvfFrame> EncodedDataHelper::ReadNextIvfFrame() {
