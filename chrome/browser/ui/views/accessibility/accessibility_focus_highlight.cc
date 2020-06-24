@@ -6,6 +6,7 @@
 
 #include "base/numerics/ranges.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
+#include "chrome/common/pref_names.h"
 #include "content/public/browser/focused_node_details.h"
 #include "content/public/browser/notification_service.h"
 #include "content/public/browser/notification_types.h"
@@ -67,9 +68,16 @@ AccessibilityFocusHighlight::AccessibilityFocusHighlight(
           browser_view_->GetWidget()->GetLayer()->device_scale_factor()) {
   DCHECK(browser_view);
 
-  // Listen for focus changes. Automatically deregisters when destroyed.
-  notification_registrar_.Add(this, content::NOTIFICATION_FOCUS_CHANGED_IN_PAGE,
-                              content::NotificationService::AllSources());
+  // Listen for preference changes.
+  profile_pref_registrar_.Init(browser_view_->browser()->profile()->GetPrefs());
+  profile_pref_registrar_.Add(
+      prefs::kAccessibilityFocusHighlightEnabled,
+      base::BindRepeating(
+          &AccessibilityFocusHighlight::AddOrRemoveFocusObserver,
+          base::Unretained(this)));
+
+  // Initialise focus observer based on current preferences.
+  AddOrRemoveFocusObserver();
 
   // One-time initialization of statics the first time an instance is created.
   if (fade_in_time_.is_zero()) {
@@ -151,6 +159,27 @@ void AccessibilityFocusHighlight::RemoveLayer() {
   if (compositor_) {
     compositor_->RemoveAnimationObserver(this);
     compositor_ = nullptr;
+  }
+}
+
+void AccessibilityFocusHighlight::AddOrRemoveFocusObserver() {
+  PrefService* prefs = browser_view_->browser()->profile()->GetPrefs();
+
+  if (prefs->GetBoolean(prefs::kAccessibilityFocusHighlightEnabled)) {
+    // Listen for focus changes. Automatically deregisters when destroyed,
+    // or when the preference toggles off.
+    notification_registrar_.Add(this,
+                                content::NOTIFICATION_FOCUS_CHANGED_IN_PAGE,
+                                content::NotificationService::AllSources());
+    return;
+  }
+
+  if (notification_registrar_.IsRegistered(
+          this, content::NOTIFICATION_FOCUS_CHANGED_IN_PAGE,
+          content::NotificationService::AllSources())) {
+    notification_registrar_.Remove(this,
+                                   content::NOTIFICATION_FOCUS_CHANGED_IN_PAGE,
+                                   content::NotificationService::AllSources());
   }
 }
 

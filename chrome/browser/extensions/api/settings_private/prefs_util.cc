@@ -373,6 +373,10 @@ const PrefsUtil::TypedPrefMap& PrefsUtil::GetWhitelistedKeys() {
   (*s_whitelist)[::prefs::kLiveCaptionEnabled] =
       settings_api::PrefType::PREF_TYPE_BOOLEAN;
 #endif
+#if !defined(OS_CHROMEOS)
+  (*s_whitelist)[::prefs::kAccessibilityFocusHighlightEnabled] =
+      settings_api::PrefType::PREF_TYPE_BOOLEAN;
+#endif
 
 #if defined(OS_CHROMEOS)
   // Accounts / Users / People.

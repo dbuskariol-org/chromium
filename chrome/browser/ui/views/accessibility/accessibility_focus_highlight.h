@@ -10,6 +10,7 @@
 #include "base/gtest_prod_util.h"
 #include "base/macros.h"
 #include "base/time/time.h"
+#include "components/prefs/pref_change_registrar.h"
 #include "content/public/browser/notification_observer.h"
 #include "content/public/browser/notification_registrar.h"
 #include "third_party/skia/include/core/SkColor.h"
@@ -51,6 +52,9 @@ class AccessibilityFocusHighlight : public ui::LayerDelegate,
 
   // Get rid of the layer and stop animation.
   void RemoveLayer();
+
+  // Handle preference changes by adding or removing the layer as necessary.
+  void AddOrRemoveFocusObserver();
 
   // content::NotificationObserver overrides:
   void Observe(int type,
@@ -99,6 +103,9 @@ class AccessibilityFocusHighlight : public ui::LayerDelegate,
 
   // If set, draws the highlight even if the widget is not active.
   static bool skip_activation_check_for_testing_;
+
+  // For observing browser preference notifications.
+  PrefChangeRegistrar profile_pref_registrar_;
 
   // For observing focus notifications.
   content::NotificationRegistrar notification_registrar_;

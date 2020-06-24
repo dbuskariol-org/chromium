@@ -444,6 +444,10 @@
 #include "chrome/browser/chrome_browser_main_posix.h"
 #endif
 
+#if !defined(OS_CHROMEOS)
+#include "ui/accessibility/accessibility_features.h"
+#endif  // !defined(OS_CHROMEOS)
+
 #if !defined(OS_ANDROID)
 #include "chrome/browser/badging/badge_manager.h"
 #include "chrome/browser/devtools/chrome_devtools_manager_delegate.h"
@@ -3223,6 +3227,11 @@ void ChromeContentBrowserClient::OverrideWebkitPrefs(
 #if defined(OS_CHROMEOS)
   web_prefs->always_show_focus =
       prefs->GetBoolean(ash::prefs::kAccessibilityFocusHighlightEnabled);
+#else
+  if (features::IsAccessibilityFocusHighlightEnabled()) {
+    web_prefs->always_show_focus =
+        prefs->GetBoolean(prefs::kAccessibilityFocusHighlightEnabled);
+  }
 #endif
 
 #if defined(OS_ANDROID)

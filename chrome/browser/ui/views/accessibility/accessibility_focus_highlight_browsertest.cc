@@ -7,6 +7,7 @@
 #include "build/build_config.h"
 #include "chrome/browser/ui/views/accessibility/accessibility_focus_highlight.h"
 #include "chrome/browser/ui/views/frame/browser_view.h"
+#include "chrome/common/pref_names.h"
 #include "chrome/test/base/in_process_browser_test.h"
 #include "chrome/test/base/ui_test_utils.h"
 #include "content/public/test/browser_test.h"
@@ -131,6 +132,9 @@ IN_PROC_BROWSER_TEST_F(AccessibilityFocusHighlightBrowserTest,
 
   AccessibilityFocusHighlight::SetNoFadeForTesting();
   AccessibilityFocusHighlight::SkipActivationCheckForTesting();
+
+  browser()->profile()->GetPrefs()->SetBoolean(
+      prefs::kAccessibilityFocusHighlightEnabled, true);
 
   // The web page has a background with a specific color. Keep looping until we
   // capture an image of the page that's more than 90% that color.
