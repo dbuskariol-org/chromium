@@ -2374,6 +2374,9 @@ extern const char kTextfieldFocusOnTapUpDescription[];
 extern const char kReopenTabInProductHelpName[];
 extern const char kReopenTabInProductHelpDescription[];
 
+extern const char kEnableNewBadgeOnMenuItemsName[];
+extern const char kEnableNewBadgeOnMenuItemsDescription[];
+
 #endif  // defined(TOOLKIT_VIEWS)
 
 // Random platform combinations -----------------------------------------------

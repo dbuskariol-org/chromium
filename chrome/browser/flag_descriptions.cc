@@ -4052,6 +4052,12 @@ const char kReopenTabInProductHelpDescription[] =
     "Enable in-product help that guides a user to reopen a tab if it looks "
     "like they accidentally closed it.";
 
+const char kEnableNewBadgeOnMenuItemsName[] =
+    "Enable 'New' badge on menu items";
+const char kEnableNewBadgeOnMenuItemsDescription[] =
+    "When enabled, allows 'New' badge to help users identify menu items which "
+    "access new functionality.";
+
 #endif  // defined(TOOLKIT_VIEWS)
 
 // Random platform combinations -----------------------------------------------

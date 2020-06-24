@@ -41741,6 +41741,7 @@ from previous Chrome versions.
   <int value="667643314" label="LitePageServerPreviews:enabled"/>
   <int value="669097106" label="NtpRealboxMatchOmniboxTheme:disabled"/>
   <int value="673588373" label="OmniboxPedalSuggestions:disabled"/>
+  <int value="674788251" label="EnableNewBadgeOnMenuItems:enabled"/>
   <int value="677866592" label="ClickToCallUI:disabled"/>
   <int value="679251577" label="AccessibilityExposeARIAAnnotations:disabled"/>
   <int value="679931272" label="DcheckIsFatal:enabled"/>
@@ -42777,6 +42778,7 @@ from previous Chrome versions.
   <int value="1823337908" label="SmartDim20190221:enabled"/>
   <int value="1824931483"
       label="EnableHistoryFaviconsGoogleServerQuery:disabled"/>
+  <int value="1825369164" label="EnableNewBadgeOnMenuItems:disabled"/>
   <int value="1825940786" label="ChromeHomePromo:disabled"/>
   <int value="1827369558" label="AndroidPayIntegrationV1:disabled"/>
   <int value="1828660283" label="enable-webfonts-intervention-trigger"/>

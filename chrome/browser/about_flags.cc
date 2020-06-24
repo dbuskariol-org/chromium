@@ -4691,6 +4691,11 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kEnableMDRoundedCornersOnDialogsName,
      flag_descriptions::kEnableMDRoundedCornersOnDialogsDescription, kOsDesktop,
      FEATURE_VALUE_TYPE(views::features::kEnableMDRoundedCornersOnDialogs)},
+
+    {"enable-new-badge-on-menu-items",
+     flag_descriptions::kEnableNewBadgeOnMenuItemsName,
+     flag_descriptions::kEnableNewBadgeOnMenuItemsDescription, kOsDesktop,
+     FEATURE_VALUE_TYPE(views::features::kEnableNewBadgeOnMenuItems)},
 #endif  // defined(TOOLKIT_VIEWS)
 
     {"strict-origin-isolation", flag_descriptions::kStrictOriginIsolationName,
