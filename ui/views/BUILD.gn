@@ -1039,6 +1039,7 @@ test("views_unittests") {
     "animation/ink_drop_ripple_unittest.cc",
     "animation/ink_drop_unittest.cc",
     "animation/installable_ink_drop_animator_unittest.cc",
+    "animation/installable_ink_drop_painter_unittest.cc",
     "animation/installable_ink_drop_unittest.cc",
     "animation/slide_out_controller_unittest.cc",
     "animation/square_ink_drop_ripple_unittest.cc",
