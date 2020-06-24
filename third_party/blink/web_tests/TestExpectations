@@ -6760,7 +6760,6 @@ crbug.com/1083585 [ Win ] geolocation-api/watchPosition-page-visibility.html [ P
 crbug.com/1046784 http/tests/devtools/elements/styles/stylesheet-tracking.js [ Pass Failure Timeout ]
 
 # Sheriff 2020-05-28
-crbug.com/1087208 http/tests/images/document-policy-oversized-images-resize.php [ Pass Failure ]
 crbug.com/1083585 [ Linux ] geolocation-api/watchPosition-page-visibility.html [ Pass Failure ]
 crbug.com/1087077 external/wpt/html/semantics/forms/form-submission-0/form-double-submit.html [ Failure ]
 crbug.com/1087077 external/wpt/html/semantics/forms/form-submission-0/form-double-submit-3.html [ Failure ]
