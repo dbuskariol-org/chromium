@@ -6272,7 +6272,7 @@ crbug.com/1041973 external/wpt/html/semantics/forms/constraints/form-validation-
 # Disable for landing devtools changes
 crbug.com/1006759 http/tests/devtools/console/argument-hints.js [ Pass Failure ]
 
-# Failing origin trial for css proeprties test
+# Failing origin trial for css properties test
 crbug.com/1041993 http/tests/origin_trials/sample-api-script-added-after-css-declaration.html [ Failure ]
 
 # Sheriff 2020-01-16
