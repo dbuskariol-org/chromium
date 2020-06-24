@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef UI_BASE_CURSOR_CURSOR_THEME_MANAGER_LINUX_OBSERVER_H_
-#define UI_BASE_CURSOR_CURSOR_THEME_MANAGER_LINUX_OBSERVER_H_
+#ifndef UI_BASE_CURSOR_CURSOR_THEME_MANAGER_OBSERVER_H_
+#define UI_BASE_CURSOR_CURSOR_THEME_MANAGER_OBSERVER_H_
 
 #include <string>
 
@@ -12,7 +12,7 @@
 
 namespace ui {
 
-class COMPONENT_EXPORT(UI_BASE_CURSOR) CursorThemeManagerLinuxObserver
+class COMPONENT_EXPORT(UI_BASE_CURSOR) CursorThemeManagerObserver
     : public base::CheckedObserver {
  public:
   // |cursor_theme_name| will be nonempty.
@@ -23,9 +23,9 @@ class COMPONENT_EXPORT(UI_BASE_CURSOR) CursorThemeManagerLinuxObserver
   virtual void OnCursorThemeSizeChanged(int cursor_theme_size) = 0;
 
  protected:
-  ~CursorThemeManagerLinuxObserver() override = default;
+  ~CursorThemeManagerObserver() override = default;
 };
 
 }  // namespace ui
 
-#endif  // UI_BASE_CURSOR_CURSOR_THEME_MANAGER_LINUX_OBSERVER_H_
+#endif  // UI_BASE_CURSOR_CURSOR_THEME_MANAGER_OBSERVER_H_

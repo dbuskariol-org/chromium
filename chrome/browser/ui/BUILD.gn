@@ -3972,6 +3972,9 @@ static_library("ui") {
             deps += [ "//ui/ozone" ]
           }
         }
+        if (use_ozone) {
+          deps += [ "//ui/base/cursor:cursor_base" ]
+        }
       }
     }
 
