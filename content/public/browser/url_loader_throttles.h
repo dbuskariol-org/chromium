@@ -2,10 +2,11 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CONTENT_BROWSER_LOADER_URL_LOADER_THROTTLES_H_
-#define CONTENT_BROWSER_LOADER_URL_LOADER_THROTTLES_H_
+#ifndef CONTENT_PUBLIC_BROWSER_URL_LOADER_THROTTLES_H_
+#define CONTENT_PUBLIC_BROWSER_URL_LOADER_THROTTLES_H_
 
 #include "base/callback.h"
+#include "content/common/content_export.h"
 
 namespace blink {
 class URLLoaderThrottle;
@@ -23,6 +24,7 @@ class WebContents;
 
 // Wrapper around ContentBrowserClient::CreateURLLoaderThrottles which inserts
 // additional content specific throttles.
+CONTENT_EXPORT
 std::vector<std::unique_ptr<blink::URLLoaderThrottle>>
 CreateContentBrowserURLLoaderThrottles(
     const network::ResourceRequest& request,
@@ -33,4 +35,4 @@ CreateContentBrowserURLLoaderThrottles(
 
 }  // namespace content
 
-#endif  // CONTENT_BROWSER_LOADER_URL_LOADER_THROTTLES_H_
+#endif  // CONTENT_PUBLIC_BROWSER_URL_LOADER_THROTTLES_H_
