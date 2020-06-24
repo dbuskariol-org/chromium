@@ -94,6 +94,37 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
         return sXSurfaceProcessScope;
     }
 
+    // We avoid attaching surfaces until after |startup()| is called. This ensures that
+    // the correct sign-in state is used if attaching the surface triggers a fetch.
+
+    private static boolean sStartupCalled;
+    private static HashSet<FeedStreamSurface> sWaitingSurfaces;
+
+    public static void startup() {
+        if (sStartupCalled) return;
+        sStartupCalled = true;
+        xSurfaceProcessScope();
+        if (sWaitingSurfaces != null) {
+            for (FeedStreamSurface surface : sWaitingSurfaces) {
+                surface.surfaceOpened();
+            }
+            sWaitingSurfaces = null;
+        }
+    }
+
+    private static void openSurfaceAtStartup(FeedStreamSurface surface) {
+        if (sWaitingSurfaces == null) {
+            sWaitingSurfaces = new HashSet<FeedStreamSurface>();
+        }
+        sWaitingSurfaces.add(surface);
+    }
+
+    private static void cancelOpenSurfaceAtStartup(FeedStreamSurface surface) {
+        if (sWaitingSurfaces != null) {
+            sWaitingSurfaces.remove(surface);
+        }
+    }
+
     /**
      * Provides logging and context for all surfaces.
      *
@@ -447,7 +478,12 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
      * the content is available, onStreamUpdated will be called.
      */
     public void surfaceOpened() {
-        FeedStreamSurfaceJni.get().surfaceOpened(mNativeFeedStreamSurface, FeedStreamSurface.this);
+        if (!sStartupCalled) {
+            openSurfaceAtStartup(this);
+        } else {
+            FeedStreamSurfaceJni.get().surfaceOpened(
+                    mNativeFeedStreamSurface, FeedStreamSurface.this);
+        }
     }
 
     /**
@@ -458,7 +494,13 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
         if (feedCount > 0) {
             mContentManager.removeContents(mHeaderCount, feedCount);
         }
-        FeedStreamSurfaceJni.get().surfaceClosed(mNativeFeedStreamSurface, FeedStreamSurface.this);
+
+        if (!sStartupCalled) {
+            cancelOpenSurfaceAtStartup(this);
+        } else {
+            FeedStreamSurfaceJni.get().surfaceClosed(
+                    mNativeFeedStreamSurface, FeedStreamSurface.this);
+        }
     }
 
     private void openUrl(String url, boolean inNewTab) {
