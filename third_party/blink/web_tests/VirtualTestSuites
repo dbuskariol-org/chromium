@@ -437,7 +437,7 @@
   {
     "prefix": "lazyload-image",
     "bases": ["http/tests/lazyload"],
-    "args": ["--enable-blink-features=LazyImageLoading,AutomaticLazyImageLoading",
+    "args": ["--enable-blink-features=AutomaticLazyImageLoading",
              "--disable-blink-features=RestrictAutomaticLazyImageLoadingToDataSaver"]
   },
   {
