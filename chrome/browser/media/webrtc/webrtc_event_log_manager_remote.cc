@@ -543,7 +543,8 @@ void WebRtcRemoteEventLogManager::GetHistory(
   std::vector<UploadList::UploadInfo> history;
 
   if (!BrowserContextEnabled(browser_context_id)) {
-    LOG(ERROR) << "Unknown |browser_context_id|.";
+    // Either the browser context is unknown, or more likely, it's not
+    // enabled for remote logging.
     content::GetUIThreadTaskRunner({})->PostTask(
         FROM_HERE, base::BindOnce(std::move(reply), history));
     return;
