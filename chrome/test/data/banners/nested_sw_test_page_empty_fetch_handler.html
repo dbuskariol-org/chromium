@@ -10,10 +10,11 @@
     </script>
     <script>
       // Register page scoped service worker.
-      navigator.serviceWorker.register('service_worker_with_no_fetch_handler.js', { scope: 'nested_sw_test_page.html' });
+      navigator.serviceWorker.register('service_worker_with_no_fetch_handler.js',
+        { scope: 'nested_sw_test_page_empty_fetch_handler.html' });
 
       // Register app scoped service worker.
-      navigator.serviceWorker.register('service_worker_offline_support.js');
+      navigator.serviceWorker.register('service_worker_empty_fetch_handler.js');
     </script>
   </head>
   <body onload="initialize()">

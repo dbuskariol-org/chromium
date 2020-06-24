@@ -2,6 +2,5 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-self.addEventListener("fetch", event => {
-  event.respondWith(new Response("Hello offline page"));
-});
+// A no-op fetch handler.
+self.addEventListener('fetch', event => {});
