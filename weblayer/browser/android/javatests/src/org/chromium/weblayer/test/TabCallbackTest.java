@@ -321,4 +321,33 @@ public class TabCallbackTest {
         Assert.assertEquals("foobar", titles[0]);
         CriteriaHelper.pollUiThread(() -> Criteria.checkThat(titles[0], Matchers.is("foobar")));
     }
+
+    @MinWebLayerVersion(85)
+    @Test
+    @SmallTest
+    public void testOnBackgroundColorChanged() throws TimeoutException {
+        String startupUrl = "about:blank";
+        InstrumentationActivity activity = mActivityTestRule.launchShellWithUrl(startupUrl);
+
+        Integer backgroundColors[] = new Integer[1];
+        CallbackHelper callbackHelper = new CallbackHelper();
+        TestThreadUtils.runOnUiThreadBlocking(() -> {
+            Tab tab = activity.getTab();
+            TabCallback callback = new TabCallback() {
+                @Override
+                public void onBackgroundColorChanged(int color) {
+                    backgroundColors[0] = color;
+                    callbackHelper.notifyCalled();
+                }
+            };
+            tab.registerTabCallback(callback);
+        });
+
+        mActivityTestRule.executeScriptSync(
+                "document.body.style.backgroundColor = \"rgb(255, 0, 0)\"",
+                /*useSeparateIsolate=*/false);
+
+        callbackHelper.waitForFirst();
+        Assert.assertEquals(0xffff0000, (int) backgroundColors[0]);
+    }
 }

@@ -170,6 +170,17 @@ public final class TabImpl extends ITab.Stub implements LoginPrompt.Observer {
                 viewController.onBottomControlsChanged(bottomControlsOffsetY);
             }
         }
+
+        @Override
+        public void onBackgroundColorChanged(int color) {
+            if (WebLayerFactoryImpl.getClientMajorVersion() >= 85) {
+                try {
+                    mClient.onBackgroundColorChanged(color);
+                } catch (RemoteException e) {
+                    throw new APICallException(e);
+                }
+            }
+        }
     }
 
     public static TabImpl fromWebContents(WebContents webContents) {
