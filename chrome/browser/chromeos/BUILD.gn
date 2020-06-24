@@ -1352,6 +1352,8 @@ source_set("chromeos") {
     "kerberos/kerberos_credentials_manager_factory.h",
     "kerberos/kerberos_ticket_expiry_notification.cc",
     "kerberos/kerberos_ticket_expiry_notification.h",
+    "lacros/ash_chrome_service_impl.cc",
+    "lacros/ash_chrome_service_impl.h",
     "lacros/lacros_loader.cc",
     "lacros/lacros_loader.h",
     "lacros/lacros_manager.cc",
