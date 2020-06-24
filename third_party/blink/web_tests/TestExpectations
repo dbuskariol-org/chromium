@@ -3635,7 +3635,6 @@ crbug.com/1031667 external/wpt/css/css-pseudo/marker-content-008.tentative.html 
 crbug.com/1031667 external/wpt/css/css-pseudo/marker-content-009.tentative.html [ Failure ]
 crbug.com/1031667 external/wpt/css/css-pseudo/marker-content-011.tentative.html [ Failure ]
 crbug.com/457718 external/wpt/css/css-pseudo/marker-font-variant-numeric-normal.html [ Failure ]
-crbug.com/457718 external/wpt/css/css-pseudo/marker-list-style-position.html [ Failure ]
 
 # iframe tests time out if the request is blocked as mixed content.
 crbug.com/1001374 external/wpt/upgrade-insecure-requests/gen/iframe-blank-inherit.meta/unset/iframe-tag.https.html [ Timeout ]
