@@ -42,6 +42,7 @@ class SkBitmap;
 
 namespace content {
 class DevToolsProtocolTestBindings;
+class JavaScriptDialogManager;
 class RenderFrameHost;
 class Shell;
 class WebTestBluetoothChooserFactory;
@@ -127,6 +128,9 @@ class WebTestControlHost : public WebContentsObserver,
       const base::DictionaryValue& changed_web_test_runtime_flags);
 
   void DidOpenNewWindowOrTab(WebContents* web_contents);
+
+  // Creates a JavascriptDialogManager to be used in web tests.
+  std::unique_ptr<JavaScriptDialogManager> CreateJavaScriptDialogManager();
 
   void SetTempPath(const base::FilePath& temp_path);
   void RendererUnresponsive();

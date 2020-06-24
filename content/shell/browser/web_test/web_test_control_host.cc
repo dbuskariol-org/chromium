@@ -70,6 +70,7 @@
 #include "content/shell/browser/web_test/web_test_content_browser_client.h"
 #include "content/shell/browser/web_test/web_test_devtools_bindings.h"
 #include "content/shell/browser/web_test/web_test_first_device_bluetooth_chooser.h"
+#include "content/shell/browser/web_test/web_test_javascript_dialog_manager.h"
 #include "content/shell/common/web_test/web_test_string_util.h"
 #include "content/shell/common/web_test/web_test_switches.h"
 #include "content/test/storage_partition_test_helpers.h"
@@ -670,6 +671,11 @@ void WebTestControlHost::DidOpenNewWindowOrTab(WebContents* web_contents) {
       web_contents,
       std::make_unique<WebTestWindowObserver>(web_contents, this));
   CHECK(result.second);  // The WebContents should not already be in the map!
+}
+
+std::unique_ptr<JavaScriptDialogManager>
+WebTestControlHost::CreateJavaScriptDialogManager() {
+  return std::make_unique<WebTestJavaScriptDialogManager>();
 }
 
 void WebTestControlHost::SetTempPath(const base::FilePath& temp_path) {
@@ -1504,9 +1510,11 @@ void WebTestControlHost::OnLeakDetectionDone(
 }
 
 void WebTestControlHost::SetBluetoothManualChooser(bool enable) {
-  bluetooth_chooser_factory_.reset();
   if (enable) {
-    bluetooth_chooser_factory_.reset(new WebTestBluetoothChooserFactory());
+    bluetooth_chooser_factory_ =
+        std::make_unique<WebTestBluetoothChooserFactory>();
+  } else {
+    bluetooth_chooser_factory_.reset();
   }
 }
 
