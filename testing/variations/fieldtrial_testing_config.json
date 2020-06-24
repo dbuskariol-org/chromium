@@ -3932,22 +3932,6 @@
             ]
         }
     ],
-    "MediaCapabilitiesWithParameters": [
-        {
-            "platforms": [
-                "android",
-                "chromeos",
-                "linux",
-                "mac",
-                "windows"
-            ],
-            "experiments": [
-                {
-                    "name": "DBWindow5000Frames_20190225"
-                }
-            ]
-        }
-    ],
     "MediaFoundationAsyncH264Encoding": [
         {
             "platforms": [
@@ -3992,6 +3976,26 @@
                     "name": "Enabled",
                     "enable_features": [
                         "UseMediaHistoryStore"
+                    ]
+                }
+            ]
+        }
+    ],
+    "MediaLearningSmoothnessExperiment": [
+        {
+            "platforms": [
+                "android",
+                "chromeos",
+                "linux",
+                "mac",
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "MediaLearningFramework",
+                        "MediaLearningSmoothnessExperiment"
                     ]
                 }
             ]
