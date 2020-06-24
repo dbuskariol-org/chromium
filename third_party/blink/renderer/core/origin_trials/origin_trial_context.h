@@ -79,9 +79,9 @@ class CORE_EXPORT OriginTrialContext final
   void AddTokenFromExternalScript(const String& token,
                                   const SecurityOrigin* origin);
   void AddTokens(const Vector<String>& tokens);
-  void AddTokens(const SecurityOrigin* origin,
-                 bool is_secure,
-                 const Vector<String>& tokens);
+  void AddTokens(const Vector<String>& tokens,
+                 const SecurityOrigin* origin,
+                 bool is_secure);
 
   void ActivateNavigationFeaturesFromInitiator(
       const Vector<OriginTrialFeature>& features);

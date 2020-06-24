@@ -267,12 +267,12 @@ void OriginTrialContext::AddTokenInternal(const String& token,
 }
 
 void OriginTrialContext::AddTokens(const Vector<String>& tokens) {
-  AddTokens(GetSecurityOrigin(), IsSecureContext(), tokens);
+  AddTokens(tokens, GetSecurityOrigin(), IsSecureContext());
 }
 
-void OriginTrialContext::AddTokens(const SecurityOrigin* origin,
-                                   bool is_secure,
-                                   const Vector<String>& tokens) {
+void OriginTrialContext::AddTokens(const Vector<String>& tokens,
+                                   const SecurityOrigin* origin,
+                                   bool is_secure) {
   if (tokens.IsEmpty())
     return;
   bool found_valid = false;
