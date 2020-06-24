@@ -32,7 +32,6 @@ import org.chromium.base.annotations.CalledByNative;
 import org.chromium.base.annotations.NativeMethods;
 import org.chromium.base.metrics.RecordUserAction;
 import org.chromium.components.content_settings.ContentSettingValues;
-import org.chromium.components.content_settings.CookieControlsBridge;
 import org.chromium.components.content_settings.CookieControlsEnforcement;
 import org.chromium.components.content_settings.CookieControlsObserver;
 import org.chromium.components.content_settings.CookieControlsStatus;
@@ -145,9 +144,6 @@ public class PageInfoController implements ModalDialogProperties.Controller,
     // The controller for the cookies section of the page info.
     private PageInfoCookiesController mCookiesController;
 
-    // Bridge updating the CookieControlsView when cookie settings change.
-    private CookieControlsBridge mCookieBridge;
-
     /**
      * Creates the PageInfoController, but does not display it. Also initializes the corresponding
      * C++ object and saves a pointer to it.
@@ -244,9 +240,7 @@ public class PageInfoController implements ModalDialogProperties.Controller,
             viewParams.siteSettingsButtonShown = false;
             viewParams.cookieControlsShown = false;
         }
-        viewParams.onUiClosingCallback = () -> {
-            mCookieBridge.onUiClosing();
-        };
+        viewParams.onUiClosingCallback = mDelegate::onUiClosing;
 
         mDelegate.initPreviewUiParams(viewParams, mRunAfterDismissConsumer);
         mDelegate.initOfflinePageUiParams(viewParams, mRunAfterDismissConsumer);
@@ -285,7 +279,7 @@ public class PageInfoController implements ModalDialogProperties.Controller,
             cookieControlsParams.onCheckedChangedCallback = (Boolean blockCookies) -> {
                 recordAction(blockCookies ? PageInfoAction.PAGE_INFO_COOKIE_BLOCKED_FOR_SITE
                                           : PageInfoAction.PAGE_INFO_COOKIE_ALLOWED_FOR_SITE);
-                mCookieBridge.setThirdPartyCookieBlockingEnabledForSite(blockCookies);
+                mDelegate.setThirdPartyCookieBlockingEnabledForSite(blockCookies);
             };
             mView.getCookieControlsView().setParams(cookieControlsParams);
         }
@@ -296,7 +290,7 @@ public class PageInfoController implements ModalDialogProperties.Controller,
                 new PermissionParamsListBuilder(mContext, mWindowAndroid, mFullUrl, showTitle, this,
                         mView::setPermissions, mPermissionParamsListBuilderDelegate);
         mNativePageInfoController = PageInfoControllerJni.get().init(this, mWebContents);
-        mCookieBridge = mDelegate.createCookieControlsBridge(this);
+        mDelegate.createCookieControlsBridge(this);
 
         mWebContentsObserver = new WebContentsObserver(webContents) {
             @Override
@@ -338,10 +332,6 @@ public class PageInfoController implements ModalDialogProperties.Controller,
         if (mDialog != null) {
             mDialog.destroy();
             mDialog = null;
-        }
-        if (mCookieBridge != null) {
-            mCookieBridge.destroy();
-            mCookieBridge = null;
         }
     }
 

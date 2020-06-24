@@ -7,12 +7,10 @@ package org.chromium.components.page_info;
 import android.content.Intent;
 
 import androidx.annotation.IntDef;
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.chromium.base.Consumer;
 import org.chromium.base.supplier.Supplier;
-import org.chromium.components.content_settings.CookieControlsBridge;
 import org.chromium.components.content_settings.CookieControlsObserver;
 import org.chromium.components.omnibox.AutocompleteSchemeClassifier;
 import org.chromium.components.page_info.PageInfoView.PageInfoViewParams;
@@ -24,7 +22,7 @@ import java.lang.annotation.RetentionPolicy;
 /**
  *  Provides embedder-level information to PageInfoController.
  */
-public abstract class PageInfoControllerDelegate {
+public class PageInfoControllerDelegate {
     @IntDef({OfflinePageState.NOT_OFFLINE_PAGE, OfflinePageState.TRUSTED_OFFLINE_PAGE,
             OfflinePageState.UNTRUSTED_OFFLINE_PAGE})
     @Retention(RetentionPolicy.SOURCE)
@@ -195,14 +193,23 @@ public abstract class PageInfoControllerDelegate {
      * Show site settings for the URL passed in.
      * @param url The URL to show site settings for.
      */
-    public abstract void showSiteSettings(String url);
+    public void showSiteSettings(String url) {}
 
+    // TODO(crbug.com/1052375): Remove the next three methods when cookie controls UI
+    // has been componentized.
     /**
      * Creates Cookie Controls Bridge.
-     * @param observer The CookieControlsObserver to create the bridge with.
-     * @return the object that facilitates interfacing with native code.
+     * @param The CookieControlsObserver to create the bridge with.
      */
-    @NonNull
-    public abstract CookieControlsBridge createCookieControlsBridge(
-            CookieControlsObserver observer);
+    public void createCookieControlsBridge(CookieControlsObserver observer) {}
+
+    /**
+     * Called when cookie controls UI is closed.
+     */
+    public void onUiClosing() {}
+
+    /**
+     * Notes whether third party cookies should be blocked for the site.
+     */
+    public void setThirdPartyCookieBlockingEnabledForSite(boolean blockCookies) {}
 }
