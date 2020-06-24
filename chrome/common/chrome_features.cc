@@ -606,6 +606,11 @@ const base::Feature kRemoveSupervisedUsersOnStartup{
 const base::Feature kSecurityKeyAttestationPrompt{
     "SecurityKeyAttestationPrompt", base::FEATURE_ENABLED_BY_DEFAULT};
 
+#if defined(OS_CHROMEOS)
+const base::Feature kSharesheet{"Sharesheet",
+                                base::FEATURE_DISABLED_BY_DEFAULT};
+#endif
+
 #if defined(OS_ANDROID)
 const base::Feature kShowTrustedPublisherURL{"ShowTrustedPublisherURL",
                                              base::FEATURE_ENABLED_BY_DEFAULT};

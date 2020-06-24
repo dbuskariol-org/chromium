@@ -2123,6 +2123,11 @@
     "expiry_milestone": 87
   },
   {
+    "name": "enable-sharesheet",
+    "owners": [ "chromeos-apps-foundation-team@google.com" ],
+    "expiry_milestone": 89
+  },
+  {
     "name": "enable-sharing-device-registration",
     "owners": [ "//chrome/browser/sharing/OWNERS" ],
     "expiry_milestone": 82

@@ -40198,6 +40198,7 @@ from previous Chrome versions.
   <int value="-1045882995" label="UseNewDoodleApi:enabled"/>
   <int value="-1044244605"
       label="UpdateNotificationSchedulingIntegration:enabled"/>
+  <int value="-1043883835" label="Sharesheet:enabled"/>
   <int value="-1042723808"
       label="HappinessTrackingSurveysForDesktopSettingsPrivacy:enabled"/>
   <int value="-1042579955" label="ChromeOSParentalControlsSettings:enabled"/>
@@ -40720,6 +40721,7 @@ from previous Chrome versions.
       label="AutofillUpstreamEditableExpirationDate:enabled"/>
   <int value="-468697885" label="ArcInputMethod:enabled"/>
   <int value="-466704882" label="webview-log-js-console-messages"/>
+  <int value="-465381408" label="Sharesheet:disabled"/>
   <int value="-462554210"
       label="OminboxUIExperimentUseGenericSearchEngineIcon:enabled"/>
   <int value="-462404204" label="CryptAuthV2DeviceSync:disabled"/>
