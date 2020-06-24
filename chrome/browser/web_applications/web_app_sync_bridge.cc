@@ -96,9 +96,9 @@ void ApplySyncDataToApp(const sync_pb::WebAppSpecifics& sync_data,
   app->SetUserDisplayMode(ToMojomDisplayMode(sync_data.user_display_mode()));
 
   base::Optional<WebApp::SyncData> parsed_sync_data =
-      ParseWebAppSyncData(sync_data);
+      ParseWebAppSyncDataStruct(sync_data);
   if (!parsed_sync_data.has_value()) {
-    // ParseWebAppSyncData() reports any errors.
+    // ParseWebAppSyncDataStruct() reports any errors.
     return;
   }
   app->SetSyncData(std::move(parsed_sync_data.value()));

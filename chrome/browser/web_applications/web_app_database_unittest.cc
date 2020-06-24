@@ -346,6 +346,8 @@ TEST_F(WebAppDatabaseTest, WebAppWithoutOptionalFields) {
   EXPECT_FALSE(app->is_in_sync_install());
   EXPECT_TRUE(app->sync_data().name.empty());
   EXPECT_FALSE(app->sync_data().theme_color.has_value());
+  EXPECT_FALSE(app->sync_data().scope.is_valid());
+  EXPECT_TRUE(app->sync_data().icon_infos.empty());
   EXPECT_TRUE(app->file_handlers().empty());
   EXPECT_TRUE(app->additional_search_terms().empty());
   EXPECT_TRUE(app->last_launch_time().is_null());
@@ -392,6 +394,8 @@ TEST_F(WebAppDatabaseTest, WebAppWithoutOptionalFields) {
   EXPECT_FALSE(app_copy->is_in_sync_install());
   EXPECT_TRUE(app_copy->sync_data().name.empty());
   EXPECT_FALSE(app_copy->sync_data().theme_color.has_value());
+  EXPECT_FALSE(app_copy->sync_data().scope.is_valid());
+  EXPECT_TRUE(app_copy->sync_data().icon_infos.empty());
   EXPECT_TRUE(app_copy->file_handlers().empty());
   EXPECT_TRUE(app_copy->additional_search_terms().empty());
 }

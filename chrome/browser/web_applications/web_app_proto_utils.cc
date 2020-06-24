@@ -7,7 +7,7 @@
 namespace web_app {
 
 base::Optional<std::vector<WebApplicationIconInfo>> ParseWebAppIconInfos(
-    const char* outer_container_name,
+    const char* container_name_for_logging,
     RepeatedIconInfosProto icon_infos_proto) {
   std::vector<WebApplicationIconInfo> icon_infos;
   for (const sync_pb::WebAppIconInfo& icon_info_proto : icon_infos_proto) {
@@ -17,12 +17,12 @@ base::Optional<std::vector<WebApplicationIconInfo>> ParseWebAppIconInfos(
       icon_info.square_size_px = icon_info_proto.size_in_px();
 
     if (!icon_info_proto.has_url()) {
-      DLOG(ERROR) << outer_container_name << " IconInfo has missing url";
+      DLOG(ERROR) << container_name_for_logging << " IconInfo has missing url";
       return base::nullopt;
     }
     icon_info.url = GURL(icon_info_proto.url());
     if (icon_info.url.is_empty() || !icon_info.url.is_valid()) {
-      DLOG(ERROR) << outer_container_name << " IconInfo has invalid url: "
+      DLOG(ERROR) << container_name_for_logging << " IconInfo has invalid url: "
                   << icon_info.url.possibly_invalid_spec();
       return base::nullopt;
     }
@@ -32,7 +32,7 @@ base::Optional<std::vector<WebApplicationIconInfo>> ParseWebAppIconInfos(
   return icon_infos;
 }
 
-base::Optional<WebApp::SyncData> ParseWebAppSyncData(
+base::Optional<WebApp::SyncData> ParseWebAppSyncDataStruct(
     const sync_pb::WebAppSpecifics& sync_proto) {
   WebApp::SyncData parsed_sync_data;
 
@@ -54,6 +54,7 @@ base::Optional<WebApp::SyncData> ParseWebAppSyncData(
       ParseWebAppIconInfos("WebAppSpecifics", sync_proto.icon_infos());
   if (!parsed_icon_infos.has_value())
     return base::nullopt;
+
   parsed_sync_data.icon_infos = std::move(parsed_icon_infos.value());
 
   return parsed_sync_data;

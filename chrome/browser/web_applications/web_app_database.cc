@@ -313,9 +313,9 @@ std::unique_ptr<WebApp> WebAppDatabase::CreateWebApp(
   }
 
   base::Optional<WebApp::SyncData> parsed_sync_data =
-      ParseWebAppSyncData(sync_data);
+      ParseWebAppSyncDataStruct(sync_data);
   if (!parsed_sync_data.has_value()) {
-    // ParseWebAppSyncData() reports any errors.
+    // ParseWebAppSyncDataStruct() reports any errors.
     return nullptr;
   }
   web_app->SetSyncData(std::move(parsed_sync_data.value()));
