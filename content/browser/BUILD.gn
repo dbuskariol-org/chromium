@@ -2103,9 +2103,7 @@ jumbo_source_set("browser") {
     ]
   }
 
-  if (!is_fuchsia) {
-    # Fuchsia does not support DevTools front-end, so only only build DevTools
-    # resources on other platforms.
+  if (!is_fuchsia && !is_android) {
     deps += [ "//content/browser/devtools:devtools_resources" ]
   }
 
