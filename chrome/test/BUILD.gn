@@ -2562,7 +2562,7 @@ if (!is_android) {
       }
     }
     if (enable_kaleidoscope) {
-      deps += [ "../browser/media/kaleidoscope/internal:browser_tests_js" ]
+      deps += [ "../browser/media/kaleidoscope/internal:browser_tests" ]
     }
     if (enable_legacy_desktop_in_product_help) {
       sources += [
