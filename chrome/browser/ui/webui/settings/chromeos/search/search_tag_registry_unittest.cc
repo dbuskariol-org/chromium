@@ -27,7 +27,7 @@ class FakeObserver : public SearchTagRegistry::Observer {
   // SearchTagRegistry::Observer:
   void OnRegistryUpdated() override { ++num_calls_; }
 
-  size_t num_calls_;
+  size_t num_calls_ = 0;
 };
 
 // Note: Copied from printing_section.cc but does not need to stay in sync with
