@@ -1211,7 +1211,7 @@ void FrameLoader::CommitDocumentLoader(
 }
 
 void FrameLoader::RestoreScrollPositionAndViewState() {
-  if (RuntimeEnabledFeatures::ForceLoadAtTopEnabled(frame_->GetDocument()) ||
+  if (RuntimeEnabledFeatures::ForceLoadAtTopEnabled(frame_->DomWindow()) ||
       !frame_->GetPage() || !GetDocumentLoader() ||
       !GetDocumentLoader()->GetHistoryItem() ||
       !GetDocumentLoader()->GetHistoryItem()->GetViewState() ||
@@ -1339,7 +1339,7 @@ void FrameLoader::ProcessFragment(const KURL& url,
   // restoration type is manual, then we should not override it unless this
   // is a same document reload.
   bool should_scroll_to_fragment =
-      !RuntimeEnabledFeatures::ForceLoadAtTopEnabled(frame_->GetDocument()) &&
+      !RuntimeEnabledFeatures::ForceLoadAtTopEnabled(frame_->DomWindow()) &&
       GetDocumentLoader()->NavigationScrollAllowed() &&
       ((load_start_type == kNavigationWithinSameDocument &&
         !IsBackForwardLoadType(frame_load_type)) ||

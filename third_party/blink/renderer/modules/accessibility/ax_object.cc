@@ -2460,8 +2460,9 @@ ax::mojom::blink::Role AXObject::DetermineAriaRoleAttribute() const {
     case ax::mojom::blink::Role::kMark:
     case ax::mojom::blink::Role::kSuggestion:
       UseCounter::Count(GetDocument(), WebFeature::kARIAAnnotations);
-      if (!RuntimeEnabledFeatures::AccessibilityExposeARIAAnnotationsEnabled(
-              GetDocument())) {
+      if (GetElement() &&
+          !RuntimeEnabledFeatures::AccessibilityExposeARIAAnnotationsEnabled(
+              GetElement()->GetExecutionContext())) {
         role = ax::mojom::blink::Role::kGenericContainer;
       }
       break;

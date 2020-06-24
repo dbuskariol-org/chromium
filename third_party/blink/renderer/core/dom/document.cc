@@ -970,10 +970,6 @@ Location* Document::location() const {
   return domWindow()->location();
 }
 
-bool Document::FeatureEnabled(OriginTrialFeature feature) const {
-  return GetOriginTrialContext()->IsFeatureEnabled(feature);
-}
-
 bool Document::DocumentPolicyFeatureObserved(
     mojom::blink::DocumentPolicyFeature feature) {
   wtf_size_t feature_index = static_cast<wtf_size_t>(feature);
@@ -1182,7 +1178,8 @@ Element* Document::CreateElementForBinding(
   bool is_v1 =
       string_or_options.IsElementCreationOptions() || !RegistrationContext();
   // V0 is only allowed with the flag.
-  DCHECK(is_v1 || RuntimeEnabledFeatures::CustomElementsV0Enabled(this));
+  DCHECK(is_v1 || RuntimeEnabledFeatures::CustomElementsV0Enabled(
+                      GetExecutionContext()));
   bool create_v1_builtin = string_or_options.IsElementCreationOptions();
   bool should_create_builtin =
       create_v1_builtin || string_or_options.IsString();
@@ -1260,7 +1257,8 @@ Element* Document::createElementNS(
   bool is_v1 =
       string_or_options.IsElementCreationOptions() || !RegistrationContext();
   // V0 is only allowed with the flag.
-  DCHECK(is_v1 || RuntimeEnabledFeatures::CustomElementsV0Enabled(this));
+  DCHECK(is_v1 || RuntimeEnabledFeatures::CustomElementsV0Enabled(
+                      GetExecutionContext()));
   bool create_v1_builtin = string_or_options.IsElementCreationOptions();
   bool should_create_builtin =
       create_v1_builtin || string_or_options.IsString();
@@ -1338,7 +1336,7 @@ ScriptValue Document::registerElement(ScriptState* script_state,
 }
 
 V0CustomElementRegistrationContext* Document::RegistrationContext() const {
-  if (RuntimeEnabledFeatures::CustomElementsV0Enabled(this))
+  if (RuntimeEnabledFeatures::CustomElementsV0Enabled(GetExecutionContext()))
     return registration_context_.Get();
   return nullptr;
 }
@@ -4374,7 +4372,7 @@ void Document::writeln(v8::Isolate* isolate,
 void Document::write(v8::Isolate* isolate,
                      TrustedHTML* text,
                      ExceptionState& exception_state) {
-  DCHECK(RuntimeEnabledFeatures::TrustedDOMTypesEnabled(this));
+  DCHECK(RuntimeEnabledFeatures::TrustedDOMTypesEnabled(GetExecutionContext()));
   write(text->toString(), EnteredDOMWindow(isolate)->document(),
         exception_state);
 }
@@ -4382,7 +4380,7 @@ void Document::write(v8::Isolate* isolate,
 void Document::writeln(v8::Isolate* isolate,
                        TrustedHTML* text,
                        ExceptionState& exception_state) {
-  DCHECK(RuntimeEnabledFeatures::TrustedDOMTypesEnabled(this));
+  DCHECK(RuntimeEnabledFeatures::TrustedDOMTypesEnabled(GetExecutionContext()));
   writeln(text->toString(), EnteredDOMWindow(isolate)->document(),
           exception_state);
 }
