@@ -126,6 +126,8 @@ class TranslateInfoBarDelegate : public infobars::InfoBarDelegate {
     return step_ == translate::TRANSLATE_STEP_TRANSLATE_ERROR;
   }
 
+  void OnErrorShown(TranslateErrors::Type error_type);
+
   // Return true if the translation was triggered by a menu entry instead of
   // via an infobar/bubble or preference.
   bool triggered_from_menu() const {
