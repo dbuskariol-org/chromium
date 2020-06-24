@@ -455,6 +455,24 @@ void DefineCursor(x11::Window window, x11::Cursor cursor) {
       .Sync();
 }
 
+x11::Window CreateDummyWindow(const std::string& name) {
+  auto* connection = x11::Connection::Get();
+  auto window = connection->GenerateId<x11::Window>();
+  connection->CreateWindow({
+      .wid = window,
+      .parent = connection->default_root(),
+      .x = -100,
+      .y = -100,
+      .width = 10,
+      .height = 10,
+      .c_class = x11::WindowClass::InputOnly,
+      .override_redirect = x11::Bool32(true),
+  });
+  if (!name.empty())
+    SetStringProperty(window, x11::Atom::WM_NAME, x11::Atom::STRING, name);
+  return window;
+}
+
 bool IsXInput2Available() {
   return DeviceDataManagerX11::GetInstance()->IsXInput2Available();
 }

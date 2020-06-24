@@ -233,6 +233,7 @@ READ_SPECIAL = set([
 WRITE_SPECIAL = set([
     ('xcb', 'ClientMessage'),
     ('xcb', 'UnmapNotify'),
+    ('xcb', 'SelectionNotify'),
 ])
 
 
