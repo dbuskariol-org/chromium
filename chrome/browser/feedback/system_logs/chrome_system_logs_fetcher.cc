@@ -26,8 +26,7 @@
 
 namespace system_logs {
 
-SystemLogsFetcher* BuildChromeSystemLogsFetcher() {
-  const bool scrub_data = true;
+SystemLogsFetcher* BuildChromeSystemLogsFetcher(bool scrub_data) {
   SystemLogsFetcher* fetcher = new SystemLogsFetcher(
       scrub_data, extension_misc::kBuiltInFirstPartyExtensionIds);
 
