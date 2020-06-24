@@ -1447,10 +1447,6 @@
       origin_trial_feature_name: "Portals",
     },
     {
-      name: "PostAnimationFrame",
-      status: "experimental",
-    },
-    {
       name: "PreciseMemoryInfo",
     },
     // Prefer not using composited scrolling. Composited scrolling will still
