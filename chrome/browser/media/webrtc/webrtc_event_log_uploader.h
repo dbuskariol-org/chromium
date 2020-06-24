@@ -147,6 +147,9 @@ class WebRtcEventLogUploaderImpl : public WebRtcEventLogUploader {
 
   // This object is in charge of the actual upload.
   std::unique_ptr<network::SimpleURLLoader> url_loader_;
+
+  // Allows releasing `this` while a task from `url_loader_` is still pending.
+  base::WeakPtrFactory<WebRtcEventLogUploaderImpl> weak_ptr_factory_{this};
 };
 
 }  // namespace webrtc_event_logging

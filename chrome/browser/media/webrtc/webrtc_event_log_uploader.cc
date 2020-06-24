@@ -298,12 +298,10 @@ void WebRtcEventLogUploaderImpl::StartUpload(const std::string& upload_data) {
   url_loader_->SetOnUploadProgressCallback(
       base::BindRepeating(OnURLLoadUploadProgress));
 
-  // See comment in destructor for an explanation about why using
-  // base::Unretained(this) is safe here.
   url_loader_->DownloadToString(
       url_loader_factory_remote.get(),
       base::BindOnce(&WebRtcEventLogUploaderImpl::OnURLLoadComplete,
-                     base::Unretained(this)),
+                     weak_ptr_factory_.GetWeakPtr()),
       kWebRtcEventLogMaxUploadIdBytes);
 }
 
