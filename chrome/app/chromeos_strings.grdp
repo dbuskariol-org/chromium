@@ -5228,6 +5228,13 @@
   <message name="IDS_EDU_LOGIN_PARENT_SIGNIN_PASSWORD_HIDE" desc="A tool tip on a button that hides the saved password that is being shown.">
     Hide password
   </message>
+
+  <!--
+    ==================================================================================
+    If you change any IDS_EDU_LOGIN_INFO_* string, update kConsentScreenTextVersion in
+    chrome/browser/chromeos/child_accounts/secondary_account_consent_logger.cc
+    to the value of "v<GERRIT_CL_NUMBER>"
+  -->
   <message name="IDS_EDU_LOGIN_INFO_COEXISTENCE_TITLE" desc="Title for the screen explaining co-existence to a parent.">
     School account information for parents
   </message>
@@ -5236,13 +5243,6 @@
     If your child uses a Chromebook in school and you wish to mirror the school experience at home to ensure your child has access to all necessary schoolwork, please sign out of this Family Link account and sign in to the school account from the Chrome OS accounts page (note: Family Link parental controls will not apply).&lt;br&gt;&lt;br&gt;
     If your child does not use a Chromebook in school or if you prefer to manage your child’s experience at home using Family Link, please click the Next button below to add a school account to this profile.
   </message>
-
-  <!--
-    ==================================================================================
-    If you change any IDS_EDU_LOGIN_INFO_* string, update kConsentScreenTextVersion in
-    chrome/browser/chromeos/child_accounts/secondary_account_consent_logger.cc
-    to the value of "v<GERRIT_CL_NUMBER>"
-  -->
   <message name="IDS_EDU_LOGIN_INFO_TITLE" desc="Title for the parent information screen in EDU account addition flow.">
     G Suite for Education accounts
   </message>
@@ -5251,23 +5251,6 @@
   </message>
   <message name="IDS_EDU_LOGIN_INFO_PARENT_SETTINGS" desc="Text informing parent about Google services that users can access, browsing data storage and Family Link parent settings.">
     G Suite for Education administrators determine which Google services their users can access while signed into a G Suite for Education account. This may include some features or services that your child was previously unable to access using this supervised  account. School administrators are required to provide or obtain consent for the use of the services by their minor users.
-  </message>
-  <message name="IDS_EDU_LOGIN_INFO_DATA_PROTECTION" desc="Text informing parent about their child's data protection.">
-    Your child's data in Classroom will be protected. <ph name="LINK_BEGIN">&lt;a target="_blank" href="$1<ex>https://support.google.com</ex>"&gt;</ph>Learn more<ph name="LINK_END">&lt;/a&gt;</ph>
-  </message>
-  <message name="IDS_EDU_LOGIN_INFO_RESOURCES_AVAILABILITY" desc="Text informing parent some resources for schoolwork might not be available.">
-    Resources for schoolwork might not be available or automatically loaded
-    Your child might not have access to:
-    <ph name="BEGIN_LIST">&lt;ul&gt;</ph>
-      <ph name="LIST_ITEM">&lt;li&gt;</ph>Applications and extensions that were installed by the school
-      <ph name="LIST_ITEM">&lt;li&gt;</ph>Bookmarks from a school Chromebook
-      <ph name="LIST_ITEM">&lt;li&gt;</ph>Autofill passwords to educational sites
-    <ph name="END_LIST">&lt;/ul&gt;</ph>
-    To get the full school experience on this device, your child should:
-    <ph name="BEGIN_OLIST">&lt;ol&gt;</ph>
-      <ph name="OLIST_ITEM">&lt;li&gt;</ph>Sign out of their Family Link managed account
-      <ph name="OLIST_ITEM">&lt;li&gt;</ph>Sign in with their GSuite for Education account on the sign-in screen. Note, however, this will mean school policies including app and website access settings will take effect over your Family Link supervision features (for instance, school administrators may allow YouTube if it’s necessary for homework, screentime would not be enforced, etc.)
-    <ph name="END_OLIST">&lt;/ol&gt;</ph>
   </message>
   <!--
     IDS_EDU_LOGIN_INFO_* strings END
