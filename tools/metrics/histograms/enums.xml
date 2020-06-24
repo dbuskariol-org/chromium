@@ -71777,6 +71777,15 @@ Full version information for the fingerprint enum values:
   <int value="2" label="Dialog canceled"/>
 </enum>
 
+<enum name="WebAppUrlLoaderResult">
+  <int value="0" label="UrlLoaded"/>
+  <int value="1" label="RedirectedUrlLoaded"/>
+  <int value="2" label="FailedUnknownReason"/>
+  <int value="3" label="FailedPageTookTooLong"/>
+  <int value="4" label="FailedWebContentsDestroyed"/>
+  <int value="5" label="FailedErrorPageLoaded"/>
+</enum>
+
 <enum name="WebAudioAutoplayStatus">
   <int value="0" label="The AudioContext failed to autoplay"/>
   <int value="1"
