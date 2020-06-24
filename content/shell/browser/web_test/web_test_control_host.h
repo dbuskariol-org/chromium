@@ -186,8 +186,8 @@ class WebTestControlHost : public WebContentsObserver,
   void Reload() override;
   void OverridePreferences(
       const content::WebPreferences& web_preferences) override;
-  void CloseRemainingWindows() override;
   void SetMainWindowHidden(bool hidden) override;
+  void CheckForLeakedWindows() override;
   void GoToOffset(int offset) override;
   void SendBluetoothManualChooserEvent(const std::string& event,
                                        const std::string& argument) override;
@@ -223,6 +223,7 @@ class WebTestControlHost : public WebContentsObserver,
   static WebTestControlHost* instance_;
 
   void DiscardMainWindow();
+  void CloseTestOpenedWindows();
 
   // Makes sure that the potentially new renderer associated with |frame| is 1)
   // initialized for the test, 2) kept up to date wrt test flags and 3)
@@ -340,6 +341,10 @@ class WebTestControlHost : public WebContentsObserver,
   base::Optional<SkBitmap> pixel_dump_;
   std::string actual_pixel_hash_;
   mojom::WebTestDumpPtr main_frame_dump_;
+  // By default a test that opens other windows will have them closed at the end
+  // of the test before checking for leaks. It may specify that it has closed
+  // any windows it opened, and thus look for leaks from them with this flag.
+  bool check_for_leaked_windows_ = false;
   bool waiting_for_pixel_results_ = false;
   bool waiting_for_main_frame_dump_ = false;
   int waiting_for_reset_done_ = 0;
