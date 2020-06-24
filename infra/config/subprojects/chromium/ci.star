@@ -424,6 +424,14 @@ ci.android_builder(
 )
 
 ci.android_builder(
+    name = 'android-marshmallow-x86-rel',
+    console_view_entry = ci.console_view_entry(
+        category = 'builder_tester|x86',
+        short_name = 'M',
+    ),
+)
+
+ci.android_builder(
     name = 'android-nougat-arm64-rel',
     console_view_entry = ci.console_view_entry(
         category = 'builder_tester|arm64',
