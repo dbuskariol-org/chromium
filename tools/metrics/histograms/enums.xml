@@ -4216,6 +4216,12 @@ Unknown properties are collapsed to zero. -->
   <int value="25" label="ZIP or state requirement: Violated"/>
 </enum>
 
+<enum name="AutofillAddressProfileImportStatus">
+  <int value="0" label="No import"/>
+  <int value="1" label="Regular import"/>
+  <int value="2" label="Import with section union"/>
+</enum>
+
 <enum name="AutofillAssistantDropOutReason">
   <int value="0" label="Autofill Assistant started"/>
   <int value="1" label="Autostart timed out"/>
