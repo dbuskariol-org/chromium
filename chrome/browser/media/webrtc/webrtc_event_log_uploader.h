@@ -67,7 +67,9 @@ class WebRtcEventLogUploaderImpl : public WebRtcEventLogUploader {
  public:
   class Factory : public WebRtcEventLogUploader::Factory {
    public:
-    ~Factory() override = default;
+    explicit Factory(scoped_refptr<base::SequencedTaskRunner> task_runner);
+
+    ~Factory() override;
 
     std::unique_ptr<WebRtcEventLogUploader> Create(
         const WebRtcLogFileInfo& log_file,
@@ -80,9 +82,13 @@ class WebRtcEventLogUploaderImpl : public WebRtcEventLogUploader {
         const WebRtcLogFileInfo& log_file,
         UploadResultCallback callback,
         size_t max_remote_log_file_size_bytes);
+
+   private:
+    scoped_refptr<base::SequencedTaskRunner> task_runner_;
   };
 
   WebRtcEventLogUploaderImpl(
+      scoped_refptr<base::SequencedTaskRunner> task_runner,
       const WebRtcLogFileInfo& log_file,
       UploadResultCallback callback,
       size_t max_remote_log_file_size_bytes);
@@ -121,6 +127,9 @@ class WebRtcEventLogUploaderImpl : public WebRtcEventLogUploader {
   // The URL used for uploading the logs.
   static const char kUploadURL[];
 
+  // The object lives on this IO-capable task runner.
+  scoped_refptr<base::SequencedTaskRunner> task_runner_;
+
   // Housekeeping information about the uploaded file (path, time of last
   // modification, associated BrowserContext).
   const WebRtcLogFileInfo log_file_;
@@ -138,9 +147,6 @@ class WebRtcEventLogUploaderImpl : public WebRtcEventLogUploader {
 
   // This object is in charge of the actual upload.
   std::unique_ptr<network::SimpleURLLoader> url_loader_;
-
-  // The object lives on this IO-capable task runner.
-  scoped_refptr<base::SequencedTaskRunner> io_task_runner_;
 };
 
 }  // namespace webrtc_event_logging

@@ -203,7 +203,7 @@ WebRtcRemoteEventLogManager::WebRtcRemoteEventLogManager(
       uploading_supported_for_connection_type_(false),
       scheduled_upload_tasks_(0),
       uploader_factory_(
-          std::make_unique<WebRtcEventLogUploaderImpl::Factory>()),
+          std::make_unique<WebRtcEventLogUploaderImpl::Factory>(task_runner)),
       task_runner_(task_runner),
       weak_ptr_factory_(
           std::make_unique<base::WeakPtrFactory<WebRtcRemoteEventLogManager>>(

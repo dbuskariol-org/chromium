@@ -81,7 +81,8 @@ class WebRtcEventLogUploaderImplTest : public ::testing::Test {
 
     EXPECT_TRUE(base::Time::FromString("30 Dec 1983", &kReasonableTime));
 
-    uploader_factory_ = std::make_unique<WebRtcEventLogUploaderImpl::Factory>();
+    uploader_factory_ = std::make_unique<WebRtcEventLogUploaderImpl::Factory>(
+        base::SequencedTaskRunnerHandle::Get());
   }
 
   ~WebRtcEventLogUploaderImplTest() override {
