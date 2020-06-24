@@ -38,6 +38,7 @@
 #include "base/memory/ptr_util.h"
 #include "base/metrics/histogram_functions.h"
 #include "base/numerics/safe_conversions.h"
+#include "base/time/time.h"
 #include "mojo/public/cpp/bindings/pending_remote.h"
 #include "services/network/public/cpp/cross_origin_embedder_policy.h"
 #include "services/network/public/mojom/cross_origin_embedder_policy.mojom.h"
@@ -1448,8 +1449,13 @@ void ServiceWorkerGlobalScope::StartFetchEvent(
     mojo::PendingRemote<mojom::blink::ServiceWorkerFetchResponseCallback>
         response_callback,
     DispatchFetchEventInternalCallback callback,
+    base::Optional<base::TimeTicks> created_time,
     int event_id) {
   DCHECK(IsContextThread());
+  if (created_time.has_value()) {
+    RecordQueuingTime(created_time.value());
+  }
+
   fetch_event_callbacks_.Set(event_id, std::move(callback));
   HeapMojoRemote<mojom::blink::ServiceWorkerFetchResponseCallback,
                  HeapMojoWrapperMode::kWithoutContextObserver>
@@ -1537,14 +1543,14 @@ void ServiceWorkerGlobalScope::DispatchFetchEventForSubresource(
         WTF::Bind(&ServiceWorkerGlobalScope::StartFetchEvent,
                   WrapWeakPersistent(this), std::move(params),
                   std::move(corp_checker), std::move(response_callback),
-                  std::move(callback)),
+                  std::move(callback), base::TimeTicks::Now()),
         CreateAbortCallback(&fetch_event_callbacks_), base::nullopt);
   } else {
     event_queue_->EnqueueNormal(
         WTF::Bind(&ServiceWorkerGlobalScope::StartFetchEvent,
                   WrapWeakPersistent(this), std::move(params),
                   std::move(corp_checker), std::move(response_callback),
-                  std::move(callback)),
+                  std::move(callback), base::TimeTicks::Now()),
         CreateAbortCallback(&fetch_event_callbacks_), base::nullopt);
   }
 }
@@ -1894,14 +1900,14 @@ void ServiceWorkerGlobalScope::DispatchFetchEventForMainResource(
         WTF::Bind(&ServiceWorkerGlobalScope::StartFetchEvent,
                   WrapWeakPersistent(this), std::move(params),
                   /*corp_checker=*/nullptr, std::move(response_callback),
-                  std::move(callback)),
+                  std::move(callback), base::nullopt),
         CreateAbortCallback(&fetch_event_callbacks_), base::nullopt);
   } else {
     event_queue_->EnqueueNormal(
         WTF::Bind(&ServiceWorkerGlobalScope::StartFetchEvent,
                   WrapWeakPersistent(this), std::move(params),
                   /*corp_checker=*/nullptr, std::move(response_callback),
-                  std::move(callback)),
+                  std::move(callback), base::TimeTicks::Now()),
         CreateAbortCallback(&fetch_event_callbacks_), base::nullopt);
   }
 }
@@ -2400,6 +2406,12 @@ void ServiceWorkerGlobalScope::NoteRespondedToFetchEvent(
   it->value -= 1;
   if (it->value == 0)
     unresponded_fetch_event_counts_.erase(it);
+}
+
+void ServiceWorkerGlobalScope::RecordQueuingTime(base::TimeTicks created_time) {
+  base::UmaHistogramMediumTimes(
+      "ServiceWorker.FetchEvent.QueuingTime",
+      created_time - base::TimeTicks::Now());
 }
 
 }  // namespace blink
