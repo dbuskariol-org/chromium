@@ -524,6 +524,9 @@ extern const char kEnableSRPIsolatedPrerendersDescription[];
 extern const char kEnableSRPIsolatedPrerenderProbingName[];
 extern const char kEnableSRPIsolatedPrerenderProbingDescription[];
 
+extern const char kEnableSRPIsolatedPrerendersNSPName[];
+extern const char kEnableSRPIsolatedPrerendersNSPDescription[];
+
 extern const char kEnableResamplingInputEventsName[];
 extern const char kEnableResamplingInputEventsDescription[];
 extern const char kEnableResamplingScrollEventsName[];

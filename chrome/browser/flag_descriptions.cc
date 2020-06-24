@@ -740,6 +740,11 @@ const char kEnableSRPIsolatedPrerenderProbingName[] =
 const char kEnableSRPIsolatedPrerenderProbingDescription[] =
     "Enable probing checks for Isolated Prerenders which will block commit.";
 
+const char kEnableSRPIsolatedPrerendersNSPName[] =
+    "Enable NoStatePrefetch on Navigation Predictor Isolated Prerenders";
+const char kEnableSRPIsolatedPrerendersNSPDescription[] =
+    "Enables NoStatePrefetch on Isolated Prerenders.";
+
 const char kDownloadAutoResumptionNativeName[] =
     "Enable download auto-resumption in native";
 const char kDownloadAutoResumptionNativeDescription[] =
