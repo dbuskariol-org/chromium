@@ -212,27 +212,25 @@ const WebRtcLogFileInfo& WebRtcEventLogUploaderImpl::GetWebRtcLogFileInfo()
   return log_file_;
 }
 
-bool WebRtcEventLogUploaderImpl::Cancel() {
+void WebRtcEventLogUploaderImpl::Cancel() {
   DCHECK(task_runner_->RunsTasksInCurrentSequence());
 
-  // The upload could already have been completed, or maybe was never properly
-  // started (due to a file read failure, etc.).
-  const bool upload_was_active = (url_loader_.get() != nullptr);
-
-  // Note that in this case, it might still be that the last bytes hit the
-  // wire right as we attempt to cancel the upload. OnURLFetchComplete, however,
-  // will not be called.
-  url_loader_.reset();
-
-  DeleteLogFile();
-  DeleteHistoryFile();
-
-  if (upload_was_active) {
-    UmaRecordWebRtcEventLoggingUpload(
-        WebRtcEventLoggingUploadUma::kUploadCancelled);
+  if (url_loader_.get() == nullptr) {
+    // Either the upload has already completed, or it never properly started.
+    return;
   }
 
-  return upload_was_active;
+  // Stop the upload.
+  url_loader_.reset();
+
+  // Note edge case - the upload might on very rare occasions already have
+  // finished, with the on-complete callback pending on the queue.
+  // In those very rare occasions, we will record the UMA for cancellation
+  // as well as the success/failure of the upload. Also, we'll post to replies
+  // back to the owner of this WebRtcEventLogUploaderImpl object.
+  UmaRecordWebRtcEventLoggingUpload(
+      WebRtcEventLoggingUploadUma::kUploadCancelled);
+  ReportResult(/*upload_successful=*/false, /*delete_history_file=*/true);
 }
 
 bool WebRtcEventLogUploaderImpl::PrepareUploadData(std::string* upload_data) {
@@ -344,7 +342,8 @@ void WebRtcEventLogUploaderImpl::OnURLLoadComplete(
   ReportResult(upload_successful);
 }
 
-void WebRtcEventLogUploaderImpl::ReportResult(bool result) {
+void WebRtcEventLogUploaderImpl::ReportResult(bool upload_successful,
+                                              bool delete_history_file) {
   DCHECK(task_runner_->RunsTasksInCurrentSequence());
 
   // * If the upload was successful, the file is no longer needed.
@@ -356,11 +355,16 @@ void WebRtcEventLogUploaderImpl::ReportResult(bool result) {
   // TODO(crbug.com/775415): Provide refined retrial behavior.
   DeleteLogFile();
 
+  if (delete_history_file) {
+    DeleteHistoryFile();
+  }
+
   // Release hold of history file, allowing it to be read, moved or deleted.
   history_file_writer_.reset();
 
   task_runner_->PostTask(
-      FROM_HERE, base::BindOnce(std::move(callback_), log_file_.path, result));
+      FROM_HERE,
+      base::BindOnce(std::move(callback_), log_file_.path, upload_successful));
 }
 
 void WebRtcEventLogUploaderImpl::DeleteLogFile() {
