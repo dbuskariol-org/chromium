@@ -64,8 +64,5 @@ paint/invalidation/media-audio-no-spurious-repaints.html [ Failure ]
 # Outline paints incorrectly with columns. Needs LayoutNGBlockFragment.
 crbug.com/1047358 paint/pagination/composited-paginated-outlined-box.html [ Failure ]
 
-# Ad frame highlight size is incorrect
-crbug.com/1047359 http/tests/subresource_filter/ad-highlight-frame-resized.html [ Pass Failure ]
-
 compositing/gestures/gesture-tapHighlight-composited-img.html [ Pass Failure ]
 http/tests/images/image-decode-in-frame.html [ Pass Failure ]
