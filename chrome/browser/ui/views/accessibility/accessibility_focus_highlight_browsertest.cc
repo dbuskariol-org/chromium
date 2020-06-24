@@ -127,11 +127,12 @@ IN_PROC_BROWSER_TEST_F(AccessibilityFocusHighlightBrowserTest,
                        MAYBE_DrawsHighlight) {
   ui_test_utils::NavigateToURL(
       browser(), GURL("data:text/html,"
-                      "<body style='background-color: rgb(204, 255, 255)'>"
-                      "<input id='textfield' style='width: 100%'>"));
+                      "<body style='background-color: rgb(204, 255, 255);'>"
+                      "<div tabindex=0 id='div'>Focusable div</div>"));
 
   AccessibilityFocusHighlight::SetNoFadeForTesting();
   AccessibilityFocusHighlight::SkipActivationCheckForTesting();
+  AccessibilityFocusHighlight::UseDefaultColorForTesting();
 
   browser()->profile()->GetPrefs()->SetBoolean(
       prefs::kAccessibilityFocusHighlightEnabled, true);
@@ -145,16 +146,16 @@ IN_PROC_BROWSER_TEST_F(AccessibilityFocusHighlightBrowserTest,
   } while (CountPercentPixelsWithColor(image, SkColorSetRGB(204, 255, 255)) <
            90.0f);
 
-  // Initially less than 0.01% of the image should be the focus ring's highlight
+  SkColor highlight_color = AccessibilityFocusHighlight::default_color_;
+
+  // Initially less than 0.05% of the image should be the focus ring's highlight
   // color.
-  SkColor highlight_color =
-      AccessibilityFocusHighlight::GetHighlightColorForTesting();
-  ASSERT_LT(CountPercentPixelsWithColor(image, highlight_color), 0.01f);
+  ASSERT_LT(CountPercentPixelsWithColor(image, highlight_color), 0.05f);
 
   // Focus something.
   content::WebContents* web_contents =
       browser()->tab_strip_model()->GetActiveWebContents();
-  std::string script("document.getElementById('textfield').focus();");
+  std::string script("document.getElementById('div').focus();");
   EXPECT_TRUE(content::ExecuteScript(web_contents, script));
 
   // Now wait until at least 0.1% of the image has the focus ring's highlight
