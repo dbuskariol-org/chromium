@@ -3694,6 +3694,7 @@ static_library("browser") {
       "//base/util/memory_pressure",
       "//base/util/timer",
       "//chrome/app/vector_icons",
+      "//chrome/browser/nearby_sharing/certificates",
       "//chrome/browser/nearby_sharing/logging",
       "//chrome/browser/nearby_sharing/proto",
       "//chrome/browser/policy:path_parser",
