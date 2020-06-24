@@ -226,6 +226,9 @@ void DefineCursor(x11::Window window, x11::Cursor cursor);
 COMPONENT_EXPORT(UI_BASE_X)
 x11::Window CreateDummyWindow(const std::string& name = "");
 
+COMPONENT_EXPORT(UI_BASE_X)
+x11::KeyCode KeysymToKeycode(x11::Connection* connection, x11::KeySym keysym);
+
 // These functions cache their results ---------------------------------
 
 // Returns true if the system supports XINPUT2.
