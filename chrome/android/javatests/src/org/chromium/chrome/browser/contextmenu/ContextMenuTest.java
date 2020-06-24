@@ -176,7 +176,7 @@ public class ContextMenuTest implements CustomMainActivityStart {
     public void
     testShopSimilarProductsFiresIntent() throws Throwable {
         LensUtils.setFakePassableLensEnvironmentForTesting(true);
-        LensUtils.setFakeImageUrlInShoppingAllowlistForTesting(true);
+        LensUtils.setFakeImageSrlUrlInAllowlist(true);
         Tab tab = mDownloadTestRule.getActivity().getActivityTab();
         ShareHelper.setIgnoreActivityNotFoundExceptionForTesting(true);
         hardcodeTestImageForSharing(TEST_JPG_IMAGE_FILE_EXTENSION);
@@ -186,8 +186,6 @@ public class ContextMenuTest implements CustomMainActivityStart {
                 "testImage", R.id.contextmenu_shop_similar_products,
                 "com.google.android.googlequicksearchbox");
     }
-
-
 
     @Test
     @MediumTest
@@ -201,7 +199,7 @@ public class ContextMenuTest implements CustomMainActivityStart {
     public void
     testShopImageWithGoogleLensFiresIntent() throws Throwable {
         LensUtils.setFakePassableLensEnvironmentForTesting(true);
-        LensUtils.setFakeImageUrlInShoppingAllowlistForTesting(true);
+        LensUtils.setFakeImageSrlUrlInAllowlist(true);
         Tab tab = mDownloadTestRule.getActivity().getActivityTab();
         ShareHelper.setIgnoreActivityNotFoundExceptionForTesting(true);
         hardcodeTestImageForSharing(TEST_JPG_IMAGE_FILE_EXTENSION);
@@ -224,7 +222,7 @@ public class ContextMenuTest implements CustomMainActivityStart {
     public void
     testSearchSimilarProductsFiresIntent() throws Throwable {
         LensUtils.setFakePassableLensEnvironmentForTesting(true);
-        LensUtils.setFakeImageUrlInShoppingAllowlistForTesting(true);
+        LensUtils.setFakeImageSrlUrlInAllowlist(true);
         Tab tab = mDownloadTestRule.getActivity().getActivityTab();
         ShareHelper.setIgnoreActivityNotFoundExceptionForTesting(true);
         hardcodeTestImageForSharing(TEST_JPG_IMAGE_FILE_EXTENSION);
@@ -545,7 +543,7 @@ public class ContextMenuTest implements CustomMainActivityStart {
     public void
     testContextMenuLensEnabledShopSimilarProducts() throws TimeoutException {
         LensUtils.setFakePassableLensEnvironmentForTesting(true);
-        LensUtils.setFakeImageUrlInShoppingAllowlistForTesting(true);
+        LensUtils.setFakeImageSrlUrlInAllowlist(true);
         Tab tab = mDownloadTestRule.getActivity().getActivityTab();
         ContextMenu menu = ContextMenuUtils.openContextMenu(tab, "testImage");
 
@@ -570,7 +568,7 @@ public class ContextMenuTest implements CustomMainActivityStart {
     public void
     testContextMenuLensEnabledShopImageWithGoogleLens() throws TimeoutException {
         LensUtils.setFakePassableLensEnvironmentForTesting(true);
-        LensUtils.setFakeImageUrlInShoppingAllowlistForTesting(true);
+        LensUtils.setFakeImageSrlUrlInAllowlist(true);
         Tab tab = mDownloadTestRule.getActivity().getActivityTab();
         ContextMenu menu = ContextMenuUtils.openContextMenu(tab, "testImage");
 
@@ -595,7 +593,7 @@ public class ContextMenuTest implements CustomMainActivityStart {
     public void
     testContextMenuLensEnabledSeachSimilarProducts() throws TimeoutException {
         LensUtils.setFakePassableLensEnvironmentForTesting(true);
-        LensUtils.setFakeImageUrlInShoppingAllowlistForTesting(true);
+        LensUtils.setFakeImageSrlUrlInAllowlist(true);
         Tab tab = mDownloadTestRule.getActivity().getActivityTab();
         ContextMenu menu = ContextMenuUtils.openContextMenu(tab, "testImage");
 
@@ -620,7 +618,7 @@ public class ContextMenuTest implements CustomMainActivityStart {
     public void
     testContextMenuLensEnabledSearchAndShopSimilarProducts() throws TimeoutException {
         LensUtils.setFakePassableLensEnvironmentForTesting(true);
-        LensUtils.setFakeImageUrlInShoppingAllowlistForTesting(true);
+        LensUtils.setFakeImageSrlUrlInAllowlist(true);
         Tab tab = mDownloadTestRule.getActivity().getActivityTab();
         ContextMenu menu = ContextMenuUtils.openContextMenu(tab, "testImage");
 
