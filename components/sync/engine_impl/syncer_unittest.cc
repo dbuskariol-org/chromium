@@ -1316,38 +1316,6 @@ TEST_F(SyncerTest, TestClientCommandDuringCommit) {
   EXPECT_EQ(9, last_client_invalidation_hint_buffer_size_);
 }
 
-TEST_F(SyncerTest, EnsureWeSendUpOldParent) {
-  syncable::Id folder_one_id = ids_.FromNumber(1);
-  syncable::Id folder_two_id = ids_.FromNumber(2);
-
-  mock_server_->AddUpdateDirectory(folder_one_id, TestIdFactory::root(),
-                                   "folder_one", 1, 1, foreign_cache_guid(),
-                                   "-1");
-  mock_server_->AddUpdateDirectory(folder_two_id, TestIdFactory::root(),
-                                   "folder_two", 1, 1, foreign_cache_guid(),
-                                   "-2");
-  EXPECT_TRUE(SyncShareNudge());
-  {
-    // A moved entry should send an "old parent."
-    syncable::WriteTransaction trans(FROM_HERE, UNITTEST, directory());
-    MutableEntry entry(&trans, GET_BY_ID, folder_one_id);
-    ASSERT_TRUE(entry.good());
-    entry.PutParentId(folder_two_id);
-    entry.PutIsUnsynced(true);
-    // A new entry should send no "old parent."
-    MutableEntry create(&trans, CREATE, BOOKMARKS, trans.root_id(),
-                        "new_folder");
-    create.PutIsUnsynced(true);
-    create.PutSpecifics(DefaultBookmarkSpecifics());
-  }
-  EXPECT_TRUE(SyncShareNudge());
-  const sync_pb::CommitMessage& commit = mock_server_->last_sent_commit();
-  ASSERT_EQ(2, commit.entries_size());
-  EXPECT_EQ("2", commit.entries(0).parent_id_string());
-  EXPECT_EQ("0", commit.entries(0).old_parent_id());
-  EXPECT_FALSE(commit.entries(1).has_old_parent_id());
-}
-
 TEST_F(SyncerTest, Test64BitVersionSupport) {
   int64_t really_big_int = std::numeric_limits<int64_t>::max() - 12;
   const string name("ringo's dang orang ran rings around my o-ring");
