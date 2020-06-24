@@ -788,13 +788,14 @@ cr.define('cr.ui.login.debug', function() {
   }
 
   class ToolPanel {
-    constructor(parent, title) {
+    constructor(parent, title, id) {
       this.titleDiv =
           /** @type {!HTMLElement} */ (document.createElement('h2'));
       this.titleDiv.textContent = title;
 
       let panel = /** @type {!HTMLElement} */ (document.createElement('div'));
       panel.className = 'debug-tool-panel';
+      panel.id = id;
 
       parent.appendChild(this.titleDiv);
       parent.appendChild(panel);
@@ -1022,7 +1023,8 @@ cr.define('cr.ui.login.debug', function() {
     }
 
     createLanguagePanel(parent) {
-      let langPanel = new ToolPanel(this.debuggerOverlay_, 'Language');
+      let langPanel = new ToolPanel(
+          this.debuggerOverlay_, 'Language', 'DebuggerPanelLanguage');
       const LANGUAGES = [
         ['English', 'en-US'],
         ['German', 'de'],
@@ -1040,7 +1042,8 @@ cr.define('cr.ui.login.debug', function() {
     }
 
     createToolsPanel(parent) {
-      let panel = new ToolPanel(this.debuggerOverlay_, 'Tools');
+      let panel =
+          new ToolPanel(this.debuggerOverlay_, 'Tools', 'DebuggerPanelTools');
       new DebugButton(
           panel.content, 'Capture screenshot', this.makeScreenshot.bind(this));
       new DebugButton(
@@ -1052,14 +1055,16 @@ cr.define('cr.ui.login.debug', function() {
     }
 
     createScreensPanel(parent) {
-      let panel = new ToolPanel(this.debuggerOverlay_, 'Screens');
+      let panel = new ToolPanel(
+          this.debuggerOverlay_, 'Screens', 'DebuggerPanelScreens');
       // List of screens will be created later, as not all screens
       // might be registered at this point.
       this.screensPanel = panel;
     }
 
     createStatesPanel(parent) {
-      let panel = new ToolPanel(this.debuggerOverlay_, 'Screen States');
+      let panel = new ToolPanel(
+          this.debuggerOverlay_, 'Screen States', 'DebuggerPanelStates');
       // List of states is rebuilt every time to reflect current screen.
       this.statesPanel = panel;
     }
@@ -1221,6 +1226,7 @@ cr.define('cr.ui.login.debug', function() {
         // Create UI Debugger button
         let button =
             /** @type {!HTMLElement} */ (document.createElement('div'));
+        button.id = 'invokeDebuggerButton';
         button.className = 'debugger-button';
         button.textContent = 'Debug';
         button.addEventListener('click', this.toggleDebugUI.bind(this));
@@ -1231,6 +1237,7 @@ cr.define('cr.ui.login.debug', function() {
         // Create base debugger panel.
         let overlay =
             /** @type {!HTMLElement} */ (document.createElement('div'));
+        overlay.id = 'debuggerOverlay';
         overlay.className = 'debugger-overlay';
         overlay.setAttribute('hidden', true);
         this.debuggerOverlay_ = overlay;
