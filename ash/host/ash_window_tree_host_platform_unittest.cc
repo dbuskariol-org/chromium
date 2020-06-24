@@ -1,25 +1,34 @@
-// Copyright 2014 The Chromium Authors. All rights reserved.
+// Copyright 2020 The Chromium Authors. All rights reserved.
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+#include "ash/host/ash_window_tree_host_platform.h"
+
+#include "ash/test/ash_test_base.h"
+
 #include "ui/ozone/public/input_controller.h"
+#include "ui/ozone/public/ozone_platform.h"
 
-#include <memory>
+namespace ash {
 
-#include "base/callback.h"
-#include "base/logging.h"
-#include "base/macros.h"
-
-namespace ui {
-
-namespace {
-
-class StubInputController : public InputController {
+class AshWindowTreeHostPlatformTest : public AshTestBase {
  public:
-  StubInputController() = default;
-  ~StubInputController() override = default;
+  AshWindowTreeHostPlatformTest() = default;
+  ~AshWindowTreeHostPlatformTest() override = default;
+};
+
+class TestInputController : public ui::InputController {
+ public:
+  TestInputController() = default;
+  ~TestInputController() override = default;
 
   // InputController:
+  void SuspendMouseAcceleration() override { acceleration_suspended_ = true; }
+  void EndMouseAccelerationSuspension() override {
+    acceleration_suspended_ = false;
+  }
+
+  // these are all stubs that are not used yet in these tests
   bool HasMouse() override { return false; }
   bool HasTouchpad() override { return false; }
   bool IsCapsLockEnabled() override { return false; }
@@ -46,8 +55,6 @@ class StubInputController : public InputController {
   void SetPrimaryButtonRight(bool right) override {}
   void SetMouseReverseScroll(bool enabled) override {}
   void SetMouseAcceleration(bool enabled) override {}
-  void SuspendMouseAcceleration() override {}
-  void EndMouseAccelerationSuspension() override {}
   void SetMouseScrollAcceleration(bool enabled) override {}
   void SetTouchpadAcceleration(bool enabled) override {}
   void SetTouchpadScrollAcceleration(bool enabled) override {}
@@ -62,20 +69,31 @@ class StubInputController : public InputController {
   void SetInternalTouchpadEnabled(bool enabled) override {}
   bool IsInternalTouchpadEnabled() const override { return false; }
   void SetTouchscreensEnabled(bool enabled) override {}
-  void SetInternalKeyboardFilter(bool enable_filter,
-                                 std::vector<DomCode> allowed_keys) override {}
+  void SetInternalKeyboardFilter(
+      bool enable_filter,
+      std::vector<ui::DomCode> allowed_keys) override {}
   void GetGesturePropertiesService(
       mojo::PendingReceiver<ui::ozone::mojom::GesturePropertiesService>
           receiver) override {}
 
+  bool GetAccelerationSuspended() { return acceleration_suspended_; }
+
  private:
-  DISALLOW_COPY_AND_ASSIGN(StubInputController);
+  // member variable used to keep track of mouse acceleration suspension
+  bool acceleration_suspended_ = false;
 };
 
-}  // namespace
+TEST_F(AshWindowTreeHostPlatformTest, UnadjustedMovement) {
+  AshWindowTreeHostPlatform host;
+  auto test_input_controller = std::make_unique<TestInputController>();
+  host.input_controller_ = test_input_controller.get();
 
-std::unique_ptr<InputController> CreateStubInputController() {
-  return std::make_unique<StubInputController>();
+  std::unique_ptr<aura::ScopedEnableUnadjustedMouseEvents>
+      unadjusted_movement_context = host.RequestUnadjustedMovement();
+  EXPECT_TRUE(unadjusted_movement_context.get() != nullptr);
+  EXPECT_TRUE(test_input_controller->GetAccelerationSuspended());
+  unadjusted_movement_context.reset();
+  EXPECT_FALSE(test_input_controller->GetAccelerationSuspended());
 }
 
-}  // namespace ui
+}  // namespace ash
