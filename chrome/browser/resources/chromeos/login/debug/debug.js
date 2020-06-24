@@ -102,6 +102,39 @@ cr.define('cr.ui.login.debug', function() {
       // Device without mouse/keyboard.
       id: 'hid-detection',
       kind: ScreenKind.NORMAL,
+      states: [
+        {
+          id: 'searching',
+          trigger: (screen) => {
+            screen.setKeyboardDeviceName('Some Keyboard');
+            screen.setPointingDeviceName('Some Mouse');
+            screen.setKeyboardState('searching');
+            screen.setMouseState('usb');
+            screen.setPinDialogVisible(false);
+          },
+        },
+        {
+          id: 'connected',
+          trigger: (screen) => {
+            screen.setKeyboardDeviceName('Some Keyboard');
+            screen.setPointingDeviceName('Some Mouse');
+            screen.setKeyboardState('connected');
+            screen.setMouseState('paired');
+            screen.setPinDialogVisible(false);
+          },
+        },
+        {
+          id: 'pairing-pin',
+          trigger: (screen) => {
+            screen.setKeyboardDeviceName('Some Keyboard');
+            screen.setPointingDeviceName('Some Mouse');
+            screen.setKeyboardState('pairing');
+            screen.setMouseState('pairing');
+            screen.setPinDialogVisible(true);
+            screen.setNumKeysEnteredPinCode(1);
+          },
+        },
+      ],
     },
     {
       // Welcome screen.
@@ -110,10 +143,76 @@ cr.define('cr.ui.login.debug', function() {
       data: {
         isDeveloperMode: true,
       },
+      states: [
+        {
+          id: 'default',
+          trigger: (screen) => {
+            screen.closeTimezoneSection_();
+          },
+        },
+        {
+          id: 'acessibility',
+          trigger: (screen) => {
+            screen.onWelcomeAccessibilityButtonClicked_();
+          },
+        },
+        {
+          id: 'languages',
+          trigger: (screen) => {
+            screen.onWelcomeSelectLanguageButtonClicked_();
+          },
+        },
+        {
+          // Available on Chromebox for meetings.
+          id: 'timezone',
+          trigger: (screen) => {
+            screen.onWelcomeTimezoneButtonClicked_();
+          },
+        },
+        {
+          // Advanced options, shown by long press on "Welcome!" title.
+          id: 'adv-options',
+          trigger: (screen) => {
+            screen.onWelcomeLaunchAdvancedOptions_();
+          },
+        },
+      ],
     },
     {
       id: 'debugging',
       kind: ScreenKind.OTHER,
+      states: [
+        {
+          id: 'remove-protection',
+          trigger: (screen) => {
+            screen.updateState(1);
+          },
+        },
+        {
+          id: 'setup',
+          trigger: (screen) => {
+            screen.updateState(2);
+          },
+        },
+        {
+          id: 'wait',
+          trigger: (screen) => {
+            screen.updateState(3);
+          },
+        },
+        {
+          id: 'done',
+          trigger: (screen) => {
+            screen.updateState(4);
+          },
+        },
+        {
+          id: 'error',
+          trigger: (screen) => {
+            screen.updateState(-1);
+          },
+        },
+      ],
     },
     {
       id: 'demo-preferences',
@@ -127,11 +226,35 @@ cr.define('cr.ui.login.debug', function() {
     {
       id: 'eula',
       kind: ScreenKind.NORMAL,
+      // TODO: Current logic triggers switching screens in focus(), making
+      // it impossible to trigger  installation settings dialog.
+      skipScreenshots: true,
     },
     {
       id: 'demo-setup',
       kind: ScreenKind.OTHER,
       suffix: 'demo',
+      states: [
+        {
+          id: 'progress',
+          trigger: (screen) => {
+            screen.setCurrentSetupStep('enrollment');
+          },
+        },
+        {
+          id: 'done',
+          trigger: (screen) => {
+            screen.setCurrentSetupStep('complete');
+            screen.onSetupSucceeded();
+          },
+        },
+        {
+          id: 'error',
+          trigger: (screen) => {
+            screen.onSetupFailed('Some error message', true);
+          },
+        },
+      ],
     },
     {
       id: 'oobe-update',
@@ -191,6 +314,52 @@ cr.define('cr.ui.login.debug', function() {
       id: 'enterprise-enrollment',
       kind: ScreenKind.NORMAL,
       suffix: 'E',
+      states: [
+        {
+          id: 'signin',
+          trigger: (screen) => {
+            screen.showStep('signin');
+          },
+        },
+        {
+          id: 'working',
+          trigger: (screen) => {
+            screen.showStep('working');
+          },
+        },
+        {
+          id: 'attributes',
+          trigger: (screen) => {
+            screen.showStep('attribute-prompt');
+          },
+        },
+        {
+          id: 'success',
+          trigger: (screen) => {
+            screen.showStep('success');
+          },
+        },
+        {
+          id: 'error',
+          trigger: (screen) => {
+            screen.showError('Some error message', true);
+          },
+        },
+        {
+          id: 'ad-join-encrypted',
+          trigger: (screen) => {
+            screen.setAdJoinParams('machineName', 'userName', 0, true);
+            screen.showStep('ad-join');
+          },
+        },
+        {
+          id: 'ad-join',
+          trigger: (screen) => {
+            screen.setAdJoinParams('machineName', 'userName', 0, false);
+            screen.showStep('ad-join');
+          },
+        },
+      ],
     },
     {
       id: 'packaged-license',
