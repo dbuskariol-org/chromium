@@ -34,7 +34,6 @@ extern "C" {
 #include <X11/extensions/Xrandr.h>
 #include <X11/extensions/Xrender.h>
 #include <X11/extensions/record.h>
-#include <X11/extensions/scrnsaver.h>
 #include <X11/extensions/shape.h>
 #include <X11/extensions/sync.h>
 
