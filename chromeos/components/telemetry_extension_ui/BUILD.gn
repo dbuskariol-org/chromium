@@ -10,6 +10,8 @@ static_library("telemetry_extension_ui") {
   sources = [
     "probe_service.cc",
     "probe_service.h",
+    "probe_service_converters.cc",
+    "probe_service_converters.h",
     "telemetry_extension_ui.cc",
     "telemetry_extension_ui.h",
     "url_constants.cc",
@@ -25,5 +27,20 @@ static_library("telemetry_extension_ui") {
     "//chromeos/services/cros_healthd/public/mojom",
     "//content/public/browser",
     "//ui/webui",
+  ]
+}
+
+source_set("unit_tests") {
+  testonly = true
+  sources = [ "probe_service_converters_unittest.cc" ]
+  deps = [
+    ":telemetry_extension_ui",
+    "//base",
+    "//base/test:test_support",
+    "//chromeos/components/telemetry_extension_ui/mojom",
+    "//chromeos/dbus/cros_healthd",
+    "//chromeos/services/cros_healthd/public/mojom",
+    "//testing/gmock",
+    "//testing/gtest",
   ]
 }

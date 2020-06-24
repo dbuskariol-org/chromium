@@ -30,6 +30,10 @@ test("chromeos_components_unittests") {
     "//chromeos/components/trial_group:unit_tests",
     "//mojo/core/embedder",
   ]
+
+  if (!is_official_build) {
+    deps += [ "//chromeos/components/telemetry_extension_ui:unit_tests" ]
+  }
 }
 
 group("closure_compile") {
