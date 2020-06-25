@@ -101,6 +101,8 @@ void PrintCompositeClient::RenderFrameDeleted(
     // When a subframe we are expecting is deleted, we should notify print
     // compositor service.
     for (int doc_cookie : iter->second) {
+      if (!base::Contains(compositor_map_, doc_cookie))
+        continue;
       auto* compositor = GetCompositeRequest(doc_cookie);
       compositor->NotifyUnavailableSubframe(frame_guid);
     }
@@ -128,6 +130,9 @@ void PrintCompositeClient::OnDidPrintFrameContent(
                                          std::move(params));
     return;
   }
+
+  if (!base::Contains(compositor_map_, document_cookie))
+    return;
 
   // Content in |params| is sent from untrusted source; only minimal processing
   // is done here. Most of it will be directly forwarded to print compositor
@@ -215,7 +220,7 @@ void PrintCompositeClient::DoPrepareForDocumentToPdf(
   DCHECK(!GetIsDocumentConcurrentlyComposited(document_cookie));
 
   is_doc_concurrently_composited_set_.insert(document_cookie);
-  auto* compositor = GetCompositeRequest(document_cookie);
+  auto* compositor = CreateCompositeRequest(document_cookie);
   compositor->PrepareForDocumentToPdf(
       base::BindOnce(&PrintCompositeClient::OnDidPrepareForDocumentToPdf,
                      std::move(callback)));
@@ -248,7 +253,7 @@ void PrintCompositeClient::DoCompositeDocumentToPdf(
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   DCHECK(!GetIsDocumentConcurrentlyComposited(document_cookie));
 
-  auto* compositor = GetCompositeRequest(document_cookie);
+  auto* compositor = CreateCompositeRequest(document_cookie);
   auto region = content.metafile_data_region.Duplicate();
 
   // Since this class owns compositor, compositor will be gone when this class
@@ -307,24 +312,10 @@ bool PrintCompositeClient::GetIsDocumentConcurrentlyComposited(
   return base::Contains(is_doc_concurrently_composited_set_, cookie);
 }
 
-mojom::PrintCompositor* PrintCompositeClient::GetCompositeRequest(int cookie) {
-  auto iter = compositor_map_.find(cookie);
-  if (iter != compositor_map_.end()) {
-    DCHECK(iter->second.is_bound());
-    return iter->second.get();
-  }
+mojom::PrintCompositor* PrintCompositeClient::CreateCompositeRequest(
+    int cookie) {
+  DCHECK(!base::Contains(compositor_map_, cookie));
 
-  iter = compositor_map_.emplace(cookie, CreateCompositeRequest()).first;
-  return iter->second.get();
-}
-
-void PrintCompositeClient::RemoveCompositeRequest(int cookie) {
-  size_t erased = compositor_map_.erase(cookie);
-  DCHECK_EQ(erased, 1u);
-}
-
-mojo::Remote<mojom::PrintCompositor>
-PrintCompositeClient::CreateCompositeRequest() {
   auto compositor = content::ServiceProcessHost::Launch<mojom::PrintCompositor>(
       content::ServiceProcessHost::Options()
           .WithDisplayName(IDS_PRINT_COMPOSITOR_SERVICE_DISPLAY_NAME)
@@ -341,7 +332,23 @@ PrintCompositeClient::CreateCompositeRequest() {
       std::move(discardable_memory_manager));
   compositor->SetWebContentsURL(web_contents()->GetLastCommittedURL());
   compositor->SetUserAgent(user_agent_);
-  return compositor;
+
+  mojom::PrintCompositor* compositor_ptr = compositor.get();
+  compositor_map_.emplace(cookie, std::move(compositor));
+  return compositor_ptr;
+}
+
+void PrintCompositeClient::RemoveCompositeRequest(int cookie) {
+  size_t erased = compositor_map_.erase(cookie);
+  DCHECK_EQ(erased, 1u);
+}
+
+mojom::PrintCompositor* PrintCompositeClient::GetCompositeRequest(
+    int cookie) const {
+  auto iter = compositor_map_.find(cookie);
+  DCHECK(iter != compositor_map_.end());
+  DCHECK(iter->second.is_bound());
+  return iter->second.get();
 }
 
 const mojo::AssociatedRemote<mojom::PrintRenderFrame>&

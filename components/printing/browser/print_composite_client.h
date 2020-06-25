@@ -117,15 +117,19 @@ class PrintCompositeClient
                               int document_cookie,
                               mojom::DidPrintContentParamsPtr params);
 
-  // Get the request or create a new one if none exists.
-  // Since printed pages always share content with its document, they share the
-  // same composite request.
-  mojom::PrintCompositor* GetCompositeRequest(int cookie);
+  // Creates a new composite request and stores it in |compositor_map_| for a
+  // given document |cookie|. Since printed pages always share content with its
+  // document, they share the same composite request. Launches the compositor in
+  // a separate process.
+  // Returns the created composite request.
+  mojom::PrintCompositor* CreateCompositeRequest(int cookie);
 
   // Remove an existing request from |compositor_map_|.
   void RemoveCompositeRequest(int cookie);
 
-  mojo::Remote<mojom::PrintCompositor> CreateCompositeRequest();
+  // Get the composite request of a document. |cookie| must be valid and
+  // |compositor_map_|.
+  mojom::PrintCompositor* GetCompositeRequest(int cookie) const;
 
   // Helper method to fetch the PrintRenderFrame remote interface pointer
   // associated with a given subframe.
