@@ -6751,7 +6751,9 @@ crbug.com/v8/10556 external/wpt/wasm/jsapi/instance/constructor-caching.any.work
 crbug.com/1011811 http/tests/devtools/network/network-xhr-data-received-async-response-type-blob.js [ Pass Failure ]
 crbug.com/1011811 http/tests/devtools/network/download.js [ Pass Failure ]
 crbug.com/1011811 http/tests/devtools/sxg/sxg-disable-cache.js [ Pass Failure ]
+
 crbug.com/1080609 virtual/threaded/external/wpt/scroll-animations/element-based-offset.html [ Pass Failure ]
+crbug.com/1080609 virtual/threaded/external/wpt/scroll-animations/element-based-offset-clamp.html [ Pass Failure ]
 
 # Fails when test moved to use full compositor pipe.
 crbug.com/1085832 [ Fuchsia ] images/size-failure.html [ Timeout ]
@@ -6898,5 +6900,3 @@ crbug.com/867532 [ Linux ] http/tests/workers/worker-usecounter.html [ Pass Time
 crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry.html [ Pass Crash Timeout ]
 crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry-different-function-realm.html [ Pass Crash Timeout ]
 
-#Sheriff 2020-06-25
-crbug.com/1099346 [ Win10 ] virtual/threaded/external/wpt/scroll-animations/element-based-offset-clamp.html [ Pass Failure ]
