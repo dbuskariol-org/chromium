@@ -9376,7 +9376,6 @@ histogram as enum -->
   <int value="503" label="Shelf Alignment Right"/>
   <int value="504" label="Shelf Alignment Bottom"/>
   <int value="505" label="Change Wallpaper"/>
-  <int value="506" label="Display Settings"/>
 </enum>
 
 <enum name="ChromeOSUsbEventTiming">
