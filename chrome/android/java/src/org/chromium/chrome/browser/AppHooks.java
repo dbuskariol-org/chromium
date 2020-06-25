@@ -47,7 +47,6 @@ import org.chromium.chrome.browser.sync.TrustedVaultClient;
 import org.chromium.chrome.browser.tab.Tab;
 import org.chromium.chrome.browser.usage_stats.DigitalWellbeingClient;
 import org.chromium.chrome.browser.webapps.GooglePlayWebApkInstallDelegate;
-import org.chromium.chrome.browser.webauth.Fido2ApiHandler;
 import org.chromium.chrome.browser.xsurface.ProcessScope;
 import org.chromium.chrome.browser.xsurface.SurfaceDependencyProvider;
 import org.chromium.components.browser_ui.widget.FeatureHighlightProvider;
@@ -296,14 +295,6 @@ public abstract class AppHooks {
      */
     public FeedbackSourceProvider getAdditionalFeedbackSources() {
         return new FeedbackSourceProvider() {};
-    }
-
-    /**
-     * @return a new {@link Fido2ApiHandler} instance.
-     */
-    public Fido2ApiHandler createFido2ApiHandler() {
-        // TODO(nsatragno): remove after cleaning up Fido2ApiHandlerInternal.
-        return new Fido2ApiHandler();
     }
 
     /**
