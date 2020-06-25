@@ -4000,6 +4000,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "shared-highlighting-ios",
+    "owners": ["tmartino"],
+    "expiry_milestone": 90
+  },
+  {
     "name": "sharing-device-expiration",
     "owners": [ "//chrome/browser/sharing/OWNERS" ],
     "expiry_milestone": 86
