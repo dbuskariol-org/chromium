@@ -51,12 +51,8 @@ def GetBuildOutputDirectory(src_dir=None, cros_board=None):
     return os.path.join(src_dir, out_dirname)
   assert not cros_board, "'cros_board' not supported on this platform"
 
-  if sys.platform == 'darwin':
-    if AreNinjaFilesNewerThanXcodeFiles(src_dir):
-      return os.path.join(src_dir, 'out')
-    return os.path.join(src_dir, 'xcodebuild')
-
-  if sys.platform == 'cygwin' or sys.platform.startswith('win'):
+  if sys.platform == 'cygwin' or sys.platform.startswith('win') or (
+      sys.platorm == 'darwin'):
     return os.path.join(src_dir, 'out')
 
   raise NotImplementedError('Unexpected platform %s' % sys.platform)

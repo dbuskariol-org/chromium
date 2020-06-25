@@ -23,7 +23,7 @@ import subprocess
 import sys
 import tempfile
 
-from slave import build_directory
+import build_directory
 
 
 SRC_DIR = os.path.abspath(
