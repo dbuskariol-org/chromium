@@ -6896,3 +6896,6 @@ crbug.com/867532 [ Linux ] http/tests/workers/worker-usecounter.html [ Pass Time
 # Tests blocking WPT importer
 crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry.html [ Pass Crash Timeout ]
 crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry-different-function-realm.html [ Pass Crash Timeout ]
+
+#Sheriff 2020-06-25
+crbug.com/1099346 [ Win10 ] virtual/threaded/external/wpt/scroll-animations/element-based-offset-clamp.html [ Pass Failure ]
