@@ -6073,7 +6073,6 @@ crbug.com/1010032 [ Win7 ] virtual/text-antialias/fallback-traits-fixup.html [ F
 crbug.com/1010032 [ Win7 ] virtual/text-antialias/international/bold-bengali.html [ Failure ]
 crbug.com/1010032 [ Win7 ] virtual/text-antialias/selection/khmer-selection.html [ Failure ]
 crbug.com/1010032 [ Win7 ] fast/writing-mode/Kusa-Makura-background-canvas.html [ Failure ]
-crbug.com/1010170 [ Mac ] media/video-played-reset.html [ Failure ]
 
 # Sheriff 2019-10-02
 crbug.com/1010483 [ Win ] fast/parser/residual-style-dom.html [ Crash Pass ]
@@ -6900,3 +6899,5 @@ crbug.com/867532 [ Linux ] http/tests/workers/worker-usecounter.html [ Pass Time
 crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry.html [ Pass Crash Timeout ]
 crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry-different-function-realm.html [ Pass Crash Timeout ]
 
+#Sheriff 2020-06-25
+crbug.com/1010170 media/video-played-reset.html [ Pass Failure ]
