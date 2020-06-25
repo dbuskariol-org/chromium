@@ -40,10 +40,8 @@ import org.chromium.components.browser_ui.bottomsheet.BottomSheetContent;
 import org.chromium.components.browser_ui.bottomsheet.BottomSheetController;
 import org.chromium.components.feed.proto.FeedUiProto.SharedState;
 import org.chromium.components.feed.proto.FeedUiProto.Slice;
-import org.chromium.components.feed.proto.FeedUiProto.Slice.SliceDataCase;
 import org.chromium.components.feed.proto.FeedUiProto.StreamUpdate;
 import org.chromium.components.feed.proto.FeedUiProto.StreamUpdate.SliceUpdate;
-import org.chromium.components.feed.proto.FeedUiProto.StreamUpdate.SliceUpdate.UpdateCase;
 import org.chromium.components.signin.base.CoreAccountInfo;
 import org.chromium.components.signin.identitymanager.ConsentLevel;
 import org.chromium.content_public.browser.LoadUrlParams;
@@ -314,7 +312,7 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
             newContentList.add(mContentManager.getContent(i));
         }
         for (SliceUpdate sliceUpdate : streamUpdate.getUpdatedSlicesList()) {
-            if (sliceUpdate.getUpdateCase() == UpdateCase.SLICE) {
+            if (sliceUpdate.hasSlice()) {
                 newContentList.add(createContentFromSlice(sliceUpdate.getSlice()));
             } else {
                 String existingSliceId = sliceUpdate.getSliceId();
@@ -379,10 +377,10 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
 
     private FeedListContentManager.FeedContent createContentFromSlice(Slice slice) {
         String sliceId = slice.getSliceId();
-        if (slice.getSliceDataCase() == SliceDataCase.XSURFACE_SLICE) {
+        if (slice.hasXsurfaceSlice()) {
             return new FeedListContentManager.ExternalViewContent(
                     sliceId, slice.getXsurfaceSlice().getXsurfaceFrame().toByteArray());
-        } else if (slice.getSliceDataCase() == SliceDataCase.LOADING_SPINNER_SLICE) {
+        } else if (slice.hasLoadingSpinnerSlice()) {
             return new FeedListContentManager.NativeViewContent(sliceId, R.layout.feed_spinner);
         } else {
             // TODO(jianli): Create native view for ZeroStateSlice.
