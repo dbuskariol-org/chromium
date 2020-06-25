@@ -26,6 +26,8 @@ class AppServiceProxy;
 
 namespace chromeos {
 namespace settings {
+class Hierarchy;
+class OsSettingsManager;
 class SearchHandler;
 }
 }  // namespace chromeos
@@ -107,7 +109,8 @@ class OsSettingsProvider
   // and checking for alternate matches is enough.
   std::vector<chromeos::settings::mojom::SearchResultPtr> FilterResults(
       const base::string16& query,
-      const std::vector<chromeos::settings::mojom::SearchResultPtr>& results);
+      const std::vector<chromeos::settings::mojom::SearchResultPtr>& results,
+      const chromeos::settings::Hierarchy* hierarchy);
 
   void OnLoadIcon(apps::mojom::IconValuePtr icon_value);
 
@@ -119,7 +122,9 @@ class OsSettingsProvider
   float min_score_for_alternates_ = 0.4f;
 
   Profile* const profile_;
-  chromeos::settings::SearchHandler* const search_handler_;
+  chromeos::settings::OsSettingsManager* const settings_manager_;
+  chromeos::settings::SearchHandler* search_handler_;
+  const chromeos::settings::Hierarchy* hierarchy_;
   apps::AppServiceProxy* app_service_proxy_;
   gfx::ImageSkia icon_;
 
