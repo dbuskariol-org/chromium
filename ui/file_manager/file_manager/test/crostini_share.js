@@ -75,9 +75,10 @@ shareBase.testSharePaths = async (
   const googleDrive = '#directory-tree .tree-item [volume-type-icon="drive"]';
   const menuHidden = '#file-context-menu[hidden]';
   const androidRoot = '#directory-tree [volume-type-icon="android_files"]';
-
   const shareLabel = {'termina': 'Linux apps', 'PvmDefault': 'Plugin VM'};
   const givePermission = `Give ${shareLabel[vmName]} permission to modify `;
+  const shareMessageShown = '#files-message:not([hidden])';
+  const shareMessageHidden = '#files-message[hidden]';
 
   const oldSharePaths = chrome.fileManagerPrivate.sharePathsWithCrostini;
   let sharePathsCalled = false;
@@ -149,6 +150,14 @@ shareBase.testSharePaths = async (
   const lastEnumUma = chrome.metricsPrivate.values_.pop();
   assertEquals('FileBrowser.MenuItemSelected', lastEnumUma[0].metricName);
   assertEquals(enumUma, lastEnumUma[1]);
+
+  // Click 'photos directory and ensure share message is shown.
+  assertTrue(test.fakeMouseDoubleClick(photos), 'click photos');
+  await test.waitForElement(shareMessageShown);
+
+  // Go back to 'My files' and ensure message is not shown.
+  assertTrue(test.fakeMouseDoubleClick(myFilesDirTree), 'click My files');
+  await test.waitForElement(shareMessageHidden);
 
   // Dispatch unshare event which is normally initiated when the user
   // manages shared paths in the settings page.

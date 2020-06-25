@@ -41,6 +41,8 @@ testcase.sharePathWithCrostini = async () => {
       '[command="#share-with-linux"]:not([hidden]):not([disabled])';
   const menuNoShareWithLinux = '#file-context-menu:not([hidden]) ' +
       '[command="#share-with-linux"][hidden][disabled="disabled"]';
+  const shareMessageShown = '#files-message:not([hidden])';
+  const shareMessageHidden = '#files-message[hidden]';
 
   const appId =
       await setupAndWaitUntilReady(RootPath.DOWNLOADS, [ENTRIES.photos], []);
@@ -70,6 +72,11 @@ testcase.sharePathWithCrostini = async () => {
   await remoteCall.callRemoteTestUtil(
       'fakeMouseRightClick', appId, ['#file-list [file-name="photos"']);
   await remoteCall.waitForElement(appId, menuNoShareWithLinux);
+
+  // Click 'photos' to go in photos directory, ensure share message is shown.
+  await remoteCall.waitForElement(appId, shareMessageHidden);
+  remoteCall.callRemoteTestUtil('fakeMouseDoubleClick', appId, [photos]);
+  await remoteCall.waitForElement(appId, shareMessageShown);
 };
 
 testcase.pluginVmDirectoryNotSharedErrorDialog = async () => {
