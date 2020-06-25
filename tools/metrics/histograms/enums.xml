@@ -10389,6 +10389,28 @@ histogram as enum -->
   <int value="2" label="Read Text"/>
 </enum>
 
+<enum name="ClipboardFormatRead">
+  <int value="0" label="Text"/>
+  <int value="1" label="Html"/>
+  <int value="2" label="Rtf"/>
+  <int value="3" label="Image"/>
+  <int value="4" label="Bookmark"/>
+  <int value="5" label="Data"/>
+  <int value="6" label="CustomData"/>
+  <int value="7" label="WebSmartPaste"/>
+</enum>
+
+<enum name="ClipboardFormatWrite">
+  <int value="0" label="Text"/>
+  <int value="1" label="Html"/>
+  <int value="2" label="Rtf"/>
+  <int value="3" label="Image"/>
+  <int value="4" label="Bookmark"/>
+  <int value="5" label="Data"/>
+  <int value="6" label="CustomData"/>
+  <int value="7" label="WebSmartPaste"/>
+</enum>
+
 <enum name="ClockdriftLevel">
   <int value="0" label="None"/>
   <int value="1" label="Probable"/>
