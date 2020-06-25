@@ -330,4 +330,12 @@ class TasksView extends CoordinatorLayoutForPointer {
                         .getLayoutParams();
         params.topMargin = topMargin;
     }
+
+    /**
+     * Set the visibility of the trendy terms section.
+     * @param isVisible whether the trendy terms section is visible or not.
+     */
+    void setTrendyTermsVisibility(boolean isVisible) {
+        findViewById(R.id.trendy_terms_recycler_view).setVisibility(isVisible ? VISIBLE : GONE);
+    }
 }

@@ -22698,6 +22698,15 @@ should be able to be added at any place in this file.
   </description>
 </action>
 
+<action name="StartSurface.TrendyTerms">
+  <owner>wychen@chromium.org</owner>
+  <owner>yuezhanggg@chromium.org</owner>
+  <description>
+    Metric record when the trendy terms start surface is shown (the user taps
+    the tab switcher button or on chrome start).
+  </description>
+</action>
+
 <action name="StartSurface.TwoPanes">
   <owner>gogerald@chromium.org</owner>
   <description>

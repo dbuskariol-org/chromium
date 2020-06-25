@@ -29,6 +29,14 @@
                 android:orientation="horizontal"
                 android:paddingBottom="@dimen/tasks_view_items_vertical_spacing" />
         </HorizontalScrollView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/trendy_terms_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone">
+        </androidx.recyclerview.widget.RecyclerView>
         <LinearLayout
             android:id="@+id/tab_switcher_title"
             android:layout_width="match_parent"

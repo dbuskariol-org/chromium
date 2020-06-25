@@ -13,6 +13,7 @@ import static androidx.test.espresso.action.ViewActions.pressKey;
 import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.Visibility.GONE;
+import static androidx.test.espresso.matcher.ViewMatchers.Visibility.VISIBLE;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withEffectiveVisibility;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -200,18 +201,20 @@ public class StartSurfaceTest {
     @DisabledTest(message = "crbug.com/1084176")
     @CommandLineFlags.Add({BASE_PARAMS + "/tasksonly"})
     public void testShow_TasksOnly() {
+        final ChromeTabbedActivity cta = mActivityTestRule.getActivity();
         if (!mImmediateReturn) {
-            TabUiTestHelper.enterTabSwitcher(mActivityTestRule.getActivity());
+            TabUiTestHelper.enterTabSwitcher(cta);
         }
         onViewWaiting(allOf(withId(R.id.primary_tasks_surface_view), isDisplayed()));
         onView(withId(org.chromium.chrome.tab_ui.R.id.mv_tiles_container))
                 .check(matches(isDisplayed()));
         onView(withId(org.chromium.chrome.tab_ui.R.id.tasks_surface_body))
                 .check(matches(isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.trendy_terms_recycler_view))
+                .check(matches(withEffectiveVisibility(GONE)));
 
-        TestThreadUtils.runOnUiThreadBlocking(
-                () -> mActivityTestRule.getActivity().getLayoutManager().hideOverview(false));
-        assertFalse(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
+        TestThreadUtils.runOnUiThreadBlocking(() -> cta.getLayoutManager().hideOverview(false));
+        assertFalse(cta.getLayoutManager().overviewVisible());
     }
 
     @Test
@@ -232,6 +235,63 @@ public class StartSurfaceTest {
                 .check(matches(withEffectiveVisibility(GONE)));
         onView(withId(org.chromium.chrome.tab_ui.R.id.tasks_surface_body))
                 .check(matches(isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.trendy_terms_recycler_view))
+                .check(matches(withEffectiveVisibility(GONE)));
+
+        if (!isInstantReturn()) {
+            // TODO(crbug.com/1076274): fix toolbar to make incognito switch part of the view.
+            onView(withId(org.chromium.chrome.tab_ui.R.id.incognito_switch))
+                    .check(matches(withEffectiveVisibility(GONE)));
+        }
+        mActivityTestRule.waitForActivityNativeInitializationComplete();
+
+        TabUiTestHelper.createTabs(cta, true, 1);
+        TabUiTestHelper.verifyTabModelTabCount(cta, 1, 1);
+        if (isInstantReturn()) {
+            // TODO(crbug.com/1076274): fix toolbar to avoid wrongly focusing on the toolbar
+            // omnibox.
+            return;
+        }
+        TabUiTestHelper.enterTabSwitcher(cta);
+        if (!isInstantReturn()) {
+            // TODO(crbug.com/1076274): fix toolbar to make incognito switch part of the view.
+            onView(withId(org.chromium.chrome.tab_ui.R.id.incognito_switch))
+                    .check(matches(isDisplayed()));
+        }
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> cta.getTabModelSelector().getModel(true).closeAllTabs());
+        TabUiTestHelper.verifyTabModelTabCount(cta, 1, 0);
+        assertTrue(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
+        if (!isInstantReturn()) {
+            // TODO(crbug.com/1076274): fix toolbar to make incognito switch part of the view.
+            onView(withId(org.chromium.chrome.tab_ui.R.id.incognito_switch))
+                    .check(matches(withEffectiveVisibility(GONE)));
+        }
+
+        TestThreadUtils.runOnUiThreadBlocking(
+                () -> mActivityTestRule.getActivity().getLayoutManager().hideOverview(false));
+        assertFalse(mActivityTestRule.getActivity().getLayoutManager().overviewVisible());
+    }
+
+    @Test
+    @MediumTest
+    @Feature({"StartSurface"})
+    // clang-format off
+    @CommandLineFlags.Add({BASE_PARAMS + "/trendyterms" +
+            "/hide_switch_when_no_incognito_tabs/true"})
+    public void testShow_TrendyTerms() {
+        // clang-format on
+        final ChromeTabbedActivity cta = mActivityTestRule.getActivity();
+        if (!mImmediateReturn) {
+            TabUiTestHelper.enterTabSwitcher(cta);
+        }
+        onViewWaiting(allOf(withId(R.id.primary_tasks_surface_view), isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.mv_tiles_container))
+                .check(matches(withEffectiveVisibility(GONE)));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.tasks_surface_body))
+                .check(matches(isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.trendy_terms_recycler_view))
+                .check(matches(withEffectiveVisibility(VISIBLE)));
 
         if (!isInstantReturn()) {
             // TODO(crbug.com/1076274): fix toolbar to make incognito switch part of the view.
@@ -284,6 +344,8 @@ public class StartSurfaceTest {
                 .check(matches(isDisplayed()));
         onView(withId(org.chromium.chrome.tab_ui.R.id.tasks_surface_body))
                 .check(matches(isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.trendy_terms_recycler_view))
+                .check(matches(withEffectiveVisibility(GONE)));
 
         onView(withId(R.id.ss_explore_tab)).perform(click());
         onViewWaiting(withId(R.id.start_surface_explore_view));
@@ -319,6 +381,8 @@ public class StartSurfaceTest {
                 .check(matches(isDisplayed()));
         onView(withId(org.chromium.chrome.tab_ui.R.id.tasks_surface_body))
                 .check(matches(isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.trendy_terms_recycler_view))
+                .check(matches(withEffectiveVisibility(GONE)));
 
         // Note that onView(R.id.more_tabs).perform(click()) can not be used since it requires 90
         // percent of the view's area is displayed to the users. However, this view has negative
@@ -378,6 +442,8 @@ public class StartSurfaceTest {
                 .check(matches(isDisplayed()));
         onView(withId(org.chromium.chrome.tab_ui.R.id.tasks_surface_body))
                 .check(matches(isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.trendy_terms_recycler_view))
+                .check(matches(withEffectiveVisibility(GONE)));
 
         if (!isInstantReturn()) {
             // TODO(crbug.com/1076274): fix toolbar to make incognito switch part of the view.
@@ -445,6 +511,8 @@ public class StartSurfaceTest {
                 .check(matches(isDisplayed()));
         onView(withId(org.chromium.chrome.tab_ui.R.id.tasks_surface_body))
                 .check(matches(isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.trendy_terms_recycler_view))
+                .check(matches(withEffectiveVisibility(GONE)));
 
         if (!isInstantReturn()) {
             // TODO(crbug.com/1076274): fix toolbar to make incognito switch part of the view.
@@ -511,6 +579,8 @@ public class StartSurfaceTest {
                 .check(matches(isDisplayed()));
         onView(withId(org.chromium.chrome.tab_ui.R.id.tasks_surface_body))
                 .check(matches(isDisplayed()));
+        onView(withId(org.chromium.chrome.tab_ui.R.id.trendy_terms_recycler_view))
+                .check(matches(withEffectiveVisibility(GONE)));
 
         onView(withId(org.chromium.chrome.tab_ui.R.id.incognito_switch))
                 .check(matches(withEffectiveVisibility(GONE)));
