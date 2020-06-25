@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.components.sync;
+package org.chromium.chrome.browser.sync;
 
 import android.accounts.Account;
 import android.annotation.SuppressLint;
@@ -21,6 +21,8 @@ import org.chromium.base.StrictModeContext;
 import org.chromium.base.ThreadUtils;
 import org.chromium.components.signin.AccountManagerFacadeProvider;
 import org.chromium.components.signin.ChromeSigninController;
+import org.chromium.components.sync.SyncContentResolverDelegate;
+import org.chromium.components.sync.SystemSyncContentResolverDelegate;
 
 import javax.annotation.concurrent.ThreadSafe;
 

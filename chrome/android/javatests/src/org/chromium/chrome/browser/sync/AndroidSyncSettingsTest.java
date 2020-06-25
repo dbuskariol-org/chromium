@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.components.sync;
+package org.chromium.chrome.browser.sync;
 
 import android.accounts.Account;
 import android.os.Bundle;
@@ -21,11 +21,11 @@ import org.chromium.base.ThreadUtils;
 import org.chromium.base.test.BaseJUnit4ClassRunner;
 import org.chromium.base.test.util.CallbackHelper;
 import org.chromium.base.test.util.Feature;
+import org.chromium.chrome.browser.sync.AndroidSyncSettings.AndroidSyncSettingsObserver;
 import org.chromium.components.signin.AccountManagerFacadeProvider;
 import org.chromium.components.signin.AccountUtils;
 import org.chromium.components.signin.ChromeSigninController;
 import org.chromium.components.signin.test.util.FakeAccountManagerFacade;
-import org.chromium.components.sync.AndroidSyncSettings.AndroidSyncSettingsObserver;
 import org.chromium.components.sync.test.util.MockSyncContentResolverDelegate;
 
 import java.util.concurrent.TimeoutException;
