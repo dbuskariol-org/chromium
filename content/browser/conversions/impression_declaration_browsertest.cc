@@ -9,6 +9,7 @@
 #include "base/run_loop.h"
 #include "base/test/scoped_feature_list.h"
 #include "base/time/time.h"
+#include "build/build_config.h"
 #include "content/browser/conversions/conversion_manager_impl.h"
 #include "content/browser/web_contents/web_contents_impl.h"
 #include "content/public/browser/navigation_handle.h"
@@ -167,9 +168,17 @@ IN_PROC_BROWSER_TEST_F(ImpressionDeclarationBrowserTest,
   EXPECT_EQ(1UL, impression_observer.last_impression().impression_data);
 }
 
+// Flaky on Mac: crbug.com/1099410
+#if defined(OS_MACOSX)
+#define MAYBE_ImpressionTagNavigatesExistingRemoteFrame_ImpressionReceived \
+  DISABLED_ImpressionTagNavigatesExistingRemoteFrame_ImpressionReceived
+#else
+#define MAYBE_ImpressionTagNavigatesExistingRemoteFrame_ImpressionReceived \
+  ImpressionTagNavigatesExistingRemoteFrame_ImpressionReceived
+#endif
 IN_PROC_BROWSER_TEST_F(
     ImpressionDeclarationBrowserTest,
-    ImpressionTagNavigatesExistingRemoteFrame_ImpressionReceived) {
+    MAYBE_ImpressionTagNavigatesExistingRemoteFrame_ImpressionReceived) {
   EXPECT_TRUE(NavigateToURL(
       web_contents(),
       https_server()->GetURL("b.test", "/page_with_impression_creator.html")));
