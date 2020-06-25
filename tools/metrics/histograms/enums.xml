@@ -47768,6 +47768,9 @@ Called by update_net_error_codes.py.-->
 </enum>
 
 <enum name="NetReportingUploadOutcome">
+  <obsolete>
+    Removed from code June 2020.
+  </obsolete>
   <int value="0" label="Canceled: redirect to insecure URL"/>
   <int value="1" label="Canceled: auth required"/>
   <int value="2" label="Canceled: certificate requested"/>
