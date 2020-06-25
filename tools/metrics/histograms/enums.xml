@@ -47699,6 +47699,9 @@ Called by update_net_error_codes.py.-->
 </enum>
 
 <enum name="NetReportingHeaderEndpointGroupOutcome">
+  <obsolete>
+    Removed from code, June 2020.
+  </obsolete>
   <int value="0" label="Discarded: not a dictionary"/>
   <int value="1" label="Discarded: group not a string"/>
   <int value="2" label="Discarded: TTL missing"/>
@@ -47713,6 +47716,9 @@ Called by update_net_error_codes.py.-->
 </enum>
 
 <enum name="NetReportingHeaderEndpointOutcome">
+  <obsolete>
+    Removed from code, June 2020.
+  </obsolete>
   <int value="0" label="Discarded: not a dictionary"/>
   <int value="1" label="Discarded: URL missing"/>
   <int value="2" label="Discarded: URL not a string"/>
@@ -47728,6 +47734,9 @@ Called by update_net_error_codes.py.-->
 </enum>
 
 <enum name="NetReportingHeaderOutcome">
+  <obsolete>
+    Removed from code, June 2020.
+  </obsolete>
   <int value="0" label="Discarded: no ReportingService"/>
   <int value="1" label="Discarded: invalid SSLInfo"/>
   <int value="2" label="Discarded: cert status error"/>
