@@ -537,9 +537,6 @@ bool BrowserCommandController::ExecuteCommandWithDisposition(
           ->GetMainFrame()
           ->ViewSource();
       break;
-    case IDC_EMAIL_PAGE_LOCATION:
-      EmailPageLocation(browser_);
-      break;
     case IDC_PRINT:
       Print(browser_);
       break;
@@ -974,7 +971,6 @@ void BrowserCommandController::InitCommandState() {
   command_updater_.UpdateCommandEnabled(IDC_OPEN_IN_PWA_WINDOW, true);
 
   // Page-related commands
-  command_updater_.UpdateCommandEnabled(IDC_EMAIL_PAGE_LOCATION, true);
   command_updater_.UpdateCommandEnabled(IDC_MANAGE_PASSWORDS_FOR_PAGE, true);
 
   // Zoom
@@ -1165,8 +1161,6 @@ void BrowserCommandController::UpdateCommandsForTabState() {
   window()->ZoomChangedForActiveTab(false);
   command_updater_.UpdateCommandEnabled(IDC_VIEW_SOURCE,
                                         CanViewSource(browser_));
-  command_updater_.UpdateCommandEnabled(IDC_EMAIL_PAGE_LOCATION,
-                                        CanEmailPageLocation(browser_));
   if (browser_->is_type_devtools())
     command_updater_.UpdateCommandEnabled(IDC_OPEN_FILE, false);
 
