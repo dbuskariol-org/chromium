@@ -77,15 +77,18 @@ class TasksView extends CoordinatorLayoutForPointer {
         mSearchBoxCoordinator = new SearchBoxCoordinator(getContext(), this);
         mHeaderView = (AppBarLayout) findViewById(R.id.task_surface_header);
         AppBarLayout.LayoutParams layoutParams =
-                (AppBarLayout.LayoutParams) mSearchBoxCoordinator.getView().getLayoutParams();
+                (AppBarLayout.LayoutParams) (findViewById(R.id.scroll_component_container)
+                                                     .getLayoutParams());
         layoutParams.setScrollFlags(SCROLL_FLAG_SCROLL);
-        adjustOmniboxScrollMode(layoutParams);
+        adjustScrollMode(layoutParams);
         setTabCarouselTitleStyle();
     }
 
-    private void adjustOmniboxScrollMode(AppBarLayout.LayoutParams layoutParams) {
-        if (!StartSurfaceConfiguration.START_SURFACE_VARIATION.getValue().equals("omniboxonly")) {
-            // Omnibox scroll mode is only relevant in omnibox-only variation.
+    private void adjustScrollMode(AppBarLayout.LayoutParams layoutParams) {
+        if (!StartSurfaceConfiguration.START_SURFACE_VARIATION.getValue().equals("omniboxonly")
+                && !StartSurfaceConfiguration.START_SURFACE_VARIATION.getValue().equals(
+                        "trendyterms")) {
+            // Scroll mode is only relevant in omnibox-only variation and trendy-terms variation.
             return;
         }
         String scrollMode = StartSurfaceConfiguration.START_SURFACE_OMNIBOX_SCROLL_MODE.getValue();
