@@ -349,7 +349,7 @@ TEST_F(AXTreeSourceArcTest, ReorderChildrenByLayout) {
 
   EXPECT_EQ(10, GetDispatchedEventCount(ax::mojom::Event::kFocus));
 
-  // Sanity check tree output.
+  // Check completeness of tree output.
   ExpectTree(
       "id=100 window FOCUSABLE (0, 0)-(0, 0) modal=true child_ids=10\n"
       "  id=10 genericContainer INVISIBLE (0, 0)-(0, 0) restriction=disabled "
