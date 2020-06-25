@@ -40,6 +40,8 @@
 #include "components/omnibox/common/omnibox_features.h"
 #include "components/password_manager/core/common/password_manager_features.h"
 #include "components/payments/core/features.h"
+#import "components/policy/core/common/policy_loader_ios_constants.h"
+#include "components/policy/policy_constants.h"
 #include "components/safe_browsing/core/features.h"
 #include "components/security_state/core/features.h"
 #include "components/send_tab_to_self/features.h"
@@ -683,6 +685,32 @@ void AppendSwitchesFromExperimentalSettings(base::CommandLine* command_line) {
 
     command_line->AppendSwitchASCII(switches::kUserAgent,
                                     web::BuildMobileUserAgent(product));
+  }
+
+  // Set some sample policy values for testing if EnableSamplePolicies is
+  // enabled.
+  if ([defaults boolForKey:@"EnableSamplePolicies"]) {
+    NSDictionary* testing_policies = @{
+      base::SysUTF8ToNSString(policy::key::kAutofillCreditCardEnabled) : @NO,
+
+      // 2 = Disable all variations
+      base::SysUTF8ToNSString(policy::key::kChromeVariations) : @2,
+
+      // 2 = Do not allow any site to show popups
+      base::SysUTF8ToNSString(policy::key::kDefaultPopupsSetting) : @2,
+
+      base::SysUTF8ToNSString(policy::key::kDefaultSearchProviderEnabled) :
+          @YES,
+      base::SysUTF8ToNSString(policy::key::kDefaultSearchProviderSearchURL) :
+          @"http://www.google.com/?q={searchTerms}",
+      base::SysUTF8ToNSString(policy::key::kDefaultSearchProviderKeyword) :
+          @"google",
+
+      base::SysUTF8ToNSString(policy::key::kPasswordManagerEnabled) : @NO,
+    };
+    NSDictionary* registration_defaults =
+        @{kPolicyLoaderIOSConfigurationKey : testing_policies};
+    [defaults registerDefaults:registration_defaults];
   }
 
   // Freeform commandline flags.  These are added last, so that any flags added
