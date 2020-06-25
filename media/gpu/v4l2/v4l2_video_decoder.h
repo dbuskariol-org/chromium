@@ -36,12 +36,12 @@ namespace media {
 
 class DmabufVideoFramePool;
 
-class MEDIA_GPU_EXPORT V4L2SliceVideoDecoder
+class MEDIA_GPU_EXPORT V4L2VideoDecoder
     : public DecoderInterface,
       public V4L2VideoDecoderBackend::Client {
  public:
-  // Create V4L2SliceVideoDecoder instance. The success of the creation doesn't
-  // ensure V4L2SliceVideoDecoder is available on the device. It will be
+  // Create V4L2VideoDecoder instance. The success of the creation doesn't
+  // ensure V4L2VideoDecoder is available on the device. It will be
   // determined in Initialize().
   static std::unique_ptr<DecoderInterface> Create(
       scoped_refptr<base::SequencedTaskRunner> decoder_task_runner,
@@ -71,13 +71,12 @@ class MEDIA_GPU_EXPORT V4L2SliceVideoDecoder
   DmabufVideoFramePool* GetVideoFramePool() const override;
 
  private:
-  friend class V4L2SliceVideoDecoderTest;
+  friend class V4L2VideoDecoderTest;
 
-  V4L2SliceVideoDecoder(
-      scoped_refptr<base::SequencedTaskRunner> decoder_task_runner,
-      base::WeakPtr<DecoderInterface::Client> client,
-      scoped_refptr<V4L2Device> device);
-  ~V4L2SliceVideoDecoder() override;
+  V4L2VideoDecoder(scoped_refptr<base::SequencedTaskRunner> decoder_task_runner,
+                   base::WeakPtr<DecoderInterface::Client> client,
+                   scoped_refptr<V4L2Device> device);
+  ~V4L2VideoDecoder() override;
 
   enum class State {
     // Initial state. Transitions to |kDecoding| if Initialize() is successful,
@@ -167,8 +166,8 @@ class MEDIA_GPU_EXPORT V4L2SliceVideoDecoder
 
   // |weak_this_| must be dereferenced and invalidated on
   // |decoder_task_runner_|.
-  base::WeakPtr<V4L2SliceVideoDecoder> weak_this_;
-  base::WeakPtrFactory<V4L2SliceVideoDecoder> weak_this_factory_;
+  base::WeakPtr<V4L2VideoDecoder> weak_this_;
+  base::WeakPtrFactory<V4L2VideoDecoder> weak_this_factory_;
 };
 
 }  // namespace media

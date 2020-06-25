@@ -41,7 +41,7 @@ constexpr uint32_t kSupportedInputFourccs[] = {
 }  // namespace
 
 // static
-std::unique_ptr<DecoderInterface> V4L2SliceVideoDecoder::Create(
+std::unique_ptr<DecoderInterface> V4L2VideoDecoder::Create(
     scoped_refptr<base::SequencedTaskRunner> decoder_task_runner,
     base::WeakPtr<DecoderInterface::Client> client) {
   DCHECK(decoder_task_runner->RunsTasksInCurrentSequence());
@@ -53,12 +53,12 @@ std::unique_ptr<DecoderInterface> V4L2SliceVideoDecoder::Create(
     return nullptr;
   }
 
-  return base::WrapUnique<DecoderInterface>(new V4L2SliceVideoDecoder(
+  return base::WrapUnique<DecoderInterface>(new V4L2VideoDecoder(
       std::move(decoder_task_runner), std::move(client), std::move(device)));
 }
 
 // static
-SupportedVideoDecoderConfigs V4L2SliceVideoDecoder::GetSupportedConfigs() {
+SupportedVideoDecoderConfigs V4L2VideoDecoder::GetSupportedConfigs() {
   scoped_refptr<V4L2Device> device = V4L2Device::Create();
   if (!device)
     return SupportedVideoDecoderConfigs();
@@ -69,7 +69,7 @@ SupportedVideoDecoderConfigs V4L2SliceVideoDecoder::GetSupportedConfigs() {
       false);
 }
 
-V4L2SliceVideoDecoder::V4L2SliceVideoDecoder(
+V4L2VideoDecoder::V4L2VideoDecoder(
     scoped_refptr<base::SequencedTaskRunner> decoder_task_runner,
     base::WeakPtr<DecoderInterface::Client> client,
     scoped_refptr<V4L2Device> device)
@@ -82,7 +82,7 @@ V4L2SliceVideoDecoder::V4L2SliceVideoDecoder(
   weak_this_ = weak_this_factory_.GetWeakPtr();
 }
 
-V4L2SliceVideoDecoder::~V4L2SliceVideoDecoder() {
+V4L2VideoDecoder::~V4L2VideoDecoder() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(2);
 
@@ -106,9 +106,9 @@ V4L2SliceVideoDecoder::~V4L2SliceVideoDecoder() {
   weak_this_factory_.InvalidateWeakPtrs();
 }
 
-void V4L2SliceVideoDecoder::Initialize(const VideoDecoderConfig& config,
-                                       InitCB init_cb,
-                                       const OutputCB& output_cb) {
+void V4L2VideoDecoder::Initialize(const VideoDecoderConfig& config,
+                                  InitCB init_cb,
+                                  const OutputCB& output_cb) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DCHECK(config.IsValidConfig());
   DCHECK(state_ == State::kUninitialized || state_ == State::kDecoding);
@@ -241,7 +241,7 @@ void V4L2SliceVideoDecoder::Initialize(const VideoDecoderConfig& config,
   std::move(init_cb).Run(::media::OkStatus());
 }
 
-bool V4L2SliceVideoDecoder::SetupInputFormat(uint32_t input_format_fourcc) {
+bool V4L2VideoDecoder::SetupInputFormat(uint32_t input_format_fourcc) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DCHECK_EQ(state_, State::kUninitialized);
 
@@ -274,8 +274,8 @@ bool V4L2SliceVideoDecoder::SetupInputFormat(uint32_t input_format_fourcc) {
   return true;
 }
 
-bool V4L2SliceVideoDecoder::SetupOutputFormat(const gfx::Size& size,
-                                              const gfx::Rect& visible_rect) {
+bool V4L2VideoDecoder::SetupOutputFormat(const gfx::Size& size,
+                                         const gfx::Rect& visible_rect) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3) << "size: " << size.ToString()
             << ", visible_rect: " << visible_rect.ToString();
@@ -349,7 +349,7 @@ bool V4L2SliceVideoDecoder::SetupOutputFormat(const gfx::Size& size,
   return true;
 }
 
-void V4L2SliceVideoDecoder::Reset(base::OnceClosure closure) {
+void V4L2VideoDecoder::Reset(base::OnceClosure closure) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3);
 
@@ -380,8 +380,8 @@ void V4L2SliceVideoDecoder::Reset(base::OnceClosure closure) {
   std::move(closure).Run();
 }
 
-void V4L2SliceVideoDecoder::Decode(scoped_refptr<DecoderBuffer> buffer,
-                                   DecodeCB decode_cb) {
+void V4L2VideoDecoder::Decode(scoped_refptr<DecoderBuffer> buffer,
+                              DecodeCB decode_cb) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DCHECK_NE(state_, State::kUninitialized);
 
@@ -395,7 +395,7 @@ void V4L2SliceVideoDecoder::Decode(scoped_refptr<DecoderBuffer> buffer,
                               bitstream_id);
 }
 
-bool V4L2SliceVideoDecoder::StartStreamV4L2Queue(bool start_output_queue) {
+bool V4L2VideoDecoder::StartStreamV4L2Queue(bool start_output_queue) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3);
 
@@ -407,9 +407,8 @@ bool V4L2SliceVideoDecoder::StartStreamV4L2Queue(bool start_output_queue) {
   }
 
   if (!device_->StartPolling(
-          base::BindRepeating(&V4L2SliceVideoDecoder::ServiceDeviceTask,
-                              weak_this_),
-          base::BindRepeating(&V4L2SliceVideoDecoder::SetState, weak_this_,
+          base::BindRepeating(&V4L2VideoDecoder::ServiceDeviceTask, weak_this_),
+          base::BindRepeating(&V4L2VideoDecoder::SetState, weak_this_,
                               State::kError))) {
     SetState(State::kError);
     return false;
@@ -418,7 +417,7 @@ bool V4L2SliceVideoDecoder::StartStreamV4L2Queue(bool start_output_queue) {
   return true;
 }
 
-bool V4L2SliceVideoDecoder::StopStreamV4L2Queue(bool stop_input_queue) {
+bool V4L2VideoDecoder::StopStreamV4L2Queue(bool stop_input_queue) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3);
 
@@ -439,37 +438,37 @@ bool V4L2SliceVideoDecoder::StopStreamV4L2Queue(bool stop_input_queue) {
   return true;
 }
 
-void V4L2SliceVideoDecoder::InitiateFlush() {
+void V4L2VideoDecoder::InitiateFlush() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3);
 
   SetState(State::kFlushing);
 }
 
-void V4L2SliceVideoDecoder::CompleteFlush() {
+void V4L2VideoDecoder::CompleteFlush() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3);
 
   SetState(State::kDecoding);
 }
 
-void V4L2SliceVideoDecoder::ChangeResolution(gfx::Size pic_size,
-                                             gfx::Rect visible_rect,
-                                             size_t num_output_frames) {
+void V4L2VideoDecoder::ChangeResolution(gfx::Size pic_size,
+                                        gfx::Rect visible_rect,
+                                        size_t num_output_frames) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3);
   DCHECK(!continue_change_resolution_cb_);
 
   // After the pipeline flushes all frames, we can start changing resolution.
   continue_change_resolution_cb_ =
-      base::BindOnce(&V4L2SliceVideoDecoder::ContinueChangeResolution,
-                     weak_this_, pic_size, visible_rect, num_output_frames);
+      base::BindOnce(&V4L2VideoDecoder::ContinueChangeResolution, weak_this_,
+                     pic_size, visible_rect, num_output_frames);
 
   DCHECK(client_);
   client_->PrepareChangeResolution();
 }
 
-void V4L2SliceVideoDecoder::ApplyResolutionChange() {
+void V4L2VideoDecoder::ApplyResolutionChange() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3);
   DCHECK(continue_change_resolution_cb_);
@@ -477,7 +476,7 @@ void V4L2SliceVideoDecoder::ApplyResolutionChange() {
   std::move(continue_change_resolution_cb_).Run();
 }
 
-void V4L2SliceVideoDecoder::ContinueChangeResolution(
+void V4L2VideoDecoder::ContinueChangeResolution(
     const gfx::Size& pic_size,
     const gfx::Rect& visible_rect,
     const size_t num_output_frames) {
@@ -545,7 +544,7 @@ void V4L2SliceVideoDecoder::ContinueChangeResolution(
                      base::Unretained(backend_.get()), true));
 }
 
-void V4L2SliceVideoDecoder::ServiceDeviceTask(bool event) {
+void V4L2VideoDecoder::ServiceDeviceTask(bool event) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3) << "Number of queued input buffers: "
             << input_queue_->QueuedBuffersCount()
@@ -584,9 +583,9 @@ void V4L2SliceVideoDecoder::ServiceDeviceTask(bool event) {
   backend_->OnServiceDeviceTask(event);
 }
 
-void V4L2SliceVideoDecoder::OutputFrame(scoped_refptr<VideoFrame> frame,
-                                        const gfx::Rect& visible_rect,
-                                        base::TimeDelta timestamp) {
+void V4L2VideoDecoder::OutputFrame(scoped_refptr<VideoFrame> frame,
+                                   const gfx::Rect& visible_rect,
+                                   base::TimeDelta timestamp) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(4) << "timestamp: " << timestamp.InMilliseconds() << " msec";
 
@@ -611,14 +610,14 @@ void V4L2SliceVideoDecoder::OutputFrame(scoped_refptr<VideoFrame> frame,
   output_cb_.Run(std::move(frame));
 }
 
-DmabufVideoFramePool* V4L2SliceVideoDecoder::GetVideoFramePool() const {
+DmabufVideoFramePool* V4L2VideoDecoder::GetVideoFramePool() const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(4);
 
   return client_->GetVideoFramePool();
 }
 
-void V4L2SliceVideoDecoder::SetState(State new_state) {
+void V4L2VideoDecoder::SetState(State new_state) {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3) << "Change state from " << static_cast<int>(state_) << " to "
             << static_cast<int>(new_state);
@@ -663,14 +662,14 @@ void V4L2SliceVideoDecoder::SetState(State new_state) {
   return;
 }
 
-void V4L2SliceVideoDecoder::OnBackendError() {
+void V4L2VideoDecoder::OnBackendError() {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(2);
 
   SetState(State::kError);
 }
 
-bool V4L2SliceVideoDecoder::IsDecoding() const {
+bool V4L2VideoDecoder::IsDecoding() const {
   DCHECK_CALLED_ON_VALID_SEQUENCE(decoder_sequence_checker_);
   DVLOGF(3);
 
