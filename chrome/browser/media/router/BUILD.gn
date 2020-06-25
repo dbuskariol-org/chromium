@@ -310,6 +310,7 @@ source_set("unittests") {
 if (enable_openscreen) {
   test("openscreen_unittests") {
     deps = [
+      "//base/test:run_all_unittests",
       "//base/test:test_support",
       "//chrome/browser",
       "//chrome/test:test_support",
