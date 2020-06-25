@@ -1292,6 +1292,7 @@ if (!is_android) {
       "../browser/ui/thumbnails/thumbnail_tab_helper_browsertest.cc",
       "../browser/ui/toolbar/browser_actions_bar_browsertest.cc",
       "../browser/ui/toolbar/browser_actions_bar_browsertest.h",
+      "../browser/ui/toolbar/toolbar_actions_model_browsertest.cc",
       "../browser/ui/update_chrome_dialog_browsertest.cc",
       "../browser/ui/views/apps/app_info_dialog/app_info_dialog_views_browsertest.cc",
       "../browser/ui/views/bookmarks/bookmark_bar_view_browsertest.cc",
