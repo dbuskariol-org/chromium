@@ -1360,6 +1360,7 @@ Unknown properties are collapsed to zero. -->
   <int value="5" label="MENU_DELETE"/>
   <int value="6" label="RETRY"/>
   <int value="7" label="MENU_RENAME"/>
+  <int value="8" label="MENU_CHANGE"/>
 </enum>
 
 <enum name="Android.DownloadManager.Menu.Actions">
