@@ -82,7 +82,8 @@ class PLATFORM_EXPORT MarkingVisitorCommon : public Visitor {
   NotFullyConstructedWorklist::View not_fully_constructed_worklist_;
   WeakCallbackWorklist::View weak_callback_worklist_;
   MovableReferenceWorklist::View movable_reference_worklist_;
-  WeakTableWorklist::View weak_table_worklist_;
+  EphemeronPairsWorklist::View discovered_ephemeron_pairs_worklist_;
+  EphemeronPairsWorklist::View ephemeron_pairs_to_process_worklist_;
   BackingStoreCallbackWorklist::View backing_store_callback_worklist_;
   size_t marked_bytes_ = 0;
   const MarkingMode marking_mode_;

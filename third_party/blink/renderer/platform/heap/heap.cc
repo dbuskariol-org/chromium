@@ -165,33 +165,35 @@ void ThreadHeap::VisitRememberedSets(MarkingVisitor* visitor) {
 }
 
 void ThreadHeap::SetupWorklists(bool should_initialize_compaction_worklists) {
-  marking_worklist_.reset(new MarkingWorklist());
-  write_barrier_worklist_.reset(new WriteBarrierWorklist());
-  not_fully_constructed_worklist_.reset(new NotFullyConstructedWorklist());
-  previously_not_fully_constructed_worklist_.reset(
-      new NotFullyConstructedWorklist());
-  weak_callback_worklist_.reset(new WeakCallbackWorklist());
-  weak_table_worklist_.reset(new WeakTableWorklist);
-  v8_references_worklist_.reset(new V8ReferencesWorklist());
-  not_safe_to_concurrently_trace_worklist_.reset(
-      new NotSafeToConcurrentlyTraceWorklist());
-  DCHECK(ephemeron_callbacks_.IsEmpty());
+  marking_worklist_ = std::make_unique<MarkingWorklist>();
+  write_barrier_worklist_ = std::make_unique<WriteBarrierWorklist>();
+  not_fully_constructed_worklist_ =
+      std::make_unique<NotFullyConstructedWorklist>();
+  previously_not_fully_constructed_worklist_ =
+      std::make_unique<NotFullyConstructedWorklist>();
+  weak_callback_worklist_ = std::make_unique<WeakCallbackWorklist>();
+  discovered_ephemeron_pairs_worklist_ =
+      std::make_unique<EphemeronPairsWorklist>();
+  ephemeron_pairs_to_process_worklist_ =
+      std::make_unique<EphemeronPairsWorklist>();
+  v8_references_worklist_ = std::make_unique<V8ReferencesWorklist>();
+  not_safe_to_concurrently_trace_worklist_ =
+      std::make_unique<NotSafeToConcurrentlyTraceWorklist>();
   if (should_initialize_compaction_worklists) {
-    movable_reference_worklist_.reset(new MovableReferenceWorklist());
-    backing_store_callback_worklist_.reset(new BackingStoreCallbackWorklist());
+    movable_reference_worklist_ = std::make_unique<MovableReferenceWorklist>();
+    backing_store_callback_worklist_ =
+        std::make_unique<BackingStoreCallbackWorklist>();
   }
 }
 
 void ThreadHeap::DestroyMarkingWorklists(BlinkGC::StackState stack_state) {
-  marking_worklist_.reset(nullptr);
-  write_barrier_worklist_.reset(nullptr);
-  previously_not_fully_constructed_worklist_.reset(nullptr);
-  weak_callback_worklist_.reset(nullptr);
-  weak_table_worklist_.reset();
+  marking_worklist_.reset();
+  write_barrier_worklist_.reset();
+  previously_not_fully_constructed_worklist_.reset();
+  weak_callback_worklist_.reset();
+  ephemeron_pairs_to_process_worklist_.reset();
   v8_references_worklist_.reset();
   not_safe_to_concurrently_trace_worklist_.reset();
-  ephemeron_callbacks_.clear();
-
   // The fixed point iteration may have found not-fully-constructed objects.
   // Such objects should have already been found through the stack scan though
   // and should thus already be marked.
@@ -218,7 +220,24 @@ void ThreadHeap::DestroyMarkingWorklists(BlinkGC::StackState stack_state) {
     not_fully_constructed_worklist_->Clear();
 #endif
   }
-  not_fully_constructed_worklist_.reset(nullptr);
+  not_fully_constructed_worklist_.reset();
+
+  // |discovered_ephemeron_pairs_worklist_| may still hold ephemeron pairs with
+  // dead keys.
+  if (!discovered_ephemeron_pairs_worklist_->IsGlobalEmpty()) {
+#if DCHECK_IS_ON()
+    EphemeronPairItem item;
+    while (discovered_ephemeron_pairs_worklist_->Pop(
+        WorklistTaskId::MutatorThread, &item)) {
+      const HeapObjectHeader* const header = HeapObjectHeader::FromInnerAddress(
+          reinterpret_cast<ConstAddress>(item.key));
+      DCHECK(!header->IsMarked());
+    }
+#else
+    discovered_ephemeron_pairs_worklist_->Clear();
+#endif
+  }
+  discovered_ephemeron_pairs_worklist_.reset();
 }
 
 void ThreadHeap::DestroyCompactionWorklists() {
@@ -245,6 +264,16 @@ void ThreadHeap::FlushNotFullyConstructedObjects() {
         not_fully_constructed_worklist_.get());
   }
   DCHECK(view.IsLocalViewEmpty());
+}
+
+void ThreadHeap::FlushEphemeronPairs() {
+  EphemeronPairsWorklist::View view(discovered_ephemeron_pairs_worklist_.get(),
+                                    WorklistTaskId::MutatorThread);
+  if (!view.IsLocalViewEmpty()) {
+    view.FlushToGlobal();
+    ephemeron_pairs_to_process_worklist_->MergeGlobalPool(
+        discovered_ephemeron_pairs_worklist_.get());
+  }
 }
 
 void ThreadHeap::MarkNotFullyConstructedObjects(MarkingVisitor* visitor) {
@@ -290,23 +319,12 @@ bool DrainWorklistWithDeadline(base::TimeTicks deadline,
 
 bool ThreadHeap::InvokeEphemeronCallbacks(MarkingVisitor* visitor,
                                           base::TimeTicks deadline) {
+  FlushEphemeronPairs();
+
   // Mark any strong pointers that have now become reachable in ephemeron maps.
   ThreadHeapStatsCollector::Scope stats_scope(
       stats_collector(),
       ThreadHeapStatsCollector::kMarkInvokeEphemeronCallbacks);
-
-  // We first reiterate over known callbacks from previous iterations.
-  constexpr size_t kDeadlineCheckInterval = 250;
-  size_t processed_callback_count = 0;
-  for (auto& tuple : ephemeron_callbacks_) {
-    tuple.value(visitor, tuple.key);
-    if (++processed_callback_count == kDeadlineCheckInterval) {
-      if (deadline <= base::TimeTicks::Now()) {
-        return false;
-      }
-      processed_callback_count = 0;
-    }
-  }
 
   DCHECK_EQ(WorklistTaskId::MutatorThread, visitor->task_id());
 
@@ -314,15 +332,10 @@ bool ThreadHeap::InvokeEphemeronCallbacks(MarkingVisitor* visitor,
   // Callbacks found by the concurrent marking will be flushed eventually
   // and then invoked by the mutator thread (in the atomic pause at latest).
   return DrainWorklistWithDeadline(
-      deadline, weak_table_worklist_.get(),
-      [this, visitor](const WeakTableItem& item) {
-        auto result = ephemeron_callbacks_.insert(item.base_object_payload,
-                                                  item.callback);
-        DCHECK(result.is_new_entry ||
-               result.stored_value->value == item.callback);
-        if (result.is_new_entry) {
-          item.callback(visitor, item.base_object_payload);
-        }
+      deadline, ephemeron_pairs_to_process_worklist_.get(),
+      [visitor](EphemeronPairItem& item) {
+        visitor->VisitEphemeron(item.key, item.value,
+                                item.value_trace_callback);
       },
       WorklistTaskId::MutatorThread);
 }

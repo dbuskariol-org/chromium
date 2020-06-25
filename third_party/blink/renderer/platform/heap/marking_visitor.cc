@@ -22,7 +22,12 @@ MarkingVisitorCommon::MarkingVisitorCommon(ThreadState* state,
       weak_callback_worklist_(Heap().GetWeakCallbackWorklist(), task_id),
       movable_reference_worklist_(Heap().GetMovableReferenceWorklist(),
                                   task_id),
-      weak_table_worklist_(Heap().GetWeakTableWorklist(), task_id),
+      discovered_ephemeron_pairs_worklist_(
+          Heap().GetDiscoveredEphemeronPairsWorklist(),
+          task_id),
+      ephemeron_pairs_to_process_worklist_(
+          Heap().GetEphemeronPairsToProcessWorklist(),
+          task_id),
       backing_store_callback_worklist_(Heap().GetBackingStoreCallbackWorklist(),
                                        task_id),
       marking_mode_(marking_mode),
@@ -76,8 +81,11 @@ void MarkingVisitorCommon::VisitEphemeron(const void* key,
                                           const void* value,
                                           TraceCallback value_trace_callback) {
   if (!HeapObjectHeader::FromPayload(key)
-           ->IsMarked<HeapObjectHeader::AccessMode::kAtomic>())
+           ->IsMarked<HeapObjectHeader::AccessMode::kAtomic>()) {
+    discovered_ephemeron_pairs_worklist_.Push(
+        {key, value, value_trace_callback});
     return;
+  }
   value_trace_callback(this, value);
 }
 
@@ -111,7 +119,7 @@ void MarkingVisitorCommon::VisitWeakContainer(
   RegisterWeakCallback(weak_callback, weak_callback_parameter);
   // Register ephemeron callbacks if necessary.
   if (weak_desc.callback)
-    weak_table_worklist_.Push(weak_desc);
+    weak_desc.callback(this, weak_desc.base_object_payload);
 }
 
 // static
@@ -295,7 +303,8 @@ void ConcurrentMarkingVisitor::FlushWorklists() {
   write_barrier_worklist_.FlushToGlobal();
   not_fully_constructed_worklist_.FlushToGlobal();
   weak_callback_worklist_.FlushToGlobal();
-  weak_table_worklist_.FlushToGlobal();
+  discovered_ephemeron_pairs_worklist_.FlushToGlobal();
+  ephemeron_pairs_to_process_worklist_.FlushToGlobal();
   not_safe_to_concurrently_trace_worklist_.FlushToGlobal();
   // Flush compaction worklists.
   if (marking_mode_ == kGlobalMarkingWithCompaction) {
