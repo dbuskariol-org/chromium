@@ -656,6 +656,11 @@ const flags_ui::FeatureEntry kFeatureEntries[] = {
     {"shared-highlighting-ios", flag_descriptions::kSharedHighlightingIOSName,
      flag_descriptions::kSharedHighlightingIOSDescription, flags_ui::kOsIos,
      FEATURE_VALUE_TYPE(kSharedHighlightingIOS)},
+    {"add-web-content-drop-interaction",
+     flag_descriptions::kAddWebContentDropInteractionName,
+     flag_descriptions::kAddWebContentDropInteractionDescription,
+     flags_ui::kOsIos,
+     FEATURE_VALUE_TYPE(web::features::kAddWebContentDropInteraction)},
 };
 
 bool SkipConditionalFeatureEntry(const flags_ui::FeatureEntry& entry) {
