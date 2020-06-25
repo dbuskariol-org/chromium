@@ -1013,6 +1013,11 @@ void AddAutofillStrings(content::WebUIDataSource* html_source,
                          autofill::payments::GetManageInstrumentsUrl().spec());
   html_source->AddString("paymentMethodsLearnMoreURL",
                          chrome::kPaymentMethodsLearnMoreURL);
+  html_source->AddString(
+      "siteSettingsFlashWildcardsUnsupported",
+      l10n_util::GetStringFUTF16(
+          IDS_SETTINGS_SITE_SETTINGS_FLASH_WILDCARD_UNSUPPORTED,
+          base::UTF8ToUTF16(chrome::kChromeFlashRoadmapURL)));
 
   bool is_guest_mode = false;
 #if defined(OS_CHROMEOS)
