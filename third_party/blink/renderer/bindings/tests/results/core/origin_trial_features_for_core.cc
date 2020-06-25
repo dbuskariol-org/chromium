@@ -84,6 +84,11 @@ void InstallPendingOriginTrialFeatureForCore(OriginTrialFeature feature,
   v8::Isolate* isolate = script_state->GetIsolate();
   const DOMWrapperWorld& world = script_state->World();
   V8PerContextData* context_data = script_state->PerContextData();
+  v8::Local<v8::Context> current_context = script_state->GetContext();
+  v8::Local<v8::Object> global_object = current_context->Global();
+  ALLOW_UNUSED_LOCAL(global_object);
+  ExecutionContext* execution_context = ToExecutionContext(current_context);
+  ALLOW_UNUSED_LOCAL(execution_context);
   switch (feature) {
     case OriginTrialFeature::kOriginTrialFeature: {
       if (context_data->GetExistingConstructorAndPrototypeForType(

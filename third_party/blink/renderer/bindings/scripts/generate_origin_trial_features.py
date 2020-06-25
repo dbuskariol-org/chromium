@@ -39,12 +39,20 @@ def get_install_functions(interfaces, feature_names):
         be installed on those interfaces.
     """
     return [{
-        'condition': 'RuntimeEnabledFeatures::%sEnabled' % feature_name,
-        'name': feature_name,
-        'install_method': 'Install%s' % feature_name,
-        'interface_is_global': interface_info.is_global,
-        'v8_class': interface_info.v8_class,
-        'v8_class_or_partial': interface_info.v8_class_or_partial
+        'condition':
+        'RuntimeEnabledFeatures::%sEnabled' % feature_name,
+        'name':
+        feature_name,
+        'install_method':
+        'Install%s' % feature_name,
+        'interface_is_global':
+        interface_info.is_global,
+        'global_type_check_method':
+        interface_global_type_check_method(interface_info),
+        'v8_class':
+        interface_info.v8_class,
+        'v8_class_or_partial':
+        interface_info.v8_class_or_partial,
     } for feature_name in feature_names for interface_info in interfaces]
 
 
@@ -75,6 +83,21 @@ def read_idl_file(reader, idl_filename):
 
 def interface_is_global(interface):
     return 'Global' in interface.extended_attributes
+
+
+def interface_global_type_check_method(interface_info):
+    """Generate the name of the method on ExecutionContext used to check if the
+       context matches the type of the interface, which is a global.
+
+       Returns None for non-global interfaces.
+    """
+    if not interface_info.is_global:
+        return None
+
+    if interface_info.name == 'Window':
+        return 'IsDocument'
+
+    return 'Is%s' % interface_info.name
 
 
 def origin_trial_features_info(info_provider, reader, idl_filenames,
