@@ -1067,6 +1067,9 @@ Your Google account may have other forms of browsing history like searches and a
       <message name="IDS_DOWNLOAD_LATER_PICK_TIME_TEXT" desc="The text for the radio button to select the download time in download later dialog.">
         Pick date &amp; time
       </message>
+      <message name="IDS_DOWNLOAD_LATER_PROMPT_ENABLED_TITLE" desc="A setting text to ask whether to show a dialog about when to download.">
+        Ask when to save files
+      </message>
 
       <!-- Downloads location -->
       <message name="IDS_DOWNLOADS_LOCATION_SELECTOR_TITLE" desc="Title of the preference that allows the user to select which of the folders they would like to make the default location to save their downloads.">
