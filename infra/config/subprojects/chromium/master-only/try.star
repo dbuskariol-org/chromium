@@ -504,6 +504,10 @@ try_.chromium_linux_builder(
 )
 
 try_.chromium_linux_builder(
+    name = 'network_service_linux',
+)
+
+try_.chromium_linux_builder(
     name = 'tricium-metrics-analysis',
     executable = 'recipe:tricium_metrics',
 )
