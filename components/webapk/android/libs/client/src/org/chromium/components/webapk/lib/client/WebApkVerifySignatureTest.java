@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.webapk.lib.client;
+package org.chromium.components.webapk.lib.client;
 
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
@@ -12,9 +12,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.annotation.Config;
 
+import org.chromium.components.webapk.lib.client.WebApkVerifySignature.Error;
 import org.chromium.testing.local.LocalRobolectricTestRunner;
 import org.chromium.testing.local.TestDir;
-import org.chromium.webapk.lib.client.WebApkVerifySignature.Error;
 
 import java.io.RandomAccessFile;
 import java.nio.MappedByteBuffer;
