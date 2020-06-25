@@ -1654,11 +1654,22 @@ To change this setting, <ph name="BEGIN_LINK">&lt;resetlink&gt;</ph>reset sync<p
           =1 {1 download pending.}
           other {# downloads pending.}}
       </message>
+      <message name="IDS_MULTIPLE_DOWNLOAD_SCHEDULED" desc="Label describing that one or more downloads are scheduled">
+        {FILE_COUNT, plural,
+          =1 {1 download scheduled.}
+          other {# downloads scheduled.}}
+      </message>
       <message name="IDS_DOWNLOAD_INFOBAR_FILENAME" desc="Label showing the file name that just finished downloading">
          <ph name="FILE_NAME">%1$s<ex>abc.png</ex></ph>.
       </message>
       <message name="IDS_DOWNLOAD_INFOBAR_ACCESSIBILITY_MESSAGE_WITH_LINK" desc="InfoBar accessibility text describing the link on the download progress infobar">
         <ph name="MESSAGE">%1$s<ex>Downloading file (200 MB)</ex></ph> <ph name="LINK_NAME">%2$s<ex>Details</ex></ph> button
+      </message>
+      <message name="IDS_DOWNLOAD_SCHEDULED_ON_WIFI" desc="Label describing that the download was scheduled to start on Wi-Fi.">
+        Download will start on Wi-Fi.
+      </message>
+      <message name="IDS_DOWNLOAD_SCHEDULED_ON_DATE" desc="Label describing that the download was scheduled to start at a later date or time.">
+        Download will start on <ph name="date">%1$s<ex>Feb 28</ex></ph>.
       </message>
 
       <!-- Inline Update Infobar -->

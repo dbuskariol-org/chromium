@@ -17459,6 +17459,8 @@ Called by update_document_policy_enum.py.-->
   <int value="7" label="Multiple downloads complete"/>
   <int value="8" label="Multiple downloads failed"/>
   <int value="9" label="Multiple downloads pending"/>
+  <int value="10" label="Scheduled"/>
+  <int value="11" label="Multiple downloads scheduled"/>
 </enum>
 
 <enum name="DownloadInfoBarState">
