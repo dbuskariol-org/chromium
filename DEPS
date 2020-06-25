@@ -37,6 +37,7 @@ gclient_gn_args = [
   'checkout_nacl',
   'checkout_oculus_sdk',
   'checkout_openxr',
+  'mac_xcode_version',
 ]
 
 
@@ -168,6 +169,11 @@ vars = {
   # This can be overridden, e.g. with custom_vars, to build clang from HEAD
   # instead of downloading the prebuilt pinned revision.
   'llvm_force_head_revision': False,
+
+  # This can be overridden, e.g. with custom_vars, to download a nonstandard
+  # Xcode version in build/mac_toolchain.py
+  # instead of downloading the prebuilt pinned revision.
+  'mac_xcode_version': 'default',
 
   'android_git': 'https://android.googlesource.com',
   'aomedia_git': 'https://aomedia.googlesource.com',
@@ -4231,7 +4237,8 @@ hooks = [
     'name': 'mac_toolchain',
     'pattern': '.',
     'condition': 'checkout_mac',
-    'action': ['python', 'src/build/mac_toolchain.py'],
+    'action': ['python', 'src/build/mac_toolchain.py',
+               '--xcode-version', Var('mac_xcode_version')],
   },
   {
     # Update the prebuilt clang toolchain.
