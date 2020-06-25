@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/service_manager/zygote/zygote_main.h"
+#include "content/zygote/zygote_main.h"
 
 #include <dlfcn.h>
 #include <fcntl.h>
@@ -28,6 +28,10 @@
 #include "base/strings/string_number_conversions.h"
 #include "base/system/sys_info.h"
 #include "build/build_config.h"
+#include "content/common/zygote/zygote_commands_linux.h"
+#include "content/public/common/zygote/sandbox_support_linux.h"
+#include "content/public/common/zygote/zygote_fork_delegate_linux.h"
+#include "content/zygote/zygote_linux.h"
 #include "sandbox/linux/services/credentials.h"
 #include "sandbox/linux/services/init_process_reaper.h"
 #include "sandbox/linux/services/libc_interceptor.h"
@@ -40,13 +44,9 @@
 #include "services/service_manager/sandbox/linux/sandbox_linux.h"
 #include "services/service_manager/sandbox/sandbox.h"
 #include "services/service_manager/sandbox/switches.h"
-#include "services/service_manager/zygote/common/common_sandbox_support_linux.h"
-#include "services/service_manager/zygote/common/zygote_commands_linux.h"
-#include "services/service_manager/zygote/common/zygote_fork_delegate_linux.h"
-#include "services/service_manager/zygote/zygote_linux.h"
 #include "third_party/icu/source/i18n/unicode/timezone.h"
 
-namespace service_manager {
+namespace content {
 
 namespace {
 
@@ -237,10 +237,11 @@ bool ZygoteMain(
 
   Zygote zygote(sandbox_flags, std::move(fork_delegates),
                 base::GlobalDescriptors::Descriptor(
-                    static_cast<uint32_t>(kSandboxIPCChannel), GetSandboxFD()));
+                    static_cast<uint32_t>(service_manager::kSandboxIPCChannel),
+                    GetSandboxFD()));
 
   // This function call can return multiple times, once per fork().
   return zygote.ProcessRequests();
 }
 
-}  // namespace service_manager
+}  // namespace content

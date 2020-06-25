@@ -4339,7 +4339,6 @@ static_library("browser") {
     if (use_x11) {
       deps += [ "//ui/gfx/x" ]
     }
-    deps += [ "//services/service_manager/zygote" ]
   }
 
   if (is_chromeos) {

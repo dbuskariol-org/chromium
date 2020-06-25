@@ -837,6 +837,9 @@ const char kWebglAntialiasingMode[] = "webgl-antialiasing-mode";
 // Set a default sample count for webgl if msaa is enabled.
 const char kWebglMSAASampleCount[] = "webgl-msaa-sample-count";
 
+// The prefix used when starting the zygote process. (i.e. 'gdb --args')
+const char kZygoteCmdPrefix[] = "zygote-cmd-prefix";
+
 // Enables specified backend for the Web OTP API.
 const char kWebOtpBackend[] = "web-otp-backend";
 

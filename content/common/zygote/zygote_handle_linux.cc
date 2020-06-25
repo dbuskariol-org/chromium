@@ -2,11 +2,12 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/service_manager/zygote/common/zygote_handle.h"
+#include "content/public/common/zygote/zygote_handle.h"
 
-#include "services/service_manager/zygote/host/zygote_communication_linux.h"
+#include "content/common/zygote/zygote_communication_linux.h"
+#include "content/common/zygote/zygote_handle_impl_linux.h"
 
-namespace service_manager {
+namespace content {
 namespace {
 
 // Intentionally leaked.
@@ -41,4 +42,4 @@ ZygoteHandle GetUnsandboxedZygote() {
   return g_unsandboxed_zygote;
 }
 
-}  // namespace service_manager
+}  // namespace content

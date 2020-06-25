@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef SERVICES_SERVICE_MANAGER_ZYGOTE_ZYGOTE_LINUX_H_
-#define SERVICES_SERVICE_MANAGER_ZYGOTE_ZYGOTE_LINUX_H_
+#ifndef CONTENT_ZYGOTE_ZYGOTE_LINUX_H_
+#define CONTENT_ZYGOTE_ZYGOTE_LINUX_H_
 
 #include <stddef.h>
 
@@ -23,7 +23,7 @@ namespace base {
 class PickleIterator;
 }
 
-namespace service_manager {
+namespace content {
 
 class ZygoteForkDelegate;
 
@@ -147,6 +147,6 @@ class Zygote {
   base::GlobalDescriptors::Descriptor ipc_backchannel_;
 };
 
-}  // namespace service_manager
+}  // namespace content
 
-#endif  // SERVICES_SERVICE_MANAGER_ZYGOTE_ZYGOTE_LINUX_H_
+#endif  // CONTENT_ZYGOTE_ZYGOTE_LINUX_H_

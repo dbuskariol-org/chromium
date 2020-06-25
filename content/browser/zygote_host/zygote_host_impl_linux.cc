@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/service_manager/zygote/host/zygote_host_impl_linux.h"
+#include "content/browser/zygote_host/zygote_host_impl_linux.h"
 
 #include <stdlib.h>
 #include <sys/socket.h>
@@ -16,15 +16,15 @@
 #include "base/process/memory.h"
 #include "base/strings/string_number_conversions.h"
 #include "build/build_config.h"
+#include "content/common/zygote/zygote_commands_linux.h"
 #include "sandbox/linux/services/credentials.h"
 #include "sandbox/linux/services/namespace_sandbox.h"
 #include "sandbox/linux/suid/client/setuid_sandbox_host.h"
 #include "sandbox/linux/suid/common/sandbox.h"
 #include "services/service_manager/sandbox/linux/sandbox_linux.h"
 #include "services/service_manager/sandbox/switches.h"
-#include "services/service_manager/zygote/common/zygote_commands_linux.h"
 
-namespace service_manager {
+namespace content {
 
 namespace {
 
@@ -139,7 +139,7 @@ void ZygoteHostImpl::SetRendererSandboxStatus(int status) {
   renderer_sandbox_status_ = status;
 }
 
-int ZygoteHostImpl::GetRendererSandboxStatus() const {
+int ZygoteHostImpl::GetRendererSandboxStatus() {
   return renderer_sandbox_status_;
 }
 
@@ -290,4 +290,4 @@ void ZygoteHostImpl::AdjustRendererOOMScore(base::ProcessHandle pid,
 }
 #endif
 
-}  // namespace service_manager
+}  // namespace content

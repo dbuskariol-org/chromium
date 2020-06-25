@@ -2,21 +2,21 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef SERVICES_SERVICE_MANAGER_ZYGOTE_COMMON_COMMON_SANDBOX_SUPPORT_LINUX_H_
-#define SERVICES_SERVICE_MANAGER_ZYGOTE_COMMON_COMMON_SANDBOX_SUPPORT_LINUX_H_
+#ifndef CONTENT_PUBLIC_COMMON_ZYGOTE_SANDBOX_SUPPORT_LINUX_H_
+#define CONTENT_PUBLIC_COMMON_ZYGOTE_SANDBOX_SUPPORT_LINUX_H_
 
 #include <stddef.h>
 
-#include "base/component_export.h"
 #include "build/build_config.h"
+#include "content/common/content_export.h"
 
 class NaClListener;
 
-namespace service_manager {
+namespace content {
 
 #if !defined(OS_NACL_NONSFI)
 // TODO(crbug.com/982879): Remove this when NaCl is unshipped.
-class COMPONENT_EXPORT(SERVICE_MANAGER_ZYGOTE) SharedMemoryIPCSupport {
+class CONTENT_EXPORT SharedMemoryIPCSupport {
  private:
   friend class ::NaClListener;
 
@@ -35,8 +35,8 @@ class COMPONENT_EXPORT(SERVICE_MANAGER_ZYGOTE) SharedMemoryIPCSupport {
 
 // Gets the well-known file descriptor on which we expect to find the
 // sandbox IPC channel.
-COMPONENT_EXPORT(SERVICE_MANAGER_ZYGOTE) int GetSandboxFD();
+CONTENT_EXPORT int GetSandboxFD();
 
-}  // namespace service_manager
+}  // namespace content
 
-#endif  // SERVICES_SERVICE_MANAGER_ZYGOTE_COMMON_COMMON_SANDBOX_SUPPORT_LINUX_H_
+#endif  // CONTENT_PUBLIC_COMMON_ZYGOTE_SANDBOX_SUPPORT_LINUX_H_

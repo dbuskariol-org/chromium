@@ -177,6 +177,7 @@
 #include "content/public/common/service_names.mojom.h"
 #include "content/public/common/url_constants.h"
 #include "content/public/common/web_preferences.h"
+#include "content/public/common/zygote/zygote_buildflags.h"
 #include "device/gamepad/gamepad_haptics_manager.h"
 #include "google_apis/gaia/gaia_switches.h"
 #include "gpu/GLES2/gl2extchromium.h"
@@ -214,7 +215,6 @@
 #include "services/service_manager/public/cpp/binder_registry.h"
 #include "services/service_manager/public/cpp/interface_provider.h"
 #include "services/service_manager/sandbox/switches.h"
-#include "services/service_manager/zygote/common/zygote_buildflags.h"
 #include "storage/browser/database/database_tracker.h"
 #include "storage/browser/file_system/sandbox_file_system_backend.h"
 #include "third_party/blink/public/common/features.h"
@@ -289,7 +289,7 @@
 #endif
 
 #if BUILDFLAG(USE_ZYGOTE_HANDLE)
-#include "services/service_manager/zygote/common/zygote_handle.h"  // nogncheck
+#include "content/public/common/zygote/zygote_handle.h"  // nogncheck
 #endif
 
 #if BUILDFLAG(CLANG_PROFILING_INSIDE_SANDBOX)
@@ -434,14 +434,14 @@ class RendererSandboxedProcessLauncherDelegate
 #endif  // OS_WIN
 
 #if BUILDFLAG(USE_ZYGOTE_HANDLE)
-  service_manager::ZygoteHandle GetZygote() override {
+  ZygoteHandle GetZygote() override {
     const base::CommandLine& browser_command_line =
         *base::CommandLine::ForCurrentProcess();
     base::CommandLine::StringType renderer_prefix =
         browser_command_line.GetSwitchValueNative(switches::kRendererCmdPrefix);
     if (!renderer_prefix.empty())
       return nullptr;
-    return service_manager::GetGenericZygote();
+    return GetGenericZygote();
   }
 #endif  // BUILDFLAG(USE_ZYGOTE_HANDLE)
 

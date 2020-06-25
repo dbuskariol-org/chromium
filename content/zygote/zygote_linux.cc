@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/service_manager/zygote/zygote_linux.h"
+#include "content/zygote/zygote_linux.h"
 
 #include <errno.h>
 #include <fcntl.h>
@@ -32,6 +32,9 @@
 #include "base/time/time.h"
 #include "base/trace_event/trace_event.h"
 #include "build/build_config.h"
+#include "content/common/zygote/zygote_commands_linux.h"
+#include "content/public/common/zygote/send_zygote_child_ping_linux.h"
+#include "content/public/common/zygote/zygote_fork_delegate_linux.h"
 #include "ipc/ipc_channel.h"
 #include "sandbox/linux/services/credentials.h"
 #include "sandbox/linux/services/namespace_sandbox.h"
@@ -41,15 +44,12 @@
 #include "services/service_manager/embedder/switches.h"
 #include "services/service_manager/sandbox/linux/sandbox_linux.h"
 #include "services/service_manager/sandbox/sandbox.h"
-#include "services/service_manager/zygote/common/send_zygote_child_ping_linux.h"
-#include "services/service_manager/zygote/common/zygote_commands_linux.h"
-#include "services/service_manager/zygote/common/zygote_fork_delegate_linux.h"
 #include "third_party/icu/source/i18n/unicode/timezone.h"
 
 // See
 // https://chromium.googlesource.com/chromium/src/+/master/docs/linux/zygote.md
 
-namespace service_manager {
+namespace content {
 
 namespace {
 
@@ -407,7 +407,8 @@ int Zygote::ForkWithRealPid(const std::string& process_type,
   base::ScopedFD read_pipe, write_pipe;
   base::ProcessId pid = 0;
   if (helper) {
-    int mojo_channel_fd = LookUpFd(fd_mapping, kMojoIPCChannel);
+    int mojo_channel_fd =
+        LookUpFd(fd_mapping, service_manager::kMojoIPCChannel);
     if (mojo_channel_fd < 0) {
       DLOG(ERROR) << "Failed to find kMojoIPCChannel in FD mapping";
       return -1;
@@ -656,4 +657,4 @@ bool Zygote::HandleGetSandboxStatus(int fd, base::PickleIterator iter) {
   return false;
 }
 
-}  // namespace service_manager
+}  // namespace content

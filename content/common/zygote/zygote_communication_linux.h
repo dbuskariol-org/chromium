@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef SERVICES_SERVICE_MANAGER_ZYGOTE_HOST_ZYGOTE_COMMUNICATION_LINUX_H_
-#define SERVICES_SERVICE_MANAGER_ZYGOTE_HOST_ZYGOTE_COMMUNICATION_LINUX_H_
+#ifndef CONTENT_COMMON_ZYGOTE_ZYGOTE_COMMUNICATION_LINUX_H_
+#define CONTENT_COMMON_ZYGOTE_ZYGOTE_COMMUNICATION_LINUX_H_
 
 #include <memory>
 #include <set>
@@ -13,23 +13,23 @@
 #include <sys/types.h>
 
 #include "base/callback.h"
-#include "base/component_export.h"
 #include "base/files/scoped_file.h"
 #include "base/process/kill.h"
 #include "base/process/launch.h"
 #include "base/process/process_handle.h"
 #include "base/synchronization/lock.h"
+#include "content/common/content_export.h"
 
 namespace base {
 class Pickle;
 }  // namespace base
 
-namespace service_manager {
+namespace content {
 
 // Handles interprocess communication with the Linux zygote process. The zygote
 // does not use standard Chrome IPC or mojo, see:
 // https://chromium.googlesource.com/chromium/src/+/master/docs/linux/sandbox_ipc.md
-class COMPONENT_EXPORT(SERVICE_MANAGER_ZYGOTE) ZygoteCommunication {
+class CONTENT_EXPORT ZygoteCommunication {
  public:
   enum class ZygoteType { kSandboxed, kUnsandboxed };
   explicit ZygoteCommunication(ZygoteType type);
@@ -102,6 +102,6 @@ class COMPONENT_EXPORT(SERVICE_MANAGER_ZYGOTE) ZygoteCommunication {
   bool init_;
 };
 
-}  // namespace service_manager
+}  // namespace content
 
-#endif  // SERVICES_SERVICE_MANAGER_ZYGOTE_HOST_ZYGOTE_COMMUNICATION_LINUX_H_
+#endif  // CONTENT_COMMON_ZYGOTE_ZYGOTE_COMMUNICATION_LINUX_H_

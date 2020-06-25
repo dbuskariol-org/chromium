@@ -8,6 +8,7 @@
 #include "base/command_line.h"
 #include "base/strings/string_split.h"
 #include "content/public/common/content_switches.h"
+#include "content/public/common/zygote/zygote_buildflags.h"
 #include "content/public/test/browser_test.h"
 #include "content/public/test/browser_test_utils.h"
 #include "content/public/test/content_browser_test.h"
@@ -16,11 +17,10 @@
 #include "services/service_manager/embedder/switches.h"
 #include "services/service_manager/sandbox/linux/sandbox_linux.h"
 #include "services/service_manager/sandbox/switches.h"
-#include "services/service_manager/zygote/common/zygote_buildflags.h"
 #if BUILDFLAG(USE_ZYGOTE_HANDLE)
-#include "services/service_manager/zygote/common/zygote_handle.h"
-#include "services/service_manager/zygote/host/zygote_communication_linux.h"
-#include "services/service_manager/zygote/host/zygote_host_impl_linux.h"
+#include "content/browser/zygote_host/zygote_host_impl_linux.h"
+#include "content/common/zygote/zygote_communication_linux.h"
+#include "content/common/zygote/zygote_handle_impl_linux.h"
 #endif
 
 namespace content {
@@ -60,13 +60,13 @@ IN_PROC_BROWSER_TEST_F(LinuxZygoteBrowserTest, ZygoteSandboxes) {
   }
 
   // Sanity check the sandbox flags we expect to be everywhere.
-  const int flags = service_manager::GetGenericZygote()->GetSandboxStatus();
+  const int flags = GetGenericZygote()->GetSandboxStatus();
   constexpr int kExpectedFlags = service_manager::SandboxLinux::kPIDNS |
                                  service_manager::SandboxLinux::kNetNS |
                                  service_manager::SandboxLinux::kUserNS;
   EXPECT_EQ(kExpectedFlags, flags & kExpectedFlags);
 
-  EXPECT_EQ(service_manager::GetUnsandboxedZygote()->GetSandboxStatus(), 0);
+  EXPECT_EQ(GetUnsandboxedZygote()->GetSandboxStatus(), 0);
 }
 #endif
 
@@ -100,7 +100,7 @@ IN_PROC_BROWSER_TEST_F(LinuxZygoteDisabledBrowserTest,
                        NoZygoteWhenZygoteDisabled) {
   EXPECT_TRUE(NavigateToURL(shell(), GURL("data:text/html,start page")));
 
-  EXPECT_FALSE(service_manager::ZygoteHostImpl::GetInstance()->HasZygote());
+  EXPECT_FALSE(ZygoteHostImpl::GetInstance()->HasZygote());
 }
 #endif
 

@@ -2,15 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/service_manager/zygote/common/common_sandbox_support_linux.h"
+#include "content/public/common/zygote/sandbox_support_linux.h"
 
 #include "base/pickle.h"
 #include "base/posix/global_descriptors.h"
 #include "base/posix/unix_domain_socket.h"
+#include "build/build_config.h"
 #include "services/service_manager/embedder/descriptors.h"
 #include "services/service_manager/sandbox/linux/sandbox_linux.h"
 
-namespace service_manager {
+namespace content {
 
 #if !defined(OS_NACL_NONSFI)
 int SharedMemoryIPCSupport::MakeSharedMemorySegment(size_t length,
@@ -35,4 +36,4 @@ int GetSandboxFD() {
          base::GlobalDescriptors::kBaseDescriptor;
 }
 
-}  // namespace service_manager
+}  // namespace content

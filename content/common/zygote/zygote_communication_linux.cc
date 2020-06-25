@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "services/service_manager/zygote/host/zygote_communication_linux.h"
+#include "content/common/zygote/zygote_communication_linux.h"
 
 #include <string.h>
 #include <sys/socket.h>
@@ -17,13 +17,14 @@
 #include "base/posix/eintr_wrapper.h"
 #include "base/posix/unix_domain_socket.h"
 #include "base/stl_util.h"
+#include "content/common/zygote/zygote_commands_linux.h"
+#include "content/public/common/content_switches.h"
 #include "services/service_manager/embedder/result_codes.h"
 #include "services/service_manager/embedder/switches.h"
 #include "services/service_manager/sandbox/switches.h"
-#include "services/service_manager/zygote/common/zygote_commands_linux.h"
 #include "third_party/icu/source/i18n/unicode/timezone.h"
 
-namespace service_manager {
+namespace content {
 
 ZygoteCommunication::ZygoteCommunication(ZygoteType type)
     : type_(type),
@@ -225,10 +226,11 @@ void ZygoteCommunication::Init(
   CHECK(base::PathService::Get(base::FILE_EXE, &chrome_path));
 
   base::CommandLine cmd_line(chrome_path);
-  cmd_line.AppendSwitchASCII(switches::kProcessType, switches::kZygoteProcess);
+  cmd_line.AppendSwitchASCII(service_manager::switches::kProcessType,
+                             service_manager::switches::kZygoteProcess);
 
   if (type_ == ZygoteType::kUnsandboxed)
-    cmd_line.AppendSwitch(switches::kNoZygoteSandbox);
+    cmd_line.AppendSwitch(service_manager::switches::kNoZygoteSandbox);
 
   const base::CommandLine& browser_command_line =
       *base::CommandLine::ForCurrentProcess();
@@ -279,7 +281,7 @@ base::TerminationStatus ZygoteCommunication::GetTerminationStatus(
 
   // Set this now to handle the error cases.
   if (exit_code)
-    *exit_code = RESULT_CODE_NORMAL_EXIT;
+    *exit_code = service_manager::RESULT_CODE_NORMAL_EXIT;
   int status = base::TERMINATION_STATUS_NORMAL_TERMINATION;
 
   if (len == -1) {
@@ -318,4 +320,4 @@ int ZygoteCommunication::GetSandboxStatus() {
   return sandbox_status_;
 }
 
-}  // namespace service_manager
+}  // namespace content

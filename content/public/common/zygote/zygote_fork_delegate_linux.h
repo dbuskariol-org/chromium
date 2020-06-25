@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef SERVICES_SERVICE_MANAGER_ZYGOTE_COMMON_ZYGOTE_FORK_DELEGATE_LINUX_H_
-#define SERVICES_SERVICE_MANAGER_ZYGOTE_COMMON_ZYGOTE_FORK_DELEGATE_LINUX_H_
+#ifndef CONTENT_PUBLIC_COMMON_ZYGOTE_ZYGOTE_FORK_DELEGATE_LINUX_H_
+#define CONTENT_PUBLIC_COMMON_ZYGOTE_ZYGOTE_FORK_DELEGATE_LINUX_H_
 
 #include <unistd.h>
 
@@ -14,7 +14,7 @@
 // to C++11.
 #include "base/process/kill.h"
 
-namespace service_manager {
+namespace content {
 
 // The ZygoteForkDelegate allows the Chrome Linux zygote to delegate
 // fork operations to another class that knows how to do some
@@ -85,6 +85,6 @@ class ZygoteForkDelegate {
                                     int* exit_code) = 0;
 };
 
-}  // namespace service_manager
+}  // namespace content
 
-#endif  // SERVICES_SERVICE_MANAGER_ZYGOTE_COMMON_ZYGOTE_FORK_DELEGATE_LINUX_H_
+#endif  // CONTENT_PUBLIC_COMMON_ZYGOTE_ZYGOTE_FORK_DELEGATE_LINUX_H_
