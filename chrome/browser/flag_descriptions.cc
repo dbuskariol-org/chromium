@@ -3651,11 +3651,6 @@ const char kEnableQuickAnswersTextAnnotatorName[] =
 const char kEnableQuickAnswersTextAnnotatorDescription[] =
     "Enable Quick Answers text annotator.";
 
-const char kEnableVideoPlayerNativeControlsName[] =
-    "Enable native controls in video player app";
-const char kEnableVideoPlayerNativeControlsDescription[] =
-    "Enable native controls in video player app";
-
 const char kTrimOnFreezeName[] = "Trim Working Set on freeze";
 const char kTrimOnFreezeDescription[] = "Trim Working Set on all frames frozen";
 

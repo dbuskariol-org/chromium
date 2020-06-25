@@ -1864,11 +1864,6 @@
     "expiry_milestone": 89
   },
   {
-    "name": "enable-native-controls",
-    "owners": [ "chrome-media-ux@google.com" ],
-    "expiry_milestone": 75
-  },
-  {
     "name": "enable-native-notifications",
     "owners": [ "peter", "finnur" ],
     "expiry_milestone": 84
