@@ -1245,6 +1245,15 @@
   <message name="IDS_FILE_BROWSER_FOLDER_SHARED_WITH_PLUGIN_VM_PLURAL" translateable="false" desc="Confirmation message shown when a user shares more than 1 folder with the Plugin VM.">
     <ph name="NUMBER_OF_ITEMS">$1<ex>3</ex></ph> folders shared with Plugin VM
   </message>
+  <message name="IDS_FILE_BROWSER_MESSAGE_FOLDER_SHARED_WITH_CROSTINI" desc="Message shown in FilesApp message bar when a user has shared a folder with the crostini container.">
+    This folder is shared with Linux
+  </message>
+  <message name="IDS_FILE_BROWSER_MESSAGE_FOLDER_SHARED_WITH_CROSTINI_AND_PLUGIN_VM" desc="Message shown in FilesApp message bar when a user has shared a folder with the crostini container and Windows.">
+    This folder is shared with Linux and Windows
+  </message>
+  <message name="IDS_FILE_BROWSER_MESSAGE_FOLDER_SHARED_WITH_PLUGIN_VM" desc="Message shown in FilesApp message bar when a user has shared a folder with Windows.">
+    This folder is shared with Windows
+  </message>
 
   <message name="IDS_FILE_BROWSER_FOLDER" desc="Folder entry type">
     Folder
