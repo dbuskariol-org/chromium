@@ -77,7 +77,9 @@ def read_idl_file(reader, idl_filename):
     interfaces = definitions.interfaces
     includes = definitions.includes
     # There should only be a single interface defined in an IDL file. Return it.
-    assert len(interfaces) == 1
+    assert len(interfaces) == 1, (
+        "Expected one interface in file %r, found %d" %
+        (idl_filename, len(interfaces)))
     return (interfaces.values()[0], includes)
 
 
@@ -131,7 +133,9 @@ def origin_trial_features_info(info_provider, reader, idl_filenames,
         # If this interface include another one,
         # it inherits any conditional features from it.
         for include in includes:
-            assert include.interface == interface.name
+            assert include.interface == interface.name, (
+                "'includes' interface identifier %r in file %r should be  %r" %
+                (include.interface, idl_filename, interface.name))
             mixin, _ = read_idl_file(
                 reader,
                 info_provider.interfaces_info[include.mixin].get('full_path'))
