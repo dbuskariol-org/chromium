@@ -2808,10 +2808,7 @@ if (public_android_sdk) {
 
     # Used for binary size monitoring.
     create_app_bundle_minimal_apks("trichrome_chrome_minimal_apks") {
-      deps = [
-        ":ssargs_trichrome",
-        ":trichrome_chrome_bundle",
-      ]
+      deps = [ ":trichrome_chrome_bundle" ]
       bundle_path = "$root_build_dir/apks/TrichromeChrome.aab"
     }
 
