@@ -1010,6 +1010,9 @@ void FillMiscNavigationParams(
     navigation_params->force_fetch_cache_mode =
         blink::mojom::FetchCacheMode::kDefault;
   }
+
+  navigation_params->origin_isolation_restricted =
+      commit_params.origin_isolation_restricted;
 }
 
 // Fills in the origin policy associated with this response, if any is present.
