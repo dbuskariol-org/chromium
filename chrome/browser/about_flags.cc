@@ -4919,6 +4919,12 @@ const FeatureEntry kFeatureEntries[] = {
      FEATURE_VALUE_TYPE(chromeos::features::kSmartDimNewMlAgent)},
 #endif  // defined(OS_CHROMEOS)
 
+#if defined(OS_ANDROID)
+    {"privacy-elevated-android", flag_descriptions::kPrivacyElevatedAndroidName,
+     flag_descriptions::kPrivacyElevatedAndroidDescription, kOsAndroid,
+     FEATURE_VALUE_TYPE(features::kPrivacyElevatedAndroid)},
+#endif
+
     {"privacy-settings-redesign",
      flag_descriptions::kPrivacySettingsRedesignName,
      flag_descriptions::kPrivacySettingsRedesignDescription, kOsDesktop,

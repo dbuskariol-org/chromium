@@ -3724,6 +3724,15 @@
     "expiry_milestone": 85
   },
   {
+    "name": "privacy-elevated-android",
+    "owners": [
+      "andzaytsev",
+      "msramek",
+      "chrome-friendly-settings@google.com"
+    ],
+    "expiry_milestone": 89
+  },
+  {
     "name": "privacy-settings-redesign",
     "owners": [
       "harrisonsean",
