@@ -13,7 +13,7 @@ const shareBase = {
   // Params for 'Share with Plugin VM'.
   vmNamePluginVm: 'PvmDefault',
   vmNameSelectorPluginVm: 'plugin-vm',
-  toastSharedTextPluginVm: '1 folder shared with Plugin VM',
+  toastSharedTextPluginVm: '1 folder shared with Parallels Desktop',
   toastActionTextPluginVm: 'Manage',
   enumUmaShareWithPluginVm: 16,
   enumUmaManagePluginVmSharing: 17,
@@ -75,7 +75,10 @@ shareBase.testSharePaths = async (
   const googleDrive = '#directory-tree .tree-item [volume-type-icon="drive"]';
   const menuHidden = '#file-context-menu[hidden]';
   const androidRoot = '#directory-tree [volume-type-icon="android_files"]';
-  const shareLabel = {'termina': 'Linux apps', 'PvmDefault': 'Plugin VM'};
+  const shareLabel = {
+    'termina': 'Linux apps',
+    'PvmDefault': 'Parallels Desktop'
+  };
   const givePermission = `Give ${shareLabel[vmName]} permission to modify `;
   const shareMessageShown = '#files-message:not([hidden])';
   const shareMessageHidden = '#files-message[hidden]';
