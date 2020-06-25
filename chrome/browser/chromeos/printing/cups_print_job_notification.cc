@@ -171,6 +171,15 @@ void CupsPrintJobNotification::CleanUpNotification() {
 void CupsPrintJobNotification::UpdateNotification() {
   if (!print_job_)
     return;
+
+  if (print_job_->state() == CupsPrintJob::State::STATE_CANCELLED) {
+    // Handles the state in which print job was cancelled by the print
+    // management app.
+    print_job_ = nullptr;
+    CleanUpNotification();
+    return;
+  }
+
   UpdateNotificationTitle();
   UpdateNotificationIcon();
   UpdateNotificationBodyMessage();
