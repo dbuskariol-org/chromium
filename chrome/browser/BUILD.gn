@@ -3440,6 +3440,8 @@ static_library("browser") {
       "resource_coordinator/tab_metrics_logger.h",
       "resource_coordinator/usage_clock.cc",
       "resource_coordinator/usage_clock.h",
+      "safe_browsing/generated_safe_browsing_pref.cc",
+      "safe_browsing/generated_safe_browsing_pref.h",
       "search/background/ntp_background_data.cc",
       "search/background/ntp_background_data.h",
       "search/background/ntp_background_service.cc",
