@@ -4777,6 +4777,10 @@ const FeatureEntry kFeatureEntries[] = {
      flag_descriptions::kUseSearchClickForRightClickDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(chromeos::features::kUseSearchClickForRightClick)},
 
+    {"show-metered-toggle", flag_descriptions::kMeteredShowToggleName,
+     flag_descriptions::kMeteredShowToggleDescription, kOsCrOS,
+     FEATURE_VALUE_TYPE(features::kMeteredShowToggle)},
+
     {"enable-print-server-ui", flag_descriptions::kPrintServerUiName,
      flag_descriptions::kPrintServerUiDescription, kOsCrOS,
      FEATURE_VALUE_TYPE(features::kPrintServerUi)},

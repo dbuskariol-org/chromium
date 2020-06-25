@@ -4094,6 +4094,11 @@
     "expiry_milestone": 85
   },
   {
+    "name": "show-metered-toggle",
+    "owners": [ "stevenjb" ],
+    "expiry_milestone": 87
+  },
+  {
     "name": "show-overdraw-feedback",
     "owners": [ "andrescj", "chromeos-gfx@google.com" ],
     "expiry_milestone": 85

@@ -3844,6 +3844,12 @@ const char kMediaSessionNotificationsDescription[] =
     "Shows notifications for media sessions showing the currently playing "
     "media and providing playback controls";
 
+const char kMeteredShowToggleName[] = "Show Metered Toggle";
+const char kMeteredShowToggleDescription[] =
+    "Shows a Metered toggle in the Network settings UI for WiFI and Cellular. "
+    "The toggle allows users to set whether a network should be considered "
+    "metered for purposes of bandwith usage (e.g. for automatic updates).";
+
 const char kPrintServerUiName[] = "Print Server UI";
 const char kPrintServerUiDescription[] =
     "Enables users to add their own print server in the printer settings page.";

@@ -40764,6 +40764,7 @@ from previous Chrome versions.
   <int value="-494722408" label="ContentSuggestionsLargeThumbnail:enabled"/>
   <int value="-493551777" label="StaleWhileRevalidate2:disabled"/>
   <int value="-492864618" label="NTPForeignSessionsSuggestions:disabled"/>
+  <int value="-491546546" label="MeteredShowToggle:enabled"/>
   <int value="-491131428" label="OmniboxNewAnswerLayout:disabled"/>
   <int value="-488779992" label="blink-settings"/>
   <int value="-488449930" label="SafetyCheckAndroid:enabled"/>
@@ -42844,6 +42845,7 @@ from previous Chrome versions.
   <int value="1843088575" label="OutOfBlinkCors:enabled"/>
   <int value="1844110073" label="enable-app-view"/>
   <int value="1847024354" label="enable-hotword-hardware"/>
+  <int value="1847658464" label="MeteredShowToggle:disabled"/>
   <int value="1848974467" label="DelayAsyncScriptExecution:disabled"/>
   <int value="1849379463" label="OfflinePagesCTV2:enabled"/>
   <int value="1849580433" label="disable-oop-rasterization"/>
