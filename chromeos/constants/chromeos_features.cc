@@ -253,6 +253,10 @@ const base::Feature kInstantTethering{"InstantTethering",
 const base::Feature kLacrosSupport{"LacrosSupport",
                                    base::FEATURE_DISABLED_BY_DEFAULT};
 
+// Enables or disables device management disclosure on login / lock screen.
+const base::Feature kLoginDeviceManagementDisclosure{
+    "LoginDeviceManagementDisclosure", base::FEATURE_DISABLED_BY_DEFAULT};
+
 // Enables or disables the display password button on login / lock screen.
 const base::Feature kLoginDisplayPasswordButton{
     "LoginDisplayPasswordButton", base::FEATURE_DISABLED_BY_DEFAULT};
@@ -476,6 +480,10 @@ bool IsInstantTetheringBackgroundAdvertisingSupported() {
 
 bool IsLacrosSupportEnabled() {
   return base::FeatureList::IsEnabled(kLacrosSupport);
+}
+
+bool IsLoginDeviceManagementDisclosureEnabled() {
+  return base::FeatureList::IsEnabled(kLoginDeviceManagementDisclosure);
 }
 
 bool IsLoginDisplayPasswordButtonEnabled() {
