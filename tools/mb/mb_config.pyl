@@ -2080,7 +2080,7 @@
     ],
 
     'official_goma_mac_perf': [
-      'official', 'goma', 'no_keystone_registration_framework', 'minimal_symbols',
+      'official', 'goma', 'no_keystone_registration_framework', 'full_symbols',
     ],
 
     'official_goma_mac_pgo': [
