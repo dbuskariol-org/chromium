@@ -20895,6 +20895,7 @@ Called by update_document_policy_enum.py.-->
   <int value="724" label="PluginVmRequiredFreeDiskSpace"/>
   <int value="725" label="UserAgentClientHintsEnabled"/>
   <int value="726" label="SuggestedContentEnabled"/>
+  <int value="727" label="ExtensionInstallEventLoggingEnabled"/>
 </enum>
 
 <enum name="EnterprisePolicyDeviceIdValidity">
