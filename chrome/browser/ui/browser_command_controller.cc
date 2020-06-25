@@ -1020,13 +1020,19 @@ void BrowserCommandController::InitCommandState() {
   command_updater_.UpdateCommandEnabled(
       IDC_HOME, normal_window || browser_->deprecated_is_app());
 
-  const bool is_web_app =
+  const bool is_web_app_or_custom_tab =
+#if defined(OS_CHROMEOS)
+      browser_->is_type_custom_tab() ||
+#endif
       web_app::AppBrowserController::IsForWebAppBrowser(browser_);
   // Hosted app browser commands.
-  command_updater_.UpdateCommandEnabled(IDC_COPY_URL, is_web_app);
-  command_updater_.UpdateCommandEnabled(IDC_OPEN_IN_CHROME, is_web_app);
-  command_updater_.UpdateCommandEnabled(IDC_SITE_SETTINGS, is_web_app);
-  command_updater_.UpdateCommandEnabled(IDC_WEB_APP_MENU_APP_INFO, is_web_app);
+  command_updater_.UpdateCommandEnabled(IDC_COPY_URL, is_web_app_or_custom_tab);
+  command_updater_.UpdateCommandEnabled(IDC_OPEN_IN_CHROME,
+                                        is_web_app_or_custom_tab);
+  command_updater_.UpdateCommandEnabled(IDC_SITE_SETTINGS,
+                                        is_web_app_or_custom_tab);
+  command_updater_.UpdateCommandEnabled(IDC_WEB_APP_MENU_APP_INFO,
+                                        is_web_app_or_custom_tab);
 
   // Tab management commands
   const bool supports_tabs =
