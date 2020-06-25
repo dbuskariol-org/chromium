@@ -2176,6 +2176,21 @@
             ]
         }
     ],
+    "DirectCompositionSoftwareOverlays": [
+        {
+            "platforms": [
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "DirectCompositionSoftwareOverlays"
+                    ]
+                }
+            ]
+        }
+    ],
     "DirectCompositionUseNV12DecodeSwapChain": [
         {
             "platforms": [
