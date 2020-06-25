@@ -32,7 +32,6 @@ import org.chromium.chrome.browser.init.ProcessInitializationHandler;
 import org.chromium.chrome.browser.instantapps.InstantAppsHandler;
 import org.chromium.chrome.browser.locale.LocaleManager;
 import org.chromium.chrome.browser.metrics.VariationsSession;
-import org.chromium.chrome.browser.multiwindow.MultiWindowUtils;
 import org.chromium.chrome.browser.offlinepages.CCTRequestStatus;
 import org.chromium.chrome.browser.omaha.RequestGenerator;
 import org.chromium.chrome.browser.partnerbookmarks.PartnerBookmark;
@@ -190,13 +189,6 @@ public abstract class AppHooks {
      */
     public GooglePasswordManagerUIProvider createGooglePasswordManagerUIProvider() {
         return null;
-    }
-
-    /**
-     * @return An instance of MultiWindowUtils to be installed as a singleton.
-     */
-    public MultiWindowUtils createMultiWindowUtils() {
-        return new MultiWindowUtils();
     }
 
     /**
