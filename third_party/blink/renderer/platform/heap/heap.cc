@@ -151,7 +151,7 @@ void ThreadHeap::VisitRememberedSets(MarkingVisitor* visitor) {
       // points or by reintroducing nested allocation scopes that avoid
       // finalization.
       DCHECK(header->IsMarked());
-      DCHECK(!MarkingVisitor::IsInConstruction(header));
+      DCHECK(!header->IsInConstruction());
       const GCInfo& gc_info = GCInfo::From(header->GcInfoIndex());
       gc_info.trace(visitor, header->Payload());
     }
@@ -391,7 +391,7 @@ bool ThreadHeap::AdvanceMarking(MarkingVisitor* visitor,
           [visitor](const MarkingItem& item) {
             HeapObjectHeader* header =
                 HeapObjectHeader::FromPayload(item.base_object_payload);
-            DCHECK(!MarkingVisitor::IsInConstruction(header));
+            DCHECK(!header->IsInConstruction());
             item.callback(visitor, item.base_object_payload);
             visitor->AccountMarkedBytes(header);
           },
@@ -402,7 +402,7 @@ bool ThreadHeap::AdvanceMarking(MarkingVisitor* visitor,
       finished = DrainWorklistWithDeadline(
           deadline, write_barrier_worklist_.get(),
           [visitor](HeapObjectHeader* header) {
-            DCHECK(!MarkingVisitor::IsInConstruction(header));
+            DCHECK(!header->IsInConstruction());
             GCInfo::From(header->GcInfoIndex())
                 .trace(visitor, header->Payload());
             visitor->AccountMarkedBytes(header);
@@ -452,7 +452,9 @@ bool ThreadHeap::AdvanceConcurrentMarking(ConcurrentMarkingVisitor* visitor,
           HeapObjectHeader* header =
               HeapObjectHeader::FromPayload(item.base_object_payload);
           PageFromObject(header)->SynchronizedLoad();
-          DCHECK(!ConcurrentMarkingVisitor::IsInConstruction(header));
+          DCHECK(
+              !header
+                   ->IsInConstruction<HeapObjectHeader::AccessMode::kAtomic>());
           item.callback(visitor, item.base_object_payload);
           visitor->AccountMarkedBytes(header);
         },
@@ -464,7 +466,9 @@ bool ThreadHeap::AdvanceConcurrentMarking(ConcurrentMarkingVisitor* visitor,
         deadline, write_barrier_worklist_.get(),
         [visitor](HeapObjectHeader* header) {
           PageFromObject(header)->SynchronizedLoad();
-          DCHECK(!ConcurrentMarkingVisitor::IsInConstruction(header));
+          DCHECK(
+              !header
+                   ->IsInConstruction<HeapObjectHeader::AccessMode::kAtomic>());
           GCInfo::From(header->GcInfoIndex()).trace(visitor, header->Payload());
           visitor->AccountMarkedBytes(header);
         },

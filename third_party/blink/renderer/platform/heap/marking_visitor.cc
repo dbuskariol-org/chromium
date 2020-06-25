@@ -11,9 +11,9 @@
 
 namespace blink {
 
-MarkingVisitorCommon::MarkingVisitorCommon(ThreadState* state,
-                                           MarkingMode marking_mode,
-                                           int task_id)
+MarkingVisitorBase::MarkingVisitorBase(ThreadState* state,
+                                       MarkingMode marking_mode,
+                                       int task_id)
     : Visitor(state),
       marking_worklist_(Heap().GetMarkingWorklist(), task_id),
       write_barrier_worklist_(Heap().GetWriteBarrierWorklist(), task_id),
@@ -33,19 +33,19 @@ MarkingVisitorCommon::MarkingVisitorCommon(ThreadState* state,
       marking_mode_(marking_mode),
       task_id_(task_id) {}
 
-void MarkingVisitorCommon::FlushCompactionWorklists() {
+void MarkingVisitorBase::FlushCompactionWorklists() {
   if (marking_mode_ != kGlobalMarkingWithCompaction)
     return;
   movable_reference_worklist_.FlushToGlobal();
   backing_store_callback_worklist_.FlushToGlobal();
 }
 
-void MarkingVisitorCommon::RegisterWeakCallback(WeakCallback callback,
-                                                const void* object) {
+void MarkingVisitorBase::RegisterWeakCallback(WeakCallback callback,
+                                              const void* object) {
   weak_callback_worklist_.Push({callback, object});
 }
 
-void MarkingVisitorCommon::RegisterBackingStoreCallback(
+void MarkingVisitorBase::RegisterBackingStoreCallback(
     const void* backing,
     MovingObjectCallback callback) {
   if (marking_mode_ != kGlobalMarkingWithCompaction)
@@ -55,7 +55,7 @@ void MarkingVisitorCommon::RegisterBackingStoreCallback(
   }
 }
 
-void MarkingVisitorCommon::RegisterMovableSlot(const void* const* slot) {
+void MarkingVisitorBase::RegisterMovableSlot(const void* const* slot) {
   if (marking_mode_ != kGlobalMarkingWithCompaction)
     return;
   if (Heap().ShouldRegisterMovingAddress()) {
@@ -63,10 +63,10 @@ void MarkingVisitorCommon::RegisterMovableSlot(const void* const* slot) {
   }
 }
 
-void MarkingVisitorCommon::VisitWeak(const void* object,
-                                     const void* object_weak_ref,
-                                     TraceDescriptor desc,
-                                     WeakCallback callback) {
+void MarkingVisitorBase::VisitWeak(const void* object,
+                                   const void* object_weak_ref,
+                                   TraceDescriptor desc,
+                                   WeakCallback callback) {
   // Filter out already marked values. The write barrier for WeakMember
   // ensures that any newly set value after this point is kept alive and does
   // not require the callback.
@@ -77,9 +77,9 @@ void MarkingVisitorCommon::VisitWeak(const void* object,
   RegisterWeakCallback(callback, object_weak_ref);
 }
 
-void MarkingVisitorCommon::VisitEphemeron(const void* key,
-                                          const void* value,
-                                          TraceCallback value_trace_callback) {
+void MarkingVisitorBase::VisitEphemeron(const void* key,
+                                        const void* value,
+                                        TraceCallback value_trace_callback) {
   if (!HeapObjectHeader::FromPayload(key)
            ->IsMarked<HeapObjectHeader::AccessMode::kAtomic>()) {
     discovered_ephemeron_pairs_worklist_.Push(
@@ -89,7 +89,7 @@ void MarkingVisitorCommon::VisitEphemeron(const void* key,
   value_trace_callback(this, value);
 }
 
-void MarkingVisitorCommon::VisitWeakContainer(
+void MarkingVisitorBase::VisitWeakContainer(
     const void* object,
     const void* const*,
     TraceDescriptor,
@@ -122,6 +122,19 @@ void MarkingVisitorCommon::VisitWeakContainer(
     weak_desc.callback(this, weak_desc.base_object_payload);
 }
 
+void MarkingVisitorBase::DynamicallyMarkAddress(ConstAddress address) {
+  constexpr HeapObjectHeader::AccessMode mode =
+      HeapObjectHeader::AccessMode::kAtomic;
+  HeapObjectHeader* const header =
+      HeapObjectHeader::FromInnerAddress<mode>(address);
+  DCHECK(header);
+  DCHECK(!header->IsInConstruction<mode>());
+  if (MarkHeaderNoTracing(header)) {
+    marking_worklist_.Push({reinterpret_cast<void*>(header->Payload()),
+                            GCInfo::From(header->GcInfoIndex<mode>()).trace});
+  }
+}
+
 // static
 bool MarkingVisitor::MarkValue(void* value,
                                BasePage* base_page,
@@ -140,7 +153,8 @@ bool MarkingVisitor::MarkValue(void* value,
     return false;
 
   MarkingVisitor* visitor = thread_state->CurrentVisitor();
-  if (UNLIKELY(IsInConstruction(header))) {
+  if (UNLIKELY(
+          header->IsInConstruction<HeapObjectHeader::AccessMode::kAtomic>())) {
     // It is assumed that objects on not_fully_constructed_worklist_ are not
     // marked.
     header->Unmark<HeapObjectHeader::AccessMode::kAtomic>();
@@ -232,7 +246,7 @@ void MarkingVisitor::ConservativelyMarkAddress(BasePage* page,
 
   // Simple case for fully constructed objects. This just adds the object to the
   // regular marking worklist.
-  if (!IsInConstruction(header)) {
+  if (!header->IsInConstruction()) {
     MarkHeader(header,
                {header->Payload(), GCInfo::From(header->GcInfoIndex()).trace});
     return;
