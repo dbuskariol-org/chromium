@@ -47646,6 +47646,9 @@ Called by update_net_error_codes.py.-->
 </enum>
 
 <enum name="NetNetworkErrorLoggingHeaderOutcome">
+  <obsolete>
+    Removed from code June 2020.
+  </obsolete>
   <int value="0" label="Discarded: no NetworkErrorLoggingService"/>
   <int value="1" label="Discarded: invalid SSLInfo"/>
   <int value="2" label="Discarded: cert status error"/>
