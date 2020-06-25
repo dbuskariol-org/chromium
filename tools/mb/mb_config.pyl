@@ -2735,7 +2735,7 @@
     },
 
     'mac_xcode_11': {
-      'gn_args': 'mac_sdk_official_version="11"',
+      'gn_args': 'mac_sdk_official_version="11.0"',
     },
 
     'minimal_symbols': {
