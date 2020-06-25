@@ -73755,7 +73755,7 @@ Called by update_scheduler_enums.py.-->
   <int value="10" label="GET_GROUP_FAILED"/>
   <int value="11" label="GET_TAG_FAILED"/>
   <int value="12" label="SUPPRESS_POPUP_FAILED"/>
-  <int value="13" label="ADD_TOAST_DISMISS_HANDLER_FAILED"/>
+  <int value="13" label="ADD_TOAST_DISMISS_HANDLER_FAILED (deprecated)"/>
   <int value="14" label="ADD_TOAST_ERROR_HANDLER_FAILED"/>
   <int value="15" label="SHOWING_TOAST_FAILED"/>
   <int value="16" label="CREATE_TOAST_NOTIFICATION_MANAGER_FAILED"/>
