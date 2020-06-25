@@ -568,7 +568,7 @@ const base::Feature kPrerenderFallbackToPreconnect{
 // Whether to display redesign of the chrome privacy settings page
 // to the user.
 const base::Feature kPrivacySettingsRedesign{"PrivacySettingsRedesign",
-                                             base::FEATURE_DISABLED_BY_DEFAULT};
+                                             base::FEATURE_ENABLED_BY_DEFAULT};
 
 #if defined(OS_ANDROID)
 const base::Feature kSafetyCheckAndroid{"SafetyCheckAndroid",
