@@ -4251,6 +4251,21 @@
             ]
         }
     ],
+    "NewUsbBackend": [
+        {
+            "platforms": [
+                "windows"
+            ],
+            "experiments": [
+                {
+                    "name": "Enabled",
+                    "enable_features": [
+                        "NewUsbBackend"
+                    ]
+                }
+            ]
+        }
+    ],
     "NotificationTimeouts": [
         {
             "platforms": [
