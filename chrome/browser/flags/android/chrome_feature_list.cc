@@ -607,7 +607,7 @@ const base::Feature kTrustedWebActivityNewDisclosure{
     "TrustedWebActivityNewDisclosure", base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kTrustedWebActivityLocationDelegation{
-    "TrustedWebActivityLocationDelegation", base::FEATURE_DISABLED_BY_DEFAULT};
+    "TrustedWebActivityLocationDelegation", base::FEATURE_ENABLED_BY_DEFAULT};
 
 const base::Feature kTrustedWebActivityPostMessage{
     "TrustedWebActivityPostMessage", base::FEATURE_DISABLED_BY_DEFAULT};
