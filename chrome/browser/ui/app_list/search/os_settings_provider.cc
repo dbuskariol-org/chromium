@@ -124,6 +124,9 @@ OsSettingsProvider::OsSettingsProvider(Profile* profile)
     return;
   }
 
+  search_handler_->Observe(
+      search_results_observer_receiver_.BindNewPipeAndPassRemote());
+
   app_service_proxy_ = apps::AppServiceProxyFactory::GetForProfile(profile_);
   if (app_service_proxy_) {
     Observe(&app_service_proxy_->AppRegistryCache());
@@ -163,6 +166,7 @@ ash::AppListSearchResultType OsSettingsProvider::ResultType() {
 }
 
 void OsSettingsProvider::Start(const base::string16& query) {
+  last_query_ = query;
   if (!search_handler_)
     return;
 
@@ -181,6 +185,10 @@ void OsSettingsProvider::Start(const base::string16& query) {
                               kDoNotIncludeParentResults,
                           base::BindOnce(&OsSettingsProvider::OnSearchReturned,
                                          weak_factory_.GetWeakPtr(), query));
+}
+
+void OsSettingsProvider::ViewClosing() {
+  last_query_.clear();
 }
 
 void OsSettingsProvider::OnSearchReturned(
@@ -226,6 +234,13 @@ void OsSettingsProvider::OnAppUpdate(const apps::AppUpdate& update) {
 void OsSettingsProvider::OnAppRegistryCacheWillBeDestroyed(
     apps::AppRegistryCache* cache) {
   Observe(nullptr);
+}
+
+void OsSettingsProvider::OnSearchResultAvailabilityChanged() {
+  if (last_query_.empty())
+    return;
+
+  Start(last_query_);
 }
 
 std::vector<chromeos::settings::mojom::SearchResultPtr>

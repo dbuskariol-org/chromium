@@ -15,6 +15,8 @@
 #include "chrome/browser/ui/webui/settings/chromeos/search/search.mojom.h"
 #include "components/services/app_service/public/cpp/app_registry_cache.h"
 #include "components/services/app_service/public/mojom/types.mojom.h"
+#include "mojo/public/cpp/bindings/receiver.h"
+#include "mojo/public/cpp/bindings/remote.h"
 
 class Profile;
 
@@ -57,8 +59,10 @@ class OsSettingsResult : public ChromeSearchResult {
 
 // Provider results for OS settings based on a search query. No results are
 // provided for zero-state.
-class OsSettingsProvider : public SearchProvider,
-                           public apps::AppRegistryCache::Observer {
+class OsSettingsProvider
+    : public SearchProvider,
+      public apps::AppRegistryCache::Observer,
+      public chromeos::settings::mojom::SearchResultsObserver {
  public:
   explicit OsSettingsProvider(Profile* profile);
   ~OsSettingsProvider() override;
@@ -68,12 +72,16 @@ class OsSettingsProvider : public SearchProvider,
 
   // SearchProvider:
   void Start(const base::string16& query) override;
+  void ViewClosing() override;
   ash::AppListSearchResultType ResultType() override;
 
   // apps::AppRegistryCache::Observer:
   void OnAppUpdate(const apps::AppUpdate& update) override;
   void OnAppRegistryCacheWillBeDestroyed(
       apps::AppRegistryCache* cache) override;
+
+  // mojom::SearchResultsObserver:
+  void OnSearchResultAvailabilityChanged() override;
 
  private:
   void OnSearchReturned(
@@ -114,6 +122,11 @@ class OsSettingsProvider : public SearchProvider,
   chromeos::settings::SearchHandler* const search_handler_;
   apps::AppServiceProxy* app_service_proxy_;
   gfx::ImageSkia icon_;
+
+  // Last query. It is reset when view is closed.
+  base::string16 last_query_;
+  mojo::Receiver<chromeos::settings::mojom::SearchResultsObserver>
+      search_results_observer_receiver_{this};
 
   base::WeakPtrFactory<OsSettingsProvider> weak_factory_{this};
 };
