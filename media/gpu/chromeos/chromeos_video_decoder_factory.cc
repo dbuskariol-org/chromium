@@ -19,7 +19,7 @@
 #endif
 
 #if BUILDFLAG(USE_V4L2_CODEC)
-#include "media/gpu/v4l2/v4l2_slice_video_decoder.h"
+#include "media/gpu/v4l2/v4l2_video_decoder.h"
 #endif
 
 namespace media {
