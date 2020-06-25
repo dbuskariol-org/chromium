@@ -6101,7 +6101,7 @@ crbug.com/1015859 [ Linux ] http/tests/devtools/a11y-axe-core/performance/landin
 crbug.com/1015975 media/video-currentTime.html [ Pass Failure ]
 
 # Sheriff 2019-10-21
-crbug.com/1016456 external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout ]
+crbug.com/1016456 external/wpt/dom/ranges/Range-mutations-dataChange.html [ Pass Timeout Crash ]
 
 # Sheriff 2019-10-24
 crbug.com/1017626 [ Linux ] external/wpt/compat/idlharness.window.html [ Pass Timeout ]
