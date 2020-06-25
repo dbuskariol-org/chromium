@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "chrome/browser/ui/webui/signin/inline_login_handler_dialog_chromeos.h"
+#include "chrome/browser/ui/webui/signin/inline_login_dialog_chromeos.h"
 
 #include <algorithm>
 #include <string>
@@ -36,7 +36,7 @@ namespace chromeos {
 
 namespace {
 
-InlineLoginHandlerDialogChromeOS* dialog = nullptr;
+InlineLoginDialogChromeOS* dialog = nullptr;
 constexpr int kSigninDialogWidth = 768;
 constexpr int kSigninDialogHeight = 640;
 
@@ -66,7 +66,7 @@ GURL GetUrlWithEmailParam(base::StringPiece url_string,
 }
 
 GURL GetInlineLoginUrl(const std::string& email,
-                       const InlineLoginHandlerDialogChromeOS::Source& source) {
+                       const InlineLoginDialogChromeOS::Source& source) {
   if (IsDeviceAccountEmail(email)) {
     // It's a device account re-auth.
     return GetUrlWithEmailParam(chrome::kChromeUIChromeSigninURL, email);
@@ -83,7 +83,7 @@ GURL GetInlineLoginUrl(const std::string& email,
   }
   // User type is Child.
   if (!features::IsEduCoexistenceEnabled() ||
-      source == InlineLoginHandlerDialogChromeOS::Source::kArc) {
+      source == InlineLoginDialogChromeOS::Source::kArc) {
     return GURL(chrome::kChromeUIAccountManagerErrorURL);
   }
   DCHECK_EQ(std::string(chrome::kChromeUIChromeSigninURL).back(), '/');
@@ -96,8 +96,8 @@ GURL GetInlineLoginUrl(const std::string& email,
 }  // namespace
 
 // static
-void InlineLoginHandlerDialogChromeOS::Show(const std::string& email,
-                                            const Source& source) {
+void InlineLoginDialogChromeOS::Show(const std::string& email,
+                                     const Source& source) {
   base::UmaHistogramEnumeration(kAccountAdditionSource, source);
   // If the dialog was triggered as a response to background request, it could
   // get displayed on the lock screen. In this case it is safe to ignore it,
@@ -112,8 +112,8 @@ void InlineLoginHandlerDialogChromeOS::Show(const std::string& email,
   }
 
   // Will be deleted by |SystemWebDialogDelegate::OnDialogClosed|.
-  dialog = new InlineLoginHandlerDialogChromeOS(
-      GetInlineLoginUrl(email, source), source);
+  dialog =
+      new InlineLoginDialogChromeOS(GetInlineLoginUrl(email, source), source);
   dialog->ShowSystemDialog();
 
   // TODO(crbug.com/1016828): Remove/update this after the dialog behavior on
@@ -122,73 +122,71 @@ void InlineLoginHandlerDialogChromeOS::Show(const std::string& email,
       ->SetBackdropType(ash::WindowBackdrop::BackdropType::kSemiOpaque);
 }
 
-void InlineLoginHandlerDialogChromeOS::Show(const Source& source) {
+void InlineLoginDialogChromeOS::Show(const Source& source) {
   Show(/* email= */ std::string(), source);
 }
 
 // static
-void InlineLoginHandlerDialogChromeOS::UpdateEduCoexistenceFlowResult(
+void InlineLoginDialogChromeOS::UpdateEduCoexistenceFlowResult(
     EduCoexistenceFlowResult result) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   if (dialog)
     dialog->SetEduCoexistenceFlowResult(result);
 }
 
-void InlineLoginHandlerDialogChromeOS::AdjustWidgetInitParams(
+void InlineLoginDialogChromeOS::AdjustWidgetInitParams(
     views::Widget::InitParams* params) {
   params->z_order = ui::ZOrderLevel::kNormal;
 }
 
-gfx::Size InlineLoginHandlerDialogChromeOS::GetMaximumDialogSize() {
+gfx::Size InlineLoginDialogChromeOS::GetMaximumDialogSize() {
   gfx::Size size;
   GetDialogSize(&size);
   return size;
 }
 
-gfx::NativeView InlineLoginHandlerDialogChromeOS::GetHostView() const {
+gfx::NativeView InlineLoginDialogChromeOS::GetHostView() const {
   return dialog_window();
 }
 
-gfx::Point InlineLoginHandlerDialogChromeOS::GetDialogPosition(
-    const gfx::Size& size) {
+gfx::Point InlineLoginDialogChromeOS::GetDialogPosition(const gfx::Size& size) {
   gfx::Size host_size = GetHostView()->bounds().size();
 
   // Show all sub-dialogs at center-top.
   return gfx::Point(std::max(0, (host_size.width() - size.width()) / 2), 0);
 }
 
-void InlineLoginHandlerDialogChromeOS::AddObserver(
+void InlineLoginDialogChromeOS::AddObserver(
     web_modal::ModalDialogHostObserver* observer) {}
 
-void InlineLoginHandlerDialogChromeOS::RemoveObserver(
+void InlineLoginDialogChromeOS::RemoveObserver(
     web_modal::ModalDialogHostObserver* observer) {}
 
-void InlineLoginHandlerDialogChromeOS::SetEduCoexistenceFlowResult(
+void InlineLoginDialogChromeOS::SetEduCoexistenceFlowResult(
     EduCoexistenceFlowResult result) {
   edu_coexistence_flow_result_ = result;
 }
 
-InlineLoginHandlerDialogChromeOS::InlineLoginHandlerDialogChromeOS(
-    const GURL& url,
-    const Source& source)
+InlineLoginDialogChromeOS::InlineLoginDialogChromeOS(const GURL& url,
+                                                     const Source& source)
     : SystemWebDialogDelegate(url, base::string16() /* title */),
       delegate_(this),
       source_(source),
       url_(url) {}
 
-InlineLoginHandlerDialogChromeOS::~InlineLoginHandlerDialogChromeOS() {
+InlineLoginDialogChromeOS::~InlineLoginDialogChromeOS() {
   DCHECK_EQ(this, dialog);
   dialog = nullptr;
 }
 
-void InlineLoginHandlerDialogChromeOS::GetDialogSize(gfx::Size* size) const {
+void InlineLoginDialogChromeOS::GetDialogSize(gfx::Size* size) const {
   const display::Display display =
       display::Screen::GetScreen()->GetDisplayNearestWindow(dialog_window());
   size->SetSize(std::min(kSigninDialogWidth, display.work_area().width()),
                 std::min(kSigninDialogHeight, display.work_area().height()));
 }
 
-std::string InlineLoginHandlerDialogChromeOS::GetDialogArgs() const {
+std::string InlineLoginDialogChromeOS::GetDialogArgs() const {
   if (url_.GetWithEmptyPath() !=
       GURL(chrome::kChromeUIAccountManagerErrorURL)) {
     return std::string();
@@ -211,11 +209,11 @@ std::string InlineLoginHandlerDialogChromeOS::GetDialogArgs() const {
   return data;
 }
 
-bool InlineLoginHandlerDialogChromeOS::ShouldShowDialogTitle() const {
+bool InlineLoginDialogChromeOS::ShouldShowDialogTitle() const {
   return false;
 }
 
-void InlineLoginHandlerDialogChromeOS::OnDialogShown(content::WebUI* webui) {
+void InlineLoginDialogChromeOS::OnDialogShown(content::WebUI* webui) {
   SystemWebDialogDelegate::OnDialogShown(webui);
   web_modal::WebContentsModalDialogManager::CreateForWebContents(
       webui->GetWebContents());
@@ -224,8 +222,7 @@ void InlineLoginHandlerDialogChromeOS::OnDialogShown(content::WebUI* webui) {
       ->SetDelegate(&delegate_);
 }
 
-void InlineLoginHandlerDialogChromeOS::OnDialogClosed(
-    const std::string& json_retval) {
+void InlineLoginDialogChromeOS::OnDialogClosed(const std::string& json_retval) {
   if (ProfileManager::GetActiveUserProfile()->IsChild()) {
     DCHECK(edu_coexistence_flow_result_.has_value());
     base::UmaHistogramEnumeration("AccountManager.EduCoexistence.FlowResult",

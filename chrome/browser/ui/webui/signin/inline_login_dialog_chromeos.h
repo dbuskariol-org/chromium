@@ -2,8 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef CHROME_BROWSER_UI_WEBUI_SIGNIN_INLINE_LOGIN_HANDLER_DIALOG_CHROMEOS_H_
-#define CHROME_BROWSER_UI_WEBUI_SIGNIN_INLINE_LOGIN_HANDLER_DIALOG_CHROMEOS_H_
+#ifndef CHROME_BROWSER_UI_WEBUI_SIGNIN_INLINE_LOGIN_DIALOG_CHROMEOS_H_
+#define CHROME_BROWSER_UI_WEBUI_SIGNIN_INLINE_LOGIN_DIALOG_CHROMEOS_H_
 
 #include <string>
 
@@ -20,9 +20,8 @@ namespace chromeos {
 // Extends from |SystemWebDialogDelegate| to create an always-on-top but movable
 // dialog. It is intentionally made movable so that users can copy-paste account
 // passwords from password managers.
-class InlineLoginHandlerDialogChromeOS
-    : public SystemWebDialogDelegate,
-      public web_modal::WebContentsModalDialogHost {
+class InlineLoginDialogChromeOS : public SystemWebDialogDelegate,
+                                  public web_modal::WebContentsModalDialogHost {
  public:
   // The source UX surface used for launching the account addition /
   // re-authentication dialog. This should be as specific as possible.
@@ -88,8 +87,8 @@ class InlineLoginHandlerDialogChromeOS
   void SetEduCoexistenceFlowResult(EduCoexistenceFlowResult result);
 
  protected:
-  InlineLoginHandlerDialogChromeOS(const GURL& url, const Source& source);
-  ~InlineLoginHandlerDialogChromeOS() override;
+  InlineLoginDialogChromeOS(const GURL& url, const Source& source);
+  ~InlineLoginDialogChromeOS() override;
 
   // ui::WebDialogDelegate overrides
   void GetDialogSize(gfx::Size* size) const override;
@@ -104,9 +103,9 @@ class InlineLoginHandlerDialogChromeOS
   const GURL url_;
   base::Optional<EduCoexistenceFlowResult> edu_coexistence_flow_result_;
 
-  DISALLOW_COPY_AND_ASSIGN(InlineLoginHandlerDialogChromeOS);
+  DISALLOW_COPY_AND_ASSIGN(InlineLoginDialogChromeOS);
 };
 
 }  // namespace chromeos
 
-#endif  // CHROME_BROWSER_UI_WEBUI_SIGNIN_INLINE_LOGIN_HANDLER_DIALOG_CHROMEOS_H_
+#endif  // CHROME_BROWSER_UI_WEBUI_SIGNIN_INLINE_LOGIN_DIALOG_CHROMEOS_H_
