@@ -129,9 +129,8 @@ bool MarkingVisitor::MarkValue(void* value,
   HeapObjectHeader* header;
   if (LIKELY(!base_page->IsLargeObjectPage())) {
     header = reinterpret_cast<HeapObjectHeader*>(
-        static_cast<NormalPage*>(base_page)
-            ->FindHeaderFromAddress<HeapObjectHeader::AccessMode::kAtomic>(
-                reinterpret_cast<Address>(value)));
+        static_cast<NormalPage*>(base_page)->FindHeaderFromAddress(
+            reinterpret_cast<Address>(value)));
   } else {
     LargeObjectPage* large_page = static_cast<LargeObjectPage*>(base_page);
     header = large_page->ObjectHeader();
@@ -216,18 +215,6 @@ MarkingVisitor::MarkingVisitor(ThreadState* state, MarkingMode marking_mode)
     : MarkingVisitorBase(state, marking_mode, WorklistTaskId::MutatorThread) {
   DCHECK(state->InAtomicMarkingPause());
   DCHECK(state->CheckThread());
-}
-
-void MarkingVisitor::DynamicallyMarkAddress(ConstAddress address) {
-  HeapObjectHeader* const header =
-      HeapObjectHeader::FromInnerAddress<HeapObjectHeader::AccessMode::kAtomic>(
-          address);
-  DCHECK(header);
-  DCHECK(!IsInConstruction(header));
-  if (MarkHeaderNoTracing(header)) {
-    marking_worklist_.Push({reinterpret_cast<void*>(header->Payload()),
-                            GCInfo::From(header->GcInfoIndex()).trace});
-  }
 }
 
 void MarkingVisitor::ConservativelyMarkAddress(BasePage* page,

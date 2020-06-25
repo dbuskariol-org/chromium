@@ -356,19 +356,6 @@ bool ThreadHeap::AdvanceMarking(MarkingVisitor* visitor,
       // Start with mutator-thread-only worklists (not fully constructed).
       // If time runs out, concurrent markers can take care of the rest.
 
-      // Convert |previously_not_fully_constructed_worklist_| to
-      // |marking_worklist_|. This merely re-adds items with the proper
-      // callbacks.
-      finished = DrainWorklistWithDeadline(
-          deadline, previously_not_fully_constructed_worklist_.get(),
-          [visitor](NotFullyConstructedItem& item) {
-            visitor->DynamicallyMarkAddress(
-                reinterpret_cast<ConstAddress>(item));
-          },
-          WorklistTaskId::MutatorThread);
-      if (!finished)
-        break;
-
       {
         ThreadHeapStatsCollector::EnabledScope bailout_scope(
             stats_collector(), ThreadHeapStatsCollector::kMarkBailOutObjects);
@@ -383,6 +370,19 @@ bool ThreadHeap::AdvanceMarking(MarkingVisitor* visitor,
       }
 
       finished = FlushV8References(deadline);
+      if (!finished)
+        break;
+
+      // Convert |previously_not_fully_constructed_worklist_| to
+      // |marking_worklist_|. This merely re-adds items with the proper
+      // callbacks.
+      finished = DrainWorklistWithDeadline(
+          deadline, previously_not_fully_constructed_worklist_.get(),
+          [visitor](NotFullyConstructedItem& item) {
+            visitor->DynamicallyMarkAddress(
+                reinterpret_cast<ConstAddress>(item));
+          },
+          WorklistTaskId::MutatorThread);
       if (!finished)
         break;
 
@@ -424,13 +424,26 @@ bool ThreadHeap::AdvanceMarking(MarkingVisitor* visitor,
 
 bool ThreadHeap::HasWorkForConcurrentMarking() const {
   return !marking_worklist_->IsGlobalPoolEmpty() ||
-         !write_barrier_worklist_->IsGlobalPoolEmpty();
+         !write_barrier_worklist_->IsGlobalPoolEmpty() ||
+         !previously_not_fully_constructed_worklist_->IsGlobalPoolEmpty();
 }
 
 bool ThreadHeap::AdvanceConcurrentMarking(ConcurrentMarkingVisitor* visitor,
                                           base::TimeTicks deadline) {
   bool finished;
   do {
+    // Convert |previously_not_fully_constructed_worklist_| to
+    // |marking_worklist_|. This merely re-adds items with the proper
+    // callbacks.
+    finished = DrainWorklistWithDeadline(
+        deadline, previously_not_fully_constructed_worklist_.get(),
+        [visitor](NotFullyConstructedItem& item) {
+          visitor->DynamicallyMarkAddress(reinterpret_cast<ConstAddress>(item));
+        },
+        visitor->task_id());
+    if (!finished)
+      break;
+
     // Iteratively mark all objects that are reachable from the objects
     // currently pushed onto the marking worklist.
     finished = DrainWorklistWithDeadline(

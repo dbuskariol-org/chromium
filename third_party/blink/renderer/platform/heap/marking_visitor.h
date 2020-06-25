@@ -115,6 +115,15 @@ ALWAYS_INLINE bool MarkingVisitorCommon::MarkHeaderNoTracing(
 // Base visitor used to mark Oilpan objects on any thread.
 template <class Specialized>
 class PLATFORM_EXPORT MarkingVisitorBase : public MarkingVisitorCommon {
+ public:
+  // Returns whether an object is in construction.
+  static bool IsInConstruction(HeapObjectHeader* header);
+
+  // Marks an object dynamically using any address within its body and adds a
+  // tracing callback for processing of the object. The object is not allowed
+  // to be in construction.
+  void DynamicallyMarkAddress(ConstAddress);
+
  protected:
   MarkingVisitorBase(ThreadState* state, MarkingMode marking_mode, int task_id)
       : MarkingVisitorCommon(state, marking_mode, task_id) {}
@@ -141,11 +150,34 @@ ALWAYS_INLINE void MarkingVisitorBase<Specialized>::MarkHeader(
   DCHECK(header);
   DCHECK(desc.callback);
 
-  if (Specialized::IsInConstruction(header)) {
+  if (IsInConstruction(header)) {
     not_fully_constructed_worklist_.Push(header->Payload());
   } else if (MarkHeaderNoTracing(header)) {
     marking_worklist_.Push(desc);
   }
+}
+
+template <class Specialized>
+void MarkingVisitorBase<Specialized>::DynamicallyMarkAddress(
+    ConstAddress address) {
+  constexpr HeapObjectHeader::AccessMode mode = Specialized::kAccessMode;
+  HeapObjectHeader* const header =
+      HeapObjectHeader::FromInnerAddress<mode>(address);
+  DCHECK(header);
+  DCHECK(!IsInConstruction(header));
+  if (MarkHeaderNoTracing(header)) {
+    marking_worklist_.Push({reinterpret_cast<void*>(header->Payload()),
+                            GCInfo::From(header->GcInfoIndex<mode>()).trace});
+  }
+}
+
+// static
+template <class Specialized>
+ALWAYS_INLINE bool MarkingVisitorBase<Specialized>::IsInConstruction(
+    HeapObjectHeader* header) {
+  // No need for atomics when operating on the mutator thread where
+  // construction happens.
+  return header->IsInConstruction<Specialized::kAccessMode>();
 }
 
 // Visitor used to mark Oilpan objects on the main thread. Also implements
@@ -154,9 +186,6 @@ ALWAYS_INLINE void MarkingVisitorBase<Specialized>::MarkHeader(
 class PLATFORM_EXPORT MarkingVisitor
     : public MarkingVisitorBase<MarkingVisitor> {
  public:
-  // Returns whether an object is in construction.
-  static bool IsInConstruction(HeapObjectHeader* header);
-
   static void GenerationalBarrier(Address slot, ThreadState* state);
 
   // Eagerly traces an already marked backing store ensuring that all its
@@ -174,14 +203,11 @@ class PLATFORM_EXPORT MarkingVisitor
   // Trace method.
   void ConservativelyMarkAddress(BasePage*, ConstAddress);
 
-  // Marks an object dynamically using any address within its body and adds a
-  // tracing callback for processing of the object. The object is not allowed
-  // to be in construction.
-  void DynamicallyMarkAddress(ConstAddress);
-
   void FlushMarkingWorklists();
 
  private:
+  static constexpr auto kAccessMode = HeapObjectHeader::AccessMode::kNonAtomic;
+
   // Write barrier that adds a value the |slot| refers to to the set of marked
   // objects. The barrier bails out if marking is off or the object is not yet
   // marked. Returns true if the value has been marked on this call.
@@ -195,16 +221,10 @@ class PLATFORM_EXPORT MarkingVisitor
   static void TraceMarkedBackingStoreSlow(const void*);
 
   friend class HeapAllocator;
+  friend class MarkingVisitorBase<MarkingVisitor>;
   template <typename T, TracenessMemberConfiguration tracenessConfiguration>
   friend class MemberBase;
 };
-
-// static
-ALWAYS_INLINE bool MarkingVisitor::IsInConstruction(HeapObjectHeader* header) {
-  // No need for atomics when operating on the mutator thread where
-  // construction happens.
-  return header->IsInConstruction<HeapObjectHeader::AccessMode::kNonAtomic>();
-}
 
 // static
 template <typename T>
@@ -258,9 +278,6 @@ ALWAYS_INLINE void MarkingVisitor::TraceMarkedBackingStore(const void* value) {
 class PLATFORM_EXPORT ConcurrentMarkingVisitor
     : public MarkingVisitorBase<ConcurrentMarkingVisitor> {
  public:
-  // Returns whether an object is in construction.
-  static bool IsInConstruction(HeapObjectHeader* header);
-
   ConcurrentMarkingVisitor(ThreadState*, MarkingMode, int);
   ~ConcurrentMarkingVisitor() override = default;
 
@@ -274,15 +291,13 @@ class PLATFORM_EXPORT ConcurrentMarkingVisitor
   }
 
  private:
+  static constexpr auto kAccessMode = HeapObjectHeader::AccessMode::kAtomic;
+
   NotSafeToConcurrentlyTraceWorklist::View
       not_safe_to_concurrently_trace_worklist_;
-};
 
-// static
-ALWAYS_INLINE bool ConcurrentMarkingVisitor::IsInConstruction(
-    HeapObjectHeader* header) {
-  return header->IsInConstruction<HeapObjectHeader::AccessMode::kAtomic>();
-}
+  friend class MarkingVisitorBase<ConcurrentMarkingVisitor>;
+};
 
 }  // namespace blink
 
