@@ -45313,6 +45313,12 @@ Called by update_use_counter_css.py.-->
   <int value="1" label="Sink List"/>
 </enum>
 
+<enum name="MediaRouterResponseReceiverAppType">
+  <int value="0" label="Other"/>
+  <int value="1" label="Web"/>
+  <int value="2" label="Android Tv"/>
+</enum>
+
 <enum name="MediaRouterSinkPositionLabel">
   <int value="100" label="100+"/>
 </enum>
@@ -58320,6 +58326,12 @@ https://www.dmtf.org/sites/default/files/standards/documents/DSP0134_2.7.1.pdf
   <int value="15"
       label="Navigation buttons + spoken feedback + switch access +
              auto-click"/>
+</enum>
+
+<enum name="ReceiverAppTypeSet">
+  <int value="0" label="Other"/>
+  <int value="1" label="Web"/>
+  <int value="2" label="Android Tv and Web"/>
 </enum>
 
 <enum name="RecentTabsAction">
