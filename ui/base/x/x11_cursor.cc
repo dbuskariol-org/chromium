@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#include "ui/ozone/platform/x11/x11_cursor_ozone.h"
+#include "ui/base/x/x11_cursor.h"
 
 #include "base/check_op.h"
 #include "third_party/skia/include/core/SkBitmap.h"
@@ -11,16 +11,15 @@
 
 namespace ui {
 
-X11CursorOzone::X11CursorOzone(const SkBitmap& bitmap,
-                               const gfx::Point& hotspot) {
+X11Cursor::X11Cursor(const SkBitmap& bitmap, const gfx::Point& hotspot) {
   XcursorImage* image = SkBitmapToXcursorImage(bitmap, hotspot);
   xcursor_ = XcursorImageLoadCursor(gfx::GetXDisplay(), image);
   XcursorImageDestroy(image);
 }
 
-X11CursorOzone::X11CursorOzone(const std::vector<SkBitmap>& bitmaps,
-                               const gfx::Point& hotspot,
-                               int frame_delay_ms) {
+X11Cursor::X11Cursor(const std::vector<SkBitmap>& bitmaps,
+                     const gfx::Point& hotspot,
+                     int frame_delay_ms) {
   // Initialize an XCursorImage for each frame, store all of them in
   // XCursorImages and load the cursor from that.
   XcursorImages* images = XcursorImagesCreate(bitmaps.size());
@@ -35,14 +34,14 @@ X11CursorOzone::X11CursorOzone(const std::vector<SkBitmap>& bitmaps,
   XcursorImagesDestroy(images);
 }
 
-X11CursorOzone::X11CursorOzone(::Cursor xcursor) : xcursor_(xcursor) {}
+X11Cursor::X11Cursor(::Cursor xcursor) : xcursor_(xcursor) {}
 
 // static
-scoped_refptr<X11CursorOzone> X11CursorOzone::CreateInvisible() {
-  return base::MakeRefCounted<X11CursorOzone>(CreateInvisibleCursor());
+scoped_refptr<X11Cursor> X11Cursor::CreateInvisible() {
+  return base::MakeRefCounted<X11Cursor>(CreateInvisibleCursor());
 }
 
-X11CursorOzone::~X11CursorOzone() {
+X11Cursor::~X11Cursor() {
   XFreeCursor(gfx::GetXDisplay(), xcursor_);
 }
 
