@@ -217,6 +217,8 @@ test("chromeos_unittests") {
 
   if (is_printing_ppd_provider_v3) {
     sources += [
+      "printing/fake_printer_config_cache.cc",
+      "printing/fake_printer_config_cache.h",
       "printing/ppd_metadata_parser_unittest.cc",
       "printing/printer_config_cache_unittest.cc",
     ]
