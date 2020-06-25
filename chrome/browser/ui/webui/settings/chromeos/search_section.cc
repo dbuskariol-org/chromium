@@ -51,6 +51,20 @@ const std::vector<SearchConcept>& GetAssistantSearchConcepts() {
        mojom::SearchResultDefaultRank::kMedium,
        mojom::SearchResultType::kSubpage,
        {.subpage = mojom::Subpage::kAssistant}},
+  });
+  return *tags;
+}
+
+const std::vector<SearchConcept>& GetAssistantOnSearchConcepts() {
+  static const base::NoDestructor<std::vector<SearchConcept>> tags({
+      {IDS_OS_SETTINGS_TAG_ASSISTANT_TURN_OFF,
+       mojom::kAssistantSubpagePath,
+       mojom::SearchResultIcon::kAssistant,
+       mojom::SearchResultDefaultRank::kMedium,
+       mojom::SearchResultType::kSetting,
+       {.setting = mojom::Setting::kAssistantOnOff},
+       {IDS_OS_SETTINGS_TAG_ASSISTANT_TURN_OFF_ALT1,
+        SearchConcept::kAltTagEnd}},
       {IDS_OS_SETTINGS_TAG_ASSISTANT_PREFERRED_INPUT,
        mojom::kAssistantSubpagePath,
        mojom::SearchResultIcon::kAssistant,
@@ -69,20 +83,6 @@ const std::vector<SearchConcept>& GetAssistantSearchConcepts() {
        mojom::SearchResultDefaultRank::kLow,
        mojom::SearchResultType::kSetting,
        {.setting = mojom::Setting::kAssistantRelatedInfo}},
-  });
-  return *tags;
-}
-
-const std::vector<SearchConcept>& GetAssistantOnSearchConcepts() {
-  static const base::NoDestructor<std::vector<SearchConcept>> tags({
-      {IDS_OS_SETTINGS_TAG_ASSISTANT_TURN_OFF,
-       mojom::kAssistantSubpagePath,
-       mojom::SearchResultIcon::kAssistant,
-       mojom::SearchResultDefaultRank::kMedium,
-       mojom::SearchResultType::kSetting,
-       {.setting = mojom::Setting::kAssistantOnOff},
-       {IDS_OS_SETTINGS_TAG_ASSISTANT_TURN_OFF_ALT1,
-        SearchConcept::kAltTagEnd}},
   });
   return *tags;
 }
