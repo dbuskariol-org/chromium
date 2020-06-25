@@ -411,6 +411,21 @@ void UkmPageLoadMetricsObserver::RecordNavigationTimingMetrics() {
           (timing.navigation_commit_sent_time - navigation_start_time)
               .InMilliseconds());
 
+  // Record the elapsed time from the navigation start milestone for the 103
+  // Early Hints experiment (https://crbug.com/1093693). Note that multiple 103
+  // responses can be served per request. These metrics use the first 103
+  // response as the timing.
+  if (!timing.early_hints_for_first_request_time.is_null()) {
+    builder.SetEarlyHintsForFirstRequest(
+        (timing.early_hints_for_first_request_time - navigation_start_time)
+            .InMilliseconds());
+  }
+  if (!timing.early_hints_for_final_request_time.is_null()) {
+    builder.SetEarlyHintsForFinalRequest(
+        (timing.early_hints_for_final_request_time - navigation_start_time)
+            .InMilliseconds());
+  }
+
   builder.Record(ukm::UkmRecorder::Get());
 }
 

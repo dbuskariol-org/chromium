@@ -3276,6 +3276,19 @@ IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest, EarlyHints) {
       internal::kHistogramEarlyHintsFinalRequestStartToEarlyHints, 1);
   histogram_tester_->ExpectTotalCount(
       internal::kHistogramEarlyHintsEarlyHintsToFinalResponseStart, 1);
+
+  using NavigationTiming = ukm::builders::NavigationTiming;
+  const auto& entries =
+      test_ukm_recorder_->GetMergedEntriesByName(NavigationTiming::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  for (const auto& kv : entries) {
+    test_ukm_recorder_->ExpectEntrySourceHasUrl(
+        kv.second.get(), embedded_test_server()->GetURL("/mock_page.html"));
+    EXPECT_TRUE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFirstRequestName));
+    EXPECT_TRUE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFinalRequestName));
+  }
 }
 
 IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest, EarlyHints_NoHints) {
@@ -3293,6 +3306,19 @@ IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest, EarlyHints_NoHints) {
       internal::kHistogramEarlyHintsFinalRequestStartToEarlyHints, 0);
   histogram_tester_->ExpectTotalCount(
       internal::kHistogramEarlyHintsEarlyHintsToFinalResponseStart, 0);
+
+  using NavigationTiming = ukm::builders::NavigationTiming;
+  const auto& entries =
+      test_ukm_recorder_->GetMergedEntriesByName(NavigationTiming::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  for (const auto& kv : entries) {
+    test_ukm_recorder_->ExpectEntrySourceHasUrl(
+        kv.second.get(), embedded_test_server()->GetURL("/mock_page.html"));
+    EXPECT_FALSE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFirstRequestName));
+    EXPECT_FALSE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFinalRequestName));
+  }
 }
 
 IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest, EarlyHints_MultipleHints) {
@@ -3313,6 +3339,19 @@ IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest, EarlyHints_MultipleHints) {
       internal::kHistogramEarlyHintsFinalRequestStartToEarlyHints, 1);
   histogram_tester_->ExpectTotalCount(
       internal::kHistogramEarlyHintsEarlyHintsToFinalResponseStart, 1);
+
+  using NavigationTiming = ukm::builders::NavigationTiming;
+  const auto& entries =
+      test_ukm_recorder_->GetMergedEntriesByName(NavigationTiming::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  for (const auto& kv : entries) {
+    test_ukm_recorder_->ExpectEntrySourceHasUrl(
+        kv.second.get(), embedded_test_server()->GetURL("/mock_page.html"));
+    EXPECT_TRUE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFirstRequestName));
+    EXPECT_TRUE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFinalRequestName));
+  }
 }
 
 IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest,
@@ -3333,6 +3372,19 @@ IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest,
       internal::kHistogramEarlyHintsFinalRequestStartToEarlyHints, 0);
   histogram_tester_->ExpectTotalCount(
       internal::kHistogramEarlyHintsEarlyHintsToFinalResponseStart, 0);
+
+  using NavigationTiming = ukm::builders::NavigationTiming;
+  const auto& entries =
+      test_ukm_recorder_->GetMergedEntriesByName(NavigationTiming::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  for (const auto& kv : entries) {
+    test_ukm_recorder_->ExpectEntrySourceHasUrl(
+        kv.second.get(), embedded_test_server()->GetURL("/mock_page2.html"));
+    EXPECT_TRUE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFirstRequestName));
+    EXPECT_FALSE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFinalRequestName));
+  }
 }
 
 IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest,
@@ -3353,6 +3405,19 @@ IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest,
       internal::kHistogramEarlyHintsFinalRequestStartToEarlyHints, 1);
   histogram_tester_->ExpectTotalCount(
       internal::kHistogramEarlyHintsEarlyHintsToFinalResponseStart, 1);
+
+  using NavigationTiming = ukm::builders::NavigationTiming;
+  const auto& entries =
+      test_ukm_recorder_->GetMergedEntriesByName(NavigationTiming::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  for (const auto& kv : entries) {
+    test_ukm_recorder_->ExpectEntrySourceHasUrl(
+        kv.second.get(), embedded_test_server()->GetURL("/mock_page2.html"));
+    EXPECT_FALSE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFirstRequestName));
+    EXPECT_TRUE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFinalRequestName));
+  }
 }
 
 IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest,
@@ -3374,4 +3439,17 @@ IN_PROC_BROWSER_TEST_F(PageLoadMetricsBrowserTest,
       internal::kHistogramEarlyHintsFinalRequestStartToEarlyHints, 1);
   histogram_tester_->ExpectTotalCount(
       internal::kHistogramEarlyHintsEarlyHintsToFinalResponseStart, 1);
+
+  using NavigationTiming = ukm::builders::NavigationTiming;
+  const auto& entries =
+      test_ukm_recorder_->GetMergedEntriesByName(NavigationTiming::kEntryName);
+  EXPECT_EQ(1u, entries.size());
+  for (const auto& kv : entries) {
+    test_ukm_recorder_->ExpectEntrySourceHasUrl(
+        kv.second.get(), embedded_test_server()->GetURL("/mock_page2.html"));
+    EXPECT_TRUE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFirstRequestName));
+    EXPECT_TRUE(test_ukm_recorder_->EntryHasMetric(
+        kv.second.get(), NavigationTiming::kEarlyHintsForFinalRequestName));
+  }
 }
