@@ -27,8 +27,8 @@ import org.chromium.base.test.BaseRobolectricTestRunner;
  * Unit tests for the {@link TabViewManager} class.
  */
 @RunWith(BaseRobolectricTestRunner.class)
-@Config(shadows = {TabViewManagerImplTest.TabBrowserControlsOffsetHelperShadow.class})
-public class TabViewManagerImplTest {
+@Config(shadows = {TabViewManagerUnitTest.TabBrowserControlsOffsetHelperShadow.class})
+public class TabViewManagerUnitTest {
     /**
      * A shadow implementation of {@link TabBrowserControlsOffsetHelper}.
      */
