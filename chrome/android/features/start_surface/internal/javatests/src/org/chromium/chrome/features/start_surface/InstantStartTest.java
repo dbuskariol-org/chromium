@@ -55,6 +55,7 @@ import org.chromium.chrome.browser.ChromeTabbedActivity;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManagerChromePhone;
 import org.chromium.chrome.browser.compositor.layouts.LayoutManagerChromeTablet;
 import org.chromium.chrome.browser.compositor.layouts.OverviewModeState;
+import org.chromium.chrome.browser.compositor.layouts.components.LayoutTab;
 import org.chromium.chrome.browser.compositor.layouts.content.TabContentManager;
 import org.chromium.chrome.browser.flags.CachedFeatureFlags;
 import org.chromium.chrome.browser.flags.ChromeFeatureList;
@@ -72,6 +73,7 @@ import org.chromium.chrome.browser.tabmodel.TabbedModeTabPersistencePolicy;
 import org.chromium.chrome.browser.tasks.ReturnToChromeExperimentsUtil;
 import org.chromium.chrome.browser.tasks.pseudotab.PseudoTab;
 import org.chromium.chrome.browser.tasks.pseudotab.TabAttributeCache;
+import org.chromium.chrome.browser.tasks.tab_management.TabUiFeatureUtilities;
 import org.chromium.chrome.browser.toolbar.top.StartSurfaceToolbarCoordinator;
 import org.chromium.chrome.browser.toolbar.top.TopToolbarCoordinator;
 import org.chromium.chrome.tab_ui.R;
@@ -740,6 +742,26 @@ public class InstantStartTest {
 
         onView(withId(org.chromium.chrome.start_surface.R.id.placeholders_layout))
                 .check(matches(isDisplayed()));
+    }
+
+    @Test
+    @SmallTest
+    @Restriction({UiRestriction.RESTRICTION_TYPE_PHONE})
+    @Features.DisableFeatures(ChromeFeatureList.START_SURFACE_ANDROID)
+    public void testInstantStartWithoutStartSurface() throws IOException {
+        createTabStateFile(new int[] {0});
+        mActivityTestRule.startMainActivityFromLauncher();
+
+        Assert.assertTrue(TabUiFeatureUtilities.supportInstantStart(false));
+        Assert.assertTrue(CachedFeatureFlags.isEnabled(ChromeFeatureList.INSTANT_START));
+        Assert.assertFalse(StartSurfaceConfiguration.isStartSurfaceEnabled());
+
+        Assert.assertEquals(1,
+                mActivityTestRule.getActivity().getTabModelSelector().getCurrentModel().getCount());
+        LayoutTab layoutTab =
+                mActivityTestRule.getActivity().getLayoutManager().getLayoutTabForTesting(
+                        mActivityTestRule.getActivity().getTabModelSelector().getCurrentTabId());
+        Assert.assertNotNull(layoutTab);
     }
 
     /**
