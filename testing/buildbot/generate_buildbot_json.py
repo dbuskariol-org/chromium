@@ -1397,16 +1397,18 @@ class BBJSONGenerator(object):
     # references to configs outside of this directory are added, please change
     # their presubmit to run `generate_buildbot_json.py -c`, so that the tree
     # never ends up in an invalid state.
-    project_star = glob.glob(
-        os.path.join(self.args.infra_config_dir, 'project.star'))
-    if project_star:
-      is_master_pattern = re.compile('is_master\s*=\s*(True|False)')
-      for l in self.read_file(project_star[0]).splitlines():
-        match = is_master_pattern.search(l)
-        if match:
-          if match.group(1) == 'False':
-            return None
-          break
+
+    # Get the generated project.pyl so we can check if we should be enforcing
+    # that the specs are for builders that actually exist
+    # If not, return None to indicate that we won't enforce that builders in
+    # waterfalls.pyl are defined in LUCI
+    project_pyl_path = os.path.join(self.args.infra_config_dir, 'generated',
+                                    'project.pyl')
+    if os.path.exists(project_pyl_path):
+      settings = ast.literal_eval(self.read_file(project_pyl_path))
+      if not settings.get('validate_source_side_specs_have_builder', True):
+        return None
+
     bot_names = set()
     milo_configs = glob.glob(
         os.path.join(self.args.infra_config_dir, 'generated', 'luci-milo*.cfg'))

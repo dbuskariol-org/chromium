@@ -55,7 +55,7 @@ class FakeBBGen(generate_buildbot_json.BBJSONGenerator):
                waterfalls,
                test_suites,
                luci_milo_cfg,
-               project_star='is_master = True',
+               project_pyl='{"validate_source_side_specs_have_builder": True}',
                exceptions=EMPTY_PYL_FILE,
                mixins=EMPTY_PYL_FILE,
                gn_isolate_map=EMPTY_PYL_FILE,
@@ -72,11 +72,13 @@ class FakeBBGen(generate_buildbot_json.BBJSONGenerator):
         (pyl_files_dir, 'mixins.pyl'): mixins,
         (pyl_files_dir, 'gn_isolate_map.pyl'): gn_isolate_map,
         (pyl_files_dir, 'variants.pyl'): variants,
-        (infra_config_dir, 'project.star'): project_star,
+        (infra_config_dir, 'generated/project.pyl'): project_pyl,
         (infra_config_dir, 'generated/luci-milo.cfg'): luci_milo_cfg,
         (infra_config_dir, 'generated/luci-milo-dev.cfg'): '',
     }
     for (d, filename), content in files.iteritems():
+      if content is None:
+        continue
       path = os.path.join(d, filename)
       parent = os.path.abspath(os.path.dirname(path))
       if not os.path.exists(parent):
@@ -2896,12 +2898,23 @@ class UnitTest(TestCase):
       fbb.check_input_file_consistency(verbose=True)
     self.assertFalse(fbb.printed_lines)
 
-  def test_nonexistent_bot_does_not_raise_on_branch(self):
+  def test_nonexistent_bot_raises_when_no_project_pyl_exists(self):
     fbb = FakeBBGen(self.args,
                     UNKNOWN_BOT_GTESTS_WATERFALL,
                     FOO_TEST_SUITE,
                     LUCI_MILO_CFG,
-                    project_star='is_master = False')
+                    project_pyl=None)
+    with self.assertRaises(generate_buildbot_json.BBGenErr):
+      fbb.check_input_file_consistency(verbose=True)
+    self.assertFalse(fbb.printed_lines)
+
+  def test_nonexistent_bot_does_not_raise_when_validation_disabled(self):
+    fbb = FakeBBGen(
+        self.args,
+        UNKNOWN_BOT_GTESTS_WATERFALL,
+        FOO_TEST_SUITE,
+        LUCI_MILO_CFG,
+        project_pyl='{"validate_source_side_specs_have_builder": False}')
     fbb.check_input_file_consistency(verbose=True)
 
   def test_waterfalls_must_be_sorted(self):
