@@ -6894,5 +6894,5 @@ crbug.com/1098676 [ Win ] http/tests/devtools/console-xhr-logging.js [ Pass Fail
 crbug.com/867532 [ Linux ] http/tests/workers/worker-usecounter.html [ Pass Timeout ]
 
 # Tests blocking WPT importer
-crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry.html [ Pass Crash ]
-crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry-different-function-realm.html [ Pass Crash ]
+crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry.html [ Pass Crash Timeout ]
+crbug.com/1098844 external/wpt/wasm/jsapi/functions/entry-different-function-realm.html [ Pass Crash Timeout ]
