@@ -46,6 +46,26 @@ const char kConstValuePrefix[] = "_const_";
 const char kNULLValue[] = "_const_NULL";
 const char kFailedToParseArgsError[] = "_const_ERROR:FAILED_TO_PARSE_ARGS";
 
+#define INT_FAIL(propnode, msg)                                  \
+  LOG(ERROR) << "Failed to parse " << propnode.original_property \
+             << " to Int: " << msg;                              \
+  return nil;
+
+#define INTARRAY_FAIL(propnode, msg)                             \
+  LOG(ERROR) << "Failed to parse " << propnode.original_property \
+             << " to IntArray: " << msg;                         \
+  return nil;
+
+#define NSRANGE_FAIL(propnode, msg)                              \
+  LOG(ERROR) << "Failed to parse " << propnode.original_property \
+             << " to NSRange: " << msg;                          \
+  return nil;
+
+#define UIELEMENT_FAIL(propnode, msg)                            \
+  LOG(ERROR) << "Failed to parse " << propnode.original_property \
+             << " to UIElement: " << msg;                        \
+  return nil;
+
 }  // namespace
 
 class AccessibilityTreeFormatterMac : public AccessibilityTreeFormatterBase {
@@ -314,17 +334,13 @@ AccessibilityTreeFormatterMac::ParamByPropertyNode(
 NSNumber* AccessibilityTreeFormatterMac::PropertyNodeToInt(
     const PropertyNode& propnode) const {
   if (propnode.parameters.size() != 1) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to Int: single argument is expected";
-    return nil;
+    INT_FAIL(propnode, "single argument is expected")
   }
 
   const auto& intnode = propnode.parameters[0];
   base::Optional<int> param = intnode.AsInt();
   if (!param) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to Int: " << intnode.name_or_value << " is not a number";
-    return nil;
+    INT_FAIL(propnode, "not a number")
   }
   return [NSNumber numberWithInt:*param];
 }
@@ -333,17 +349,12 @@ NSNumber* AccessibilityTreeFormatterMac::PropertyNodeToInt(
 NSArray* AccessibilityTreeFormatterMac::PropertyNodeToIntArray(
     const PropertyNode& propnode) const {
   if (propnode.parameters.size() != 1) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to IntArray: single argument is expected";
-    return nil;
+    INTARRAY_FAIL(propnode, "single argument is expected")
   }
 
   const auto& arraynode = propnode.parameters[0];
   if (arraynode.name_or_value != base::ASCIIToUTF16("[]")) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to IntArray: " << arraynode.name_or_value
-               << " is not array";
-    return nil;
+    INTARRAY_FAIL(propnode, "not array")
   }
 
   NSMutableArray* array =
@@ -351,10 +362,8 @@ NSArray* AccessibilityTreeFormatterMac::PropertyNodeToIntArray(
   for (const auto& paramnode : arraynode.parameters) {
     base::Optional<int> param = paramnode.AsInt();
     if (!param) {
-      LOG(ERROR) << "Failed to parse " << propnode.original_property
-                 << " to IntArray: " << paramnode.name_or_value
-                 << " is not a number";
-      return nil;
+      INTARRAY_FAIL(propnode, paramnode.name_or_value +
+                                  base::UTF8ToUTF16(" is not a number"))
     }
     [array addObject:@(*param)];
   }
@@ -365,30 +374,22 @@ NSArray* AccessibilityTreeFormatterMac::PropertyNodeToIntArray(
 NSValue* AccessibilityTreeFormatterMac::PropertyNodeToRange(
     const PropertyNode& propnode) const {
   if (propnode.parameters.size() != 1) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to NSRange: single argument is expected";
-    return nil;
+    NSRANGE_FAIL(propnode, "single argument is expected")
   }
 
   const auto& dictnode = propnode.parameters[0];
   if (!dictnode.IsDict()) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to NSRange: dictionary is expected";
-    return nil;
+    NSRANGE_FAIL(propnode, "dictionary is expected")
   }
 
   base::Optional<int> loc = dictnode.FindIntKey("loc");
   if (!loc) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to NSRange: no loc or loc is not a number";
-    return nil;
+    NSRANGE_FAIL(propnode, "no loc or loc is not a number")
   }
 
   base::Optional<int> len = dictnode.FindIntKey("len");
   if (!len) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to NSRange: no len or len is not a number";
-    return nil;
+    NSRANGE_FAIL(propnode, "no len or len is not a number")
   }
 
   return [NSValue valueWithRange:NSMakeRange(*loc, *len)];
@@ -400,9 +401,7 @@ AccessibilityTreeFormatterMac::PropertyNodeToUIElement(
     const PropertyNode& propnode,
     const LineIndexesMap& line_indexes_map) const {
   if (propnode.parameters.size() != 1) {
-    LOG(ERROR) << "Failed to parse " << propnode.original_property
-               << " to UIElement: single argument is expected";
-    return nil;
+    UIELEMENT_FAIL(propnode, "single argument is expected")
   }
 
   const auto& uielnode = propnode.parameters[0];
@@ -414,9 +413,7 @@ AccessibilityTreeFormatterMac::PropertyNodeToUIElement(
     }
   }
 
-  LOG(ERROR)
-      << "Failed to parse " << propnode.original_property
-      << " to UIElement: no corresponding UIElement was found in the tree";
+  UIELEMENT_FAIL(propnode, "no corresponding UIElement was found in the tree")
   return nil;
 }
 
