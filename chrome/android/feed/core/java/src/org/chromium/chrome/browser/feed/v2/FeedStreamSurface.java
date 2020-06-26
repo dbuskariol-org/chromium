@@ -385,8 +385,10 @@ public class FeedStreamSurface implements SurfaceActionsHandler, FeedActionsHand
                     sliceId, slice.getXsurfaceSlice().getXsurfaceFrame().toByteArray());
         } else if (slice.hasLoadingSpinnerSlice()) {
             return new FeedListContentManager.NativeViewContent(sliceId, R.layout.feed_spinner);
+        } else if (slice.hasZeroStateSlice()) {
+            // TODO(iwells): Settle on a final layout for zero-state.
+            return new FeedListContentManager.NativeViewContent(sliceId, R.layout.no_content);
         } else {
-            // TODO(jianli): Create native view for ZeroStateSlice.
             TextView view = new TextView(mActivity);
             view.setText(sliceId);
             return new FeedListContentManager.NativeViewContent(sliceId, view);
