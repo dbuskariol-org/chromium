@@ -1,5 +1,5 @@
-This patchfile is a stop-gap solution to accomodate differences in syntax for
-AppReduce, which is used internally in place of ProGuard. See crbug.com/1004516.
+This patchfile is a stop-gap solution to accomodate possible differences in
+supported ProGuard rules when building cronet internally. See crbug.com/1004516.
 
 This patches base/android/proguard/chromium_code.flags.
 
@@ -9,7 +9,7 @@ cd src
 export ORIG_FLAGS="base/android/proguard/chromium_code.flags"
 cp $ORIG_FLAGS modified.flags
 $EDITOR modified.flags
-diff -u "$ORIG_FLAGS" modified.flags > "components/cronet/android/cronet_appreduce_workaround.patch"
+diff -u "$ORIG_FLAGS" modified.flags > "components/cronet/android/cronet_workaround.patch"
 
 To test whether the patch applies cleanly use:
 
