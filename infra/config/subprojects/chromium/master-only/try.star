@@ -758,7 +758,15 @@ chrome_internal_verifier(
 )
 
 chrome_internal_verifier(
+    builder = 'chromeos-eve-chrome',
+)
+
+chrome_internal_verifier(
     builder = 'chromeos-eve-compile-chrome',
+)
+
+chrome_internal_verifier(
+    builder = 'chromeos-kevin-chrome',
 )
 
 chrome_internal_verifier(
