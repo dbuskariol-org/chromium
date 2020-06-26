@@ -66,6 +66,14 @@ const char kFailedToParseArgsError[] = "_const_ERROR:FAILED_TO_PARSE_ARGS";
              << " to UIElement: " << msg;                        \
   return nil;
 
+#define TEXTMARKER_FAIL(propnode, msg)                                         \
+  LOG(ERROR) << "Failed to parse " << propnode.original_property               \
+             << " to AXTextMarker: " << msg                                    \
+             << ". Expected format: {anchor, offset, affinity}, where anchor " \
+                "is :line_num, offset is integer, affinity is either down, "   \
+                "up or none";                                                  \
+  return nil;
+
 }  // namespace
 
 class AccessibilityTreeFormatterMac : public AccessibilityTreeFormatterBase {
@@ -137,6 +145,7 @@ class AccessibilityTreeFormatterMac : public AccessibilityTreeFormatterBase {
   gfx::NativeViewAccessible PropertyNodeToUIElement(
       const PropertyNode&,
       const LineIndexesMap&) const;
+  id PropertyNodeToTextMarker(const PropertyNode&, const LineIndexesMap&) const;
 
   base::Value PopulateSize(const BrowserAccessibilityCocoa*) const;
   base::Value PopulatePosition(const BrowserAccessibilityCocoa*) const;
@@ -150,6 +159,9 @@ class AccessibilityTreeFormatterMac : public AccessibilityTreeFormatterBase {
                             const LineIndexesMap& line_indexes_map) const;
 
   std::string NodeToLineIndex(id, const LineIndexesMap&) const;
+  gfx::NativeViewAccessible LineIndexToNode(
+      const base::string16 line_index,
+      const LineIndexesMap& line_indexes_map) const;
 
   base::string16 ProcessTreeForOutput(
       const base::DictionaryValue& node,
@@ -325,6 +337,8 @@ AccessibilityTreeFormatterMac::ParamByPropertyNode(
     param = PropertyNodeToRange(property_node);
   } else if (property_name == "AXIndexForChildUIElement") {  // UIElement
     param = PropertyNodeToUIElement(property_node, line_indexes_map);
+  } else if (property_name == "AXIndexForTextMarker") {  // TextMarker
+    param = PropertyNodeToTextMarker(property_node, line_indexes_map);
   }
 
   return param;
@@ -404,17 +418,53 @@ AccessibilityTreeFormatterMac::PropertyNodeToUIElement(
     UIELEMENT_FAIL(propnode, "single argument is expected")
   }
 
-  const auto& uielnode = propnode.parameters[0];
-  base::string16 line_index = uielnode.name_or_value;
-  for (std::pair<const gfx::NativeViewAccessible, base::string16> item :
-       line_indexes_map) {
-    if (item.second == line_index) {
-      return item.first;
-    }
+  gfx::NativeViewAccessible uielement =
+      LineIndexToNode(propnode.parameters[0].name_or_value, line_indexes_map);
+  if (!uielement) {
+    UIELEMENT_FAIL(propnode, "no corresponding UIElement was found in the tree")
+  }
+  return uielement;
+}
+
+id AccessibilityTreeFormatterMac::PropertyNodeToTextMarker(
+    const PropertyNode& propnode,
+    const LineIndexesMap& line_indexes_map) const {
+  if (propnode.parameters.size() != 1) {
+    TEXTMARKER_FAIL(propnode, "single argument is expected")
   }
 
-  UIELEMENT_FAIL(propnode, "no corresponding UIElement was found in the tree")
-  return nil;
+  const auto& tmnode = propnode.parameters[0];
+  if (!tmnode.IsDict()) {
+    TEXTMARKER_FAIL(propnode, "dictionary is expected")
+  }
+  if (tmnode.parameters.size() != 3) {
+    TEXTMARKER_FAIL(propnode, "wrong number of dictionary elements")
+  }
+
+  BrowserAccessibilityCocoa* anchor_cocoa =
+      LineIndexToNode(tmnode.parameters[0].name_or_value, line_indexes_map);
+  if (!anchor_cocoa) {
+    TEXTMARKER_FAIL(propnode, "1st argument: wrong anchor")
+  }
+
+  base::Optional<int> offset = tmnode.parameters[1].AsInt();
+  if (!offset) {
+    TEXTMARKER_FAIL(propnode, "2nd argument: wrong offset")
+  }
+
+  ax::mojom::TextAffinity affinity;
+  const base::string16& affinity_str = tmnode.parameters[2].name_or_value;
+  if (affinity_str == base::UTF8ToUTF16("none")) {
+    affinity = ax::mojom::TextAffinity::kNone;
+  } else if (affinity_str == base::UTF8ToUTF16("down")) {
+    affinity = ax::mojom::TextAffinity::kDownstream;
+  } else if (affinity_str == base::UTF8ToUTF16("up")) {
+    affinity = ax::mojom::TextAffinity::kUpstream;
+  } else {
+    TEXTMARKER_FAIL(propnode, "3rd argument: wrong affinity")
+  }
+
+  return content::AXTextMarkerFrom(anchor_cocoa, *offset, affinity);
 }
 
 base::Value AccessibilityTreeFormatterMac::PopulateSize(
@@ -573,6 +623,18 @@ std::string AccessibilityTreeFormatterMac::NodeToLineIndex(
     line_index = base::UTF16ToUTF8(index_iterator->second);
   }
   return kConstValuePrefix + line_index;
+}
+
+gfx::NativeViewAccessible AccessibilityTreeFormatterMac::LineIndexToNode(
+    const base::string16 line_index,
+    const LineIndexesMap& line_indexes_map) const {
+  for (std::pair<const gfx::NativeViewAccessible, base::string16> item :
+       line_indexes_map) {
+    if (item.second == line_index) {
+      return item.first;
+    }
+  }
+  return nil;
 }
 
 base::string16 AccessibilityTreeFormatterMac::ProcessTreeForOutput(
