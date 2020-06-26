@@ -4,7 +4,6 @@
 
 #include <vector>
 
-#include "base/test/task_environment.h"
 #include "media/base/demuxer_stream.h"
 #include "media/base/media_util.h"
 #include "media/base/mock_filters.h"
@@ -14,14 +13,16 @@
 #include "media/filters/decoder_stream.h"
 #include "testing/gmock/include/gmock/gmock.h"
 #include "testing/gtest/include/gtest/gtest.h"
+#include "third_party/blink/public/platform/scheduler/test/renderer_scheduler_test_support.h"
+#include "third_party/blink/renderer/platform/testing/testing_platform_support.h"
 
-#include "media/webcodecs/wc_decoder_selector.h"
+#include "third_party/blink/renderer/modules/webcodecs/decoder_selector.h"
 
 using ::testing::_;
 using ::testing::IsNull;
 using ::testing::StrictMock;
 
-namespace media {
+namespace blink {
 
 namespace {
 
@@ -37,32 +38,37 @@ const char kDecoder2[] = "Decoder2";
 // Specializations for the AUDIO version of the test.
 class AudioDecoderSelectorTestParam {
  public:
-  static constexpr DemuxerStream::Type kStreamType = DemuxerStream::AUDIO;
+  static constexpr media::DemuxerStream::Type kStreamType =
+      media::DemuxerStream::AUDIO;
 
-  using DecoderSelector = WebCodecsDecoderSelector<DemuxerStream::AUDIO>;
-  using MockDecoder = MockAudioDecoder;
-  using Output = AudioBuffer;
+  using DecoderSelector = DecoderSelector<media::DemuxerStream::AUDIO>;
+  using MockDecoder = media::MockAudioDecoder;
+  using Output = media::AudioBuffer;
 
-  static AudioDecoderConfig CreateConfig() { return TestAudioConfig::Normal(); }
+  static media::AudioDecoderConfig CreateConfig() {
+    return media::TestAudioConfig::Normal();
+  }
 
   // Create a config that won't match the return of CreateConfig().
-  static AudioDecoderConfig CreateAlternateConfig() {
-    return TestAudioConfig::NormalEncrypted();
+  static media::AudioDecoderConfig CreateAlternateConfig() {
+    return media::TestAudioConfig::NormalEncrypted();
   }
 
   // Decoder::Initialize() takes different parameters depending on the type.
   static void ExpectInitialize(MockDecoder* decoder,
                                DecoderCapability capability,
-                               AudioDecoderConfig expected_config) {
+                               media::AudioDecoderConfig expected_config) {
     EXPECT_CALL(*decoder, Initialize_(_, _, _, _, _))
         .WillRepeatedly([capability, expected_config](
-                            const AudioDecoderConfig& config, CdmContext*,
-                            AudioDecoder::InitCB& init_cb,
-                            const AudioDecoder::OutputCB&, const WaitingCB&) {
+                            const media::AudioDecoderConfig& config,
+                            media::CdmContext*,
+                            media::AudioDecoder::InitCB& init_cb,
+                            const media::AudioDecoder::OutputCB&,
+                            const media::WaitingCB&) {
           EXPECT_TRUE(config.Matches(expected_config));
           std::move(init_cb).Run(capability == kSucceed
-                                     ? OkStatus()
-                                     : StatusCode::kCodeOnlyForTesting);
+                                     ? media::OkStatus()
+                                     : media::StatusCode::kCodeOnlyForTesting);
         });
   }
 };
@@ -70,38 +76,43 @@ class AudioDecoderSelectorTestParam {
 // Specializations for the VIDEO version of the test.
 class VideoDecoderSelectorTestParam {
  public:
-  static constexpr DemuxerStream::Type kStreamType = DemuxerStream::VIDEO;
+  static constexpr media::DemuxerStream::Type kStreamType =
+      media::DemuxerStream::VIDEO;
 
-  using DecoderSelector = WebCodecsDecoderSelector<DemuxerStream::VIDEO>;
-  using MockDecoder = MockVideoDecoder;
-  using Output = VideoFrame;
+  using DecoderSelector = DecoderSelector<media::DemuxerStream::VIDEO>;
+  using MockDecoder = media::MockVideoDecoder;
+  using Output = media::VideoFrame;
 
-  static VideoDecoderConfig CreateConfig() { return TestVideoConfig::Normal(); }
+  static media::VideoDecoderConfig CreateConfig() {
+    return media::TestVideoConfig::Normal();
+  }
 
   // Create a config that won't match the return of CreateConfig().
-  static VideoDecoderConfig CreateAlternateConfig() {
-    return TestVideoConfig::LargeEncrypted();
+  static media::VideoDecoderConfig CreateAlternateConfig() {
+    return media::TestVideoConfig::LargeEncrypted();
   }
 
   static void ExpectInitialize(MockDecoder* decoder,
                                DecoderCapability capability,
-                               VideoDecoderConfig expected_config) {
+                               media::VideoDecoderConfig expected_config) {
     EXPECT_CALL(*decoder, Initialize_(_, _, _, _, _, _))
         .WillRepeatedly([capability, expected_config](
-                            const VideoDecoderConfig& config, bool low_delay,
-                            CdmContext*, VideoDecoder::InitCB& init_cb,
-                            const VideoDecoder::OutputCB&, const WaitingCB&) {
+                            const media::VideoDecoderConfig& config,
+                            bool low_delay, media::CdmContext*,
+                            media::VideoDecoder::InitCB& init_cb,
+                            const media::VideoDecoder::OutputCB&,
+                            const media::WaitingCB&) {
           EXPECT_TRUE(config.Matches(expected_config));
           std::move(init_cb).Run(capability == kSucceed
-                                     ? OkStatus()
-                                     : StatusCode::kCodeOnlyForTesting);
+                                     ? media::OkStatus()
+                                     : media::StatusCode::kCodeOnlyForTesting);
         });
   }
 };
 
 // Allocate storage for the member variables.
-constexpr DemuxerStream::Type AudioDecoderSelectorTestParam::kStreamType;
-constexpr DemuxerStream::Type VideoDecoderSelectorTestParam::kStreamType;
+constexpr media::DemuxerStream::Type AudioDecoderSelectorTestParam::kStreamType;
+constexpr media::DemuxerStream::Type VideoDecoderSelectorTestParam::kStreamType;
 
 }  // namespace
 
@@ -154,8 +165,8 @@ class WebCodecsDecoderSelectorTest : public ::testing::Test {
 
   void CreateDecoderSelector() {
     decoder_selector_ =
-        std::make_unique<WebCodecsDecoderSelector<TypeParam::kStreamType>>(
-            task_environment_.GetMainThreadTaskRunner(),
+        std::make_unique<DecoderSelector<TypeParam::kStreamType>>(
+            scheduler::GetSingleThreadTaskRunnerForTesting(),
             base::BindRepeating(&Self::CreateDecoders, base::Unretained(this)),
             base::BindRepeating(&Self::OnOutput, base::Unretained(this)));
   }
@@ -168,15 +179,14 @@ class WebCodecsDecoderSelectorTest : public ::testing::Test {
     RunUntilIdle();
   }
 
-  void RunUntilIdle() { task_environment_.RunUntilIdle(); }
+  void RunUntilIdle() { platform_->RunUntilIdle(); }
 
-  base::test::TaskEnvironment task_environment_;
-  NullMediaLog media_log_;
+  ScopedTestingPlatformSupport<TestingPlatformSupport> platform_;
+  media::NullMediaLog media_log_;
 
   DecoderConfig last_set_decoder_config_;
 
-  std::unique_ptr<WebCodecsDecoderSelector<TypeParam::kStreamType>>
-      decoder_selector_;
+  std::unique_ptr<DecoderSelector<TypeParam::kStreamType>> decoder_selector_;
 
   std::vector<std::pair<std::string, DecoderCapability>>
       mock_decoders_to_create_;
@@ -237,4 +247,4 @@ TYPED_TEST(WebCodecsDecoderSelectorTest, TwoDecoders_NewConfigSelectAgain) {
   this->SelectDecoder(TypeParam::CreateAlternateConfig());
 }
 
-}  // namespace media
+}  // namespace blink

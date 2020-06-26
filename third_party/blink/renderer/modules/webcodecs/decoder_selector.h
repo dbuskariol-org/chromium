@@ -2,26 +2,26 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-#ifndef MEDIA_WEBCODECS_WC_DECODER_SELECTOR_H_
-#define MEDIA_WEBCODECS_WC_DECODER_SELECTOR_H_
+#ifndef THIRD_PARTY_BLINK_RENDERER_MODULES_WEBCODECS_DECODER_SELECTOR_H_
+#define THIRD_PARTY_BLINK_RENDERER_MODULES_WEBCODECS_DECODER_SELECTOR_H_
 
 #include <memory>
 
 #include "media/base/demuxer_stream.h"
-#include "media/base/media_export.h"
 #include "media/base/media_util.h"
 #include "media/filters/decoder_selector.h"
 #include "media/filters/decoder_stream_traits.h"
+#include "third_party/blink/renderer/modules/modules_export.h"
 
-namespace media {
+namespace blink {
 
-template <DemuxerStream::Type StreamType>
-class ShimDemuxerStream;
+template <media::DemuxerStream::Type StreamType>
+class NullDemuxerStream;
 
-template <DemuxerStream::Type StreamType>
-class MEDIA_EXPORT WebCodecsDecoderSelector {
+template <media::DemuxerStream::Type StreamType>
+class DecoderSelector {
  public:
-  typedef DecoderStreamTraits<StreamType> StreamTraits;
+  typedef media::DecoderStreamTraits<StreamType> StreamTraits;
   typedef typename StreamTraits::DecoderType Decoder;
   typedef typename StreamTraits::DecoderConfigType DecoderConfig;
 
@@ -34,13 +34,20 @@ class MEDIA_EXPORT WebCodecsDecoderSelector {
   // Decoder.
   using SelectDecoderCB = base::OnceCallback<void(std::unique_ptr<Decoder>)>;
 
-  WebCodecsDecoderSelector(
-      scoped_refptr<base::SingleThreadTaskRunner> task_runner,
-      CreateDecodersCB create_decoders_cb,
-      typename Decoder::OutputCB output_cb);
+  // Construction can happen on any thread, but all subsequent API calls
+  // including destruction must use |task_runner| thread.
+  // Provided callbacks will be called on |task_runner|. |output_cb| will always
+  // be Post()'ed.
+  DecoderSelector(scoped_refptr<base::SingleThreadTaskRunner> task_runner,
+                  CreateDecodersCB create_decoders_cb,
+                  typename Decoder::OutputCB output_cb);
 
   // Aborts any pending decoder selection.
-  ~WebCodecsDecoderSelector();
+  ~DecoderSelector();
+
+  // Disallow copy and assign.
+  DecoderSelector(const DecoderSelector&) = delete;
+  DecoderSelector& operator=(const DecoderSelector&) = delete;
 
   // Selects and initializes a decoder using |config|. Decoder will
   // be returned via |select_decoder_cb| posted to |task_runner_|. Subsequent
@@ -55,13 +62,13 @@ class MEDIA_EXPORT WebCodecsDecoderSelector {
   // Proxy SelectDecoderCB from impl_ to our |select_decoder_cb|.
   void OnDecoderSelected(SelectDecoderCB select_decoder_cb,
                          std::unique_ptr<Decoder> decoder,
-                         std::unique_ptr<DecryptingDemuxerStream>);
+                         std::unique_ptr<media::DecryptingDemuxerStream>);
 
   // Implements heavy lifting for decoder selection.
-  DecoderSelector<StreamType> impl_;
+  media::DecoderSelector<StreamType> impl_;
 
   // Shim to satisfy dependencies of |impl_|. Provides DecoderConfig to |impl_|.
-  std::unique_ptr<ShimDemuxerStream<StreamType>> demuxer_stream_;
+  std::unique_ptr<NullDemuxerStream<StreamType>> demuxer_stream_;
 
   // Helper to unify API for configuring audio/video decoders.
   std::unique_ptr<StreamTraits> stream_traits_;
@@ -70,14 +77,14 @@ class MEDIA_EXPORT WebCodecsDecoderSelector {
   typename Decoder::OutputCB output_cb_;
 
   // TODO(chcunningham): Route MEDIA_LOG for WebCodecs.
-  NullMediaLog null_media_log_;
+  media::NullMediaLog null_media_log_;
 };
 
-typedef WebCodecsDecoderSelector<DemuxerStream::VIDEO>
+typedef DecoderSelector<media::DemuxerStream::VIDEO>
     WebCodecsVideoDecoderSelector;
-typedef WebCodecsDecoderSelector<DemuxerStream::AUDIO>
+typedef DecoderSelector<media::DemuxerStream::AUDIO>
     WebCodecsAudioDecoderSelector;
 
-}  // namespace media
+}  // namespace blink
 
-#endif  // MEDIA_WEBCODECS_WC_DECODER_SELECTOR_H_
+#endif  // THIRD_PARTY_BLINK_RENDERER_MODULES_WEBCODECS_DECODER_SELECTOR_H_
