@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package org.chromium.chrome.browser.payments;
+package org.chromium.components.payments;
 
 import org.chromium.base.annotations.JNINamespace;
 import org.chromium.base.annotations.NativeMethods;
@@ -18,7 +18,6 @@ public class JourneyLogger {
      */
     private long mJourneyLoggerAndroid;
 
-    private boolean mWasPaymentRequestTriggered;
     private boolean mHasRecorded;
 
     public JourneyLogger(boolean isIncognito, WebContents webContents) {
@@ -112,8 +111,6 @@ public class JourneyLogger {
     public void setEventOccurred(int event) {
         assert event >= 0;
         assert event < Event.ENUM_MAX;
-
-        if (event == Event.SHOWN || event == Event.SKIPPED_SHOW) mWasPaymentRequestTriggered = true;
 
         JourneyLoggerJni.get().setEventOccurred(mJourneyLoggerAndroid, JourneyLogger.this, event);
     }
